@@ -1,16 +1,16 @@
 ## API Response Builder for Laravel 5 ##
  
- ResponseBuilder is Laravel5's helper package designed to simplify building normalized
- REST API responses in your code.
+ Response Builder is Laravel5's helper designed to simplify building 
+ nice, normalized and easy to consume REST API responses.
  
 ## Response structure ##
 
  For simplicity of consuming, produced JSON response is **always** the same at its corem and contains the following data:
 
-  * `success` (boolean) determines if API method succeeded or not,
-  * `code` (int) being your own return code (see `Return Codes` and `Code Ranges` section below),
-  * `locale` (string) locale used for error message (obtained automatically via \App::getLocale()),
-  * `message` (string) human readable description of `code` (see `Messages and Localization` section below),
+  * `success` (boolean) determines if API method succeeded or not
+  * `code` (int) being your own return code (see `Return Codes` and `Code Ranges` section below)
+  * `locale` (string) locale used for error message (obtained automatically via \App::getLocale())
+  * `message` (string) human readable description of `code` (see `Messages and Localization` section below)
   * `data` (object|null) your returned payload or `null` if there's no data to return.
 
 
@@ -30,11 +30,11 @@
  API consumer would see its' return code. This simplifies the code, and
  helps keep features separated but to make this work you must ensure no
  API return code overlaps, otherwise you cannot easily tell which one in
- your chain failed. For that reason ResponseBuilder supports code ranges,
+ your chain failed. For that reason Response Builder supports code ranges,
  allowing you to configure `min_code` and `max_code` you want to be allowed,
- and no code outside this range would be allowed by ResponseBuilder.
+ and no code outside this range would be allowed by Response Builder.
  
- NOTE: codes from `0` to `63` (inclusive) are reserved by ResponseBuilder and
+ NOTE: codes from `0` to `63` (inclusive) are reserved by Response Builder and
  cannot be used by your codes.
  
 ## Usage examples ##
@@ -72,8 +72,8 @@ which would produce
       }
     }
 
-**IMPORTANT** `data` node is **always** returned as JSON Object. This is by design, to simplify response API consumption, so if you want to return
-array, put it in another array:
+**IMPORTANT** `data` node is **always** returned as JSON Object. This is by design, to simplify response 
+API consumption, so if you want to return array, put it in another array:
  
     $data = [1,2,3];
     return ResponseBuilder::success( ['my_array'=>$data] );
@@ -94,8 +94,9 @@ Nested arrays are supported.
     
 ### Errors ###
 
- Returning error is almost as simple as returning success, however you need to provide at least error code. I strongly suggest not to use numeric values
- directly in your code but to create separate class, keep all used codes there and reference them:
+ Returning error is almost as simple as returning success, however you need to provide at least error 
+ code. I strongly suggest not to use numeric values directly in your code but to create separate class,
+ keep all used codes there and reference them:
   
     class ErrorCode {
         const SOMETHING_WENT_WRONG = 250;
@@ -115,9 +116,9 @@ Nested arrays are supported.
       "data": null
     }
 
-As there's no custom message, `message` field returns built-in message. To provide custom message you need to edit add 
-entry for `ErrorCodes::SOMETHING_WENT_WRONG` to `map` array in ResponseBuilder configuration file. 
-See `Response Builder Configuration` section for details
+ As there's no custom message, `message` field returns built-in message. To provide custom message you 
+ need to edit add  entry for `ErrorCodes::SOMETHING_WENT_WRONG` to `map` array in Response Builder 
+ configuration file.  See `Response Builder Configuration` section for details
 
 
 ## Exposed Methods ##
@@ -128,7 +129,7 @@ See `Response Builder Configuration` section for details
  
     use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
     
- to code that calls ResponseBuilder methods.
+ to code that calls Response Builder methods.
 
  Expected arguments:
 
@@ -139,11 +140,11 @@ See `Response Builder Configuration` section for details
  * `$message` (string) custom message to be returned as part of error response.
  
  **NOTE** If you want to use own `$http_code`, ensure it is right for the purpose.
- ResponseBuilder will throw `\InvalidArgumentException` if you use `$http_code` outside
+ Response Builder will throw `\InvalidArgumentException` if you use `$http_code` outside
  of 200-299 range with `success()` and related methods and it will also do the same
  for `error()` and related methods if `$http_code` will be lower than 400.
  
- Redirection codes 3xx cannot be used with ResponseBuilder.
+ Redirection codes 3xx cannot be used with Response Builder.
  
  See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details.
 
@@ -164,7 +165,7 @@ See `Response Builder Configuration` section for details
 
 ## Installation ##
 
- To install ResponseBuilder all you need to do is to open your shell and do:
+ To install Response Builder all you need to do is to open your shell and do:
 
       composer require marcin-orlowski/laravel-api-response-builder
 
@@ -185,8 +186,8 @@ See `Response Builder Configuration` section for details
 
 ## Response Builder Configuration ##
 
- ResponseBuilder configuration can be found in `config/response_builder.php` file. Supported configuration
- keys (all must be present):
+ Response Builder configuration can be found in `config/response_builder.php` file. Supported
+ configuration keys (all must be present):
 
  * `min_code` (int) lowest allowed code for assigned code range (inclusive)
  * `max_code` (int) highest allowed code for assigned code range (inclusive)
@@ -208,19 +209,19 @@ See `Response Builder Configuration` section for details
  If you do not want to use code ranges in your API, just set `max_code` in
  configuration file to some very high value.
 
- **IMPORTANT** ALL return codes you want ResponseBuilder to use without specifying
+ **IMPORTANT** ALL return codes you want Response Builder to use without specifying
  return message manually MUST be "registered" in `map` otherwise `\InvalidArgumentException`
  will be thrown.
 
 
 ## Messages and Localization ##
 
- ResponseBuilder utilised standard Laravel's Lang class to deal with messages, so all features
+ Response Builder utilised standard Laravel's Lang class to deal with messages, so all features
  are available, incl. support for message with placeholders.
 
 ## Lumen support ##
 
- ResponseBuilder is **not** compatible with Lumen framework, mainly due to lack of Lang class.
+ Response Builder is **not** compatible with Lumen framework, mainly due to lack of Lang class.
 
 
 ## CHANGES ##
