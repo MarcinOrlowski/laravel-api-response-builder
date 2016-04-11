@@ -229,9 +229,3 @@ can be achieved with custom Exception Handler and Response Builder comes with re
 
 * Response Builder is **not** compatible with Lumen framework, mainly due to lack of Lang class.
 * Tests will be released shortly. They do already exist, however Response Builder was extracted from existing project and require some work to remove dependencies. 
-
-
-## CHANGES ##
-
-* v1.0.0 (2016-04-11)
-   * Initial public release
