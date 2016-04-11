@@ -1,4 +1,4 @@
-## API Response Builder for Laravel 5 ##
+# API Response Builder for Laravel 5 #
  
 Response Builder is Laravel5's helper designed to simplify building 
 nice, normalized and easy to consume REST API responses.
@@ -19,7 +19,7 @@ For simplicity of consuming, produced JSON response is **always** the same at it
 Return codes must be positive integer. Code `0` (zero) always means success, all
 other codes are treaded as error codes. 
 
-## Code Ranges ##
+#### Code Ranges ####
 
 In one of our projects we had multiple APIs chained together (so one API
 called another). In case of method failure we wanted to be able to 
@@ -216,9 +216,19 @@ will be thrown.
 Response Builder utilised standard Laravel's Lang class to deal with messages, so all features
 are available, incl. support for message with placeholders.
 
-## Lumen support ##
+## Handling exceptions the right way ##
 
-Response Builder is **not** compatible with Lumen framework, mainly due to lack of Lang class.
+Properly designed API shall never hit consumer with HTML nor anything like that. While in regular use this
+is quite easy to achieve, unexpected problems like uncaught exception or even enabled maintenance mode
+can confuse many APIs world wide. Do not be one of them and take care of that too. With Laravel this
+can be achieved with custom Exception Handler and Response Builder comes with ready-to-use recipe in
+[extras/](extras/) folder.
+
+
+## Notes ##
+
+* Response Builder is **not** compatible with Lumen framework, mainly due to lack of Lang class.
+* Tests will be released shortly. They do already exist, however Response Builder was extracted from existing project and require some work to remove dependencies. 
 
 
 ## CHANGES ##
