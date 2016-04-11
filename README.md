@@ -167,14 +167,11 @@ Nested arrays are supported.
 
  To install Response Builder all you need to do is to open your shell and do:
 
-      composer require marcin-orlowski/laravel-api-response-builder
+     composer require marcin-orlowski/laravel-api-response-builder
 
- Alternatively you can edit your `composer.json` and add the following line to `require` 
- section:
+ then publish default configuration file to `config/` folder of your app:
  
-     "marcin-orlowski/laravel-api-response-builder": "~1.0",
- 
- then call `composer update marcin-orlowski/laravel-api-response-builder` once you done. 
+     php artisan vendor:publish
  
 
 ## Laravel setup ##
