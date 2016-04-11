@@ -185,13 +185,16 @@ See `Response Builder Configuration` section for details
 
 ## Response Builder Configuration ##
 
-ResponseBuilder configuration can be found in `config/response_builder.php` file. Supported configuration
-keys (all must be present):
+ ResponseBuilder configuration can be found in `config/response_builder.php` file. Supported configuration
+ keys (all must be present):
 
  * `min_code` (int) lowest allowed code for assigned code range (inclusive)
  * `max_code` (int) highest allowed code for assigned code range (inclusive)
- * `map` (array) maps error codes to localization string keys, i.e.:
+ * `map` (array) maps error codes to localization string keys.
   
+
+ Maping example:
+ 
     'map' => [
         ErrorCodes::SOMETHING => 'api.something',
     }
