@@ -1,0 +1,29 @@
+{
+  "name": "marcin-orlowski/laravel-api-response-builder",
+  "description": "Simplifies building REST API response objects",
+  "homepage": "https://github.com/MarcinOrlowski/laravel-api-response-builder",
+  "keywords": [
+    "laravel",
+    "json",
+    "api",
+    "builder",
+    "rest",
+    "helper"
+  ],
+  "version": "1.0.0",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Marcin Orlowski"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "laravel/framework": "~5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "MarcinOrlowski\\ResponseBuilder\\": "src"
+    }
+  }
+}
