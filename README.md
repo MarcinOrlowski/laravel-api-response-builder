@@ -8,9 +8,9 @@ nice, normalized and easy to consume REST API responses.
 For simplicity of consuming, produced JSON response is **always** the same at its corem and contains the following data:
 
   * `success` (boolean) determines if API method succeeded or not
-  * `code` (int) being your own return code (see `Return Codes` and `Code Ranges` section below)
+  * `code` (int) being your own return code
   * `locale` (string) locale used for error message (obtained automatically via \App::getLocale())
-  * `message` (string) human readable description of `code` (see `Messages and Localization` section below)
+  * `message` (string) human readable description of `code`
   * `data` (object|null) your returned payload or `null` if there's no data to return.
 
 
@@ -152,7 +152,6 @@ See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for
 
     success(array $data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
     successWithHttpCode($http_code);
-    successWithDataAndHttpCode($http_code);
     
 #### Reporting Error ####
 
@@ -160,7 +159,7 @@ See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for
     errorWithData($error_code, $data, array $lang_args = []);
     errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = []);
     errorWithHttpCode($error_code, $http_code, $lang_args = []);
-    errorWithMessage($error_code, $message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+    errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
 
 
 ## Installation ##

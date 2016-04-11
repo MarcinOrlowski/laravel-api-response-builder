@@ -7,7 +7,7 @@ can be achieved with custom Exception Handler.
 
 Here's how to do that:
 
-Edit your `ErrorCodes` class and add the following constants, assigning unique codes withing your code range:
+Edit your `ErrorCodes` class and add the following constants, assigning unique codes within your code range:
  
     const RESPONSE_BUILDER_UNCAUGHT_EXCEPTION = ...;
     const RESPONSE_BUILDER_UNKNOWN_METHOD = ...;

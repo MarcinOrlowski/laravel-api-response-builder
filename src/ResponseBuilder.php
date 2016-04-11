@@ -68,18 +68,6 @@ class ResponseBuilder
 	}
 
 	/**
-	 * Returns success with payload and custom HTTP code
-	 *
-	 * @param array|null $data      payload to be returned as 'data' node
-	 * @param int        $http_code HTTP return code to be set for this response
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	public static function successWithDataAndHttpCode(array $data, $http_code) {
-		return static::buildSuccessResponse($data, ErrorCodes::OK, $http_code, []);
-	}
-
-	/**
 	 * @param array|null $data        payload to be returned as 'data' node, @null if none
 	 * @param int        $return_code numeric code to be returned as 'code' @\App\ErrorCodes::OK is default
 	 * @param int        $http_code   HTTP return code to be set for this response (DEFAULT_OK_HTTP_CODE (200) is default)
@@ -160,14 +148,14 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param int      $error_code numeric code to be returned as 'code'
-	 * @param string   $message    custom message to be returned as part of error response
-	 * @param int|null $http_code  optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
+	 * @param int      $error_code    numeric code to be returned as 'code'
+	 * @param string   $error_message custom message to be returned as part of error response
+	 * @param int|null $http_code     optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithMessage($error_code, $message, $http_code = HttpResponse::HTTP_BAD_REQUEST) {
-		return static::buildErrorResponse(null, $error_code, $http_code, [], $message);
+	public static function errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST) {
+		return static::buildErrorResponse(null, $error_code, $http_code, [], $error_message);
 	}
 
 	/**
