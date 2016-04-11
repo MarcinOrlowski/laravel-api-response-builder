@@ -21,7 +21,8 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 * @return void
 	 */
 	public function register() {
-		// dummy
+		$source = realpath(__DIR__.'/../config/response_builder.php');
+		$this->mergeConfigFrom($source, 'response_builder');
 	}
 
 	/**
@@ -32,8 +33,8 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	public function boot() {
 		$this->loadTranslationsFrom(__DIR__ . '/lang', 'response_builder');
 
-		$this->publishes([
-			__DIR__ . '/../config/response_builder.php' => config_path('response_builder.php'),
-		]);
+		$source = realpath(__DIR__.'/../config/response_builder.php');
+		$this->publishes([$source => config_path('response_builder.php')]);
+		$this->mergeConfigFrom($source, 'response_builder');
 	}
 }
