@@ -31,5 +31,9 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 */
 	public function boot() {
 		$this->loadTranslationsFrom(__DIR__ . '/lang', 'response_builder');
+
+		$this->publishes([
+			__DIR__ . '/../config/response_builder.php' => config_path('response_builder.php'),
+		]);
 	}
 }
