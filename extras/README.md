@@ -24,12 +24,17 @@ Then create `exception_handler.php` file in `app/resources/lang/en` directory, a
        'service_in_maintenance'  => 'Service unavailable. Maintenance in progress.',
     ];
  
-Next edit `config/response-builder.php` config file and add following lines to `map`:
+Next edit `config/response_builder.php` config file add
+
+    use App\ErrorCodes;
+
+and then paste following lines to `map` array:
  
     ErrorCodes::RESPONSE_BUILDER_UNCAUGHT_EXCEPTION     => 'exception_handler.uncaught_exception_fmt',
     ErrorCodes::RESPONSE_BUILDER_UNKNOWN_METHOD         => 'exception_handler.unknown_method',
     ErrorCodes::RESPONSE_BUILDER_HTTP_EXCEPTION         => 'exception_handler.http_exception_fmt',
     ErrorCodes::RESPONSE_BUILDER_SERVICE_IN_MAINTENANCE => 'exception_handler.service_in_maintenance',
+
 
 Finally copy `Handler.php` file from `vendor/marcin-orlowski/laravel-api-response-builder/extras/` folder to your `app/Exceptions/` folder, 
 overwriting existing handler
@@ -38,6 +43,8 @@ overwriting existing handler
 ## Notes ##
 
 The above assumes you keep your codes in `ErrorCodes` class stored in `app/ErrorCodes.php` and using `App\ErrorCodes` namespace. If you keep them
-elsewhere, then you need to edit provided Handler class code and replace `App\ErrorCodes` with right namespace in the line:
+elsewhere, then you need to edit provided `Handler.php` file and replace `App\ErrorCodes` with right namespace in the line:
 
     use App\ErrorCodes as ResponseBuilderErrorCodes;
+
+and also edit `use` entry in `config/response_builder.php` to match your setup.
