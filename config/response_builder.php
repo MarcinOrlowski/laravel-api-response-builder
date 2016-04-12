@@ -48,7 +48,25 @@ return [
 	*/
     'map' => [
 
-
     ],
+
+
+	/*
+	|--------------------------------------------------------------------------
+	| Exception handler error codes
+	|--------------------------------------------------------------------------
+	|
+	| If you use ResponseBuilder's Exception handler, you must map events
+	| to error codes you assigned.
+	|
+	| See README for details
+	|
+	*/
+	'exception_handler' => [
+//		'unknown_method'         => ErrorCodes::RESPONSE_BUILDER_UNCAUGHT_EXCEPTION,
+//		'service_in_maintenance' => ErrorCodes::RESPONSE_BUILDER_UNKNOWN_METHOD,
+//		'http_exception'         => ErrorCodes::RESPONSE_BUILDER_HTTP_EXCEPTION,
+//		'uncaught_exception'     => ErrorCodes::RESPONSE_BUILDER_SERVICE_IN_MAINTENANCE,
+	],
 
 ];

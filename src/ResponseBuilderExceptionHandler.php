@@ -1,4 +1,6 @@
-<?php namespace App\Exceptions;
+<?php
+
+namespace MarcinOrlowski\ResponseBuilder;
 
 /**
  * Exception handler using ResponseBuilder to return JSON even in such hard tines
@@ -13,12 +15,12 @@
 
 use App\ErrorCodes as ResponseBuilderErrorCodes;
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpFoundation\Response;
+use Config;
 
-class Handler extends ExceptionHandler
+class ResponseBuilderExceptionHandler extends ExceptionHandler
 {
 	/**
 	 * A list of the exception types that should not be reported.
@@ -53,15 +55,16 @@ class Handler extends ExceptionHandler
 	 * @return \Illuminate\Http\Response
 	 */
 	public function render($request, Exception $e) {
+
 		if( $e instanceof \Symfony\Component\HttpKernel\Exception\HttpException ) {
 			switch($e->getStatusCode()) {
 				case Response::HTTP_NOT_FOUND: {
-					$result = ResponseBuilder::errorWithHttpCode(ResponseBuilderErrorCodes::RESPONSE_BUILDER_UNKNOWN_METHOD, $e->getStatusCode());
+					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.unknown_method'), $e->getStatusCode());
 				}
 					break;
 
 				case Response::HTTP_SERVICE_UNAVAILABLE: {
-					$result = ResponseBuilder::errorWithHttpCode(ResponseBuilderErrorCodes::RESPONSE_BUILDER_SERVICE_IN_MAINTENANCE, $e->getStatusCode());
+					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.service_in_maintenance'), $e->getStatusCode());
 				}
 					break;
 
@@ -71,7 +74,7 @@ class Handler extends ExceptionHandler
 						$msg = '#' . $e->getStatusCode();
 					}
 
-					$result = ResponseBuilder::error(ResponseBuilderErrorCodes::RESPONSE_BUILDER_HTTP_EXCEPTION, ['message' => $msg], null, $e->getStatusCode());
+					$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.http_exception'), ['message' => $msg], null, $e->getStatusCode());
 				}
 					break;
 			}
@@ -81,11 +84,7 @@ class Handler extends ExceptionHandler
 				$msg .= ': ' . $e->getMessage();
 			}
 
-			if( getenv('APP_DEBUG') !== false ) {
-				$msg .= ', ' . basename($e->getFile()) . ':' . $e->getLine();
-			}
-
-			$result = ResponseBuilder::error(ResponseBuilderErrorCodes::RESPONSE_BUILDER_UNCAUGHT_EXCEPTION, ['message' => $msg], null, 500);
+			$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.uncaught_exception'), ['message' => $msg], null, 500);
 		}
 
 		return $result;
