@@ -2,10 +2,11 @@
  
 ## CHANGE LOG ##
 
-* v1.0.2 (2016-04-12)
+* v1.1.0 (2016-04-12)
    * Corrected issue with `data` returned as empty object not null
    * Changed fallback error message
    * Expanded docs with more examples
+   * Changed internal codes and mappings
 
 * v1.0.1 (2016-04-11)
    * Docs cleanup
