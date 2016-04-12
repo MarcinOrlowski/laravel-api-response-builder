@@ -2,6 +2,11 @@
  
 ## CHANGE LOG ##
 
+* v1.0.2 (2016-04-12)
+   * Corrected issue with `data` returned as empty object not null
+   * Changed fallback error message
+   * Expanded docs with more examples
+
 * v1.0.1 (2016-04-11)
    * Docs cleanup
    * Added extras/ with ready to use exception handler
