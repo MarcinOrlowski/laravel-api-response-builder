@@ -108,7 +108,7 @@ Usage restrictions:
 
 #### Success ####
 
-To report success from your Controller just do:
+To report success from your API, just conclude your Controller with:
 
     return ResponseBuilder::success();
 
@@ -122,12 +122,12 @@ which will produce:
        "data": null
      }
 
-If you want to return some data back:
+If you want to return some data back too, pass it to `success()`:
 
     $data = [ "foo" => "bar" ];
     return ResponseBuilder::success($data);
 
-which would produce:
+which would return:
 
     {
       ...
@@ -136,9 +136,8 @@ which would produce:
       }
     }
 
-**IMPORTANT:** `data` node is **always** returned as JSON Object. This is enforced by design, to simplify
-response consumption, and simplifying further backward compatible changes like adding new fields to
-returned data. Therefore passing array:
+**IMPORTANT:** `data` node is **always** returned as JSON Object. This is enforced by design, therefore trying to return
+plain array directly:
 
     $method_response = [1,2,3];
     return ResponseBuilder::success($method_response);
@@ -154,14 +153,14 @@ could produce unwanted results:
       }
     }
 
-The `0`, `1`, `2` keys are array elements' indices. The right way of returning array (i.e. list things),
-would be to simply wrap it in another array:
+The right way of returning array (i.e. list things), it to make it part of returning object (which
+in code would most likely mean wrapping it in another array and providing the key):
 
     $method_response = [1,2,3];
     $data = ['things' => method_response];
     return ResponseBuilder::success($data);
 
-which would produce expected and much cleaner data structure:
+This would produce expected and much cleaner data structure:
 
     {
       ...
@@ -174,10 +173,14 @@ which would produce expected and much cleaner data structure:
 #### Errors ####
 
 Returning error is almost as simple as returning success, however you need to provide at least error
-code. I strongly suggest not to use numeric values directly in your code but to create separate class,
-keep all used codes there and reference them:
+code to report back. To keep your source readable and clear, it strongly suggested to create separate class
+i.e. `app/ErrorCodes.php` and put all codes you need to use in your code there:
 
-    class ErrorCode {
+    <?php
+
+    namespace App;
+
+    class ErrorCodes {
         const SOMETHING_WENT_WRONG = 250;
     }
 
@@ -185,27 +188,31 @@ To report failure of your method just do:
 
     return ResponseBuilder::error(ErrorCodes::SOMETHING_WENT_WRONG);
 
-which would produce:
+and you will produce:
 
     {
       "success": false,
       "code": 250,
       "locale": "en",
-      "message": "Error #250 occurred.",
+      "message": "Error #250",
       "data": null
     }
 
-As there's no custom message, `message` field returns built-in message. To provide custom message you
-need to edit add  entry for `ErrorCodes::SOMETHING_WENT_WRONG` to `map` array in Response Builder
-configuration file. See `Response Builder Configuration` section for details
+Response Builder tries to automatically obtain error message for each code. This is
+configured in `config/response_builder.php` file, with use of `map` array. See
+[Response Builder Configuration](#response-builder-configuration) for more details.
 
-To report failure with error code mapped to message using placeholders:
+If there's no dedicated message configured, `message` is populated with built-in generic
+fallback message "Error #xxx", as shown above.
+
+As Response Builder uses Laravel's Lang package, you can use the same features with
+your messages as you use across the whole app, incl. using placeholders:
 
     return ResponseBuilder::error(ErrorCodes::SOMETHING_WENT_WRONG, ['login' => $login]);
 
-You can override message mapping by providing error message by hand by using `errorWithMessage()`
-but this expects final string provided, so if you need substitution, you need to resolve
-them in your code:
+However this is not recommended, you can override message mapping by providing replacement
+error message with use of `errorWithMessage()`, which expects string message as argument.
+In this case however, if placeholders are used, you need to resolve them yourself:
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
     return ResponseBuilder::errorWithMessage(ErrorCodes::SOMETHING_WENT_WRONG, $msg);
