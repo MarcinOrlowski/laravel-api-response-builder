@@ -1,6 +1,9 @@
 # API Response Builder for Laravel 5 #
- 
+
 ## CHANGE LOG ##
+
+* v1.4.0 (2016-04-12)
+   * Replaced ErrorCodes class with ErrorCode, as it should be that way from the start
 
 * v1.3.0 (2016-04-12)
    * Reworked Exception Handler making it even easier to use

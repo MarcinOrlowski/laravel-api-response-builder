@@ -38,7 +38,7 @@ class ResponseBuilder
 			$data = (object)$data;
 		}
 
-		$response = ['success' => ($code == ErrorCodes::OK),
+		$response = ['success' => ($code == ErrorCode::OK),
 		             'code'    => $code,
 		             'locale'  => \App::getLocale(),
 		             'message' => $message,
@@ -59,7 +59,7 @@ class ResponseBuilder
 	 */
 	public static function success(array $data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = [])
 	{
-		return static::buildSuccessResponse($data, ErrorCodes::OK, $http_code, $lang_args);
+		return static::buildSuccessResponse($data, ErrorCode::OK, $http_code, $lang_args);
 	}
 
 	/**
@@ -71,18 +71,18 @@ class ResponseBuilder
 	 */
 	public static function successWithHttpCode($http_code)
 	{
-		return static::buildSuccessResponse(null, ErrorCodes::OK, $http_code, []);
+		return static::buildSuccessResponse(null, ErrorCode::OK, $http_code, []);
 	}
 
 	/**
 	 * @param array|null $data        payload to be returned as 'data' node, @null if none
-	 * @param int        $return_code numeric code to be returned as 'code' @\App\ErrorCodes::OK is default
+	 * @param int        $return_code numeric code to be returned as 'code' @\App\ErrorCode::OK is default
 	 * @param int        $http_code   HTTP return code to be set for this response (DEFAULT_OK_HTTP_CODE (200) is default)
 	 * @param array      $lang_args   array of arguments passed to Lang if message associated with error_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected static function buildSuccessResponse(array $data = null, $return_code = ErrorCodes::OK, $http_code = self::DEFAULT_ERROR_HTTP_CODE, array $lang_args = [])
+	protected static function buildSuccessResponse(array $data = null, $return_code = ErrorCode::OK, $http_code = self::DEFAULT_ERROR_HTTP_CODE, array $lang_args = [])
 	{
 		if( is_null($http_code) ) {
 			$http_code = HttpResponse::HTTP_OK;
@@ -194,7 +194,7 @@ class ResponseBuilder
 
 		if( is_int($error_code) === false ) {
 			throw new \InvalidArgumentException('error_code must be integer');
-		} elseif( $error_code == ErrorCodes::OK ) {
+		} elseif( $error_code == ErrorCode::OK ) {
 			throw new \InvalidArgumentException('error_code must be equal to ErrorCode::OK');
 		} elseif( (is_array($lang_args) === false) && (is_null($lang_args) === false) ) {
 			throw new \InvalidArgumentException('lang_args must be either array or null');
@@ -232,9 +232,9 @@ class ResponseBuilder
 		if( is_string($message_message_or_return_code) === false ) {
 			if( is_int($message_message_or_return_code) ) {
 				// TODO below line should most likely be in separate LangHelper class but since it would be the only line here, it ends here with this annotation :)
-				$key = ErrorCodes::getMapping($message_message_or_return_code);
+				$key = ErrorCode::getMapping($message_message_or_return_code);
 				if( is_null($key) ) {
-					$message_message_or_return_code = \Lang::get(ErrorCodes::getMapping(ErrorCodes::NO_ERROR_MESSAGE), ['error_code' => $message_message_or_return_code]);
+					$message_message_or_return_code = \Lang::get(ErrorCode::getMapping(ErrorCode::NO_ERROR_MESSAGE), ['error_code' => $message_message_or_return_code]);
 				} else {
 					$message_message_or_return_code = \Lang::get($key, $lang_args);
 				}

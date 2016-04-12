@@ -11,30 +11,30 @@ generated.
 
 ## Planting Response Builder's Exception Handler ##
 
-First edit your `ErrorCodes` class (that one which stores your error codes) and add the following
+First edit your `ErrorCode` class (that one which stores your error codes) and add the following
 constants, **assigning unique codes within your allowed code range**:
 
-    const RESPONSE_BUILDER_UNKNOWN_METHOD = ...;
-    const RESPONSE_BUILDER_SERVICE_IN_MAINTENANCE = ...;
-    const RESPONSE_BUILDER_HTTP_EXCEPTION = ...;
-    const RESPONSE_BUILDER_UNCAUGHT_EXCEPTION = ...;
+    const UNKNOWN_METHOD = ...;
+    const SERVICE_IN_MAINTENANCE = ...;
+    const HTTP_EXCEPTION = ...;
+    const UNCAUGHT_EXCEPTION = ...;
 
 Then, edit `config/response_builder.php` file and map codes to error messages by adding following
 lines to your `map` array:
 
-	ErrorCodes::RESPONSE_BUILDER_UNKNOWN_METHOD         => 'response-builder::builder.unknown_method',
-	ErrorCodes::RESPONSE_BUILDER_SERVICE_IN_MAINTENANCE => 'response-builder::builder.service_in_maintenance',
-	ErrorCodes::RESPONSE_BUILDER_HTTP_EXCEPTION         => 'response-builder::builder.http_exception_fmt',
-	ErrorCodes::RESPONSE_BUILDER_UNCAUGHT_EXCEPTION     => 'response-builder::builder.uncaught_exception_fmt',
+	ErrorCode::UNKNOWN_METHOD         => 'response-builder::builder.unknown_method',
+	ErrorCode::SERVICE_IN_MAINTENANCE => 'response-builder::builder.service_in_maintenance',
+	ErrorCode::HTTP_EXCEPTION         => 'response-builder::builder.http_exception_fmt',
+	ErrorCode::UNCAUGHT_EXCEPTION     => 'response-builder::builder.uncaught_exception_fmt',
 
 In the same config file edit `exception_handler` entry to make it look like this (if you follow
 this guide strictly, just uncomment these lines):
 
 	'exception_handler' => [
-		'unknown_method'         => ErrorCodes::RESPONSE_BUILDER_UNKNOWN_METHOD,
-		'service_in_maintenance' => ErrorCodes::RESPONSE_BUILDER_SERVICE_IN_MAINTENANCE,
-		'http_exception'         => ErrorCodes::RESPONSE_BUILDER_HTTP_EXCEPTION,
-		'uncaught_exception'     => ErrorCodes::RESPONSE_BUILDER_UNCAUGHT_EXCEPTION,
+		'unknown_method'         => ErrorCode::UNKNOWN_METHOD,
+		'service_in_maintenance' => ErrorCode::SERVICE_IN_MAINTENANCE,
+		'http_exception'         => ErrorCode::HTTP_EXCEPTION,
+		'uncaught_exception'     => ErrorCode::UNCAUGHT_EXCEPTION,
 	],
 
 Finally edit `app/Exceptions/Handler.php` file, remove **all** its content and make it look like this:
@@ -57,11 +57,4 @@ which will be substituted by actual exception message when used.
 
 ## Notes ##
 
-The above assumes you keep your codes in `ErrorCodes` class stored in `app/ErrorCodes.php` and using `App\ErrorCodes` namespace.
-If  you keep them elsewhere, then you need to edit provided `Handler.php` file and replace `App\ErrorCodes` with right namespace
-in the line:
-
-    use App\ErrorCodes as ResponseBuilderErrorCodes;
-
-(the `as ResponseBuilderErrorCodes` must remain unaltered). Also adjust `use` line in `config/response_builder.php` to
-use proper namespace too.
+The above assumes you keep your codes in `ErrorCode` class stored in `app/ErrorCode.php` and using `App\ErrorCode` namespace.

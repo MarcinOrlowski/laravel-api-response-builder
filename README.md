@@ -174,19 +174,19 @@ This would produce expected and much cleaner data structure:
 
 Returning error is almost as simple as returning success, however you need to provide at least error
 code to report back. To keep your source readable and clear, it strongly suggested to create separate class
-i.e. `app/ErrorCodes.php` and put all codes you need to use in your code there:
+i.e. `app/ErrorCode.php` and put all codes you need to use in your code there:
 
     <?php
 
     namespace App;
 
-    class ErrorCodes {
+    class ErrorCode {
         const SOMETHING_WENT_WRONG = 250;
     }
 
 To report failure of your method just do:
 
-    return ResponseBuilder::error(ErrorCodes::SOMETHING_WENT_WRONG);
+    return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG);
 
 and you will produce:
 
@@ -208,14 +208,14 @@ fallback message "Error #xxx", as shown above.
 As Response Builder uses Laravel's Lang package, you can use the same features with
 your messages as you use across the whole app, incl. using placeholders:
 
-    return ResponseBuilder::error(ErrorCodes::SOMETHING_WENT_WRONG, ['login' => $login]);
+    return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG, ['login' => $login]);
 
 However this is not recommended, you can override message mapping by providing replacement
 error message with use of `errorWithMessage()`, which expects string message as argument.
 In this case however, if placeholders are used, you need to resolve them yourself:
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
-    return ResponseBuilder::errorWithMessage(ErrorCodes::SOMETHING_WENT_WRONG, $msg);
+    return ResponseBuilder::errorWithMessage(ErrorCode::SOMETHING_WENT_WRONG, $msg);
 
 
 ## Installation and Configuration ##
@@ -249,7 +249,7 @@ configuration keys (all must be present):
 Code to message mapping example:
 
     'map' => [
-        ErrorCodes::SOMETHING => 'api.something',
+        ErrorCode::SOMETHING => 'api.something',
     }
 
 If given error code is not present in `map`, Response Builder will provide
@@ -279,17 +279,17 @@ well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for details.
 
 ## Overriding built-in messages ##
 
-At the moment Response Builder provides few built-in messages (see [src/ErrorCodes.php](src/ErrorCodes.php)):
+At the moment Response Builder provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
 one is used for success code `0` and another serves as fallback message for codes without mapping. If for any
 reason you want to override them simply map these codes in your `map` config:
 
-     MarcinOrlowski\ResponseBuilder\ErrorCodes::OK => 'my_messages.ok',
+     MarcinOrlowski\ResponseBuilder\ErrorCode::OK => 'my_messages.ok',
 
 and from now on, each `success()` will be returning mapped message.
 
 To override default error message used when given error code has no entry in `map`, add the following:
 
-     MarcinOrlowski\ResponseBuilder\ErrorCodes::NO_ERROR_MESSAGE => 'my_messages.default_error_message_fmt',
+     MarcinOrlowski\ResponseBuilder\ErrorCode::NO_ERROR_MESSAGE => 'my_messages.default_error_message_fmt',
 
 You can use `:error_code` placeholder in the message and it will be substituted actual error code value.
 

@@ -9,7 +9,7 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-namespace App\ErrorCodes;
+namespace App\ErrorCode;
 
 return [
 
@@ -43,7 +43,7 @@ return [
 	| readable form, that's why this mapping is needed. ResponseBuilder uses
 	| standard Laravel's Lang
 	|
-	|    ErrorCodes::SOMETHING => 'api.something',
+	|    ErrorCode::SOMETHING => 'api.something',
 	|
 	*/
     'map' => [
@@ -63,10 +63,10 @@ return [
 	|
 	*/
 	'exception_handler' => [
-//		'unknown_method'         => ErrorCodes::RESPONSE_BUILDER_UNCAUGHT_EXCEPTION,
-//		'service_in_maintenance' => ErrorCodes::RESPONSE_BUILDER_UNKNOWN_METHOD,
-//		'http_exception'         => ErrorCodes::RESPONSE_BUILDER_HTTP_EXCEPTION,
-//		'uncaught_exception'     => ErrorCodes::RESPONSE_BUILDER_SERVICE_IN_MAINTENANCE,
+//		'unknown_method'         => ErrorCode::UNCAUGHT_EXCEPTION,
+//		'service_in_maintenance' => ErrorCode::UNKNOWN_METHOD,
+//		'http_exception'         => ErrorCode::HTTP_EXCEPTION,
+//		'uncaught_exception'     => ErrorCode::SERVICE_IN_MAINTENANCE,
 	],
 
 ];

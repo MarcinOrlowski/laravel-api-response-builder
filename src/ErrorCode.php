@@ -18,7 +18,7 @@ use Config;
  *
  * @package MarcinOrlowski\ResponseBuilder
  */
-class ErrorCodes
+class ErrorCode
 {
 	// protected code range
 	const _RESERVED_MIN_CODE =  0;
@@ -146,8 +146,8 @@ class ErrorCodes
 	public static function isCodeValid($code) {
 		$result = false;
 
-		if( ($code >= ErrorCodes::getMinCode()) && ($code <= ErrorCodes::getMaxCode())
-			|| ($code <= ErrorCodes::getReservedMaxCode()) && ($code >= ErrorCodes::getReservedMinCode())
+		if( ($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode())
+			|| ($code <= ErrorCode::getReservedMaxCode()) && ($code >= ErrorCode::getReservedMinCode())
 		) {
 			$result = true;
 		}
