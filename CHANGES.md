@@ -2,6 +2,11 @@
  
 ## CHANGE LOG ##
 
+* v1.2.0 (2016-04-12)
+   * Fixed issue with messages not resolving properly
+   * Incorporated Exception Handler's messages
+   * Added Polish translation
+
 * v1.1.0 (2016-04-12)
    * Corrected issue with `data` returned as empty object not null
    * Changed fallback error message
