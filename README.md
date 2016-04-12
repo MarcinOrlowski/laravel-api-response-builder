@@ -123,7 +123,7 @@ which would produce
       }
     }
 
-**IMPORTANT** `data` node is **always** returned as JSON Object. This is enforced by design, to simplify
+**IMPORTANT:** `data` node is **always** returned as JSON Object. This is enforced by design, to simplify
 response consumption, and simplifying further backward compatible changes like adding new fields to 
 returned data. If your method returns array (i.e. list things), simply put this array in another array:
  
@@ -240,7 +240,7 @@ If you do not have dedicated error message, use `null` instead:
 If you do not want to use code ranges in your API, just set `max_code` in
 configuration file to some very high value.
 
-**NOTE** if given error code is not present in `map`, Response Builder will provide 
+**NOTE:** if given error code is not present in `map`, Response Builder will provide 
 default message automatically. If you want to override this message, see `Overriding
 built-in messages` section.
 
@@ -279,7 +279,7 @@ To override default error message used when given error code has no entry in `ma
 
      MarcinOrlowski\ResponseBuilder\ErrorCodes::NO_ERROR_MESSAGE => 'my_messages.default_error_message_fmt',
 
-If you use `:error_code` placeholder in the message, it will be substituted with error code value.
+You can use `:error_code` placeholder in the message and it will be substituted actual error code value.
  
 
 ## Notes ##
