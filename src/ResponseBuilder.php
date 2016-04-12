@@ -51,13 +51,14 @@ class ResponseBuilder
 	/**
 	 * Returns success
 	 *
-	 * @param array|null $data        payload to be returned as 'data' node, @null if none
-	 * @param int        $http_code   HTTP return code to be set for this response (HttpResponse::HTTP_OK (200) is default)
-	 * @param array      $lang_args   array of arguments passed to Lang if message associated with error_code uses placeholders
+	 * @param array|null $data      payload to be returned as 'data' node, @null if none
+	 * @param int        $http_code HTTP return code to be set for this response (HttpResponse::HTTP_OK (200) is default)
+	 * @param array      $lang_args array of arguments passed to Lang if message associated with error_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function success(array $data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []) {
+	public static function success(array $data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = [])
+	{
 		return static::buildSuccessResponse($data, ErrorCodes::OK, $http_code, $lang_args);
 	}
 
@@ -68,7 +69,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function successWithHttpCode($http_code) {
+	public static function successWithHttpCode($http_code)
+	{
 		return static::buildSuccessResponse(null, ErrorCodes::OK, $http_code, []);
 	}
 
@@ -80,7 +82,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected static function buildSuccessResponse(array $data = null, $return_code = ErrorCodes::OK, $http_code = self::DEFAULT_ERROR_HTTP_CODE, array $lang_args = []) {
+	protected static function buildSuccessResponse(array $data = null, $return_code = ErrorCodes::OK, $http_code = self::DEFAULT_ERROR_HTTP_CODE, array $lang_args = [])
+	{
 		if( is_null($http_code) ) {
 			$http_code = HttpResponse::HTTP_OK;
 		}
@@ -114,7 +117,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function error($error_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST) {
+	public static function error($error_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST)
+	{
 		return static::buildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
@@ -125,7 +129,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithData($error_code, $data, array $lang_args = []) {
+	public static function errorWithData($error_code, $data, array $lang_args = [])
+	{
 		return static::buildErrorResponse($data, $error_code, HttpResponse::HTTP_BAD_REQUEST, $lang_args);
 	}
 
@@ -137,7 +142,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = []) {
+	public static function errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = [])
+	{
 		return static::buildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
@@ -148,7 +154,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithHttpCode($error_code, $http_code, $lang_args = []) {
+	public static function errorWithHttpCode($error_code, $http_code, $lang_args = [])
+	{
 		return static::buildErrorResponse(null, $error_code, $http_code, $lang_args);
 	}
 
@@ -159,7 +166,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST) {
+	public static function errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST)
+	{
 		return static::buildErrorResponse(null, $error_code, $http_code, [], $error_message);
 	}
 
@@ -175,7 +183,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected static function buildErrorResponse($data, $error_code, $http_code, $lang_args, $message = null, array $headers = []) {
+	protected static function buildErrorResponse($data, $error_code, $http_code, $lang_args, $message = null, array $headers = [])
+	{
 		if( is_null($http_code) ) {
 			$http_code = HttpResponse::HTTP_BAD_REQUEST;
 		}
@@ -211,7 +220,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected static function make($return_code, $message_message_or_return_code, $data, $http_code, $lang_args = [], $headers = []) {
+	protected static function make($return_code, $message_message_or_return_code, $data, $http_code, $lang_args = [], $headers = [])
+	{
 		if( is_null($lang_args) ) {
 			$lang_args = [];
 		}
