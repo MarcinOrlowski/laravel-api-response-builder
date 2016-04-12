@@ -5,7 +5,7 @@
  *
  * @package   MarcinOrlowski\ResponseBuilder
  *
- * @author    Marcin Orlowski <mail@marcinorlowski.com>
+ * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * @copyright 2016 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
