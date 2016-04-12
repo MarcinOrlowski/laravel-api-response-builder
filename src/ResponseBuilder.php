@@ -32,12 +32,17 @@ class ResponseBuilder
 	 *
 	 * @return array response array ready to be encoded as json and sent back to client
 	 */
-	protected static function buildResponseArray($code, $message, array $data = null) {
+	protected static function buildResponseArray($code, $message, array $data = null)
+	{
+		if( !is_null($data) ) {
+			$data = (object)$data;
+		}
+
 		$response = ['success' => ($code == ErrorCodes::OK),
 		             'code'    => $code,
 		             'locale'  => \App::getLocale(),
 		             'message' => $message,
-		             'data'    => (object)$data,
+		             'data'    => $data,
 		];
 
 		return $response;
