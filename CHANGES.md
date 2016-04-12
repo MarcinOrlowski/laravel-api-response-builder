@@ -2,6 +2,10 @@
  
 ## CHANGE LOG ##
 
+* v1.3.0 (2016-04-12)
+   * Reworked Exception Handler making it even easier to use
+   * Docs cleanup
+
 * v1.2.0 (2016-04-12)
    * Fixed issue with messages not resolving properly
    * Incorporated Exception Handler's messages

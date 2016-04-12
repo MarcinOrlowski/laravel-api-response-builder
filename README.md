@@ -262,8 +262,8 @@ localization are supported.
 Properly designed API shall never hit consumer with HTML nor anything like that. While in regular use this
 is quite easy to achieve, unexpected problems like uncaught exception or even enabled maintenance mode
 can confuse many APIs world wide. Do not be one of them and take care of that too. With Laravel this
-can be achieved with custom Exception Handler and Response Builder comes with ready-to-use recipe in
-[extras/](extras/) folder.
+can be achieved with custom Exception Handler and Response Builder comes with ready-to-use Handler as
+well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for details.
 
 
 ## Overriding built-in messages ##
