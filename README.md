@@ -125,29 +125,30 @@ which would produce
 
 **IMPORTANT:** `data` node is **always** returned as JSON Object. This is enforced by design, to simplify
 response consumption, and simplifying further backward compatible changes like adding new fields to 
-returned data. If your method returns array (i.e. list things), simply put this array in another array:
+returned data. Therefore passing array directly would produce unwanted results:
  
     $method_response = [1,2,3];
-    $data = [method_response];
-    return ResponseBuilder::success($data);
+    return ResponseBuilder::success($method_response);
     
 which would produce
 
     {
       ...
       "data": {
-         "0": [1, 2, 3]
+         "0": 1,
+         "1": 2,
+         "2": 3
       }
     }
     
-The `0` key comes from array index so it's recommended to implicitly assign data key in such case, to 
-avoid problems and to make response data more self explanatory:
+The `0`, `1`, `2` keys come from array index. The proper way of returning array (i.e. list things), 
+it to simply wrap it in another array:
 
     $method_response = [1,2,3];
-    $data = ['things'=>method_response];
+    $data = ['things' => method_response];
     return ResponseBuilder::success($data);
     
-which would produce much cleaner
+which would produce expected and much cleaner data structure
 
     {
       ...
@@ -187,7 +188,7 @@ configuration file. See `Response Builder Configuration` section for details
 
 To report failure with error code mapped to message using placeholders:
 
-    return ResponseBuilder::error(ErrorCodes::SOMETHING_WENT_WRONG, ['login'=>$login]);
+    return ResponseBuilder::error(ErrorCodes::SOMETHING_WENT_WRONG, ['login' => $login]);
     
 You can override message mapping by providing error message by hand by using `errorWithMessage()` 
 but this expects final string provided, so if you need substitution, you need to resolve
