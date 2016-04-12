@@ -4,6 +4,8 @@ Response Builder is Laravel5's helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
 
 
+[![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder) [![Total Downloads](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/downloads)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder) [![Latest Unstable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/unstable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder) [![License](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/license)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
+
 ## Table of contents ##
 
  * [Response structure](#response-structure)
