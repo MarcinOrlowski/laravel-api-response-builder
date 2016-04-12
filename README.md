@@ -99,7 +99,7 @@ To report success from your Controller just do:
  
     return ResponseBuilder::success();
  
-which will produce
+which will produce:
  
      {
        "success": true,
@@ -114,7 +114,7 @@ If you want to return some data back:
     $data = [ "foo" => "bar" ];
     return ResponseBuilder::success($data);
 
-which would produce
+which would produce:
 
     {
       ...
@@ -130,7 +130,7 @@ returned data. Therefore passing array directly would produce unwanted results:
     $method_response = [1,2,3];
     return ResponseBuilder::success($method_response);
     
-which would produce
+which would produce:
 
     {
       ...
@@ -148,7 +148,7 @@ it to simply wrap it in another array:
     $data = ['things' => method_response];
     return ResponseBuilder::success($data);
     
-which would produce expected and much cleaner data structure
+which would produce expected and much cleaner data structure:
 
     {
       ...
@@ -172,7 +172,7 @@ To report failure of your method just do:
 
     return ResponseBuilder::error(ErrorCodes::SOMETHING_WENT_WRONG);
     
-which would produce
+which would produce:
 
     {
       "success": false,
