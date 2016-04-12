@@ -8,6 +8,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+namespace App\ErrorCodes;
+
 return [
 
 	/*
@@ -28,7 +31,7 @@ return [
 	| max_code - Max error code assigned for this module (inclusive)
 	|
 	*/
-	'min_code'  => 200,
+	'min_code'  => 100,
     'max_code'  => 399,
 
 	/*
@@ -41,12 +44,6 @@ return [
 	| standard Laravel's Lang
 	|
 	|    ErrorCodes::SOMETHING => 'api.something',
-	|
-	| If you do not have
-	| dedicated message for error code, you still must have put the code here
-	| but you can set null as string, i.e.:
-	|
-	|    ErrorCodes::SOMETHING => null,
 	|
 	*/
     'map' => [

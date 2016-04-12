@@ -20,7 +20,8 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 *
 	 * @return void
 	 */
-	public function register() {
+	public function register()
+	{
 		// nothing here
 	}
 
@@ -29,8 +30,9 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 *
 	 * @return void
 	 */
-	public function boot() {
-		$this->loadTranslationsFrom(__DIR__ . '/lang', 'response_builder');
+	public function boot()
+	{
+		$this->loadTranslationsFrom(__DIR__ . '/lang', 'response-builder');
 
 		$source = realpath(__DIR__ . '/../config/response_builder.php');
 		$this->publishes([
