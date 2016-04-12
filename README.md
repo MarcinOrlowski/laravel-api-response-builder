@@ -240,9 +240,9 @@ If you do not have dedicated error message, use `null` instead:
 If you do not want to use code ranges in your API, just set `max_code` in
 configuration file to some very high value.
 
-**IMPORTANT** ALL return codes you want Response Builder to use without specifying
-return message manually MUST be "registered" in `map` otherwise `\InvalidArgumentException`
-will be thrown.
+**NOTE** if given error code is not present in `map`, Response Builder will provide 
+default message automatically. If you want to override this message, see `Overriding
+built-in messages` section.
 
 
 ## Messages and Localization ##
@@ -271,10 +271,16 @@ At the moment Response Builder provides few built-in messages (see [src/ErrorCod
 one is used for success code `0` and another serves as fallback message for codes without mapping. If for any
 reason you want to override them simply map these codes in your `map` config:
 
-     MarcinOrlowski\ResponseBuilder\ErrorCodes::OK       => 'my_messages.ok',
+     MarcinOrlowski\ResponseBuilder\ErrorCodes::OK => 'my_messages.ok',
 
 and from now on, each `success()` will be returning mapped message.
 
+To override default error message used when given error code has no entry in `map`, add the following:
+
+     MarcinOrlowski\ResponseBuilder\ErrorCodes::NO_ERROR_MESSAGE => 'my_messages.default_error_message_fmt',
+
+If you use `:error_code` placeholder in the message, it will be substituted with error code value.
+ 
 
 ## Notes ##
 
