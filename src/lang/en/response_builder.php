@@ -11,7 +11,7 @@
 return [
 
 	'ok'                       => 'OK',
-	'no_error_description_fmt' => 'No description for error #:error_code',
+	'no_error_description_fmt' => 'Error #:error_code occurred.',
 
 ];
 
