@@ -11,7 +11,13 @@
 return [
 
 	'ok'                   => 'OK',
-	'no_error_message_fmt' => 'Error #:error_code occurred.',
+	'no_error_message_fmt' => 'Error #:error_code',
+
+	// can be used by Exception Handler (if enabled)
+	'uncaught_exception_fmt'  => 'Uncaught exception: :message',
+	'unknown_method'          => 'Unknown method',
+	'http_exception_fmt'      => 'HTTP exception: :message',
+	'service_in_maintenance'  => 'Service maintenance in progress',
 
 ];
 

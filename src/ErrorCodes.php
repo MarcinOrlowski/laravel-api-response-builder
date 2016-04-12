@@ -31,8 +31,8 @@ class ErrorCodes
 	// built-in codes mapping
 	protected static $base_map = [
 
-		self::OK               => 'response_builder.ok',
-		self::NO_ERROR_MESSAGE => 'response_builder.no_error_message_fmt',
+		self::OK               => 'response-builder::builder.ok',
+		self::NO_ERROR_MESSAGE => 'response-builder::builder.no_error_message_fmt',
 
 	];
 
