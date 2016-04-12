@@ -234,7 +234,7 @@ class ResponseBuilder
 				// TODO below line should most likely be in separate LangHelper class but since it would be the only line here, it ends here with this annotation :)
 				$key = ErrorCodes::getMapping($message_message_or_return_code);
 				if( is_null($key) ) {
-					$message_message_or_return_code = \Lang::get(ErrorCodes::getMapping(ErrorCodes::NO_ERROR_DESCRIPTION), ['error_code' => $message_message_or_return_code]);
+					$message_message_or_return_code = \Lang::get(ErrorCodes::getMapping(ErrorCodes::NO_ERROR_MESSAGE), ['error_code' => $message_message_or_return_code]);
 				} else {
 					$message_message_or_return_code = \Lang::get($key, $lang_args);
 				}

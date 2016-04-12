@@ -10,8 +10,8 @@
  */
 return [
 
-	'ok'                       => 'OK',
-	'no_error_description_fmt' => 'Error #:error_code occurred.',
+	'ok'                   => 'OK',
+	'no_error_message_fmt' => 'Error #:error_code occurred.',
 
 ];
 

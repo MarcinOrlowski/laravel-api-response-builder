@@ -26,13 +26,13 @@ class ErrorCodes
 
 	// built-in codes
 	const OK                   = 0;
-	const NO_ERROR_DESCRIPTION = 1;
+	const NO_ERROR_MESSAGE     = 1;
 
 	// built-in codes mapping
 	protected static $base_map = [
 
-		self::OK                     => 'response_builder.ok',
-		self::NO_ERROR_DESCRIPTION   => 'response_builder.no_error_description_fmt',
+		self::OK               => 'response_builder.ok',
+		self::NO_ERROR_MESSAGE => 'response_builder.no_error_message_fmt',
 
 	];
 
