@@ -26,6 +26,6 @@
     }
   },
   "require-dev": {
-    "marcin-orlowski/coding-standard": "^1.0"
+    "marcin-orlowski/coding-standard": "^1.1"
   }
 }

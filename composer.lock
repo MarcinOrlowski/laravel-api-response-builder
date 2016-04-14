@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d54e56fbb4969ac6658c0de4d548a96c",
-    "content-hash": "a05e45faccfaa1782983f9876d2096ed",
+    "hash": "2f1178a108347ab7bb259a3ac438e1ab",
+    "content-hash": "39aed6cab2b60d2d722771bf1f257fc5",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1782,16 +1782,16 @@
     "packages-dev": [
         {
             "name": "marcin-orlowski/coding-standard",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MarcinOrlowski/php-coding-standard.git",
-                "reference": "ca000df819a3ddf029cf35b21cd9b36ce6016f20"
+                "reference": "460978e1e1ad1345ade14e098046273ef47e22bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MarcinOrlowski/php-coding-standard/zipball/ca000df819a3ddf029cf35b21cd9b36ce6016f20",
-                "reference": "ca000df819a3ddf029cf35b21cd9b36ce6016f20",
+                "url": "https://api.github.com/repos/MarcinOrlowski/php-coding-standard/zipball/460978e1e1ad1345ade14e098046273ef47e22bf",
+                "reference": "460978e1e1ad1345ade14e098046273ef47e22bf",
                 "shasum": ""
             },
             "require": {
@@ -1819,7 +1819,7 @@
                 "dev-tools",
                 "php"
             ],
-            "time": "2016-04-14 18:12:30"
+            "time": "2016-04-14 22:09:57"
         },
         {
             "name": "squizlabs/php_codesniffer",
