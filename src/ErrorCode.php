@@ -5,6 +5,7 @@ namespace MarcinOrlowski\ResponseBuilder;
 /**
  * Laravel API Response Builder
  *
+ * @package   MarcinOrlowski\ResponseBuilder
  * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * @copyright 2016 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -15,20 +16,33 @@ use Config;
 
 /**
  * ErrorCode handling class
- *
- * @package MarcinOrlowski\ResponseBuilder
  */
 class ErrorCode
 {
-	// protected code range
-	const _RESERVED_MIN_CODE =  0;
+	/**
+	 * protected code range - lowest code
+	 */
+	const _RESERVED_MIN_CODE = 0;
+
+	/**
+	 * protected code range - highest code
+	 */
 	const _RESERVED_MAX_CODE = 63;
 
-	// built-in codes
-	const OK                   = 0;
-	const NO_ERROR_MESSAGE     = 1;
 
-	// built-in codes mapping
+	/**
+	 * built-in codes: OK
+	 */
+	const OK = 0;
+	/**
+	 * built-in code for faillback message mapping
+	 */
+	const NO_ERROR_MESSAGE = 1;
+
+
+	/**
+	 * @var array built-in codes mapping
+	 */
 	protected static $base_map = [
 
 		self::OK               => 'response-builder::builder.ok',
@@ -40,12 +54,15 @@ class ErrorCode
 	/**
 	 * Returns lowest allowed error code for this module
 	 *
-	 * @return int
+	 * @return integer
+	 *
+	 * @throws \RuntimeException Throws exception if no min_code set up
 	 */
-	protected static function getMinCode() {
+	protected static function getMinCode()
+	{
 		$min_code = Config::get('response_builder.min_code', null);
 
-		if($min_code === null) {
+		if ($min_code === null) {
 			throw new \RuntimeException('Missing min_code key in config/response_builder.php config file');
 		}
 
@@ -55,12 +72,15 @@ class ErrorCode
 	/**
 	 * Returns highest allowed error code for this module
 	 *
-	 * @return int
+	 * @return integer
+	 *
+	 * @throws \RuntimeException Throws exception if no max_code set up
 	 */
-	protected static function getMaxCode() {
+	protected static function getMaxCode()
+	{
 		$max_code = Config::get('response_builder.max_code', null);
 
-		if($max_code === null) {
+		if ($max_code === null) {
 			throw new \RuntimeException('Missing min_code key in config/response_builder.php config file');
 		}
 
@@ -71,18 +91,20 @@ class ErrorCode
 	/**
 	 * Returns lowest possible reserved code used by predefined Response Builder's messages
 	 *
-	 * @return int
+	 * @return integer
 	 */
-	protected static function getReservedMinCode() {
+	protected static function getReservedMinCode()
+	{
 		return static::_RESERVED_MIN_CODE;
 	}
 
 	/**
 	 * Returns hihest possible reserved code used by predefined Response Builder's messages
 	 *
-	 * @return int
+	 * @return integer
 	 */
-	protected static function getReservedMaxCode() {
+	protected static function getReservedMaxCode()
+	{
 		return static::_RESERVED_MAX_CODE;
 	}
 
@@ -91,14 +113,15 @@ class ErrorCode
 	 *
 	 * @return array
 	 */
-	public static function getErrorCodeConstants() {
+	public static function getErrorCodeConstants()
+	{
 		$reflect = new \ReflectionClass(get_called_class());
 		$constants = $reflect->getConstants();
 
 		// filter out all internal constants (starting with underscore
-		foreach($constants as $name=>$val) {
-			if(substr($name,0,1) == '_') {
-				unset($constants[$name]);
+		foreach ($constants as $name => $val) {
+			if (substr($name, 0, 1) == '_') {
+				unset($constants[ $name ]);
 			}
 		}
 
@@ -109,12 +132,14 @@ class ErrorCode
 	 * Returns complete error code to locale string mapping array
 	 *
 	 * @return array
+	 *
+	 * @throws \RuntimeException Thrown when builder map is not configured.
 	 */
-	public static function getMap() {
+	public static function getMap()
+	{
 		$map = Config::get('response_builder.map', null);
-
-		if($map === null) {
-			throw new \RuntimeException('Missing min_code key in config/response_builder.php config file');
+		if ($map === null) {
+			throw new \RuntimeException('Missing "map" key in config/response_builder.php config file');
 		}
 
 		return $map + static::$base_map;
@@ -123,30 +148,35 @@ class ErrorCode
 	/**
 	 * Returns locale mappings for given error code or null if there's no mapping
 	 *
-	 * @param int $code
+	 * @param integer $code Code to look for string mapping for.
 	 *
 	 * @return string|null
+	 *
+	 * @throws \InvalidArgumentException If $code is not in allowed range.
 	 */
-	public static function getMapping($code) {
-		if( static::isCodeValid($code) === false ) {
+	public static function getMapping($code)
+	{
+		if (static::isCodeValid($code) === false) {
 			throw new \InvalidArgumentException("Message code {$code} is out of allowed range");
 		}
 
 		$map = static::getMap();
-		return array_key_exists($code, $map) ? $map[$code] : null;
+
+		return array_key_exists($code, $map) ? $map[ $code ] : null;
 	}
 
 	/**
 	 * Checks if given $code can is valid in this module and can be safely used
 	 *
-	 * @param int $code
+	 * @param integer $code Code to check
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
-	public static function isCodeValid($code) {
+	public static function isCodeValid($code)
+	{
 		$result = false;
 
-		if( ($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode())
+		if (($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode())
 			|| ($code <= ErrorCode::getReservedMaxCode()) && ($code >= ErrorCode::getReservedMinCode())
 		) {
 			$result = true;

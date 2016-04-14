@@ -18,6 +18,9 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpFoundation\Response;
 use Config;
 
+/**
+ * Class ResponseBuilderExceptionHandler
+ */
 class ResponseBuilderExceptionHandler extends ExceptionHandler
 {
 	/**
@@ -32,57 +35,45 @@ class ResponseBuilderExceptionHandler extends ExceptionHandler
 	// @codingStandardsIgnoreEnd
 
 	/**
-	 * Report or log an exception.
-	 *
-	 * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-	 *
-	 * @param  \Exception $e
-	 *
-	 * @return void
-	 */
-	public function report(Exception $e) {
-		parent::report($e);
-	}
-
-	/**
 	 * Render an exception into an HTTP response.
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  \Exception               $e
+	 * @param  \Illuminate\Http\Request $request   Request object
+	 * @param  \Exception               $exception Exception
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function render($request, Exception $e) {
-
-		if( $e instanceof \Symfony\Component\HttpKernel\Exception\HttpException ) {
-			switch($e->getStatusCode()) {
-				case Response::HTTP_NOT_FOUND: {
-					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.unknown_method'), $e->getStatusCode());
-				}
+	public function render(\Illuminate\Http\Request $request, Exception $exception)
+	{
+		if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+			switch ($exception->getStatusCode()) {
+				case Response::HTTP_NOT_FOUND:
+					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.unknown_method'),
+						$exception->getStatusCode());
 					break;
 
-				case Response::HTTP_SERVICE_UNAVAILABLE: {
-					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.service_in_maintenance'), $e->getStatusCode());
-				}
+				case Response::HTTP_SERVICE_UNAVAILABLE:
+					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.service_in_maintenance'),
+						$exception->getStatusCode());
 					break;
 
-				default: {
-					$msg = trim($e->getMessage());
-					if( $msg == '' ) {
-						$msg = '#' . $e->getStatusCode();
+				default:
+					$msg = trim($exception->getMessage());
+					if ($msg == '') {
+						$msg = '#' . $exception->getStatusCode();
 					}
 
-					$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.http_exception'), ['message' => $msg], null, $e->getStatusCode());
-				}
+					$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.http_exception'),
+						['message' => $msg], null, $exception->getStatusCode());
 					break;
 			}
 		} else {
-			$msg = get_class($e);
-			if( trim($e->getMessage()) != '' ) {
-				$msg .= ': ' . $e->getMessage();
+			$msg = get_class($exception);
+			if (trim($exception->getMessage()) != '') {
+				$msg .= ': ' . $exception->getMessage();
 			}
 
-			$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.uncaught_exception'), ['message' => $msg], null, 500);
+			$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.uncaught_exception'),
+				['message' => $msg], null, 500);
 		}
 
 		return $result;

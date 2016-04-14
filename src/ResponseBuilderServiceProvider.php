@@ -5,6 +5,7 @@ namespace MarcinOrlowski\ResponseBuilder;
 /**
  * Laravel API Response Builder
  *
+ * @package   MarcinOrlowski\ResponseBuilder
  * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * @copyright 2016 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -13,6 +14,9 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class ResponseBuilderServiceProvider
+ */
 class ResponseBuilderServiceProvider extends ServiceProvider
 {
 	/**
