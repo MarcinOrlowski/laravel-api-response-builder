@@ -24,5 +24,8 @@
     "psr-4": {
       "MarcinOrlowski\\ResponseBuilder\\": "src"
     }
+  },
+  "require-dev": {
+    "marcin-orlowski/coding-standard": "^1.0"
   }
 }
