@@ -2,6 +2,10 @@
 
 ## CHANGE LOG ##
 
+* v1.4.1 (2016-04-14)
+   * Removed pointles Handler's overloading to report()
+   * Code style cleanup
+
 * v1.4.0 (2016-04-12)
    * Replaced ErrorCodes class with ErrorCode, as it should be that way from the start
 
