@@ -15,7 +15,7 @@ nice, normalized and easy to consume REST API responses.
  * [Usage examples](#usage-examples)
  * [Installation and Configuration](#installation-and-configuration)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
- * [Extending Response Object](#extending-response-object)
+ * [Manipulate Response Object](#manipulate-response-object)
  * [Overriding built-in messages](#overriding-built-in-messages)
  * [License](#license)
  * [Notes](#notes)
