@@ -1,7 +1,5 @@
 <?php
 
-namespace MarcinOrlowski\ResponseBuilder;
-
 /**
  * Laravel API Response Builder
  *
@@ -12,6 +10,8 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+namespace MarcinOrlowski\ResponseBuilder;
 
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -31,7 +31,7 @@ class ResponseBuilder
 	 *
 	 * @return array response array ready to be encoded as json and sent back to client
 	 */
-	protected static function buildResponseArray($code, $message, array $data = null)
+	protected static function buildResponse($code, $message, array $data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if (!is_null($data)) {
@@ -252,6 +252,6 @@ class ResponseBuilder
 			}
 		}
 
-		return Response::json(static::buildResponseArray($return_code, $message_or_code, $data), $http_code, $headers);
+		return Response::json(static::buildResponse($return_code, $message_or_code, $data), $http_code, $headers);
 	}
 }

@@ -15,6 +15,7 @@ nice, normalized and easy to consume REST API responses.
  * [Usage examples](#usage-examples)
  * [Installation and Configuration](#installation-and-configuration)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
+ * [Extending Response Object](#extending-response-object)
  * [Overriding built-in messages](#overriding-built-in-messages)
  * [License](#license)
  * [Notes](#notes)
@@ -31,6 +32,7 @@ the following data:
   * `message` (string) human readable description of `code`
   * `data` (object|null) your returned payload or `null` if there's no data to return.
 
+If you need to return other/different fields in response, see [Manipulating Response Object](#manipulating-response-object).
 
 ## Return Codes ##
 
@@ -278,6 +280,51 @@ is quite easy to achieve, unexpected problems like uncaught exception or even en
 can confuse many APIs world wide. Do not be one of them and take care of that too. With Laravel this
 can be achieved with custom Exception Handler and Response Builder comes with ready-to-use Handler as
 well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for details.
+
+
+## Manipulating Response Object ##
+
+If you need to return more fields in response object you can simply extend `ResponseBuilder` class
+and override `buildResponse()` method:
+
+    protected static function buildResponse($code, $message, array $data = null);
+
+For example, to remove `locale` field but add server time and timezone to returned response create
+`MyResponseBuilder.php` file in `app/` folder with content:
+
+    <?php
+
+    namespace App;
+
+    class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
+    {
+        protected static function buildResponse($code, $message, array $data = null)
+        {
+            $array = parent::buildResponse($code, $message, $data);
+
+            $date = new DateTime();
+            $array['timestamp'] = $date->getTimestamp();
+            $array['timezone'] = $date->getTimezone();
+            unset($array['locale']);
+
+            return $date;
+        }
+    }
+
+and from now on use your class instead:
+
+    MyResponseBuilder::success();
+
+which would return:
+
+     {
+       "success": true,
+       "code": 0,
+       "message": "OK",
+       "timestamp": 1272509157,
+       "timezone": "UTC",
+       "data": null
+     }
 
 
 ## Overriding built-in messages ##
