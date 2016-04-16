@@ -2,6 +2,10 @@
 
 ## CHANGE LOG ##
 
+* v1.4.2 (2016-04-16)
+   * Added chapter about manipulating response object
+   * Code cleanup
+
 * v1.4.1 (2016-04-14)
    * Removed pointles Handler's overloading to report()
    * Code style cleanup

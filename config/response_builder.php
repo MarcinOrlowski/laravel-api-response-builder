@@ -45,6 +45,8 @@ return [
 	|
 	|    ErrorCode::SOMETHING => 'api.something',
 	|
+	| See README if you want to provide own messages for built-in codes too.
+	|
 	*/
     'map' => [
 
