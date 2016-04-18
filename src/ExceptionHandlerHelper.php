@@ -19,21 +19,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Config;
 
 /**
- * Class ResponseBuilderExceptionHandler
+ * Class ExceptionHandlerHelper
  */
-class ResponseBuilderExceptionHandler extends ExceptionHandler
+class ExceptionHandlerHelper
 {
-	/**
-	 * A list of the exception types that should not be reported.
-	 *
-	 * @var array
-	 */
-	// @codingStandardsIgnoreStart
-	protected $dontReport = [
-		'Symfony\Component\HttpKernel\Exception\HttpException',
-	];
-	// @codingStandardsIgnoreEnd
-
 	/**
 	 * Render an exception into an HTTP response.
 	 *
@@ -42,7 +31,7 @@ class ResponseBuilderExceptionHandler extends ExceptionHandler
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function render(\Illuminate\Http\Request $request, Exception $exception)
+	public function render($request, Exception $exception)
 	{
 		if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
 			switch ($exception->getStatusCode()) {

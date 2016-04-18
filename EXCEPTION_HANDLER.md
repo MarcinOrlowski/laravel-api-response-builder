@@ -37,14 +37,16 @@ this guide strictly, just uncomment these lines):
 		'uncaught_exception'     => ErrorCode::UNCAUGHT_EXCEPTION,
 	],
 
-Finally edit `app/Exceptions/Handler.php` file, remove **all** its content and make it look like this:
+Finally edit `app/Exceptions/Handler.php` add
 
-    <?php
-    namespace App\Exceptions;
+    use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 
-    use MarcinOrlowski\ResponseBuilder\ResponseBuilderExceptionHandler as ExceptionHandler;
+andmodify `render()` method to look like this:
 
-    class Handler extends ExceptionHandler {}
+    public function render($request, Exception $e)
+    {
+        return ExceptionHandlerHelper::render($request, $e);
+    }
 
 
 ## Using own messages ##
