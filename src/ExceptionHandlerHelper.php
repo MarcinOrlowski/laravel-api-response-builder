@@ -31,7 +31,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function render($request, Exception $exception)
+	public static function render($request, Exception $exception)
 	{
 		if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
 			switch ($exception->getStatusCode()) {
