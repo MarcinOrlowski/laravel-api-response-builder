@@ -9,7 +9,7 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-namespace App\ErrorCode;
+use App\ErrorCode;
 
 return [
 
@@ -50,6 +50,13 @@ return [
 	*/
     'map' => [
 
+	    // Uncomment if you want to use ExceptionHandlerHelper helper
+
+//	    ErrorCode::UNKNOWN_METHOD         => 'response-builder::builder.unknown_method',
+//	    ErrorCode::SERVICE_IN_MAINTENANCE => 'response-builder::builder.service_in_maintenance',
+//	    ErrorCode::HTTP_EXCEPTION         => 'response-builder::builder.http_exception_fmt',
+//	    ErrorCode::UNCAUGHT_EXCEPTION     => 'response-builder::builder.uncaught_exception_fmt',
+
     ],
 
 
@@ -58,17 +65,19 @@ return [
 	| Exception handler error codes
 	|--------------------------------------------------------------------------
 	|
-	| If you use ResponseBuilder's Exception handler, you must map events
+	| If you use ResponseBuilder's Exception handler helper, you must map events
 	| to error codes you assigned.
 	|
 	| See README for details
 	|
 	*/
 	'exception_handler' => [
-//		'unknown_method'         => ErrorCode::UNCAUGHT_EXCEPTION,
-//		'service_in_maintenance' => ErrorCode::UNKNOWN_METHOD,
+
+//		'unknown_method'         => ErrorCode::UNKNOWN_METHOD,
+//		'service_in_maintenance' => ErrorCode::SERVICE_IN_MAINTENANCE,
 //		'http_exception'         => ErrorCode::HTTP_EXCEPTION,
-//		'uncaught_exception'     => ErrorCode::SERVICE_IN_MAINTENANCE,
+//		'uncaught_exception'     => ErrorCode::UNCAUGHT_EXCEPTION,
+
 	],
 
 ];
