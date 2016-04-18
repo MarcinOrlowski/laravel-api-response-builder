@@ -73,10 +73,12 @@ return [
 	*/
 	'exception_handler' => [
 
-//		'unknown_method'         => ErrorCode::UNKNOWN_METHOD,
-//		'service_in_maintenance' => ErrorCode::SERVICE_IN_MAINTENANCE,
-//		'http_exception'         => ErrorCode::HTTP_EXCEPTION,
-//		'uncaught_exception'     => ErrorCode::UNCAUGHT_EXCEPTION,
+		'exception' => [
+			'http_not_found'           => ErrorCode::UNKNOWN_METHOD,
+			'http_service_unavailable' => ErrorCode::SERVICE_IN_MAINTENANCE,
+			'http_exception'           => ErrorCode::HTTP_EXCEPTION,
+			'uncaught_exception'       => ErrorCode::UNCAUGHT_EXCEPTION,
+		],
 
 	],
 

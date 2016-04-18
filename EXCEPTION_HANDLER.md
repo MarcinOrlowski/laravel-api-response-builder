@@ -28,14 +28,16 @@ lines to your `map` array:
 	ErrorCode::UNCAUGHT_EXCEPTION     => 'response-builder::builder.uncaught_exception_fmt',
 
 In the same config file edit `exception_handler` entry to make it look like this (if you follow
-this guide strictly, just uncomment these lines):
+this guide strictly, just uncomment these lines in published config template):
 
 	'exception_handler' => [
-		'unknown_method'         => ErrorCode::UNKNOWN_METHOD,
-		'service_in_maintenance' => ErrorCode::SERVICE_IN_MAINTENANCE,
-		'http_exception'         => ErrorCode::HTTP_EXCEPTION,
-		'uncaught_exception'     => ErrorCode::UNCAUGHT_EXCEPTION,
-	],
+		'exception' => [
+			'http_not_found'           => ErrorCode::UNKNOWN_METHOD,
+			'http_service_unavailable' => ErrorCode::SERVICE_IN_MAINTENANCE,
+			'http_exception'           => ErrorCode::HTTP_EXCEPTION,
+			'uncaught_exception'       => ErrorCode::UNCAUGHT_EXCEPTION,
+		],
+    ],
 
 Finally edit `app/Exceptions/Handler.php` add
 

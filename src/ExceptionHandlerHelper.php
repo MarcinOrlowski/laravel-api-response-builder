@@ -36,12 +36,12 @@ class ExceptionHandlerHelper
 		if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
 			switch ($exception->getStatusCode()) {
 				case Response::HTTP_NOT_FOUND:
-					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.unknown_method'),
+					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.exception.http_not_found'),
 						$exception->getStatusCode());
 					break;
 
 				case Response::HTTP_SERVICE_UNAVAILABLE:
-					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.service_in_maintenance'),
+					$result = ResponseBuilder::errorWithHttpCode(Config::get('response_builder.exception_handler.exception.http_service_unavailable'),
 						$exception->getStatusCode());
 					break;
 
@@ -51,7 +51,7 @@ class ExceptionHandlerHelper
 						$msg = '#' . $exception->getStatusCode();
 					}
 
-					$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.http_exception'),
+					$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.exception.http_exception'),
 						['message' => $msg], null, $exception->getStatusCode());
 					break;
 			}
@@ -61,7 +61,7 @@ class ExceptionHandlerHelper
 				$msg .= ': ' . $exception->getMessage();
 			}
 
-			$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.uncaught_exception'),
+			$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.exception.uncaught_exception'),
 				['message' => $msg], null, 500);
 		}
 
