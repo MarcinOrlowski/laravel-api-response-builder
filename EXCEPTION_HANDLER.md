@@ -59,6 +59,17 @@ providing keys matching your own messages. For `RESPONSE_BUILDER_UNCAUGHT_EXCEPT
 which will be substituted by actual exception message when used.
 
 
+## OAuth2 Exception Handler conflict ##
+
+Please note that some packages may also provide own exception handling helpers. For example if your
+API delegates OAuth2 related tasks to popular [lucadegasperi/oauth2-server-laravel](https://packagist.org/packages/lucadegasperi/oauth2-server-laravel)
+package, then you must not use its `OAuthExceptionHandlerMiddleware` if you want standard handler
+to kick off. To ensure it is not set, see `app/Kernel.php` file and remove/comment out the following
+line (if present):
+
+    'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware',
+
+
 ## Notes ##
 
 The above assumes you keep your codes in `ErrorCode` class stored in `app/ErrorCode.php` and using `App\ErrorCode` namespace.
