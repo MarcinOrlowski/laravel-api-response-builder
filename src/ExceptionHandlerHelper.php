@@ -48,7 +48,7 @@ class ExceptionHandlerHelper
 				default:
 					$msg = trim($exception->getMessage());
 					if ($msg == '') {
-						$msg = '#' . $exception->getStatusCode();
+						$msg = 'Exception code #' . $exception->getStatusCode();
 					}
 
 					$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.exception.http_exception'),
@@ -56,9 +56,14 @@ class ExceptionHandlerHelper
 					break;
 			}
 		} else {
-			$msg = get_class($exception);
-			if (trim($exception->getMessage()) != '') {
-				$msg .= ': ' . $exception->getMessage();
+			$msg = trim($exception->getMessage());
+			if (Config::get('response_builder.exception_handler.include_class_name', false)) {
+				$class_name = get_class($exception);
+				if ($msg != '') {
+					$msg = $class_name . ': ' . $msg;
+				} else {
+					$msg = $class_name;
+				}
 			}
 
 			$result = ResponseBuilder::error(Config::get('response_builder.exception_handler.exception.uncaught_exception'),

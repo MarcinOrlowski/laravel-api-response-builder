@@ -2,6 +2,10 @@
 
 ## CHANGE LOG ##
 
+* v1.5.0 (2016-04-  )
+   * ExHandler: ExceptionHandler is now replaced by ExceptionHandlerHelper
+   * ExHandler: Added option to ommit Exception class name in emited uncaught exception message
+
 * v1.4.2 (2016-04-16)
    * Added chapter about manipulating response object
    * Code cleanup

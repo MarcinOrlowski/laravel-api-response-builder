@@ -73,6 +73,12 @@ return [
 	*/
 	'exception_handler' => [
 
+		// Set to true, if you want exception class name to be included
+		// in reponse caused by unhandled exception.
+		'include_class_name' => false,
+
+		// Map exception to your own error codes. That way, when cascading
+		// you will still know which module thrown this exception
 		'exception' => [
 			'http_not_found'           => ErrorCode::UNKNOWN_METHOD,
 			'http_service_unavailable' => ErrorCode::SERVICE_IN_MAINTENANCE,
