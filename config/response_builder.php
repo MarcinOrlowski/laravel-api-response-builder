@@ -75,7 +75,7 @@ return [
 
 		// Set to true, if you want exception class name to be included
 		// in reponse caused by unhandled exception.
-		'include_class_name' => false,
+		'include_class_name' => env('EX_INCLUDE_CLASS_NAME', false),
 
 		// Map exception to your own error codes. That way, when cascading
 		// you will still know which module thrown this exception

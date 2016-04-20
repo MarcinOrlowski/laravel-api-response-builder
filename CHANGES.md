@@ -4,6 +4,7 @@
 
 * v1.5.1 (2016-04-21)
    * Added errorWithMessageAndData()
+   * Added env('EX_INCLUDE_CLASS_NAME') to control include_class_name exception handler feature
 
 * v1.5.0 (2016-04-18)
    * ExHandler: ExceptionHandler is now replaced by ExceptionHandlerHelper
