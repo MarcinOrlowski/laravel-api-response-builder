@@ -167,6 +167,19 @@ class ResponseBuilder
 	/**
 	 * @param integer      $error_code    numeric code to be returned as 'code'
 	 * @param string       $error_message custom message to be returned as part of error response
+	 * @param array|null   $data          payload to be returned as 'data' node, @null if none
+	 * @param integer|null $http_code     optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public static function errorWithMessageAndData($error_code, $error_message, $data, $http_code = HttpResponse::HTTP_BAD_REQUEST)
+	{
+		return static::buildErrorResponse($data, $error_code, $http_code, [], $error_message);
+	}
+
+	/**
+	 * @param integer      $error_code    numeric code to be returned as 'code'
+	 * @param string       $error_message custom message to be returned as part of error response
 	 * @param integer|null $http_code     optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
