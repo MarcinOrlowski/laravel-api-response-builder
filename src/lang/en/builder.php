@@ -14,9 +14,9 @@ return [
 	'no_error_message'             => 'Error #:error_code',
 
 	// can be used by Exception Handler (if enabled)
-	'uncaught_exception'           => 'Uncaught exception: :message',
+	'uncaught_exception'           => 'Uncaught exception :message',
 	'http_not_found'               => 'Unknown method',
-	'http_exception'               => 'HTTP exception: :message',
+	'http_exception'               => 'HTTP exception :message',
 	'http_service_unavailable'     => 'Service maintenance in progress',
 
 ];

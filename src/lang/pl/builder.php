@@ -14,9 +14,9 @@ return [
 	'no_error_message'             => 'Błąd #:error_code',
 
 	// can be used by Exception Handler (if enabled)
-	'uncaught_exception'           => 'Nieprzechwycony wyjątek: :message',
+	'uncaught_exception'           => 'Nieprzechwycony wyjątek :message',
 	'http_not_found'               => 'Nieznana metoda',
-	'http_exception'               => 'Wyjątek HTTP: :message',
+	'http_exception'               => 'Wyjątek HTTP :message',
 	'http_service_unavailable'     => 'Trwa przerwa serwisowa',
 
 ];
