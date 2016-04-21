@@ -55,7 +55,7 @@ class ExceptionHandlerHelper
 			}
 		} else {
 			$msg = trim($ex->getMessage());
-			if (Config::get('response_builder.exception_handler.include_class_name', false)) {
+			if (Config::get('response_builder.exception_handler.exception.uncaught_exception.include_class_name', false)) {
 				$class_name = get_class($ex);
 				if ($msg != '') {
 					$msg = $class_name . ': ' . $msg;

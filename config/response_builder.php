@@ -67,10 +67,6 @@ return [
 	*/
 	'exception_handler' => [
 
-		// Set to true, if you want exception class name to be included
-		// in reponse caused by unhandled exception.
-		'include_class_name' => env('EX_INCLUDE_CLASS_NAME', false),
-
 		// Map exception to your own error codes. That way, when cascading
 		// you will still know which module thrown this exception
 		'exception' => [
@@ -89,6 +85,11 @@ return [
 //			'uncaught_exception' => [
 //				'code'      => ErrorCode::UNCAUGHT_EXCEPTION,
 //				'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+//
+//				// Set to true, if you want exception class name to be included
+//				// in reponse caused by unhandled exception.
+//				'include_class_name' => env('EX_UNCAUGHT_EXCEPTION_INCLUDE_CLASS_NAME', false),
+//
 //			],
 		],
 
