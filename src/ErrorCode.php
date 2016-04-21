@@ -168,6 +168,25 @@ class ErrorCode
 	}
 
 	/**
+	 * Returns locale mappings for given base error code or null if there's no mapping
+	 *
+	 * @param integer $code Base (built-in) code to look for string mapping for.
+	 *
+	 * @return string|null
+	 *
+	 * @throws \InvalidArgumentException If $code is not in allowed reserved range.
+	 */
+	public static function getBaseMapping($code)
+	{
+		if (($code >= ErrorCode::_RESERVED_MIN_CODE) && ($code <= ErrorCode::_RESERVED_MAX_CODE)) {
+			return array_key_exists($code, static::$base_map) ? static::$base_map[ $code ] : null;
+		} else {
+			throw new \InvalidArgumentException("Base message code {$code} is out of allowed reserved range");
+		}
+	}
+
+
+	/**
 	 * Returns locale mappings for given error code or null if there's no mapping
 	 *
 	 * @param integer $code Code to look for string mapping for.
