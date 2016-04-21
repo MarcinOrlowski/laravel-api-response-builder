@@ -33,7 +33,7 @@ return [
 	|
 	*/
 	'min_code'  => 100,
-    'max_code'  => 399,
+	'max_code'  => 399,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -49,9 +49,9 @@ return [
 	| See README if you want to provide own messages for built-in codes too.
 	|
 	*/
-    'map' => [
+	'map' => [
 
-    ],
+	],
 
 
 	/*
@@ -66,6 +66,17 @@ return [
 	|
 	*/
 	'exception_handler' => [
+
+		// By default, exception provided messages have higher priority than mapped error messages.
+		// This behaviour can be configured with `use_exception_message_first` option. When option
+		// is set to `true` (which is default value) and when exception's `getMessage()` returns non empty
+		// string, that string will be used as returned as `message` w/o further processing. If
+		// it is set to `true` but exception provides no message, then mapped message will be used
+		// and the ":message" placeholder will be substituted with exception class name. When option
+		// is set to @false, then pre 2.0 behaviour takes place and mapped messages will always be used
+		// with `:message` placeholder being substituted with exception message (can if it is empty string).
+		'use_exception_message_first' => env('EX_USE_EXCEPTION_MESSAGE', true),
+
 
 		// Map exception to your own error codes. That way, when cascading
 		// you will still know which module thrown this exception
@@ -85,11 +96,6 @@ return [
 //			'uncaught_exception' => [
 //				'code'      => ErrorCode::UNCAUGHT_EXCEPTION,
 //				'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-//
-//				// Set to true, if you want exception class name to be included
-//				// in reponse caused by unhandled exception.
-//				'include_class_name' => env('EX_UNCAUGHT_EXCEPTION_INCLUDE_CLASS_NAME', false),
-//
 //			],
 		],
 

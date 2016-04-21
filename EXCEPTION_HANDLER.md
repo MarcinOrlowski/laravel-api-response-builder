@@ -115,6 +115,16 @@ where `api.xxxx` entry must be valid localization string key from your app. You 
 in your messages. Supported are `:error_code` substituted by actual error code assigned to this
 exception and `:message` substituted by content returned by exception's `getMessage()` method.
 
+## Exceptions with messages ##
+
+By default, exception provided messages have higher priority than mapped error messages.
+This behaviour can be configured with `use_exception_message_first` option. When option
+is set to `true` (which is default value) and when exception's `getMessage()` returns non empty
+string, that string will be used as returned as `message` w/o further processing. If
+it is set to `true` but exception provides no message, then mapped message will be used
+and the ":message" placeholder will be substituted with exception class name. When option
+is set to @false, then pre 2.0 behaviour takes place and mapped messages will always be used
+with `:message` placeholder being substituted with exception message (can if it is empty string).
 
 ## Exception Handler conflicts ##
 

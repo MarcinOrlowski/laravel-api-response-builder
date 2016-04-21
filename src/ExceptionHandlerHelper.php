@@ -35,11 +35,11 @@ class ExceptionHandlerHelper
 	{
 		if ($ex instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
 			switch ($ex->getStatusCode()) {
-				case Response::HTTP_NOT_FOUND:
+				case HttpResponse::HTTP_NOT_FOUND:
 					$result = static::error($ex, 'http_not_found', ErrorCode::EX_HTTP_NOT_FOUND);
 					break;
 
-				case Response::HTTP_SERVICE_UNAVAILABLE:
+				case HttpResponse::HTTP_SERVICE_UNAVAILABLE:
 					$result = static::error($ex, 'http_service_unavailable', ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE);
 					break;
 
@@ -54,17 +54,7 @@ class ExceptionHandlerHelper
 					break;
 			}
 		} else {
-			$msg = trim($ex->getMessage());
-			if (Config::get('response_builder.exception_handler.exception.uncaught_exception.include_class_name', false)) {
-				$class_name = get_class($ex);
-				if ($msg != '') {
-					$msg = $class_name . ': ' . $msg;
-				} else {
-					$msg = $class_name;
-				}
-			}
-
-			$result = static::error($ex, 'uncaught_exception', HttpResponse::HTTP_INTERNAL_SERVER_ERROR, ['message' => $msg]);
+			$result = static::error($ex, 'uncaught_exception', HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
 		}
 
 		return $result;
@@ -75,12 +65,10 @@ class ExceptionHandlerHelper
 	 * @param string    $config_base
 	 * @param integer   $default_error_code
 	 * @param integer   $default_http_code
-	 * @param array     $lang_args
 	 *
 	 * @return Response
 	 */
-	protected static function error(Exception $ex, $config_base, $default_error_code,
-	                                $default_http_code = HttpResponse::HTTP_BAD_REQUEST, array $lang_args = [])
+	protected static function error(Exception $ex, $config_base, $default_error_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{
 		$error_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_error_code);
 		$http_code = Config::get("response_builder.exception_handler.exception.{$config_base}.http_code", 0);
@@ -105,29 +93,51 @@ class ExceptionHandlerHelper
 		$data = [];
 		if (Config::get('app.debug')) {
 			$data = [
-				'file' => $ex->getFile(),
-				'line' => $ex->getLine(),
+				'class' => get_class($ex),
+				'file'  => $ex->getFile(),
+				'line'  => $ex->getLine(),
 			];
 		}
 
-		// Check if we got user mapping for the event. If not, fall back to built-in messages
+		// let's figure out what event we are handling now
+		$base_config_key = 'response_builder.exception_handler.exception.';
+		if (Config::get($base_config_key . 'http_not_found.code', ErrorCode::EX_HTTP_NOT_FOUND) == $error_code) {
+			$base_error_code = ErrorCode::EX_HTTP_NOT_FOUND;
+		} elseif (Config::get($base_config_key . 'http_service_unavailable.code', ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE) == $error_code) {
+			$base_error_code = ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE;
+		} elseif (Config::get($base_config_key . 'http_exception.code', ErrorCode::EX_HTTP_EXCEPTION) == $error_code) {
+			$base_error_code = ErrorCode::EX_HTTP_EXCEPTION;
+		} elseif (Config::get($base_config_key . 'uncaught_exception.code', ErrorCode::EX_UNCAUGHT_EXCEPTION) == $error_code) {
+			$base_error_code = ErrorCode::EX_UNCAUGHT_EXCEPTION;
+		} else {
+			$base_error_code = ErrorCode::NO_ERROR_MESSAGE;
+		}
 
 		$key = ErrorCode::getMapping($error_code);
 		if (is_null($key)) {
-			if (Config::get('response_builder.exception_handler.exception.http_not_found') == $error_code) {
-				$key = 'response-builder::builder.http_not_found';
-			} elseif (Config::get('response_builder.exception_handler.exception.http_service_unavailable') == $error_code) {
-				$key = 'response-builder::builder.service_unavailable';
-			} elseif (Config::get('response_builder.exception_handler.exception.http_exception') == $error_code) {
-				$key = 'response-builder::builder.http_exception';
-			} elseif (Config::get('response_builder.exception_handler.exception.uncaught_exception') == $error_code) {
-				$key = 'response-builder::builder.uncaught_exception';
-			} else {
-				$key = 'response-builder::builder.no_error_message';
+			$key = ErrorCode::getBaseMapping($base_error_code);
+		}
+
+		// let's build error message
+		$ex_message = trim($ex->getMessage());
+		if (Config::get('response_builder.exception_handler.use_exception_message_first', true)) {
+			$error_message = $ex_message;
+		} else {
+			$error_message = '';
+			if ($ex_message == '') {
+				$ex_message = get_class($ex);
 			}
 		}
-		$error_message = Lang::get($key, $lang_args);
+
+		if ($error_message == '') {
+			$error_message = Lang::get($key, [
+				'error_code' => $error_code,
+				'message'    => $ex_message,
+				'class'      => get_class($ex),
+			]);
+		}
 
 		return ResponseBuilder::errorWithMessageAndData($error_code, $error_message, $data, $http_code);
 	}
+
 }

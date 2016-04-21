@@ -3,13 +3,15 @@
 ## CHANGE LOG ##
 
 * v2.0.0 (2016-04-21)
-   * Configuration file structure changed!
+   * Configuration file structure changed
    * Built-in localization keys changed
-   * Added errorWithMessageAndData() method
-   * If app runs in DEBUG mode, ExceptionHandlerHelper will add 'file' and 'line' to returned JSON
+   * Added `errorWithMessageAndData()` method
+   * ExceptionHandlerHelper adds `class`, `file` and `line`` to returned JSON for apps in DEBUG mode
+   * ExceptionHandlerHelper can now use `:message`, `:error_code`, `:http_code` and `:class` placeholders
    * ExceptionHandlerHelper now automatically resolves message mappings and needs no config entries
    * ExceptionHandlerHelper now comes with built-in error codes (still, using own codes isrecommended)
    * Added option to configure HTTP codes for each ExceptionHandlerHelper returned response separately
+   * Exception provided messages can now have prioritet over ExceptionHandlerHelper configured error messages
 
 * v1.5.0 (2016-04-18)
    * ExHandler: ExceptionHandler is now replaced by ExceptionHandlerHelper
