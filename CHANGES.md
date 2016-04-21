@@ -3,12 +3,13 @@
 ## CHANGE LOG ##
 
 * v2.0.0 (2016-04-21)
-   * Configuration keys changed
+   * Configuration file structure changed!
    * Built-in localization keys changed
-   * Added errorWithMessageAndData()
-   * Added env('EX_INCLUDE_CLASS_NAME') to control include_class_name exception handler feature
-   * If app runs in DEBUG mode, ExceptionHandlerHelper now adds 'file' and 'line' to returned error JSONs
+   * Added errorWithMessageAndData() method
+   * If app runs in DEBUG mode, ExceptionHandlerHelper will add 'file' and 'line' to returned JSON
    * ExceptionHandlerHelper now automatically resolves message mappings and needs no config entries
+   * ExceptionHandlerHelper now comes with built-in error codes (still, using own codes isrecommended)
+   * Added option to configure HTTP codes for each ExceptionHandlerHelper returned response separately
 
 * v1.5.0 (2016-04-18)
    * ExHandler: ExceptionHandler is now replaced by ExceptionHandlerHelper
