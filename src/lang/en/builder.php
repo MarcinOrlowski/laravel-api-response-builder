@@ -15,7 +15,6 @@ return [
 
 	// can be used by Exception Handler (if enabled)
 	'uncaught_exception'           => 'Uncaught exception: :message',
-	'uncaught_exception_no_prefix' => ':message',
 	'http_not_found'               => 'Unknown method',
 	'http_exception'               => 'HTTP exception: :message',
 	'http_service_unavailable'     => 'Service maintenance in progress',
