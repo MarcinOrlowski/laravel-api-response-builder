@@ -335,11 +335,11 @@ reason you want to override them simply map these codes in your `map` config:
 
      MarcinOrlowski\ResponseBuilder\ErrorCode::OK => 'my_messages.ok',
 
-and from now on, each `success()` will be returning mapped message.
+and from now on, each `success()` will be returning your message instead.
 
 To override default error message used when given error code has no entry in `map`, add the following:
 
-     MarcinOrlowski\ResponseBuilder\ErrorCode::NO_ERROR_MESSAGE => 'my_messages.default_error_message_fmt',
+     MarcinOrlowski\ResponseBuilder\ErrorCode::NO_ERROR_MESSAGE => 'my_messages.default_error_message',
 
 You can use `:error_code` placeholder in the message and it will be substituted actual error code value.
 
