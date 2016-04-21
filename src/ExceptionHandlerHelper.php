@@ -119,13 +119,13 @@ class ExceptionHandlerHelper
 		}
 
 		// let's build error message
+		$error_message = '';
 		$ex_message = trim($ex->getMessage());
 		if (Config::get('response_builder.exception_handler.use_exception_message_first', true)) {
-			$error_message = $ex_message;
-		} else {
-			$error_message = '';
 			if ($ex_message == '') {
 				$ex_message = get_class($ex);
+			} else {
+				$error_message = $ex_message;
 			}
 		}
 
