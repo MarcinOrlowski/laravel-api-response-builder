@@ -10,14 +10,15 @@
  */
 return [
 
-	'ok'                   => 'OK',
-	'no_error_message_fmt' => 'Error #:error_code',
+	'ok'                           => 'OK',
+	'no_error_message'             => 'Error #:error_code',
 
 	// can be used by Exception Handler (if enabled)
-	'uncaught_exception_fmt'  => 'Uncaught exception: :message',
-	'unknown_method'          => 'Unknown method',
-	'http_exception_fmt'      => 'HTTP exception: :message',
-	'service_in_maintenance'  => 'Service maintenance in progress',
+	'uncaught_exception'           => 'Uncaught exception: :message',
+	'uncaught_exception_no_prefix' => ':message',
+	'http_not_found'               => 'Unknown method',
+	'http_exception'               => 'HTTP exception: :message',
+	'http_service_unavailable'     => 'Service maintenance in progress',
 
 ];
 

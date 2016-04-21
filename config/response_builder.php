@@ -50,13 +50,6 @@ return [
 	*/
     'map' => [
 
-	    // Uncomment if you want to use ExceptionHandlerHelper helper
-
-//	    ErrorCode::UNKNOWN_METHOD         => 'response-builder::builder.unknown_method',
-//	    ErrorCode::SERVICE_IN_MAINTENANCE => 'response-builder::builder.service_in_maintenance',
-//	    ErrorCode::HTTP_EXCEPTION         => 'response-builder::builder.http_exception_fmt',
-//	    ErrorCode::UNCAUGHT_EXCEPTION     => 'response-builder::builder.uncaught_exception_fmt',
-
     ],
 
 

@@ -16,6 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Lang;
 
 /**
  * Class ExceptionHandlerHelper
@@ -92,6 +93,23 @@ class ExceptionHandlerHelper
 			];
 		}
 
-		return ResponseBuilder::error($error_code, $lang_args, $data, $http_code);
+		// Check if we got user mapping for the event. If not, fall back to built-in messages
+		$key = ErrorCode::getMapping($error_code);
+		if (is_null($key)) {
+			if (Config::get('response_builder.exception_handler.exception.http_not_found') == $error_code) {
+				$key = 'response-builder::builder.http_not_found';
+			} elseif (Config::get('response_builder.exception_handler.exception.http_service_unavailable') == $error_code) {
+				$key = 'response-builder::builder.service_unavailable';
+			} elseif (Config::get('response_builder.exception_handler.exception.http_exception') == $error_code) {
+				$key = 'response-builder::builder.http_exception';
+			} elseif (Config::get('response_builder.exception_handler.exception.uncaught_exception') == $error_code) {
+				$key = 'response-builder::builder.uncaught_exception';
+			} else {
+				$key = 'response-builder::builder.no_error_message';
+			}
+		}
+		$error_message = Lang::get($key, $lang_args);
+
+		return ResponseBuilder::errorWithMessageAndData($error_code, $error_message, $data, $http_code);
 	}
 }
