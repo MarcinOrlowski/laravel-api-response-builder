@@ -36,11 +36,11 @@ class ExceptionHandlerHelper
 		if ($ex instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
 			switch ($ex->getStatusCode()) {
 				case Response::HTTP_NOT_FOUND:
-					$result = static::error($ex, Config::get('response_builder.exception_handler.exception.http_not_found'));
+					$result = static::error($ex, 'http_not_found', ErrorCode::EX_HTTP_NOT_FOUND);
 					break;
 
 				case Response::HTTP_SERVICE_UNAVAILABLE:
-					$result = static::error($ex, Config::get('response_builder.exception_handler.exception.http_service_unavailable'));
+					$result = static::error($ex, 'http_service_unavailable', ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE);
 					break;
 
 				default:
@@ -49,8 +49,8 @@ class ExceptionHandlerHelper
 						$msg = 'Exception code #' . $ex->getStatusCode();
 					}
 
-					$result = static::error($ex, Config::get('response_builder.exception_handler.exception.http_exception'),
-						['message' => $msg]);
+					$result = static::error($ex, 'http_exception', ErrorCode::EX_HTTP_EXCEPTION,
+						HttpResponse::HTTP_BAD_REQUEST, ['message' => $msg]);
 					break;
 			}
 		} else {
@@ -64,8 +64,7 @@ class ExceptionHandlerHelper
 				}
 			}
 
-			$result = static::error($ex, Config::get('response_builder.exception_handler.exception.uncaught_exception'),
-				['message' => $msg], HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
+			$result = static::error($ex, 'uncaught_exception', HttpResponse::HTTP_INTERNAL_SERVER_ERROR, ['message' => $msg]);
 		}
 
 		return $result;
@@ -73,16 +72,34 @@ class ExceptionHandlerHelper
 
 	/**
 	 * @param Exception $ex
-	 * @param integer   $error_code
+	 * @param string    $config_base
+	 * @param integer   $default_error_code
+	 * @param integer   $default_http_code
 	 * @param array     $lang_args
-	 * @param integer   $http_code
 	 *
 	 * @return Response
 	 */
-	protected static function error(Exception $ex, $error_code, array $lang_args = [], $http_code = 0)
+	protected static function error(Exception $ex, $config_base, $default_error_code,
+	                                $default_http_code = HttpResponse::HTTP_BAD_REQUEST, array $lang_args = [])
 	{
-		if ($http_code == 0) {
+		$error_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_error_code);
+		$http_code = Config::get("response_builder.exception_handler.exception.{$config_base}.http_code", 0);
+
+		// check if this is valid HTTP error code
+		if ($http_code < 400) {
+			$http_code = 0;
+		} elseif ($http_code == 0) {
+			// no code, let's try exception status
 			$http_code = $ex->getStatusCode();
+
+			// can it be valid HTTP error code?
+			if ($http_code < 400) {
+				$http_code = 0;
+			}
+		}
+		// still no code? use default
+		if ($http_code == 0) {
+			$http_code = $default_http_code;
 		}
 
 		$data = [];
@@ -94,6 +111,7 @@ class ExceptionHandlerHelper
 		}
 
 		// Check if we got user mapping for the event. If not, fall back to built-in messages
+
 		$key = ErrorCode::getMapping($error_code);
 		if (is_null($key)) {
 			if (Config::get('response_builder.exception_handler.exception.http_not_found') == $error_code) {

@@ -10,6 +10,7 @@
  */
 
 use App\ErrorCode;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 return [
 
@@ -73,10 +74,22 @@ return [
 		// Map exception to your own error codes. That way, when cascading
 		// you will still know which module thrown this exception
 		'exception' => [
-			'http_not_found'           => ErrorCode::UNKNOWN_METHOD,
-			'http_service_unavailable' => ErrorCode::SERVICE_IN_MAINTENANCE,
-			'http_exception'           => ErrorCode::HTTP_EXCEPTION,
-			'uncaught_exception'       => ErrorCode::UNCAUGHT_EXCEPTION,
+//			'http_not_found' => [
+//				'code'      => ErrorCode::HTTP_NOT_FOUND,
+//				'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//			],
+//			'http_service_unavailable' => [
+//				'code'      => ErrorCode::HTTP_SERVICE_UNAVAILABLE,
+//				'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//			],
+//			'http_exception' => [
+//				'code'      => ErrorCode::HTTP_EXCEPTION,
+//				'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//			],
+//			'uncaught_exception' => [
+//				'code'      => ErrorCode::UNCAUGHT_EXCEPTION,
+//				'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+//			],
 		],
 
 	],

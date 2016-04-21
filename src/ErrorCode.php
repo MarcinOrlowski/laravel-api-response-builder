@@ -38,6 +38,23 @@ class ErrorCode
 	 * built-in code for faillback message mapping
 	 */
 	const NO_ERROR_MESSAGE = 1;
+	/**
+	 * built-in error code for HTTP_NOT_FOUND exception
+	 */
+	const EX_HTTP_NOT_FOUND = 10;
+	/**
+	 * built-in error code for HTTP_SERVICE_UNAVAILABLE exception
+	 */
+	const EX_HTTP_SERVICE_UNAVAILABLE = 11;
+	/**
+	 * built-in error code for HTTP_EXCEPTION
+	 */
+
+	const EX_HTTP_EXCEPTION = 12;
+	/**
+	 * built-in error code for UNCAUGHT_EXCEPTION
+	 */
+	const EX_UNCAUGHT_EXCEPTION = 13;
 
 
 	/**
@@ -45,8 +62,13 @@ class ErrorCode
 	 */
 	protected static $base_map = [
 
-		self::OK               => 'response-builder::builder.ok',
-		self::NO_ERROR_MESSAGE => 'response-builder::builder.no_error_message_fmt',
+		self::OK                            => 'response-builder::builder.ok',
+		self::NO_ERROR_MESSAGE              => 'response-builder::builder.no_error_message_fmt',
+
+		self::EX_HTTP_NOT_FOUND             => 'response-builder::builder.http_not_found',
+		self::EX_HTTP_SERVICE_UNAVAILABLE   => 'response-builder::builder.http_service_unavailable',
+		self::EX_HTTP_EXCEPTION             => 'response-builder::builder.http_exception',
+		self::EX_UNCAUGHT_EXCEPTION         => 'response-builder::builder.uncaught_exception',
 
 	];
 

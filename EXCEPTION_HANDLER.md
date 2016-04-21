@@ -54,12 +54,52 @@ an then edit `config/response_builder.php` file to map exception types to your c
 
 	'exception_handler' => [
 		'exception' => [
-			'http_not_found'           => ErrorCode::HTTP_NOT_FOUND,
-			'http_service_unavailable' => ErrorCode::HTTP_SERVICE_UNAVAILABLE,
-			'http_exception'           => ErrorCode::HTTP_EXCEPTION,
-			'uncaught_exception'       => ErrorCode::UNCAUGHT_EXCEPTION,
+			'http_not_found'           => ['code' => ErrorCode::HTTP_NOT_FOUND],
+			'http_service_unavailable' => ['code' => ErrorCode::HTTP_SERVICE_UNAVAILABLE],
+			'http_exception'           => ['code' => ErrorCode::HTTP_EXCEPTION],
+			'uncaught_exception'       => ['code' => ErrorCode::UNCAUGHT_EXCEPTION],
 		],
     ],
+
+## HTTP return codes ##
+
+You can also configure HTTP return code to use with each exception, by using `http_code` key:
+
+    'http_not_found' => [
+        'code'      => ErrorCode::UNKNOWN_METHOD,
+        'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+    ],
+    'http_service_unavailable' => [
+        'code'      => ErrorCode::HTTP_SERVICE_UNAVAILABLE,
+        'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+    ],
+    'http_exception' => [
+        'code'      => ErrorCode::HTTP_EXCEPTION,
+        'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+    ],
+    'uncaught_exception' => [
+        'code'      => ErrorCode::UNCAUGHT_EXCEPTION,
+        'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+    ],
+
+**NOTE:** you must use valid HTTP error code. Codes lower than 400 (`HttpResponse::HTTP_BAD_REQUEST`)
+will be ignored.
+
+Both keys `code` and `http_code` are optional and can be used selectively according to your needs.
+Helper will fall back to defaults if these are not found:
+
+    'http_not_found' => [
+        'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+    ],
+    'http_service_unavailable' => [
+        'code' => ErrorCode::HTTP_SERVICE_UNAVAILABLE,
+    ],
+    'uncaught_exception' => [
+    ],
+
+If no `http_code` is configured Helper will try to get exception's status code. If it is `0` then it falls
+to default `HttpResponse::HTTP_BAD_REQUEST` code (`HttpResponse::HTTP_INTERNAL_SERVER_ERROR` for uncaught
+exceptions).
 
 ## Error messages ##
 
