@@ -14,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 
@@ -65,7 +65,7 @@ class ExceptionHandlerHelper
 			}
 
 			$result = static::error($ex, Config::get('response_builder.exception_handler.exception.uncaught_exception'),
-				['message' => $msg], Response::HTTP_INTERNAL_SERVER_ERROR);
+				['message' => $msg], HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
 		}
 
 		return $result;
