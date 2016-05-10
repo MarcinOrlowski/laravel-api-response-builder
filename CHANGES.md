@@ -3,7 +3,9 @@
 ## CHANGE LOG ##
 
 * dev-master
-   * Eloquent models can now be returned as payload (`toArray()` will be called automatically)
+   * Eloquent Model can now be directly returned as response payload.
+   * Eloquent Collection can now be directly returned as response payload.
+   * Added some config parameters (see `config/response_builder.php` in `vendor/....`) 
    * You can now pass literyaly anything to be returned in `data` payload, however data type conversion will be enforced to ensure returning data matches specification
 
 * v2.0.0 (2016-04-21)
