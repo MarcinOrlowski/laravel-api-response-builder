@@ -13,9 +13,9 @@
 
 namespace MarcinOrlowski\ResponseBuilder;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Builds standardized \Symfony\Component\HttpFoundation\Response response object
@@ -36,8 +36,12 @@ class ResponseBuilder
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if (!is_null($data)) {
-			if ($data instanceof Model) {
-				$data = $data->toArray();
+			if ($data instanceof Illuminate\Database\Eloquent\Model) {
+				$key = 'classes.' . Illuminate\Database\Eloquent\Model::class . '.key';
+				$data = [Config.get($key, 'item') => $data->toArray()];
+			} elseif ($data instanceof Illuminate\Database\Eloquent\Collection) {
+				$key = 'classes.' . Illuminate\Database\Eloquent\Collection::class . '.key';
+				$data = [Config.get($key, 'items') => $data->toArray()];
 			}
 
 			$data = (object)$data;

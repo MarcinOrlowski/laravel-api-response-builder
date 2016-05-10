@@ -56,6 +56,31 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
+	| Response Builder classes
+	|--------------------------------------------------------------------------
+	|
+	| Response Builder includes handling of object of given classes (i.e. Eloquent
+	| Model or Collection). Some of these require some additional settings
+	| and here you have option to override the defaults
+	|
+	| See README for details
+	|
+	*/
+
+	'classes' => [
+
+		Illuminate\Database\Eloquent\Model::class => [
+			'key' => 'item',
+		],
+
+		Illuminate\Database\Eloquent\Collection::class => [
+			'key' => 'items',
+		],
+
+	],
+
+	/*
+	|--------------------------------------------------------------------------
 	| Exception handler error codes
 	|--------------------------------------------------------------------------
 	|
