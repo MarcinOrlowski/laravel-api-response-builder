@@ -123,7 +123,7 @@ is set to `true` (which is default value) and when exception's `getMessage()` re
 string, that string will be used as returned as `message` w/o further processing. If
 it is set to `true` but exception provides no message, then mapped message will be used
 and the ":message" placeholder will be substituted with exception class name. When option
-is set to @false, then pre 2.0 behaviour takes place and mapped messages will always be used
+is set to `false`, then pre 2.0 behaviour takes place and mapped messages will always be used
 with `:message` placeholder being substituted with exception message (can if it is empty string).
 
 ## Exception Handler conflicts ##

@@ -148,7 +148,7 @@ which would return:
       }
     }
     
-Since v2.1 you can directly return Eloquent model object directly:
+Since v2.1 you can return Eloquent model object directly:
 
     $flight = App\Flight::where('active', 1)->first();
     return ResponseBuilder::success($flight);
@@ -192,8 +192,7 @@ published config file, look into your `vendor/marcin-orlowski/laravel-api=respon
 folder for new items)
 
 **NOTE:** currently there's no recursive processing, so if you want to return Eloquent 
-model as part of array you must explicitely call `toArray()` yourself on that object.
-For example:
+model as part of array you must explicitely call `toArray()` on such object:
 
     $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
     return ResponseBuilder::success($data);
@@ -216,8 +215,8 @@ could produce usually unwanted results:
       }
     }
 
-The right way of returning array (i.e. list things), it to make it part of returning object (which
-in code would most likely mean wrapping it in another array and providing the key):
+The proper way of returning array (i.e. list things), is to make it part of returned object (which
+in code would most likely mean wrapping it in another array and providing a key):
 
     $method_response = [1,2,3];
     $data = ['items' => method_response];
