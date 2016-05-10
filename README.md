@@ -148,7 +148,7 @@ which would return:
       }
     }
     
-Since v2.1 you can directly return Eloquent models object:
+Since v2.1 you can directly return Eloquent model object directly:
 
     $flight = App\Flight::where('active', 1)->first();
     return ResponseBuilder::success($flight);
@@ -157,13 +157,43 @@ which would model attributes (`toArray()` will automatically be called). The
 imaginary output would then look like this:
 
     {
-      "airline": "lot",
-      "flight_number": "lo123",
-      ...
+      "item": {
+          "airline": "lot",
+          "flight_number": "lo123",
+          ...
+       }
     }
 
+You can also return Collection:
+
+    $flights = App\Flight::where('active', 1)->get();
+    return ResponseBuilder::success($flights);
+
+which would return array of objects:
+
+    {
+      "items": [
+            {
+               "airline": "lot",
+               "flight_number": "lo123",
+               ...
+            },{
+               "airline": "american",
+               "flight_number": "am456",
+               ...
+            }
+         ]
+       }
+    }
+
+    
+`item` and `items` keys are configurable (see `app/config/response_builder.php` or if you already
+published config file, look into your `vendor/marcin-orlowski/laravel-api=response-builder/config/`
+folder for new items)
+
 **NOTE:** currently there's no recursive processing, so if you want to return Eloquent 
-model as part of array you must explicitely call `toArray()` yourself, i.e.:
+model as part of array you must explicitely call `toArray()` yourself on that object.
+For example:
 
     $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
     return ResponseBuilder::success($data);
@@ -175,7 +205,7 @@ plain array directly:
     $method_response = [1,2,3];
     return ResponseBuilder::success($method_response);
 
-could produce unwanted results:
+could produce usually unwanted results:
 
     {
       ...
@@ -190,7 +220,7 @@ The right way of returning array (i.e. list things), it to make it part of retur
 in code would most likely mean wrapping it in another array and providing the key):
 
     $method_response = [1,2,3];
-    $data = ['things' => method_response];
+    $data = ['items' => method_response];
     return ResponseBuilder::success($data);
 
 This would produce expected and much cleaner data structure:
@@ -198,7 +228,7 @@ This would produce expected and much cleaner data structure:
     {
       ...
       "data": {
-         "things": [1, 2, 3]
+         "items": [1, 2, 3]
       }
     }
 
@@ -206,8 +236,8 @@ This would produce expected and much cleaner data structure:
 #### Errors ####
 
 Returning error is almost as simple as returning success, however you need to provide at least error
-code to report back. To keep your source readable and clear, it strongly suggested to create separate class
-i.e. `app/ErrorCode.php` and put all codes you need to use in your code there:
+code to report back. To keep your source readable and clear, it's strongly suggested to create separate 
+class i.e. `app/ErrorCode.php` and put all codes you need to use in your code there:
 
     <?php
 
@@ -257,9 +287,13 @@ To install Response Builder all you need to do is to open your shell and do:
 
     composer require marcin-orlowski/laravel-api-response-builder
 
-then publish default configuration file to `config/` folder of your app:
+If you want to change defaults then you should publish configuration file to 
+your `config/` folder:
 
     php artisan vendor:publish
+
+and tweak according to your needs. If you are fine with defaults, this step
+can safely be skipped.
 
 
 #### Laravel setup ####
@@ -285,19 +319,18 @@ Code to message mapping example:
         ErrorCode::SOMETHING => 'api.something',
     }
 
-If given error code is not present in `map`, Response Builder will provide
-fallback message automatically (in form like "Error #xxx"). See
-[Overriding built-in messages](#overriding-built-in-messages) if you want
+If given error code is not present in `map`, Response Builder will provide fallback message automatically 
+(in form like "Error #xxx"). See [Overriding built-in messages](#overriding-built-in-messages) if you want.
 
 
 ## Messages and Localization ##
 
 Response Builder is designed with localization in mind so default approach is you just set it up
-once and most is done automatically. This also includes creating human readable error messages.
-As described in `Configuration` section, once you got `map` populated, you most likely will not
+once and most things should happen automatically, which also includes creating human readable error messages.
+As described in `Configuration` section, once you got `map` configured, you most likely will not
 be in need to manually refer error messages - Response Builder will do that for you and you optionally
 just need to pass array with placeholders' substitution (hence the order of arguments for `errorXXX()`
-methods). Response Builder utilised standard Laravel's Lang class to deal with messages, so all features
+methods). Response Builder utilised standard Laravel's `Lang` class to deal with messages, so all features
 localization are supported.
 
 
@@ -307,7 +340,7 @@ Properly designed API shall never hit consumer with HTML nor anything like that.
 is quite easy to achieve, unexpected problems like uncaught exception or even enabled maintenance mode
 can confuse many APIs world wide. Do not be one of them and take care of that too. With Laravel this
 can be achieved with custom Exception Handler and Response Builder comes with ready-to-use Handler as
-well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for details.
+well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for easy setup information.
 
 
 ## Manipulating Response Object ##
@@ -315,7 +348,7 @@ well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for details.
 If you need to return more fields in response object you can simply extend `ResponseBuilder` class
 and override `buildResponse()` method:
 
-    protected static function buildResponse($code, $message, array $data = null);
+    protected static function buildResponse($code, $message, $data = null);
 
 For example, to remove `locale` field but add server time and timezone to returned response create
 `MyResponseBuilder.php` file in `app/` folder with content:
@@ -326,7 +359,7 @@ For example, to remove `locale` field but add server time and timezone to return
 
     class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
     {
-        protected static function buildResponse($code, $message, array $data = null)
+        protected static function buildResponse($code, $message, $data = null)
         {
             $array = parent::buildResponse($code, $message, $data);
 
@@ -359,11 +392,11 @@ which would return:
 
 At the moment Response Builder provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
 one is used for success code `0` and another serves as fallback message for codes without mapping. If for any
-reason you want to override them simply map these codes in your `map` config:
+reason you want to override them, simply map these codes in your `map` config:
 
      MarcinOrlowski\ResponseBuilder\ErrorCode::OK => 'my_messages.ok',
 
-and from now on, each `success()` will be returning your message instead.
+and from now on, each `success()` will be returning your message instead of built-in one.
 
 To override default error message used when given error code has no entry in `map`, add the following:
 
@@ -380,5 +413,5 @@ You can use `:error_code` placeholder in the message and it will be substituted 
 
 ## Notes ##
 
-* Response Builder is **not** compatible with Lumen framework, mainly due to lack of Lang class.
-* Tests will be released shortly. They do already exist, however Response Builder was extracted from existing project and require some work to remove dependencies.
+* Response Builder is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making Response Builder usable with Lumen, speak up or (betteR) send pull request!
+* Tests will be released shortly. They do already exist, however Response Builder was extracted from existing project and making tests work again require some work to remove dependencies.
