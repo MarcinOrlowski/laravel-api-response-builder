@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Builds standardized \Symfony\Component\HttpFoundation\Response response object
@@ -27,14 +28,18 @@ class ResponseBuilder
 	 *
 	 * @param integer $code    response code (not http response code)
 	 * @param string  $message error message or 'OK'
-	 * @param array   $data    api response data if any
+	 * @param mixed   $data    api response data if any
 	 *
 	 * @return array response array ready to be encoded as json and sent back to client
 	 */
-	protected static function buildResponse($code, $message, array $data = null)
+	protected static function buildResponse($code, $message, $data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if (!is_null($data)) {
+			if ($data instanceof Model) {
+				$data = $data->toArray();
+			}
+
 			$data = (object)$data;
 		}
 
@@ -51,13 +56,13 @@ class ResponseBuilder
 	/**
 	 * Returns success
 	 *
-	 * @param array|null $data      payload to be returned as 'data' node, @null if none
+	 * @param mixed|null $data      payload to be returned as 'data' node, @null if none
 	 * @param integer    $http_code HTTP return code to be set for this response (HttpResponse::HTTP_OK (200) is default)
 	 * @param array      $lang_args array of arguments passed to Lang if message associated with error_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function success(array $data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = [])
+	public static function success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = [])
 	{
 		return static::buildSuccessResponse($data, ErrorCode::OK, $http_code, $lang_args);
 	}
@@ -75,7 +80,7 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param array|null $data        payload to be returned as 'data' node, @null if none
+	 * @param mixed|null $data        payload to be returned as 'data' node, @null if none
 	 * @param integer    $return_code numeric code to be returned as 'code' @\App\ErrorCode::OK is default
 	 * @param integer    $http_code   HTTP return code to be set for this response (DEFAULT_OK_HTTP_CODE (200) is default)
 	 * @param array      $lang_args   array of arguments passed to Lang if message associated with error_code uses placeholders
@@ -85,7 +90,7 @@ class ResponseBuilder
 	 * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
 	 *
 	 */
-	protected static function buildSuccessResponse(array $data = null, $return_code = ErrorCode::OK,
+	protected static function buildSuccessResponse($data = null, $return_code = ErrorCode::OK,
 	                                               $http_code = self::DEFAULT_ERROR_HTTP_CODE, array $lang_args = [])
 	{
 		if (is_null($http_code)) {
@@ -129,7 +134,7 @@ class ResponseBuilder
 
 	/**
 	 * @param integer    $error_code numeric code to be returned as 'code'
-	 * @param array|null $data       payload to be returned as 'data' node, @null if none
+	 * @param mixed|null $data       payload to be returned as 'data' node, @null if none
 	 * @param array|null $lang_args  |null optional array with arguments passed to Lang::get()
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
@@ -141,7 +146,7 @@ class ResponseBuilder
 
 	/**
 	 * @param integer    $error_code numeric code to be returned as 'code'
-	 * @param array|null $data       payload to be returned as 'data' node, @null if none
+	 * @param mixed|null $data       payload to be returned as 'data' node, @null if none
 	 * @param integer    $http_code  HTTP error code to be returned with this Response
 	 * @param array|null $lang_args  |null optional array with arguments passed to Lang::get()
 	 *
@@ -167,7 +172,7 @@ class ResponseBuilder
 	/**
 	 * @param integer      $error_code    numeric code to be returned as 'code'
 	 * @param string       $error_message custom message to be returned as part of error response
-	 * @param array|null   $data          payload to be returned as 'data' node, @null if none
+	 * @param mixed|null   $data          payload to be returned as 'data' node, @null if none
 	 * @param integer|null $http_code     optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
@@ -193,7 +198,7 @@ class ResponseBuilder
 	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error message
 	 * uses placeholders as well as return data payload
 	 *
-	 * @param array|null   $data       payload array to be returned in 'data' node or response object
+	 * @param mixed|null   $data       payload array to be returned in 'data' node or response object
 	 * @param integer      $error_code internal error code with matching error message
 	 * @param integer|null $http_code  optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
 	 * @param array|null   $lang_args  if array, then this passed as arguments to Lang::get() to build final string.
@@ -219,8 +224,6 @@ class ResponseBuilder
 			throw new \InvalidArgumentException('error_code must not be equal to ErrorCode::OK');
 		} elseif ((is_array($lang_args) === false) && (is_null($lang_args) === false)) {
 			throw new \InvalidArgumentException('lang_args must be either array or null');
-		} elseif ((is_array($data) === false) && (is_null($data) === false)) {
-			throw new \InvalidArgumentException('data must be either array or null');
 		} elseif (is_int($http_code) === false) {
 			throw new \InvalidArgumentException('http_code must be integer');
 		} elseif ($http_code < 400) {
@@ -234,7 +237,7 @@ class ResponseBuilder
 	/**
 	 * @param integer        $return_code     internal message code (usually 0 for OK, and unique integer for errors)
 	 * @param string|integer $message_or_code error message string or error code (must be mapped correctly too)
-	 * @param array|null     $data            optional additional data to be included in response object
+	 * @param mixed|null     $data            optional additional data to be included in response object
 	 * @param integer        $http_code       return HTTP code for build Response object
 	 * @param array          $lang_args       |null optional array with arguments passed to Lang::get()
 	 * @param array          $headers         |null optional HTTP headers to be returned in error response
