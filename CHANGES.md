@@ -2,6 +2,10 @@
 
 ## CHANGE LOG ##
 
+* dev-master
+   * Eloquent models can now be returned as payload (`toArray()` will be called automatically)
+   * You can now pass literyaly anything to be returned in `data` payload, however data type conversion will be enforced to ensure returning data matches specification
+
 * v2.0.0 (2016-04-21)
    * Configuration file structure changed
    * Built-in localization keys changed
