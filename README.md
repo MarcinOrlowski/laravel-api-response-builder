@@ -61,14 +61,14 @@ codes.
 ## Exposed Methods ##
 
 All ResponseBuilder methods are **static**, and for simplicity of use, it's recommended to
-add the following `use` to code that calls Response Builder methods:
+add the following `use` to make using Response Builder easier:
 
     use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 
 Methods' arguments:
 
- * `$data` (array|null) data you want to be returned in response's `data` node,
+ * `$data` (mixed|null) data you want to be returned in response's `data` node,
  * `$http_code` (int) valid HTTP return code (see `HttpResponse` class for useful constants),
  * `$lang_args` (array) array of arguments passed to `Lang::get()` while building `message`,
  * `$error_code` (int) error code you want to be returned in `code`,
@@ -76,6 +76,12 @@ Methods' arguments:
 
 Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
 for the latter. Helper methods arguments are partially optional - see signatures below for details.
+
+**NOTE:** Since v2.1 you `$data` must no longer be `array`, but can literaly of any type, (i.e. `string`),
+however to ensure returned JSON matches specification, data type conversion will be enforced
+internally. There's no smart logic for doing that (with the exception for some Laravel types like
+Model or Collection), so the result may not necessary be of your desire and you will end up with object
+keys being "0" or "scalar".
 
 **IMPORTANT:** If you want to use own `$http_code`, ensure it is right for the purpose.
 Response Builder will throw `\InvalidArgumentException` if you use `$http_code` outside
@@ -88,7 +94,7 @@ See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for
 
 #### Reporting Sucess ####
 
-    success(array $data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
+    success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
     successWithHttpCode($http_code);
 
 Usage restrictions:
@@ -140,6 +146,27 @@ which would return:
          "foo": "bar"
       }
     }
+    
+Since v2.1 you can directly return Eloquent models object:
+
+    $flight = App\Flight::where('active', 1)->first();
+    return ResponseBuilder::success($flight);
+
+which would model attributes (`toArray()` will automatically be called). The
+imaginary output would then look like this:
+
+    {
+      "airline": "lot",
+      "flight_number": "lo123",
+      ...
+    }
+
+**NOTE:** currently there's no recursive processing, so if you want to return Eloquent 
+model as part of array you must explicitely call `toArray()` yourself, i.e.:
+
+    $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
+    return ResponseBuilder::success($data);
+
 
 **IMPORTANT:** `data` node is **always** returned as JSON Object. This is enforced by design, therefore trying to return
 plain array directly:
