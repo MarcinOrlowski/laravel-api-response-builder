@@ -2,11 +2,12 @@
 
 ## CHANGE LOG ##
 
-* dev-master
+* v2.1.0 (2016-05-16)
    * Eloquent Model can now be directly returned as response payload.
    * Eloquent Collection can now be directly returned as response payload.
    * Added some config parameters (see `config/response_builder.php` in `vendor/....`) 
-   * You can now pass literyaly anything to be returned in `data` payload, however data type conversion will be enforced to ensure returning data matches specification
+   * You can now pass literaly anything to be returned in `data` payload, however data type conversion will be enforced to ensure returning data matches specification
+   * Updated documentation
 
 * v2.0.0 (2016-04-21)
    * Configuration file structure changed
