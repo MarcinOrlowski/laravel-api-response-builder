@@ -153,7 +153,7 @@ Since v2.1 you can return Eloquent model object directly:
     $flight = App\Flight::where('active', 1)->first();
     return ResponseBuilder::success($flight);
 
-which would model attributes (`toArray()` will automatically be called). The
+which would return model attributes (`toArray()` will automatically be called by Response Builder). The
 imaginary output would then look like this:
 
     {
@@ -164,7 +164,7 @@ imaginary output would then look like this:
        }
     }
 
-You can also return Collection:
+You can also return whole Collection:
 
     $flights = App\Flight::where('active', 1)->get();
     return ResponseBuilder::success($flights);
@@ -192,19 +192,20 @@ published config file, look into your `vendor/marcin-orlowski/laravel-api=respon
 folder for new items)
 
 **NOTE:** currently there's no recursive processing, so if you want to return Eloquent 
-model as part of array you must explicitely call `toArray()` on such object:
+model as part of own array structure you must explicitely call `toArray()` on such object
+prior adding it to your array you want to pass to Response Builder:
 
     $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
     return ResponseBuilder::success($data);
 
 
 **IMPORTANT:** `data` node is **always** returned as JSON Object. This is enforced by design, therefore trying to return
-plain array directly:
+plain array:
 
-    $method_response = [1,2,3];
-    return ResponseBuilder::success($method_response);
+    $returned_array = [1,2,3];
+    return ResponseBuilder::success($returned_array);
 
-could produce usually unwanted results:
+will produce:
 
     {
       ...
@@ -215,11 +216,11 @@ could produce usually unwanted results:
       }
     }
 
-The proper way of returning array (i.e. list things), is to make it part of returned object (which
-in code would most likely mean wrapping it in another array and providing a key):
+To avoid this you need to make the array part of object, which
+in usually means wrapping it in another array:
 
-    $method_response = [1,2,3];
-    $data = ['items' => method_response];
+    $returned_array = [1,2,3];
+    $data = ['my_array' => $returned_array];
     return ResponseBuilder::success($data);
 
 This would produce expected and much cleaner data structure:
@@ -227,15 +228,15 @@ This would produce expected and much cleaner data structure:
     {
       ...
       "data": {
-         "items": [1, 2, 3]
+         "my_array": [1, 2, 3]
       }
     }
 
 
 #### Errors ####
 
-Returning error is almost as simple as returning success, however you need to provide at least error
-code to report back. To keep your source readable and clear, it's strongly suggested to create separate 
+Returning errors is almost as simple as returning success, however you need to provide at least error
+code to report back to caller. To keep your source readable and clear, it's strongly suggested to create separate 
 class i.e. `app/ErrorCode.php` and put all codes you need to use in your code there:
 
     <?php
@@ -311,15 +312,20 @@ configuration keys (all must be present):
  * `max_code` (int) highest allowed code for assigned code range (inclusive)
  * `map` (array) maps error codes to localization string keys.
 
-
 Code to message mapping example:
 
     'map' => [
         ErrorCode::SOMETHING => 'api.something',
-    }
+    ],
 
 If given error code is not present in `map`, Response Builder will provide fallback message automatically 
-(in form like "Error #xxx"). See [Overriding built-in messages](#overriding-built-in-messages) if you want.
+(default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array empty in
+your config, however you must have `map` key present:
+
+    'map' => [],
+
+Also, read [Overriding built-in messages](#overriding-built-in-messages) to see how to override built-in
+messages.
 
 
 ## Messages and Localization ##
@@ -360,8 +366,10 @@ For example, to remove `locale` field but add server time and timezone to return
     {
         protected static function buildResponse($code, $message, $data = null)
         {
+            // tell ResponseBuilder to do the dirty job
             $array = parent::buildResponse($code, $message, $data);
 
+            // and tweak the response structure as you wish
             $date = new DateTime();
             $array['timestamp'] = $date->getTimestamp();
             $array['timezone'] = $date->getTimezone();
@@ -390,8 +398,9 @@ which would return:
 ## Overriding built-in messages ##
 
 At the moment Response Builder provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
-one is used for success code `0` and another serves as fallback message for codes without mapping. If for any
-reason you want to override them, simply map these codes in your `map` config:
+one is used for success code `0` and anothers provide fallback message for codes without custom mapping. If for 
+any reason you want to override them, simply map these codes in your `map` config using codes from package
+resrved range:
 
      MarcinOrlowski\ResponseBuilder\ErrorCode::OK => 'my_messages.ok',
 
