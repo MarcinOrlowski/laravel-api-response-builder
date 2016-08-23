@@ -2,6 +2,9 @@
 
 ## CHANGE LOG ##
 
+* v2.1.1 (2016-08-23)
+   * Fixed bad handling of HTTP error code in exception handler (reported by Adrian Chen @absszero)
+
 * v2.1.0 (2016-05-16)
    * Eloquent Model can now be directly returned as response payload.
    * Eloquent Collection can now be directly returned as response payload.
