@@ -122,11 +122,11 @@ Usage restrictions:
 
 #### Success ####
 
-To report success from your API, just conclude your Controller with:
+To report success from your API, just conclude your Controller method with simple:
 
     return ResponseBuilder::success();
 
-which will produce:
+which will produce and return the following JSON object:
 
      {
        "success": true,
@@ -136,7 +136,7 @@ which will produce:
        "data": null
      }
 
-If you want to return some data back too, pass it to `success()`:
+If you would like to return some data with your success respoinse (which pretty much always the case :), wrap it into `array` and pass it to `success()` as argument:
 
     $data = [ "foo" => "bar" ];
     return ResponseBuilder::success($data);
@@ -149,8 +149,8 @@ which would return:
          "foo": "bar"
       }
     }
-    
-Since v2.1 you can return Eloquent model object directly:
+
+Since v2.1 you can pass Eloquent model object directly for its data to be returned:
 
     $flight = App\Flight::where('active', 1)->first();
     return ResponseBuilder::success($flight);
@@ -166,12 +166,12 @@ imaginary output would then look like this:
        }
     }
 
-You can also return whole Collection:
+You can also return the whole Collection if needed:
 
     $flights = App\Flight::where('active', 1)->get();
     return ResponseBuilder::success($flights);
 
-which would return array of objects:
+which would return array of objects as expected:
 
     {
       "items": [
@@ -189,11 +189,11 @@ which would return array of objects:
     }
 
     
-`item` and `items` keys are configurable (see `app/config/response_builder.php` or if you already
+`item` and `items` keys are configurable (see `app/config/response_builder.php` or, if you already
 published config file, look into your `vendor/marcin-orlowski/laravel-api=response-builder/config/`
-folder for new items)
+folder for new configuration keys).
 
-**NOTE:** currently there's no recursive processing, so if you want to return Eloquent 
+**NOTE:** currently there's no recursive processing implemented, so if you want to return Eloquent 
 model as part of own array structure you must explicitely call `toArray()` on such object
 prior adding it to your array you want to pass to ResponseBuilder:
 
@@ -201,13 +201,13 @@ prior adding it to your array you want to pass to ResponseBuilder:
     return ResponseBuilder::success($data);
 
 
-**IMPORTANT:** `data` node is **always** returned as JSON Object. This is enforced by design, therefore trying to return
+**IMPORTANT:** `data` node is **always** returned as JSON Object. This is **enforced** by design, therefore trying to return
 plain array:
 
     $returned_array = [1,2,3];
     return ResponseBuilder::success($returned_array);
 
-will produce:
+will, due to array to object conversion, produce the following output:
 
     {
       ...
@@ -219,7 +219,7 @@ will produce:
     }
 
 To avoid this you need to make the array part of object, which
-in usually means wrapping it in another array:
+usually means wrapping it into another array:
 
     $returned_array = [1,2,3];
     $data = ['my_array' => $returned_array];
@@ -238,8 +238,11 @@ This would produce expected and much cleaner data structure:
 #### Errors ####
 
 Returning errors is almost as simple as returning success, however you need to provide at least error
-code to report back to caller. To keep your source readable and clear, it's strongly suggested to create separate 
-class i.e. `app/ErrorCode.php` and put all codes you need to use in your code there:
+code to `error()` method wich will be then reported back to caller. To keep your source readable and clear, 
+it's strongly suggested to create separate class i.e. `app/ErrorCode.php` and put all codes you need to use
+in your code there as `const` and then reference it. This way you protect yourself from using wrong code or
+save your time in case you will need to refactor code range in future. For example, your imaginary 
+`app/ErrorCode.php` can look like this:
 
     <?php
 
@@ -249,11 +252,11 @@ class i.e. `app/ErrorCode.php` and put all codes you need to use in your code th
         const SOMETHING_WENT_WRONG = 250;
     }
 
-To report failure of your method just do:
+End then, to report failure because of `SOMETHING_WENT_WRONG`, just reference this constant:
 
     return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG);
 
-and you will produce:
+This will produce the followin JSON reponse:
 
     {
       "success": false,
@@ -263,21 +266,26 @@ and you will produce:
       "data": null
     }
 
-ResponseBuilder tries to automatically obtain error message for each code. This is
-configured in `config/response_builder.php` file, with use of `map` array. See
-[ResponseBuilder Configuration](#response-builder-configuration) for more details.
+Plase note the `message` key in the above JSON. ResponseBuilder tries to automatically obtain error
+message for each code you pass. This is all configured in `config/response_builder.php` file, with
+use of `map` array. See [ResponseBuilder Configuration](#response-builder-configuration) for more details.
+If there's no dedicated message configured for given error code, `message` value is provided with use 
+of built-in generic fallback message "Error #xxx", as shown above.
 
-If there's no dedicated message configured, `message` is populated with built-in generic
-fallback message "Error #xxx", as shown above.
-
-As ResponseBuilder uses Laravel's Lang package, you can use the same features with
-your messages as you use across the whole app, incl. using placeholders:
+As ResponseBuilder uses Laravel's `Lang` package for locatlisation, you can use the same features with
+your messages as you use across the whole application, including message placeholders:
 
     return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG, ['login' => $login]);
+    
+and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be 
+correctly replaced with content of your `$login` variable.
 
-However this is not recommended, you can override message mapping by providing replacement
-error message with use of `errorWithMessage()`, which expects string message as argument.
-In this case however, if placeholders are used, you need to resolve them yourself:
+You can, however this is not really recommended, override error message mapping completely.
+ResponseBuilder comes with `errorWithMessage()` method, which expects string message as argument.
+This means you can just pass any string you want and it will be returned as `message` element
+in JSON response. Pleas enote this method is pretty low-level and string is used as is. If you
+want to use placeholdes, you need to handle them in your code i.e. by calling `Lang::get()` manually
+and then pass the result:
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
     return ResponseBuilder::errorWithMessage(ErrorCode::SOMETHING_WENT_WRONG, $msg);
@@ -294,8 +302,9 @@ your `config/` folder:
 
     php artisan vendor:publish
 
-and tweak according to your needs. If you are fine with defaults, this step
-can safely be skipped.
+and tweak this file according to your needs. If you are fine with defaults, this step
+can safely be skipped (you can also remove published config file if no tweaks are
+required).
 
 
 #### Laravel setup ####
@@ -357,8 +366,8 @@ and override `buildResponse()` method:
 
     protected static function buildResponse($code, $message, $data = null);
 
-For example, to remove `locale` field but add server time and timezone to returned response create
-`MyResponseBuilder.php` file in `app/` folder with content:
+For example, to remove `locale` field but add server time and timezone to returned response, create
+`MyResponseBuilder.php` file in `app/` folder with the following content:
 
     <?php
 
@@ -368,16 +377,18 @@ For example, to remove `locale` field but add server time and timezone to return
     {
         protected static function buildResponse($code, $message, $data = null)
         {
-            // tell ResponseBuilder to do the dirty job
-            $array = parent::buildResponse($code, $message, $data);
+            // tell ResponseBuilder to do all the dirty job first
+            $response = parent::buildResponse($code, $message, $data);
 
-            // and tweak the response structure as you wish
+            // then do all the tweaks you need
             $date = new DateTime();
-            $array['timestamp'] = $date->getTimestamp();
-            $array['timezone'] = $date->getTimezone();
-            unset($array['locale']);
+            $response['timestamp'] = $date->getTimestamp();
+            $response['timezone'] = $date->getTimezone();
 
-            return $date;
+            unset($response['locale']);
+
+            // finally, return what $response holds
+            return $response;
         }
     }
 
@@ -385,7 +396,7 @@ and from now on use your class instead:
 
     MyResponseBuilder::success();
 
-which would return:
+which should then return your desired JSON structure:
 
      {
        "success": true,
