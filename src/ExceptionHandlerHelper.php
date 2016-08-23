@@ -74,17 +74,18 @@ class ExceptionHandlerHelper
 		$http_code = Config::get("response_builder.exception_handler.exception.{$config_base}.http_code", 0);
 
 		// check if this is valid HTTP error code
-		if ($http_code < 400) {
-			$http_code = 0;
-		} elseif ($http_code == 0) {
-			// no code, let's try exception status
+		if ($http_code == 0) {
+			// no code, let's try getting the exception status
 			$http_code = $ex->getStatusCode();
 
-			// can it be valid HTTP error code?
+			// can it be considered valid HTTP error code?
 			if ($http_code < 400) {
 				$http_code = 0;
 			}
+		} elseif ($http_code < 400) {
+			$http_code = 0;
 		}
+
 		// still no code? use default
 		if ($http_code == 0) {
 			$http_code = $default_http_code;
