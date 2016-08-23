@@ -414,3 +414,7 @@ You can use `:error_code` placeholder in the message and it will be substituted 
 
 * Response Builder is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making Response Builder usable with Lumen, speak up or (betteR) send pull request!
 * Tests will be released shortly. They do already exist, however Response Builder was extracted from existing project and making tests work again require some work to remove dependencies.
+
+## Changelog ##
+
+ See [CHANGES.md](CHANGES.md) for detailed revision history.
