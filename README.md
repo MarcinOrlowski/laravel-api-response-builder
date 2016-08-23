@@ -1,6 +1,6 @@
 # API Response Builder for Laravel 5 #
 
-Response Builder is Laravel5's helper designed to simplify building
+ResponseBuilder is Laravel5's helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
 
 
@@ -27,42 +27,44 @@ nice, normalized and easy to consume REST API responses.
 For simplicity of consuming, produced JSON response is **always** the same at its core and contains
 the following data:
 
-  * `success` (boolean) determines if API method succeeded or not
-  * `code` (int) being your own return code
-  * `locale` (string) locale used for error message (obtained automatically via \App::getLocale())
-  * `message` (string) human readable description of `code`
+  * `success` (boolean) determines if API method succeeded or not,
+  * `code` (int) being your own return code,
+  * `locale` (string) locale used for error message (obtained automatically via `\App::getLocale()`),
+  * `message` (string) human readable description, telling what `code` really means,
   * `data` (object|null) your returned payload or `null` if there's no data to return.
 
-If you need to return other/different fields in response, see [Manipulating Response Object](#manipulating-response-object).
+If you need to return other/different fields in response, see [Manipulating Response Object](#manipulating-response-object) chapter for detailed implementation guides.
 
 ## Return Codes ##
 
-Return codes must be positive integer. Code `0` (zero) always means success, all
-other codes are treated as error codes.
+All return codes must be positive integer. Code `0` (zero) **ALWAYS** means **success**. All
+other codes are considered error codes.
 
 
 #### Code Ranges ####
 
-In one of our projects we had multiple APIs chained together (so one API called another). In case of
-method failure we wanted to be able to do the "cascade" and use return code provided by API that failed.
+In one of our projects we had multiple APIs chained together (so one API called another). So we wanted
+to be able to chain API invocations and still be able to tell which one failed in case of problems.
 For example our API consumer call method of publicly exposed API "A". That API uses internal API "B"
 method, but under the hood "B" also delegates some work and talks to API "C". In case of failure of
-method in "C", API consumer would see its' return code. This simplifies the code, and helps keep features
+method in "C", API consumer would see its' return code. This simplifies the code and helps keep features
 separated but to make this work you must ensure no API return code overlaps, otherwise you cannot easily
-tell which one in your chain failed. For that reason Response Builder supports code ranges, allowing you
-to configure `min_code` and `max_code` you want to be allowed, and no code outside this range would be
-allowed by Response Builder.
+tell which one in your chain failed. For that reason ResponseBuilder supports code ranges, allowing you
+to configure `min_code` and `max_code` you want to be allowed in given API. No code outside this range would
+be allowed by ResponseBuilder so once you assign non-overlaping ranges to your modules, your live
+will be easier and ResponseBuilder will fail (throwing an exception) if wrong code is used, so your
+unit tests should detect any error code clash easily.
 
 If you do not need code ranges for your API, just set `max_code` in configuration file to some very high value.
 
-**IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by Response Builder and cannot be assigned to your
+**IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by ResponseBuilder and cannot be assigned to your
 codes.
 
 
 ## Exposed Methods ##
 
 All ResponseBuilder methods are **static**, and for simplicity of use, it's recommended to
-add the following `use` to make using Response Builder easier:
+add the following `use` to make using ResponseBuilder easier:
 
     use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -85,11 +87,11 @@ Model or Collection), so the result may not necessary be of your desire and you 
 keys being "0" or "scalar".
 
 **IMPORTANT:** If you want to use own `$http_code`, ensure it is right for the purpose.
-Response Builder will throw `\InvalidArgumentException` if you use `$http_code` outside
+ResponseBuilder will throw `\InvalidArgumentException` if you use `$http_code` outside
 of 200-299 range with `success()` and related methods and it will also do the same
 for `error()` and related methods if `$http_code` will be lower than 400.
 
-Redirection codes 3xx cannot be used with Response Builder.
+Redirection codes 3xx cannot be used with ResponseBuilder.
 
 See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details on HTTP codes.
 
@@ -153,7 +155,7 @@ Since v2.1 you can return Eloquent model object directly:
     $flight = App\Flight::where('active', 1)->first();
     return ResponseBuilder::success($flight);
 
-which would return model attributes (`toArray()` will automatically be called by Response Builder). The
+which would return model attributes (`toArray()` will automatically be called by ResponseBuilder). The
 imaginary output would then look like this:
 
     {
@@ -193,7 +195,7 @@ folder for new items)
 
 **NOTE:** currently there's no recursive processing, so if you want to return Eloquent 
 model as part of own array structure you must explicitely call `toArray()` on such object
-prior adding it to your array you want to pass to Response Builder:
+prior adding it to your array you want to pass to ResponseBuilder:
 
     $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
     return ResponseBuilder::success($data);
@@ -261,14 +263,14 @@ and you will produce:
       "data": null
     }
 
-Response Builder tries to automatically obtain error message for each code. This is
+ResponseBuilder tries to automatically obtain error message for each code. This is
 configured in `config/response_builder.php` file, with use of `map` array. See
-[Response Builder Configuration](#response-builder-configuration) for more details.
+[ResponseBuilder Configuration](#response-builder-configuration) for more details.
 
 If there's no dedicated message configured, `message` is populated with built-in generic
 fallback message "Error #xxx", as shown above.
 
-As Response Builder uses Laravel's Lang package, you can use the same features with
+As ResponseBuilder uses Laravel's Lang package, you can use the same features with
 your messages as you use across the whole app, incl. using placeholders:
 
     return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG, ['login' => $login]);
@@ -283,7 +285,7 @@ In this case however, if placeholders are used, you need to resolve them yoursel
 
 ## Installation and Configuration ##
 
-To install Response Builder all you need to do is to open your shell and do:
+To install ResponseBuilder all you need to do is to open your shell and do:
 
     composer require marcin-orlowski/laravel-api-response-builder
 
@@ -303,9 +305,9 @@ Edit `app/config.php` and add the following line to your `providers` array:
     MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
 
 
-#### Response Builder Configuration ####
+#### ResponseBuilder Configuration ####
 
-Response Builder configuration can be found in `config/response_builder.php` file. Supported
+ResponseBuilder configuration can be found in `config/response_builder.php` file. Supported
 configuration keys (all must be present):
 
  * `min_code` (int) lowest allowed code for assigned code range (inclusive)
@@ -318,7 +320,7 @@ Code to message mapping example:
         ErrorCode::SOMETHING => 'api.something',
     ],
 
-If given error code is not present in `map`, Response Builder will provide fallback message automatically 
+If given error code is not present in `map`, ResponseBuilder will provide fallback message automatically 
 (default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array empty in
 your config, however you must have `map` key present:
 
@@ -330,12 +332,12 @@ messages.
 
 ## Messages and Localization ##
 
-Response Builder is designed with localization in mind so default approach is you just set it up
+ResponseBuilder is designed with localization in mind so default approach is you just set it up
 once and most things should happen automatically, which also includes creating human readable error messages.
 As described in `Configuration` section, once you got `map` configured, you most likely will not
-be in need to manually refer error messages - Response Builder will do that for you and you optionally
+be in need to manually refer error messages - ResponseBuilder will do that for you and you optionally
 just need to pass array with placeholders' substitution (hence the order of arguments for `errorXXX()`
-methods). Response Builder utilised standard Laravel's `Lang` class to deal with messages, so all features
+methods). ResponseBuilder utilised standard Laravel's `Lang` class to deal with messages, so all features
 localization are supported.
 
 
@@ -344,7 +346,7 @@ localization are supported.
 Properly designed API shall never hit consumer with HTML nor anything like that. While in regular use this
 is quite easy to achieve, unexpected problems like uncaught exception or even enabled maintenance mode
 can confuse many APIs world wide. Do not be one of them and take care of that too. With Laravel this
-can be achieved with custom Exception Handler and Response Builder comes with ready-to-use Handler as
+can be achieved with custom Exception Handler and ResponseBuilder comes with ready-to-use Handler as
 well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for easy setup information.
 
 
@@ -397,7 +399,7 @@ which would return:
 
 ## Overriding built-in messages ##
 
-At the moment Response Builder provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
+At the moment ResponseBuilder provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
 one is used for success code `0` and anothers provide fallback message for codes without custom mapping. If for 
 any reason you want to override them, simply map these codes in your `map` config using codes from package
 resrved range:
@@ -416,13 +418,13 @@ You can use `:error_code` placeholder in the message and it will be substituted 
 ## License ##
 
 * Written and copyrighted by Marcin Orlowski
-* Response Builder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+* ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 
 ## Notes ##
 
-* Response Builder is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making Response Builder usable with Lumen, speak up or (betteR) send pull request!
-* Tests will be released shortly. They do already exist, however Response Builder was extracted from existing project and making tests work again require some work to remove dependencies.
+* ResponseBuilder is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making ResponseBuilder usable with Lumen, speak up or (betteR) send pull request!
+* Tests will be released shortly. They do already exist, however ResponseBuilder was extracted from existing project and making tests work again require some work to remove dependencies.
 
 ## Changelog ##
 
