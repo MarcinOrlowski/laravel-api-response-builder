@@ -76,7 +76,11 @@ class ExceptionHandlerHelper
 		// check if this is valid HTTP error code
 		if ($http_code == 0) {
 			// no code, let's try getting the exception status
-			$http_code = $ex->getStatusCode();
+			if ($ex instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+				$http_code = $ex->getStatusCode();
+			} else {
+				$http_code = $ex->getCode();
+			}
 
 			// can it be considered valid HTTP error code?
 			if ($http_code < 400) {

@@ -2,6 +2,9 @@
 
 ## CHANGE LOG ##
 
+* v2.1.2 (2016-08-24)
+   * Fixed exception code handling in ExceptionHandlerHelper (reported by Adrian Chen @absszero)
+
 * v2.1.1 (2016-08-23)
    * Fixed bad handling of HTTP error code in exception handler (reported by Adrian Chen @absszero)
 
