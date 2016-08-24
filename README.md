@@ -128,13 +128,13 @@ To report success from your API, just conclude your Controller method with simpl
 
 which will produce and return the following JSON object:
 
-     {
-       "success": true,
-       "code": 0,
-       "locale": "en",
-       "message": "OK",
-       "data": null
-     }
+    {
+      "success": true,
+      "code": 0,
+      "locale": "en",
+      "message": "OK",
+      "data": null
+    }
 
 If you would like to return some data with your success respoinse (which pretty much always the case :), wrap it into `array` and pass it to `success()` as argument:
 
@@ -144,9 +144,12 @@ If you would like to return some data with your success respoinse (which pretty 
 which would return:
 
     {
-      ...
+      "success": true,
+      "code": 0,
+      "locale": "en",
+      "message": "OK",
       "data": {
-         "foo": "bar"
+          "foo": "bar"
       }
     }
 
@@ -175,17 +178,17 @@ which would return array of objects as expected:
 
     {
       "items": [
-            {
-               "airline": "lot",
-               "flight_number": "lo123",
-               ...
-            },{
-               "airline": "american",
-               "flight_number": "am456",
-               ...
-            }
-         ]
-       }
+          {
+             "airline": "lot",
+             "flight_number": "lo123",
+             ...
+          },{
+             "airline": "american",
+             "flight_number": "am456",
+             ...
+          }
+        ]
+      }
     }
 
     
@@ -201,8 +204,8 @@ prior adding it to your array you want to pass to ResponseBuilder:
     return ResponseBuilder::success($data);
 
 
-**IMPORTANT:** `data` node is **always** returned as JSON Object. This is **enforced** by design, therefore trying to return
-plain array:
+**IMPORTANT:** `data` node is **always** returned as JSON Object. This is **enforced** by design, 
+therefore trying to return plain array:
 
     $returned_array = [1,2,3];
     return ResponseBuilder::success($returned_array);
@@ -316,8 +319,10 @@ Edit `app/config.php` and add the following line to your `providers` array:
 
 #### ResponseBuilder Configuration ####
 
-ResponseBuilder configuration can be found in `config/response_builder.php` file. Supported
-configuration keys (all must be present):
+ResponseBuilder configuration can be found in `config/response_builder.php` file and 
+each of its element is heavily documented in the file itself. 
+
+Supported configuration keys (all keys must be present in config file):
 
  * `min_code` (int) lowest allowed code for assigned code range (inclusive)
  * `max_code` (int) highest allowed code for assigned code range (inclusive)
@@ -366,8 +371,11 @@ and override `buildResponse()` method:
 
     protected static function buildResponse($code, $message, $data = null);
 
-For example, to remove `locale` field but add server time and timezone to returned response, create
-`MyResponseBuilder.php` file in `app/` folder with the following content:
+For example, you want to get rid of `locale` field and add server time and timezone to returned
+responses. First, create `MyResponseBuilder.php` file in `app/` folder (both location and class
+name can be anything you wish, just remember to adjust the namespace too) and override
+`buildResponse()` method which builds normalized response array for all the helper methods.
+So the class content should be as follow:
 
     <?php
 
@@ -392,7 +400,7 @@ For example, to remove `locale` field but add server time and timezone to return
         }
     }
 
-and from now on use your class instead:
+and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`:
 
     MyResponseBuilder::success();
 
