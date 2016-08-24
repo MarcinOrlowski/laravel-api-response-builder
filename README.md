@@ -95,7 +95,7 @@ Redirection codes 3xx cannot be used with ResponseBuilder.
 
 See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details on HTTP codes.
 
-#### Reporting Sucess ####
+#### Reporting Success ####
 
     success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
     successWithHttpCode($http_code);
