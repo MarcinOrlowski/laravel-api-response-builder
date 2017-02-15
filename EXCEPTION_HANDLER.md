@@ -128,15 +128,18 @@ with `:message` placeholder being substituted with exception message (can if it 
 
 ## Exception Handler conflicts ##
 
-Please note that some packages may also provide own exception handling helpers and may recommend
-enabling them. If you do so, it will conflict and our handler may not be executed at all.
+Please note that some 3rd party packages may also provide own exception handling helpers and may 
+recommend using said handlers in your application. Unfortunately this will cause conflict with
+ResponseBuilder's handler which usually lead to one (or another) handler not being executed
+at all.
 
 For example if your API delegates OAuth2 related tasks to popular [lucadegasperi/oauth2-server-laravel](https://packagist.org/packages/lucadegasperi/oauth2-server-laravel)
-package, then you must not use its `OAuthExceptionHandlerMiddleware`. To ensure it is not set,
-edit `app/Kernel.php` file and remove/comment out the following line (if present):
+package, then you must NOT use its `OAuthExceptionHandlerMiddleware` class and ensure it is not set,
+by inspecting `app/Kernel.php` file and ensuring the following line (if present):
 
     'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware',
 
+is removed or commented out.
 
 ## Notes ##
 
