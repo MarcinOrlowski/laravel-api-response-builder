@@ -7,9 +7,10 @@ nice, normalized and easy to consume REST API responses.
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Latest Unstable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/unstable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![License](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/license)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
+[![Monthly Downloads](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/d/monthly)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 
 ## Table of contents ##
-
+ 
  * [Response structure](#response-structure)
  * [Return Codes and Code Ranges](#return-codes)
  * [Exposed Methods](#exposed-methods)
@@ -18,6 +19,11 @@ nice, normalized and easy to consume REST API responses.
  * [Handling Exceptions API way](#handling-exceptions-api-way)
  * [Manipulate Response Object](#manipulate-response-object)
  * [Overriding built-in messages](#overriding-built-in-messages)
+
+ 
+ * [Bugs reports and Pull requests appreciated](#contributing)
+
+
  * [License](#license)
  * [Notes](#notes)
 
@@ -51,7 +57,7 @@ method in "C", API consumer would see its' return code. This simplifies the code
 separated but to make this work you must ensure no API return code overlaps, otherwise you cannot easily
 tell which one in your chain failed. For that reason ResponseBuilder supports code ranges, allowing you
 to configure `min_code` and `max_code` you want to be allowed in given API. No code outside this range would
-be allowed by ResponseBuilder so once you assign non-overlaping ranges to your modules, your live
+be allowed by ResponseBuilder so once you assign non-overlapping ranges to your modules, your live
 will be easier and ResponseBuilder will fail (throwing an exception) if wrong code is used, so your
 unit tests should detect any error code clash easily.
 
@@ -80,7 +86,7 @@ Methods' arguments:
 Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
 for the latter. Helper methods arguments are partially optional - see signatures below for details.
 
-**NOTE:** Since v2.1 you `$data` must no longer be `array`, but can literaly of any type, (i.e. `string`),
+**NOTE:** Since v2.1 you `$data` must no longer be `array`, but can literally of any type, (i.e. `string`),
 however to ensure returned JSON matches specification, data type conversion will be enforced
 internally. There's no smart logic for doing that (with the exception for some Laravel types like
 Model or Collection), so the result may not necessary be of your desire and you will end up with object
@@ -136,7 +142,7 @@ which will produce and return the following JSON object:
       "data": null
     }
 
-If you would like to return some data with your success respoinse (which pretty much always the case :), wrap it into `array` and pass it to `success()` as argument:
+If you would like to return some data with your success response (which pretty much always the case :), wrap it into `array` and pass it to `success()` as argument:
 
     $data = [ "foo" => "bar" ];
     return ResponseBuilder::success($data);
@@ -197,7 +203,7 @@ published config file, look into your `vendor/marcin-orlowski/laravel-api=respon
 folder for new configuration keys).
 
 **NOTE:** currently there's no recursive processing implemented, so if you want to return Eloquent 
-model as part of own array structure you must explicitely call `toArray()` on such object
+model as part of own array structure you must explicitly call `toArray()` on such object
 prior adding it to your array you want to pass to ResponseBuilder:
 
     $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
@@ -241,7 +247,7 @@ This would produce expected and much cleaner data structure:
 #### Errors ####
 
 Returning errors is almost as simple as returning success, however you need to provide at least error
-code to `error()` method wich will be then reported back to caller. To keep your source readable and clear, 
+code to `error()` method which will be then reported back to caller. To keep your source readable and clear, 
 it's strongly suggested to create separate class i.e. `app/ErrorCode.php` and put all codes you need to use
 in your code there as `const` and then reference it. This way you protect yourself from using wrong code or
 save your time in case you will need to refactor code range in future. For example, your imaginary 
@@ -259,7 +265,7 @@ End then, to report failure because of `SOMETHING_WENT_WRONG`, just reference th
 
     return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG);
 
-This will produce the followin JSON reponse:
+This will produce the following JSON response:
 
     {
       "success": false,
@@ -269,13 +275,13 @@ This will produce the followin JSON reponse:
       "data": null
     }
 
-Plase note the `message` key in the above JSON. ResponseBuilder tries to automatically obtain error
+Please note the `message` key in the above JSON. ResponseBuilder tries to automatically obtain error
 message for each code you pass. This is all configured in `config/response_builder.php` file, with
 use of `map` array. See [ResponseBuilder Configuration](#response-builder-configuration) for more details.
 If there's no dedicated message configured for given error code, `message` value is provided with use 
 of built-in generic fallback message "Error #xxx", as shown above.
 
-As ResponseBuilder uses Laravel's `Lang` package for locatlisation, you can use the same features with
+As ResponseBuilder uses Laravel's `Lang` package for localisation, you can use the same features with
 your messages as you use across the whole application, including message placeholders:
 
     return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG, ['login' => $login]);
@@ -286,8 +292,8 @@ correctly replaced with content of your `$login` variable.
 You can, however this is not really recommended, override error message mapping completely.
 ResponseBuilder comes with `errorWithMessage()` method, which expects string message as argument.
 This means you can just pass any string you want and it will be returned as `message` element
-in JSON response. Pleas enote this method is pretty low-level and string is used as is. If you
-want to use placeholdes, you need to handle them in your code i.e. by calling `Lang::get()` manually
+in JSON response. Please note this method is pretty low-level and string is used as is. If you
+want to use placeholders, you need to handle them in your code i.e. by calling `Lang::get()` manually
 and then pass the result:
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
@@ -419,9 +425,9 @@ which should then return your desired JSON structure:
 ## Overriding built-in messages ##
 
 At the moment ResponseBuilder provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
-one is used for success code `0` and anothers provide fallback message for codes without custom mapping. If for 
+one is used for success code `0` and another provides fallback message for codes without custom mapping. If for 
 any reason you want to override them, simply map these codes in your `map` config using codes from package
-resrved range:
+reserved range:
 
      MarcinOrlowski\ResponseBuilder\ErrorCode::OK => 'my_messages.ok',
 
@@ -433,16 +439,29 @@ To override default error message used when given error code has no entry in `ma
 
 You can use `:error_code` placeholder in the message and it will be substituted actual error code value.
 
+## Contributing ##
+
+Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
+ 
+If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues) **before writting any code**. This will help us save your
+time in case I'd not be able to accept such changes. But if all is good and clear then follow common routine:
+
+ * fork the project
+ * create new branch
+ * do your changes
+ * send pull request
+
+Thanks in advance!
 
 ## License ##
 
-* Written and copyrighted by Marcin Orlowski
+* Written and copyrighted &copy;2016-2017 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
 * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 
 ## Notes ##
 
-* ResponseBuilder is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making ResponseBuilder usable with Lumen, speak up or (betteR) send pull request!
+* ResponseBuilder is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making ResponseBuilder usable with Lumen, speak up or (better) send pull request!
 * Tests will be released shortly. They do already exist, however ResponseBuilder was extracted from existing project and making tests work again require some work to remove dependencies.
 
 ## Changelog ##

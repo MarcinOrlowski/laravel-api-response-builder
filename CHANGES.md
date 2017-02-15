@@ -12,7 +12,7 @@
    * Eloquent Model can now be directly returned as response payload.
    * Eloquent Collection can now be directly returned as response payload.
    * Added some config parameters (see `config/response_builder.php` in `vendor/....`) 
-   * You can now pass literaly anything to be returned in `data` payload, however data type conversion will be enforced to ensure returning data matches specification
+   * You can now pass literally anything to be returned in `data` payload, however data type conversion will be enforced to ensure returning data matches specification
    * Updated documentation
 
 * v2.0.0 (2016-04-21)
@@ -22,20 +22,20 @@
    * ExceptionHandlerHelper adds `class`, `file` and `line`` to returned JSON for apps in DEBUG mode
    * ExceptionHandlerHelper can now use `:message`, `:error_code`, `:http_code` and `:class` placeholders
    * ExceptionHandlerHelper now automatically resolves message mappings and needs no config entries
-   * ExceptionHandlerHelper now comes with built-in error codes (still, using own codes isrecommended)
+   * ExceptionHandlerHelper now comes with built-in error codes (still, using own codes is recommended)
    * Added option to configure HTTP codes for each ExceptionHandlerHelper returned response separately
-   * Exception provided messages can now have prioritet over ExceptionHandlerHelper configured error messages
+   * Exception provided messages can now have priorities over ExceptionHandlerHelper configured error messages
 
 * v1.5.0 (2016-04-18)
    * ExHandler: ExceptionHandler is now replaced by ExceptionHandlerHelper
-   * ExHandler: Added option to ommit Exception class name in emited uncaught exception message
+   * ExHandler: Added option to omit Exception class name in emitted uncaught exception message
 
 * v1.4.2 (2016-04-16)
    * Added chapter about manipulating response object
    * Code cleanup
 
 * v1.4.1 (2016-04-14)
-   * Removed pointles Handler's overloading to report()
+   * Removed pointless Handler's overloading to report()
    * Code style cleanup
 
 * v1.4.0 (2016-04-12)
