@@ -404,7 +404,7 @@ So the class content should be as follow:
     {
         protected static function buildResponse($code, $message, $data = null)
         {
-            // tell ResponseBuilder to do all the dirty job first
+            // tell ResponseBuilder to do all the heavy lifting first
             $response = parent::buildResponse($code, $message, $data);
 
             // then do all the tweaks you need
