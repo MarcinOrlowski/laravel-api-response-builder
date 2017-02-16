@@ -12,9 +12,9 @@ nice, normalized and easy to consume REST API responses.
 ## Table of contents ##
  
  * [Response structure](#response-structure)
+ * [Usage examples](#usage-examples)
  * [Return Codes and Code Ranges](#return-codes)
  * [Exposed Methods](#exposed-methods)
- * [Usage examples](#usage-examples)
  * [Installation and Configuration](#installation-and-configuration)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
  * [Manipulate Response Object](#manipulate-response-object)
@@ -37,90 +37,6 @@ the following data:
 
 If you need to return other/different fields in response, see [Manipulating Response Object](#manipulating-response-object) 
 chapter for detailed implementation guides.
-
-## Return Codes ##
-
-All return codes must be positive integer. Code `0` (zero) **ALWAYS** means **success**. All
-other codes are considered error codes.
-
-
-#### Code Ranges ####
-
-In one of our projects we had multiple APIs chained together (so one API called another). So we wanted
-to be able to chain API invocations and still be able to tell which one failed in case of problems.
-For example our API consumer call method of publicly exposed API "A". That API uses internal API "B"
-method, but under the hood "B" also delegates some work and talks to API "C". In case of failure of
-method in "C", API consumer would see its' return code. This simplifies the code and helps keep features
-separated but to make this work you must ensure no API return code overlaps, otherwise you cannot easily
-tell which one in your chain failed. For that reason ResponseBuilder supports code ranges, allowing you
-to configure `min_code` and `max_code` you want to be allowed in given API. No code outside this range would
-be allowed by ResponseBuilder so once you assign non-overlapping ranges to your modules, your live
-will be easier and ResponseBuilder will fail (throwing an exception) if wrong code is used, so your
-unit tests should detect any error code clash easily.
-
-If you do not need code ranges for your API, just set `max_code` in configuration file to some very high value.
-
-**IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by ResponseBuilder and cannot be assigned to your
-codes.
-
-
-## Exposed Methods ##
-
-All ResponseBuilder methods are **static**, and for simplicity of use, it's recommended to
-add the following `use` to make using ResponseBuilder easier:
-
-    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-
-
-Methods' arguments:
-
- * `$data` (mixed|null) data you want to be returned in response's `data` node,
- * `$http_code` (int) valid HTTP return code (see `HttpResponse` class for useful constants),
- * `$lang_args` (array) array of arguments passed to `Lang::get()` while building `message`,
- * `$error_code` (int) error code you want to be returned in `code`,
- * `$message` (string) custom message to be returned as part of error response.
-
-Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
-for the latter. Helper methods arguments are partially optional - see signatures below for details.
-
-**NOTE:** Since v2.1 the requirement for `$data` to be an `array` is lifted and `$data` can be
-of any type you need (i.e. `string`), however to ensure returned JSON structure is unaffected,
-data type casting is used internally. There's no smart logic but ordinary `$data = (object)$data;`
-casting with the exception for Laravel types like `Model` and `Collection`), and it's recommended
-you ensure `$data` is `array` (with mentioned exception) if you do not want to end up with dictionary
-using keys like "0" or "scalar".
-
-**IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
-value matches W3C meaning of the code. ResponseBuilder will throw `\InvalidArgumentException` if 
-you try to call `success()` and  related methods with `$http_code` not being in range of 200-299. 
-The same will happen if you try to call `error()` but `$http_code` will be lower than 400.
-
-Redirection codes 3xx cannot be used with ResponseBuilder.
-
-See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details on HTTP codes.
-
-#### Reporting Success ####
-
-    success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
-    successWithHttpCode($http_code);
-
-Usage restrictions:
-
-* `$http_code` must be in range from 200 to 299
-
-#### Reporting Error ####
-
-    error($error_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST);
-    errorWithData($error_code, $data, array $lang_args = []);
-    errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = []);
-    errorWithHttpCode($error_code, $http_code, $lang_args = []);
-    errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
-
-Usage restrictions:
-
-* `$error_code` must not be 0
-* `$http_code` must not be lower than 400
-
 
 ## Usage examples ##
 
@@ -297,6 +213,92 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
     return ResponseBuilder::errorWithMessage(ErrorCode::SOMETHING_WENT_WRONG, $msg);
+
+
+## Return Codes ##
+
+All return codes must be positive integer. Code `0` (zero) **ALWAYS** means **success**. All
+other codes are considered error codes.
+
+
+#### Code Ranges ####
+
+In one of our projects we had multiple APIs chained together (so one API called another). So we wanted
+to be able to chain API invocations and still be able to tell which one failed in case of problems.
+For example our API consumer call method of publicly exposed API "A". That API uses internal API "B"
+method, but under the hood "B" also delegates some work and talks to API "C". In case of failure of
+method in "C", API consumer would see its' return code. This simplifies the code and helps keep features
+separated but to make this work you must ensure no API return code overlaps, otherwise you cannot easily
+tell which one in your chain failed. For that reason ResponseBuilder supports code ranges, allowing you
+to configure `min_code` and `max_code` you want to be allowed in given API. No code outside this range would
+be allowed by ResponseBuilder so once you assign non-overlapping ranges to your modules, your live
+will be easier and ResponseBuilder will fail (throwing an exception) if wrong code is used, so your
+unit tests should detect any error code clash easily.
+
+If you do not need code ranges for your API, just set `max_code` in configuration file to some very high value.
+
+**IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by ResponseBuilder and cannot be assigned to your
+codes.
+
+
+## Exposed Methods ##
+
+All ResponseBuilder methods are **static**, and for simplicity of use, it's recommended to
+add the following `use` to make using ResponseBuilder easier:
+
+    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+
+
+Methods' arguments:
+
+ * `$data` (mixed|null) data you want to be returned in response's `data` node,
+ * `$http_code` (int) valid HTTP return code (see `HttpResponse` class for useful constants),
+ * `$lang_args` (array) array of arguments passed to `Lang::get()` while building `message`,
+ * `$error_code` (int) error code you want to be returned in `code`,
+ * `$message` (string) custom message to be returned as part of error response.
+
+Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
+for the latter. Helper methods arguments are partially optional - see signatures below for details.
+
+**NOTE:** Since v2.1 the requirement for `$data` to be an `array` is lifted and `$data` can be
+of any type you need (i.e. `string`), however to ensure returned JSON structure is unaffected,
+data type casting is used internally. There's no smart logic but ordinary `$data = (object)$data;`
+casting with the exception for Laravel types like `Model` and `Collection`), and it's recommended
+you ensure `$data` is `array` (with mentioned exception) if you do not want to end up with dictionary
+using keys like "0" or "scalar".
+
+**IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
+value matches W3C meaning of the code. ResponseBuilder will throw `\InvalidArgumentException` if 
+you try to call `success()` and  related methods with `$http_code` not being in range of 200-299. 
+The same will happen if you try to call `error()` but `$http_code` will be lower than 400.
+
+Redirection codes 3xx cannot be used with ResponseBuilder.
+
+See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details on HTTP codes.
+
+#### Reporting Success ####
+
+    success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
+    successWithHttpCode($http_code);
+
+Usage restrictions:
+
+* `$http_code` must be in range from 200 to 299
+
+#### Reporting Error ####
+
+    error($error_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+    errorWithData($error_code, $data, array $lang_args = []);
+    errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = []);
+    errorWithHttpCode($error_code, $http_code, $lang_args = []);
+    errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+
+Usage restrictions:
+
+* `$error_code` must not be 0
+* `$http_code` must not be lower than 400
+
+
 
 
 ## Installation and Configuration ##
