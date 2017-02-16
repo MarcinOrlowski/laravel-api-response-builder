@@ -419,7 +419,9 @@ So the class content should be as follow:
         }
     }
 
-and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`:
+and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`. As all responses are
+always produced with use of `buildResponse()` internally, your **all** responses will be affected
+the same way. For example:
 
     MyResponseBuilder::success();
 
@@ -434,6 +436,23 @@ which should then return your desired JSON structure:
        "data": null
      }
 
+and 
+
+    $data = [ 'foo'=>'bar ];
+    return MyResponseBuilder::errorWithData(ErrorCode::SOMETHING_WENT_WRONG, $data);
+
+would produce:
+
+    {
+      "success": false,
+      "code": 250,
+      "message": "Error #250",
+      "timestamp": 1272509157,
+      "timezone": "UTC",
+      "data": {
+          "foo": "bar"
+      }
+    }
 
 ## Overriding built-in messages ##
 
