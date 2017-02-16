@@ -17,7 +17,7 @@ nice, normalized and easy to consume REST API responses.
  * [Exposed Methods](#exposed-methods)
  * [Installation and Configuration](#installation-and-configuration)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
- * [Manipulate Response Object](#manipulate-response-object)
+ * [Manipulating Response Object](#manipulating-response-object)
  * [Overriding built-in messages](#overriding-built-in-messages)
  * [Bugs reports and pull requests](#contributing)
  * [License](#license)
