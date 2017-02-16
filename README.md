@@ -361,11 +361,13 @@ localization are supported.
 
 ## Handling Exceptions API way ##
 
-Properly designed API shall never hit consumer with HTML nor anything like that. While in regular use this
-is quite easy to achieve, unexpected problems like uncaught exception or even enabled maintenance mode
-can confuse many APIs world wide. Do not be one of them and take care of that too. With Laravel this
-can be achieved with custom Exception Handler and ResponseBuilder comes with ready-to-use Handler as
-well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for easy setup information.
+Properly designed REST API should never hit consumer with anything but JSON. While it looks like easy task, 
+there's always chance for unexpected issue to occur. So we need to expect unexpected and be prepared when 
+it hit the fan. This means not only things like uncaught exception but also Laravel's maintenance mode can 
+pollute returned API responses which is unfortunately pretty common among badly written APIs. Do not be 
+one of them, and take care of that in advance with couple of easy steps. 
+With Laravel this can be achieved with custom Exception Handler and ResponseBuilder comes with ready-to-use
+Handler as well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for easy setup information.
 
 
 ## Manipulating Response Object ##
