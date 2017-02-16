@@ -40,6 +40,8 @@ chapter for detailed implementation guides.
 
 ## Usage examples ##
 
+The following assumes package is properly installed and enabled. These steps are described in details later, so keep reading.
+
 #### Success ####
 
 To report success from your API, just conclude your Controller method with simple:
