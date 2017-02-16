@@ -35,7 +35,8 @@ the following data:
   * `message` (string) human readable description, telling what `code` really means,
   * `data` (object|null) your returned payload or `null` if there's no data to return.
 
-If you need to return other/different fields in response, see [Manipulating Response Object](#manipulating-response-object) chapter for detailed implementation guides.
+If you need to return other/different fields in response, see [Manipulating Response Object](#manipulating-response-object) 
+chapter for detailed implementation guides.
 
 ## Return Codes ##
 
@@ -82,16 +83,17 @@ Methods' arguments:
 Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
 for the latter. Helper methods arguments are partially optional - see signatures below for details.
 
-**NOTE:** Since v2.1 you `$data` must no longer be `array`, but can literally of any type, (i.e. `string`),
-however to ensure returned JSON matches specification, data type conversion will be enforced
-internally. There's no smart logic for doing that (with the exception for some Laravel types like
-Model or Collection), so the result may not necessary be of your desire and you will end up with object
-keys being "0" or "scalar".
+**NOTE:** Since v2.1 the requirement for `$data` to be an `array` is lifted and `$data` can be
+of any type you need (i.e. `string`), however to ensure returned JSON structure is unaffected,
+data type casting is used internally. There's no smart logic but ordinary `$data = (object)$data;`
+casting with the exception for Laravel types like `Model` and `Collection`), and it's recommended
+you ensure `$data` is `array` (with mentioned exception) if you do not want to end up with dictionary
+using keys like "0" or "scalar".
 
-**IMPORTANT:** If you want to use own `$http_code`, ensure it is right for the purpose.
-ResponseBuilder will throw `\InvalidArgumentException` if you use `$http_code` outside
-of 200-299 range with `success()` and related methods and it will also do the same
-for `error()` and related methods if `$http_code` will be lower than 400.
+**IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
+value matches W3C meaning of the code. ResponseBuilder will throw `\InvalidArgumentException` if 
+you try to call `success()` and  related methods with `$http_code` not being in range of 200-299. 
+The same will happen if you try to call `error()` but `$http_code` will be lower than 400.
 
 Redirection codes 3xx cannot be used with ResponseBuilder.
 
@@ -194,9 +196,10 @@ which would return array of objects as expected:
     }
 
     
-`item` and `items` keys are configurable (see `app/config/response_builder.php` or, if you already
-published config file, look into your `vendor/marcin-orlowski/laravel-api=response-builder/config/`
-folder for new configuration keys).
+`item` and `items` keys are configurable - see `app/config/response_builder.php` or, if you already
+published config file, look into your `vendor/marcin-orlowski/laravel-api-response-builder/config/`
+folder for distribution config file and diff it for new configuration keys read. You can also read 
+project changelog.
 
 **NOTE:** currently there's no recursive processing implemented, so if you want to return Eloquent 
 model as part of own array structure you must explicitly call `toArray()` on such object
@@ -212,7 +215,7 @@ therefore trying to return plain array:
     $returned_array = [1,2,3];
     return ResponseBuilder::success($returned_array);
 
-will, due to array to object conversion, produce the following output:
+would, due to array-to-object conversion, produce the following output:
 
     {
       ...
@@ -285,12 +288,12 @@ your messages as you use across the whole application, including message placeho
 and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be 
 correctly replaced with content of your `$login` variable.
 
-You can, however this is not really recommended, override error message mapping completely.
+You can, however this is not really recommended, override built-in error message mapping too as
 ResponseBuilder comes with `errorWithMessage()` method, which expects string message as argument.
 This means you can just pass any string you want and it will be returned as `message` element
-in JSON response. Please note this method is pretty low-level and string is used as is. If you
-want to use placeholders, you need to handle them in your code i.e. by calling `Lang::get()` manually
-and then pass the result:
+in JSON response regardless the `code` value. Please note this method is pretty low-level and string
+is used as is without any further processing. If you want to use `Lang`'s placeholders here, you need
+to handle them yourself by calling `Lang::get()` manually first and pass the result:
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
     return ResponseBuilder::errorWithMessage(ErrorCode::SOMETHING_WENT_WRONG, $msg);
@@ -298,18 +301,17 @@ and then pass the result:
 
 ## Installation and Configuration ##
 
-To install ResponseBuilder all you need to do is to open your shell and do:
+To install ResponseBuilder all you need to do is to open your shell/cmd and do:
 
     composer require marcin-orlowski/laravel-api-response-builder
 
 If you want to change defaults then you should publish configuration file to 
-your `config/` folder:
+your `config/` folder once package is installed:
 
     php artisan vendor:publish
 
 and tweak this file according to your needs. If you are fine with defaults, this step
-can safely be skipped (you can also remove published config file if no tweaks are
-required).
+can safely be skipped (you can also remove published `config/response_builder.php` file).
 
 
 #### Laravel setup ####
@@ -324,7 +326,7 @@ Edit `app/config.php` and add the following line to your `providers` array:
 ResponseBuilder configuration can be found in `config/response_builder.php` file and 
 each of its element is heavily documented in the file itself. 
 
-Supported configuration keys (all keys must be present in config file):
+Supported configuration keys (all keys **MUST** be present in config file):
 
  * `min_code` (int) lowest allowed code for assigned code range (inclusive)
  * `max_code` (int) highest allowed code for assigned code range (inclusive)
@@ -338,7 +340,7 @@ Code to message mapping example:
 
 If given error code is not present in `map`, ResponseBuilder will provide fallback message automatically 
 (default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array empty in
-your config, however you must have `map` key present:
+your config, however you **MUST** have `map` key present nonetheless:
 
     'map' => [],
 
