@@ -26,17 +26,26 @@ nice, normalized and easy to consume REST API responses.
 
 ## Response structure ##
 
-For simplicity of consuming, produced JSON response is **always** the same at its core and contains
-the following data:
+Predictability, simplicity and no special-case is the key of the ResponseBuilder design. I wanted to make my life easier not only when I develop the API itself, but also when I later consume its output while writting client (i.e. mobile) applications. So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of the values. Sample response:
 
-  * `success` (boolean) determines if API method succeeded or not,
-  * `code` (int) being your own return code,
-  * `locale` (string) locale used for error message (obtained automatically via `\App::getLocale()`),
-  * `message` (string) human readable description, telling what `code` really means,
-  * `data` (object|null) your returned payload or `null` if there's no data to return.
+    {
+      "success": true,
+      "code": 0,
+      "locale": "en",
+      "message": "OK",
+      "data": null
+    }
 
-If you need to return other/different fields in response, see [Manipulating Response Object](#manipulating-response-object) 
-chapter for detailed implementation guides.
+where 
+
+  * `success` (boolean) tells response indicates API method failure or succeesss,
+  * `code` (int) your own return code (usually used when `success` indicates failure),
+  * `locale` (string) locale used for returned text error message (obtained automatically via `\App::getLocale()`). This helps when your API is multilingual so clients can check returned data is in correct language version,
+  * `message` (string) human readable message. Usually explains meaning of `code` value,
+  * `data` (object|null) whatever additional data your API produces will be returned here. Even you return no extra data that key  still be here, however with `null` value.
+
+**NOTE:** If you need to return other/different fields in **core** response structure (not in `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for guidance of how to do that.
+
 
 ## Usage examples ##
 
