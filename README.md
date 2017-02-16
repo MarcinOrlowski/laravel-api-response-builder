@@ -38,11 +38,11 @@ Predictability, simplicity and no special-case is the key of the ResponseBuilder
 
 where 
 
-  * `success` (boolean) tells response indicates API method failure or succeesss,
-  * `code` (int) your own return code (usually used when `success` indicates failure),
-  * `locale` (string) locale used for returned text error message (obtained automatically via `\App::getLocale()`). This helps when your API is multilingual so clients can check returned data is in correct language version,
-  * `message` (string) human readable message. Usually explains meaning of `code` value,
-  * `data` (object|null) whatever additional data your API produces will be returned here. Even you return no extra data that key  still be here, however with `null` value.
+  * `success` (**boolean**) tells response indicates API method failure or succeesss,
+  * `code` (**int**) your own return code (usually used when `success` indicates failure),
+  * `locale` (**string**) locale used for returned text error message (obtained automatically via `\App::getLocale()`). This helps when your API is multilingual so clients can check returned data is in correct language version,
+  * `message` (**string**) human readable message. Usually explains meaning of `code` value,
+  * `data` (**object**|**null**) whatever additional data your API produces will be returned here. Even you return no extra data that key  still be here, however with `null` value.
 
 **NOTE:** If you need to return other/different fields in **core** response structure (not in `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for guidance of how to do that.
 
