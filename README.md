@@ -271,11 +271,11 @@ add the following `use` to make using ResponseBuilder easier:
 
 Methods' arguments:
 
- * `$data` (mixed|null) data you want to be returned in response's `data` node,
- * `$http_code` (int) valid HTTP return code (see `HttpResponse` class for useful constants),
- * `$lang_args` (array) array of arguments passed to `Lang::get()` while building `message`,
- * `$error_code` (int) error code you want to be returned in `code`,
- * `$message` (string) custom message to be returned as part of error response.
+ * `$data` (**mixed**|**null**) data you want to be returned in response's `data` node,
+ * `$http_code` (**int**) valid HTTP return code (see `HttpResponse` class for useful constants),
+ * `$lang_args` (**array**) array of arguments passed to `Lang::get()` while building `message`,
+ * `$error_code` (**int**) error code you want to be returned in `code`,
+ * `$message` (**string**) custom message to be returned as part of error response.
 
 Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
 for the latter. Helper methods arguments are partially optional - see signatures below for details.
