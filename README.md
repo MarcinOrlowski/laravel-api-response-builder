@@ -84,7 +84,7 @@ which would return:
       }
     }
 
-Since v2.1 you can pass Eloquent model object directly for its data to be returned:
+Since v2.1 you can pass Eloquent `Model` object directly for its data to be returned:
 
     $flight = App\Flight::where('active', 1)->first();
     return ResponseBuilder::success($flight);
@@ -100,7 +100,7 @@ imaginary output would then look like this:
        }
     }
 
-You can also return the whole Collection if needed:
+You can also return the whole `Collection` if needed:
 
     $flights = App\Flight::where('active', 1)->get();
     return ResponseBuilder::success($flights);
@@ -123,26 +123,26 @@ which would return array of objects as expected:
     }
 
     
-`item` and `items` keys are configurable - see `app/config/response_builder.php` or, if you already
-published config file, look into your `vendor/marcin-orlowski/laravel-api-response-builder/config/`
-folder for distribution config file and diff it for new configuration keys read. You can also read 
-project changelog.
+`item` and `items` keys are configurable via config's `classes` mapping. As name indicates, what
+matters is class name (not the number of elements), therefore you will always get `items` keys
+even if `Collection` holds one or even zero elements.
 
-**NOTE:** currently there's no recursive processing implemented, so if you want to return Eloquent 
-model as part of own array structure you must explicitly call `toArray()` on such object
-prior adding it to your array you want to pass to ResponseBuilder:
+**NOTE:** currently there's no recursion used to traverse what is expected to be returned as `data`,
+therefore if you you want to return bigger array that contains i.e. `Model` or `Collection` too,
+then you must manually call `toArray()` on these objects prior adding it to your return array:
 
     $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
     return ResponseBuilder::success($data);
 
 
-**IMPORTANT:** `data` node is **always** returned as JSON Object. This is **enforced** by design, 
-therefore trying to return plain array:
+**IMPORTANT:** `data` node is **always** a JSON Object. This is **enforced** by design, 
+therefore if you need to  return an array, you cannot pass it directly:
 
+    // this is WRONG
     $returned_array = [1,2,3];
     return ResponseBuilder::success($returned_array);
 
-would, due to array-to-object conversion, produce the following output:
+as this, due to array-to-object conversion, would produce:
 
     {
       ...
@@ -153,9 +153,10 @@ would, due to array-to-object conversion, produce the following output:
       }
     }
 
-To avoid this you need to make the array part of object, which
-usually means wrapping it into another array:
+which most likely is not what you expect. To avoid this you, need to make your array part of 
+data object, which simply means wrapping it into another array like this:
 
+    // this is RIGHT
     $returned_array = [1,2,3];
     $data = ['my_array' => $returned_array];
     return ResponseBuilder::success($data);
@@ -169,6 +170,14 @@ This would produce expected and much cleaner data structure:
       }
     }
 
+**WARNING:** do not wrap without giving the key:
+
+    // this is WRONG
+    $data = [[1,2,3]];
+    return ResponseBuilder::success($data);
+
+as what you get in result depends on what is the index of first element of `$data`, which can simply
+be anything.
 
 #### Errors ####
 
@@ -337,7 +346,7 @@ Edit `app/config.php` and add the following line to your `providers` array:
 #### ResponseBuilder Configuration ####
 
 ResponseBuilder configuration can be found in `config/response_builder.php` file and 
-each of its element is heavily documented in the file itself. 
+each of its element is heavily documented in the file itself.
 
 Supported configuration keys (all keys **MUST** be present in config file):
 
@@ -360,6 +369,10 @@ your config, however you **MUST** have `map` key present nonetheless:
 Also, read [Overriding built-in messages](#overriding-built-in-messages) to see how to override built-in
 messages.
 
+**NOTE:** Config file may grow in future so if you are not using defaults, then on package upgrades
+check CHANGES.md to see if there're new configuration options. If so, and you alredy have config
+published, then you need to look into dist config file in `vendor/marcin-orlowski/laravel-api-response-builder/config/`
+folder and grab new version of config file.
 
 ## Messages and Localization ##
 
