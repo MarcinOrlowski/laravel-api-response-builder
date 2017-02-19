@@ -197,7 +197,7 @@ class ErrorCode
 	 */
 	public static function getMapping($code)
 	{
-		if (static::isCodeValid($code) === false) {
+		if (!static::isCodeValid($code)) {
 			throw new \InvalidArgumentException("Message code {$code} is out of allowed range");
 		}
 
@@ -217,8 +217,8 @@ class ErrorCode
 	{
 		$result = false;
 
-		if (($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode())
-			|| ($code <= ErrorCode::getReservedMaxCode()) && ($code >= ErrorCode::getReservedMinCode())
+		if ((($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode()))
+			|| (($code <= ErrorCode::getReservedMaxCode()) && ($code >= ErrorCode::getReservedMinCode()))
 		) {
 			$result = true;
 		}

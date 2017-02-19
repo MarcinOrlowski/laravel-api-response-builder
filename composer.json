@@ -2,6 +2,7 @@
   "name": "marcin-orlowski/laravel-api-response-builder",
   "description": "Helps building nice, normalized and easy to consume REST API responses.",
   "homepage": "https://github.com/MarcinOrlowski/laravel-api-response-builder",
+  "version": "2.1.3",
   "keywords": [
     "laravel",
     "json",
