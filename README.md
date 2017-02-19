@@ -11,6 +11,7 @@ nice, normalized and easy to consume REST API responses.
 
 ## Table of contents ##
  
+ * [Features](#features)
  * [Response structure](#response-structure)
  * [Usage examples](#usage-examples)
  * [Return Codes and Code Ranges](#return-codes)
@@ -31,6 +32,17 @@ ResponseBuilder is free software (see [License](#license)) and you can use it fu
 
 ![BTC](http://i.imgur.com/mUe8olT.png)
 
+----
+
+## Features ##
+
+ * Easy to use
+ * Configurable (with ready-to-use defaults)
+ * Localization support
+ * Automated object conversion with custom mapping
+ * Code ranges to support cascaded APIs
+ * Built-in exception handler to ensure your API stays consumable even in case of unexpected
+ 
 ----
 
 ## Response structure ##
