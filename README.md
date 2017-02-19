@@ -11,116 +11,67 @@ nice, normalized and easy to consume REST API responses.
 
 ## Table of contents ##
  
+ * [Features](#features)
  * [Response structure](#response-structure)
+ * [Usage examples](#usage-examples)
  * [Return Codes and Code Ranges](#return-codes)
  * [Exposed Methods](#exposed-methods)
- * [Usage examples](#usage-examples)
  * [Installation and Configuration](#installation-and-configuration)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
- * [Manipulate Response Object](#manipulate-response-object)
+ * [Manipulating Response Object](#manipulating-response-object)
  * [Overriding built-in messages](#overriding-built-in-messages)
  * [Bugs reports and pull requests](#contributing)
  * [License](#license)
  * [Notes](#notes)
 
+----
+
+## Donations ##
+
+ResponseBuilder is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or commercial, however if you feel it prevent you from reinventing the whell, helped having your projects done or simply saved you time and money then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
+
+![BTC](http://i.imgur.com/mUe8olT.png)
+
+----
+
+## Features ##
+
+ * Easy to use
+ * Configurable (with ready-to-use defaults)
+ * Localization support
+ * Automated object conversion with custom mapping
+ * Code ranges to support cascaded APIs
+ * Built-in exception handler to ensure your API stays consumable even in case of unexpected
+ 
+----
 
 ## Response structure ##
 
-For simplicity of consuming, produced JSON response is **always** the same at its core and contains
-the following data:
+Predictability, simplicity and no special-case is the key of the ResponseBuilder design. I wanted to make my life easier not only when I develop the API itself, but also when I later consume its output while writting client (i.e. mobile) applications. So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of the values. Sample response:
 
-  * `success` (boolean) determines if API method succeeded or not,
-  * `code` (int) being your own return code,
-  * `locale` (string) locale used for error message (obtained automatically via `\App::getLocale()`),
-  * `message` (string) human readable description, telling what `code` really means,
-  * `data` (object|null) your returned payload or `null` if there's no data to return.
+    {
+      "success": true,
+      "code": 0,
+      "locale": "en",
+      "message": "OK",
+      "data": null
+    }
 
-If you need to return other/different fields in response, see [Manipulating Response Object](#manipulating-response-object) chapter for detailed implementation guides.
+where 
 
-## Return Codes ##
+  * `success` (**boolean**) tells response indicates API method failure or succeesss,
+  * `code` (**int**) your own return code (usually used when `success` indicates failure),
+  * `locale` (**string**) locale used for returned text error message (obtained automatically via `\App::getLocale()`). This helps when your API is multilingual so clients can check returned data is in correct language version,
+  * `message` (**string**) human readable message. Usually explains meaning of `code` value,
+  * `data` (**object**|**null**) whatever additional data your API produces will be returned here. Even you return no extra data that key  still be here, however with `null` value.
 
-All return codes must be positive integer. Code `0` (zero) **ALWAYS** means **success**. All
-other codes are considered error codes.
+**NOTE:** If you need to return other/different fields in **core** response structure (not in `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for guidance of how to do that.
 
-
-#### Code Ranges ####
-
-In one of our projects we had multiple APIs chained together (so one API called another). So we wanted
-to be able to chain API invocations and still be able to tell which one failed in case of problems.
-For example our API consumer call method of publicly exposed API "A". That API uses internal API "B"
-method, but under the hood "B" also delegates some work and talks to API "C". In case of failure of
-method in "C", API consumer would see its' return code. This simplifies the code and helps keep features
-separated but to make this work you must ensure no API return code overlaps, otherwise you cannot easily
-tell which one in your chain failed. For that reason ResponseBuilder supports code ranges, allowing you
-to configure `min_code` and `max_code` you want to be allowed in given API. No code outside this range would
-be allowed by ResponseBuilder so once you assign non-overlapping ranges to your modules, your live
-will be easier and ResponseBuilder will fail (throwing an exception) if wrong code is used, so your
-unit tests should detect any error code clash easily.
-
-If you do not need code ranges for your API, just set `max_code` in configuration file to some very high value.
-
-**IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by ResponseBuilder and cannot be assigned to your
-codes.
-
-
-## Exposed Methods ##
-
-All ResponseBuilder methods are **static**, and for simplicity of use, it's recommended to
-add the following `use` to make using ResponseBuilder easier:
-
-    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-
-
-Methods' arguments:
-
- * `$data` (mixed|null) data you want to be returned in response's `data` node,
- * `$http_code` (int) valid HTTP return code (see `HttpResponse` class for useful constants),
- * `$lang_args` (array) array of arguments passed to `Lang::get()` while building `message`,
- * `$error_code` (int) error code you want to be returned in `code`,
- * `$message` (string) custom message to be returned as part of error response.
-
-Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
-for the latter. Helper methods arguments are partially optional - see signatures below for details.
-
-**NOTE:** Since v2.1 you `$data` must no longer be `array`, but can literally of any type, (i.e. `string`),
-however to ensure returned JSON matches specification, data type conversion will be enforced
-internally. There's no smart logic for doing that (with the exception for some Laravel types like
-Model or Collection), so the result may not necessary be of your desire and you will end up with object
-keys being "0" or "scalar".
-
-**IMPORTANT:** If you want to use own `$http_code`, ensure it is right for the purpose.
-ResponseBuilder will throw `\InvalidArgumentException` if you use `$http_code` outside
-of 200-299 range with `success()` and related methods and it will also do the same
-for `error()` and related methods if `$http_code` will be lower than 400.
-
-Redirection codes 3xx cannot be used with ResponseBuilder.
-
-See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details on HTTP codes.
-
-#### Reporting Success ####
-
-    success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
-    successWithHttpCode($http_code);
-
-Usage restrictions:
-
-* `$http_code` must be in range from 200 to 299
-
-#### Reporting Error ####
-
-    error($error_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST);
-    errorWithData($error_code, $data, array $lang_args = []);
-    errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = []);
-    errorWithHttpCode($error_code, $http_code, $lang_args = []);
-    errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
-
-Usage restrictions:
-
-* `$error_code` must not be 0
-* `$http_code` must not be lower than 400
-
+----
 
 ## Usage examples ##
+
+The following assumes package is properly installed and enabled. These steps are described in details later, so keep reading.
 
 #### Success ####
 
@@ -155,12 +106,12 @@ which would return:
       }
     }
 
-Since v2.1 you can pass Eloquent model object directly for its data to be returned:
+Since v2.1 you can pass Eloquent `Model` object directly for its data to be returned:
 
     $flight = App\Flight::where('active', 1)->first();
     return ResponseBuilder::success($flight);
 
-which would return model attributes (`toArray()` will automatically be called by ResponseBuilder). The
+which would return model attributes (conversion method will automatically be called by ResponseBuilder). The
 imaginary output would then look like this:
 
     {
@@ -171,7 +122,7 @@ imaginary output would then look like this:
        }
     }
 
-You can also return the whole Collection if needed:
+You can also return the whole `Collection` if needed:
 
     $flights = App\Flight::where('active', 1)->get();
     return ResponseBuilder::success($flights);
@@ -194,25 +145,25 @@ which would return array of objects as expected:
     }
 
     
-`item` and `items` keys are configurable (see `app/config/response_builder.php` or, if you already
-published config file, look into your `vendor/marcin-orlowski/laravel-api=response-builder/config/`
-folder for new configuration keys).
+`item` and `items` keys are configurable via config's `classes` mapping as well as name of conversion
+method to be called on the object. As name indicates, what matters is class name (not the number of 
+elements), therefore you will always get `items` keys even if `Collection` holds one or even zero elements.
 
-**NOTE:** currently there's no recursive processing implemented, so if you want to return Eloquent 
-model as part of own array structure you must explicitly call `toArray()` on such object
-prior adding it to your array you want to pass to ResponseBuilder:
+**NOTE:** currently there's no recursion used to traverse what is expected to be returned as `data`,
+therefore if you you want to return bigger array that contains i.e. `Model` or `Collection` too,
+then you must manually call `toArray()` on these objects prior adding it to your return array:
 
     $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
     return ResponseBuilder::success($data);
 
+**IMPORTANT:** `data` node is **always** a JSON Object. This is **enforced** by design, 
+therefore if you need to  return an array, you cannot pass it directly:
 
-**IMPORTANT:** `data` node is **always** returned as JSON Object. This is **enforced** by design, 
-therefore trying to return plain array:
-
+    // this is WRONG
     $returned_array = [1,2,3];
     return ResponseBuilder::success($returned_array);
 
-will, due to array to object conversion, produce the following output:
+as this, due to array-to-object conversion, would produce:
 
     {
       ...
@@ -223,9 +174,10 @@ will, due to array to object conversion, produce the following output:
       }
     }
 
-To avoid this you need to make the array part of object, which
-usually means wrapping it into another array:
+which most likely is not what you expect. To avoid this you, need to make your array part of 
+data object, which simply means wrapping it into another array like this:
 
+    // this is RIGHT
     $returned_array = [1,2,3];
     $data = ['my_array' => $returned_array];
     return ResponseBuilder::success($data);
@@ -239,6 +191,14 @@ This would produce expected and much cleaner data structure:
       }
     }
 
+**WARNING:** do not wrap without giving the key:
+
+    // this is WRONG
+    $data = [[1,2,3]];
+    return ResponseBuilder::success($data);
+
+as what you get in result depends on what is the index of first element of `$data`, which can simply
+be anything.
 
 #### Errors ####
 
@@ -285,31 +245,121 @@ your messages as you use across the whole application, including message placeho
 and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be 
 correctly replaced with content of your `$login` variable.
 
-You can, however this is not really recommended, override error message mapping completely.
+You can, however this is not really recommended, override built-in error message mapping too as
 ResponseBuilder comes with `errorWithMessage()` method, which expects string message as argument.
 This means you can just pass any string you want and it will be returned as `message` element
-in JSON response. Please note this method is pretty low-level and string is used as is. If you
-want to use placeholders, you need to handle them in your code i.e. by calling `Lang::get()` manually
-and then pass the result:
+in JSON response regardless the `code` value. Please note this method is pretty low-level and string
+is used as is without any further processing. If you want to use `Lang`'s placeholders here, you need
+to handle them yourself by calling `Lang::get()` manually first and pass the result:
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
     return ResponseBuilder::errorWithMessage(ErrorCode::SOMETHING_WENT_WRONG, $msg);
 
+----
+
+## Return Codes ##
+
+All return codes must be positive integer. Code `0` (zero) **ALWAYS** means **success**. All
+other codes are considered error codes.
+
+
+#### Code Ranges ####
+
+In one of our projects we had multiple APIs chained together (so one API called another). So we wanted
+to be able to chain API invocations and still be able to tell which one failed in case of problems.
+For example our API consumer call method of publicly exposed API "A". That API uses internal API "B"
+method, but under the hood "B" also delegates some work and talks to API "C". In case of failure of
+method in "C", API consumer would see its' return code. This simplifies the code and helps keep features
+separated but to make this work you must ensure no API return code overlaps, otherwise you cannot easily
+tell which one in your chain failed. For that reason ResponseBuilder supports code ranges, allowing you
+to configure `min_code` and `max_code` you want to be allowed in given API. No code outside this range would
+be allowed by ResponseBuilder so once you assign non-overlapping ranges to your modules, your live
+will be easier and ResponseBuilder will fail (throwing an exception) if wrong code is used, so your
+unit tests should detect any error code clash easily.
+
+If you do not need code ranges for your API, just set `max_code` in configuration file to some very high value.
+
+**IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by ResponseBuilder and cannot be assigned to your
+codes.
+
+----
+
+## Exposed Methods ##
+
+All ResponseBuilder methods are **static**, and for simplicity of use, it's recommended to
+add the following `use` to make using ResponseBuilder easier:
+
+    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+
+
+Methods' arguments:
+
+ * `$error_code` (**int**) any integer value you want to be returned in `code`,
+ * `$data` (**mixed**|**null**) any data you want to be returned in your response as `data` node,
+ * `$http_code` (**int**) valid HTTP return code (see `HttpResponse` class for useful constants),
+ * `$lang_args` (**array**) array of arguments passed to `Lang::get()` while building `message`,
+ * `$message` (**string**) custom message to be returned as part of error response (avoid, use error code mapping feature).
+
+Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
+for the latter. Helper methods arguments are partially optional - see signatures below for details.
+
+**NOTE:** `$data` can be of any type you want (i.e. `string`), however to ensure returned JSON structure 
+is unaffected and `data` is always an object, type casting is done internally. There's no smart logic 
+but dumb `$data = (object)$data;` with the exception for classes configured with "classes" mapping. In
+such case conversion method is called on the object and result is returned instead. Laravel's
+`Model` and `Collection` classes are pre-configured but you can add additional classes just by
+creating entry in "classes" mapping. 
+
+I recommend you ensure `$data` is an `array` (with mentioned exception) prior passing it to ResponseBuilder 
+methods unless you intentionally want the oddities like array keys keys `0` or `scalar` to happen.
+
+**IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
+value matches W3C meaning of the code. ResponseBuilder will throw `\InvalidArgumentException` if 
+you try to call `success()` and  related methods with `$http_code` not being in range of 200-299. 
+The same will happen if you try to call `error()` but `$http_code` will be lower than 400.
+
+Redirection codes (3xx) cannot be used with ResponseBuilder.
+
+See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details on HTTP codes.
+
+#### Reporting Success ####
+
+    success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
+    successWithHttpCode($http_code);
+
+Usage restrictions:
+
+* `$http_code` must be in range from 200 to 299
+
+#### Reporting Error ####
+
+    error($error_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+    errorWithData($error_code, $data, array $lang_args = []);
+    errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = []);
+    errorWithHttpCode($error_code, $http_code, $lang_args = []);
+    errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+
+Usage restrictions:
+
+* `$error_code` must not be 0
+* `$http_code` must not be lower than 400
+
+
+----
 
 ## Installation and Configuration ##
 
-To install ResponseBuilder all you need to do is to open your shell and do:
+To install ResponseBuilder all you need to do is to open your shell/cmd and do:
 
     composer require marcin-orlowski/laravel-api-response-builder
 
 If you want to change defaults then you should publish configuration file to 
-your `config/` folder:
+your `config/` folder once package is installed:
 
     php artisan vendor:publish
 
 and tweak this file according to your needs. If you are fine with defaults, this step
-can safely be skipped (you can also remove published config file if no tweaks are
-required).
+can safely be skipped (you can also remove published `config/response_builder.php` file).
 
 
 #### Laravel setup ####
@@ -322,9 +372,9 @@ Edit `app/config.php` and add the following line to your `providers` array:
 #### ResponseBuilder Configuration ####
 
 ResponseBuilder configuration can be found in `config/response_builder.php` file and 
-each of its element is heavily documented in the file itself. 
+each of its element is heavily documented in the file itself.
 
-Supported configuration keys (all keys must be present in config file):
+Supported configuration keys (all keys **MUST** be present in config file):
 
  * `min_code` (int) lowest allowed code for assigned code range (inclusive)
  * `max_code` (int) highest allowed code for assigned code range (inclusive)
@@ -338,13 +388,19 @@ Code to message mapping example:
 
 If given error code is not present in `map`, ResponseBuilder will provide fallback message automatically 
 (default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array empty in
-your config, however you must have `map` key present:
+your config, however you **MUST** have `map` key present nonetheless:
 
     'map' => [],
 
 Also, read [Overriding built-in messages](#overriding-built-in-messages) to see how to override built-in
 messages.
 
+**NOTE:** Config file may grow in future so if you are not using defaults, then on package upgrades
+check CHANGES.md to see if there're new configuration options. If so, and you alredy have config
+published, then you need to look into dist config file in `vendor/marcin-orlowski/laravel-api-response-builder/config/`
+folder and grab new version of config file.
+
+----
 
 ## Messages and Localization ##
 
@@ -356,15 +412,19 @@ just need to pass array with placeholders' substitution (hence the order of argu
 methods). ResponseBuilder utilised standard Laravel's `Lang` class to deal with messages, so all features
 localization are supported.
 
+----
 
 ## Handling Exceptions API way ##
 
-Properly designed API shall never hit consumer with HTML nor anything like that. While in regular use this
-is quite easy to achieve, unexpected problems like uncaught exception or even enabled maintenance mode
-can confuse many APIs world wide. Do not be one of them and take care of that too. With Laravel this
-can be achieved with custom Exception Handler and ResponseBuilder comes with ready-to-use Handler as
-well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for easy setup information.
+Properly designed REST API should never hit consumer with anything but JSON. While it looks like easy task, 
+there's always chance for unexpected issue to occur. So we need to expect unexpected and be prepared when 
+it hit the fan. This means not only things like uncaught exception but also Laravel's maintenance mode can 
+pollute returned API responses which is unfortunately pretty common among badly written APIs. Do not be 
+one of them, and take care of that in advance with couple of easy steps. 
+With Laravel this can be achieved with custom Exception Handler and ResponseBuilder comes with ready-to-use
+Handler as well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for easy setup information.
 
+----
 
 ## Manipulating Response Object ##
 
@@ -387,7 +447,7 @@ So the class content should be as follow:
     {
         protected static function buildResponse($code, $message, $data = null)
         {
-            // tell ResponseBuilder to do all the dirty job first
+            // tell ResponseBuilder to do all the heavy lifting first
             $response = parent::buildResponse($code, $message, $data);
 
             // then do all the tweaks you need
@@ -402,7 +462,9 @@ So the class content should be as follow:
         }
     }
 
-and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`:
+and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`. As all responses are
+always produced with use of `buildResponse()` internally, your **all** responses will be affected
+the same way. For example:
 
     MyResponseBuilder::success();
 
@@ -417,6 +479,25 @@ which should then return your desired JSON structure:
        "data": null
      }
 
+and 
+
+    $data = [ 'foo'=>'bar ];
+    return MyResponseBuilder::errorWithData(ErrorCode::SOMETHING_WENT_WRONG, $data);
+
+would produce:
+
+    {
+      "success": false,
+      "code": 250,
+      "message": "Error #250",
+      "timestamp": 1272509157,
+      "timezone": "UTC",
+      "data": {
+          "foo": "bar"
+      }
+    }
+
+----
 
 ## Overriding built-in messages ##
 
@@ -435,6 +516,8 @@ To override default error message used when given error code has no entry in `ma
 
 You can use `:error_code` placeholder in the message and it will be substituted actual error code value.
 
+----
+
 ## Contributing ##
 
 Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
@@ -449,16 +532,21 @@ time in case I'd not be able to accept such changes. But if all is good and clea
 
 Thanks in advance!
 
+----
+
 ## License ##
 
 * Written and copyrighted &copy;2016-2017 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
 * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
+----
 
 ## Notes ##
 
 * ResponseBuilder is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making ResponseBuilder usable with Lumen, speak up or (better) send pull request!
 * Tests will be released shortly. They do already exist, however ResponseBuilder was extracted from existing project and making tests work again require some work to remove dependencies.
+
+----
 
 ## Changelog ##
 

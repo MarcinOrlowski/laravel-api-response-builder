@@ -59,9 +59,17 @@ return [
 	| Response Builder classes
 	|--------------------------------------------------------------------------
 	|
-	| Response Builder includes handling of object of given classes (i.e. Eloquent
-	| Model or Collection). Some of these require some additional settings
-	| and here you have option to override the defaults
+	| Response Builder can auto-convert objects given as return $data. This is
+	| handled by "classes" mapping. The key is class name to check object against,
+	| and configuration elements include:
+	|
+	| "key" (string)
+	|          - name of the key to be used in returned JSON after object is
+	|            converted.
+	|
+	| "method" (string)
+	|          - name of argument-less method to be called on the object to
+	|            convert it prior returning
 	|
 	| See README for details
 	|
@@ -70,11 +78,13 @@ return [
 	'classes' => [
 
 		Illuminate\Database\Eloquent\Model::class => [
-			'key' => 'item',
+			'key'    => 'item',
+			'method' => 'toArray',
 		],
 
 		Illuminate\Database\Eloquent\Collection::class => [
-			'key' => 'items',
+			'key'    => 'items',
+			'method' => 'toArray',
 		],
 
 	],
