@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class ResponseBuilder
 {
 	/**
-	 * Creates standarised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
+	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
 	 * additionally added to reported JSON for easier manual debugging.
 	 *
 	 * @param integer $code    response code (not http response code)
@@ -48,7 +48,7 @@ class ResponseBuilder
 			$data = (object)$data;
 		}
 
-		$response = ['success' => ($code == ErrorCode::OK),
+		$response = ['success' => ($code === ErrorCode::OK),
 		             'code'    => $code,
 		             'locale'  => \App::getLocale(),
 		             'message' => $message,
@@ -102,10 +102,10 @@ class ResponseBuilder
 			$http_code = HttpResponse::HTTP_OK;
 		}
 
-		if (is_int($return_code) === false) {
+		if (!is_int($return_code)) {
 			throw new \InvalidArgumentException('error_code must be integer');
 		} else {
-			if (is_int($http_code) === false) {
+			if (!is_int($http_code)) {
 				throw new \InvalidArgumentException('http_code must be integer');
 			} else {
 				if ($http_code < 199) {
@@ -226,13 +226,13 @@ class ResponseBuilder
 			$headers = [];
 		}
 
-		if (is_int($error_code) === false) {
+		if (!is_int($error_code)) {
 			throw new \InvalidArgumentException('error_code must be integer');
 		} elseif ($error_code == ErrorCode::OK) {
 			throw new \InvalidArgumentException('error_code must not be equal to ErrorCode::OK');
-		} elseif ((is_array($lang_args) === false) && ($lang_args !== null)) {
+		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException('lang_args must be either array or null');
-		} elseif (is_int($http_code) === false) {
+		} elseif (!is_int($http_code)) {
 			throw new \InvalidArgumentException('http_code must be integer');
 		} elseif ($http_code < 400) {
 			throw new \InvalidArgumentException('http_code cannot be lower than 400');
@@ -267,7 +267,7 @@ class ResponseBuilder
 		}
 
 		// are we given message test already?
-		if (is_string($message_or_code) === false) {
+		if (!is_string($message_or_code)) {
 			// no, so it must be an int value
 			if (!is_int($message_or_code)) {
 				throw new \InvalidArgumentException('Message must be either string or resolvable error code');
@@ -286,7 +286,7 @@ class ResponseBuilder
 				throw new \InvalidArgumentException('Error code must be integer value');
 			}
 
-			if (ErrorCode::isCodeValid($message_or_code) === false) {
+			if (!ErrorCode::isCodeValid($message_or_code)) {
 				throw new \InvalidArgumentException("Error code {$message_or_code} is out of allowed range");
 			}
 		}
