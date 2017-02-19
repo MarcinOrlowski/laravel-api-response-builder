@@ -33,6 +33,8 @@ nice, normalized and easy to consume REST API responses.
 
 ![BTC](http://i.imgur.com/mUe8olT.png)
 
+Thanks for all the fish!
+
 ----
 
 ## Features ##
@@ -365,7 +367,7 @@ would produce the following response (contrary to the previous examples, source 
           "airline": "lot",
           "flight_number": "lo123",
           ...
-        },
+       },
        "planes": [
           {
              "make": "airbus",
