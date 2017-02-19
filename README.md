@@ -1,6 +1,6 @@
 # API Response Builder for Laravel 5 #
 
-ResponseBuilder is Laravel5's helper designed to simplify building
+`ResponseBuilder` is Laravel5's helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
 
 
@@ -16,6 +16,7 @@ nice, normalized and easy to consume REST API responses.
  * [Usage examples](#usage-examples)
  * [Return Codes and Code Ranges](#return-codes)
  * [Exposed Methods](#exposed-methods)
+ * [Data Conversion](#data-conversion)
  * [Installation and Configuration](#installation-and-configuration)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
  * [Manipulating Response Object](#manipulating-response-object)
@@ -28,7 +29,7 @@ nice, normalized and easy to consume REST API responses.
 
 ## Donations ##
 
-ResponseBuilder is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or commercial, however if you feel it prevent you from reinventing the whell, helped having your projects done or simply saved you time and money then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
+`ResponseBuilder` is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or commercial, however if you feel it prevent you from reinventing the whell, helped having your projects done or simply saved you time and money then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
 
 ![BTC](http://i.imgur.com/mUe8olT.png)
 
@@ -59,7 +60,7 @@ Predictability, simplicity and no special-case is the key of the ResponseBuilder
 
 where 
 
-  * `success` (**boolean**) tells response indicates API method failure or succeesss,
+  * `success` (**boolean**) tells response indicates API method failure or success,
   * `code` (**int**) your own return code (usually used when `success` indicates failure),
   * `locale` (**string**) locale used for returned text error message (obtained automatically via `\App::getLocale()`). This helps when your API is multilingual so clients can check returned data is in correct language version,
   * `message` (**string**) human readable message. Usually explains meaning of `code` value,
@@ -106,55 +107,10 @@ which would return:
       }
     }
 
-Since v2.1 you can pass Eloquent `Model` object directly for its data to be returned:
+`ResponseBuilder` is able to do the object conversion on-the-fly. Classes like Eloquent's
+Model or Collection are pre-configured, but you can easily make any other class handled. See
+[Data Conversion](#data-conversion) chapter for more details.
 
-    $flight = App\Flight::where('active', 1)->first();
-    return ResponseBuilder::success($flight);
-
-which would return model attributes (conversion method will automatically be called by ResponseBuilder). The
-imaginary output would then look like this:
-
-    {
-      "item": {
-          "airline": "lot",
-          "flight_number": "lo123",
-          ...
-       }
-    }
-
-You can also return the whole `Collection` if needed:
-
-    $flights = App\Flight::where('active', 1)->get();
-    return ResponseBuilder::success($flights);
-
-which would return array of objects as expected:
-
-    {
-      "items": [
-          {
-             "airline": "lot",
-             "flight_number": "lo123",
-             ...
-          },{
-             "airline": "american",
-             "flight_number": "am456",
-             ...
-          }
-        ]
-      }
-    }
-
-    
-`item` and `items` keys are configurable via config's `classes` mapping as well as name of conversion
-method to be called on the object. As name indicates, what matters is class name (not the number of 
-elements), therefore you will always get `items` keys even if `Collection` holds one or even zero elements.
-
-**NOTE:** currently there's no recursion used to traverse what is expected to be returned as `data`,
-therefore if you you want to return bigger array that contains i.e. `Model` or `Collection` too,
-then you must manually call `toArray()` on these objects prior adding it to your return array:
-
-    $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
-    return ResponseBuilder::success($data);
 
 **IMPORTANT:** `data` node is **always** a JSON Object. This is **enforced** by design, 
 therefore if you need to  return an array, you cannot pass it directly:
@@ -185,13 +141,13 @@ data object, which simply means wrapping it into another array like this:
 This would produce expected and much cleaner data structure:
 
     {
-      ...
-      "data": {
-         "my_array": [1, 2, 3]
-      }
+       ...
+       "data": {
+          "my_array": [1, 2, 3]
+       }
     }
 
-**WARNING:** do not wrap without giving the key:
+**WARNING:** do NOT wrap without giving the key:
 
     // this is WRONG
     $data = [[1,2,3]];
@@ -214,7 +170,7 @@ save your time in case you will need to refactor code range in future. For examp
     namespace App;
 
     class ErrorCode {
-        const SOMETHING_WENT_WRONG = 250;
+       const SOMETHING_WENT_WRONG = 250;
     }
 
 End then, to report failure because of `SOMETHING_WENT_WRONG`, just reference this constant:
@@ -224,20 +180,20 @@ End then, to report failure because of `SOMETHING_WENT_WRONG`, just reference th
 This will produce the following JSON response:
 
     {
-      "success": false,
-      "code": 250,
-      "locale": "en",
-      "message": "Error #250",
-      "data": null
+       "success": false,
+       "code": 250,
+       "locale": "en",
+       "message": "Error #250",
+       "data": null
     }
 
-Please note the `message` key in the above JSON. ResponseBuilder tries to automatically obtain error
+Please note the `message` key in the above JSON. `ResponseBuilder` tries to automatically obtain error
 message for each code you pass. This is all configured in `config/response_builder.php` file, with
 use of `map` array. See [ResponseBuilder Configuration](#response-builder-configuration) for more details.
 If there's no dedicated message configured for given error code, `message` value is provided with use 
 of built-in generic fallback message "Error #xxx", as shown above.
 
-As ResponseBuilder uses Laravel's `Lang` package for localisation, you can use the same features with
+As `ResponseBuilder` uses Laravel's `Lang` package for localisation, you can use the same features with
 your messages as you use across the whole application, including message placeholders:
 
     return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG, ['login' => $login]);
@@ -246,7 +202,7 @@ and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder
 correctly replaced with content of your `$login` variable.
 
 You can, however this is not really recommended, override built-in error message mapping too as
-ResponseBuilder comes with `errorWithMessage()` method, which expects string message as argument.
+`ResponseBuilder` comes with `errorWithMessage()` method, which expects string message as argument.
 This means you can just pass any string you want and it will be returned as `message` element
 in JSON response regardless the `code` value. Please note this method is pretty low-level and string
 is used as is without any further processing. If you want to use `Lang`'s placeholders here, you need
@@ -271,23 +227,23 @@ For example our API consumer call method of publicly exposed API "A". That API u
 method, but under the hood "B" also delegates some work and talks to API "C". In case of failure of
 method in "C", API consumer would see its' return code. This simplifies the code and helps keep features
 separated but to make this work you must ensure no API return code overlaps, otherwise you cannot easily
-tell which one in your chain failed. For that reason ResponseBuilder supports code ranges, allowing you
+tell which one in your chain failed. For that reason `ResponseBuilder` supports code ranges, allowing you
 to configure `min_code` and `max_code` you want to be allowed in given API. No code outside this range would
-be allowed by ResponseBuilder so once you assign non-overlapping ranges to your modules, your live
-will be easier and ResponseBuilder will fail (throwing an exception) if wrong code is used, so your
+be allowed by `ResponseBuilder` so once you assign non-overlapping ranges to your modules, your live
+will be easier and `ResponseBuilder` will fail (throwing an exception) if wrong code is used, so your
 unit tests should detect any error code clash easily.
 
 If you do not need code ranges for your API, just set `max_code` in configuration file to some very high value.
 
-**IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by ResponseBuilder and cannot be assigned to your
-codes.
+**IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by `ResponseBuilder` and must not be used directly
+ nor assigned to your codes.
 
 ----
 
 ## Exposed Methods ##
 
-All ResponseBuilder methods are **static**, and for simplicity of use, it's recommended to
-add the following `use` to make using ResponseBuilder easier:
+All `ResponseBuilder` methods are **static**, and for simplicity of use, it's recommended to
+add the following `use` to your code:
 
     use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -310,15 +266,15 @@ such case conversion method is called on the object and result is returned inste
 `Model` and `Collection` classes are pre-configured but you can add additional classes just by
 creating entry in "classes" mapping. 
 
-I recommend you ensure `$data` is an `array` (with mentioned exception) prior passing it to ResponseBuilder 
+I recommend you ensure `$data` is an `array` (with mentioned exception) prior passing it to `ResponseBuilder` 
 methods unless you intentionally want the oddities like array keys keys `0` or `scalar` to happen.
 
 **IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
-value matches W3C meaning of the code. ResponseBuilder will throw `\InvalidArgumentException` if 
+value matches W3C meaning of the code. `ResponseBuilder` will throw `\InvalidArgumentException` if 
 you try to call `success()` and  related methods with `$http_code` not being in range of 200-299. 
 The same will happen if you try to call `error()` but `$http_code` will be lower than 400.
 
-Redirection codes (3xx) cannot be used with ResponseBuilder.
+Redirection codes (3xx) cannot be used with `ResponseBuilder`.
 
 See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details on HTTP codes.
 
@@ -344,12 +300,94 @@ Usage restrictions:
 * `$error_code` must not be 0
 * `$http_code` must not be lower than 400
 
+----
+
+## Data Conversion ##
+
+`ResponseBuilder` can save you some work by automatically converting certain objects
+prior returning response array. i.e. you can pass Eloquent's Model or Collection
+object directly and have it converted to array automatically.
+
+For example, passing `Model` object:
+
+    $flight = App\Flight::where(...)->first();
+    return ResponseBuilder::success($flight);
+
+will return:
+
+    {
+       "item": {
+          "airline": "lot",
+          "flight_number": "lo123",
+          ...
+       }
+    }
+
+Or you have more data, the pass `Collection`:
+
+    $flights = App\Flight::where(...)->get();
+    return ResponseBuilder::success($flights);
+
+which would return array of objects as expected:
+
+    {
+       "items": [
+          {
+             "airline": "lot",
+             "flight_number": "lo123",
+             ...
+          },{
+             "airline": "american",
+             "flight_number": "am456",
+             ...
+          }
+       ]
+    }
+
+The result is keyed `item` and `items`, depending on class name (therefore you will always get `items` 
+keys even if `Collection` holds one or even zero elements) is the given object of and the
+whole magic is done by calling object's method of choice (`toArray()` in case of above examples).
+
+The whole functionality is configurable via `classes` mapping array (see config file for details).
+
+When you pass the array it will be walked recursively and the conversion will take place
+on all known elements as well:
+
+    $data = [
+       'flight' = App\Flight::where(...)->first(),
+       'planes' = App\Plane::where(...)->get(),
+    ];
+
+would produce the following response (contrary to the previous examples, source array keys are preserved):
+
+    {
+       "flight": {
+          "airline": "lot",
+          "flight_number": "lo123",
+          ...
+        },
+       "planes": [
+          {
+             "make": "airbus",
+             "registration": "F-GUGJ",
+             ...
+          },{
+             "make": "boeing",
+             "registration": "VT-ANG",
+             ...
+          }
+       ]
+    }
+
+ 
+**NOTE** if you are upgrading from earlier versions of the `ResponseBuilder`, you must add `classes` 
+mapping to your config otherwise no conversion will as mapping is internally empty by default.
 
 ----
 
 ## Installation and Configuration ##
 
-To install ResponseBuilder all you need to do is to open your shell/cmd and do:
+To install `ResponseBuilder` all you need to do is to open your shell/cmd and do:
 
     composer require marcin-orlowski/laravel-api-response-builder
 
@@ -371,8 +409,9 @@ Edit `app/config.php` and add the following line to your `providers` array:
 
 #### ResponseBuilder Configuration ####
 
-ResponseBuilder configuration can be found in `config/response_builder.php` file and 
-each of its element is heavily documented in the file itself.
+Package configuration can be found in `config/response_builder.php` file and 
+each of its element is heavily documented in the file, so please take a moment
+and read it.
 
 Supported configuration keys (all keys **MUST** be present in config file):
 
@@ -386,7 +425,7 @@ Code to message mapping example:
         ErrorCode::SOMETHING => 'api.something',
     ],
 
-If given error code is not present in `map`, ResponseBuilder will provide fallback message automatically 
+If given error code is not present in `map`, `ResponseBuilder` will provide fallback message automatically 
 (default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array empty in
 your config, however you **MUST** have `map` key present nonetheless:
 
@@ -396,7 +435,7 @@ Also, read [Overriding built-in messages](#overriding-built-in-messages) to see 
 messages.
 
 **NOTE:** Config file may grow in future so if you are not using defaults, then on package upgrades
-check CHANGES.md to see if there're new configuration options. If so, and you alredy have config
+check CHANGES.md to see if there're new configuration options. If so, and you already have config
 published, then you need to look into dist config file in `vendor/marcin-orlowski/laravel-api-response-builder/config/`
 folder and grab new version of config file.
 
@@ -404,13 +443,13 @@ folder and grab new version of config file.
 
 ## Messages and Localization ##
 
-ResponseBuilder is designed with localization in mind so default approach is you just set it up
+`ResponseBuilder` is designed with localization in mind so default approach is you just set it up
 once and most things should happen automatically, which also includes creating human readable error messages.
-As described in `Configuration` section, once you got `map` configured, you most likely will not
-be in need to manually refer error messages - ResponseBuilder will do that for you and you optionally
+As described in `Configuration` section, once you get `map` configured, you most likely will not
+be in need to manually refer error messages - `ResponseBuilder` will do that for you and you optionally
 just need to pass array with placeholders' substitution (hence the order of arguments for `errorXXX()`
-methods). ResponseBuilder utilised standard Laravel's `Lang` class to deal with messages, so all features
-localization are supported.
+methods). `ResponseBuilder` utilised standard Laravel's `Lang` class to deal with messages, so all 
+localization features are supported.
 
 ----
 
@@ -421,7 +460,7 @@ there's always chance for unexpected issue to occur. So we need to expect unexpe
 it hit the fan. This means not only things like uncaught exception but also Laravel's maintenance mode can 
 pollute returned API responses which is unfortunately pretty common among badly written APIs. Do not be 
 one of them, and take care of that in advance with couple of easy steps. 
-With Laravel this can be achieved with custom Exception Handler and ResponseBuilder comes with ready-to-use
+With Laravel this can be achieved with custom Exception Handler and `ResponseBuilder` comes with ready-to-use
 Handler as well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for easy setup information.
 
 ----
@@ -445,21 +484,21 @@ So the class content should be as follow:
 
     class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
     {
-        protected static function buildResponse($code, $message, $data = null)
-        {
-            // tell ResponseBuilder to do all the heavy lifting first
-            $response = parent::buildResponse($code, $message, $data);
+       protected static function buildResponse($code, $message, $data = null)
+       {
+          // tell ResponseBuilder to do all the heavy lifting first
+          $response = parent::buildResponse($code, $message, $data);
 
-            // then do all the tweaks you need
-            $date = new DateTime();
-            $response['timestamp'] = $date->getTimestamp();
-            $response['timezone'] = $date->getTimezone();
+          // then do all the tweaks you need
+          $date = new DateTime();
+          $response['timestamp'] = $date->getTimestamp();
+          $response['timezone'] = $date->getTimezone();
 
-            unset($response['locale']);
+          unset($response['locale']);
 
-            // finally, return what $response holds
-            return $response;
-        }
+          // finally, return what $response holds
+          return $response;
+       }
     }
 
 and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`. As all responses are
@@ -471,12 +510,12 @@ the same way. For example:
 which should then return your desired JSON structure:
 
      {
-       "success": true,
-       "code": 0,
-       "message": "OK",
-       "timestamp": 1272509157,
-       "timezone": "UTC",
-       "data": null
+        "success": true,
+        "code": 0,
+        "message": "OK",
+        "timestamp": 1272509157,
+        "timezone": "UTC",
+        "data": null
      }
 
 and 
@@ -487,21 +526,21 @@ and
 would produce:
 
     {
-      "success": false,
-      "code": 250,
-      "message": "Error #250",
-      "timestamp": 1272509157,
-      "timezone": "UTC",
-      "data": {
+       "success": false,
+       "code": 250,
+       "message": "Error #250",
+       "timestamp": 1272509157,
+       "timezone": "UTC",
+       "data": {
           "foo": "bar"
-      }
+       }
     }
 
 ----
 
 ## Overriding built-in messages ##
 
-At the moment ResponseBuilder provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
+At the moment `ResponseBuilder` provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
 one is used for success code `0` and another provides fallback message for codes without custom mapping. If for 
 any reason you want to override them, simply map these codes in your `map` config using codes from package
 reserved range:
@@ -543,8 +582,8 @@ Thanks in advance!
 
 ## Notes ##
 
-* ResponseBuilder is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making ResponseBuilder usable with Lumen, speak up or (better) send pull request!
-* Tests will be released shortly. They do already exist, however ResponseBuilder was extracted from existing project and making tests work again require some work to remove dependencies.
+* `ResponseBuilder` is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making `ResponseBuilder` usable with Lumen, speak up or (better) send pull request!
+* Tests will be released shortly. They do already exist, however `ResponseBuilder` was extracted from existing project and making tests work again require some work to remove dependencies.
 
 ----
 
