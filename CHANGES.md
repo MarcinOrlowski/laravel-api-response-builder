@@ -7,6 +7,7 @@
    * For sake of logic, errorWithDataAndHttpCode() and errorWithHttpCode() will throw exception if http_code is null
    * http_code can be handed as null to all the other methods to have it replaced by default code
    * "classes" mapping now features "method" field to specify method name to call for object conversion
+   * For $data arrays recursive "classes" mapped objects conversion now takes place
 
 * v2.1.2 (2016-08-24)
    * Fixed exception code handling in ExceptionHandlerHelper (reported by Adrian Chen @absszero)
