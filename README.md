@@ -48,7 +48,7 @@ nice, normalized and easy to consume REST API responses.
 
 ## Response structure ##
 
-Predictability, simplicity and no special-case is the key of the ResponseBuilder design. I wanted to make my life easier not only when I develop the API itself, but also when I later consume its output while writting client (i.e. mobile) applications. So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of the values. Sample response:
+Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not only when I develop the API itself, but also when I later consume its output while writting client (i.e. mobile) applications. So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of the values. Sample response:
 
     {
       "success": true,
