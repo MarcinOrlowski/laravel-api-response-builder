@@ -35,7 +35,7 @@ class ResponseBuilder
 	protected static function buildResponse($code, $message, $data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
-		if (!is_null($data)) {
+		if ($data !== null) {
 			if ($data instanceof Illuminate\Database\Eloquent\Model) {
 				$key = 'classes.' . Illuminate\Database\Eloquent\Model::class . '.key';
 				$data = [Config.get($key, 'item') => $data->toArray()];
@@ -44,6 +44,7 @@ class ResponseBuilder
 				$data = [Config.get($key, 'items') => $data->toArray()];
 			}
 
+			// ensure we get object in final JSON structure in data node
 			$data = (object)$data;
 		}
 
@@ -97,7 +98,7 @@ class ResponseBuilder
 	protected static function buildSuccessResponse($data = null, $return_code = ErrorCode::OK,
 	                                               $http_code = self::DEFAULT_ERROR_HTTP_CODE, array $lang_args = null)
 	{
-		if (is_null($http_code)) {
+		if ($http_code === null) {
 			$http_code = HttpResponse::HTTP_OK;
 		}
 
@@ -215,10 +216,10 @@ class ResponseBuilder
 	 */
 	protected static function buildErrorResponse($data, $error_code, $http_code, array $lang_args = null, $message = null, array $headers = null)
 	{
-		if (is_null($http_code)) {
+		if ($http_code === null) {
 			$http_code = HttpResponse::HTTP_BAD_REQUEST;
 		}
-		if (is_null($message)) {
+		if ($message === null) {
 			$message = $error_code;
 		}
 		if ($headers === null) {
@@ -229,7 +230,7 @@ class ResponseBuilder
 			throw new \InvalidArgumentException('error_code must be integer');
 		} elseif ($error_code == ErrorCode::OK) {
 			throw new \InvalidArgumentException('error_code must not be equal to ErrorCode::OK');
-		} elseif ((is_array($lang_args) === false) && (is_null($lang_args) === false)) {
+		} elseif ((is_array($lang_args) === false) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException('lang_args must be either array or null');
 		} elseif (is_int($http_code) === false) {
 			throw new \InvalidArgumentException('http_code must be integer');
@@ -255,10 +256,10 @@ class ResponseBuilder
 	 */
 	protected static function make($return_code, $message_or_code, $data, $http_code, array $lang_args = null, array $headers = null)
 	{
-		if (is_null($lang_args)) {
+		if ($lang_args === null) {
 			$lang_args = [];
 		}
-		if (is_null($headers)) {
+		if ($headers === null) {
 			$headers = [];
 		}
 		if ($headers === null) {
@@ -274,7 +275,7 @@ class ResponseBuilder
 
 			// do we have the mapping for this string already?
 			$key = ErrorCode::getMapping($message_or_code);
-			if (is_null($key)) {
+			if ($key === null) {
 				// no, get the default one instead
 				$key = ErrorCode::getMapping(ErrorCode::NO_ERROR_MESSAGE);
 				$lang_args = ['error_code' => $message_or_code];
