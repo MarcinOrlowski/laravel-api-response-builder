@@ -28,20 +28,37 @@ class ResponseBuilder
 	 *
 	 * @param integer $code    response code (not http response code)
 	 * @param string  $message error message or 'OK'
-	 * @param mixed   $data    api response data if any
+	 * @param mixed   $data    API response data if any
 	 *
 	 * @return array response array ready to be encoded as json and sent back to client
+	 *
+	 * @throws \RuntimeException in case of missing or invalid "classes" mapping
 	 */
 	protected static function buildResponse($code, $message, $data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
-			if ($data instanceof Illuminate\Database\Eloquent\Model) {
-				$key = 'classes.' . Illuminate\Database\Eloquent\Model::class . '.key';
-				$data = [Config.get($key, 'item') => $data->toArray()];
-			} elseif ($data instanceof Illuminate\Database\Eloquent\Collection) {
-				$key = 'classes.' . Illuminate\Database\Eloquent\Collection::class . '.key';
-				$data = [Config.get($key, 'items') => $data->toArray()];
+			// we can do some auto-conversion on known class types, so check for that first
+			$classes = Config.get('classes');
+			if ($classes !== null) {
+				if (is_array($classes)) {
+					foreach($classes as $keyClassName => $valClassData) {
+						if ($data instanceof $keyClassName) {
+							if (array_key_exists($valClassData, 'method')) {
+								if (array_key_exists($valClassData, 'key')) {
+									$conversionMethod = $valClassData['method'];
+									$data = [$valClassData['key'] => $data->$conversionMethod()];
+								} else {
+									throw new \RuntimeException('Missing "key" configuration in class conversion mapping');
+								}
+							} else {
+								throw new \RuntimeException('Missing "method" configuration in class conversion mapping');
+							}
+						}
+					}
+				} else {
+					throw new \RuntimeException('"classes" mapping must be an array in your config/response_builder.php file');
+				}
 			}
 
 			// ensure we get object in final JSON structure in data node
