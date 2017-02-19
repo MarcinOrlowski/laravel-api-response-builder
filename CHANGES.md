@@ -2,6 +2,9 @@
 
 ## CHANGE LOG ##
 
+* v2.1.3 (2017-02-  )
+   * [RB-5] Fixed error code range not being checked when used with custom message strings
+
 * v2.1.2 (2016-08-24)
    * Fixed exception code handling in ExceptionHandlerHelper (reported by Adrian Chen @absszero)
 

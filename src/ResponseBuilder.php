@@ -259,10 +259,14 @@ class ResponseBuilder
 			$headers = [];
 		}
 
+		// are we given message test already?
 		if (is_string($message_or_code) === false) {
+			// no, so it must be an int value
 			if (is_int($message_or_code)) {
+				// do we have the mapping for this string already?
 				$key = ErrorCode::getMapping($message_or_code);
 				if (is_null($key)) {
+					// no, get the default one instead
 					$key = ErrorCode::getMapping(ErrorCode::NO_ERROR_MESSAGE);
 					$lang_args = ['error_code' => $message_or_code];
 				}
@@ -270,6 +274,15 @@ class ResponseBuilder
 			} else {
 				throw new \InvalidArgumentException('Message must be either string or resolvable error code');
 			}
+		} else {
+			if (is_int($message_or_code)) {
+				if (ErrorCode::isCodeValid($message_or_code) === false) {
+					throw new \InvalidArgumentException("Error code {$message_or_code} is out of allowed range");
+				}
+			} else {
+				throw new \InvalidArgumentException('Error code must be integer value');
+			}
+
 		}
 
 		return Response::json(static::buildResponse($return_code, $message_or_code, $data), $http_code, $headers);
