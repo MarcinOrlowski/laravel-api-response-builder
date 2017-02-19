@@ -11,6 +11,7 @@ nice, normalized and easy to consume REST API responses.
 
 ## Table of contents ##
  
+ * [Features](#features)
  * [Response structure](#response-structure)
  * [Usage examples](#usage-examples)
  * [Return Codes and Code Ranges](#return-codes)
@@ -31,6 +32,17 @@ ResponseBuilder is free software (see [License](#license)) and you can use it fu
 
 ![BTC](http://i.imgur.com/mUe8olT.png)
 
+----
+
+## Features ##
+
+ * Easy to use
+ * Configurable (with ready-to-use defaults)
+ * Localization support
+ * Automated object conversion with custom mapping
+ * Code ranges to support cascaded APIs
+ * Built-in exception handler to ensure your API stays consumable even in case of unexpected
+ 
 ----
 
 ## Response structure ##
@@ -99,7 +111,7 @@ Since v2.1 you can pass Eloquent `Model` object directly for its data to be retu
     $flight = App\Flight::where('active', 1)->first();
     return ResponseBuilder::success($flight);
 
-which would return model attributes (`toArray()` will automatically be called by ResponseBuilder). The
+which would return model attributes (conversion method will automatically be called by ResponseBuilder). The
 imaginary output would then look like this:
 
     {
@@ -133,9 +145,9 @@ which would return array of objects as expected:
     }
 
     
-`item` and `items` keys are configurable via config's `classes` mapping. As name indicates, what
-matters is class name (not the number of elements), therefore you will always get `items` keys
-even if `Collection` holds one or even zero elements.
+`item` and `items` keys are configurable via config's `classes` mapping as well as name of conversion
+method to be called on the object. As name indicates, what matters is class name (not the number of 
+elements), therefore you will always get `items` keys even if `Collection` holds one or even zero elements.
 
 **NOTE:** currently there's no recursion used to traverse what is expected to be returned as `data`,
 therefore if you you want to return bigger array that contains i.e. `Model` or `Collection` too,
@@ -143,7 +155,6 @@ then you must manually call `toArray()` on these objects prior adding it to your
 
     $data = [ 'flight' = App\Flight::where('active', 1)->first()->toArray() ];
     return ResponseBuilder::success($data);
-
 
 **IMPORTANT:** `data` node is **always** a JSON Object. This is **enforced** by design, 
 therefore if you need to  return an array, you cannot pass it directly:
@@ -294,10 +305,13 @@ for the latter. Helper methods arguments are partially optional - see signatures
 
 **NOTE:** `$data` can be of any type you want (i.e. `string`), however to ensure returned JSON structure 
 is unaffected and `data` is always an object, type casting is done internally. There's no smart logic 
-but dumb `$data = (object)$data;` with the exception for Laravel types like `Model` and `Collection`
-which are converted by calling `toArray()` on them). I recommend you ensure `$data` is an `array` (with
-mentioned exception) prior passing it to ResponseBuilder methods unless you intentionally want the oddities
-like array keys keys `0` or `scalar` to happen.
+but dumb `$data = (object)$data;` with the exception for classes configured with "classes" mapping. In
+such case conversion method is called on the object and result is returned instead. Laravel's
+`Model` and `Collection` classes are pre-configured but you can add additional classes just by
+creating entry in "classes" mapping. 
+
+I recommend you ensure `$data` is an `array` (with mentioned exception) prior passing it to ResponseBuilder 
+methods unless you intentionally want the oddities like array keys keys `0` or `scalar` to happen.
 
 **IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
 value matches W3C meaning of the code. ResponseBuilder will throw `\InvalidArgumentException` if 
