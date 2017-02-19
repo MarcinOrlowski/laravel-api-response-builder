@@ -106,7 +106,7 @@ class ResponseBuilder
 		}
 		if (!is_int($http_code)) {
 			throw new \InvalidArgumentException('http_code must be integer');
-		} else if (($http_code < 199) || ($http_code > 299)) {
+		} elseif (($http_code < 199) || ($http_code > 299)) {
 			throw new \InvalidArgumentException('http_code must be in range 200-299 inclusive');
 		}
 
