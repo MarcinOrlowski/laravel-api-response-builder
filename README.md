@@ -23,6 +23,15 @@ nice, normalized and easy to consume REST API responses.
  * [License](#license)
  * [Notes](#notes)
 
+----
+
+## Donations ##
+
+ResponseBuilder is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or commercial, however if you feel it prevent you from reinventing the whell, helped having your projects done or simply saved you time and money then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
+
+![BTC](http://i.imgur.com/mUe8olT.png)
+
+----
 
 ## Response structure ##
 
@@ -46,6 +55,7 @@ where
 
 **NOTE:** If you need to return other/different fields in **core** response structure (not in `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for guidance of how to do that.
 
+----
 
 ## Usage examples ##
 
@@ -234,6 +244,7 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
     return ResponseBuilder::errorWithMessage(ErrorCode::SOMETHING_WENT_WRONG, $msg);
 
+----
 
 ## Return Codes ##
 
@@ -260,6 +271,7 @@ If you do not need code ranges for your API, just set `max_code` in configuratio
 **IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by ResponseBuilder and cannot be assigned to your
 codes.
 
+----
 
 ## Exposed Methods ##
 
@@ -271,28 +283,28 @@ add the following `use` to make using ResponseBuilder easier:
 
 Methods' arguments:
 
- * `$data` (**mixed**|**null**) data you want to be returned in response's `data` node,
+ * `$error_code` (**int**) any integer value you want to be returned in `code`,
+ * `$data` (**mixed**|**null**) any data you want to be returned in your response as `data` node,
  * `$http_code` (**int**) valid HTTP return code (see `HttpResponse` class for useful constants),
  * `$lang_args` (**array**) array of arguments passed to `Lang::get()` while building `message`,
- * `$error_code` (**int**) error code you want to be returned in `code`,
- * `$message` (**string**) custom message to be returned as part of error response.
+ * `$message` (**string**) custom message to be returned as part of error response (avoid, use error code mapping feature).
 
 Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
 for the latter. Helper methods arguments are partially optional - see signatures below for details.
 
-**NOTE:** Since v2.1 the requirement for `$data` to be an `array` is lifted and `$data` can be
-of any type you need (i.e. `string`), however to ensure returned JSON structure is unaffected,
-data type casting is used internally. There's no smart logic but ordinary `$data = (object)$data;`
-casting with the exception for Laravel types like `Model` and `Collection`), and it's recommended
-you ensure `$data` is `array` (with mentioned exception) if you do not want to end up with dictionary
-using keys like "0" or "scalar".
+**NOTE:** `$data` can be of any type you want (i.e. `string`), however to ensure returned JSON structure 
+is unaffected and `data` is always an object, type casting is done internally. There's no smart logic 
+but dumb `$data = (object)$data;` with the exception for Laravel types like `Model` and `Collection`
+which are converted by calling `toArray()` on them). I recommend you ensure `$data` is an `array` (with
+mentioned exception) prior passing it to ResponseBuilder methods unless you intentionally want the oddities
+like array keys keys `0` or `scalar` to happen.
 
 **IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
 value matches W3C meaning of the code. ResponseBuilder will throw `\InvalidArgumentException` if 
 you try to call `success()` and  related methods with `$http_code` not being in range of 200-299. 
 The same will happen if you try to call `error()` but `$http_code` will be lower than 400.
 
-Redirection codes 3xx cannot be used with ResponseBuilder.
+Redirection codes (3xx) cannot be used with ResponseBuilder.
 
 See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details on HTTP codes.
 
@@ -319,7 +331,7 @@ Usage restrictions:
 * `$http_code` must not be lower than 400
 
 
-
+----
 
 ## Installation and Configuration ##
 
@@ -374,6 +386,8 @@ check CHANGES.md to see if there're new configuration options. If so, and you al
 published, then you need to look into dist config file in `vendor/marcin-orlowski/laravel-api-response-builder/config/`
 folder and grab new version of config file.
 
+----
+
 ## Messages and Localization ##
 
 ResponseBuilder is designed with localization in mind so default approach is you just set it up
@@ -384,6 +398,7 @@ just need to pass array with placeholders' substitution (hence the order of argu
 methods). ResponseBuilder utilised standard Laravel's `Lang` class to deal with messages, so all features
 localization are supported.
 
+----
 
 ## Handling Exceptions API way ##
 
@@ -395,6 +410,7 @@ one of them, and take care of that in advance with couple of easy steps.
 With Laravel this can be achieved with custom Exception Handler and ResponseBuilder comes with ready-to-use
 Handler as well. See [EXCEPTION_HANDLER.md](EXCEPTION_HANDLER.md) for easy setup information.
 
+----
 
 ## Manipulating Response Object ##
 
@@ -467,6 +483,8 @@ would produce:
       }
     }
 
+----
+
 ## Overriding built-in messages ##
 
 At the moment ResponseBuilder provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
@@ -484,6 +502,8 @@ To override default error message used when given error code has no entry in `ma
 
 You can use `:error_code` placeholder in the message and it will be substituted actual error code value.
 
+----
+
 ## Contributing ##
 
 Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
@@ -498,16 +518,21 @@ time in case I'd not be able to accept such changes. But if all is good and clea
 
 Thanks in advance!
 
+----
+
 ## License ##
 
 * Written and copyrighted &copy;2016-2017 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
 * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
+----
 
 ## Notes ##
 
 * ResponseBuilder is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making ResponseBuilder usable with Lumen, speak up or (better) send pull request!
 * Tests will be released shortly. They do already exist, however ResponseBuilder was extracted from existing project and making tests work again require some work to remove dependencies.
+
+----
 
 ## Changelog ##
 
