@@ -25,7 +25,15 @@
       "MarcinOrlowski\\ResponseBuilder\\": "src"
     }
   },
+  "autoload-dev": {
+    "classmap": [
+      "tests/ResponseBuilderTest.php",
+      "tests/TestCase.php"
+    ]
+  },
   "require-dev": {
-    "marcin-orlowski/coding-standard": "^1.1"
+    "marcin-orlowski/coding-standard": "^1.1",
+    "phpunit/phpunit": "^6.0",
+    "orchestra/testbench": "~3.0"
   }
 }
