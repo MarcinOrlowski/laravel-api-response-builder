@@ -4,6 +4,7 @@
 
 * v2.1.3 (2017-02-  )
    * [RB-5] Fixed error code range not being checked when used with custom message strings
+   * http_code can now be handed as null to have it replaced by defaults
 
 * v2.1.2 (2016-08-24)
    * Fixed exception code handling in ExceptionHandlerHelper (reported by Adrian Chen @absszero)

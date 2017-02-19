@@ -85,18 +85,17 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param mixed|null $data        payload to be returned as 'data' node, @null if none
-	 * @param integer    $return_code numeric code to be returned as 'code' @\App\ErrorCode::OK is default
-	 * @param integer    $http_code   HTTP return code to be set for this response (DEFAULT_OK_HTTP_CODE (200) is default)
-	 * @param array|null $lang_args   array of arguments passed to Lang if message associated with error_code uses placeholders
+	 * @param mixed|null   $data        payload to be returned as 'data' node, @null if none
+	 * @param integer      $return_code numeric code to be returned as 'code' @\App\ErrorCode::OK is default
+	 * @param integer|null $http_code   HTTP return code to be set for this response (is default HttpResponse::HTTP_OK)
+	 * @param array|null   $lang_args   array of arguments passed to Lang if message associated with error_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
 	 *
 	 */
-	protected static function buildSuccessResponse($data = null, $return_code = ErrorCode::OK,
-	                                               $http_code = self::DEFAULT_ERROR_HTTP_CODE, array $lang_args = null)
+	protected static function buildSuccessResponse($data = null, $return_code = ErrorCode::OK, $http_code = null, array $lang_args = null)
 	{
 		if ($http_code === null) {
 			$http_code = HttpResponse::HTTP_OK;
@@ -121,11 +120,11 @@ class ResponseBuilder
 	 * @param integer      $error_code internal error code with matching error message
 	 * @param array|null   $lang_args  if array, then this passed as arguments to Lang::get() to build final string.
 	 * @param mixed|null   $data       payload array to be returned in 'data' node or response object
-	 * @param integer|null $http_code  optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
+	 * @param integer|null $http_code  optional HTTP status code to be used with this response. Default HttpResponse::HTTP_BAD_REQUEST
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function error($error_code, array $lang_args = null, $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST)
+	public static function error($error_code, array $lang_args = null, $data = null, $http_code = null)
 	{
 		return static::buildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
@@ -143,10 +142,10 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer    $error_code numeric code to be returned as 'code'
-	 * @param mixed|null $data       payload to be returned as 'data' node, @null if none
-	 * @param integer    $http_code  HTTP error code to be returned with this Response
-	 * @param array|null $lang_args  |null optional array with arguments passed to Lang::get()
+	 * @param integer      $error_code numeric code to be returned as 'code'
+	 * @param mixed|null   $data       payload to be returned as 'data' node, @null if none
+	 * @param integer|null $http_code  HTTP error code to be returned with this Response or @null for default
+	 * @param array|null   $lang_args  |null optional array with arguments passed to Lang::get()
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
@@ -156,9 +155,9 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer    $error_code numeric code to be returned as 'code'
-	 * @param integer    $http_code  HTTP return code to be set for this response (HttpResponse::HTTP_OK (200) is default)
-	 * @param array|null $lang_args  |null optional array with arguments passed to Lang::get()
+	 * @param integer      $error_code numeric code to be returned as 'code'
+	 * @param integer|null $http_code  HTTP return code to be set for this response or @null for default
+	 * @param array|null   $lang_args  |null optional array with arguments passed to Lang::get()
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
@@ -171,7 +170,7 @@ class ResponseBuilder
 	 * @param integer      $error_code    numeric code to be returned as 'code'
 	 * @param string       $error_message custom message to be returned as part of error response
 	 * @param mixed|null   $data          payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code     optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
+	 * @param integer|null $http_code     optional HTTP status code to be used with this response or @null for defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
@@ -183,11 +182,11 @@ class ResponseBuilder
 	/**
 	 * @param integer      $error_code    numeric code to be returned as 'code'
 	 * @param string       $error_message custom message to be returned as part of error response
-	 * @param integer|null $http_code     optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
+	 * @param integer|null $http_code optional HTTP status code to be used with this response or @null for defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST)
+	public static function errorWithMessage($error_code, $error_message, $http_code = null)
 	{
 		return static::buildErrorResponse(null, $error_code, $http_code, [], $error_message);
 	}
@@ -198,7 +197,7 @@ class ResponseBuilder
 	 *
 	 * @param mixed|null   $data       payload array to be returned in 'data' node or response object
 	 * @param integer      $error_code internal error code with matching error message
-	 * @param integer|null $http_code  optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
+	 * @param integer|null $http_code  optional HTTP status code to be used with this response or @null for default HttpResponse::HTTP_BAD_REQUEST
 	 * @param array|null   $lang_args  if array, then this passed as arguments to Lang::get() to build final string.
 	 * @param string|null  $message    custom message to be returned as part of error response
 	 * @param array|null   $headers    optional HTTP headers to be returned in error response
@@ -212,12 +211,6 @@ class ResponseBuilder
 		if ($http_code === null) {
 			$http_code = HttpResponse::HTTP_BAD_REQUEST;
 		}
-		if ($message === null) {
-			$message = $error_code;
-		}
-		if ($headers === null) {
-			$headers = [];
-		}
 
 		if (!is_int($error_code)) {
 			throw new \InvalidArgumentException('error_code must be integer');
@@ -229,6 +222,13 @@ class ResponseBuilder
 			throw new \InvalidArgumentException('http_code must be integer');
 		} elseif ($http_code < 400) {
 			throw new \InvalidArgumentException('http_code cannot be lower than 400');
+		}
+
+		if ($message === null) {
+			$message = $error_code;
+		}
+		if ($headers === null) {
+			$headers = [];
 		}
 
 		return static::make($error_code, $message, $data, $http_code, $lang_args, $headers);
