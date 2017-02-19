@@ -107,7 +107,7 @@ class ResponseBuilder
 		if (!is_int($http_code)) {
 			throw new \InvalidArgumentException('http_code must be integer');
 		} else if (($http_code < 199) || ($http_code > 299)) {
-			throw new \InvalidArgumentException('http_code must be in range 200-299 inclusive.');
+			throw new \InvalidArgumentException('http_code must be in range 200-299 inclusive');
 		}
 
 		return static::make($return_code, $return_code, $data, $http_code, $lang_args);
@@ -120,7 +120,7 @@ class ResponseBuilder
 	 * @param integer      $error_code internal error code with matching error message
 	 * @param array|null   $lang_args  if array, then this passed as arguments to Lang::get() to build final string.
 	 * @param mixed|null   $data       payload array to be returned in 'data' node or response object
-	 * @param integer|null $http_code  optional HTTP status code to be used with this response. Default HttpResponse::HTTP_BAD_REQUEST
+	 * @param integer|null $http_code  optional HTTP status code to be used with this response or @null for default
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
@@ -138,7 +138,7 @@ class ResponseBuilder
 	 */
 	public static function errorWithData($error_code, $data, array $lang_args = null)
 	{
-		return static::buildErrorResponse($data, $error_code, HttpResponse::HTTP_BAD_REQUEST, $lang_args);
+		return static::buildErrorResponse($data, $error_code, null, $lang_args);
 	}
 
 	/**
@@ -154,7 +154,7 @@ class ResponseBuilder
 	public static function errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = null)
 	{
 		if ($http_code === null) {
-			throw new \RuntimeException('http_code cannot be null. Use errorWithData() instead.');
+			throw new \RuntimeException('http_code cannot be null. Use errorWithData() instead');
 		}
 
 		return static::buildErrorResponse($data, $error_code, $http_code, $lang_args);
@@ -172,7 +172,7 @@ class ResponseBuilder
 	public static function errorWithHttpCode($error_code, $http_code, array $lang_args = null)
 	{
 		if ($http_code === null) {
-			throw new \RuntimeException('http_code cannot be null. Use error() instead.');
+			throw new \RuntimeException('http_code cannot be null. Use error() instead');
 		}
 
 		return static::buildErrorResponse(null, $error_code, $http_code, $lang_args);
@@ -186,7 +186,7 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithMessageAndData($error_code, $error_message, $data, $http_code = HttpResponse::HTTP_BAD_REQUEST)
+	public static function errorWithMessageAndData($error_code, $error_message, $data, $http_code = null)
 	{
 		return static::buildErrorResponse($data, $error_code, $http_code, null, $error_message);
 	}
@@ -209,7 +209,7 @@ class ResponseBuilder
 	 *
 	 * @param mixed|null   $data       payload array to be returned in 'data' node or response object
 	 * @param integer      $error_code internal error code with matching error message
-	 * @param integer|null $http_code  optional HTTP status code to be used with this response or @null for default HttpResponse::HTTP_BAD_REQUEST
+	 * @param integer|null $http_code  optional HTTP status code to be used with this response or @null for default
 	 * @param array|null   $lang_args  if array, then this passed as arguments to Lang::get() to build final string.
 	 * @param string|null  $message    custom message to be returned as part of error response
 	 * @param array|null   $headers    optional HTTP headers to be returned in error response
@@ -226,7 +226,7 @@ class ResponseBuilder
 
 		if (!is_int($error_code)) {
 			throw new \InvalidArgumentException('error_code must be integer');
-		} elseif ($error_code == ErrorCode::OK) {
+		} elseif ($error_code === ErrorCode::OK) {
 			throw new \InvalidArgumentException('error_code must not be equal to ErrorCode::OK');
 		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException('lang_args must be either array or null');
