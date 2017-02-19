@@ -63,13 +63,11 @@ return [
 	| handled by "classes" mapping. The key is class name to check object against,
 	| and configuration elements include:
 	|
-	| "key" (string)
-	|          - name of the key to be used in returned JSON after object is
-	|            converted.
+	| "key" (string) (mandatory)
+	|   - name of the key to be used in returned JSON after object is converted.
 	|
-	| "method" (string)
-	|          - name of argument-less method to be called on the object to
-	|            convert it prior returning
+	| "method" (string) (mandatory)
+	|   - name of argument-less method to be called on the object for conversion
 	|
 	| See README for details
 	|

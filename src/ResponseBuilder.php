@@ -22,6 +22,61 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 class ResponseBuilder
 {
+
+	/**
+	 * Reads and validates "classes" config mapping
+	 *
+	 * @return array|null Classes mapping as specified in configuration or @null if no such config found
+	 *
+	 * @throws \RuntimeException if "classes" mapping is invalid
+	 */
+	protected static function getClassesMapping()
+	{
+		$classes = Config . get('classes');
+
+		if ($classes !== null) {
+			if (!is_array($classes)) {
+				throw new \RuntimeException('"classes" mapping must be an array in your config/response_builder.php file');
+			}
+
+			$mandatoryKeys = ['key',
+			                  'method',
+			];
+			foreach($classes as $className => $classConfig) {
+				foreach($mandatoryKeys as $keyName) {
+					if (!array_key_exists($classConfig, $keyName)) {
+						throw new \RuntimeException('Missing "{$keyName}" for "{$className}" mapping');
+					}
+				}
+			}
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Recursively walks $data array and converts all known objects if found. Note
+	 * $data array is passed by reference so source $data array may be modified.
+	 *
+	 * @param array $classes "classes" config mapping array
+	 * @param array $data    array to recursively convert known elements of
+	 */
+	protected static function convert(array $classes, array &$data)
+	{
+		foreach($data as $dataKey => $dataVal) {
+			if (is_array($data)) {
+				static::convert($classes, $data);
+			} elseif (is_object($data)) {
+				foreach($classes as $classConfigClass => $classConfigData) {
+					if ($data instanceof $classConfigClass) {
+						$conversionMethod = $classConfigData['method'];
+						$data[ $dataKey ] = $data->$conversionMethod();
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
 	 * additionally added to reported JSON for easier manual debugging.
@@ -32,32 +87,27 @@ class ResponseBuilder
 	 *
 	 * @return array response array ready to be encoded as json and sent back to client
 	 *
-	 * @throws \RuntimeException in case of missing or invalid "classes" mapping
+	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
 	protected static function buildResponse($code, $message, $data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
 			// we can do some auto-conversion on known class types, so check for that first
-			$classes = Config.get('classes');
+			$classes = self::getClassesMapping();
+
 			if ($classes !== null) {
-				if (is_array($classes)) {
+				if (is_array($data)) {
+					if (count($classes) > 0) {
+						static::convert(classes, $data);
+					}
+				} elseif (is_object($data)) {
 					foreach($classes as $keyClassName => $valClassData) {
 						if ($data instanceof $keyClassName) {
-							if (array_key_exists($valClassData, 'method')) {
-								if (array_key_exists($valClassData, 'key')) {
-									$conversionMethod = $valClassData['method'];
-									$data = [$valClassData['key'] => $data->$conversionMethod()];
-								} else {
-									throw new \RuntimeException('Missing "key" configuration in class conversion mapping');
-								}
-							} else {
-								throw new \RuntimeException('Missing "method" configuration in class conversion mapping');
-							}
+							$conversionMethod = $valClassData['method'];
+							$data = [$valClassData['key'] => $data->$conversionMethod()];
 						}
 					}
-				} else {
-					throw new \RuntimeException('"classes" mapping must be an array in your config/response_builder.php file');
 				}
 			}
 
