@@ -62,11 +62,11 @@ class ResponseBuilder
 	 *
 	 * @param mixed|null $data      payload to be returned as 'data' node, @null if none
 	 * @param integer    $http_code HTTP return code to be set for this response (HttpResponse::HTTP_OK (200) is default)
-	 * @param array      $lang_args array of arguments passed to Lang if message associated with error_code uses placeholders
+	 * @param array|null $lang_args array of arguments passed to Lang if message associated with error_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = [])
+	public static function success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = null)
 	{
 		return static::buildSuccessResponse($data, ErrorCode::OK, $http_code, $lang_args);
 	}
@@ -87,7 +87,7 @@ class ResponseBuilder
 	 * @param mixed|null $data        payload to be returned as 'data' node, @null if none
 	 * @param integer    $return_code numeric code to be returned as 'code' @\App\ErrorCode::OK is default
 	 * @param integer    $http_code   HTTP return code to be set for this response (DEFAULT_OK_HTTP_CODE (200) is default)
-	 * @param array      $lang_args   array of arguments passed to Lang if message associated with error_code uses placeholders
+	 * @param array|null $lang_args   array of arguments passed to Lang if message associated with error_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -95,7 +95,7 @@ class ResponseBuilder
 	 *
 	 */
 	protected static function buildSuccessResponse($data = null, $return_code = ErrorCode::OK,
-	                                               $http_code = self::DEFAULT_ERROR_HTTP_CODE, array $lang_args = [])
+	                                               $http_code = self::DEFAULT_ERROR_HTTP_CODE, array $lang_args = null)
 	{
 		if (is_null($http_code)) {
 			$http_code = HttpResponse::HTTP_OK;
@@ -126,12 +126,12 @@ class ResponseBuilder
 	 *
 	 * @param integer      $error_code internal error code with matching error message
 	 * @param array|null   $lang_args  if array, then this passed as arguments to Lang::get() to build final string.
-	 * @param array|null   $data       payload array to be returned in 'data' node or response object
+	 * @param mixed|null   $data       payload array to be returned in 'data' node or response object
 	 * @param integer|null $http_code  optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function error($error_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST)
+	public static function error($error_code, array $lang_args = null, $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{
 		return static::buildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
@@ -143,7 +143,7 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithData($error_code, $data, array $lang_args = [])
+	public static function errorWithData($error_code, $data, array $lang_args = null)
 	{
 		return static::buildErrorResponse($data, $error_code, HttpResponse::HTTP_BAD_REQUEST, $lang_args);
 	}
@@ -156,7 +156,7 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = [])
+	public static function errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = null)
 	{
 		return static::buildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
@@ -168,7 +168,7 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithHttpCode($error_code, $http_code, $lang_args = [])
+	public static function errorWithHttpCode($error_code, $http_code, array $lang_args = null)
 	{
 		return static::buildErrorResponse(null, $error_code, $http_code, $lang_args);
 	}
@@ -183,7 +183,7 @@ class ResponseBuilder
 	 */
 	public static function errorWithMessageAndData($error_code, $error_message, $data, $http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{
-		return static::buildErrorResponse($data, $error_code, $http_code, [], $error_message);
+		return static::buildErrorResponse($data, $error_code, $http_code, null, $error_message);
 	}
 
 	/**
@@ -207,19 +207,22 @@ class ResponseBuilder
 	 * @param integer|null $http_code  optional HTTP status code to be used with this response. Default @DEFAULT_ERROR_HTTP_CODE
 	 * @param array|null   $lang_args  if array, then this passed as arguments to Lang::get() to build final string.
 	 * @param string|null  $message    custom message to be returned as part of error response
-	 * @param array        $headers    optional HTTP headers to be returned in error response
+	 * @param array|null   $headers    optional HTTP headers to be returned in error response
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 * @throws \InvalidArgumentException Thrown if $code is not correct, outside the range, equals OK code etc.
 	 */
-	protected static function buildErrorResponse($data, $error_code, $http_code, $lang_args, $message = null, array $headers = [])
+	protected static function buildErrorResponse($data, $error_code, $http_code, array $lang_args = null, $message = null, array $headers = null)
 	{
 		if (is_null($http_code)) {
 			$http_code = HttpResponse::HTTP_BAD_REQUEST;
 		}
 		if (is_null($message)) {
 			$message = $error_code;
+		}
+		if ($headers === null) {
+			$headers = [];
 		}
 
 		if (is_int($error_code) === false) {
@@ -250,12 +253,15 @@ class ResponseBuilder
 	 *
 	 * @throws \InvalidArgumentException If code is neither a string nor integer.
 	 */
-	protected static function make($return_code, $message_or_code, $data, $http_code, array $lang_args = [], array $headers = [])
+	protected static function make($return_code, $message_or_code, $data, $http_code, array $lang_args = null, array $headers = null)
 	{
 		if (is_null($lang_args)) {
 			$lang_args = [];
 		}
 		if (is_null($headers)) {
+			$headers = [];
+		}
+		if ($headers === null) {
 			$headers = [];
 		}
 
