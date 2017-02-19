@@ -149,12 +149,12 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
-	 * @throws \RuntimeException if http_code is @null
+	 * @throws \InvalidArgumentException if http_code is @null
 	 */
 	public static function errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = null)
 	{
 		if ($http_code === null) {
-			throw new \RuntimeException('http_code cannot be null. Use errorWithData() instead');
+			throw new \InvalidArgumentException('http_code cannot be null. Use errorWithData() instead');
 		}
 
 		return static::buildErrorResponse($data, $error_code, $http_code, $lang_args);
@@ -167,12 +167,12 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
-	 * @throws \RuntimeException if http_code is @null
+	 * @throws \InvalidArgumentException if http_code is @null
 	 */
 	public static function errorWithHttpCode($error_code, $http_code, array $lang_args = null)
 	{
 		if ($http_code === null) {
-			throw new \RuntimeException('http_code cannot be null. Use error() instead');
+			throw new \InvalidArgumentException('http_code cannot be null. Use error() instead');
 		}
 
 		return static::buildErrorResponse(null, $error_code, $http_code, $lang_args);
