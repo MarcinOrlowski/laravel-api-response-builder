@@ -2,9 +2,10 @@
 
 ## CHANGE LOG ##
 
-* v2.1.3 (2017-02-  )
+* v2.2.0 (2017-02-  )
    * [RB-5] Fixed error code range not being checked when used with custom message strings
-   * http_code can now be handed as null to have it replaced by defaults
+   * For sake of logic, errorWithDataAndHttpCode() and errorWithHttpCode() will throw exception if http_code is null
+   * http_code can be handed as null to all the other methods to have it replaced by default code
 
 * v2.1.2 (2016-08-24)
    * Fixed exception code handling in ExceptionHandlerHelper (reported by Adrian Chen @absszero)

@@ -142,27 +142,39 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $error_code numeric code to be returned as 'code'
-	 * @param mixed|null   $data       payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code  HTTP error code to be returned with this Response or @null for default
-	 * @param array|null   $lang_args  |null optional array with arguments passed to Lang::get()
+	 * @param integer    $error_code numeric code to be returned as 'code'
+	 * @param mixed|null $data       payload to be returned as 'data' node, @null if none
+	 * @param integer    $http_code  HTTP error code to be returned with this Cannot be @null
+	 * @param array|null $lang_args  |null optional array with arguments passed to Lang::get()
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
+	 *
+	 * @throws \RuntimeException if http_code is @null
 	 */
 	public static function errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = null)
 	{
+		if ($http_code === null) {
+			throw new \RuntimeException('http_code cannot be null. Use errorWithData() instead.');
+		}
+
 		return static::buildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
 	/**
-	 * @param integer      $error_code numeric code to be returned as 'code'
-	 * @param integer|null $http_code  HTTP return code to be set for this response or @null for default
-	 * @param array|null   $lang_args  |null optional array with arguments passed to Lang::get()
+	 * @param integer    $error_code numeric code to be returned as 'code'
+	 * @param integer    $http_code  HTTP return code to be set for this response or @null for default
+	 * @param array|null $lang_args  |null optional array with arguments passed to Lang::get()
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
+	 *
+	 * @throws \RuntimeException if http_code is @null
 	 */
 	public static function errorWithHttpCode($error_code, $http_code, array $lang_args = null)
 	{
+		if ($http_code === null) {
+			throw new \RuntimeException('http_code cannot be null. Use error() instead.');
+		}
+
 		return static::buildErrorResponse(null, $error_code, $http_code, $lang_args);
 	}
 
