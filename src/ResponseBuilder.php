@@ -104,18 +104,11 @@ class ResponseBuilder
 
 		if (!is_int($return_code)) {
 			throw new \InvalidArgumentException('error_code must be integer');
-		} else {
-			if (!is_int($http_code)) {
-				throw new \InvalidArgumentException('http_code must be integer');
-			} else {
-				if ($http_code < 199) {
-					throw new \InvalidArgumentException('http_code cannot be lower than 200');
-				} else {
-					if ($http_code > 299) {
-						throw new \InvalidArgumentException('http_code cannot be higher than 299');
-					}
-				}
-			}
+		}
+		if (!is_int($http_code)) {
+			throw new \InvalidArgumentException('http_code must be integer');
+		} else if (($http_code < 199) || ($http_code > 299)) {
+			throw new \InvalidArgumentException('http_code must be in range 200-299 inclusive.');
 		}
 
 		return static::make($return_code, $return_code, $data, $http_code, $lang_args);
