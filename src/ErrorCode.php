@@ -217,8 +217,8 @@ class ErrorCode
 	{
 		$result = false;
 
-		if (($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode())
-			|| ($code <= ErrorCode::getReservedMaxCode()) && ($code >= ErrorCode::getReservedMinCode())
+		if ((($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode()))
+			|| (($code <= ErrorCode::getReservedMaxCode()) && ($code >= ErrorCode::getReservedMinCode()))
 		) {
 			$result = true;
 		}
