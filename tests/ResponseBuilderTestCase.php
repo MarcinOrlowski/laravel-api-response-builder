@@ -21,6 +21,17 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 abstract class ResponseBuilderTestCase extends TestCaseBase
 {
+	public function getApiCodesObject()
+	{
+		return new ErrorCode();
+	}
+
+	public function getApiCodesClassName()
+	{
+		return 'MarcinOrlowski\ResponseBuilder\ErrorCode';
+	}
+
+
 	public function setUp()
 	{
 		parent::setUp();
@@ -28,7 +39,7 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 		Config::set('response_builder.min_code', 100);
 		Config::set('response_builder.max_code', 399);
 
-		$obj = new ErrorCode();
+		$obj = $this->getApiCodesObject();
 		$method = $this->getProtectedMethod(get_class($obj), 'getMinCode');
 		$this->min_allowed_code = $method->invokeArgs($obj, []);
 
@@ -68,14 +79,21 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 	 *
 	 * NOTE: content of `data` node is NOT checked here!
 	 *
-	 * @param int $http_code HTTP return code to check against
+	 * @param int|null $expected_code expected api code to be returned
+	 * @param int      $http_code     HTTP return code to check against
 	 *
 	 * @return validated response object data (as object, not array)
 	 *
 	 */
-	public function getResponseSuccessObject($expected_code = ErrorCode::OK,
-	                                         $http_code = HttpResponse::HTTP_OK)
+	public function getResponseSuccessObject($expected_code = null,
+	                                         $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK)
 	{
+		if ($expected_code === null) {
+			/** @var ErrorCode $api_codes */
+			$api_codes = $this->getApiCodesClassName();
+			$expected_code = $api_codes::OK;
+		}
+
 		if (($http_code < 200) || ($http_code > 299)) {
 			$this->fail("TEST: Success HTTP code ($http_code) in not in range: 200-299.");
 		}
@@ -87,10 +105,16 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 	}
 
 
-	public function getResponseErrorObject($expected_code = ErrorCode::NO_ERROR_MESSAGE,
+	public function getResponseErrorObject($expected_code = null,
 	                                       $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
 	                                       $message = null)
 	{
+		if ($expected_code === null) {
+			/** @var ErrorCode $api_codes */
+			$api_codes = $this->getApiCodesClassName();
+			$expected_code = $api_codes::NO_ERROR_MESSAGE;
+		}
+
 		if ($http_code < HttpResponse::HTTP_BAD_REQUEST)  {
 			$this->fail(sprintf("TEST: Error HTTP code (%d) cannot be below %d.", $http_code, HttpResponse::HTTP_BAD_REQUEST));
 		}
@@ -111,8 +135,9 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 		$j = json_decode($this->response->getContent());
 		$this->validateResponseStructure($j);
 
+		$api_codes = $this->getApiCodesClassName();
 		$this->assertEquals($expected_code, $j->code);
-		$expected_message = ($message === null) ? \Lang::get(ErrorCode::getMapping($expected_code)) : $message;
+		$expected_message = ($message === null) ? \Lang::get($api_codes::getMapping($expected_code)) : $message;
 		$this->assertEquals($expected_message, $j->message);
 
 		return $j;
@@ -202,10 +227,32 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 	 * @deprecated
 	 */
 	protected function validateSuccessCommon($json_object, $code=0, $lang_args=[]) {
+		$api_codes = $this->getApiCodesClassName();
+
 		$this->validateResponseStructure($json_object);
 		$this->assertEquals($code, $json_object->code);
-		$this->assertEquals(\Lang::get(ErrorCode::getMapping($json_object->code), $lang_args), $json_object->message);
+		$this->assertEquals(\Lang::get($api_codes::getMapping($json_object->code), $lang_args), $json_object->message);
 	}
 
+
+
+	/**
+	 * Checks if Response's code matches our expectations. If not, shows ErrorCode::XXX constant name of expected and current values
+	 *
+	 * @param int $expected_code ErrorCodes::XXX code expected
+	 * @param $response_json response json object
+	 */
+	public function assertResponseStatusCode($expected_code, $response_json) {
+		$response_code = $response_json->code;
+
+		if( $response_code !== $expected_code ) {
+			$msg = sprintf('Status code mismatch. Expected: %s, found %s. Message: "%s"',
+				$this->resolveConstantFromCode($expected_code),
+				$this->resolveConstantFromCode($response_code),
+				$response_json->message);
+
+			$this->fail($msg);
+		}
+	}
 
 }
