@@ -35,7 +35,7 @@ class ResponseBuilderTestCaseBase extends \MarcinOrlowski\ResponseBuilder\Tests\
 	 */
 	public function getApiCodesClassName()
 	{
-		return \MarcinOrlowski\ResponseBuilder\ErrorCode::class;
+		return '\MarcinOrlowski\ResponseBuilder\ErrorCode';
 	}
 
 	/** @var int */
@@ -86,7 +86,7 @@ class ResponseBuilderTestCaseBase extends \MarcinOrlowski\ResponseBuilder\Tests\
 	protected function getPackageProviders($app)
 	{
 		return [
-			\MarcinOrlowski\ResponseBuilder\TestResponseBuilderServiceProvider::class,
+			'\MarcinOrlowski\ResponseBuilder\TestResponseBuilderServiceProvider',
 		];
 	}
 

@@ -134,7 +134,7 @@ abstract class AppTestBase extends ResponseBuilderTestCase
 	 * Tests if your ApiCodes class is instance of base ResponseBuilder class
 	 */
 	public function testErrorCodesSubclassOfErrorCode() {
-		$base_class = MarcinOrlowski\ResponseBuilder\ErrorCode::class;
+		$base_class = 'MarcinOrlowski\ResponseBuilder\ErrorCode';
 		$api_codes = $this->getApiCodesObject();
 
 		$this->assertInstanceOf($api_codes, $base_class);

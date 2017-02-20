@@ -33,7 +33,7 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 	 *
 	 *   return '\App\ApiCodes';
 	 *
-	 * or
+	 * or (PHP5.5+ only!)
 	 *
 	 *   return \App\ApiCodes::class;
 	 *
