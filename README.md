@@ -351,7 +351,7 @@ which would return array of objects as expected:
 
 The result is keyed `item` and `items`, depending on class name (therefore you will always get `items` 
 keys even if `Collection` holds one or even zero elements) is the given object of and the
-whole magic is done by calling object's method of choice (`toArray()` in case of above examples).
+whole magic is done by calling method configured for given class.
 
 The whole functionality is configurable via `classes` mapping array (see config file for details).
 
@@ -384,16 +384,13 @@ would produce the following response (contrary to the previous examples, source 
        ]
     }
 
- 
-**NOTE** if you are upgrading from earlier versions of the `ResponseBuilder`, you must add `classes` 
-mapping to your config otherwise no conversion will as mapping is internally empty by default.
 
 ----
 
 ## Requirements ##
 
 There're no special requirements. Once you fulfill Laravel's requirements you are all good. Minimum
-`ResponseBuilder` is tested against is:
+versions `ResponseBuilder` is tested against are:
 
   * PHP 5.5
   * Laravel 5.1.45
@@ -401,7 +398,6 @@ There're no special requirements. Once you fulfill Laravel's requirements you ar
 all newer versions of PHP and Laravel are also supported out of the box.
 
 ----
-
 
 ## Installation and Configuration ##
 
