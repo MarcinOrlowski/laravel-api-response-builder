@@ -16,6 +16,11 @@ php:
   # aliased to a recent hhvm version
   - hhvm
 
+before_script:
+    - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
+    - flags="--prefer-dist"
+    - composer install $flags
+
 # omitting "script:" will default to phpunit
 # use the $DB env variable to determine the phpunit.xml to use
 script: phpunit --configuration phpunit.xml --coverage-text
