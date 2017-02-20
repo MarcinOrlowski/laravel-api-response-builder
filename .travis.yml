@@ -1,0 +1,21 @@
+language: php
+
+# list any PHP version you want to test against
+php:
+  # using major version aliases
+  # aliased to 5.3.29
+  - 5.3
+  # aliased to a recent 5.4.x version
+  - 5.4
+  # aliased to a recent 5.5.x version
+  - 5.5
+  # aliased to a recent 5.6.x version
+  - 5.6
+  # aliased to a recent 7.x version
+  - 7.1
+  # aliased to a recent hhvm version
+  - hhvm
+
+# omitting "script:" will default to phpunit
+# use the $DB env variable to determine the phpunit.xml to use
+script: phpunit --configuration phpunit.xml --coverage-text
