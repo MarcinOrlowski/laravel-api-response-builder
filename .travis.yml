@@ -5,12 +5,12 @@ php:
   # using major version aliases
   # aliased to a recent 5.5.x version
   - 5.5
-  # aliased to a recent 5.6.x version
-  - 5.6
-  # aliased to a recent 7.x version
-  - 7.1
-  # aliased to a recent hhvm version
-  - hhvm
+#  # aliased to a recent 5.6.x version
+#  - 5.6
+#  # aliased to a recent 7.x version
+#  - 7.1
+#  # aliased to a recent hhvm version
+#  - hhvm
 
 before_script:
     - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
