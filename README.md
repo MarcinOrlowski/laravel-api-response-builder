@@ -6,6 +6,7 @@ nice, normalized and easy to consume REST API responses.
 
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/44f427e872e2480597bde0242417a2a7)](https://www.codacy.com/app/MarcinOrlowski/laravel-api-response-builder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MarcinOrlowski/laravel-api-response-builder&amp;utm_campaign=Badge_Grade)
 [![Monthly Downloads](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/d/monthly)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![License](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/license)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 
@@ -24,7 +25,9 @@ nice, normalized and easy to consume REST API responses.
 
 ## Donations ##
 
-`ResponseBuilder` is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or commercial, however if you feel it prevent you from reinventing the whell, helped having your projects done or simply saved you time and money then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
+`ResponseBuilder` is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or 
+commercial, however if you feel it prevent you from reinventing the whell, helped having your projects done or simply saved you time and money 
+then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
 
 ![BTC](http://i.imgur.com/mUe8olT.png)
 
@@ -51,7 +54,8 @@ Thanks for all the fish!
 
 Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
  
-If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues) **before writting any code**. This will help us save your
+If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues) 
+**before writting any code**. This will help us save your
 time in case I'd not be able to accept such changes. But if all is good and clear then follow common routine:
 
  * fork the project
