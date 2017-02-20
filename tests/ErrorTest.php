@@ -3,6 +3,7 @@
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\Base\ResponseBuilderTestCaseBase;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-class ErrorTest extends ResponseBuilderTestCase
+class ErrorTest extends ResponseBuilderTestCaseBase
 {
 
 	/**
@@ -104,10 +105,12 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	/**
 	 * Tests errorWithDataAndHttpCode() with http_code null
+	 *
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testErrorWithDataAndHttpCode_HttpCodeNull()
 	{
-		$this->expectException(\InvalidArgumentException::class);
+//		$this->expectException(\InvalidArgumentException::class);
 		ResponseBuilder::errorWithDataAndHttpCode($this->random_error_code, null, null);
 	}
 
@@ -133,11 +136,11 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	/**
 	 * Tests errorWithHttpCode() with @null as http_code
+	 *
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testErrorWithHttpCode_NullHttpCode()
 	{
-		$this->expectException(\InvalidArgumentException::class);
-
 		ResponseBuilder::errorWithHttpCode($this->random_error_code, null);
 	}
 
@@ -192,11 +195,11 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	/**
 	 * Tests buildErrorResponse() fed with not allowed OK api code
+	 *
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testBuildErrorResponse_ApiCodeOK()
 	{
-		$this->expectException(\InvalidArgumentException::class);
-
 		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
@@ -211,11 +214,11 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	/**
 	 * Tests buildErrorResponse() fed with api_code in form of disallowed variable type
+	 *
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testBuildErrorResponse_WrongApiCodeType()
 	{
-		$this->expectException(\InvalidArgumentException::class);
-
 		$data = null;
 		$http_code = 404;
 		$api_code = 'wrong-error-code';
@@ -226,11 +229,11 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	/**
 	 * Tests buildErrorResponse() fed with http_code in form of disallowed variable type
+	 *
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testBuildErrorResponse_WrongHttpCodeType()
 	{
-		$this->expectException(\InvalidArgumentException::class);
-
 		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
@@ -263,11 +266,11 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	/**
 	 * Tests buildErrorResponse() fed with http code out of allowed bounds
+	 *
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testBuildErrorResponse_TooLowHttpCode()
 	{
-		$this->expectException(\InvalidArgumentException::class);
-
 		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
@@ -281,6 +284,8 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	/**
 	 * Tests buildErrorResponse() fed with wrong lang_args data
+	 *
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testBuildErrorResponse_WrongLangArgs()
 	{
@@ -292,7 +297,6 @@ class ErrorTest extends ResponseBuilderTestCase
 		$error_code = $api_codes_class_name::NO_ERROR_MESSAGE;
 		$lang_args = 'string-is-invalid';
 
-		$this->expectException(\InvalidArgumentException::class);
 		/** @noinspection PhpParamsInspection */
 		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}

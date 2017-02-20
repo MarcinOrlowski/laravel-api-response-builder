@@ -3,6 +3,7 @@
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\Base\ResponseBuilderTestCaseBase;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-class SuccessTest extends ResponseBuilderTestCase
+class SuccessTest extends ResponseBuilderTestCaseBase
 {
 	/**
 	 * Check success()
@@ -109,9 +110,10 @@ class SuccessTest extends ResponseBuilderTestCase
 		ResponseBuilder::successWithHttpCode(0);
 	}
 
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testBuildSuccessResponse_InvalidReturnCode() {
-		$this->expectException(\InvalidArgumentException::class);
-
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'buildSuccessResponse');
 		$method->invokeArgs($obj, [null, 'string-is-invalid-code']);

@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
 
 /**
  * Laravel API Response Builder
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * Class ResponseBuilderTestCase
  */
-class ResponseBuilderTestCase extends TestCaseBase
+class ResponseBuilderTestCaseBase extends \MarcinOrlowski\ResponseBuilder\Tests\Base\TestCaseBase
 {
 	/**
 	 * @return ErrorCode

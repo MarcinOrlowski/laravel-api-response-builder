@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
 
 use MarcinOrlowski\ResponseBuilder\ErrorCode;
 

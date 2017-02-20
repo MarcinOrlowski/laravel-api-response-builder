@@ -2,6 +2,8 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
+use MarcinOrlowski\ResponseBuilder\Tests\Base\ResponseBuilderTestCaseBase;
+
 /**
  * Laravel API Response Builder
  *
@@ -12,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class MakeTest extends ResponseBuilderTestCase
+class MakeTest extends ResponseBuilderTestCaseBase
 {
 	/**
 	 * @expectedException \InvalidArgumentException
