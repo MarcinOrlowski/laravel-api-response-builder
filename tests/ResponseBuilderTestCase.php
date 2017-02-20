@@ -43,17 +43,20 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 			$this->random_error_code => $this->getRandomString('setup_msg'),
 		];
 		Config::set('response_builder.map', $this->error_message_map);
-
-		// FIXME all tests that verify message should fail as random string
-		// is non-existing message key and not message itself, so it should
-		// resolve to null and fail?!!!!
-
 	}
 
+
+	/**
+	 * Load service providers we need during the tests
+	 *
+	 * @param \Illuminate\Foundation\Application $app
+	 *
+	 * @return array
+	 */
 	protected function getPackageProviders($app)
 	{
 		return [
-			\MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
+			\MarcinOrlowski\ResponseBuilder\TestResponseBuilderServiceProvider::class,
 		];
 	}
 
