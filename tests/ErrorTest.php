@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Laravel API Response Builder
+ *
+ * @package   MarcinOrlowski\ResponseBuilder
+ *
+ * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * @copyright 2016-2017 Marcin Orlowski
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+ */
+
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use MarcinOrlowski\ResponseBuilder\ErrorCode;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -102,11 +113,13 @@ class ErrorTest extends ResponseBuilderTestCase
 	public function testErrorWithHttpCode_Null()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+
 		ResponseBuilder::errorWithHttpCode($this->random_error_code, null);
 	}
 
 
-	public function testErrorWithMessageAndData() {
+	public function testErrorWithMessageAndData()
+	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 		$error_code = $this->random_error_code;
 		$error_message = $this->getRandomString('msg');
@@ -117,7 +130,8 @@ class ErrorTest extends ResponseBuilderTestCase
 		$this->assertEquals((object)$data, $j->data);
 	}
 
-	public function testErrorWithMessage() {
+	public function testErrorWithMessage()
+	{
 		$error_code = $this->random_error_code;
 		$error_message = $this->getRandomString('msg');
 		$this->response = ResponseBuilder::errorWithMessage($error_code, $error_message);
@@ -128,7 +142,8 @@ class ErrorTest extends ResponseBuilderTestCase
 	}
 
 
-	public function testErrorWithNonexistingErrorCodeMessageMapping() {
+	public function testErrorWithNonexistingErrorCodeMessageMapping()
+	{
 		$error_code = $this->random_error_code + 1;
 		$this->response = ResponseBuilder::error($error_code);
 		$j = $this->getResponseErrorObject($error_code);
@@ -139,69 +154,72 @@ class ErrorTest extends ResponseBuilderTestCase
 	}
 
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testBuildErrorResponseWrongErrorCode() {
+	public function testBuildErrorResponseWrongErrorCode()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$data = null;
 		$http_code = 404;
 		$error_code = 'wrong-error-code';
 		$lang_args = null;
 
-		$this->validateBuildErrorResponse($data, $error_code, $http_code, $lang_args);
+		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testBuildErrorResponseWrongHttpCode() {
+	public function testBuildErrorResponseWrongHttpCode()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$data = null;
 		$http_code = 'string-is-invalid';
 		$error_code = ErrorCode::NO_ERROR_MESSAGE;
 		$lang_args = null;
 
-		$this->validateBuildErrorResponse($data, $error_code, $http_code, $lang_args);
+		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
-	public function testBuildErrorResponseWithNullHttpCode() {
+	public function testBuildErrorResponseWithNullHttpCode()
+	{
 		$data = null;
 		$http_code = null;
 		$error_code = ErrorCode::NO_ERROR_MESSAGE;
 		$lang_args = null;
 
-		$this->validateBuildErrorResponse($data, $error_code, $http_code, $lang_args);
+		$this->response = $this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 
 		$http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
 		$this->assertEquals($http_code, $this->response->getStatusCode());
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testBuildErrorResponseWithTooLowHttpCode() {
+	public function testBuildErrorResponseWithTooLowHttpCode()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$data = null;
 		$http_code = 0;
 		$error_code = ErrorCode::NO_ERROR_MESSAGE;
 		$lang_args = null;
 
-		$this->validateBuildErrorResponse($data, $error_code, $http_code, $lang_args);
+		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
-	public function testBuildErrorResponseWithWrongLangArgs() {
+	public function testBuildErrorResponseWithWrongLangArgs()
+	{
 		$data = null;
 		$http_code = 404;
 		$error_code = ErrorCode::NO_ERROR_MESSAGE;
 		$lang_args = 'string-is-invalid';
 
 		$this->expectException(\InvalidArgumentException::class);
-		$this->validateBuildErrorResponse($data, $error_code, $http_code, $lang_args);
+		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
-	protected function validateBuildErrorResponse($data, $error_code, $http_code, $lang_args) {
+	protected function callBuildErrorResponse($data, $error_code, $http_code, $lang_args)
+	{
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'buildErrorResponse');
 
-		$this->response = $method->invokeArgs($obj, [$data, $error_code, $http_code, $lang_args]);
+		return $method->invokeArgs($obj, [$data, $error_code, $http_code, $lang_args]);
 	}
 
 }
