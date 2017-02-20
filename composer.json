@@ -18,8 +18,7 @@
     }
   ],
   "require": {
-    "php": ">=5.5.9",
-    "laravel/framework": "~5.0"
+    "php": ">=5.5.9"
   },
   "autoload": {
     "psr-4": {
@@ -28,13 +27,15 @@
   },
   "autoload-dev": {
     "classmap": [
-      "tests/ResponseBuilderTest.php",
-      "tests/TestCase.php"
+      "tests/"
     ]
   },
   "require-dev": {
     "marcin-orlowski/coding-standard": "^1.1",
     "phpunit/phpunit": "^6.0",
-    "orchestra/testbench": "~3.0"
+    "mockery/mockery": "^0.9.8",
+    "orchestra/testbench": "~3.4",
+    "laravel/framework": "^5.4.0",
+    "phpunit/php-code-coverage": "^5.0"
   }
 }
