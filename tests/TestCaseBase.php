@@ -13,6 +13,39 @@
 
 abstract class TestCaseBase extends Orchestra\Testbench\TestCase
 {
+	// return object of your API codes class usually just:
+	//
+	// return new \App\ApiCodes();
+	abstract function getApiCodesObject();
+
+	// return object of your API codes class usually just:
+	//
+	// return '\App\ApiCodes';
+	abstract function getApiCodesClassName();
+
+
+	/**
+	 * Returns ErrorCode constant name referenced by its value
+	 *
+	 * @param $error_code
+	 *
+	 * @return int|null|string
+	 */
+	protected function resolveConstantFromCode($error_code) {
+		$api_codes = $this->getApiCodesClassName();
+		$const = $api_codes::getErrorCodeConstants();
+		$name = null;
+		foreach( $const as $const_name => $const_value ) {
+			if( is_int($const_value) && ($const_value === $error_code) ) {
+				$name = $const_name;
+				break;
+			}
+		}
+
+		return ($name === null) ? "??? ({$error_code})" : $name;
+	}
+
+
 	/**
 	 * Helper to let test protected/private methods
 	 *
