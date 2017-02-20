@@ -124,7 +124,7 @@ class ResponseBuilder
 			$data = (object)$data;
 		}
 
-		$response = ['success' => ($api_code === ErrorCode::OK),
+		$response = ['success' => ($api_code === ApiCodeBase::OK),
 		             'code'    => $api_code,
 		             'locale'  => \App::getLocale(),
 		             'message' => $message,
@@ -163,12 +163,12 @@ class ResponseBuilder
 			throw new \InvalidArgumentException('http_code cannot be null. If this is intentional you should success() instead');
 		}
 
-		return static::buildSuccessResponse(null, ErrorCode::OK, $http_code, []);
+		return static::buildSuccessResponse(null, ApiCodeBase::OK, $http_code, []);
 	}
 
 	/**
 	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code  numeric code to be returned as 'code' @\App\ErrorCode::OK is default
+	 * @param integer|null $api_code  numeric code to be returned as 'code' @\App\ApiCodeBase::OK is default
 	 * @param integer|null $http_code HTTP return code to be set for this response
 	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with error_code uses placeholders
 	 *
@@ -183,7 +183,7 @@ class ResponseBuilder
 			$http_code = static::DEFAULT_HTTP_CODE_OK;
 		}
 		if ($api_code === null) {
-			$api_code = ErrorCode::OK;
+			$api_code = ApiCodeBase::OK;
 		}
 
 		if (!is_int($api_code)) {
@@ -311,8 +311,8 @@ class ResponseBuilder
 
 		if (!is_int($api_code)) {
 			throw new \InvalidArgumentException('api_code must be integer');
-		} elseif ($api_code === ErrorCode::OK) {
-			throw new \InvalidArgumentException('api_code must not be equal to ErrorCode::OK');
+		} elseif ($api_code === ApiCodeBase::OK) {
+			throw new \InvalidArgumentException('api_code must not be equal to ApiCodeBase::OK');
 		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException('lang_args must be either array or null');
 		} elseif (!is_int($http_code)) {
@@ -361,10 +361,10 @@ class ResponseBuilder
 			}
 
 			// do we have the mapping for this string already?
-			$key = ErrorCode::getMapping($message_or_api_code);
+			$key = ApiCodeBase::getMapping($message_or_api_code);
 			if ($key === null) {
 				// no, get the default one instead
-				$key = ErrorCode::getMapping(ErrorCode::NO_ERROR_MESSAGE);
+				$key = ApiCodeBase::getMapping(ApiCodeBase::NO_ERROR_MESSAGE);
 				$lang_args = ['error_code' => $message_or_api_code];
 			}
 			$message_or_api_code = \Lang::get($key, $lang_args);
@@ -373,7 +373,7 @@ class ResponseBuilder
 				throw new \InvalidArgumentException('api_code must be integer value');
 			}
 
-			if (!ErrorCode::isCodeValid($api_code)) {
+			if (!ApiCodeBase::isCodeValid($api_code)) {
 				throw new \InvalidArgumentException("api_code {$api_code} is out of allowed range");
 			}
 		}

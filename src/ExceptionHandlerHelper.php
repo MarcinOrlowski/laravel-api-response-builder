@@ -36,11 +36,11 @@ class ExceptionHandlerHelper
 		if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
 			switch ($exception->getStatusCode()) {
 				case HttpResponse::HTTP_NOT_FOUND:
-					$result = static::error($exception, 'http_not_found', ErrorCode::EX_HTTP_NOT_FOUND);
+					$result = static::error($exception, 'http_not_found', ApiCodeBase::EX_HTTP_NOT_FOUND);
 					break;
 
 				case HttpResponse::HTTP_SERVICE_UNAVAILABLE:
-					$result = static::error($exception, 'http_service_unavailable', ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE);
+					$result = static::error($exception, 'http_service_unavailable', ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE);
 					break;
 
 				default:
@@ -49,7 +49,7 @@ class ExceptionHandlerHelper
 						$msg = 'Exception code #' . $exception->getStatusCode();
 					}
 
-					$result = static::error($exception, 'http_exception', ErrorCode::EX_HTTP_EXCEPTION,
+					$result = static::error($exception, 'http_exception', ApiCodeBase::EX_HTTP_EXCEPTION,
 						HttpResponse::HTTP_BAD_REQUEST, ['message' => $msg]);
 					break;
 			}
@@ -106,21 +106,21 @@ class ExceptionHandlerHelper
 
 		// let's figure out what event we are handling now
 		$base_config_key = 'response_builder.exception_handler.exception.';
-		if (Config::get($base_config_key . 'http_not_found.code', ErrorCode::EX_HTTP_NOT_FOUND) === $error_code) {
-			$base_error_code = ErrorCode::EX_HTTP_NOT_FOUND;
-		} elseif (Config::get($base_config_key . 'http_service_unavailable.code', ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE) === $error_code) {
-			$base_error_code = ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE;
-		} elseif (Config::get($base_config_key . 'http_exception.code', ErrorCode::EX_HTTP_EXCEPTION) === $error_code) {
-			$base_error_code = ErrorCode::EX_HTTP_EXCEPTION;
-		} elseif (Config::get($base_config_key . 'uncaught_exception.code', ErrorCode::EX_UNCAUGHT_EXCEPTION) === $error_code) {
-			$base_error_code = ErrorCode::EX_UNCAUGHT_EXCEPTION;
+		if (Config::get($base_config_key . 'http_not_found.code', ApiCodeBase::EX_HTTP_NOT_FOUND) === $error_code) {
+			$base_error_code = ApiCodeBase::EX_HTTP_NOT_FOUND;
+		} elseif (Config::get($base_config_key . 'http_service_unavailable.code', ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE) === $error_code) {
+			$base_error_code = ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE;
+		} elseif (Config::get($base_config_key . 'http_exception.code', ApiCodeBase::EX_HTTP_EXCEPTION) === $error_code) {
+			$base_error_code = ApiCodeBase::EX_HTTP_EXCEPTION;
+		} elseif (Config::get($base_config_key . 'uncaught_exception.code', ApiCodeBase::EX_UNCAUGHT_EXCEPTION) === $error_code) {
+			$base_error_code = ApiCodeBase::EX_UNCAUGHT_EXCEPTION;
 		} else {
-			$base_error_code = ErrorCode::NO_ERROR_MESSAGE;
+			$base_error_code = ApiCodeBase::NO_ERROR_MESSAGE;
 		}
 
-		$key = ErrorCode::getMapping($error_code);
+		$key = ApiCodeBase::getMapping($error_code);
 		if ($key === null) {
-			$key = ErrorCode::getBaseMapping($base_error_code);
+			$key = ApiCodeBase::getBaseMapping($base_error_code);
 		}
 
 		// let's build error message

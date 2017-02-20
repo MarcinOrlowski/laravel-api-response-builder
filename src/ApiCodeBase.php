@@ -15,9 +15,9 @@ namespace MarcinOrlowski\ResponseBuilder;
 use Config;
 
 /**
- * ErrorCode handling class
+ * ApiCode handling class
  */
-class ErrorCode
+class ApiCodeBase
 {
 	/**
 	 * protected code range - lowest code
@@ -169,7 +169,7 @@ class ErrorCode
 	 */
 	public static function getBaseMapping($code)
 	{
-		if (($code < ErrorCode::RESERVED_MIN_API_CODE) || ($code > ErrorCode::RESERVED_MAX_API_CODE)) {
+		if (($code < ApiCodeBase::RESERVED_MIN_API_CODE) || ($code > ApiCodeBase::RESERVED_MAX_API_CODE)) {
 			throw new \InvalidArgumentException("Base message code {$code} is out of allowed reserved range");
 		}
 
@@ -208,8 +208,8 @@ class ErrorCode
 	{
 		$result = false;
 
-		if ((($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode()))
-			|| (($code <= ErrorCode::getReservedMaxCode()) && ($code >= ErrorCode::getReservedMinCode()))
+		if ((($code >= ApiCodeBase::getMinCode()) && ($code <= ApiCodeBase::getMaxCode()))
+			|| (($code <= ApiCodeBase::getReservedMaxCode()) && ($code >= ApiCodeBase::getReservedMinCode()))
 		) {
 			$result = true;
 		}

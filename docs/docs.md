@@ -161,7 +161,7 @@ save your time in case you will need to refactor code range in future. For examp
 
 End then, to report failure because of `SOMETHING_WENT_WRONG`, just reference this constant:
 
-    return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG);
+    return ResponseBuilder::error(ApiCodeBase::SOMETHING_WENT_WRONG);
 
 This will produce the following JSON response:
 
@@ -182,7 +182,7 @@ of built-in generic fallback message "Error #xxx", as shown above.
 As `ResponseBuilder` uses Laravel's `Lang` package for localisation, you can use the same features with
 your messages as you use across the whole application, including message placeholders:
 
-    return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG, ['login' => $login]);
+    return ResponseBuilder::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $login]);
     
 and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be 
 correctly replaced with content of your `$login` variable.
@@ -195,7 +195,7 @@ is used as is without any further processing. If you want to use `Lang`'s placeh
 to handle them yourself by calling `Lang::get()` manually first and pass the result:
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
-    return ResponseBuilder::errorWithMessage(ErrorCode::SOMETHING_WENT_WRONG, $msg);
+    return ResponseBuilder::errorWithMessage(ApiCodeBase::SOMETHING_WENT_WRONG, $msg);
 
 ----
 
@@ -417,7 +417,7 @@ Supported configuration keys (all keys **MUST** be present in config file):
 Code to message mapping example:
 
     'map' => [
-        ErrorCode::SOMETHING => 'api.something',
+        ApiCodeBase::SOMETHING => 'api.something',
     ],
 
 If given error code is not present in `map`, `ResponseBuilder` will provide fallback message automatically 
@@ -516,7 +516,7 @@ which should then return your desired JSON structure:
 and 
 
     $data = [ 'foo'=>'bar ];
-    return MyResponseBuilder::errorWithData(ErrorCode::SOMETHING_WENT_WRONG, $data);
+    return MyResponseBuilder::errorWithData(ApiCodeBase::SOMETHING_WENT_WRONG, $data);
 
 would produce:
 
@@ -540,13 +540,13 @@ one is used for success code `0` and another provides fallback message for codes
 any reason you want to override them, simply map these codes in your `map` config using codes from package
 reserved range:
 
-     MarcinOrlowski\ResponseBuilder\ErrorCode::OK => 'my_messages.ok',
+     MarcinOrlowski\ResponseBuilder\ApiCodeBase::OK => 'my_messages.ok',
 
 and from now on, each `success()` will be returning your message instead of built-in one.
 
 To override default error message used when given error code has no entry in `map`, add the following:
 
-     MarcinOrlowski\ResponseBuilder\ErrorCode::NO_ERROR_MESSAGE => 'my_messages.default_error_message',
+     MarcinOrlowski\ResponseBuilder\ApiCodeBase::NO_ERROR_MESSAGE => 'my_messages.default_error_message',
 
 You can use `:error_code` placeholder in the message and it will be substituted actual error code value.
 

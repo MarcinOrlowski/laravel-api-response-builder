@@ -2,7 +2,7 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
 
-use MarcinOrlowski\ResponseBuilder\ErrorCode;
+use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 
 /**
  * Laravel API Response Builder
@@ -43,10 +43,10 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	}
 
 	/**
-	 * Checks if all error codes defined in ErrorCodes class contain mapping entry
+	 * Checks if all error codes defined in ApiCode class contain mapping entry
 	 */
 	public function testIfAllCodesGotMapping() {
-		/** @var ErrorCode $api_codes */
+		/** @var ApiCode $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $map */
 		$codes = $api_codes::getErrorCodeConstants();
@@ -59,7 +59,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 * Checks if all error codes are in allowed range
 	 */
 	public function testIfAllCodesAreInRange() {
-		/** @var ErrorCode $api_codes */
+		/** @var ApiCode $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $map */
 		$codes = $api_codes::getErrorCodeConstants();
@@ -72,7 +72,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 * Checks if all defined error code constants are unique (per value)
 	 */
 	public function testIfAllErrorValuesAreUnique() {
-		/** @var ErrorCode $api_codes_class_name */
+		/** @var ApiCode $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$items = array_count_values($api_codes_class_name::getMap());
 		foreach( $items as $code => $count ) {
@@ -86,7 +86,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 * TODO: check translations too
 	 */
 	public function testIfAllCodesAreCorrectlyMapped() {
-		/** @var ErrorCode $api_codes_class_name */
+		/** @var ApiCode $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		/** @var array $map */
 		$map = $api_codes_class_name::getMap();
@@ -104,7 +104,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 		$min = $this->min_allowed_code;
 		$max = $this->max_allowed_code;
 
-		/** @var ErrorCode $api_codes_class_name */
+		/** @var ApiCode $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$map = $api_codes_class_name::getMap();
 		krsort($map);
@@ -126,7 +126,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 
 		$json_object = json_decode($this->response->getContent());
 		$this->assertTrue(is_object($json_object));
-		$this->assertEquals(\Lang::get($api_codes_class_name::getMapping(ErrorCode::NO_ERROR_MESSAGE),
+		$this->assertEquals(\Lang::get($api_codes_class_name::getMapping(ApiCodeBase::NO_ERROR_MESSAGE),
 			['error_code' => $message_or_error_code]), $json_object->message);
 	}
 
@@ -134,7 +134,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 * Tests if your ApiCodes class is instance of base ResponseBuilder class
 	 */
 	public function testErrorCodesSubclassOfErrorCode() {
-		$base_class = 'MarcinOrlowski\ResponseBuilder\ErrorCode';
+		$base_class = ApiCodeBase::class;
 		$api_codes = $this->getApiCodesObject();
 
 		$this->assertInstanceOf($api_codes, $base_class);

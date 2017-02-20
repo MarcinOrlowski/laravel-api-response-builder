@@ -13,8 +13,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use MarcinOrlowski\ResponseBuilder\ErrorCode;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -27,7 +27,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 */
 	public function getApiCodesObject()
 	{
-		return new ErrorCode();
+		return new ApiCodeBase();
 	}
 
 	/**
@@ -35,7 +35,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 */
 	public function getApiCodesClassName()
 	{
-		return '\MarcinOrlowski\ResponseBuilder\ErrorCode';
+		return ApiCodeBase::class;
 	}
 
 	/** @var int */
@@ -237,7 +237,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 
 
 	/**
-	 * Checks if Response's code matches our expectations. If not, shows ErrorCode::XXX constant name of expected and current values
+	 * Checks if Response's code matches our expectations. If not, shows ApiCodeBase::XXX constant name of expected and current values
 	 *
 	 * @param int      $expected_code ErrorCodes::XXX code expected
 	 * @param StdClass $response_json response json object
