@@ -45,7 +45,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	protected $max_allowed_code;
 
 	/** @var int */
-	protected $random_error_code;
+	protected $random_api_code;
 
 	/** @var array */
 	protected $error_message_map = [];
@@ -68,11 +68,11 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 
 		// generate random api_code
 		/** @noinspection RandomApiMigrationInspection */
-		$this->random_error_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
+		$this->random_api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
 		// AND corresponding mapped message string
 		$this->error_message_map = [
-			$this->random_error_code => $this->getRandomString('setup_msg'),
+			$this->random_api_code => $this->getRandomString('setup_msg'),
 		];
 		\Config::set('response_builder.map', $this->error_message_map);
 	}

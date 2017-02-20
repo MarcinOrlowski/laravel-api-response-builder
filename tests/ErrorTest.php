@@ -25,7 +25,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	public function testError()
 	{
 		// GIVEN random error code
-		$error_code = $this->random_error_code;
+		$error_code = $this->random_api_code;
 
 		// WHEN we report error
 		$this->response = ResponseBuilder::error($error_code);
@@ -54,7 +54,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 
 			// AND error code
-			$error_code = $this->random_error_code;
+			$error_code = $this->random_api_code;
 
 			// WHEN we report error
 			$this->response = ResponseBuilder::error($error_code, null, $data, $http_code);
@@ -74,7 +74,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	public function testErrorWithData()
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-		$error_code = $this->random_error_code;
+		$error_code = $this->random_api_code;
 		$this->response = ResponseBuilder::errorWithData($error_code, $data);
 
 		$j = $this->getResponseErrorObject($error_code);
@@ -94,7 +94,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 		foreach($http_codes as $http_code) {
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-			$error_code = $this->random_error_code;
+			$error_code = $this->random_api_code;
 			$this->response = ResponseBuilder::errorWithDataAndHttpCode($error_code, $data, $http_code);
 
 			$j = $this->getResponseErrorObject($error_code, $http_code);
@@ -110,7 +110,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	public function testErrorWithDataAndHttpCode_HttpCodeNull()
 	{
 //		$this->expectException(\InvalidArgumentException::class);
-		ResponseBuilder::errorWithDataAndHttpCode($this->random_error_code, null, null);
+		ResponseBuilder::errorWithDataAndHttpCode($this->random_api_code, null, null);
 	}
 
 	/**
@@ -125,7 +125,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		];
 
 		foreach($http_codes as $http_code) {
-			$error_code = $this->random_error_code;
+			$error_code = $this->random_api_code;
 			$this->response = ResponseBuilder::errorWithHttpCode($error_code, $http_code);
 
 			$j = $this->getResponseErrorObject($error_code, $http_code);
@@ -140,7 +140,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testErrorWithHttpCode_NullHttpCode()
 	{
-		ResponseBuilder::errorWithHttpCode($this->random_error_code, null);
+		ResponseBuilder::errorWithHttpCode($this->random_api_code, null);
 	}
 
 	/**
@@ -149,7 +149,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	public function testErrorWithMessageAndData()
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-		$error_code = $this->random_error_code;
+		$error_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
 		$this->response = ResponseBuilder::errorWithMessageAndData($error_code, $error_message, $data);
 
@@ -163,7 +163,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testErrorWithMessage()
 	{
-		$error_code = $this->random_error_code;
+		$error_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
 		$this->response = ResponseBuilder::errorWithMessage($error_code, $error_message);
 
@@ -181,7 +181,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		$error_code = $this->random_error_code + 1;
+		$error_code = $this->random_api_code + 1;
 		$this->response = ResponseBuilder::error($error_code);
 
 		$key = $api_codes_class_name::getMapping($api_codes_class_name::NO_ERROR_MESSAGE);
