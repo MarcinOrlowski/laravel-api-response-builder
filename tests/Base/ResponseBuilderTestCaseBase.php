@@ -88,7 +88,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	protected function getPackageProviders($app)
 	{
 		return [
-			'\MarcinOrlowski\ResponseBuilder\TestResponseBuilderServiceProvider',
+			'\MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider',
 		];
 	}
 
