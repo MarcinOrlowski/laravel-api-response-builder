@@ -158,6 +158,10 @@ class ResponseBuilder
 	 */
 	public static function successWithHttpCode($http_code)
 	{
+		if ($http_code === null) {
+			throw new \InvalidArgumentException('http_code cannot be null. If this is intentional you should success() instead');
+		}
+
 		return static::buildSuccessResponse(null, ErrorCode::OK, $http_code, []);
 	}
 
