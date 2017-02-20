@@ -2,13 +2,13 @@
 
 ## CHANGE LOG ##
 
-* v2.2.0 (2017-02-  )
+* v2.2.0 (2017-02-20)
    * [RB-5] Fixed error code range not being checked when used with custom message strings
-   * For sake of logic, errorWithDataAndHttpCode() and errorWithHttpCode() will throw exception if http_code is null
-   * http_code can be handed as null to all the other methods to have it replaced by default code
-   * "classes" mapping now features "method" field to specify method name to call for object conversion
-   * For $data arrays recursive "classes" mapped objects conversion now takes place
-   * successWithHttpCode() throws exception when given http_code is null
+   * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception if `http_code` is null
+   * http_code can be handed as null to all other methods and it will be replaced default codes
+   * `classes` mapping now features `method` field to specify method name to call for automatic object conversion
+   * [RB-10] When $data is an array, all elements mapped via "classes" config will be converted recursively
+   * [RB-3] Unit tests are now part of the package
 
 * v2.1.2 (2016-08-24)
    * Fixed exception code handling in ExceptionHandlerHelper (reported by Adrian Chen @absszero)
@@ -27,11 +27,11 @@
    * Configuration file structure changed
    * Built-in localization keys changed
    * Added `errorWithMessageAndData()` method
-   * ExceptionHandlerHelper adds `class`, `file` and `line`` to returned JSON for apps in DEBUG mode
+   * ExceptionHandlerHelper adds `class`, `file` and `line` to returned JSON for apps in DEBUG mode
    * ExceptionHandlerHelper can now use `:message`, `:error_code`, `:http_code` and `:class` placeholders
    * ExceptionHandlerHelper now automatically resolves message mappings and needs no config entries
    * ExceptionHandlerHelper now comes with built-in error codes (still, using own codes is recommended)
-   * Added option to configure HTTP codes for each ExceptionHandlerHelper returned response separately
+   * Added option to configure HTTP codes for each `ExceptionHandlerHelper` returned response separately
    * Exception provided messages can now have priorities over ExceptionHandlerHelper configured error messages
 
 * v1.5.0 (2016-04-18)
