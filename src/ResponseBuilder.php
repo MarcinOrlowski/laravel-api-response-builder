@@ -155,6 +155,8 @@ class ResponseBuilder
 	 * @param integer $http_code HTTP return code to be set for this response
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
+	 *
+	 * @throws \InvalidArgumentException when http_code is @null
 	 */
 	public static function successWithHttpCode($http_code)
 	{
