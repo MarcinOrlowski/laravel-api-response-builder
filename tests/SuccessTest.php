@@ -3,9 +3,20 @@
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
+
+/**
+ * Laravel API Response Builder
+ *
+ * @package   MarcinOrlowski\ResponseBuilder
+ *
+ * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * @copyright 2016-2017 Marcin Orlowski
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+ */
+
 class SuccessTest extends ResponseBuilderTestCase
 {
-
 	/**
 	 * Check success()
 	 */
@@ -17,7 +28,10 @@ class SuccessTest extends ResponseBuilderTestCase
 		$this->assertNull($j->data);
 	}
 
-	public function testSuccess_WithDataAndHttpCode()
+	/**
+	 * Checks success() with valid payload and HTTP code
+	 */
+	public function testSuccess_DataAndHttpCode()
 	{
 		$payloads = [
 			null,
@@ -27,13 +41,14 @@ class SuccessTest extends ResponseBuilderTestCase
 		               HttpResponse::HTTP_ACCEPTED => HttpResponse::HTTP_ACCEPTED,
 		               HttpResponse::HTTP_OK       => HttpResponse::HTTP_OK];
 
-		$api_codes = $this->getApiCodesClassName();
+		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
+		$api_codes_class_name = $this->getApiCodesClassName();
 
 		foreach($payloads as $payload) {
 			foreach($http_codes as $http_code_expect => $http_code_send) {
 				$this->response = ResponseBuilder::success($payload, $http_code_send);
 
-				$j = $this->getResponseSuccessObject($api_codes::OK, $http_code_expect);
+				$j = $this->getResponseSuccessObject($api_codes_class_name::OK, $http_code_expect);
 
 				if ($payload !== null) {
 					$payload = (object)$payload;
@@ -43,7 +58,10 @@ class SuccessTest extends ResponseBuilderTestCase
 		}
 	}
 
-	public function testSuccessWithHttpCode()
+	/**
+	 * Tests successWithHttpCode()
+	 */
+	public function testSuccessHttpCode()
 	{
 		$http_codes = [HttpResponse::HTTP_ACCEPTED,
 		               HttpResponse::HTTP_OK];

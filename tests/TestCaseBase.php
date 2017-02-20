@@ -13,16 +13,32 @@
 
 abstract class TestCaseBase extends Orchestra\Testbench\TestCase
 {
-	// return object of your API codes class usually just:
-	//
-	// return new \App\ApiCodes();
-	abstract function getApiCodesObject();
 
-	// return object of your API codes class usually just:
-	//
-	// return '\App\ApiCodes';
-	abstract function getApiCodesClassName();
+	/**
+	 * Returns object of your API codes class.
+	 * Sufficient implementation of this method
+	 * for most of the cases is just:
+	 *
+	 *   return new \App\ApiCodes();
+	 *
+	 * where \App\ApiCodes matches your codes class
+	 *
+     * @return \MarcinOrlowski\ResponseBuilder\ErrorCode
+	 */
+	abstract public function getApiCodesObject();
 
+	/**
+	 * return object of your API codes class usually just:
+	 *
+	 *   return '\App\ApiCodes';
+	 *
+	 * or
+	 *
+	 *   return \App\ApiCodes::class;
+	 *
+	 * @return string
+	 */
+	abstract public function getApiCodesClassName();
 
 	/**
 	 * Returns ErrorCode constant name referenced by its value
@@ -32,9 +48,10 @@ abstract class TestCaseBase extends Orchestra\Testbench\TestCase
 	 * @return int|null|string
 	 */
 	protected function resolveConstantFromCode($error_code) {
-		$api_codes = $this->getApiCodesClassName();
+		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
+		$api_codes_class_name = $this->getApiCodesClassName();
 		/** @var array $const */
-		$const = $api_codes::getErrorCodeConstants();
+		$const = $api_codes_class_name::getErrorCodeConstants();
 		$name = null;
 		foreach( $const as $const_name => $const_value ) {
 			if( is_int($const_value) && ($const_value === $error_code) ) {
@@ -45,7 +62,6 @@ abstract class TestCaseBase extends Orchestra\Testbench\TestCase
 
 		return ($name === null) ? "??? ({$error_code})" : $name;
 	}
-
 
 	/**
 	 * Helper to let test protected/private methods
