@@ -27,6 +27,7 @@ nice, normalized and easy to consume REST API responses.
  * [Bugs reports and pull requests](#contributing)
  * [License](#license)
  * [Notes](#notes)
+ * [Changelog](#changelog)
 
 ----
 
