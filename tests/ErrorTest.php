@@ -3,7 +3,6 @@
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use MarcinOrlowski\ResponseBuilder\Tests\Base\ResponseBuilderTestCaseBase;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -17,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-class ErrorTest extends ResponseBuilderTestCaseBase
+class ErrorTest extends Base\ResponseBuilderTestCaseBase
 {
 
 	/**
