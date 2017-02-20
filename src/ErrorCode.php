@@ -141,8 +141,8 @@ class ErrorCode
 		$constants = $reflect->getConstants();
 
 		// filter out all internal constants (starting with underscore
-		foreach ($constants as $name => $val) {
-			if (substr($name, 0, 1) == '_') {
+		foreach($constants as $name => $val) {
+			if (substr($name, 0, 1) === '_') {
 				unset($constants[ $name ]);
 			}
 		}
