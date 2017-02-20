@@ -32,10 +32,10 @@
   },
   "require-dev": {
     "marcin-orlowski/coding-standard": "^1.1",
-    "phpunit/phpunit": "^6.0",
+    "phpunit/phpunit": "^5.7",
     "mockery/mockery": "^0.9.8",
-    "orchestra/testbench": "~3.4",
-    "laravel/framework": "^5.4.0",
-    "phpunit/php-code-coverage": "^5.0"
+    "orchestra/testbench": "~3.1",
+    "laravel/framework": ">=5.1.45 <5.2",
+    "phpunit/php-code-coverage": "^4.0"
   }
 }
