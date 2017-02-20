@@ -99,7 +99,7 @@ Helper will fall back to defaults if these are not found:
     'uncaught_exception' => [
     ],
 
-Helper will try to use exception's status code if no dedicatd `http_code` is configured but it would fall
+Helper will try to use exception's status code if no dedicated `http_code` is configured but it would fall
 to default `HttpResponse::HTTP_BAD_REQUEST` code (`HttpResponse::HTTP_INTERNAL_SERVER_ERROR` for uncaught
 exceptions) if exceptions status code is `0`.
 

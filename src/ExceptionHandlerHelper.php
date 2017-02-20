@@ -63,14 +63,14 @@ class ExceptionHandlerHelper
 	/**
 	 * @param Exception $exception
 	 * @param string    $config_base
-	 * @param integer   $default_error_code
+	 * @param integer   $default_api_code
 	 * @param integer   $default_http_code
 	 *
 	 * @return Response
 	 */
-	protected static function error(Exception $exception, $config_base, $default_error_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
+	protected static function error(Exception $exception, $config_base, $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{
-		$error_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_error_code);
+		$error_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_api_code);
 		$http_code = Config::get("response_builder.exception_handler.exception.{$config_base}.http_code", 0);
 
 		// check if this is valid HTTP error code
