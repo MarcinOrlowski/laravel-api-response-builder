@@ -21,6 +21,17 @@ namespace MarcinOrlowski\ResponseBuilder;
 class TestResponseBuilderServiceProvider extends ResponseBuilderServiceProvider
 {
 	/**
+	 * Register bindings in the container.
+	 *
+	 * @return void
+	 */
+	public function register() {
+		$this->mergeConfigFrom(
+			__DIR__.'/../config/response_builder.php', 'response_builder'
+		);
+	}
+
+	/**
 	 * Sets up package resources
 	 *
 	 * @return void

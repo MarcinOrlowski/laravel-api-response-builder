@@ -55,8 +55,8 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	{
 		parent::setUp();
 
-		\Config::set('response_builder.min_code', 100);
-		\Config::set('response_builder.max_code', 399);
+//		\Config::set('response_builder.min_code', 100);
+//		\Config::set('response_builder.max_code', 399);
 
 		$obj = $this->getApiCodesObject();
 		$method = $this->getProtectedMethod(get_class($obj), 'getMinCode');
