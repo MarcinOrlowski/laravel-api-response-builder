@@ -9,6 +9,8 @@ nice, normalized and easy to consume REST API responses.
 [![License](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/license)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Monthly Downloads](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/d/monthly)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 
+![Travis CI](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master!:https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
+
 ## Table of contents ##
  
  * [Features](#features)
