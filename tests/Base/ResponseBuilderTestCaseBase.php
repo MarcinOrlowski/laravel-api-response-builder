@@ -51,13 +51,14 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	protected $error_message_map = [];
 
 
+	/**
+	 * Sets up testing environment
+	 */
 	public function setUp()
 	{
 		parent::setUp();
 
-//		\Config::set('response_builder.min_code', 100);
-//		\Config::set('response_builder.max_code', 399);
-
+		// Obtain configuration params
 		$obj = $this->getApiCodesObject();
 		$method = $this->getProtectedMethod(get_class($obj), 'getMinCode');
 		$this->min_allowed_code = $method->invokeArgs($obj, []);
@@ -65,6 +66,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		$method = $this->getProtectedMethod(get_class($obj), 'getMaxCode');
 		$this->max_allowed_code = $method->invokeArgs($obj, []);
 
+		// generate random api_code
 		/** @noinspection RandomApiMigrationInspection */
 		$this->random_error_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
