@@ -11,10 +11,6 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use MarcinOrlowski\ResponseBuilder\ErrorCode;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
 abstract class TestCaseBase extends Orchestra\Testbench\TestCase
 {
 	/**
