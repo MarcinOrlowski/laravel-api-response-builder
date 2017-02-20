@@ -178,11 +178,11 @@ class ErrorCode
 	 */
 	public static function getBaseMapping($code)
 	{
-		if (($code >= ErrorCode::_RESERVED_MIN_CODE) && ($code <= ErrorCode::_RESERVED_MAX_CODE)) {
-			return array_key_exists($code, static::$base_map) ? static::$base_map[ $code ] : null;
-		} else {
+		if (($code < ErrorCode::_RESERVED_MIN_CODE) || ($code > ErrorCode::_RESERVED_MAX_CODE)) {
 			throw new \InvalidArgumentException("Base message code {$code} is out of allowed reserved range");
 		}
+
+		return array_key_exists($code, static::$base_map) ? static::$base_map[ $code ] : null;
 	}
 
 
