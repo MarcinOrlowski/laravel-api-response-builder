@@ -22,12 +22,12 @@ class ErrorCode
 	/**
 	 * protected code range - lowest code
 	 */
-	const _RESERVED_MIN_CODE = 0;
+	const RESERVED_MIN_API_CODE = 0;
 
 	/**
 	 * protected code range - highest code
 	 */
-	const _RESERVED_MAX_CODE = 63;
+	const RESERVED_MAX_API_CODE = 63;
 
 
 	/**
@@ -117,7 +117,7 @@ class ErrorCode
 	 */
 	protected static function getReservedMinCode()
 	{
-		return static::_RESERVED_MIN_CODE;
+		return static::RESERVED_MIN_API_CODE;
 	}
 
 	/**
@@ -127,7 +127,7 @@ class ErrorCode
 	 */
 	protected static function getReservedMaxCode()
 	{
-		return static::_RESERVED_MAX_CODE;
+		return static::RESERVED_MAX_API_CODE;
 	}
 
 	/**
@@ -178,7 +178,7 @@ class ErrorCode
 	 */
 	public static function getBaseMapping($code)
 	{
-		if (($code < ErrorCode::_RESERVED_MIN_CODE) || ($code > ErrorCode::_RESERVED_MAX_CODE)) {
+		if (($code < ErrorCode::RESERVED_MIN_API_CODE) || ($code > ErrorCode::RESERVED_MAX_API_CODE)) {
 			throw new \InvalidArgumentException("Base message code {$code} is out of allowed reserved range");
 		}
 
