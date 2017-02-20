@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 class ResponseBuilder
 {
-
 	/**
 	 * Reads and validates "classes" config mapping
 	 *
@@ -32,7 +31,7 @@ class ResponseBuilder
 	 */
 	protected static function getClassesMapping()
 	{
-		$classes = Config . get('classes');
+		$classes = Config::get('response_builder.classes');
 
 		if ($classes !== null) {
 			if (!is_array($classes)) {
@@ -44,7 +43,7 @@ class ResponseBuilder
 			];
 			foreach($classes as $className => $classConfig) {
 				foreach($mandatoryKeys as $keyName) {
-					if (!array_key_exists($classConfig, $keyName)) {
+					if (!array_key_exists($keyName, $classConfig)) {
 						throw new \RuntimeException('Missing "{$keyName}" for "{$className}" mapping');
 					}
 				}
@@ -64,8 +63,8 @@ class ResponseBuilder
 	protected static function convert(array $classes, array &$data)
 	{
 		foreach($data as $dataKey => $dataVal) {
-			if (is_array($data)) {
-				static::convert($classes, $data);
+			if (is_array($dataVal)) {
+				static::convert($classes, $dataVal);
 			} elseif (is_object($data)) {
 				foreach($classes as $classConfigClass => $classConfigData) {
 					if ($data instanceof $classConfigClass) {
@@ -105,11 +104,12 @@ class ResponseBuilder
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
 			// we can do some auto-conversion on known class types, so check for that first
-			$classes = Config::get('classes');
+			/** @var array $classes */
+			$classes = static::getClassesMapping();
 			if ($classes !== null) {
 				if (is_array($data)) {
 					if (count($classes) > 0) {
-						static::convert(classes, $data);
+						static::convert($classes, $data);
 					}
 				} elseif (is_object($data)) {
 					foreach($classes as $keyClassName => $valClassData) {
