@@ -12,7 +12,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class MakeTest extends Base\ResponseBuilderTestCaseBase
+class InternalsTest extends Base\ResponseBuilderTestCaseBase
 {
 	/**
 	 * @expectedException \InvalidArgumentException
