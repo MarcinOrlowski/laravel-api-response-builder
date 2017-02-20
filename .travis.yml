@@ -16,6 +16,7 @@ before_script:
     - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
     - flags="--prefer-dist"
     - composer install $flags
+    - php -r "phpinfo();"
 
 # omitting "script:" will default to phpunit
 # use the $DB env variable to determine the phpunit.xml to use
