@@ -14,19 +14,34 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Marcin Orlowski"
+      "name": "Marcin Orlowski",
+      "homepage": "http://MarcinOrlowski.com/"
     }
   ],
+  "support": {
+    "source": "https://github.com/MarcinOrlowski/laravel-api-response-builder/",
+    "issues": "https://github.com/MarcinOrlowski/laravel-api-response-builder/issues"
+  },
   "require": {
-    "php": ">=5.5.9",
-    "laravel/framework": "~5.0"
+    "php": ">=5.5.9"
   },
   "autoload": {
     "psr-4": {
       "MarcinOrlowski\\ResponseBuilder\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "MarcinOrlowski\\ResponseBuilder\\": "src",
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests"
+    }
+  },
   "require-dev": {
-    "marcin-orlowski/coding-standard": "^1.1"
+    "marcin-orlowski/coding-standard": "^1.1",
+    "phpunit/phpunit": "^4.8",
+    "mockery/mockery": "^0.9.8",
+    "orchestra/testbench": "~3.1",
+    "laravel/framework": ">=5.1.45 <5.2",
+    "phpunit/php-code-coverage": "^2.2.4"
   }
 }

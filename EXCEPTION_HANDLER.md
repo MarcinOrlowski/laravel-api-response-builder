@@ -5,7 +5,7 @@ there's always chance for unexpected issue to occur. So we need to expect unexpe
 hit the fan. This means not only things like uncaught exception but also Laravel's maintenance mode can pollute
 returned API responses which is unfortunately pretty common among badly written APIs. Do not be one of them, 
 and take care of that in advance with couple of easy steps. In Laravel, unexpected situations are routed to 
-Exception Handler. Unfortunatel default implementation is not JSON API friendly, therefore ResponseBuilder 
+Exception Handler. Unfortunately default implementation is not JSON API friendly, therefore `ResponseBuilder` 
 provides drop-in replacement for Laravel's handler. Once installed, it ensures only JSON response will be 
 returned no matter what happens.
 
@@ -32,7 +32,7 @@ After your edit it shall look like this:
         return ExceptionHandlerHelper::render($request, $e);
     }
 
-That's it. From now on, in case of any troubles, regular and standarized JSON responses will be
+That's it. From now on, in case of any troubles, regular and standardized JSON responses will be
 returned by your API instead of HTML page.
 
 
@@ -133,11 +133,11 @@ with `:message` placeholder being substituted with exception message (can if it 
 
 Please note that some 3rd party packages may also provide own exception handling helpers and may 
 recommend using said handlers in your application. Unfortunately this will cause conflict with
-ResponseBuilder's handler which usually lead to one (or another) handler not being executed
+`ResponseBuilder`'s handler which usually lead to one (or another) handler not being executed
 at all.
 
 For example if your API delegates OAuth2 related tasks to popular [lucadegasperi/oauth2-server-laravel](https://packagist.org/packages/lucadegasperi/oauth2-server-laravel)
-package, then you must NOT use its `OAuthExceptionHandlerMiddleware` class and ensure it is not set,
+package, then you must **NOT** use its `OAuthExceptionHandlerMiddleware` class and ensure it is not set,
 by inspecting `app/Kernel.php` file and ensuring the following line (if present):
 
     'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware',

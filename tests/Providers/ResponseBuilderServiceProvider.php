@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcinOrlowski\ResponseBuilder;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Providers;
 
 /**
  * Laravel API Response Builder
@@ -12,22 +12,22 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Support\ServiceProvider;
-
 /**
- * Class ResponseBuilderServiceProvider
+ * Class TestResponseBuilderServiceProvider
+ *
+ * We need slightly different paths for the test environment, so we cannot
+ * use original ResponseBuilderServiceProvider
  */
-class ResponseBuilderServiceProvider extends ServiceProvider
+class ResponseBuilderServiceProvider extends \MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider
 {
 	/**
 	 * Register bindings in the container.
 	 *
 	 * @return void
 	 */
-	public function register()
-	{
+	public function register() {
 		$this->mergeConfigFrom(
-			__DIR__.'/../config/response_builder.php', 'response_builder'
+			__DIR__.'/../../config/response_builder.php', 'response_builder'
 		);
 	}
 
@@ -38,11 +38,8 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		$this->loadTranslationsFrom(__DIR__ . '/lang', 'response-builder');
+		parent::boot();
 
-		$source = realpath(__DIR__ . '/../config/response_builder.php');
-		$this->publishes([
-			$source => config_path('response_builder.php'),
-		]);
+		$this->loadTranslationsFrom(__DIR__ . '/../../src/lang', 'response-builder');
 	}
 }
