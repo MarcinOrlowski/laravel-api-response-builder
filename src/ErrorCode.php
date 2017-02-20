@@ -63,7 +63,7 @@ class ErrorCode
 	protected static $base_map = [
 
 		self::OK                            => 'response-builder::builder.ok',
-		self::NO_ERROR_MESSAGE              => 'response-builder::builder.no_error_message_fmt',
+		self::NO_ERROR_MESSAGE              => 'response-builder::builder.no_error_message',
 
 		self::EX_HTTP_NOT_FOUND             => 'response-builder::builder.http_not_found',
 		self::EX_HTTP_SERVICE_UNAVAILABLE   => 'response-builder::builder.http_service_unavailable',
