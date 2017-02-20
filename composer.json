@@ -26,9 +26,10 @@
     }
   },
   "autoload-dev": {
-    "classmap": [
-      "tests/"
-    ]
+    "psr-4": {
+      "MarcinOrlowski\\ResponseBuilder\\": ["src", "tests"],
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests"
+    }
   },
   "require-dev": {
     "marcin-orlowski/coding-standard": "^1.1",

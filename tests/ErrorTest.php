@@ -1,5 +1,7 @@
 <?php
 
+namespace MarcinOrlowski\ResponseBuilder\Tests;
+
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 

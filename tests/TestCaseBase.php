@@ -1,5 +1,7 @@
 <?php
 
+namespace MarcinOrlowski\ResponseBuilder\Tests;
+
 /**
  * Laravel API Response Builder
  *
@@ -11,12 +13,11 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-abstract class TestCaseBase extends Orchestra\Testbench\TestCase
+abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 {
 
 	/**
-	 * Returns object of your API codes class.
-	 * Sufficient implementation of this method
+	 * Returns instance of your API codes class. Sufficient implementation of this method
 	 * for most of the cases is just:
 	 *
 	 *   return new \App\ApiCodes();
@@ -35,6 +36,8 @@ abstract class TestCaseBase extends Orchestra\Testbench\TestCase
 	 * or
 	 *
 	 *   return \App\ApiCodes::class;
+	 *
+	 * NOTE: MUST start with the "\"!
 	 *
 	 * @return string
 	 */

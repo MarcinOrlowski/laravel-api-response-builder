@@ -1,5 +1,7 @@
 <?php
 
+namespace MarcinOrlowski\ResponseBuilder\Tests;
+
 /**
  * Laravel API Response Builder
  *
