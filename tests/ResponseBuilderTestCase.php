@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * Class ResponseBuilderTestCase
  */
-abstract class ResponseBuilderTestCase extends TestCaseBase
+class ResponseBuilderTestCase extends TestCaseBase
 {
 	/**
 	 * @return ErrorCode
