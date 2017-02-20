@@ -28,11 +28,13 @@ class SuccessTest extends ResponseBuilderTestCase
 		               HttpResponse::HTTP_ACCEPTED => HttpResponse::HTTP_ACCEPTED,
 		               HttpResponse::HTTP_OK       => HttpResponse::HTTP_OK];
 
+		$api_codes = $this->getApiCodesClassName();
+
 		foreach($payloads as $payload) {
 			foreach($http_codes as $http_code_expect => $http_code_send) {
 				$this->response = ResponseBuilder::success($payload, $http_code_send);
 
-				$j = $this->getResponseSuccessObject(ErrorCode::OK, $http_code_expect);
+				$j = $this->getResponseSuccessObject($api_codes::OK, $http_code_expect);
 
 				if ($payload !== null) {
 					$payload = (object)$payload;

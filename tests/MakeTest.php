@@ -50,23 +50,40 @@ class MakeTest extends ResponseBuilderTestCase
 	/**
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMakeWithWrongMessage() {
-		$message_or_error_code = [];    // invalid
+	public function testMake_WrongMessage() {
+		$api_codes = $this->getApiCodesClassName();
 
-		$this->validateMake($message_or_error_code);
+		$message_or_api_code = [];    // invalid
+
+		$this->validateMake($api_codes::OK, $message_or_api_code);
 	}
 
-	protected function validateMake($message_or_error_code, $headers=[]) {
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testMake_CustomMessageAndWrongCode() {
+		$api_code = [];    // invalid
+		$this->validateMake($api_code, 'message');
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testMake_CustomMessageAndCodeOutOfRange() {
+		$api_code = $this->max_allowed_code + 1;    // invalid
+		$this->validateMake($api_code, 'message');
+	}
+
+	protected function validateMake($api_code, $message_or_api_code, $headers=[]) {
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'make');
 
-		$error_code = ErrorCode::OK;
-		$data = null;
-
 		$http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK;
 		$lang_args = null;
+		$data = null;
 
-		$this->response = $method->invokeArgs($obj, [$error_code, $message_or_error_code, $data, $http_code, $lang_args, $headers]);
+		$this->response = $method->invokeArgs($obj, [$api_code, $message_or_api_code,
+		                                             $data, $http_code, $lang_args, $headers]);
 	}
 	//-----------------------------------------------
 

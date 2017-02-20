@@ -150,15 +150,31 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	public function testError_MissingMessageMapping()
 	{
+		$api_codes = $this->getApiCodesClassName();
+
 		$error_code = $this->random_error_code + 1;
 		$this->response = ResponseBuilder::error($error_code);
 
-		$key = ErrorCode::getMapping(ErrorCode::NO_ERROR_MESSAGE);
+		$key = $api_codes::getMapping($api_codes::NO_ERROR_MESSAGE);
 		$lang_args = ['error_code' => $error_code];
 		$msg = \Lang::get($key, $lang_args);
 
 		$j = $this->getResponseErrorObject($error_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $msg);
 		$this->assertNull($j->data);
+	}
+
+	public function testBuildErrorResponse_ApiCodeOK()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		$api_codes = $this->getApiCodesClassName();
+
+		$data = null;
+		$http_code = 404;
+		$error_code = $api_codes::OK;
+		$lang_args = null;
+
+		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
 
@@ -178,9 +194,11 @@ class ErrorTest extends ResponseBuilderTestCase
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
+		$api_codes = $this->getApiCodesClassName();
+
 		$data = null;
 		$http_code = 'string-is-invalid';
-		$error_code = ErrorCode::NO_ERROR_MESSAGE;
+		$error_code = $api_codes::NO_ERROR_MESSAGE;
 		$lang_args = null;
 
 		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
@@ -188,9 +206,11 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	public function testBuildErrorResponse_NullHttpCode()
 	{
+		$api_codes = $this->getApiCodesClassName();
+
 		$data = null;
 		$http_code = null;
-		$error_code = ErrorCode::NO_ERROR_MESSAGE;
+		$error_code = $api_codes::NO_ERROR_MESSAGE;
 		$lang_args = null;
 
 		$this->response = $this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
@@ -203,9 +223,11 @@ class ErrorTest extends ResponseBuilderTestCase
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
+		$api_codes = $this->getApiCodesClassName();
+
 		$data = null;
 		$http_code = 0;
-		$error_code = ErrorCode::NO_ERROR_MESSAGE;
+		$error_code = $api_codes::NO_ERROR_MESSAGE;
 		$lang_args = null;
 
 		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
@@ -213,9 +235,11 @@ class ErrorTest extends ResponseBuilderTestCase
 
 	public function testBuildErrorResponse_WrongLangArgs()
 	{
+		$api_codes = $this->getApiCodesClassName();
+
 		$data = null;
 		$http_code = 404;
-		$error_code = ErrorCode::NO_ERROR_MESSAGE;
+		$error_code = $api_codes::NO_ERROR_MESSAGE;
 		$lang_args = 'string-is-invalid';
 
 		$this->expectException(\InvalidArgumentException::class);
