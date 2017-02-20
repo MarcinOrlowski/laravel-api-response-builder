@@ -585,7 +585,6 @@ Thanks in advance!
 ## Notes ##
 
 * `ResponseBuilder` is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making `ResponseBuilder` usable with Lumen, speak up or (better) send pull request!
-* Tests will be released shortly. They do already exist, however `ResponseBuilder` was extracted from existing project and making tests work again require some work to remove dependencies.
 
 ----
 
