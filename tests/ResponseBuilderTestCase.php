@@ -28,7 +28,7 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 
 	public function getApiCodesClassName()
 	{
-		return 'MarcinOrlowski\ResponseBuilder\ErrorCode';
+		return MarcinOrlowski\ResponseBuilder\ErrorCode::class;
 	}
 
 
@@ -165,9 +165,9 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 		$this->assertTrue(is_bool($json_object->success));
 		$this->assertTrue(is_int($json_object->code));
 		$this->assertTrue(is_string($json_object->locale));
-		$this->assertTrue(trim($json_object->locale) != '', "'message' cannot be empty string");
+		$this->assertNotEquals(trim($json_object->locale), '', "'message' cannot be empty string");
 		$this->assertTrue(is_string($json_object->message));
-		$this->assertTrue(trim($json_object->message) != '', "'locale' cannot be empty string");
+		$this->assertNotEquals(trim($json_object->message), '', "'locale' cannot be empty string");
 		$this->assertTrue(($json_object->data === null) || (is_object($json_object->data)),
 			"Response 'data' must be either object or null");
 	}
@@ -217,23 +217,6 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 
 		$this->assertEquals($http_code, $actual, "Expected status code {$http_code}, got {$actual}. Response: {$this->response->getContent()}");
 	}
-
-
-	/**
-	 * @param       $json_object
-	 * @param int   $code
-	 * @param array $lang_args
-	 *
-	 * @deprecated
-	 */
-	protected function validateSuccessCommon($json_object, $code=0, $lang_args=[]) {
-		$api_codes = $this->getApiCodesClassName();
-
-		$this->validateResponseStructure($json_object);
-		$this->assertEquals($code, $json_object->code);
-		$this->assertEquals(\Lang::get($api_codes::getMapping($json_object->code), $lang_args), $json_object->message);
-	}
-
 
 
 	/**

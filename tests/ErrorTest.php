@@ -12,7 +12,6 @@
  */
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use MarcinOrlowski\ResponseBuilder\ErrorCode;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ErrorTest extends ResponseBuilderTestCase
@@ -23,7 +22,6 @@ class ErrorTest extends ResponseBuilderTestCase
 	 */
 	public function testError()
 	{
-
 		// GIVEN random error code
 		$error_code = $this->random_error_code;
 

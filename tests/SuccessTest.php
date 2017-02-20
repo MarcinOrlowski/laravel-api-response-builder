@@ -1,7 +1,6 @@
 <?php
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use MarcinOrlowski\ResponseBuilder\ErrorCode;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class SuccessTest extends ResponseBuilderTestCase
@@ -65,14 +64,11 @@ class SuccessTest extends ResponseBuilderTestCase
 		ResponseBuilder::success(null, 'foo');
 	}
 
-	public function testSuccessWithHttpCodeFallback() {
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testSuccess_HttpCodeNull() {
 		$this->response = ResponseBuilder::successWithHttpCode(null);
-		$this->assertResponseOk();
-
-		$j = json_decode($this->response->getContent());
-		$this->assertTrue(is_object($j));
-		$this->validateSuccessCommon($j);
-		$this->assertNull($j->data);
 	}
 
 	/**

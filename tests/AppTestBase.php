@@ -47,6 +47,7 @@ abstract class AppTestBase extends ResponseBuilderTestCase
 	 */
 	public function testIfAllCodesGotMapping() {
 		$api_codes = $this->getApiCodesClassName();
+		/** @var array $map */
 		$codes = $api_codes::getErrorCodeConstants();
 		foreach( $codes as $name => $val ) {
 			$this->assertNotNull($api_codes::getMapping($val), "No mapping for {$name}");
@@ -58,6 +59,7 @@ abstract class AppTestBase extends ResponseBuilderTestCase
 	 */
 	public function testIfAllCodesAreInRange() {
 		$api_codes = $this->getApiCodesClassName();
+		/** @var array $map */
 		$codes = $api_codes::getErrorCodeConstants();
 		foreach( $codes as $name => $val ) {
 			$this->assertTrue($api_codes::isCodeValid($val), "Value of {$name} is outside allowed range");
@@ -82,6 +84,7 @@ abstract class AppTestBase extends ResponseBuilderTestCase
 	 */
 	public function testIfAllCodesAreCorrectlyMapped() {
 		$api_codes = $this->getApiCodesClassName();
+		/** @var array $map */
 		$map = $api_codes::getMap();
 		foreach( $map as $code => $mapping ) {
 			$str = \Lang::get($mapping);
@@ -126,10 +129,10 @@ abstract class AppTestBase extends ResponseBuilderTestCase
 	 * Tests if your ApiCodes class is instance of base ResponseBuilder class
 	 */
 	public function testErrorCodesSubclassOfErrorCode() {
-		$base_class = '\MarcinOrlowski\ResponseBuilder\ErrorCode';
+		$base_class = MarcinOrlowski\ResponseBuilder\ErrorCode::class;
 		$api_codes = $this->getApiCodesObject();
 
-		$this->assertTrue($api_codes instanceof $base_class);
+		$this->assertInstanceOf($api_codes, $base_class);
 	}
 
 }

@@ -33,6 +33,7 @@ abstract class TestCaseBase extends Orchestra\Testbench\TestCase
 	 */
 	protected function resolveConstantFromCode($error_code) {
 		$api_codes = $this->getApiCodesClassName();
+		/** @var array $const */
 		$const = $api_codes::getErrorCodeConstants();
 		$name = null;
 		foreach( $const as $const_name => $const_value ) {
