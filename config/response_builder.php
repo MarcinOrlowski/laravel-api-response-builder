@@ -9,9 +9,6 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use App\ErrorCode;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
 return [
 
 	/*
@@ -115,20 +112,20 @@ return [
 		// you will still know which module thrown this exception
 		'exception' => [
 //			'http_not_found' => [
-//				'code'      => ErrorCode::HTTP_NOT_FOUND,
-//				'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//				'code'      => \App\ApiCodes::HTTP_NOT_FOUND,
+//				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
 //			],
 //			'http_service_unavailable' => [
-//				'code'      => ErrorCode::HTTP_SERVICE_UNAVAILABLE,
-//				'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//				'code'      => \App\ApiCodes::HTTP_SERVICE_UNAVAILABLE,
+//				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
 //			],
 //			'http_exception' => [
-//				'code'      => ErrorCode::HTTP_EXCEPTION,
-//				'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//				'code'      => \App\ApiCodes::HTTP_EXCEPTION,
+//				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
 //			],
 //			'uncaught_exception' => [
-//				'code'      => ErrorCode::UNCAUGHT_EXCEPTION,
-//				'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+//				'code'      => \App\ApiCodes::UNCAUGHT_EXCEPTION,
+//				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_INTERNAL_SERVER_ERROR,
 //			],
 		],
 

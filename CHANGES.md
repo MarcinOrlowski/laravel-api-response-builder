@@ -2,6 +2,9 @@
 
 ## CHANGE LOG ##
 
+* dev
+   * Corrected default config file having `use` entries
+
 * v2.2.1 (2017-02-20)
    * Documentation splitted into separate files
 
