@@ -42,7 +42,9 @@ class ErrorTest extends ResponseBuilderTestCase
 	{
 		$http_codes = [HttpResponse::HTTP_CONFLICT,
 		               HttpResponse::HTTP_BAD_REQUEST,
-		               HttpResponse::HTTP_FAILED_DEPENDENCY];
+		               HttpResponse::HTTP_FAILED_DEPENDENCY,
+		               ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
+		];
 
 		foreach($http_codes as $http_code) {
 			// GIVEN data
@@ -77,7 +79,9 @@ class ErrorTest extends ResponseBuilderTestCase
 	{
 		$http_codes = [HttpResponse::HTTP_CONFLICT,
 		               HttpResponse::HTTP_BAD_REQUEST,
-		               HttpResponse::HTTP_FAILED_DEPENDENCY];
+		               HttpResponse::HTTP_FAILED_DEPENDENCY,
+		               ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
+		];
 
 		foreach($http_codes as $http_code) {
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
@@ -99,7 +103,9 @@ class ErrorTest extends ResponseBuilderTestCase
 	{
 		$http_codes = [HttpResponse::HTTP_CONFLICT,
 		               HttpResponse::HTTP_BAD_REQUEST,
-		               HttpResponse::HTTP_FAILED_DEPENDENCY];
+		               HttpResponse::HTTP_FAILED_DEPENDENCY,
+		               ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
+		];
 
 		foreach($http_codes as $http_code) {
 			$error_code = $this->random_error_code;
@@ -110,7 +116,7 @@ class ErrorTest extends ResponseBuilderTestCase
 		}
 	}
 
-	public function testErrorWithHttpCode_Null()
+	public function testErrorWithHttpCode_NullHttpCode()
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
@@ -125,7 +131,7 @@ class ErrorTest extends ResponseBuilderTestCase
 		$error_message = $this->getRandomString('msg');
 		$this->response = ResponseBuilder::errorWithMessageAndData($error_code, $error_message, $data);
 
-		$j = $this->getResponseErrorObject($error_code, HttpResponse::HTTP_BAD_REQUEST, $error_message);
+		$j = $this->getResponseErrorObject($error_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
 		$this->assertEquals($error_message, $j->message);
 		$this->assertEquals((object)$data, $j->data);
 	}
@@ -136,25 +142,27 @@ class ErrorTest extends ResponseBuilderTestCase
 		$error_message = $this->getRandomString('msg');
 		$this->response = ResponseBuilder::errorWithMessage($error_code, $error_message);
 
-		$j = $this->getResponseErrorObject($error_code, HttpResponse::HTTP_BAD_REQUEST, $error_message);
+		$j = $this->getResponseErrorObject($error_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
 		$this->assertEquals($error_message, $j->message);
 		$this->assertNull($j->data);
 	}
 
 
-	public function testErrorWithNonexistingErrorCodeMessageMapping()
+	public function testError_MissingMessageMapping()
 	{
 		$error_code = $this->random_error_code + 1;
 		$this->response = ResponseBuilder::error($error_code);
-		$j = $this->getResponseErrorObject($error_code);
 
 		$key = ErrorCode::getMapping(ErrorCode::NO_ERROR_MESSAGE);
 		$lang_args = ['error_code' => $error_code];
-		$this->assertEquals(\Lang::get($key, $lang_args), $j->message);
+		$msg = \Lang::get($key, $lang_args);
+
+		$j = $this->getResponseErrorObject($error_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $msg);
+		$this->assertNull($j->data);
 	}
 
 
-	public function testBuildErrorResponseWrongErrorCode()
+	public function testBuildErrorResponse_WrongErrorCode()
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
@@ -166,7 +174,7 @@ class ErrorTest extends ResponseBuilderTestCase
 		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
-	public function testBuildErrorResponseWrongHttpCode()
+	public function testBuildErrorResponse_WrongHttpCode()
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
@@ -178,7 +186,7 @@ class ErrorTest extends ResponseBuilderTestCase
 		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
-	public function testBuildErrorResponseWithNullHttpCode()
+	public function testBuildErrorResponse_NullHttpCode()
 	{
 		$data = null;
 		$http_code = null;
@@ -191,7 +199,7 @@ class ErrorTest extends ResponseBuilderTestCase
 		$this->assertEquals($http_code, $this->response->getStatusCode());
 	}
 
-	public function testBuildErrorResponseWithTooLowHttpCode()
+	public function testBuildErrorResponse_TooLowHttpCode()
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
@@ -203,7 +211,7 @@ class ErrorTest extends ResponseBuilderTestCase
 		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
 	}
 
-	public function testBuildErrorResponseWithWrongLangArgs()
+	public function testBuildErrorResponse_WrongLangArgs()
 	{
 		$data = null;
 		$http_code = 404;

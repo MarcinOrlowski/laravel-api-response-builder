@@ -16,18 +16,17 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use MarcinOrlowski\ResponseBuilder\ErrorCode;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
+/**
+ * Class ResponseBuilderTestCase
+ */
 abstract class ResponseBuilderTestCase extends TestCaseBase
 {
 	public function setUp()
 	{
 		parent::setUp();
 
-//		$this->instance('path.lang', "../lang/");
-
-
 		Config::set('response_builder.min_code', 100);
 		Config::set('response_builder.max_code', 399);
-		Config::set('response_builder.map', []);
 
 		$obj = new ErrorCode();
 		$method = $this->getProtectedMethod(get_class($obj), 'getMinCode');
@@ -89,11 +88,11 @@ abstract class ResponseBuilderTestCase extends TestCaseBase
 
 
 	public function getResponseErrorObject($expected_code = ErrorCode::NO_ERROR_MESSAGE,
-	                                       $http_code = HttpResponse::HTTP_BAD_REQUEST,
+	                                       $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
 	                                       $message = null)
 	{
 		if ($http_code < HttpResponse::HTTP_BAD_REQUEST)  {
-			$this->fail("TEST: Error HTTP code ($http_code) cannot be below %d.", HttpResponse::HTTP_BAD_REQUEST);
+			$this->fail(sprintf("TEST: Error HTTP code (%d) cannot be below %d.", $http_code, HttpResponse::HTTP_BAD_REQUEST));
 		}
 
 		$j = $this->getResponseObjectRaw($expected_code, $http_code, $message);
