@@ -160,7 +160,7 @@ class ResponseBuilder
 	public static function successWithHttpCode($http_code)
 	{
 		if ($http_code === null) {
-			throw new \InvalidArgumentException('http_code cannot be null. If this is intentional you should success() instead');
+			throw new \InvalidArgumentException('http_code cannot be null. Use success() instead');
 		}
 
 		return static::buildSuccessResponse(null, ApiCodeBase::OK, $http_code, []);
@@ -187,10 +187,10 @@ class ResponseBuilder
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException("'code' must be integer");
+			throw new \InvalidArgumentException(sprintf("'code' must be integer ('%ss' given)", gettype($api_code)));
 		}
 		if (!is_int($http_code)) {
-			throw new \InvalidArgumentException("'http_code must be integer'");
+			throw new \InvalidArgumentException(sprintf("'http_code' must be integer ('%s' given)", gettype($http_code)));
 		} elseif (($http_code < 200) || ($http_code > 299)) {
 			throw new \InvalidArgumentException("http_code ({$http_code}) invalid. Must be in range 200-299 inclusive");
 		}
@@ -239,7 +239,7 @@ class ResponseBuilder
 	public static function errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args = null)
 	{
 		if ($http_code === null) {
-			throw new \InvalidArgumentException('http_code cannot be null. If this is intentional you should errorWithData() instead');
+			throw new \InvalidArgumentException('http_code cannot be null. Use errorWithData() instead');
 		}
 
 		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args);
@@ -310,13 +310,13 @@ class ResponseBuilder
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException('api_code must be integer');
+			throw new \InvalidArgumentException(sprintf("api_code must be integer ('%s' given)", gettype($api_code)));
 		} elseif ($api_code === ApiCodeBase::OK) {
-			throw new \InvalidArgumentException('api_code must not be equal to ApiCodeBase::OK');
+			throw new \InvalidArgumentException(sprintf('api_code must not be equal to ApiCodeBase::OK (%d)', ApiCodeBase::OK));
 		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
-			throw new \InvalidArgumentException('lang_args must be either array or null');
+			throw new \InvalidArgumentException(sprintf("lang_args must be either array or null ('%s' given)", gettype($lang_args)));
 		} elseif (!is_int($http_code)) {
-			throw new \InvalidArgumentException('http_code must be integer');
+			throw new \InvalidArgumentException(sprintf("http_code must be integer ('%s' given)", gettype($http_code)));
 		} elseif ($http_code < 400) {
 			throw new \InvalidArgumentException('http_code cannot be lower than 400');
 		}
@@ -357,7 +357,9 @@ class ResponseBuilder
 		if (!is_string($message_or_api_code)) {
 			// no, so it must be an int value
 			if (!is_int($message_or_api_code)) {
-				throw new \InvalidArgumentException('Message must be either string or resolvable api_code');
+				throw new \InvalidArgumentException(
+					sprintf('Message must be either string or resolvable integer api_code (\'%s\' given)', gettype($message_or_api_code))
+				);
 			}
 
 			// do we have the mapping for this string already?
@@ -370,11 +372,15 @@ class ResponseBuilder
 			$message_or_api_code = \Lang::get($key, $lang_args);
 		} else {
 			if (!is_int($api_code)) {
-				throw new \InvalidArgumentException('api_code must be integer value');
+				throw new \InvalidArgumentException(
+					sprintf("api_code must be integer ('%s' given)", gettype($api_code))
+				);
 			}
 
 			if (!ApiCodeBase::isCodeValid($api_code)) {
-				throw new \InvalidArgumentException("api_code {$api_code} is out of allowed range");
+				$msg = sprintf("API code value ({$api_code}) is out of allowed range %d-%d",
+					ApiCodeBase::getMinCode(), ApiCodeBase::getMaxCode());
+				throw new \InvalidArgumentException($msg);
 			}
 		}
 

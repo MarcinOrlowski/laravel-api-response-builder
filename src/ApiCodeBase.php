@@ -80,12 +80,12 @@ class ApiCodeBase
 	 *
 	 * @throws \RuntimeException Throws exception if no min_code set up
 	 */
-	protected static function getMinCode()
+	public static function getMinCode()
 	{
 		$min_code = Config::get('response_builder.min_code', null);
 
 		if ($min_code === null) {
-			throw new \RuntimeException('Missing min_code key in config/response_builder.php config file');
+			throw new \RuntimeException('CONFIG: Missing "min_code" key');
 		}
 
 		return $min_code;
@@ -98,12 +98,12 @@ class ApiCodeBase
 	 *
 	 * @throws \RuntimeException Throws exception if no max_code set up
 	 */
-	protected static function getMaxCode()
+	public static function getMaxCode()
 	{
 		$max_code = Config::get('response_builder.max_code', null);
 
 		if ($max_code === null) {
-			throw new \RuntimeException('Missing min_code key in config/response_builder.php config file');
+			throw new \RuntimeException('CONFIG: Missing "min_code" key');
 		}
 
 		return $max_code;
@@ -152,7 +152,7 @@ class ApiCodeBase
 	{
 		$map = Config::get('response_builder.map', null);
 		if ($map === null) {
-			throw new \RuntimeException('Missing "map" key in config/response_builder.php config file');
+			throw new \RuntimeException('CONFIG: Missing "map" key');
 		}
 
 		return $map + static::$base_map;
@@ -189,7 +189,9 @@ class ApiCodeBase
 	public static function getMapping($code)
 	{
 		if (!static::isCodeValid($code)) {
-			throw new \InvalidArgumentException("Message code {$code} is out of allowed range");
+			$msg = sprintf("API code value ({$code}) is out of allowed range %d-%d",
+				static::getMinCode(), static::getMaxCode());
+			throw new \InvalidArgumentException($msg);
 		}
 
 		$map = static::getMap();

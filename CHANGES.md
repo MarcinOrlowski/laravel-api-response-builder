@@ -4,6 +4,10 @@
 
 * dev
    * Corrected default config file having `use` entries
+   * [RB-20] Renamed ErrorCode to ApiCodeBase
+   * ApiCodeBase's getMinCode() and getMaxCode() are now `public`
+   * Improved error messages to be even more informative
+   * All exceptions due to misconfiguration have "CONFIG: " message prefix now 
 
 * v2.2.1 (2017-02-20)
    * Documentation splitted into separate files

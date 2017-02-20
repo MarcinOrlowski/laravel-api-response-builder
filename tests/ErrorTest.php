@@ -305,18 +305,18 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 * Calls protected method buildErrorResponse()
 	 *
 	 * @param mixed|null $data
-	 * @param int|null   $error_code
+	 * @param int|null   $api_code
 	 * @param int|null   $http_code
 	 * @param mixed|null $lang_args
 	 *
 	 * @return mixed
 	 */
-	protected function callBuildErrorResponse($data, $error_code, $http_code, $lang_args)
+	protected function callBuildErrorResponse($data, $api_code, $http_code, $lang_args)
 	{
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'buildErrorResponse');
 
-		return $method->invokeArgs($obj, [$data, $error_code, $http_code, $lang_args]);
+		return $method->invokeArgs($obj, [$data, $api_code, $http_code, $lang_args]);
 	}
 
 }
