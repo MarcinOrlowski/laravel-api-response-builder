@@ -256,9 +256,9 @@ class ResponseBuilder
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException('error_code must be integer');
+			throw new \InvalidArgumentException('api_code must be integer');
 		} elseif ($api_code === ErrorCode::OK) {
-			throw new \InvalidArgumentException('error_code must not be equal to ErrorCode::OK');
+			throw new \InvalidArgumentException('api_code must not be equal to ErrorCode::OK');
 		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException('lang_args must be either array or null');
 		} elseif (!is_int($http_code)) {
