@@ -181,7 +181,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		$error_code = $this->random_api_code + 1;
+		// FIXME we **assume** this is not mapped. But assumptions sucks...
+		$error_code = $this->max_allowed_code -1;
 		$this->response = ResponseBuilder::error($error_code);
 
 		$key = $api_codes_class_name::getMapping($api_codes_class_name::NO_ERROR_MESSAGE);
