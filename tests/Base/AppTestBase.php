@@ -15,7 +15,7 @@ use MarcinOrlowski\ResponseBuilder\ErrorCode;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-abstract class AppTestBase extends ResponseBuilderTestCase
+abstract class AppTestBase extends ResponseBuilderTestCaseBase
 {
 
 	/**
