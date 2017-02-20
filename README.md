@@ -17,6 +17,7 @@ nice, normalized and easy to consume REST API responses.
  * [Return Codes and Code Ranges](#return-codes)
  * [Exposed Methods](#exposed-methods)
  * [Data Conversion](#data-conversion)
+ * [Requirements](#requirements)
  * [Installation and Configuration](#installation-and-configuration)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
  * [Manipulating Response Object](#manipulating-response-object)
@@ -386,6 +387,19 @@ would produce the following response (contrary to the previous examples, source 
 mapping to your config otherwise no conversion will as mapping is internally empty by default.
 
 ----
+
+## Requirements ##
+
+There're no special requirements. Once you fulfill Laravel's requirements you are all good. Minimum
+`ResponseBuilder` is tested against is:
+
+  * PHP 5.5
+  * Laravel 5.1.45
+
+all newer versions of PHP and Laravel are also supported out of the box.
+
+----
+
 
 ## Installation and Configuration ##
 
