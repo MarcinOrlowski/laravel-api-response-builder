@@ -23,6 +23,17 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class ResponseBuilder
 {
 	/**
+	 * Default HTTP code to be used with success responses
+	 */
+	const DEFAULT_HTTP_CODE_OK    = HttpResponse::HTTP_OK;
+
+	/**
+	 * Default HTTP code to be used with error responses
+	 */
+	const DEFAULT_HTTP_CODE_ERROR = HttpResponse::HTTP_BAD_REQUEST;
+
+
+	/**
 	 * Reads and validates "classes" config mapping
 	 *
 	 * @return array|null Classes mapping as specified in configuration or @null if no such config found
@@ -62,29 +73,20 @@ class ResponseBuilder
 	 */
 	protected static function convert(array $classes, array &$data)
 	{
-		foreach($data as $dataKey => $dataVal) {
-			if (is_array($dataVal)) {
-				static::convert($classes, $dataVal);
-			} elseif (is_object($data)) {
-				foreach($classes as $classConfigClass => $classConfigData) {
-					if ($data instanceof $classConfigClass) {
-						$conversionMethod = $classConfigData['method'];
-						$data[ $dataKey ] = $data->$conversionMethod();
-					}
+
+		foreach($data as $data_key => &$data_val) {
+			if (is_array($data_val)) {
+				static::convert($classes, $data_val);
+			} elseif (is_object($data_val)) {
+				$obj_class_name = get_class($data_val);
+				if (array_key_exists($obj_class_name, $classes)) {
+					$conversion_method = $classes[$obj_class_name]['method'];
+					$converted = $data_val->$conversion_method();
+					$data[ $data_key ] = $converted;
 				}
 			}
 		}
 	}
-
-	/**
-	 * Default HTTP code to be used with success responses
-	 */
-	const DEFAULT_HTTP_CODE_OK    = HttpResponse::HTTP_OK;
-
-	/**
-	 * Default HTTP code to be used with error responses
-	 */
-	const DEFAULT_HTTP_CODE_ERROR = HttpResponse::HTTP_BAD_REQUEST;
 
 
 	/**
@@ -106,17 +108,14 @@ class ResponseBuilder
 			// we can do some auto-conversion on known class types, so check for that first
 			/** @var array $classes */
 			$classes = static::getClassesMapping();
-			if ($classes !== null) {
+			if (($classes !== null) && (count($classes) > 0)) {
 				if (is_array($data)) {
-					if (count($classes) > 0) {
-						static::convert($classes, $data);
-					}
+					static::convert($classes, $data);
 				} elseif (is_object($data)) {
-					foreach($classes as $keyClassName => $valClassData) {
-						if ($data instanceof $keyClassName) {
-							$conversionMethod = $valClassData['method'];
-							$data = [$valClassData['key'] => $data->$conversionMethod()];
-						}
+					$obj_class_name = get_class($data);
+					if (array_key_exists($obj_class_name, $classes)) {
+						$conversion_method = $classes[$obj_class_name]['method'];
+						$data = [$classes[$obj_class_name]['key'] => $data->$conversion_method()];
 					}
 				}
 			}
