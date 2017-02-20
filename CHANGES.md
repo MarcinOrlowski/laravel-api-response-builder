@@ -2,6 +2,9 @@
 
 ## CHANGE LOG ##
 
+* @dev
+   * Documentation splitted into separate files
+
 * v2.2.0 (2017-02-20)
    * [RB-5] Fixed error code range not being checked when used with custom message strings
    * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception if `http_code` is null
