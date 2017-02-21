@@ -40,7 +40,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	{
 		$this->loadTranslationsFrom(__DIR__ . '/lang', 'response-builder');
 
-		$source = realpath(__DIR__ . '/../config/response_builder.php');
+		$source = dirname(__DIR__ . '/../config/response_builder.php');
 		$this->publishes([
 			$source => config_path('response_builder.php'),
 		]);

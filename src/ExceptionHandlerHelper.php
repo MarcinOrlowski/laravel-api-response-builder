@@ -45,7 +45,7 @@ class ExceptionHandlerHelper
 
 				default:
 					$msg = trim($exception->getMessage());
-					if ($msg == '') {
+					if ($msg === '') {
 						$msg = 'Exception code #' . $exception->getStatusCode();
 					}
 
@@ -66,7 +66,7 @@ class ExceptionHandlerHelper
 	 * @param integer   $default_api_code
 	 * @param integer   $default_http_code
 	 *
-	 * @return Response
+	 * @return Symfony\Component\HttpFoundation\Response
 	 */
 	protected static function error(Exception $exception, $config_base, $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{

@@ -46,9 +46,9 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 * Checks if all error codes defined in ApiCode class contain mapping entry
 	 */
 	public function testIfAllCodesGotMapping() {
-		/** @var ApiCode $api_codes */
+		/** @var ApiCodeBase $api_codes */
 		$api_codes = $this->getApiCodesClassName();
-		/** @var array $map */
+		/** @var array $codes */
 		$codes = $api_codes::getErrorCodeConstants();
 		foreach( $codes as $name => $val ) {
 			$this->assertNotNull($api_codes::getMapping($val), "No mapping for {$name}");
@@ -59,9 +59,9 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 * Checks if all error codes are in allowed range
 	 */
 	public function testIfAllCodesAreInRange() {
-		/** @var ApiCode $api_codes */
+		/** @var ApiCodeBase $api_codes */
 		$api_codes = $this->getApiCodesClassName();
-		/** @var array $map */
+		/** @var array $codes */
 		$codes = $api_codes::getErrorCodeConstants();
 		foreach( $codes as $name => $val ) {
 			$this->assertTrue($api_codes::isCodeValid($val), "Value of {$name} is outside allowed range");
@@ -72,7 +72,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 * Checks if all defined error code constants are unique (per value)
 	 */
 	public function testIfAllErrorValuesAreUnique() {
-		/** @var ApiCode $api_codes_class_name */
+		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$items = array_count_values($api_codes_class_name::getMap());
 		foreach( $items as $code => $count ) {
@@ -86,7 +86,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 * TODO: check translations too
 	 */
 	public function testIfAllCodesAreCorrectlyMapped() {
-		/** @var ApiCode $api_codes_class_name */
+		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		/** @var array $map */
 		$map = $api_codes_class_name::getMap();
@@ -104,7 +104,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 		$min = $this->min_allowed_code;
 		$max = $this->max_allowed_code;
 
-		/** @var ApiCode $api_codes_class_name */
+		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$map = $api_codes_class_name::getMap();
 		krsort($map);

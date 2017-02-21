@@ -42,7 +42,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		               HttpResponse::HTTP_ACCEPTED => HttpResponse::HTTP_ACCEPTED,
 		               HttpResponse::HTTP_OK       => HttpResponse::HTTP_OK];
 
-		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		foreach($payloads as $payload) {

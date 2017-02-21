@@ -18,7 +18,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testMake_WrongMessage() {
-		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$message_or_api_code = [];    // invalid

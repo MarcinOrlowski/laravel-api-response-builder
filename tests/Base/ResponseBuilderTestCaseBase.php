@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 {
 	/**
-	 * @return ErrorCode
+	 * @return ApiCodeBase
 	 */
 	public function getApiCodesObject()
 	{
@@ -88,7 +88,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	protected function getPackageProviders($app)
 	{
 		return [
-			'\MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider',
+			\MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider::class,
 		];
 	}
 
@@ -111,7 +111,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	                                         $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK)
 	{
 		if ($expected_code === null) {
-			/** @var ErrorCode $api_codes */
+			/** @var ApiCodeBase $api_codes */
 			$api_codes = $this->getApiCodesClassName();
 			$expected_code = $api_codes::OK;
 		}
@@ -141,7 +141,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	                                       $message = null)
 	{
 		if ($expected_api_code === null) {
-			/** @var ErrorCode $api_codes_class_name */
+			/** @var ApiCodeBase $api_codes_class_name */
 			$api_codes_class_name = $this->getApiCodesClassName();
 			$expected_api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
 		}
@@ -173,7 +173,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		$j = json_decode($this->response->getContent());
 		$this->validateResponseStructure($j);
 
-		/** @var ErrorCode $api_codes_class_name */
+		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$this->assertEquals($expected_api_code, $j->code);
 		$expected_message_string = ($expected_message === null) ? \Lang::get($api_codes_class_name::getMapping($expected_api_code)) : $expected_message;
