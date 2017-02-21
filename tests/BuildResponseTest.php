@@ -4,6 +4,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Illuminate\Support\Facades\Config;
 
+/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
+
 /**
  * Laravel API Response Builder
  *
@@ -137,6 +139,8 @@ class BuildResponseTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 }
+
+/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 
 
 /**

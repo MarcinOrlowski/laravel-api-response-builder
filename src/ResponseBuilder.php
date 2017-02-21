@@ -124,6 +124,7 @@ class ResponseBuilder
 			$data = (object)$data;
 		}
 
+		/** @noinspection UnnecessaryParenthesesInspection */
 		$response = ['success' => ($api_code === ApiCodeBase::OK),
 		             'code'    => $api_code,
 		             'locale'  => \App::getLocale(),
