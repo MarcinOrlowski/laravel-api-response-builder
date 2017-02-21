@@ -3,7 +3,6 @@
 `ResponseBuilder` is Laravel5's helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
 
-
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/44f427e872e2480597bde0242417a2a7)](https://www.codacy.com/app/MarcinOrlowski/laravel-api-response-builder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MarcinOrlowski/laravel-api-response-builder&amp;utm_campaign=Badge_Grade)
@@ -17,6 +16,8 @@ nice, normalized and easy to consume REST API responses.
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=dev)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
 
 ## Table of contents ##
+
+ **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
  
  * [Features](#features)
  * [Documentation](docs/docs.md)
