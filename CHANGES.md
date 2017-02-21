@@ -10,7 +10,7 @@
    * All exceptions due to misconfiguration have "CONFIG: " message prefix now 
 
 * v2.2.1 (2017-02-20)
-   * Documentation splitted into separate files
+   * Documentation split into separate files
 
 * v2.2.0 (2017-02-20)
    * [RB-5] Fixed error code range not being checked when used with custom message strings

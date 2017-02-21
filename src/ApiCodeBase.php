@@ -35,7 +35,7 @@ class ApiCodeBase
 	 */
 	const OK = 0;
 	/**
-	 * built-in code for faillback message mapping
+	 * built-in code for fallback message mapping
 	 */
 	const NO_ERROR_MESSAGE = 1;
 	/**
@@ -121,7 +121,7 @@ class ApiCodeBase
 	}
 
 	/**
-	 * Returns hihest possible reserved code used by predefined Response Builder's messages
+	 * Returns highest possible reserved code used by predefined Response Builder's messages
 	 *
 	 * @return integer
 	 */

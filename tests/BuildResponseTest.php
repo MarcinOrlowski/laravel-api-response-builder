@@ -164,7 +164,7 @@ class TestModel
 	}
 
 	/**
-	 * Coonverts model to array
+	 * Converts model to array
 	 *
 	 * @return array
 	 */
