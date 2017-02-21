@@ -15,9 +15,12 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 class InternalsTest extends Base\ResponseBuilderTestCaseBase
 {
 	/**
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_WrongMessage() {
+	public function testMake_WrongMessage()
+	{
 		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
@@ -27,17 +30,23 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 	/**
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_CustomMessageAndWrongCode() {
+	public function testMake_CustomMessageAndWrongCode()
+	{
 		$api_code = [];    // invalid
 		$this->callMakeMethod($api_code, 'message');
 	}
 
 	/**
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_CustomMessageAndCodeOutOfRange() {
+	public function testMake_CustomMessageAndCodeOutOfRange()
+	{
 		$api_code = $this->max_allowed_code + 1;    // invalid
 		$this->callMakeMethod($api_code, 'message');
 	}

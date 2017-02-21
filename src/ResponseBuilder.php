@@ -49,13 +49,13 @@ class ResponseBuilder
 				throw new \RuntimeException('"classes" mapping must be an array in your config/response_builder.php file');
 			}
 
-			$mandatoryKeys = ['key',
-			                  'method',
+			$mandatory_keys = ['key',
+			                   'method',
 			];
-			foreach($classes as $className => $classConfig) {
-				foreach($mandatoryKeys as $keyName) {
-					if (!array_key_exists($keyName, $classConfig)) {
-						throw new \RuntimeException('Missing "{$keyName}" for "{$className}" mapping');
+			foreach ($classes as $class_name => $class_config) {
+				foreach ($mandatory_keys as $key_name) {
+					if (!array_key_exists($key_name, $class_config)) {
+						throw new \RuntimeException('Missing "{$key_name}" for "{$class_name}" mapping');
 					}
 				}
 			}
@@ -70,17 +70,18 @@ class ResponseBuilder
 	 *
 	 * @param array $classes "classes" config mapping array
 	 * @param array $data    array to recursively convert known elements of
+	 *
+	 * @return void
 	 */
 	protected static function convert(array $classes, array &$data)
 	{
-
-		foreach($data as $data_key => &$data_val) {
+		foreach ($data as $data_key => &$data_val) {
 			if (is_array($data_val)) {
 				static::convert($classes, $data_val);
 			} elseif (is_object($data_val)) {
 				$obj_class_name = get_class($data_val);
 				if (array_key_exists($obj_class_name, $classes)) {
-					$conversion_method = $classes[$obj_class_name]['method'];
+					$conversion_method = $classes[ $obj_class_name ]['method'];
 					$converted = $data_val->$conversion_method();
 					$data[ $data_key ] = $converted;
 				}

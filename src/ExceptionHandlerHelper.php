@@ -68,7 +68,8 @@ class ExceptionHandlerHelper
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected static function error(Exception $exception, $config_base, $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
+	protected static function error(Exception $exception, $config_base,
+	                                $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{
 		$error_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_api_code);
 		$http_code = Config::get("response_builder.exception_handler.exception.{$config_base}.http_code", 0);
@@ -105,14 +106,14 @@ class ExceptionHandlerHelper
 		}
 
 		// let's figure out what event we are handling now
-		$base_config_key = 'response_builder.exception_handler.exception.';
-		if (Config::get($base_config_key . 'http_not_found.code', ApiCodeBase::EX_HTTP_NOT_FOUND) === $error_code) {
+		$base_config = 'response_builder.exception_handler.exception';
+		if (Config::get("{$base_config}.http_not_found.code", ApiCodeBase::EX_HTTP_NOT_FOUND) === $error_code) {
 			$base_error_code = ApiCodeBase::EX_HTTP_NOT_FOUND;
-		} elseif (Config::get($base_config_key . 'http_service_unavailable.code', ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE) === $error_code) {
+		} elseif (Config::get("{$base_config}.http_service_unavailable.code", ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE) === $error_code) {
 			$base_error_code = ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE;
-		} elseif (Config::get($base_config_key . 'http_exception.code', ApiCodeBase::EX_HTTP_EXCEPTION) === $error_code) {
+		} elseif (Config::get("{$base_config}.http_exception.code", ApiCodeBase::EX_HTTP_EXCEPTION) === $error_code) {
 			$base_error_code = ApiCodeBase::EX_HTTP_EXCEPTION;
-		} elseif (Config::get($base_config_key . 'uncaught_exception.code', ApiCodeBase::EX_UNCAUGHT_EXCEPTION) === $error_code) {
+		} elseif (Config::get("{$base_config}.uncaught_exception.code", ApiCodeBase::EX_UNCAUGHT_EXCEPTION) === $error_code) {
 			$base_error_code = ApiCodeBase::EX_UNCAUGHT_EXCEPTION;
 		} else {
 			$base_error_code = ApiCodeBase::NO_ERROR_MESSAGE;

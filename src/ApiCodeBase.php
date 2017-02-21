@@ -12,7 +12,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Config;
+use Illuminate\Support\Facades\Config;
 
 /**
  * ApiCode handling class

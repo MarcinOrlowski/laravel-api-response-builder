@@ -52,18 +52,19 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 	/**
 	 * Returns ErrorCode constant name referenced by its value
 	 *
-	 * @param $error_code
+	 * @param int $error_code value to match constant name for
 	 *
 	 * @return int|null|string
 	 */
-	protected function resolveConstantFromCode($error_code) {
+	protected function resolveConstantFromCode($error_code)
+	{
 		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		/** @var array $const */
 		$const = $api_codes_class_name::getErrorCodeConstants();
 		$name = null;
-		foreach( $const as $const_name => $const_value ) {
-			if( is_int($const_value) && ($const_value === $error_code) ) {
+		foreach ($const as $const_name => $const_value) {
+			if (is_int($const_value) && ($const_value === $error_code)) {
 				$name = $const_name;
 				break;
 			}
@@ -81,7 +82,7 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 	 *   $obj = new \App\Foo();
 	 *   $result = $method->invokeArgs($obj, ...);
 	 *
-	 * @param string $class_name  name of the class method belongs to, i.e. "Bar". Can be namespaced i.e. "Foo\Bar" (no starting backslash)
+	 * @param string $class_name  method's class name to, i.e. "Bar". Can be namespaced i.e. "Foo\Bar" (no starting backslash)
 	 * @param string $method_name method name to call
 	 *
 	 * @return \ReflectionMethod

@@ -15,12 +15,13 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-
 class ErrorTest extends Base\ResponseBuilderTestCaseBase
 {
 
 	/**
 	 * Check success()
+	 *
+	 * @return void
 	 */
 	public function testError()
 	{
@@ -40,6 +41,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests error() with various http codes and random payload
+	 *
+	 * @return void
 	 */
 	public function testError_WithDataHttpCode()
 	{
@@ -49,7 +52,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		               ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
 		];
 
-		foreach($http_codes as $http_code) {
+		foreach ($http_codes as $http_code) {
 			// GIVEN data
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 
@@ -70,6 +73,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests errorWithData()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithData()
 	{
@@ -83,6 +88,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests errorWithDataAndHttpCode()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithDataAndHttpCode()
 	{
@@ -92,7 +99,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		               ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
 		];
 
-		foreach($http_codes as $http_code) {
+		foreach ($http_codes as $http_code) {
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 			$error_code = $this->random_api_code;
 			$this->response = ResponseBuilder::errorWithDataAndHttpCode($error_code, $data, $http_code);
@@ -105,6 +112,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	/**
 	 * Tests errorWithDataAndHttpCode() with http_code null
 	 *
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testErrorWithDataAndHttpCode_HttpCodeNull()
@@ -115,6 +124,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests errorWithHttpCode()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithHttpCode()
 	{
@@ -124,7 +135,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		               ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
 		];
 
-		foreach($http_codes as $http_code) {
+		foreach ($http_codes as $http_code) {
 			$error_code = $this->random_api_code;
 			$this->response = ResponseBuilder::errorWithHttpCode($error_code, $http_code);
 
@@ -136,6 +147,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	/**
 	 * Tests errorWithHttpCode() with @null as http_code
 	 *
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testErrorWithHttpCode_NullHttpCode()
@@ -145,6 +158,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests errorWithMessageAndData()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithMessageAndData()
 	{
@@ -160,6 +175,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests errorWithMessage()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithMessage()
 	{
@@ -175,6 +192,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests error() handling api code with no message mapping
+	 *
+	 * @return void
 	 */
 	public function testError_MissingMessageMapping()
 	{
@@ -182,7 +201,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		// FIXME we **assume** this is not mapped. But assumptions sucks...
-		$error_code = $this->max_allowed_code -1;
+		$error_code = $this->max_allowed_code - 1;
 		$this->response = ResponseBuilder::error($error_code);
 
 		$key = $api_codes_class_name::getMapping($api_codes_class_name::NO_ERROR_MESSAGE);
@@ -195,6 +214,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests buildErrorResponse() fed with not allowed OK api code
+	 *
+	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -215,6 +236,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	/**
 	 * Tests buildErrorResponse() fed with api_code in form of disallowed variable type
 	 *
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testBuildErrorResponse_WrongApiCodeType()
@@ -229,6 +252,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests buildErrorResponse() fed with http_code in form of disallowed variable type
+	 *
+	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -247,6 +272,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests buildErrorResponse() fed with @null as http_code
+	 *
+	 * @return void
 	 */
 	public function testBuildErrorResponse_NullHttpCode()
 	{
@@ -267,6 +294,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	/**
 	 * Tests buildErrorResponse() fed with http code out of allowed bounds
 	 *
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testBuildErrorResponse_TooLowHttpCode()
@@ -284,6 +313,8 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Tests buildErrorResponse() fed with wrong lang_args data
+	 *
+	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -316,7 +347,10 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'buildErrorResponse');
 
-		return $method->invokeArgs($obj, [$data, $api_code, $http_code, $lang_args]);
+		return $method->invokeArgs($obj, [$data,
+		                                  $api_code,
+		                                  $http_code,
+		                                  $lang_args]);
 	}
 
 }
