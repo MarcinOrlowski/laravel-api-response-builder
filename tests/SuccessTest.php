@@ -2,6 +2,7 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
+use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -25,9 +26,10 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	public function testSuccess()
 	{
 		$this->response = ResponseBuilder::success();
-		$j = $this->getResponseSuccessObject();
+		$j = $this->getResponseSuccessObject(ApiCodeBase::OK);
 
 		$this->assertNull($j->data);
+		$this->assertEquals(\Lang::get(ApiCodeBase::getMapping(ApiCodeBase::OK)), $j->message);
 	}
 
 	/**
@@ -45,6 +47,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 
 			$this->assertNull($j->data);
 			$this->assertEquals($api_code, $j->code);
+			$this->assertEquals(\Lang::get(ApiCodeBase::getMapping(ApiCodeBase::OK)), $j->message);
 		}
 
 	}
