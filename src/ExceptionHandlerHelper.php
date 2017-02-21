@@ -71,7 +71,7 @@ class ExceptionHandlerHelper
 	protected static function error(Exception $exception, $config_base,
 	                                $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{
-		$error_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_api_code);
+		$api_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_api_code);
 		$http_code = Config::get("response_builder.exception_handler.exception.{$config_base}.http_code", 0);
 
 		// check if this is valid HTTP error code
@@ -107,21 +107,21 @@ class ExceptionHandlerHelper
 
 		// let's figure out what event we are handling now
 		$base_config = 'response_builder.exception_handler.exception';
-		if (Config::get("{$base_config}.http_not_found.code", ApiCodeBase::EX_HTTP_NOT_FOUND) === $error_code) {
-			$base_error_code = ApiCodeBase::EX_HTTP_NOT_FOUND;
-		} elseif (Config::get("{$base_config}.http_service_unavailable.code", ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE) === $error_code) {
-			$base_error_code = ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE;
-		} elseif (Config::get("{$base_config}.http_exception.code", ApiCodeBase::EX_HTTP_EXCEPTION) === $error_code) {
-			$base_error_code = ApiCodeBase::EX_HTTP_EXCEPTION;
-		} elseif (Config::get("{$base_config}.uncaught_exception.code", ApiCodeBase::EX_UNCAUGHT_EXCEPTION) === $error_code) {
-			$base_error_code = ApiCodeBase::EX_UNCAUGHT_EXCEPTION;
+		if (Config::get("{$base_config}.http_not_found.code", ApiCodeBase::EX_HTTP_NOT_FOUND) === $api_code) {
+			$base_api_code = ApiCodeBase::EX_HTTP_NOT_FOUND;
+		} elseif (Config::get("{$base_config}.http_service_unavailable.code", ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE) === $api_code) {
+			$base_api_code = ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE;
+		} elseif (Config::get("{$base_config}.http_exception.code", ApiCodeBase::EX_HTTP_EXCEPTION) === $api_code) {
+			$base_api_code = ApiCodeBase::EX_HTTP_EXCEPTION;
+		} elseif (Config::get("{$base_config}.uncaught_exception.code", ApiCodeBase::EX_UNCAUGHT_EXCEPTION) === $api_code) {
+			$base_api_code = ApiCodeBase::EX_UNCAUGHT_EXCEPTION;
 		} else {
-			$base_error_code = ApiCodeBase::NO_ERROR_MESSAGE;
+			$base_api_code = ApiCodeBase::NO_ERROR_MESSAGE;
 		}
 
-		$key = ApiCodeBase::getMapping($error_code);
+		$key = ApiCodeBase::getMapping($api_code);
 		if ($key === null) {
-			$key = ApiCodeBase::getBaseMapping($base_error_code);
+			$key = ApiCodeBase::getBaseMapping($base_api_code);
 		}
 
 		// let's build error message
@@ -137,13 +137,14 @@ class ExceptionHandlerHelper
 
 		if ($error_message === '') {
 			$error_message = Lang::get($key, [
-				'error_code' => $error_code,
+				'error_code' => $api_code,      // LEGACY!
+				'api_code' => $api_code,
 				'message'    => $ex_message,
 				'class'      => get_class($exception),
 			]);
 		}
 
-		return ResponseBuilder::errorWithMessageAndData($error_code, $error_message, $data, $http_code);
+		return ResponseBuilder::errorWithMessageAndData($api_code, $error_message, $data, $http_code);
 	}
 
 }
