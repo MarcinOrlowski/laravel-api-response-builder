@@ -132,24 +132,24 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 		krsort($map);
 		reset($map);
 
-		$message_or_error_code = null;
+		$message_or_api_code = null;
 		for ($i = $min; $i < $max; $i++) {
 			if (array_key_exists($i, $map) === false) {
-				$message_or_error_code = $i;
+				$message_or_api_code = $i;
 				break;
 			}
 		}
 
-		if ($message_or_error_code === null) {
+		if ($message_or_api_code === null) {
 			$this->fail('Failed to find unused error code value (within declared range) to perform this test');
 		}
 
-		$this->callMakeMethod($message_or_error_code, $message_or_error_code);
+		$this->callMakeMethod($message_or_api_code, $message_or_api_code);
 
 		$json_object = json_decode($this->response->getContent());
 		$this->assertTrue(is_object($json_object));
 		$this->assertEquals(\Lang::get($api_codes_class_name::getMapping(ApiCodeBase::NO_ERROR_MESSAGE),
-			['error_code' => $message_or_error_code]), $json_object->message);
+			['error_code' => $message_or_api_code]), $json_object->message);
 	}
 
 	/**

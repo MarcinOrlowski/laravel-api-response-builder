@@ -115,7 +115,7 @@ and add appropriate entry to `map` array:
 
 where `api.xxxx` entry must be valid localization string key from your app's localization strings
 pool as per Lang's requirements. You can use placeholders in your messages. Supported are 
-`:error_code` being substituted by actual error code assigned to this exception and `:message`
+`:api_code` being substituted by actual error code assigned to this exception and `:message`
 replaced by exception's `getMessage()` return value.
 
 ## Exceptions with messages ##

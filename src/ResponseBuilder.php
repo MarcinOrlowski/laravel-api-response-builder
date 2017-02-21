@@ -141,7 +141,7 @@ class ResponseBuilder
 	 *
 	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
 	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
-	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with error_code uses placeholders
+	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
@@ -172,7 +172,7 @@ class ResponseBuilder
 	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
 	 * @param integer|null $api_code  numeric code to be returned as 'code' @\App\ApiCodeBase::OK is default
 	 * @param integer|null $http_code HTTP return code to be set for this response
-	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with error_code uses placeholders
+	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *

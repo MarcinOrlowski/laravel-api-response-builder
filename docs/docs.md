@@ -236,13 +236,13 @@ add the following `use` to your code:
 
 Methods' arguments:
 
- * `$error_code` (**int**) any integer value you want to be returned in `code`,
+ * `$api_code` (**int**) any integer value you want to be returned in `code`,
  * `$data` (**mixed**|**null**) any data you want to be returned in your response as `data` node,
  * `$http_code` (**int**) valid HTTP return code (see `HttpResponse` class for useful constants),
  * `$lang_args` (**array**) array of arguments passed to `Lang::get()` while building `message`,
  * `$message` (**string**) custom message to be returned as part of error response (avoid, use error code mapping feature).
 
-Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
+Most arguments of `success()` and `error()` methods are optional, with exception for `$api_code`
 for the latter. Helper methods arguments are partially optional - see signatures below for details.
 
 **NOTE:** `$data` can be of any type you want (i.e. `string`), however to ensure returned JSON structure 
@@ -275,15 +275,15 @@ Usage restrictions:
 
 #### Reporting Error ####
 
-    error($error_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST);
-    errorWithData($error_code, $data, array $lang_args = []);
-    errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = []);
-    errorWithHttpCode($error_code, $http_code, $lang_args = []);
-    errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+    error($api_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+    errorWithData($api_code, $data, array $lang_args = []);
+    errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args = []);
+    errorWithHttpCode($api_code, $http_code, $lang_args = []);
+    errorWithMessage($api_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
 
 Usage restrictions:
 
-* `$error_code` must not be 0
+* `$api_code` must not be 0
 * `$http_code` must not be lower than 400
 
 ----
@@ -548,7 +548,7 @@ To override default error message used when given error code has no entry in `ma
 
      MarcinOrlowski\ResponseBuilder\ApiCodeBase::NO_ERROR_MESSAGE => 'my_messages.default_error_message',
 
-You can use `:error_code` placeholder in the message and it will be substituted actual error code value.
+You can use `:api_code` placeholder in the message and it will be substituted actual error code value.
 
 ----
 

@@ -26,14 +26,14 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	public function testError()
 	{
 		// GIVEN random error code
-		$error_code = $this->random_api_code;
+		$api_code = $this->random_api_code;
 
 		// WHEN we report error
-		$this->response = ResponseBuilder::error($error_code);
+		$this->response = ResponseBuilder::error($api_code);
 
 		// THEN returned message contains given error code and mapped message
-		$j = $this->getResponseErrorObject($error_code);
-		$this->assertEquals($this->error_message_map[ $error_code ], $j->message);
+		$j = $this->getResponseErrorObject($api_code);
+		$this->assertEquals($this->error_message_map[ $api_code ], $j->message);
 
 		// AND no data
 		$this->assertNull($j->data);
@@ -57,14 +57,14 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 
 			// AND error code
-			$error_code = $this->random_api_code;
+			$api_code = $this->random_api_code;
 
 			// WHEN we report error
-			$this->response = ResponseBuilder::error($error_code, null, $data, $http_code);
+			$this->response = ResponseBuilder::error($api_code, null, $data, $http_code);
 
 			// THEN returned message contains given error code and mapped message
-			$j = $this->getResponseErrorObject($error_code, $http_code);
-			$this->assertEquals($this->error_message_map[ $error_code ], $j->message);
+			$j = $this->getResponseErrorObject($api_code, $http_code);
+			$this->assertEquals($this->error_message_map[ $api_code ], $j->message);
 
 			// AND passed data
 			$this->assertEquals((object)$data, $j->data);
@@ -79,10 +79,10 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	public function testErrorWithData()
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-		$error_code = $this->random_api_code;
-		$this->response = ResponseBuilder::errorWithData($error_code, $data);
+		$api_code = $this->random_api_code;
+		$this->response = ResponseBuilder::errorWithData($api_code, $data);
 
-		$j = $this->getResponseErrorObject($error_code);
+		$j = $this->getResponseErrorObject($api_code);
 		$this->assertEquals((object)$data, $j->data);
 	}
 
@@ -101,10 +101,10 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 		foreach ($http_codes as $http_code) {
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-			$error_code = $this->random_api_code;
-			$this->response = ResponseBuilder::errorWithDataAndHttpCode($error_code, $data, $http_code);
+			$api_code = $this->random_api_code;
+			$this->response = ResponseBuilder::errorWithDataAndHttpCode($api_code, $data, $http_code);
 
-			$j = $this->getResponseErrorObject($error_code, $http_code);
+			$j = $this->getResponseErrorObject($api_code, $http_code);
 			$this->assertEquals((object)$data, $j->data);
 		}
 	}
@@ -136,10 +136,10 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		];
 
 		foreach ($http_codes as $http_code) {
-			$error_code = $this->random_api_code;
-			$this->response = ResponseBuilder::errorWithHttpCode($error_code, $http_code);
+			$api_code = $this->random_api_code;
+			$this->response = ResponseBuilder::errorWithHttpCode($api_code, $http_code);
 
-			$j = $this->getResponseErrorObject($error_code, $http_code);
+			$j = $this->getResponseErrorObject($api_code, $http_code);
 			$this->assertNull($j->data);
 		}
 	}
@@ -164,11 +164,11 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	public function testErrorWithMessageAndData()
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-		$error_code = $this->random_api_code;
+		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
-		$this->response = ResponseBuilder::errorWithMessageAndData($error_code, $error_message, $data);
+		$this->response = ResponseBuilder::errorWithMessageAndData($api_code, $error_message, $data);
 
-		$j = $this->getResponseErrorObject($error_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
+		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
 		$this->assertEquals($error_message, $j->message);
 		$this->assertEquals((object)$data, $j->data);
 	}
@@ -180,11 +180,11 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testErrorWithMessage()
 	{
-		$error_code = $this->random_api_code;
+		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
-		$this->response = ResponseBuilder::errorWithMessage($error_code, $error_message);
+		$this->response = ResponseBuilder::errorWithMessage($api_code, $error_message);
 
-		$j = $this->getResponseErrorObject($error_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
+		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
 		$this->assertEquals($error_message, $j->message);
 		$this->assertNull($j->data);
 	}
@@ -201,14 +201,14 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		// FIXME we **assume** this is not mapped. But assumptions sucks...
-		$error_code = $this->max_allowed_code - 1;
-		$this->response = ResponseBuilder::error($error_code);
+		$api_code = $this->max_allowed_code - 1;
+		$this->response = ResponseBuilder::error($api_code);
 
 		$key = $api_codes_class_name::getMapping($api_codes_class_name::NO_ERROR_MESSAGE);
-		$lang_args = ['error_code' => $error_code];
+		$lang_args = ['error_code' => $api_code];
 		$msg = \Lang::get($key, $lang_args);
 
-		$j = $this->getResponseErrorObject($error_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $msg);
+		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $msg);
 		$this->assertNull($j->data);
 	}
 
@@ -264,10 +264,10 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 		$data = null;
 		$http_code = 'string-is-invalid';
-		$error_code = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
 		$lang_args = null;
 
-		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
+		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 	}
 
 	/**
@@ -282,10 +282,10 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 		$data = null;
 		$http_code = null;
-		$error_code = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
 		$lang_args = null;
 
-		$this->response = $this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
+		$this->response = $this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 
 		$http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
 		$this->assertEquals($http_code, $this->response->getStatusCode());
@@ -305,10 +305,10 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 		$data = null;
 		$http_code = 0;
-		$error_code = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
 		$lang_args = null;
 
-		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
+		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 	}
 
 	/**
@@ -325,11 +325,11 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 		$data = null;
 		$http_code = 404;
-		$error_code = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
 		$lang_args = 'string-is-invalid';
 
 		/** @noinspection PhpParamsInspection */
-		$this->callBuildErrorResponse($data, $error_code, $http_code, $lang_args);
+		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 	}
 
 	/**
