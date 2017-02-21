@@ -103,26 +103,31 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 *
 	 * NOTE: content of `data` node is NOT checked here!
 	 *
-	 * @param int|null $expected_code expected api code to be returned
-	 * @param int      $http_code     HTTP return code to check against
+	 * @param int|null $expected_api_code  expected api code to be returned
+	 * @param int      $expected_http_code HTTP return code to check against
 	 *
 	 * @return StdClass validated response object data (as object, not array)
 	 *
 	 */
-	public function getResponseSuccessObject($expected_code = null,
-	                                         $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK)
+	public function getResponseSuccessObject($expected_api_code = null,
+	                                         $expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK,
+	                                         $message = null)
 	{
-		if ($expected_code === null) {
+		if ($expected_api_code === null) {
 			/** @var ApiCodeBase $api_codes */
 			$api_codes = $this->getApiCodesClassName();
-			$expected_code = $api_codes::OK;
+			$expected_api_code = $api_codes::OK;
 		}
 
-		if (($http_code < 200) || ($http_code > 299)) {
-			$this->fail("TEST: Success HTTP code ($http_code) in not in range: 200-299.");
+		if (($expected_http_code < 200) || ($expected_http_code > 299)) {
+			$this->fail("TEST: Success HTTP code ($expected_http_code) in not in range: 200-299.");
 		}
 
-		$j = $this->getResponseObjectRaw($expected_code, $http_code);
+		if ($message === null) {
+			$message = \Lang::get(ApiCodeBase::getMapping(ApiCodeBase::OK));
+		}
+
+		$j = $this->getResponseObjectRaw($expected_api_code, $expected_http_code, $message);
 		$this->assertEquals(true, $j->success);
 
 		return $j;
@@ -179,7 +184,9 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$this->assertEquals($expected_api_code, $j->code);
-		$expected_message_string = ($expected_message === null) ? \Lang::get($api_codes_class_name::getMapping($expected_api_code)) : $expected_message;
+		$expected_message_string = ($expected_message === null)
+			? \Lang::get($api_codes_class_name::getMapping($expected_api_code), ['api_code' => $expected_api_code])
+			: $expected_message;
 		$this->assertEquals($expected_message_string, $j->message);
 
 		return $j;

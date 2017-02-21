@@ -31,6 +31,25 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 	/**
+	 * Tests success() with custom API code
+	 *
+	 * @return void
+	 */
+	public function testSuccess_ApiCode()
+	{
+		for ($i=0; $i<20; $i++) {
+			$api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
+
+			$this->response = ResponseBuilder::success(null, $api_code);
+			$j = $this->getResponseSuccessObject($api_code);
+
+			$this->assertNull($j->data);
+			$this->assertEquals($api_code, $j->code);
+		}
+
+	}
+
+	/**
 	 * Checks success() with valid payload and HTTP code
 	 *
 	 * @return void

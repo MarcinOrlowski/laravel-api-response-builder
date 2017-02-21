@@ -98,6 +98,7 @@ class ResponseBuilder
 	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
 	 * additionally added to reported JSON for easier manual debugging.
 	 *
+	 * @param boolean $success  @true if reposnse indicates success, @false otherwise
 	 * @param integer $api_code response code
 	 * @param string  $message  error message or 'OK'
 	 * @param mixed   $data     API response data if any
@@ -106,7 +107,7 @@ class ResponseBuilder
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse($api_code, $message, $data = null)
+	protected static function buildResponse($success, $api_code, $message, $data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
@@ -130,7 +131,7 @@ class ResponseBuilder
 		}
 
 		/** @noinspection UnnecessaryParenthesesInspection */
-		$response = ['success' => ($api_code === static::DEFAULT_API_CODE_OK),
+		$response = ['success' => $success,
 		             'code'    => $api_code,
 		             'locale'  => \App::getLocale(),
 		             'message' => $message,
@@ -198,15 +199,15 @@ class ResponseBuilder
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException(sprintf("'code' must be integer ('%ss' given)", gettype($api_code)));
+			throw new \InvalidArgumentException(sprintf("api_code must be integer ('%s' given)", gettype($api_code)));
 		}
 		if (!is_int($http_code)) {
-			throw new \InvalidArgumentException(sprintf("'http_code' must be integer ('%s' given)", gettype($http_code)));
+			throw new \InvalidArgumentException(sprintf("http_code must be integer ('%s' given)", gettype($http_code)));
 		} elseif (($http_code < 200) || ($http_code > 299)) {
-			throw new \InvalidArgumentException("http_code ({$http_code}) invalid. Must be in range 200-299 inclusive");
+			throw new \InvalidArgumentException(sprintf('http_code value is invalid. Must be in range 200-299 inclusive, %d given', $http_code));
 		}
 
-		return static::make($api_code, $api_code, $data, $http_code, $lang_args);
+		return static::make(true, $api_code, $api_code, $data, $http_code, $lang_args);
 	}
 
 	/**
@@ -339,11 +340,12 @@ class ResponseBuilder
 			$headers = [];
 		}
 
-		return static::make($api_code, $message, $data, $http_code, $lang_args, $headers);
+		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers);
 	}
 
 
 	/**
+	 * @param boolean        $success
 	 * @param integer        $api_code            internal message code (usually 0 for OK, and unique integer for errors)
 	 * @param string|integer $message_or_api_code error message string or API code
 	 * @param mixed|null     $data                optional additional data to be included in response object
@@ -355,7 +357,7 @@ class ResponseBuilder
 	 *
 	 * @throws \InvalidArgumentException If code is neither a string nor integer.
 	 */
-	protected static function make($api_code, $message_or_api_code, $data, $http_code, array $lang_args = null, array $headers = null)
+	protected static function make($success, $api_code, $message_or_api_code, $data, $http_code, array $lang_args = null, array $headers = null)
 	{
 		if ($lang_args === null) {
 			$lang_args = [];
@@ -376,9 +378,16 @@ class ResponseBuilder
 			// do we have the mapping for this string already?
 			$key = ApiCodeBase::getMapping($message_or_api_code);
 			if ($key === null) {
-				// no, get the default one instead
-				$key = ApiCodeBase::getMapping(ApiCodeBase::NO_ERROR_MESSAGE);
-				$lang_args = ['error_code' => $message_or_api_code];
+				if ($success) {
+					$key = ApiCodeBase::getMapping(ApiCodeBase::OK);
+				} else {
+					// no, get the default one instead
+					$key = ApiCodeBase::getMapping(ApiCodeBase::NO_ERROR_MESSAGE);
+					$lang_args = ['error_code' => $message_or_api_code,
+					              // deprecated
+					              'api_code'   => $message_or_api_code,
+					];
+				}
 			}
 			$message_or_api_code = \Lang::get($key, $lang_args);
 		} else {
@@ -395,6 +404,6 @@ class ResponseBuilder
 			}
 		}
 
-		return Response::json(static::buildResponse($api_code, $message_or_api_code, $data), $http_code, $headers);
+		return Response::json(static::buildResponse($success, $api_code, $message_or_api_code, $data), $http_code, $headers);
 	}
 }
