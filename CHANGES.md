@@ -5,19 +5,20 @@
 * dev
    * Corrected default config file having `use` entries
    * [RB-20] Renamed ErrorCode to ApiCodeBase
-   * ApiCodeBase's getMinCode() and getMaxCode() are now `public`
+   * ApiCodeBase's `getMinCode()` and `getMaxCode()` are now `public`
    * Improved error messages to be even more informative
-   * All exceptions due to misconfiguration have "CONFIG: " message prefix now
-   * Renamed error_code param to api_code
-   * `:api_code` is now code placeholder in strings (`:error_code` is still supported, but obsolete)
+   * All exceptions due to misconfiguration have `CONFIG: ` message prefix now
+   * Renamed error_code param to api_code in all method signatures
+   * `:api_code` is now code placeholder in strings (`:error_code` is still supported for compatibility, but obsolete)
+   * Default HTTP codes are now declared as constants `DEFAULT_HTTP_CODE_xxx` if you need to know them
 
 * v2.2.1 (2017-02-20)
    * Documentation split into separate files
 
 * v2.2.0 (2017-02-20)
    * [RB-5] Fixed error code range not being checked when used with custom message strings
-   * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception if `http_code` is null
-   * http_code can be handed as null to all other methods and it will be replaced default codes
+   * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception if `http_code` is `null`
+   * `http_code` can be handed as null to all other methods and it will be replaced by default codes
    * `classes` mapping now features `method` field to specify method name to call for automatic object conversion
    * [RB-10] When $data is an array, all elements mapped via "classes" config will be converted recursively
    * [RB-3] Unit tests are now part of the package
