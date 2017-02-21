@@ -13,7 +13,7 @@
 
 language: php
 
-# PHP versions to test package agains
+# PHP versions to test package against
 php:
   # using major version aliases
   - 5.5

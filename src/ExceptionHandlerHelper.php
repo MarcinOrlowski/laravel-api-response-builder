@@ -29,27 +29,27 @@ class ExceptionHandlerHelper
 	 * @param  \Illuminate\Http\Request $request   Request object
 	 * @param  \Exception               $exception Exception
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public static function render($request, Exception $exception)
 	{
 		if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
 			switch ($exception->getStatusCode()) {
 				case HttpResponse::HTTP_NOT_FOUND:
-					$result = static::error($exception, 'http_not_found', ErrorCode::EX_HTTP_NOT_FOUND);
+					$result = static::error($exception, 'http_not_found', ApiCodeBase::EX_HTTP_NOT_FOUND);
 					break;
 
 				case HttpResponse::HTTP_SERVICE_UNAVAILABLE:
-					$result = static::error($exception, 'http_service_unavailable', ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE);
+					$result = static::error($exception, 'http_service_unavailable', ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE);
 					break;
 
 				default:
 					$msg = trim($exception->getMessage());
-					if ($msg == '') {
+					if ($msg === '') {
 						$msg = 'Exception code #' . $exception->getStatusCode();
 					}
 
-					$result = static::error($exception, 'http_exception', ErrorCode::EX_HTTP_EXCEPTION,
+					$result = static::error($exception, 'http_exception', ApiCodeBase::EX_HTTP_EXCEPTION,
 						HttpResponse::HTTP_BAD_REQUEST, ['message' => $msg]);
 					break;
 			}
@@ -63,14 +63,15 @@ class ExceptionHandlerHelper
 	/**
 	 * @param Exception $exception
 	 * @param string    $config_base
-	 * @param integer   $default_error_code
+	 * @param integer   $default_api_code
 	 * @param integer   $default_http_code
 	 *
-	 * @return Response
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected static function error(Exception $exception, $config_base, $default_error_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
+	protected static function error(Exception $exception, $config_base,
+	                                $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{
-		$error_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_error_code);
+		$api_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_api_code);
 		$http_code = Config::get("response_builder.exception_handler.exception.{$config_base}.http_code", 0);
 
 		// check if this is valid HTTP error code
@@ -105,22 +106,22 @@ class ExceptionHandlerHelper
 		}
 
 		// let's figure out what event we are handling now
-		$base_config_key = 'response_builder.exception_handler.exception.';
-		if (Config::get($base_config_key . 'http_not_found.code', ErrorCode::EX_HTTP_NOT_FOUND) === $error_code) {
-			$base_error_code = ErrorCode::EX_HTTP_NOT_FOUND;
-		} elseif (Config::get($base_config_key . 'http_service_unavailable.code', ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE) === $error_code) {
-			$base_error_code = ErrorCode::EX_HTTP_SERVICE_UNAVAILABLE;
-		} elseif (Config::get($base_config_key . 'http_exception.code', ErrorCode::EX_HTTP_EXCEPTION) === $error_code) {
-			$base_error_code = ErrorCode::EX_HTTP_EXCEPTION;
-		} elseif (Config::get($base_config_key . 'uncaught_exception.code', ErrorCode::EX_UNCAUGHT_EXCEPTION) === $error_code) {
-			$base_error_code = ErrorCode::EX_UNCAUGHT_EXCEPTION;
+		$base_config = 'response_builder.exception_handler.exception';
+		if (Config::get("{$base_config}.http_not_found.code", ApiCodeBase::EX_HTTP_NOT_FOUND) === $api_code) {
+			$base_api_code = ApiCodeBase::EX_HTTP_NOT_FOUND;
+		} elseif (Config::get("{$base_config}.http_service_unavailable.code", ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE) === $api_code) {
+			$base_api_code = ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE;
+		} elseif (Config::get("{$base_config}.http_exception.code", ApiCodeBase::EX_HTTP_EXCEPTION) === $api_code) {
+			$base_api_code = ApiCodeBase::EX_HTTP_EXCEPTION;
+		} elseif (Config::get("{$base_config}.uncaught_exception.code", ApiCodeBase::EX_UNCAUGHT_EXCEPTION) === $api_code) {
+			$base_api_code = ApiCodeBase::EX_UNCAUGHT_EXCEPTION;
 		} else {
-			$base_error_code = ErrorCode::NO_ERROR_MESSAGE;
+			$base_api_code = ApiCodeBase::NO_ERROR_MESSAGE;
 		}
 
-		$key = ErrorCode::getMapping($error_code);
+		$key = ApiCodeBase::getMapping($api_code);
 		if ($key === null) {
-			$key = ErrorCode::getBaseMapping($base_error_code);
+			$key = ApiCodeBase::getBaseMapping($base_api_code);
 		}
 
 		// let's build error message
@@ -136,13 +137,14 @@ class ExceptionHandlerHelper
 
 		if ($error_message === '') {
 			$error_message = Lang::get($key, [
-				'error_code' => $error_code,
+				'error_code' => $api_code,      // LEGACY!
+				'api_code' => $api_code,
 				'message'    => $ex_message,
 				'class'      => get_class($exception),
 			]);
 		}
 
-		return ResponseBuilder::errorWithMessageAndData($error_code, $error_message, $data, $http_code);
+		return ResponseBuilder::errorWithMessageAndData($api_code, $error_message, $data, $http_code);
 	}
 
 }

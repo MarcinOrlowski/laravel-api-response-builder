@@ -29,7 +29,7 @@ nice, normalized and easy to consume REST API responses.
 ## Donations ##
 
 `ResponseBuilder` is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or 
-commercial, however if you feel it prevent you from reinventing the whell, helped having your projects done or simply saved you time and money 
+commercial, however if you feel it prevent you from reinventing the wheel, helped having your projects done or simply saved you time and money 
 then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
 
 ![BTC](http://i.imgur.com/mUe8olT.png)
@@ -57,7 +57,7 @@ Thanks for all the fish!
 Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
  
 If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues) 
-**before writting any code**. This will help us save your
+**before doing any work**. This will help us save your
 time in case I'd not be able to accept such changes. But if all is good and clear then follow common routine:
 
  * fork the project

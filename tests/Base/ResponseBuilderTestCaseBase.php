@@ -13,8 +13,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use MarcinOrlowski\ResponseBuilder\ErrorCode;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -23,11 +23,11 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 {
 	/**
-	 * @return ErrorCode
+	 * @return ApiCodeBase
 	 */
 	public function getApiCodesObject()
 	{
-		return new ErrorCode();
+		return new ApiCodeBase();
 	}
 
 	/**
@@ -35,7 +35,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 */
 	public function getApiCodesClassName()
 	{
-		return '\MarcinOrlowski\ResponseBuilder\ErrorCode';
+		return ApiCodeBase::class;
 	}
 
 	/** @var int */
@@ -53,6 +53,8 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 
 	/**
 	 * Sets up testing environment
+	 *
+	 * @return void
 	 */
 	public function setUp()
 	{
@@ -88,7 +90,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	protected function getPackageProviders($app)
 	{
 		return [
-			'\MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider',
+			\MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider::class,
 		];
 	}
 
@@ -111,7 +113,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	                                         $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK)
 	{
 		if ($expected_code === null) {
-			/** @var ErrorCode $api_codes */
+			/** @var ApiCodeBase $api_codes */
 			$api_codes = $this->getApiCodesClassName();
 			$expected_code = $api_codes::OK;
 		}
@@ -141,12 +143,12 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	                                       $message = null)
 	{
 		if ($expected_api_code === null) {
-			/** @var ErrorCode $api_codes_class_name */
+			/** @var ApiCodeBase $api_codes_class_name */
 			$api_codes_class_name = $this->getApiCodesClassName();
 			$expected_api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
 		}
 
-		if ($expected_http_code < HttpResponse::HTTP_BAD_REQUEST)  {
+		if ($expected_http_code < HttpResponse::HTTP_BAD_REQUEST) {
 			$this->fail(sprintf('TEST: Error HTTP code (%d) cannot be below %d', $expected_http_code, HttpResponse::HTTP_BAD_REQUEST));
 		}
 
@@ -167,13 +169,14 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	private function getResponseObjectRaw($expected_api_code, $expected_http_code, $expected_message = null)
 	{
 		$actual = $this->response->getStatusCode();
-		$this->assertEquals($expected_http_code, $actual, "Expected status code {$expected_http_code}, got {$actual}. Response: {$this->response->getContent()}");
+		$this->assertEquals($expected_http_code, $actual,
+			"Expected status code {$expected_http_code}, got {$actual}. Response: {$this->response->getContent()}");
 
 		// get response as Json object
 		$j = json_decode($this->response->getContent());
 		$this->validateResponseStructure($j);
 
-		/** @var ErrorCode $api_codes_class_name */
+		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$this->assertEquals($expected_api_code, $j->code);
 		$expected_message_string = ($expected_message === null) ? \Lang::get($api_codes_class_name::getMapping($expected_api_code)) : $expected_message;
@@ -183,13 +186,15 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	}
 
 
-
 	/**
 	 * Validates if given $json_object contains all expected elements
 	 *
-	 * @param $json_object
+	 * @param StdClass $json_object
+	 *
+	 * @return void
 	 */
-	protected function validateResponseStructure($json_object) {
+	protected function validateResponseStructure($json_object)
+	{
 		$this->assertTrue(is_object($json_object));
 
 		$items = ['success',
@@ -197,7 +202,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		          'locale',
 		          'message',
 		          'data'];
-		foreach($items as $item) {
+		foreach ($items as $item) {
 			$this->assertObjectHasAttribute($item, $json_object, "No '{$item}' element in response structure found");
 		}
 
@@ -216,36 +221,19 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 
 // ---------------------------------------------------------
 
-
 	/**
-	 * Checks if response object was returned with expected success HTTP
-	 * code (200-299) indicating API method executed successfully
-	 *
-	 * @param int $http_code HTTP return code to check against
-	 *
-	 * @deprecated
-	 */
-	public function assertResponseOk($http_code = HttpResponse::HTTP_OK) {
-		if (($http_code < 200) || ($http_code > 299)) {
-			$this->fail("TEST: Success HTTP code ($http_code) in not in range: 200-299.");
-		}
-
-		$actual = $this->response->getStatusCode();
-
-		$this->assertEquals($http_code, $actual, "Expected status code {$http_code}, got {$actual}. Response: {$this->response->getContent()}");
-	}
-
-
-	/**
-	 * Checks if Response's code matches our expectations. If not, shows ErrorCode::XXX constant name of expected and current values
+	 * Checks if Response's code matches our expectations. If not, shows ApiCodeBase::XXX constant name of expected and current values
 	 *
 	 * @param int      $expected_code ErrorCodes::XXX code expected
 	 * @param StdClass $response_json response json object
+	 *
+	 * @return void
 	 */
-	public function assertResponseStatusCode($expected_code, $response_json) {
+	public function assertResponseStatusCode($expected_code, $response_json)
+	{
 		$response_code = $response_json->code;
 
-		if( $response_code !== $expected_code ) {
+		if ($response_code !== $expected_code) {
 			$msg = sprintf('Status code mismatch. Expected: %s, found %s. Message: "%s"',
 				$this->resolveConstantFromCode($expected_code),
 				$this->resolveConstantFromCode($response_code),
@@ -258,11 +246,16 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	//----------------------------
 
 	/**
-	 * @param            $api_code
-	 * @param            $message_or_api_code
+	 * Calls protected method make()
+	 *
+	 * @param int        $api_code
+	 * @param string|int $message_or_api_code
 	 * @param array|null $headers
+	 *
+	 * @return void
 	 */
-	protected function callMakeMethod($api_code, $message_or_api_code, array $headers=null) {
+	protected function callMakeMethod($api_code, $message_or_api_code, array $headers = null)
+	{
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'make');
 
@@ -270,8 +263,12 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		$lang_args = null;
 		$data = null;
 
-		$this->response = $method->invokeArgs($obj, [$api_code, $message_or_api_code,
-		                                             $data, $http_code, $lang_args, $headers]);
+		$this->response = $method->invokeArgs($obj, [$api_code,
+		                                             $message_or_api_code,
+		                                             $data,
+		                                             $http_code,
+		                                             $lang_args,
+		                                             $headers]);
 	}
 
 

@@ -14,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
  */
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use MarcinOrlowski\ResponseBuilder\ErrorCode;
+use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -30,7 +30,7 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 	 *
 	 * where \App\ApiCodes matches your codes class
 	 *
-	 * @return \MarcinOrlowski\ResponseBuilder\ErrorCode
+	 * @return \MarcinOrlowski\ResponseBuilder\ApiCodeBase
 	 */
 	abstract public function getApiCodesObject();
 
@@ -52,24 +52,25 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 	/**
 	 * Returns ErrorCode constant name referenced by its value
 	 *
-	 * @param $error_code
+	 * @param int $api_code value to match constant name for
 	 *
 	 * @return int|null|string
 	 */
-	protected function resolveConstantFromCode($error_code) {
-		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
+	protected function resolveConstantFromCode($api_code)
+	{
+		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		/** @var array $const */
 		$const = $api_codes_class_name::getErrorCodeConstants();
 		$name = null;
-		foreach( $const as $const_name => $const_value ) {
-			if( is_int($const_value) && ($const_value === $error_code) ) {
+		foreach ($const as $const_name => $const_value) {
+			if (is_int($const_value) && ($const_value === $api_code)) {
 				$name = $const_name;
 				break;
 			}
 		}
 
-		return ($name === null) ? "??? ({$error_code})" : $name;
+		return ($name === null) ? "??? ({$api_code})" : $name;
 	}
 
 	/**
@@ -81,7 +82,7 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 	 *   $obj = new \App\Foo();
 	 *   $result = $method->invokeArgs($obj, ...);
 	 *
-	 * @param string $class_name  name of the class method belongs to, i.e. "Bar". Can be namespaced i.e. "Foo\Bar" (no starting backslash)
+	 * @param string $class_name  method's class name to, i.e. "Bar". Can be namespaced i.e. "Foo\Bar" (no starting backslash)
 	 * @param string $method_name method name to call
 	 *
 	 * @return \ReflectionMethod

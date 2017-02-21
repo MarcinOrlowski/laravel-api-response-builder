@@ -15,11 +15,12 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-
 class SuccessTest extends Base\ResponseBuilderTestCaseBase
 {
 	/**
 	 * Check success()
+	 *
+	 * @return void
 	 */
 	public function testSuccess()
 	{
@@ -31,6 +32,8 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 
 	/**
 	 * Checks success() with valid payload and HTTP code
+	 *
+	 * @return void
 	 */
 	public function testSuccess_DataAndHttpCode()
 	{
@@ -42,11 +45,11 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		               HttpResponse::HTTP_ACCEPTED => HttpResponse::HTTP_ACCEPTED,
 		               HttpResponse::HTTP_OK       => HttpResponse::HTTP_OK];
 
-		/** @var \MarcinOrlowski\ResponseBuilder\ErrorCode $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		foreach($payloads as $payload) {
-			foreach($http_codes as $http_code_expect => $http_code_send) {
+		foreach ($payloads as $payload) {
+			foreach ($http_codes as $http_code_expect => $http_code_send) {
 				$this->response = ResponseBuilder::success($payload, $http_code_send);
 
 				$j = $this->getResponseSuccessObject($api_codes_class_name::OK, $http_code_expect);
@@ -60,13 +63,15 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 	/**
+	 * @return void
+	 *
 	 * Tests successWithHttpCode()
 	 */
 	public function testSuccessHttpCode()
 	{
 		$http_codes = [HttpResponse::HTTP_ACCEPTED,
 		               HttpResponse::HTTP_OK];
-		foreach($http_codes as $http_code) {
+		foreach ($http_codes as $http_code) {
 			$this->response = ResponseBuilder::successWithHttpCode($http_code);
 			$j = $this->getResponseSuccessObject(0, $http_code);
 			$this->assertNull($j->data);
@@ -77,44 +82,66 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	//----[ success ]-------------------------------------------
 
 	/**
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccessErrorCodeMustBeInt() {
+	public function testSuccessErrorCodeMustBeInt()
+	{
 		ResponseBuilder::success(null, 'foo');
 	}
 
 	/**
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccess_HttpCodeNull() {
+	public function testSuccess_HttpCodeNull()
+	{
 		$this->response = ResponseBuilder::successWithHttpCode(null);
 	}
 
 	/**
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccessWithInvalidHttpCode() {
+	public function testSuccessWithInvalidHttpCode()
+	{
 		ResponseBuilder::successWithHttpCode('invalid');
 	}
+
 	/**
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccessWithTooBigHttpCode() {
+	public function testSuccessWithTooBigHttpCode()
+	{
 		ResponseBuilder::successWithHttpCode(666);
 	}
+
 	/**
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccessWithTooLowHttpCode() {
+	public function testSuccessWithTooLowHttpCode()
+	{
 		ResponseBuilder::successWithHttpCode(0);
 	}
 
 	/**
+	 * @return void
+	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testBuildSuccessResponse_InvalidReturnCode() {
+	public function testBuildSuccessResponse_InvalidReturnCode()
+	{
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'buildSuccessResponse');
-		$method->invokeArgs($obj, [null, 'string-is-invalid-code']);
+		$method->invokeArgs($obj, [null,
+		                           'string-is-invalid-code']);
 	}
+
 }

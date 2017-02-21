@@ -4,9 +4,15 @@
 
 * dev
    * Corrected default config file having `use` entries
+   * [RB-20] Renamed ErrorCode to ApiCodeBase
+   * ApiCodeBase's getMinCode() and getMaxCode() are now `public`
+   * Improved error messages to be even more informative
+   * All exceptions due to misconfiguration have "CONFIG: " message prefix now
+   * Renamed error_code param to api_code
+   * `:api_code` is now code placeholder in strings (`:error_code` is still supported, but obsolete)
 
 * v2.2.1 (2017-02-20)
-   * Documentation splitted into separate files
+   * Documentation split into separate files
 
 * v2.2.0 (2017-02-20)
    * [RB-5] Fixed error code range not being checked when used with custom message strings
@@ -34,7 +40,7 @@
    * Built-in localization keys changed
    * Added `errorWithMessageAndData()` method
    * ExceptionHandlerHelper adds `class`, `file` and `line` to returned JSON for apps in DEBUG mode
-   * ExceptionHandlerHelper can now use `:message`, `:error_code`, `:http_code` and `:class` placeholders
+   * ExceptionHandlerHelper can now use `:message`, `:api_code`, `:http_code` and `:class` placeholders
    * ExceptionHandlerHelper now automatically resolves message mappings and needs no config entries
    * ExceptionHandlerHelper now comes with built-in error codes (still, using own codes is recommended)
    * Added option to configure HTTP codes for each `ExceptionHandlerHelper` returned response separately

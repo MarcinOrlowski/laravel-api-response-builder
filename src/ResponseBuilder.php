@@ -49,13 +49,13 @@ class ResponseBuilder
 				throw new \RuntimeException('"classes" mapping must be an array in your config/response_builder.php file');
 			}
 
-			$mandatoryKeys = ['key',
-			                  'method',
+			$mandatory_keys = ['key',
+			                   'method',
 			];
-			foreach($classes as $className => $classConfig) {
-				foreach($mandatoryKeys as $keyName) {
-					if (!array_key_exists($keyName, $classConfig)) {
-						throw new \RuntimeException('Missing "{$keyName}" for "{$className}" mapping');
+			foreach ($classes as $class_name => $class_config) {
+				foreach ($mandatory_keys as $key_name) {
+					if (!array_key_exists($key_name, $class_config)) {
+						throw new \RuntimeException('Missing "{$key_name}" for "{$class_name}" mapping');
 					}
 				}
 			}
@@ -70,17 +70,18 @@ class ResponseBuilder
 	 *
 	 * @param array $classes "classes" config mapping array
 	 * @param array $data    array to recursively convert known elements of
+	 *
+	 * @return void
 	 */
 	protected static function convert(array $classes, array &$data)
 	{
-
-		foreach($data as $data_key => &$data_val) {
+		foreach ($data as $data_key => &$data_val) {
 			if (is_array($data_val)) {
 				static::convert($classes, $data_val);
 			} elseif (is_object($data_val)) {
 				$obj_class_name = get_class($data_val);
 				if (array_key_exists($obj_class_name, $classes)) {
-					$conversion_method = $classes[$obj_class_name]['method'];
+					$conversion_method = $classes[ $obj_class_name ]['method'];
 					$converted = $data_val->$conversion_method();
 					$data[ $data_key ] = $converted;
 				}
@@ -97,7 +98,7 @@ class ResponseBuilder
 	 * @param string  $message  error message or 'OK'
 	 * @param mixed   $data     API response data if any
 	 *
-	 * @return array response array ready to be encoded as json and sent back to client
+	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
@@ -124,7 +125,8 @@ class ResponseBuilder
 			$data = (object)$data;
 		}
 
-		$response = ['success' => ($api_code === ErrorCode::OK),
+		/** @noinspection UnnecessaryParenthesesInspection */
+		$response = ['success' => ($api_code === ApiCodeBase::OK),
 		             'code'    => $api_code,
 		             'locale'  => \App::getLocale(),
 		             'message' => $message,
@@ -139,7 +141,7 @@ class ResponseBuilder
 	 *
 	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
 	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
-	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with error_code uses placeholders
+	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
@@ -160,17 +162,17 @@ class ResponseBuilder
 	public static function successWithHttpCode($http_code)
 	{
 		if ($http_code === null) {
-			throw new \InvalidArgumentException('http_code cannot be null. If this is intentional you should success() instead');
+			throw new \InvalidArgumentException('http_code cannot be null. Use success() instead');
 		}
 
-		return static::buildSuccessResponse(null, ErrorCode::OK, $http_code, []);
+		return static::buildSuccessResponse(null, ApiCodeBase::OK, $http_code, []);
 	}
 
 	/**
 	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code  numeric code to be returned as 'code' @\App\ErrorCode::OK is default
+	 * @param integer|null $api_code  numeric code to be returned as 'code' @\App\ApiCodeBase::OK is default
 	 * @param integer|null $http_code HTTP return code to be set for this response
-	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with error_code uses placeholders
+	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -183,14 +185,14 @@ class ResponseBuilder
 			$http_code = static::DEFAULT_HTTP_CODE_OK;
 		}
 		if ($api_code === null) {
-			$api_code = ErrorCode::OK;
+			$api_code = ApiCodeBase::OK;
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException("'code' must be integer");
+			throw new \InvalidArgumentException(sprintf("'code' must be integer ('%ss' given)", gettype($api_code)));
 		}
 		if (!is_int($http_code)) {
-			throw new \InvalidArgumentException("'http_code must be integer'");
+			throw new \InvalidArgumentException(sprintf("'http_code' must be integer ('%s' given)", gettype($http_code)));
 		} elseif (($http_code < 200) || ($http_code > 299)) {
 			throw new \InvalidArgumentException("http_code ({$http_code}) invalid. Must be in range 200-299 inclusive");
 		}
@@ -239,7 +241,7 @@ class ResponseBuilder
 	public static function errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args = null)
 	{
 		if ($http_code === null) {
-			throw new \InvalidArgumentException('http_code cannot be null. If this is intentional you should errorWithData() instead');
+			throw new \InvalidArgumentException('http_code cannot be null. Use errorWithData() instead');
 		}
 
 		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args);
@@ -310,13 +312,13 @@ class ResponseBuilder
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException('api_code must be integer');
-		} elseif ($api_code === ErrorCode::OK) {
-			throw new \InvalidArgumentException('api_code must not be equal to ErrorCode::OK');
+			throw new \InvalidArgumentException(sprintf("api_code must be integer ('%s' given)", gettype($api_code)));
+		} elseif ($api_code === ApiCodeBase::OK) {
+			throw new \InvalidArgumentException(sprintf('api_code must not be equal to ApiCodeBase::OK (%d)', ApiCodeBase::OK));
 		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
-			throw new \InvalidArgumentException('lang_args must be either array or null');
+			throw new \InvalidArgumentException(sprintf("lang_args must be either array or null ('%s' given)", gettype($lang_args)));
 		} elseif (!is_int($http_code)) {
-			throw new \InvalidArgumentException('http_code must be integer');
+			throw new \InvalidArgumentException(sprintf("http_code must be integer ('%s' given)", gettype($http_code)));
 		} elseif ($http_code < 400) {
 			throw new \InvalidArgumentException('http_code cannot be lower than 400');
 		}
@@ -357,24 +359,30 @@ class ResponseBuilder
 		if (!is_string($message_or_api_code)) {
 			// no, so it must be an int value
 			if (!is_int($message_or_api_code)) {
-				throw new \InvalidArgumentException('Message must be either string or resolvable api_code');
+				throw new \InvalidArgumentException(
+					sprintf('Message must be either string or resolvable integer api_code (\'%s\' given)', gettype($message_or_api_code))
+				);
 			}
 
 			// do we have the mapping for this string already?
-			$key = ErrorCode::getMapping($message_or_api_code);
+			$key = ApiCodeBase::getMapping($message_or_api_code);
 			if ($key === null) {
 				// no, get the default one instead
-				$key = ErrorCode::getMapping(ErrorCode::NO_ERROR_MESSAGE);
+				$key = ApiCodeBase::getMapping(ApiCodeBase::NO_ERROR_MESSAGE);
 				$lang_args = ['error_code' => $message_or_api_code];
 			}
 			$message_or_api_code = \Lang::get($key, $lang_args);
 		} else {
 			if (!is_int($api_code)) {
-				throw new \InvalidArgumentException('api_code must be integer value');
+				throw new \InvalidArgumentException(
+					sprintf("api_code must be integer ('%s' given)", gettype($api_code))
+				);
 			}
 
-			if (!ErrorCode::isCodeValid($api_code)) {
-				throw new \InvalidArgumentException("api_code {$api_code} is out of allowed range");
+			if (!ApiCodeBase::isCodeValid($api_code)) {
+				$msg = sprintf("API code value ({$api_code}) is out of allowed range %d-%d",
+					ApiCodeBase::getMinCode(), ApiCodeBase::getMaxCode());
+				throw new \InvalidArgumentException($msg);
 			}
 		}
 

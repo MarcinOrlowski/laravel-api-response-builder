@@ -56,10 +56,10 @@ then edit `config/response_builder.php` file to map exception types to your code
 
 	'exception_handler' => [
 		'exception' => [
-			'http_not_found'           => ['code' => ErrorCode::HTTP_NOT_FOUND],
-			'http_service_unavailable' => ['code' => ErrorCode::HTTP_SERVICE_UNAVAILABLE],
-			'http_exception'           => ['code' => ErrorCode::HTTP_EXCEPTION],
-			'uncaught_exception'       => ['code' => ErrorCode::UNCAUGHT_EXCEPTION],
+			'http_not_found'           => ['code' => ApiCodeBase::HTTP_NOT_FOUND],
+			'http_service_unavailable' => ['code' => ApiCodeBase::HTTP_SERVICE_UNAVAILABLE],
+			'http_exception'           => ['code' => ApiCodeBase::HTTP_EXCEPTION],
+			'uncaught_exception'       => ['code' => ApiCodeBase::UNCAUGHT_EXCEPTION],
 		],
     ],
 
@@ -68,19 +68,19 @@ then edit `config/response_builder.php` file to map exception types to your code
 You can also configure HTTP return code to use with each exception, by using `http_code` key:
 
     'http_not_found' => [
-        'code'      => ErrorCode::UNKNOWN_METHOD,
+        'code'      => ApiCodeBase::UNKNOWN_METHOD,
         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
     ],
     'http_service_unavailable' => [
-        'code'      => ErrorCode::HTTP_SERVICE_UNAVAILABLE,
+        'code'      => ApiCodeBase::HTTP_SERVICE_UNAVAILABLE,
         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
     ],
     'http_exception' => [
-        'code'      => ErrorCode::HTTP_EXCEPTION,
+        'code'      => ApiCodeBase::HTTP_EXCEPTION,
         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
     ],
     'uncaught_exception' => [
-        'code'      => ErrorCode::UNCAUGHT_EXCEPTION,
+        'code'      => ApiCodeBase::UNCAUGHT_EXCEPTION,
         'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
     ],
 
@@ -94,12 +94,12 @@ Helper will fall back to defaults if these are not found:
         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
     ],
     'http_service_unavailable' => [
-        'code' => ErrorCode::HTTP_SERVICE_UNAVAILABLE,
+        'code' => ApiCodeBase::HTTP_SERVICE_UNAVAILABLE,
     ],
     'uncaught_exception' => [
     ],
 
-Helper will try to use exception's status code if no dedicatd `http_code` is configured but it would fall
+Helper will try to use exception's status code if no dedicated `http_code` is configured but it would fall
 to default `HttpResponse::HTTP_BAD_REQUEST` code (`HttpResponse::HTTP_INTERNAL_SERVER_ERROR` for uncaught
 exceptions) if exceptions status code is `0`.
 
@@ -108,14 +108,14 @@ exceptions) if exceptions status code is `0`.
 If you want to override built-in messages for any (or all) exceptions, edit `config/response_builder.php`
 and add appropriate entry to `map` array:
 
-	ErrorCode::HTTP_NOT_FOUND            => 'api.http_not_found',
-	ErrorCode::HTTP_SERVICE_UNAVAILABLE  => 'api.http_service_unavailable',
-	ErrorCode::HTTP_EXCEPTION            => 'api.http_exception',
-	ErrorCode::UNCAUGHT_EXCEPTION        => 'api.uncaught_exception',
+	ApiCodeBase::HTTP_NOT_FOUND            => 'api.http_not_found',
+	ApiCodeBase::HTTP_SERVICE_UNAVAILABLE  => 'api.http_service_unavailable',
+	ApiCodeBase::HTTP_EXCEPTION            => 'api.http_exception',
+	ApiCodeBase::UNCAUGHT_EXCEPTION        => 'api.uncaught_exception',
 
 where `api.xxxx` entry must be valid localization string key from your app's localization strings
 pool as per Lang's requirements. You can use placeholders in your messages. Supported are 
-`:error_code` being substituted by actual error code assigned to this exception and `:message`
+`:api_code` being substituted by actual error code assigned to this exception and `:message`
 replaced by exception's `getMessage()` return value.
 
 ## Exceptions with messages ##

@@ -12,12 +12,12 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Config;
+use Illuminate\Support\Facades\Config;
 
 /**
- * ErrorCode handling class
+ * ApiCode handling class
  */
-class ErrorCode
+class ApiCodeBase
 {
 	/**
 	 * protected code range - lowest code
@@ -35,7 +35,7 @@ class ErrorCode
 	 */
 	const OK = 0;
 	/**
-	 * built-in code for faillback message mapping
+	 * built-in code for fallback message mapping
 	 */
 	const NO_ERROR_MESSAGE = 1;
 	/**
@@ -61,7 +61,6 @@ class ErrorCode
 	 * @var array built-in codes mapping
 	 */
 	protected static $base_map = [
-
 		self::OK               => 'response-builder::builder.ok',
 		self::NO_ERROR_MESSAGE => 'response-builder::builder.no_error_message',
 
@@ -69,7 +68,6 @@ class ErrorCode
 		self::EX_HTTP_SERVICE_UNAVAILABLE => 'response-builder::builder.http_service_unavailable',
 		self::EX_HTTP_EXCEPTION           => 'response-builder::builder.http_exception',
 		self::EX_UNCAUGHT_EXCEPTION       => 'response-builder::builder.uncaught_exception',
-
 	];
 
 
@@ -80,12 +78,12 @@ class ErrorCode
 	 *
 	 * @throws \RuntimeException Throws exception if no min_code set up
 	 */
-	protected static function getMinCode()
+	public static function getMinCode()
 	{
 		$min_code = Config::get('response_builder.min_code', null);
 
 		if ($min_code === null) {
-			throw new \RuntimeException('Missing min_code key in config/response_builder.php config file');
+			throw new \RuntimeException('CONFIG: Missing "min_code" key');
 		}
 
 		return $min_code;
@@ -98,12 +96,12 @@ class ErrorCode
 	 *
 	 * @throws \RuntimeException Throws exception if no max_code set up
 	 */
-	protected static function getMaxCode()
+	public static function getMaxCode()
 	{
 		$max_code = Config::get('response_builder.max_code', null);
 
 		if ($max_code === null) {
-			throw new \RuntimeException('Missing min_code key in config/response_builder.php config file');
+			throw new \RuntimeException('CONFIG: Missing "min_code" key');
 		}
 
 		return $max_code;
@@ -121,7 +119,7 @@ class ErrorCode
 	}
 
 	/**
-	 * Returns hihest possible reserved code used by predefined Response Builder's messages
+	 * Returns highest possible reserved code used by predefined Response Builder's messages
 	 *
 	 * @return integer
 	 */
@@ -152,7 +150,7 @@ class ErrorCode
 	{
 		$map = Config::get('response_builder.map', null);
 		if ($map === null) {
-			throw new \RuntimeException('Missing "map" key in config/response_builder.php config file');
+			throw new \RuntimeException('CONFIG: Missing "map" key');
 		}
 
 		return $map + static::$base_map;
@@ -169,7 +167,7 @@ class ErrorCode
 	 */
 	public static function getBaseMapping($code)
 	{
-		if (($code < ErrorCode::RESERVED_MIN_API_CODE) || ($code > ErrorCode::RESERVED_MAX_API_CODE)) {
+		if (($code < ApiCodeBase::RESERVED_MIN_API_CODE) || ($code > ApiCodeBase::RESERVED_MAX_API_CODE)) {
 			throw new \InvalidArgumentException("Base message code {$code} is out of allowed reserved range");
 		}
 
@@ -189,7 +187,9 @@ class ErrorCode
 	public static function getMapping($code)
 	{
 		if (!static::isCodeValid($code)) {
-			throw new \InvalidArgumentException("Message code {$code} is out of allowed range");
+			$msg = sprintf("API code value ({$code}) is out of allowed range %d-%d",
+				static::getMinCode(), static::getMaxCode());
+			throw new \InvalidArgumentException($msg);
 		}
 
 		$map = static::getMap();
@@ -208,8 +208,8 @@ class ErrorCode
 	{
 		$result = false;
 
-		if ((($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode()))
-			|| (($code <= ErrorCode::getReservedMaxCode()) && ($code >= ErrorCode::getReservedMinCode()))
+		if ((($code >= ApiCodeBase::getMinCode()) && ($code <= ApiCodeBase::getMaxCode()))
+			|| (($code <= ApiCodeBase::getReservedMaxCode()) && ($code >= ApiCodeBase::getReservedMinCode()))
 		) {
 			$result = true;
 		}
