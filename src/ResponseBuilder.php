@@ -32,6 +32,10 @@ class ResponseBuilder
 	 */
 	const DEFAULT_HTTP_CODE_ERROR = HttpResponse::HTTP_BAD_REQUEST;
 
+	/**
+	 * Default API code for OK
+	 */
+	const DEFAULT_API_CODE_OK = ApiCodeBase::OK;
 
 	/**
 	 * Reads and validates "classes" config mapping
@@ -126,7 +130,7 @@ class ResponseBuilder
 		}
 
 		/** @noinspection UnnecessaryParenthesesInspection */
-		$response = ['success' => ($api_code === ApiCodeBase::OK),
+		$response = ['success' => ($api_code === static::DEFAULT_API_CODE_OK),
 		             'code'    => $api_code,
 		             'locale'  => \App::getLocale(),
 		             'message' => $message,
@@ -140,14 +144,19 @@ class ResponseBuilder
 	 * Returns success
 	 *
 	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
+	 * @param int|null     $api_code  API code to be returned with the response or @null for default value
 	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
+	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function success($data = null, $http_code = null, array $lang_args = null)
+	public static function success($data = null, $api_code = null, array $lang_args = null, $http_code = null)
 	{
-		return static::buildSuccessResponse($data, null, $http_code, $lang_args);
+		if ($api_code === null) {
+			$api_code = static::DEFAULT_API_CODE_OK;
+		}
+
+		return static::buildSuccessResponse($data, $api_code, $lang_args, $http_code);
 	}
 
 	/**
@@ -165,27 +174,27 @@ class ResponseBuilder
 			throw new \InvalidArgumentException('http_code cannot be null. Use success() instead');
 		}
 
-		return static::buildSuccessResponse(null, ApiCodeBase::OK, $http_code, []);
+		return static::buildSuccessResponse(null, static::DEFAULT_API_CODE_OK, [], $http_code);
 	}
 
 	/**
 	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code  numeric code to be returned as 'code' @\App\ApiCodeBase::OK is default
-	 * @param integer|null $http_code HTTP return code to be set for this response
+	 * @param integer|null $api_code  numeric code to be returned as 'code' or null for default value
 	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
+	 * @param integer|null $http_code HTTP return code to be set for this response
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
 	 *
 	 */
-	protected static function buildSuccessResponse($data = null, $api_code = null, $http_code = null, array $lang_args = null)
+	protected static function buildSuccessResponse($data = null, $api_code = null, array $lang_args = null, $http_code = null)
 	{
 		if ($http_code === null) {
 			$http_code = static::DEFAULT_HTTP_CODE_OK;
 		}
 		if ($api_code === null) {
-			$api_code = ApiCodeBase::OK;
+			$api_code = static::DEFAULT_API_CODE_OK;
 		}
 
 		if (!is_int($api_code)) {
@@ -313,8 +322,8 @@ class ResponseBuilder
 
 		if (!is_int($api_code)) {
 			throw new \InvalidArgumentException(sprintf("api_code must be integer ('%s' given)", gettype($api_code)));
-		} elseif ($api_code === ApiCodeBase::OK) {
-			throw new \InvalidArgumentException(sprintf('api_code must not be equal to ApiCodeBase::OK (%d)', ApiCodeBase::OK));
+		} elseif ($api_code === static::DEFAULT_API_CODE_OK) {
+			throw new \InvalidArgumentException(sprintf('api_code must not be equal to DEFAULT_API_CODE_OK (%d)', static::DEFAULT_API_CODE_OK));
 		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException(sprintf("lang_args must be either array or null ('%s' given)", gettype($lang_args)));
 		} elseif (!is_int($http_code)) {

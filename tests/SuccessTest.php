@@ -50,7 +50,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 
 		foreach ($payloads as $payload) {
 			foreach ($http_codes as $http_code_expect => $http_code_send) {
-				$this->response = ResponseBuilder::success($payload, $http_code_send);
+				$this->response = ResponseBuilder::success($payload, null, [], $http_code_send);
 
 				$j = $this->getResponseSuccessObject($api_codes_class_name::OK, $http_code_expect);
 

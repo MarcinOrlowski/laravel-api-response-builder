@@ -3,6 +3,7 @@
 ## CHANGE LOG ##
 
 * dev
+   * `success()` method signature changed and is NOT backward compatible. See docs for details.
    * Corrected default config file having `use` entries
    * [RB-20] Renamed ErrorCode to ApiCodeBase
    * ApiCodeBase's `getMinCode()` and `getMaxCode()` are now `public`
@@ -11,6 +12,7 @@
    * Renamed error_code param to api_code in all method signatures
    * `:api_code` is now code placeholder in strings (`:error_code` is still supported for compatibility, but obsolete)
    * Default HTTP codes are now declared as constants `DEFAULT_HTTP_CODE_xxx` if you need to know them
+   
 
 * v2.2.1 (2017-02-20)
    * Documentation split into separate files
