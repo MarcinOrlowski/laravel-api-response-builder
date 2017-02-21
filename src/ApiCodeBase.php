@@ -61,7 +61,6 @@ class ApiCodeBase
 	 * @var array built-in codes mapping
 	 */
 	protected static $base_map = [
-
 		self::OK               => 'response-builder::builder.ok',
 		self::NO_ERROR_MESSAGE => 'response-builder::builder.no_error_message',
 
@@ -69,7 +68,6 @@ class ApiCodeBase
 		self::EX_HTTP_SERVICE_UNAVAILABLE => 'response-builder::builder.http_service_unavailable',
 		self::EX_HTTP_EXCEPTION           => 'response-builder::builder.http_exception',
 		self::EX_UNCAUGHT_EXCEPTION       => 'response-builder::builder.uncaught_exception',
-
 	];
 
 

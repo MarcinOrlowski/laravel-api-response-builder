@@ -29,7 +29,7 @@ class ExceptionHandlerHelper
 	 * @param  \Illuminate\Http\Request $request   Request object
 	 * @param  \Exception               $exception Exception
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public static function render($request, Exception $exception)
 	{
@@ -66,7 +66,7 @@ class ExceptionHandlerHelper
 	 * @param integer   $default_api_code
 	 * @param integer   $default_http_code
 	 *
-	 * @return Symfony\Component\HttpFoundation\Response
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	protected static function error(Exception $exception, $config_base, $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{

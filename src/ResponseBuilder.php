@@ -97,7 +97,7 @@ class ResponseBuilder
 	 * @param string  $message  error message or 'OK'
 	 * @param mixed   $data     API response data if any
 	 *
-	 * @return array response array ready to be encoded as json and sent back to client
+	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
