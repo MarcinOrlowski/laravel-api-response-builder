@@ -17,8 +17,8 @@ language: php
 php:
   # using major version aliases
   - 5.5
-#  - 5.6
-#  - 7.0
+  - 5.6
+  - 7.0
   - 7.1
 #  - hhvm
 
@@ -44,8 +44,11 @@ matrix:
 # omitting "script:" will default to phpunit
 script:
 #  - phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
+  - FOO="TEST_${LARAVEL_VERSIOM}"
   - echo $(phpenv version-name)
   - echo ${LARAVEL_VERSION}
+  - echo ${FOO}
 
 #after_script:
+#after_success:
 #  - vendor/bin/codacycoverage clover /tmp/coverage.xml
