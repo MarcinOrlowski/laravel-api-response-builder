@@ -33,8 +33,9 @@ matrix:
     - php: 5.5
       env: LARAVEL_VERSION="5.4"
 
-directories:
-  - ${HOME}/.composer/cache/files
+cache:
+  directories:
+    - ${HOME}/.composer/cache/files
 
 before_script:
 #   Disable coverage (hhvm does not feature xdebug)
