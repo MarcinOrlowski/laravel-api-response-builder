@@ -22,7 +22,7 @@ nice, normalized and easy to consume REST API responses.
  * [Documentation](docs/docs.md)
  * [Bugs reports and pull requests](#contributing)
  * [License](#license)
- * [Changelog](#changelog)
+ * [Changelog](CHANGES.md)
 
 ----
 
@@ -73,15 +73,3 @@ Thanks in advance!
 
 * Written and copyrighted &copy;2016-2017 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
 * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
-
-----
-
-## Notes ##
-
-* `ResponseBuilder` is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making `ResponseBuilder` usable with Lumen, speak up or (better) send pull request!
-
-----
-
-## Changelog ##
-
- See [CHANGES.md](CHANGES.md) for detailed revision history.

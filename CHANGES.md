@@ -1,9 +1,13 @@
 # API Response Builder for Laravel 5 #
 
+
+See [compatibility docs](docs/compatibility.md) for details about backward compatibility!
+
+
 ## CHANGE LOG ##
 
 * dev
-   * **NOT BACKWARD COMPATIBLE!**. See [copatibility docs](docs/compatibility.md) for details!
+   * **PARTIAL BACKWARD INCOMPATIBILITY**
    * [RB-17] `success()` now allows to return api code as well
    * Corrected default config file containing faulty and unneeded `use` entries
    * [RB-20] Renamed ErrorCode to ApiCodeBase

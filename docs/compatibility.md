@@ -1,34 +1,21 @@
 # API Response Builder for Laravel 5 #
 
-`ResponseBuilder` is Laravel5's helper designed to simplify building
-nice, normalized and easy to consume REST API responses.
+ `ResponseBuilder` follows [Semantic Versioning](http://semver.org/).
 
-## Preface ##
+ You need to worry about backward compatibility if you are upgrading from previous major version of the package.
 
- **NOTE:** You should **ONLY** worry about compatibility if you are upgrading from previous versions as you may
- be using APIs that changed. If you are new to the project and you just started using it, simply do not bother
- untill **next major update** (see [Semantic Versioning](http://semver.org/)).
+### v3 ###
 
-## Compatibility ##
+ * `success()` now accepts (optional) `api_code` too, therefore signature of this method as well as and argument
+ order changed. This makes it **partially** incompatible with what have been in v2, however in majority of uses
+ this change should pose no threat at all. If you were just calling `success()` or `success($data)` (which is 
+ 99,9% of use cases) then you are all fine and no change is needed. But if you were setting own 
+ `http_code` or `lang_args` when calling `success()` then you need to update your code. 
 
- Backward INCOMPATIBLE changes detailed.
+### v2 ###
 
-### v3.0 ###
+ * First public release.
 
- * `success()` changed to allow returning custom `api_code` with response, therefore signature of this method
-  (and argument order) is different which makes it **partially** incompatible. In majority of uses this is not
-  a problem but if you were calling `success()` passing `http_code` or `lang_args` to it, then you need to 
-  update your code to work properly with 3.0.0. But if you were just calling `success()` or `success($data)` 
-  (which is 99,9% of use cases) then you are all fine and no change is needed.
-
-### v2.x ###
-
- * No public API changes.
-
-### v1.x ###
+### v1 ###
 
  * Initial (internal) release
-
-## Changelog ##
-
- See [CHANGES.md](CHANGES.md) for detailed revision history.
