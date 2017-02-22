@@ -22,14 +22,31 @@ php:
   - 7.1
   - hhvm
 
+env:
+  - LARAVEL_VERSION="5.1"
+  - LARAVEL_VERSION="5.2"
+  - LARAVEL_VERSION="5.3"
+  - LARAVEL_VERSION="5.4"
+
+matrix:
+  exclude:
+    - php: 5.5
+      env: LARAVEL_VERSION="5.3"
+    - php: 5.5
+      env: LARAVEL_VERSION="5.4"
+
 before_script:
-#  - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
-  - flags="--prefer-dist"
-  - composer install $flags
+##  - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
+#  - phpenv config-rm xdebug.ini
+  - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
+  - FLAGS="--prefer-dist"
+  - composer install ${FLAGS}
 
 # omitting "script:" will default to phpunit
 script:
   - phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
 
-after_script:
-  - vendor/bin/codacycoverage clover /tmp/coverage.xml
+
+#after_script:
+#after_success:
+#  - vendor/bin/codacycoverage clover /tmp/coverage.xml
