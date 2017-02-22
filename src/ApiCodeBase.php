@@ -133,7 +133,7 @@ class ApiCodeBase
 	 *
 	 * @return array
 	 */
-	public static function getErrorCodeConstants()
+	public static function getApiCodeConstants()
 	{
 		$reflect = new \ReflectionClass(get_called_class());
 		return $reflect->getConstants();

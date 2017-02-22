@@ -12,6 +12,7 @@
  99,9% of use cases) then you are all fine and no change is needed. But if you were setting own 
  `http_code` or `lang_args` when calling `success()` then you need to update your code. 
  * Base `ErrorCode` class is now renamed as `ApiCodeBase`, so you need to change your code to extend it now.
+ * `getErrorCodeConstants()` is now `getApiCodeConstants()`
 
 ### v2 ###
 

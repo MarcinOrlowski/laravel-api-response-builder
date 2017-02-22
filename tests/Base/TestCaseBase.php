@@ -57,7 +57,7 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		/** @var array $const */
-		$const = $api_codes_class_name::getErrorCodeConstants();
+		$const = $api_codes_class_name::getApiCodeConstants();
 		$name = null;
 		foreach ($const as $const_name => $const_value) {
 			if (is_int($const_value) && ($const_value === $api_code)) {

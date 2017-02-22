@@ -57,7 +57,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 		/** @var ApiCodeBase $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $codes */
-		$codes = $api_codes::getErrorCodeConstants();
+		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
 			$this->assertNotNull($api_codes::getMapping($val), "No mapping for {$name}");
 		}
@@ -73,7 +73,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 		/** @var ApiCodeBase $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $codes */
-		$codes = $api_codes::getErrorCodeConstants();
+		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
 			$this->assertTrue($api_codes::isCodeValid($val), "Value of {$name} is outside allowed range");
 		}
