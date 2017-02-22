@@ -25,6 +25,8 @@ php:
 env:
   - TEST_VERSION="1.0"
   - TEST_VERSION="2.0"
+  - FOO_VERSION="3.0"
+  - FOO_VERSION="4.0"
 
 #before_script:
 ##  - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
@@ -36,7 +38,8 @@ env:
 script:
 #  - phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
   - echo $(phpenv version-name)
-  - echo ${TEST_VERSION}
+  - echo "TEST: ${TEST_VERSION}"
+  - echo "FOO: ${FOO_VERSION}"
 
 #after_script:
 #  - vendor/bin/codacycoverage clover /tmp/coverage.xml
