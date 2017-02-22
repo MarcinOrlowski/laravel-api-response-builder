@@ -58,6 +58,18 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 		ApiCodeBase::getMap();
 	}
 
+	/**
+	 * Tests getMap() with wrong config
+	 *
+	 * @return void
+	 *
+	 * @expectedException \RuntimeException
+	 */
+	public function testGetMap_WrongConfig()
+	{
+		\Config::set('response_builder.map', false);
+		ApiCodeBase::getMap();
+	}
 
 
 	/**

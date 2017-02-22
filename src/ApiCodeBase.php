@@ -153,6 +153,10 @@ class ApiCodeBase
 			throw new \RuntimeException('CONFIG: Missing "map" key');
 		}
 
+		if (!is_array($map)) {
+			throw new \RuntimeException('CONFIG: "map" must be an array');
+		}
+
 		return $map + static::$base_map;
 	}
 
