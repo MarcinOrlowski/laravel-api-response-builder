@@ -162,7 +162,7 @@ class ApiCodeBase
 	}
 
 	/**
-	 * Returns locale mappings for given base error code or @null if there's no mapping
+	 * Returns locale mappings for given base api code or @null if there's no mapping
 	 *
 	 * @param integer $code Base (built-in) code to look for mapped message for.
 	 *
@@ -185,7 +185,7 @@ class ApiCodeBase
 
 
 	/**
-	 * Returns locale mappings for given error code or @null if there's no mapping
+	 * Returns locale mappings for given api code or @null if there's no mapping
 	 *
 	 * @param integer $api_code Api code to look for mapped message for.
 	 *
