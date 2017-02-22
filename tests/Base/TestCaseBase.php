@@ -97,6 +97,23 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 	}
 
 	/**
+	 * Returns value of otherwise non-public member of the class
+	 *
+	 * @param string $class_name  class name to get member from
+	 * @param string $member_name member name
+	 *
+	 * @return mixed
+	 */
+	protected function getProtectedMember($class_name, $member_name)
+	{
+		$reflection = new \ReflectionClass($class_name);
+		$property = $reflection->getProperty($member_name);
+		$property->setAccessible(true);
+
+		return $property->getValue($class_name);
+	}
+
+	/**
 	 * Generates random string, with optional prefix
 	 *
 	 * @param string $prefix
