@@ -345,7 +345,7 @@ class ResponseBuilder
 
 
 	/**
-	 * @param boolean        $success
+	 * @param boolean        $success             @true if reponse indicate success, @false otherwise
 	 * @param integer        $api_code            internal message code (usually 0 for OK, and unique integer for errors)
 	 * @param string|integer $message_or_api_code error message string or API code
 	 * @param mixed|null     $data                optional additional data to be included in response object

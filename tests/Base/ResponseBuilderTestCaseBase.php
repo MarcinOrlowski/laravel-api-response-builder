@@ -285,14 +285,20 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	/**
 	 * Calls protected method make()
 	 *
-	 * @param int        $api_code
-	 * @param string|int $message_or_api_code
-	 * @param array|null $headers
+	 * @param boolean    $success             @true if response should indicate success, @false otherwise
+	 * @param int        $api_code            API code to return
+	 * @param string|int $message_or_api_code Resolvable Api code or message string
+	 * @param array|null $headers             HTTP headers to include
 	 *
 	 * @return void
 	 */
-	protected function callMakeMethod($api_code, $message_or_api_code, array $headers = null)
+	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $headers = null)
 	{
+		if (!is_bool($success)) {
+			$this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));
+		}
+
+
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'make');
 

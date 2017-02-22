@@ -26,7 +26,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 
 		$message_or_api_code = [];    // invalid
 
-		$this->callMakeMethod($api_codes_class_name::OK, $message_or_api_code);
+		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code);
 	}
 
 	/**
@@ -37,7 +37,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	public function testMake_CustomMessageAndWrongCode()
 	{
 		$api_code = [];    // invalid
-		$this->callMakeMethod($api_code, 'message');
+		$this->callMakeMethod(true, $api_code, 'message');
 	}
 
 	/**
@@ -48,7 +48,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	public function testMake_CustomMessageAndCodeOutOfRange()
 	{
 		$api_code = $this->max_allowed_code + 1;    // invalid
-		$this->callMakeMethod($api_code, 'message');
+		$this->callMakeMethod(true, $api_code, 'message');
 	}
 
 }
