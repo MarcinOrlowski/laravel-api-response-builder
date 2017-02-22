@@ -38,8 +38,9 @@ matrix:
 before_script:
 ##  - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
 #  - phpenv config-rm xdebug.ini
-  - flags="--prefer-dist"
-  - composer install $flags --file="travis/composer-${LARAVEL_VERSION}.json"
+  - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
+  - FLAGS="--prefer-dist --dev"
+  - composer install ${FLAGS}
 
 # omitting "script:" will default to phpunit
 script:
