@@ -18,6 +18,7 @@
     "orchestra/testbench": "3.3.*",
     "laravel/framework": "5.3.*",
     "phpunit/php-code-coverage": "~3.3.3",
-    "codacy/coverage": "~1.0"
+    "codacy/coverage": "~1.0",
+    "phpunit/phpunit": "~5.7"
   }
 }
