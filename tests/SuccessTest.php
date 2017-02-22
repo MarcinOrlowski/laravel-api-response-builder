@@ -39,7 +39,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testSuccess_ApiCode()
 	{
-		for ($i=0; $i<20; $i++) {
+		for ($i=0; $i<5; $i++) {
 			$api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
 			$this->response = ResponseBuilder::success(null, $api_code);
@@ -49,7 +49,6 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 			$this->assertEquals($api_code, $j->code);
 			$this->assertEquals(\Lang::get(ApiCodeBase::getMapping(ApiCodeBase::OK)), $j->message);
 		}
-
 	}
 
 	/**

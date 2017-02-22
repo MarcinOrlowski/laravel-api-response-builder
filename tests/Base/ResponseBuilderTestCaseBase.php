@@ -124,7 +124,11 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		}
 
 		if ($message === null) {
-			$message = \Lang::get(ApiCodeBase::getMapping(ApiCodeBase::OK));
+			$key = ApiCodeBase::getMapping($expected_api_code);
+			if ($key === null) {
+				$key = ApiCodeBase::getMapping(ApiCodeBase::OK);
+			}
+			$message = \Lang::get($key);
 		}
 
 		$j = $this->getResponseObjectRaw($expected_api_code, $expected_http_code, $message);
