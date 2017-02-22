@@ -18,7 +18,7 @@ nice, normalized and easy to consume REST API responses.
  * [Overriding built-in messages](#overriding-built-in-messages)
  * [License](#license)
  * [Notes](#notes)
- * [Changelog](#changelog)
+ * [Changelog](CHANGES.md)
 
 ----
 
@@ -266,7 +266,7 @@ See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for
 
 #### Reporting Success ####
 
-    success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
+    success($data = null, $api_code = null, array $lang_args = [], $http_code = null);
     successWithHttpCode($http_code);
 
 Usage restrictions:
@@ -562,9 +562,3 @@ You can use `:api_code` placeholder in the message and it will be substituted ac
 ## Notes ##
 
 * `ResponseBuilder` is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making `ResponseBuilder` usable with Lumen, speak up or (better) send pull request!
-
-----
-
-## Changelog ##
-
- See [CHANGES.md](CHANGES.md) for detailed revision history.

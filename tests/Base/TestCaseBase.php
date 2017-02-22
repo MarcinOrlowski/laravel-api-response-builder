@@ -13,10 +13,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
 /**
  * Class TestCaseBase
  */
@@ -94,6 +90,23 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 		$method->setAccessible(true);
 
 		return $method;
+	}
+
+	/**
+	 * Returns value of otherwise non-public member of the class
+	 *
+	 * @param string $class_name  class name to get member from
+	 * @param string $member_name member name
+	 *
+	 * @return mixed
+	 */
+	protected function getProtectedMember($class_name, $member_name)
+	{
+		$reflection = new \ReflectionClass($class_name);
+		$property = $reflection->getProperty($member_name);
+		$property->setAccessible(true);
+
+		return $property->getValue($class_name);
 	}
 
 	/**

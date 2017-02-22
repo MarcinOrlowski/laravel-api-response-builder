@@ -101,7 +101,7 @@ class ApiCodeBase
 		$max_code = Config::get('response_builder.max_code', null);
 
 		if ($max_code === null) {
-			throw new \RuntimeException('CONFIG: Missing "min_code" key');
+			throw new \RuntimeException('CONFIG: Missing "max_code" key');
 		}
 
 		return $max_code;
@@ -153,13 +153,18 @@ class ApiCodeBase
 			throw new \RuntimeException('CONFIG: Missing "map" key');
 		}
 
+		if (!is_array($map)) {
+			throw new \RuntimeException('CONFIG: "map" must be an array');
+		}
+
+		/** @noinspection AdditionOperationOnArraysInspection */
 		return $map + static::$base_map;
 	}
 
 	/**
-	 * Returns locale mappings for given base error code or null if there's no mapping
+	 * Returns locale mappings for given base error code or @null if there's no mapping
 	 *
-	 * @param integer $code Base (built-in) code to look for string mapping for.
+	 * @param integer $code Base (built-in) code to look for mapped message for.
 	 *
 	 * @return string|null
 	 *
@@ -168,33 +173,37 @@ class ApiCodeBase
 	public static function getBaseMapping($code)
 	{
 		if (($code < ApiCodeBase::RESERVED_MIN_API_CODE) || ($code > ApiCodeBase::RESERVED_MAX_API_CODE)) {
-			throw new \InvalidArgumentException("Base message code {$code} is out of allowed reserved range");
+			throw new \InvalidArgumentException(
+				sprintf('Base code value (%d) is out of allowed reserved range %d-%d',
+					$code, ApiCodeBase::RESERVED_MIN_API_CODE, ApiCodeBase::RESERVED_MAX_API_CODE));
 		}
 
-		return array_key_exists($code, static::$base_map) ? static::$base_map[ $code ] : null;
+		return array_key_exists($code, static::$base_map)
+			? static::$base_map[ $code ]
+			: null;
 	}
 
 
 	/**
-	 * Returns locale mappings for given error code or null if there's no mapping
+	 * Returns locale mappings for given error code or @null if there's no mapping
 	 *
-	 * @param integer $code Code to look for string mapping for.
+	 * @param integer $api_code Api code to look for mapped message for.
 	 *
 	 * @return string|null
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed range.
 	 */
-	public static function getMapping($code)
+	public static function getMapping($api_code)
 	{
-		if (!static::isCodeValid($code)) {
-			$msg = sprintf("API code value ({$code}) is out of allowed range %d-%d",
-				static::getMinCode(), static::getMaxCode());
+		if (!static::isCodeValid($api_code)) {
+			$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
+				$api_code, static::getMinCode(), static::getMaxCode());
 			throw new \InvalidArgumentException($msg);
 		}
 
 		$map = static::getMap();
 
-		return array_key_exists($code, $map) ? $map[ $code ] : null;
+		return array_key_exists($api_code, $map) ? $map[ $api_code ] : null;
 	}
 
 	/**

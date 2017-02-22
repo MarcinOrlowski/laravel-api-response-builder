@@ -1,6 +1,8 @@
 <?php
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
+use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
  * Laravel API Response Builder
@@ -26,7 +28,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 
 		$message_or_api_code = [];    // invalid
 
-		$this->callMakeMethod($api_codes_class_name::OK, $message_or_api_code);
+		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code);
 	}
 
 	/**
@@ -37,7 +39,8 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	public function testMake_CustomMessageAndWrongCode()
 	{
 		$api_code = [];    // invalid
-		$this->callMakeMethod($api_code, 'message');
+		/** @noinspection PhpParamsInspection */
+		$this->callMakeMethod(true, $api_code, 'message');
 	}
 
 	/**
@@ -48,7 +51,37 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	public function testMake_CustomMessageAndCodeOutOfRange()
 	{
 		$api_code = $this->max_allowed_code + 1;    // invalid
-		$this->callMakeMethod($api_code, 'message');
+		$this->callMakeMethod(true, $api_code, 'message');
 	}
 
+
+	/**
+	 * Checks make() handling invalid type of api_code argument
+	 *
+	 * @return void
+	 *
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testMake_ApiCodeNotIntNorString()
+	{
+		$this->callMakeMethod(true, ApiCodeBase::OK, []);
+	}
+
+
+	/**
+	 * Validates handling of wrong data type by getClassesMapping()
+	 *
+	 * @return void
+	 *
+	 * @expectedException \RuntimeException
+	 */
+	public function testGetClassesMapping_WrongType()
+	{
+		\Config::set('response_builder.classes', false);
+
+		$obj = new ResponseBuilder();
+		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');
+		$method->invokeArgs($obj, []);
+
+	}
 }

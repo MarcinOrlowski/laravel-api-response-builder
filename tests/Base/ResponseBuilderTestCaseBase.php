@@ -50,6 +50,19 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	/** @var array */
 	protected $error_message_map = [];
 
+	/**
+	 * Localization key assigned to randomly choosen api_code
+	 *
+	 * @var string
+	 */
+	protected $random_api_code_message_key;
+
+	/**
+	 * Rendered value of final api code related message (with substitution)
+	 *
+	 * @var string
+	 */
+	protected $random_api_code_message;
 
 	/**
 	 * Sets up testing environment
@@ -72,9 +85,16 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		/** @noinspection RandomApiMigrationInspection */
 		$this->random_api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
-		// AND corresponding mapped message string
+		// AND corresponding mapped message mapping
+		$map = $this->getProtectedMember(ApiCodeBase::class, 'base_map');
+		$idx = mt_rand(1, count($map));
+
+		$this->random_api_code_message_key = $map[array_keys($map)[$idx-1]];
+		$this->random_api_code_message = \Lang::get($this->random_api_code_message_key, [
+			'api_code' => $this->random_api_code,
+		]);
 		$this->error_message_map = [
-			$this->random_api_code => $this->getRandomString('setup_msg'),
+			$this->random_api_code => $this->random_api_code_message_key,
 		];
 		\Config::set('response_builder.map', $this->error_message_map);
 	}
@@ -103,26 +123,40 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 *
 	 * NOTE: content of `data` node is NOT checked here!
 	 *
-	 * @param int|null $expected_code expected api code to be returned
-	 * @param int      $http_code     HTTP return code to check against
+	 * @param int|null    $expected_api_code  expected api code to be returned or @null for default
+	 * @param int|null    $expected_http_code HTTP return code to check against or @null for default
+	 * @param string|null $expected_message   Expected value of 'message' or @null for default message
 	 *
 	 * @return StdClass validated response object data (as object, not array)
 	 *
 	 */
-	public function getResponseSuccessObject($expected_code = null,
-	                                         $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK)
+	public function getResponseSuccessObject($expected_api_code = null,
+	                                         $expected_http_code = null,
+	                                         $expected_message = null)
 	{
-		if ($expected_code === null) {
+		if ($expected_api_code === null) {
 			/** @var ApiCodeBase $api_codes */
 			$api_codes = $this->getApiCodesClassName();
-			$expected_code = $api_codes::OK;
+			$expected_api_code = $api_codes::OK;
 		}
 
-		if (($http_code < 200) || ($http_code > 299)) {
-			$this->fail("TEST: Success HTTP code ($http_code) in not in range: 200-299.");
+		if ($expected_http_code === null) {
+			$expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK;
 		}
 
-		$j = $this->getResponseObjectRaw($expected_code, $http_code);
+		if (($expected_http_code < 200) || ($expected_http_code > 299)) {
+			$this->fail("TEST: Success HTTP code ($expected_http_code) in not in range: 200-299.");
+		}
+
+		if ($expected_message === null) {
+			$key = ApiCodeBase::getMapping($expected_api_code);
+			if ($key === null) {
+				$key = ApiCodeBase::getMapping(ApiCodeBase::OK);
+			}
+			$expected_message = \Lang::get($key, ['api_code' => $expected_api_code]);
+		}
+
+		$j = $this->getResponseObjectRaw($expected_api_code, $expected_http_code, $expected_message);
 		$this->assertEquals(true, $j->success);
 
 		return $j;
@@ -176,10 +210,13 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		$j = json_decode($this->response->getContent());
 		$this->validateResponseStructure($j);
 
+		$this->assertEquals($expected_api_code, $j->code);
+
 		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
-		$this->assertEquals($expected_api_code, $j->code);
-		$expected_message_string = ($expected_message === null) ? \Lang::get($api_codes_class_name::getMapping($expected_api_code)) : $expected_message;
+		$expected_message_string = ($expected_message === null)
+			? \Lang::get($api_codes_class_name::getMapping($expected_api_code), ['api_code' => $expected_api_code])
+			: $expected_message;
 		$this->assertEquals($expected_message_string, $j->message);
 
 		return $j;
@@ -248,22 +285,29 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	/**
 	 * Calls protected method make()
 	 *
-	 * @param int        $api_code
-	 * @param string|int $message_or_api_code
-	 * @param array|null $headers
+	 * @param boolean    $success             @true if response should indicate success, @false otherwise
+	 * @param int        $api_code            API code to return
+	 * @param string|int $message_or_api_code Resolvable Api code or message string
+	 * @param array|null $headers             HTTP headers to include
 	 *
 	 * @return void
 	 */
-	protected function callMakeMethod($api_code, $message_or_api_code, array $headers = null)
+	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $headers = null)
 	{
+		if (!is_bool($success)) {
+			$this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));
+		}
+
+
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'make');
 
-		$http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK;
+		$http_code = null;
 		$lang_args = null;
 		$data = null;
 
-		$this->response = $method->invokeArgs($obj, [$api_code,
+		$this->response = $method->invokeArgs($obj, [$success,
+		                                             $api_code,
 		                                             $message_or_api_code,
 		                                             $data,
 		                                             $http_code,
