@@ -33,7 +33,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 		// THEN returned message contains given error code and mapped message
 		$j = $this->getResponseErrorObject($api_code);
-		$this->assertEquals($this->error_message_map[ $api_code ], $j->message);
+		$this->assertEquals($this->random_api_code_message, $j->message);
 
 		// AND no data
 		$this->assertNull($j->data);
@@ -64,7 +64,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 
 			// THEN returned message contains given error code and mapped message
 			$j = $this->getResponseErrorObject($api_code, $http_code);
-			$this->assertEquals($this->error_message_map[ $api_code ], $j->message);
+			$this->assertEquals($this->random_api_code_message, $j->message);
 
 			// AND passed data
 			$this->assertEquals((object)$data, $j->data);

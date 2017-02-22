@@ -50,6 +50,19 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	/** @var array */
 	protected $error_message_map = [];
 
+	/**
+	 * Localization key assigned to randomly choosen api_code
+	 *
+	 * @var string
+	 */
+	protected $random_api_code_message_key;
+
+	/**
+	 * Rendered value of final api code related message (with substitution)
+	 *
+	 * @var string
+	 */
+	protected $random_api_code_message;
 
 	/**
 	 * Sets up testing environment
@@ -72,9 +85,16 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		/** @noinspection RandomApiMigrationInspection */
 		$this->random_api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
-		// AND corresponding mapped message string
+		// AND corresponding mapped message mapping
+		$map = $this->getProtectedMember(ApiCodeBase::class, 'base_map');
+		$idx = mt_rand(1, $this->count($map));
+
+		$this->random_api_code_message_key = $map[array_keys($map)[$idx]];
+		$this->random_api_code_message = \Lang::get($this->random_api_code_message_key, [
+			'api_code' => $this->random_api_code,
+		]);
 		$this->error_message_map = [
-			$this->random_api_code => $this->getRandomString('setup_msg'),
+			$this->random_api_code => $this->random_api_code_message_key,
 		];
 		\Config::set('response_builder.map', $this->error_message_map);
 	}
@@ -133,7 +153,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 			if ($key === null) {
 				$key = ApiCodeBase::getMapping(ApiCodeBase::OK);
 			}
-			$expected_message = \Lang::get($key);
+			$expected_message = \Lang::get($key, ['api_code' => $expected_api_code]);
 		}
 
 		$j = $this->getResponseObjectRaw($expected_api_code, $expected_http_code, $expected_message);
@@ -190,9 +210,10 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		$j = json_decode($this->response->getContent());
 		$this->validateResponseStructure($j);
 
+		$this->assertEquals($expected_api_code, $j->code);
+
 		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
-		$this->assertEquals($expected_api_code, $j->code);
 		$expected_message_string = ($expected_message === null)
 			? \Lang::get($api_codes_class_name::getMapping($expected_api_code), ['api_code' => $expected_api_code])
 			: $expected_message;

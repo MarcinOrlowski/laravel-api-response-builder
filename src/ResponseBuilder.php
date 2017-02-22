@@ -360,7 +360,7 @@ class ResponseBuilder
 	protected static function make($success, $api_code, $message_or_api_code, $data, $http_code, array $lang_args = null, array $headers = null)
 	{
 		if ($lang_args === null) {
-			$lang_args = [];
+			$lang_args = ['api_code' => $message_or_api_code];
 		}
 		if ($headers === null) {
 			$headers = [];
@@ -383,9 +383,6 @@ class ResponseBuilder
 						? ApiCodeBase::OK
 						: ApiCodeBase::NO_ERROR_MESSAGE
 				);
-				$lang_args = [
-					'error_code' => $message_or_api_code,
-					'api_code'   => $message_or_api_code];
 			}
 			$message_or_api_code = \Lang::get($key, $lang_args);
 		} else {
