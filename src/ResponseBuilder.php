@@ -379,7 +379,7 @@ class ResponseBuilder
 			$key = ApiCodeBase::getMapping($message_or_api_code);
 			if ($key === null) {
 				// no, get the default one instead
-				$key = ApiCodeBase::getMapping(($success)
+				$key = ApiCodeBase::getMapping($success
 						? ApiCodeBase::OK
 						: ApiCodeBase::NO_ERROR_MESSAGE
 				);
