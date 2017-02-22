@@ -13,9 +13,11 @@ nice, normalized and easy to consume REST API responses.
 
 ### v3.0 ###
 
- * Signature of `success()` changed as now it allows custom `api_code` to be returned along with the response order
- of method arguments has changed. In majority of cases this is not a problem but if you are returning custom 
- `http_code` or passing `lang_args` then you need to fix your code to work with this version.
+ * `success()` changed to allow returning custom `api_code` with response, therefore signature of this method
+  (and argument order) is different which makes it **partially** incompatible. In majority of uses this is not
+  a problem but if you were calling `success()` passing `http_code` or `lang_args` to it, then you need to 
+  update your code to work properly with 3.0.0. But if you were just calling `success()` or `success($data)` 
+  (which is 99,9% of use cases) then you are all fine and no change is needed. 
  
 ### v2.x ###
 

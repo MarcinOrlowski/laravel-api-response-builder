@@ -3,8 +3,9 @@
 ## CHANGE LOG ##
 
 * dev
-   * `success()` method signature changed and is **NOT backward compatible**. See [copatibility docs](docs/compatibility.md) for details.
-   * Corrected default config file having `use` entries
+   * **NOT BACKWARD COMPATIBLE!**. See [copatibility docs](docs/compatibility.md) for details!
+   * [RB-17] `success()` now allows to return api code as well
+   * Corrected default config file containing faulty and unneeded `use` entries
    * [RB-20] Renamed ErrorCode to ApiCodeBase
    * ApiCodeBase's `getMinCode()` and `getMaxCode()` are now `public`
    * Improved error messages to be even more informative
