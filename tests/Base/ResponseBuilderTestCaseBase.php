@@ -89,7 +89,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		$map = $this->getProtectedMember(ApiCodeBase::class, 'base_map');
 		$idx = mt_rand(1, count($map));
 
-		$this->random_api_code_message_key = $map[array_keys($map)[$idx]];
+		$this->random_api_code_message_key = $map[array_keys($map)[$idx-1]];
 		$this->random_api_code_message = \Lang::get($this->random_api_code_message_key, [
 			'api_code' => $this->random_api_code,
 		]);
