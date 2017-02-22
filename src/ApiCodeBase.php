@@ -168,7 +168,9 @@ class ApiCodeBase
 	public static function getBaseMapping($code)
 	{
 		if (($code < ApiCodeBase::RESERVED_MIN_API_CODE) || ($code > ApiCodeBase::RESERVED_MAX_API_CODE)) {
-			throw new \InvalidArgumentException("Base message code {$code} is out of allowed reserved range");
+			throw new \InvalidArgumentException(
+				sprintf('Base code value (%d) is out of allowed reserved range %d-%d',
+					$code, ApiCodeBase::RESERVED_MIN_API_CODE, ApiCodeBase::RESERVED_MAX_API_CODE));
 		}
 
 		return array_key_exists($code, static::$base_map) ? static::$base_map[ $code ] : null;
@@ -187,8 +189,8 @@ class ApiCodeBase
 	public static function getMapping($code)
 	{
 		if (!static::isCodeValid($code)) {
-			$msg = sprintf("API code value ({$code}) is out of allowed range %d-%d",
-				static::getMinCode(), static::getMaxCode());
+			$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
+				$code, static::getMinCode(), static::getMaxCode());
 			throw new \InvalidArgumentException($msg);
 		}
 
