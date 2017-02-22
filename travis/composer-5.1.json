@@ -15,8 +15,8 @@
     }
   },
   "require-dev": {
-    "orchestra/testbench": "~3.1.0",
-    "laravel/framework": "~5.1.49",
+    "orchestra/testbench": "3.1.*",
+    "laravel/framework": "5.1.*",
     "phpunit/php-code-coverage": "~2.2.4",
     "codacy/coverage": "~1.0"
   }
