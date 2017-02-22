@@ -103,15 +103,16 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 *
 	 * NOTE: content of `data` node is NOT checked here!
 	 *
-	 * @param int|null $expected_api_code  expected api code to be returned
-	 * @param int      $expected_http_code HTTP return code to check against
+	 * @param int|null    $expected_api_code  expected api code to be returned or @null for default
+	 * @param int|null    $expected_http_code HTTP return code to check against or @null for default
+	 * @param string|null $expected_message   Expected value of 'message' or @null for default message
 	 *
 	 * @return StdClass validated response object data (as object, not array)
 	 *
 	 */
 	public function getResponseSuccessObject($expected_api_code = null,
-	                                         $expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK,
-	                                         $message = null)
+	                                         $expected_http_code = null,
+	                                         $expected_message = null)
 	{
 		if ($expected_api_code === null) {
 			/** @var ApiCodeBase $api_codes */
@@ -119,19 +120,23 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 			$expected_api_code = $api_codes::OK;
 		}
 
+		if ($expected_http_code === null) {
+			$expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK;
+		}
+
 		if (($expected_http_code < 200) || ($expected_http_code > 299)) {
 			$this->fail("TEST: Success HTTP code ($expected_http_code) in not in range: 200-299.");
 		}
 
-		if ($message === null) {
+		if ($expected_message === null) {
 			$key = ApiCodeBase::getMapping($expected_api_code);
 			if ($key === null) {
 				$key = ApiCodeBase::getMapping(ApiCodeBase::OK);
 			}
-			$message = \Lang::get($key);
+			$expected_message = \Lang::get($key);
 		}
 
-		$j = $this->getResponseObjectRaw($expected_api_code, $expected_http_code, $message);
+		$j = $this->getResponseObjectRaw($expected_api_code, $expected_http_code, $expected_message);
 		$this->assertEquals(true, $j->success);
 
 		return $j;

@@ -37,7 +37,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	 *
 	 * @return void
 	 */
-	public function testSuccess_ApiCodeNoCustomMessage()
+	public function testSuccess_ApiCode_NoCustomMessage()
 	{
 		\Config::set('response_builder.map', []);
 		$api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
@@ -49,7 +49,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 	/**
-	 * Tests success() with custom API code and custom message
+	 * Tests success() with custom API code and no custom message mapping
 	 *
 	 * @return void
 	 */
@@ -57,6 +57,30 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	{
 		$this->response = ResponseBuilder::success(null, $this->random_api_code);
 		$j = $this->getResponseSuccessObject($this->random_api_code);
+
+		$this->assertNull($j->data);
+	}
+
+
+	/**
+	 * Tests success() with custom API code and custom message
+	 *
+	 * @return void
+	 */
+	public function testSuccess_ApiCode_CustomMessageLang()
+	{
+		// for simplicity let's reuse existing message that is using placeholder
+		\Config::set('response_builder.map', [
+			$this->random_api_code => ApiCodeBase::getMapping(ApiCodeBase::NO_ERROR_MESSAGE)
+		]);
+
+		$lang_args = [
+			'api_code' => $this->getRandomString('foo'),
+		];
+
+		$this->response = ResponseBuilder::success(null, $this->random_api_code, $lang_args);
+		$expected_message = \Lang::get(ApiCodeBase::getMapping($this->random_api_code), $lang_args);
+		$j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
 
 		$this->assertNull($j->data);
 	}
@@ -118,7 +142,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccessErrorCodeMustBeInt()
+	public function testSuccess_ApiCodeMustBeInt()
 	{
 		ResponseBuilder::success(null, 'foo');
 	}
@@ -130,7 +154,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testSuccess_HttpCodeNull()
 	{
-		$this->response = ResponseBuilder::successWithHttpCode(null);
+		ResponseBuilder::successWithHttpCode(null);
 	}
 
 	/**
