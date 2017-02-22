@@ -50,7 +50,7 @@ class ResponseBuilder
 
 		if ($classes !== null) {
 			if (!is_array($classes)) {
-				throw new \RuntimeException('"classes" mapping must be an array in your config/response_builder.php file');
+				throw new \RuntimeException(sprintf('CONFIG: "classes" mapping must be an array (\'%s\' given)', gettype($classes)));
 			}
 
 			$mandatory_keys = ['key',
@@ -59,7 +59,7 @@ class ResponseBuilder
 			foreach ($classes as $class_name => $class_config) {
 				foreach ($mandatory_keys as $key_name) {
 					if (!array_key_exists($key_name, $class_config)) {
-						throw new \RuntimeException('Missing "{$key_name}" for "{$class_name}" mapping');
+						throw new \RuntimeException('CONFIG: Missing "{$key_name}" for "{$class_name}" mapping');
 					}
 				}
 			}

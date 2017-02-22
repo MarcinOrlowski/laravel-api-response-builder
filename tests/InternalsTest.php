@@ -2,6 +2,7 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
  * Laravel API Response Builder
@@ -65,4 +66,21 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 		$this->callMakeMethod(true, ApiCodeBase::OK, []);
 	}
 
+
+	/**
+	 * Validates handling of wrong data type by getClassesMapping()
+	 *
+	 * @return void
+	 *
+	 * @expectedException \RuntimeException
+	 */
+	public function testGetClassesMapping_WrongType()
+	{
+		\Config::set('response_builder.classes', false);
+
+		$obj = new ResponseBuilder();
+		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');
+		$method->invokeArgs($obj, []);
+
+	}
 }
