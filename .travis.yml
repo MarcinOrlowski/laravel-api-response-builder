@@ -37,7 +37,8 @@ directories:
   - ${HOME}/.composer/cache/files
 
 before_script:
-#  - if [ $TRAVIS_PHP_VERSION != hhvm ] ; then phpenv config-rm xdebug.ini ; fi
+#   Disable coverage (hhvm does not feature xdebug)
+  - if [ $TRAVIS_PHP_VERSION != hhvm ] ; then phpenv config-rm xdebug.ini ; fi
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
   - FLAGS="--prefer-dist"
   - composer install ${FLAGS}
@@ -45,5 +46,6 @@ before_script:
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
 
-#after_success:
-#  - vendor/bin/codacycoverage clover /tmp/coverage.xml
+after_success:
+#   IF coverage file is generated then upload it to Codacy
+  - if [ -f /tmp/coverage.xml ] ; then vendor/bin/codacycoverage clover /tmp/coverage.xml ; fi
