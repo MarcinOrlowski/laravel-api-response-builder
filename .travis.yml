@@ -33,6 +33,9 @@ matrix:
     - php: 5.5
       env: LARAVEL_VERSION="5.4"
 
+directories:
+  - ${HOME}/.composer/cache/files
+
 before_script:
 #  - if [ $TRAVIS_PHP_VERSION != hhvm ] ; then phpenv config-rm xdebug.ini ; fi
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
