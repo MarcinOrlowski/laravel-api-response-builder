@@ -20,6 +20,19 @@ php:
   - 7.1
   - hhvm
 
+env:
+  - LARAVEL_VERSION="5.1"
+  - LARAVEL_VERSION="5.2"
+  - LARAVEL_VERSION="5.3"
+  - LARAVEL_VERSION="5.4"
+
+matrix:
+  exclude:
+    - php: 5.5
+      env: LARAVEL_VERSION="5.3"
+    - php: 5.5
+      env: LARAVEL_VERSION="5.4"
+
 before_script:
 #  - phpenv config-rm xdebug.ini
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
@@ -31,4 +44,3 @@ script:
 
 after_success:
   - vendor/bin/codacycoverage clover /tmp/coverage.xml
-

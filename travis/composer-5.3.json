@@ -1,0 +1,23 @@
+{
+  "name": "marcin-orlowski/laravel-api-response-builder",
+  "require": {
+    "php": ">=5.6.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "MarcinOrlowski\\ResponseBuilder\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MarcinOrlowski\\ResponseBuilder\\": "src",
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests"
+    }
+  },
+  "require-dev": {
+    "orchestra/testbench": "3.3.*",
+    "laravel/framework": "5.3.*",
+    "phpunit/php-code-coverage": "~3.3.3",
+    "codacy/coverage": "~1.0"
+  }
+}
