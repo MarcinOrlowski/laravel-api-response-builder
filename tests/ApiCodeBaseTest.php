@@ -3,8 +3,6 @@
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
  * Laravel API Response Builder

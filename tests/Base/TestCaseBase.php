@@ -13,10 +13,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
 /**
  * Class TestCaseBase
  */

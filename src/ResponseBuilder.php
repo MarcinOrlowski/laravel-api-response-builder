@@ -314,6 +314,8 @@ class ResponseBuilder
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 * @throws \InvalidArgumentException Thrown if $code is not correct, outside the range, equals OK code etc.
+	 *
+	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
 	protected static function buildErrorResponse($data, $api_code, $http_code, $lang_args = null, $message = null, $headers = null)
 	{
@@ -356,8 +358,11 @@ class ResponseBuilder
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 * @throws \InvalidArgumentException If code is neither a string nor integer.
+	 *
+	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
-	protected static function make($success, $api_code, $message_or_api_code, $data = null, $http_code = null, array $lang_args = null, array $headers = null)
+	protected static function make($success, $api_code, $message_or_api_code, $data = null,
+	                               $http_code = null, array $lang_args = null, array $headers = null)
 	{
 		if ($lang_args === null) {
 			$lang_args = ['api_code' => $message_or_api_code];
@@ -366,7 +371,9 @@ class ResponseBuilder
 			$headers = [];
 		}
 		if ($http_code === null) {
-			$http_code = ($success) ? static::DEFAULT_HTTP_CODE_OK : static::DEFAULT_HTTP_CODE_ERROR;
+			$http_code = $success
+				? static::DEFAULT_HTTP_CODE_OK
+				: static::DEFAULT_HTTP_CODE_ERROR;
 		}
 
 		// are we given message text already?

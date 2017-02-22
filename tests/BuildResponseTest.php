@@ -138,6 +138,7 @@ class BuildResponseTest extends Base\ResponseBuilderTestCaseBase
 	public function testMake_CustomMessageAndWrongCode()
 	{
 		$api_code = [];    // invalid
+		/** @noinspection PhpParamsInspection */
 		$this->callMakeMethod(true, $api_code, 'message');
 	}
 

@@ -44,13 +44,8 @@ class ExceptionHandlerHelper
 					break;
 
 				default:
-					$msg = trim($exception->getMessage());
-					if ($msg === '') {
-						$msg = 'Exception code #' . $exception->getStatusCode();
-					}
-
 					$result = static::error($exception, 'http_exception', ApiCodeBase::EX_HTTP_EXCEPTION,
-						HttpResponse::HTTP_BAD_REQUEST, ['message' => $msg]);
+						HttpResponse::HTTP_BAD_REQUEST);
 					break;
 			}
 		} else {

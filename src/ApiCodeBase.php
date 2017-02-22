@@ -157,6 +157,7 @@ class ApiCodeBase
 			throw new \RuntimeException('CONFIG: "map" must be an array');
 		}
 
+		/** @noinspection AdditionOperationOnArraysInspection */
 		return $map + static::$base_map;
 	}
 

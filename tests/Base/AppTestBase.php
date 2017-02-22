@@ -144,7 +144,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 			$this->fail('Failed to find unused error code value (within declared range) to perform this test');
 		}
 
-		$this->callMakeMethod($message_or_api_code, $message_or_api_code);
+		$this->callMakeMethod(true, $message_or_api_code, $message_or_api_code);
 
 		$json_object = json_decode($this->response->getContent());
 		$this->assertTrue(is_object($json_object));
