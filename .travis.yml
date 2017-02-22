@@ -42,5 +42,5 @@ before_script:
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
 
-after_success:
-  - vendor/bin/codacycoverage clover /tmp/coverage.xml
+#after_success:
+#  - vendor/bin/codacycoverage clover /tmp/coverage.xml
