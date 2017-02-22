@@ -173,7 +173,9 @@ class ApiCodeBase
 					$code, ApiCodeBase::RESERVED_MIN_API_CODE, ApiCodeBase::RESERVED_MAX_API_CODE));
 		}
 
-		return array_key_exists($code, static::$base_map) ? static::$base_map[ $code ] : null;
+		return array_key_exists($code, static::$base_map)
+			? static::$base_map[ $code ]
+			: null;
 	}
 
 
