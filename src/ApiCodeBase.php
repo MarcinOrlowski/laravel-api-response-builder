@@ -157,9 +157,9 @@ class ApiCodeBase
 	}
 
 	/**
-	 * Returns locale mappings for given base error code or null if there's no mapping
+	 * Returns locale mappings for given base error code or @null if there's no mapping
 	 *
-	 * @param integer $code Base (built-in) code to look for string mapping for.
+	 * @param integer $code Base (built-in) code to look for mapped message for.
 	 *
 	 * @return string|null
 	 *
@@ -178,25 +178,25 @@ class ApiCodeBase
 
 
 	/**
-	 * Returns locale mappings for given error code or null if there's no mapping
+	 * Returns locale mappings for given error code or @null if there's no mapping
 	 *
-	 * @param integer $code Code to look for string mapping for.
+	 * @param integer $api_code Api code to look for mapped message for.
 	 *
 	 * @return string|null
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed range.
 	 */
-	public static function getMapping($code)
+	public static function getMapping($api_code)
 	{
-		if (!static::isCodeValid($code)) {
+		if (!static::isCodeValid($api_code)) {
 			$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
-				$code, static::getMinCode(), static::getMaxCode());
+				$api_code, static::getMinCode(), static::getMaxCode());
 			throw new \InvalidArgumentException($msg);
 		}
 
 		$map = static::getMap();
 
-		return array_key_exists($code, $map) ? $map[ $code ] : null;
+		return array_key_exists($api_code, $map) ? $map[ $api_code ] : null;
 	}
 
 	/**
