@@ -101,7 +101,7 @@ class ApiCodeBase
 		$max_code = Config::get('response_builder.max_code', null);
 
 		if ($max_code === null) {
-			throw new \RuntimeException('CONFIG: Missing "min_code" key');
+			throw new \RuntimeException('CONFIG: Missing "max_code" key');
 		}
 
 		return $max_code;
