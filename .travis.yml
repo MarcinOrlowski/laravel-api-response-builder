@@ -35,7 +35,7 @@ matrix:
     - php: 5.5
       env: LARAVEL_VERSION="5.4"
 
-#before_script:
+before_script:
 ##  - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
 #  - phpenv config-rm xdebug.ini
   - flags="--prefer-dist"
