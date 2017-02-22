@@ -100,7 +100,7 @@ class ResponseBuilder
 	 *
 	 * @param boolean $success  @true if reposnse indicates success, @false otherwise
 	 * @param integer $api_code response code
-	 * @param string  $message  error message or 'OK'
+	 * @param string  $message  message to return
 	 * @param mixed   $data     API response data if any
 	 *
 	 * @return array response ready to be encoded as json and sent back to client
@@ -348,12 +348,12 @@ class ResponseBuilder
 
 	/**
 	 * @param boolean        $success             @true if reponse indicate success, @false otherwise
-	 * @param integer        $api_code            internal message code (usually 0 for OK, and unique integer for errors)
-	 * @param string|integer $message_or_api_code error message string or API code
+	 * @param integer        $api_code            internal code you want to return with the message
+	 * @param string|integer $message_or_api_code message string or API code
 	 * @param mixed|null     $data                optional additional data to be included in response object
 	 * @param integer|null   $http_code           return HTTP code for build Response object
 	 * @param array          $lang_args           |null optional array with arguments passed to Lang::get()
-	 * @param array          $headers             |null optional HTTP headers to be returned in error response
+	 * @param array          $headers             |null optional HTTP headers to be returned in the response
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *

@@ -7,7 +7,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 ## CHANGE LOG ##
 
 * dev
-   * **PARTIAL BACKWARD INCOMPATIBILITY**
+   * **BACKWARD INCOMPATIBILE CHANGES**
    * [RB-17] `success()` now allows to return api code as well
    * Corrected default config file containing faulty and unneeded `use` entries
    * [RB-20] Renamed ErrorCode to ApiCodeBase
@@ -17,7 +17,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Renamed error_code param to api_code in all method signatures
    * `:api_code` is now code placeholder in strings (`:error_code` is still supported for compatibility, but obsolete)
    * Default HTTP codes are now declared as constants `DEFAULT_HTTP_CODE_xxx` if you need to know them
-   * ApiCodeBase::getMap() now ensures `map` config entry of expected `array` type
+   * `ApiCodeBase::getMap()` now ensures `map` config entry of expected `array` type
 
 * v2.2.1 (2017-02-20)
    * Documentation split into separate files

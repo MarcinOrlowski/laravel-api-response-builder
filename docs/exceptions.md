@@ -39,11 +39,11 @@ returned by your API instead of HTML page.
 ## Error codes ##
 
 Since v1.6, ExceptionHandlerHelper can be used out of the box as it requires no extra configuration,
-however it's strongly recommended you at least assign your own error codes for the events it handles,
+however it's strongly recommended you at least assign your own api codes for the events it handles,
 so you will know what module in your code thrown the exception. For consistency I recommend
 doing so even if you have just one module and do not chain APIs.
 
-First edit your `ErrorCode` class (that one which stores your error codes) and define
+First edit your `ApiCodes` class (that one which stores your api code constants) and define
 four codes **within your allowed code range** (constants can be named as you like), representing
 errors ExceptionHandlerHelper handles:
 
@@ -115,7 +115,7 @@ and add appropriate entry to `map` array:
 
 where `api.xxxx` entry must be valid localization string key from your app's localization strings
 pool as per Lang's requirements. You can use placeholders in your messages. Supported are 
-`:api_code` being substituted by actual error code assigned to this exception and `:message`
+`:api_code` being substituted by actual code assigned to this exception and `:message`
 replaced by exception's `getMessage()` return value.
 
 ## Exceptions with messages ##
