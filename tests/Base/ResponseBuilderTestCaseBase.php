@@ -302,11 +302,12 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'make');
 
-		$http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK;
+		$http_code = null;
 		$lang_args = null;
 		$data = null;
 
-		$this->response = $method->invokeArgs($obj, [$api_code,
+		$this->response = $method->invokeArgs($obj, [$success,
+		                                             $api_code,
 		                                             $message_or_api_code,
 		                                             $data,
 		                                             $http_code,

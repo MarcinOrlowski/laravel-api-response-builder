@@ -1,6 +1,7 @@
 <?php
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
+use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 
 /**
  * Laravel API Response Builder
@@ -49,6 +50,19 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	{
 		$api_code = $this->max_allowed_code + 1;    // invalid
 		$this->callMakeMethod(true, $api_code, 'message');
+	}
+
+
+	/**
+	 * Checks make() handling invalid type of api_code argument
+	 *
+	 * @return void
+	 *
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testMake_ApiCodeNotIntNorString()
+	{
+		$this->callMakeMethod(true, ApiCodeBase::OK, []);
 	}
 
 }

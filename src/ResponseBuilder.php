@@ -349,7 +349,7 @@ class ResponseBuilder
 	 * @param integer        $api_code            internal message code (usually 0 for OK, and unique integer for errors)
 	 * @param string|integer $message_or_api_code error message string or API code
 	 * @param mixed|null     $data                optional additional data to be included in response object
-	 * @param integer        $http_code           return HTTP code for build Response object
+	 * @param integer|null   $http_code           return HTTP code for build Response object
 	 * @param array          $lang_args           |null optional array with arguments passed to Lang::get()
 	 * @param array          $headers             |null optional HTTP headers to be returned in error response
 	 *
@@ -357,13 +357,16 @@ class ResponseBuilder
 	 *
 	 * @throws \InvalidArgumentException If code is neither a string nor integer.
 	 */
-	protected static function make($success, $api_code, $message_or_api_code, $data, $http_code, array $lang_args = null, array $headers = null)
+	protected static function make($success, $api_code, $message_or_api_code, $data = null, $http_code = null, array $lang_args = null, array $headers = null)
 	{
 		if ($lang_args === null) {
 			$lang_args = ['api_code' => $message_or_api_code];
 		}
 		if ($headers === null) {
 			$headers = [];
+		}
+		if ($http_code === null) {
+			$http_code = ($success) ? static::DEFAULT_HTTP_CODE_OK : static::DEFAULT_HTTP_CODE_ERROR;
 		}
 
 		// are we given message text already?
