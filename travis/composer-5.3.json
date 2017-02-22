@@ -17,8 +17,8 @@
   "require-dev": {
     "orchestra/testbench": "3.3.*",
     "laravel/framework": "5.3.*",
-    "phpunit/php-code-coverage": "^4.0.4",
     "codacy/coverage": "~1.0",
-    "phpunit/phpunit": "~4.8 || ~5.0"
+    "phpunit/phpunit": "~4.8 || ~5.0",
+    "phpunit/php-code-coverage": "^4.0.4"
   }
 }
