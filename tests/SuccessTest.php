@@ -33,24 +33,34 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 	/**
-	 * Tests success() with custom API code
+	 * Tests success() with custom API code no custom message
 	 *
 	 * @return void
 	 */
-	public function testSuccess_ApiCode()
+	public function testSuccess_ApiCodeNoCustomMessage()
 	{
-		for ($i=0; $i<20; $i++) {
-			$api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
+		\Config::set('response_builder.map', []);
+		$api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
-			$this->response = ResponseBuilder::success(null, $api_code);
-			$j = $this->getResponseSuccessObject($api_code);
+		$this->response = ResponseBuilder::success(null, $api_code);
+		$j = $this->getResponseSuccessObject($api_code);
 
-			$this->assertNull($j->data);
-			$this->assertEquals($api_code, $j->code);
-			$this->assertEquals(\Lang::get(ApiCodeBase::getMapping(ApiCodeBase::OK)), $j->message);
-		}
-
+		$this->assertNull($j->data);
 	}
+
+	/**
+	 * Tests success() with custom API code and custom message
+	 *
+	 * @return void
+	 */
+	public function testSuccess_ApiCode_CustomMessage()
+	{
+		$this->response = ResponseBuilder::success(null, $this->random_api_code);
+		$j = $this->getResponseSuccessObject($this->random_api_code);
+
+		$this->assertNull($j->data);
+	}
+
 
 	/**
 	 * Checks success() with valid payload and HTTP code

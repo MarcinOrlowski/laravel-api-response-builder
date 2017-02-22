@@ -378,16 +378,14 @@ class ResponseBuilder
 			// do we have the mapping for this string already?
 			$key = ApiCodeBase::getMapping($message_or_api_code);
 			if ($key === null) {
-				if ($success) {
-					$key = ApiCodeBase::getMapping(ApiCodeBase::OK);
-				} else {
-					// no, get the default one instead
-					$key = ApiCodeBase::getMapping(ApiCodeBase::NO_ERROR_MESSAGE);
-					$lang_args = ['error_code' => $message_or_api_code,
-					              // deprecated
-					              'api_code'   => $message_or_api_code,
-					];
-				}
+				// no, get the default one instead
+				$key = ApiCodeBase::getMapping(($success)
+						? ApiCodeBase::OK
+						: ApiCodeBase::NO_ERROR_MESSAGE
+				);
+				$lang_args = [
+					'error_code' => $message_or_api_code,
+					'api_code'   => $message_or_api_code];
 			}
 			$message_or_api_code = \Lang::get($key, $lang_args);
 		} else {
