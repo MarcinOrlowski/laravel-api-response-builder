@@ -40,6 +40,8 @@ before_script:
 #  - phpenv config-rm xdebug.ini
   - flags="--prefer-dist"
   - COMPOSER="travis/composer-${LARAVEL_VERSION}.json"
+  - echo $COMPOSER
+  - cp -vf $COMPOSER composer.json
   - composer install $flags
 
 # omitting "script:" will default to phpunit
