@@ -16,7 +16,7 @@ language: php
 php:
 #  - 5.5
   - 5.6
-  - 7.0
+#  - 7.0
 #  - 7.1
 #  - hhvm
 
@@ -40,7 +40,7 @@ before_script:
   - composer install ${FLAGS}
 
 script:
-  - phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
+  - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
 
 after_success:
   - vendor/bin/codacycoverage clover /tmp/coverage.xml
