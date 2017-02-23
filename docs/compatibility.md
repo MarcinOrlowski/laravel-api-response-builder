@@ -2,8 +2,6 @@
 
  `ResponseBuilder` follows [Semantic Versioning](http://semver.org/).
 
- You need to worry about backward compatibility if you are upgrading from previous major version of the package.
-
 ### v3 ###
 
  * `success()` now accepts (optional) `api_code` too, therefore signature of this method as well as and argument
