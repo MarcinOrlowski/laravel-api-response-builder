@@ -87,6 +87,29 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 
 
 	/**
+	 * Tests successWithCode() with custom API code and custom message
+	 *
+	 * @return void
+	 */
+	public function testSuccessWithCode_ApiCode_CustomMessageLang()
+	{
+		// for simplicity let's reuse existing message that is using placeholder
+		\Config::set('response_builder.map', [
+			$this->random_api_code => ApiCodeBase::getMapping(ApiCodeBase::NO_ERROR_MESSAGE)
+		]);
+
+		$lang_args = [
+			'api_code' => $this->getRandomString('foo'),
+		];
+
+		$this->response = ResponseBuilder::successWithCode($this->random_api_code, $lang_args);
+		$expected_message = \Lang::get(ApiCodeBase::getMapping($this->random_api_code), $lang_args);
+		$j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
+
+		$this->assertNull($j->data);
+	}
+
+	/**
 	 * Checks success() with valid payload and HTTP code
 	 *
 	 * @return void

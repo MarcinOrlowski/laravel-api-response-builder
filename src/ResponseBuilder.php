@@ -145,7 +145,7 @@ class ResponseBuilder
 	 * Returns success
 	 *
 	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
-	 * @param int|null     $api_code  API code to be returned with the response or @null for default value
+	 * @param integer|null $api_code  API code to be returned with the response or @null for default value
 	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
 	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
 	 *
@@ -158,6 +158,20 @@ class ResponseBuilder
 		}
 
 		return static::buildSuccessResponse($data, $api_code, $lang_args, $http_code);
+	}
+
+	/**
+	 * Returns success
+	 *
+	 * @param integer|null $api_code  API code to be returned with the response or @null for default value
+	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
+	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public static function successWithCode($api_code, array $lang_args = null, $http_code = null)
+	{
+		return static::success(null, $api_code, $lang_args, $http_code);
 	}
 
 	/**
