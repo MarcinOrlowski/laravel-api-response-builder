@@ -1,14 +1,32 @@
 # API Response Builder for Laravel 5 #
 
+
+See [compatibility docs](docs/compatibility.md) for details about backward compatibility!
+
+
 ## CHANGE LOG ##
 
+* dev
+   * **BACKWARD INCOMPATIBILE CHANGES**
+   * [RB-17] `success()` now allows to return API code as well
+   * Corrected default config file containing faulty and unneeded `use` entries
+   * [RB-20] Renamed ErrorCode class to ApiCodeBase
+   * ApiCodeBase's `getMinCode()` and `getMaxCode()` are now `public`
+   * Improved error messages to be even more informative
+   * All exceptions thrown due to misconfiguration have `CONFIG: ` message prefix now
+   * Renamed `error_code` param to `api_code` in all the method signatures
+   * `:api_code` is now code placeholder in strings (`:error_code` is no longer supported)
+   * Default HTTP codes are now declared as constants `DEFAULT_HTTP_CODE_xxx` if you need to know them
+   * `ApiCodeBase::getMap()` now ensures `map` config entry of expected `array` type
+   * [RB-26] Added `successWithCode()` method
+
 * v2.2.1 (2017-02-20)
-   * Documentation splitted into separate files
+   * Documentation split into separate files
 
 * v2.2.0 (2017-02-20)
    * [RB-5] Fixed error code range not being checked when used with custom message strings
-   * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception if `http_code` is null
-   * http_code can be handed as null to all other methods and it will be replaced default codes
+   * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception if `http_code` is `null`
+   * `http_code` can be handed as null to all other methods and it will be replaced by default codes
    * `classes` mapping now features `method` field to specify method name to call for automatic object conversion
    * [RB-10] When $data is an array, all elements mapped via "classes" config will be converted recursively
    * [RB-3] Unit tests are now part of the package
@@ -31,7 +49,7 @@
    * Built-in localization keys changed
    * Added `errorWithMessageAndData()` method
    * ExceptionHandlerHelper adds `class`, `file` and `line` to returned JSON for apps in DEBUG mode
-   * ExceptionHandlerHelper can now use `:message`, `:error_code`, `:http_code` and `:class` placeholders
+   * ExceptionHandlerHelper can now use `:message`, `:api_code`, `:http_code` and `:class` placeholders
    * ExceptionHandlerHelper now automatically resolves message mappings and needs no config entries
    * ExceptionHandlerHelper now comes with built-in error codes (still, using own codes is recommended)
    * Added option to configure HTTP codes for each `ExceptionHandlerHelper` returned response separately

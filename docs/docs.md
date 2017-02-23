@@ -18,13 +18,13 @@ nice, normalized and easy to consume REST API responses.
  * [Overriding built-in messages](#overriding-built-in-messages)
  * [License](#license)
  * [Notes](#notes)
- * [Changelog](#changelog)
+ * [Changelog](CHANGES.md)
 
 ----
 
 ## Donations ##
 
-`ResponseBuilder` is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or commercial, however if you feel it prevent you from reinventing the whell, helped having your projects done or simply saved you time and money then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
+`ResponseBuilder` is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or commercial, however if you feel it prevent you from reinventing the wheel, helped having your projects done or simply saved you time and money then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
 
 ![BTC](http://i.imgur.com/mUe8olT.png)
 
@@ -34,7 +34,7 @@ Thanks for all the fish!
 
 ## Response structure ##
 
-Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not only when I develop the API itself, but also when I later consume its output while writting client (i.e. mobile) applications. So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of the values. Sample response:
+Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not only when I develop the API itself, but also when I later consume its output while writing client (i.e. mobile) applications. So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of the values. Sample response:
 
     {
       "success": true,
@@ -62,7 +62,7 @@ The following assumes package is properly installed and enabled. These steps are
 
 #### Success ####
 
-To report success from your API, just conclude your Controller method with simple:
+To report success from your API, just conclude your Controller method with:
 
     return ResponseBuilder::success();
 
@@ -145,23 +145,11 @@ be anything.
 #### Errors ####
 
 Returning errors is almost as simple as returning success, however you need to provide at least error
-code to `error()` method which will be then reported back to caller. To keep your source readable and clear, 
-it's strongly suggested to create separate class i.e. `app/ErrorCode.php` and put all codes you need to use
-in your code there as `const` and then reference it. This way you protect yourself from using wrong code or
-save your time in case you will need to refactor code range in future. For example, your imaginary 
-`app/ErrorCode.php` can look like this:
+code to `error()` method which will be then reported back to caller 
+(see [Installation and Configuration](#installation-and-configuration)). Indicating failure is
+as easy as:
 
-    <?php
-
-    namespace App;
-
-    class ErrorCode {
-       const SOMETHING_WENT_WRONG = 250;
-    }
-
-End then, to report failure because of `SOMETHING_WENT_WRONG`, just reference this constant:
-
-    return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG);
+    return ResponseBuilder::error(ApiCode::SOMETHING_WENT_WRONG);
 
 This will produce the following JSON response:
 
@@ -182,7 +170,7 @@ of built-in generic fallback message "Error #xxx", as shown above.
 As `ResponseBuilder` uses Laravel's `Lang` package for localisation, you can use the same features with
 your messages as you use across the whole application, including message placeholders:
 
-    return ResponseBuilder::error(ErrorCode::SOMETHING_WENT_WRONG, ['login' => $login]);
+    return ResponseBuilder::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $login]);
     
 and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be 
 correctly replaced with content of your `$login` variable.
@@ -195,15 +183,14 @@ is used as is without any further processing. If you want to use `Lang`'s placeh
 to handle them yourself by calling `Lang::get()` manually first and pass the result:
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
-    return ResponseBuilder::errorWithMessage(ErrorCode::SOMETHING_WENT_WRONG, $msg);
+    return ResponseBuilder::errorWithMessage(ApiCodeBase::SOMETHING_WENT_WRONG, $msg);
 
 ----
 
 ## Return Codes ##
 
-All return codes must be positive integer. Code `0` (zero) **ALWAYS** means **success**. All
-other codes are considered error codes.
-
+ All return codes are integers however the meaning of the code is fully up to you. The only exception
+ is `0` (zero) which **ALWAYS** means **success** (and you cannot use `0` with `error()` mehods).
 
 #### Code Ranges ####
 
@@ -236,13 +223,13 @@ add the following `use` to your code:
 
 Methods' arguments:
 
- * `$error_code` (**int**) any integer value you want to be returned in `code`,
+ * `$api_code` (**int**) any integer value you want to be returned in `code`,
  * `$data` (**mixed**|**null**) any data you want to be returned in your response as `data` node,
  * `$http_code` (**int**) valid HTTP return code (see `HttpResponse` class for useful constants),
  * `$lang_args` (**array**) array of arguments passed to `Lang::get()` while building `message`,
  * `$message` (**string**) custom message to be returned as part of error response (avoid, use error code mapping feature).
 
-Most arguments of `success()` and `error()` methods are optional, with exception for `$error_code`
+Most arguments of `success()` and `error()` methods are optional, with exception for `$api_code`
 for the latter. Helper methods arguments are partially optional - see signatures below for details.
 
 **NOTE:** `$data` can be of any type you want (i.e. `string`), however to ensure returned JSON structure 
@@ -266,7 +253,8 @@ See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for
 
 #### Reporting Success ####
 
-    success($data = null, $http_code = HttpResponse::HTTP_OK, array $lang_args = []);
+    success($data = null, $api_code = null, array $lang_args = [], $http_code = null);
+    successWithCode($api_code = null, array $lang_args = [], $http_code = null);
     successWithHttpCode($http_code);
 
 Usage restrictions:
@@ -275,15 +263,15 @@ Usage restrictions:
 
 #### Reporting Error ####
 
-    error($error_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST);
-    errorWithData($error_code, $data, array $lang_args = []);
-    errorWithDataAndHttpCode($error_code, $data, $http_code, array $lang_args = []);
-    errorWithHttpCode($error_code, $http_code, $lang_args = []);
-    errorWithMessage($error_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+    error($api_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+    errorWithData($api_code, $data, array $lang_args = []);
+    errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args = []);
+    errorWithHttpCode($api_code, $http_code, $lang_args = []);
+    errorWithMessage($api_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
 
 Usage restrictions:
 
-* `$error_code` must not be 0
+* `$api_code` must not be 0
 * `$http_code` must not be lower than 400
 
 ----
@@ -373,8 +361,8 @@ would produce the following response (contrary to the previous examples, source 
 There're no special requirements. Once you fulfill Laravel's requirements you are all good. Minimum
 versions `ResponseBuilder` is tested against are:
 
-  * PHP 5.5
-  * Laravel 5.1.45
+  * PHP 5.5+
+  * Laravel 5.1.45+
 
 all newer versions of PHP and Laravel are also supported out of the box.
 
@@ -401,6 +389,21 @@ Edit `app/config.php` and add the following line to your `providers` array:
 
     MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
 
+#### ApiCodes class ####
+
+To keep your source readable and clear, it's strongly recommended to create separate class 
+`ApiCode.php` (i.e. in `app/`) and keep all codes there as `const`. This way you protect 
+yourself from using wrong code or save your time in case you will need to refactor code 
+range in future. For example, your imaginary `app/ApiCode.php` can look like this:
+
+    <?php
+
+    namespace App;
+
+    class ApiCode {
+       const SOMETHING_WENT_WRONG = 250;
+    }
+
 
 #### ResponseBuilder Configuration ####
 
@@ -417,7 +420,7 @@ Supported configuration keys (all keys **MUST** be present in config file):
 Code to message mapping example:
 
     'map' => [
-        ErrorCode::SOMETHING => 'api.something',
+        ApiCode::SOMETHING_WENT_WRONG => 'api.something_went_wrong',
     ],
 
 If given error code is not present in `map`, `ResponseBuilder` will provide fallback message automatically 
@@ -516,7 +519,7 @@ which should then return your desired JSON structure:
 and 
 
     $data = [ 'foo'=>'bar ];
-    return MyResponseBuilder::errorWithData(ErrorCode::SOMETHING_WENT_WRONG, $data);
+    return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
 
 would produce:
 
@@ -540,15 +543,15 @@ one is used for success code `0` and another provides fallback message for codes
 any reason you want to override them, simply map these codes in your `map` config using codes from package
 reserved range:
 
-     MarcinOrlowski\ResponseBuilder\ErrorCode::OK => 'my_messages.ok',
+     MarcinOrlowski\ResponseBuilder\ApiCodeBase::OK => 'my_messages.ok',
 
 and from now on, each `success()` will be returning your message instead of built-in one.
 
 To override default error message used when given error code has no entry in `map`, add the following:
 
-     MarcinOrlowski\ResponseBuilder\ErrorCode::NO_ERROR_MESSAGE => 'my_messages.default_error_message',
+     MarcinOrlowski\ResponseBuilder\ApiCodeBase::NO_ERROR_MESSAGE => 'my_messages.default_error_message',
 
-You can use `:error_code` placeholder in the message and it will be substituted actual error code value.
+You can use `:api_code` placeholder in the message and it will be substituted actual error code value.
 
 ----
 
@@ -562,9 +565,3 @@ You can use `:error_code` placeholder in the message and it will be substituted 
 ## Notes ##
 
 * `ResponseBuilder` is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making `ResponseBuilder` usable with Lumen, speak up or (better) send pull request!
-
-----
-
-## Changelog ##
-
- See [CHANGES.md](CHANGES.md) for detailed revision history.

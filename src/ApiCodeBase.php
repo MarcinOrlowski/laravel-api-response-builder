@@ -12,22 +12,22 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Config;
+use Illuminate\Support\Facades\Config;
 
 /**
- * ErrorCode handling class
+ * ApiCode handling class
  */
-class ErrorCode
+class ApiCodeBase
 {
 	/**
 	 * protected code range - lowest code
 	 */
-	const _RESERVED_MIN_CODE = 0;
+	const RESERVED_MIN_API_CODE = 0;
 
 	/**
 	 * protected code range - highest code
 	 */
-	const _RESERVED_MAX_CODE = 63;
+	const RESERVED_MAX_API_CODE = 63;
 
 
 	/**
@@ -35,7 +35,7 @@ class ErrorCode
 	 */
 	const OK = 0;
 	/**
-	 * built-in code for faillback message mapping
+	 * built-in code for fallback message mapping
 	 */
 	const NO_ERROR_MESSAGE = 1;
 	/**
@@ -61,15 +61,13 @@ class ErrorCode
 	 * @var array built-in codes mapping
 	 */
 	protected static $base_map = [
+		self::OK               => 'response-builder::builder.ok',
+		self::NO_ERROR_MESSAGE => 'response-builder::builder.no_error_message',
 
-		self::OK                            => 'response-builder::builder.ok',
-		self::NO_ERROR_MESSAGE              => 'response-builder::builder.no_error_message',
-
-		self::EX_HTTP_NOT_FOUND             => 'response-builder::builder.http_not_found',
-		self::EX_HTTP_SERVICE_UNAVAILABLE   => 'response-builder::builder.http_service_unavailable',
-		self::EX_HTTP_EXCEPTION             => 'response-builder::builder.http_exception',
-		self::EX_UNCAUGHT_EXCEPTION         => 'response-builder::builder.uncaught_exception',
-
+		self::EX_HTTP_NOT_FOUND           => 'response-builder::builder.http_not_found',
+		self::EX_HTTP_SERVICE_UNAVAILABLE => 'response-builder::builder.http_service_unavailable',
+		self::EX_HTTP_EXCEPTION           => 'response-builder::builder.http_exception',
+		self::EX_UNCAUGHT_EXCEPTION       => 'response-builder::builder.uncaught_exception',
 	];
 
 
@@ -80,12 +78,12 @@ class ErrorCode
 	 *
 	 * @throws \RuntimeException Throws exception if no min_code set up
 	 */
-	protected static function getMinCode()
+	public static function getMinCode()
 	{
 		$min_code = Config::get('response_builder.min_code', null);
 
 		if ($min_code === null) {
-			throw new \RuntimeException('Missing min_code key in config/response_builder.php config file');
+			throw new \RuntimeException('CONFIG: Missing "min_code" key');
 		}
 
 		return $min_code;
@@ -98,12 +96,12 @@ class ErrorCode
 	 *
 	 * @throws \RuntimeException Throws exception if no max_code set up
 	 */
-	protected static function getMaxCode()
+	public static function getMaxCode()
 	{
 		$max_code = Config::get('response_builder.max_code', null);
 
 		if ($max_code === null) {
-			throw new \RuntimeException('Missing min_code key in config/response_builder.php config file');
+			throw new \RuntimeException('CONFIG: Missing "max_code" key');
 		}
 
 		return $max_code;
@@ -117,17 +115,17 @@ class ErrorCode
 	 */
 	protected static function getReservedMinCode()
 	{
-		return static::_RESERVED_MIN_CODE;
+		return static::RESERVED_MIN_API_CODE;
 	}
 
 	/**
-	 * Returns hihest possible reserved code used by predefined Response Builder's messages
+	 * Returns highest possible reserved code used by predefined Response Builder's messages
 	 *
 	 * @return integer
 	 */
 	protected static function getReservedMaxCode()
 	{
-		return static::_RESERVED_MAX_CODE;
+		return static::RESERVED_MAX_API_CODE;
 	}
 
 	/**
@@ -135,19 +133,10 @@ class ErrorCode
 	 *
 	 * @return array
 	 */
-	public static function getErrorCodeConstants()
+	public static function getApiCodeConstants()
 	{
 		$reflect = new \ReflectionClass(get_called_class());
-		$constants = $reflect->getConstants();
-
-		// filter out all internal constants (starting with underscore
-		foreach ($constants as $name => $val) {
-			if (substr($name, 0, 1) == '_') {
-				unset($constants[ $name ]);
-			}
-		}
-
-		return $constants;
+		return $reflect->getConstants();
 	}
 
 	/**
@@ -161,49 +150,60 @@ class ErrorCode
 	{
 		$map = Config::get('response_builder.map', null);
 		if ($map === null) {
-			throw new \RuntimeException('Missing "map" key in config/response_builder.php config file');
+			throw new \RuntimeException('CONFIG: Missing "map" key');
 		}
 
+		if (!is_array($map)) {
+			throw new \RuntimeException('CONFIG: "map" must be an array');
+		}
+
+		/** @noinspection AdditionOperationOnArraysInspection */
 		return $map + static::$base_map;
 	}
 
 	/**
-	 * Returns locale mappings for given base error code or null if there's no mapping
+	 * Returns locale mappings for given base api code or @null if there's no mapping
 	 *
-	 * @param integer $code Base (built-in) code to look for string mapping for.
+	 * @param integer $code Base (built-in) code to look for mapped message for.
 	 *
 	 * @return string|null
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed reserved range.
 	 */
-	public static function getBaseMapping($code)
+	public static function getReservedCodeMessageKey($code)
 	{
-		if (($code >= ErrorCode::_RESERVED_MIN_CODE) && ($code <= ErrorCode::_RESERVED_MAX_CODE)) {
-			return array_key_exists($code, static::$base_map) ? static::$base_map[ $code ] : null;
-		} else {
-			throw new \InvalidArgumentException("Base message code {$code} is out of allowed reserved range");
+		if (($code < ApiCodeBase::RESERVED_MIN_API_CODE) || ($code > ApiCodeBase::RESERVED_MAX_API_CODE)) {
+			throw new \InvalidArgumentException(
+				sprintf('Base code value (%d) is out of allowed reserved range %d-%d',
+					$code, ApiCodeBase::RESERVED_MIN_API_CODE, ApiCodeBase::RESERVED_MAX_API_CODE));
 		}
+
+		return array_key_exists($code, static::$base_map)
+			? static::$base_map[ $code ]
+			: null;
 	}
 
 
 	/**
-	 * Returns locale mappings for given error code or null if there's no mapping
+	 * Returns locale mappings key for given api code or @null if there's no mapping
 	 *
-	 * @param integer $code Code to look for string mapping for.
+	 * @param integer $api_code Api code to look for mapped message for.
 	 *
 	 * @return string|null
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed range.
 	 */
-	public static function getMapping($code)
+	public static function getCodeMessageKey($api_code)
 	{
-		if (!static::isCodeValid($code)) {
-			throw new \InvalidArgumentException("Message code {$code} is out of allowed range");
+		if (!static::isCodeValid($api_code)) {
+			$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
+				$api_code, static::getMinCode(), static::getMaxCode());
+			throw new \InvalidArgumentException($msg);
 		}
 
 		$map = static::getMap();
 
-		return array_key_exists($code, $map) ? $map[ $code ] : null;
+		return array_key_exists($api_code, $map) ? $map[ $api_code ] : null;
 	}
 
 	/**
@@ -217,8 +217,8 @@ class ErrorCode
 	{
 		$result = false;
 
-		if ((($code >= ErrorCode::getMinCode()) && ($code <= ErrorCode::getMaxCode()))
-			|| (($code <= ErrorCode::getReservedMaxCode()) && ($code >= ErrorCode::getReservedMinCode()))
+		if ((($code >= ApiCodeBase::getMinCode()) && ($code <= ApiCodeBase::getMaxCode()))
+			|| (($code <= ApiCodeBase::getReservedMaxCode()) && ($code >= ApiCodeBase::getReservedMinCode()))
 		) {
 			$result = true;
 		}
