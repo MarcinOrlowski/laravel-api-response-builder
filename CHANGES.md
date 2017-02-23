@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* dev
+   * Updated `composer.json` to list `laravel/framework` among requirements
+
 * v3.0.0 (2017-02-23)
    * **BACKWARD INCOMPATIBILE CHANGES**
    * [RB-17] `success()` now allows to return API code as well

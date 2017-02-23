@@ -23,7 +23,8 @@
     "issues": "https://github.com/MarcinOrlowski/laravel-api-response-builder/issues"
   },
   "require": {
-    "php": ">=5.5.9"
+    "php": ">=5.5.9",
+    "laravel/framework": "^5.1",
   },
   "autoload": {
     "psr-4": {
