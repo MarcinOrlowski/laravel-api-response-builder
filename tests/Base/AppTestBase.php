@@ -30,7 +30,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 
 		$obj = $this->getApiCodesObject();
 
-		$get_base_max_code = $this->getProtectedMethod(get_class($obj), 'getBaseMaxCode');
+		$get_base_max_code = $this->getProtectedMethod(get_class($obj), 'getReservedMaxCode');
 		$base_max = $get_base_max_code->invokeArgs($obj, []);
 
 		$get_min_code = $this->getProtectedMethod(get_class($obj), 'getMinCode');
