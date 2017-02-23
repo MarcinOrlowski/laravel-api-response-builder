@@ -113,7 +113,7 @@ class ExceptionHandlerHelper
 			$base_api_code = ApiCodeBase::NO_ERROR_MESSAGE;
 		}
 
-		$key = ApiCodeBase::getMapping($api_code);
+		$key = ApiCodeBase::getCodeMessageKey($api_code);
 		if ($key === null) {
 			$key = ApiCodeBase::getBaseMapping($base_api_code);
 		}

@@ -12,6 +12,7 @@
  99,9% of use cases) then you are all fine and no change is needed. But if you were setting own 
  `http_code` or `lang_args` when calling `success()` then you need to update your code. 
  * `getErrorCodeConstants()` is now `getApiCogideConstants()`
+ * `getMapping()` is now `getCodeMessageKey()`
 
 ### v2 ###
 

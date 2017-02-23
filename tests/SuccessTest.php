@@ -29,7 +29,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		$j = $this->getResponseSuccessObject(ApiCodeBase::OK);
 
 		$this->assertNull($j->data);
-		$this->assertEquals(\Lang::get(ApiCodeBase::getMapping(ApiCodeBase::OK)), $j->message);
+		$this->assertEquals(\Lang::get(ApiCodeBase::getCodeMessageKey(ApiCodeBase::OK)), $j->message);
 	}
 
 	/**
@@ -71,7 +71,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set('response_builder.map', [
-			$this->random_api_code => ApiCodeBase::getMapping(ApiCodeBase::NO_ERROR_MESSAGE)
+			$this->random_api_code => ApiCodeBase::getCodeMessageKey(ApiCodeBase::NO_ERROR_MESSAGE)
 		]);
 
 		$lang_args = [
@@ -79,7 +79,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		];
 
 		$this->response = ResponseBuilder::success(null, $this->random_api_code, $lang_args);
-		$expected_message = \Lang::get(ApiCodeBase::getMapping($this->random_api_code), $lang_args);
+		$expected_message = \Lang::get(ApiCodeBase::getCodeMessageKey($this->random_api_code), $lang_args);
 		$j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
 
 		$this->assertNull($j->data);
@@ -95,7 +95,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set('response_builder.map', [
-			$this->random_api_code => ApiCodeBase::getMapping(ApiCodeBase::NO_ERROR_MESSAGE)
+			$this->random_api_code => ApiCodeBase::getCodeMessageKey(ApiCodeBase::NO_ERROR_MESSAGE)
 		]);
 
 		$lang_args = [
@@ -103,7 +103,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		];
 
 		$this->response = ResponseBuilder::successWithCode($this->random_api_code, $lang_args);
-		$expected_message = \Lang::get(ApiCodeBase::getMapping($this->random_api_code), $lang_args);
+		$expected_message = \Lang::get(ApiCodeBase::getCodeMessageKey($this->random_api_code), $lang_args);
 		$j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
 
 		$this->assertNull($j->data);

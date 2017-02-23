@@ -193,7 +193,7 @@ class ApiCodeBase
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed range.
 	 */
-	public static function getMapping($api_code)
+	public static function getCodeMessageKey($api_code)
 	{
 		if (!static::isCodeValid($api_code)) {
 			$msg = sprintf('API code value (%d) is out of allowed range %d-%d',

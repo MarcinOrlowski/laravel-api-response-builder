@@ -71,15 +71,15 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 
 
 	/**
-	 * Tests getMapping() for code outside of allowed range
+	 * Tests getCodeMessageKey() for code outside of allowed range
 	 *
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testGetMapping_OutOfRange()
+	public function testGetCodeMessageKey_OutOfRange()
 	{
-		ApiCodeBase::getMapping(ApiCodeBase::RESERVED_MAX_API_CODE + 1);
+		ApiCodeBase::getCodeMessageKey(ApiCodeBase::RESERVED_MAX_API_CODE + 1);
 	}
 
 	/**

@@ -149,9 +149,9 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		}
 
 		if ($expected_message === null) {
-			$key = ApiCodeBase::getMapping($expected_api_code);
+			$key = ApiCodeBase::getCodeMessageKey($expected_api_code);
 			if ($key === null) {
-				$key = ApiCodeBase::getMapping(ApiCodeBase::OK);
+				$key = ApiCodeBase::getCodeMessageKey(ApiCodeBase::OK);
 			}
 			$expected_message = \Lang::get($key, ['api_code' => $expected_api_code]);
 		}
@@ -215,7 +215,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$expected_message_string = ($expected_message === null)
-			? \Lang::get($api_codes_class_name::getMapping($expected_api_code), ['api_code' => $expected_api_code])
+			? \Lang::get($api_codes_class_name::getCodeMessageKey($expected_api_code), ['api_code' => $expected_api_code])
 			: $expected_message;
 		$this->assertEquals($expected_message_string, $j->message);
 

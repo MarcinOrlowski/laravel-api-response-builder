@@ -400,10 +400,10 @@ class ResponseBuilder
 			}
 
 			// do we have the mapping for this string already?
-			$key = ApiCodeBase::getMapping($message_or_api_code);
+			$key = ApiCodeBase::getCodeMessageKey($message_or_api_code);
 			if ($key === null) {
 				// no, get the default one instead
-				$key = ApiCodeBase::getMapping($success
+				$key = ApiCodeBase::getCodeMessageKey($success
 						? ApiCodeBase::OK
 						: ApiCodeBase::NO_ERROR_MESSAGE
 				);

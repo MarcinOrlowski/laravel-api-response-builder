@@ -204,7 +204,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 		$api_code = $this->max_allowed_code - 1;
 		$this->response = ResponseBuilder::error($api_code);
 
-		$key = $api_codes_class_name::getMapping($api_codes_class_name::NO_ERROR_MESSAGE);
+		$key = $api_codes_class_name::getCodeMessageKey($api_codes_class_name::NO_ERROR_MESSAGE);
 		$lang_args = ['api_code' => $api_code];
 		$msg = \Lang::get($key, $lang_args);
 

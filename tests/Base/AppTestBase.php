@@ -59,7 +59,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 		/** @var array $codes */
 		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
-			$this->assertNotNull($api_codes::getMapping($val), "No mapping for {$name}");
+			$this->assertNotNull($api_codes::getCodeMessageKey($val), "No mapping for {$name}");
 		}
 	}
 
@@ -148,7 +148,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 
 		$json_object = json_decode($this->response->getContent());
 		$this->assertTrue(is_object($json_object));
-		$this->assertEquals(\Lang::get($api_codes_class_name::getMapping(ApiCodeBase::NO_ERROR_MESSAGE),
+		$this->assertEquals(\Lang::get($api_codes_class_name::getCodeMessageKey(ApiCodeBase::NO_ERROR_MESSAGE),
 			['error_code' => $message_or_api_code]), $json_object->message);
 	}
 
