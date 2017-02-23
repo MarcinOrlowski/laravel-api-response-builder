@@ -83,38 +83,38 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 	/**
-	 * Tests getBaseCodeMessageKey() with too low code
+	 * Tests getReservedCodeMessageKey() with too low code
 	 *
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testGetBaseCodeMessageKey_TooLow()
+	public function testGetReservedCodeMessageKey_TooLow()
 	{
-		ApiCodeBase::getBaseCodeMessageKey(ApiCodeBase::RESERVED_MIN_API_CODE - 1);
+		ApiCodeBase::getReservedCodeMessageKey(ApiCodeBase::RESERVED_MIN_API_CODE - 1);
 	}
 
 	/**
-	 * Tests getBaseCodeMessageKey() with too high code
+	 * Tests getReservedCodeMessageKey() with too high code
 	 *
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testGetBaseCodeMessageKey_TooHigh()
+	public function testGetReservedCodeMessageKey_TooHigh()
 	{
-		ApiCodeBase::getBaseCodeMessageKey(ApiCodeBase::RESERVED_MAX_API_CODE + 1);
+		ApiCodeBase::getReservedCodeMessageKey(ApiCodeBase::RESERVED_MAX_API_CODE + 1);
 	}
 
 	/**
-	 * Tests getBaseCodeMessageKey()
+	 * Tests getReservedCodeMessageKey()
 	 *
 	 * @return void
 	 */
-	public function testGetBaseCodeMessageKey()
+	public function testGetReservedCodeMessageKey()
 	{
 		// check how mapped code handling works
-		$mapping = ApiCodeBase::getBaseCodeMessageKey(ApiCodeBase::OK);
+		$mapping = ApiCodeBase::getReservedCodeMessageKey(ApiCodeBase::OK);
 		$this->assertNotNull($mapping);
 
 		// check how not-mapped code is handled
@@ -126,7 +126,7 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 			}
 		}
 
-		$mapping = ApiCodeBase::getBaseCodeMessageKey($code);
+		$mapping = ApiCodeBase::getReservedCodeMessageKey($code);
 		$this->assertNull($mapping);
 	}
 

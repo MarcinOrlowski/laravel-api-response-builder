@@ -170,7 +170,7 @@ class ApiCodeBase
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed reserved range.
 	 */
-	public static function getBaseCodeMessageKey($code)
+	public static function getReservedCodeMessageKey($code)
 	{
 		if (($code < ApiCodeBase::RESERVED_MIN_API_CODE) || ($code > ApiCodeBase::RESERVED_MAX_API_CODE)) {
 			throw new \InvalidArgumentException(

@@ -13,7 +13,7 @@
  `http_code` or `lang_args` when calling `success()` then you need to update your code. 
  * ApiCodeBase's `getErrorCodeConstants()` is now `getApiCogideConstants()`
  * ApiCodeBase's `getMapping()` is now `getCodeMessageKey()`
- * ApiCodeBase's `getBaseMapping()` is now `getBaseCodeMessageKey()`
+ * ApiCodeBase's `getBaseMapping()` is now `getReservedCodeMessageKey()`
 
 ### v2 ###
 
