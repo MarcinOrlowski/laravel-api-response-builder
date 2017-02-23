@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
 
 use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\ApiCodes;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -27,7 +28,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 */
 	public function getApiCodesObject()
 	{
-		return new ApiCodeBase();
+		return new ApiCodes();
 	}
 
 	/**
@@ -35,7 +36,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 */
 	public function getApiCodesClassName()
 	{
-		return ApiCodeBase::class;
+		return ApiCodes::class;
 	}
 
 	/** @var int */

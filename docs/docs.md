@@ -401,6 +401,23 @@ Edit `app/config.php` and add the following line to your `providers` array:
 
     MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
 
+#### ApiCodes ckass ####
+
+ As already mentioned, `ResponseBuilder` recommends use of API codes contants across
+ your project. For simplicity you should keep them all in one class, i.e. `ApiCodes`
+ which must extend `ApiCodeBase` class. 
+ 
+    <?php
+    use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+
+    class ApiCodes extends ApiCodeBase {
+    
+        const SOMETHING => 105;
+    
+    }
+    
+If you have no custom API codes used yet, it's perfectly fine to have your class empty.
+
 
 #### ResponseBuilder Configuration ####
 
@@ -417,7 +434,7 @@ Supported configuration keys (all keys **MUST** be present in config file):
 Code to message mapping example:
 
     'map' => [
-        ApiCodeBase::SOMETHING => 'api.something',
+        ApiCode::SOMETHING => 'api.something',
     ],
 
 If given error code is not present in `map`, `ResponseBuilder` will provide fallback message automatically 
