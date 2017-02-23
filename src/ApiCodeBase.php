@@ -185,7 +185,7 @@ class ApiCodeBase
 
 
 	/**
-	 * Returns locale mappings for given api code or @null if there's no mapping
+	 * Returns locale mappings key for given api code or @null if there's no mapping
 	 *
 	 * @param integer $api_code Api code to look for mapped message for.
 	 *

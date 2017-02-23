@@ -44,8 +44,7 @@ class ExceptionHandlerHelper
 					break;
 
 				default:
-					$result = static::error($exception, 'http_exception', ApiCodeBase::EX_HTTP_EXCEPTION,
-						HttpResponse::HTTP_BAD_REQUEST);
+					$result = static::error($exception, 'http_exception', ApiCodeBase::EX_HTTP_EXCEPTION);
 					break;
 			}
 		} else {
@@ -56,18 +55,18 @@ class ExceptionHandlerHelper
 	}
 
 	/**
-	 * @param Exception $exception
-	 * @param string    $config_base
-	 * @param integer   $default_api_code
-	 * @param integer   $default_http_code
+	 * @param Exception $exception         Exception to be processed
+	 * @param string    $exception_type    Category of the exception
+	 * @param integer   $default_api_code  API code to return
+	 * @param integer   $default_http_code HTTP code to return
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected static function error(Exception $exception, $config_base,
+	protected static function error(Exception $exception, $exception_type,
 	                                $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{
-		$api_code = Config::get("response_builder.exception_handler.exception.{$config_base}.code", $default_api_code);
-		$http_code = Config::get("response_builder.exception_handler.exception.{$config_base}.http_code", 0);
+		$api_code = Config::get("response_builder.exception_handler.exception.{$exception_type}.code", $default_api_code);
+		$http_code = Config::get("response_builder.exception_handler.exception.{$exception_type}.http_code", 0);
 
 		// check if this is valid HTTP error code
 		if ($http_code === 0) {
