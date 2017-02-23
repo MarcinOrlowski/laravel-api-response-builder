@@ -254,6 +254,7 @@ See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for
 #### Reporting Success ####
 
     success($data = null, $api_code = null, array $lang_args = [], $http_code = null);
+    successWithCode($api_code = null, array $lang_args = [], $http_code = null);
     successWithHttpCode($http_code);
 
 Usage restrictions:
