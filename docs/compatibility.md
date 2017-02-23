@@ -11,7 +11,6 @@
  this change should pose no threat at all. If you were just calling `success()` or `success($data)` (which is 
  99,9% of use cases) then you are all fine and no change is needed. But if you were setting own 
  `http_code` or `lang_args` when calling `success()` then you need to update your code. 
- * Base `ErrorCode` class is now renamed to `ApiCodeBase` and is now `abstract`.
  * `getErrorCodeConstants()` is now `getApiCogideConstants()`
 
 ### v2 ###

@@ -62,7 +62,7 @@ The following assumes package is properly installed and enabled. These steps are
 
 #### Success ####
 
-To report success from your API, just conclude your Controller method with simple:
+To report success from your API, just conclude your Controller method with:
 
     return ResponseBuilder::success();
 
@@ -145,23 +145,11 @@ be anything.
 #### Errors ####
 
 Returning errors is almost as simple as returning success, however you need to provide at least error
-code to `error()` method which will be then reported back to caller. To keep your source readable and clear, 
-it's strongly suggested to create separate class i.e. `app/ErrorCode.php` and put all codes you need to use
-in your code there as `const` and then reference it. This way you protect yourself from using wrong code or
-save your time in case you will need to refactor code range in future. For example, your imaginary 
-`app/ErrorCode.php` can look like this:
+code to `error()` method which will be then reported back to caller 
+(see [Installation and Configuration](#installation-and-configuration)). Indicating failure is
+as easy as:
 
-    <?php
-
-    namespace App;
-
-    class ErrorCode {
-       const SOMETHING_WENT_WRONG = 250;
-    }
-
-End then, to report failure because of `SOMETHING_WENT_WRONG`, just reference this constant:
-
-    return ResponseBuilder::error(ApiCodeBase::SOMETHING_WENT_WRONG);
+    return ResponseBuilder::error(ApiCode::SOMETHING_WENT_WRONG);
 
 This will produce the following JSON response:
 
@@ -201,9 +189,8 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
 
 ## Return Codes ##
 
-All return codes must be positive integer. Code `0` (zero) **ALWAYS** means **success**. All
-other codes are considered error codes.
-
+ All return codes are integers however the meaning of the code is fully up to you. The only exception
+ is `0` (zero) which **ALWAYS** means **success** (and you cannot use `0` with `error()` mehods).
 
 #### Code Ranges ####
 
@@ -373,8 +360,8 @@ would produce the following response (contrary to the previous examples, source 
 There're no special requirements. Once you fulfill Laravel's requirements you are all good. Minimum
 versions `ResponseBuilder` is tested against are:
 
-  * PHP 5.5
-  * Laravel 5.1.45
+  * PHP 5.5+
+  * Laravel 5.1.45+
 
 all newer versions of PHP and Laravel are also supported out of the box.
 
@@ -401,22 +388,20 @@ Edit `app/config.php` and add the following line to your `providers` array:
 
     MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
 
-#### ApiCodes ckass ####
+#### ApiCodes class ####
 
- As already mentioned, `ResponseBuilder` recommends use of API codes contants across
- your project. For simplicity you should keep them all in one class, i.e. `ApiCodes`
- which must extend `ApiCodeBase` class. 
- 
+To keep your source readable and clear, it's strongly recommended to create separate class 
+`ApiCode.php` (i.e. in `app/`) and keep all codes there as `const`. This way you protect 
+yourself from using wrong code or save your time in case you will need to refactor code 
+range in future. For example, your imaginary `app/ApiCode.php` can look like this:
+
     <?php
-    use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 
-    class ApiCodes extends ApiCodeBase {
-    
-        const SOMETHING => 105;
-    
+    namespace App;
+
+    class ApiCode {
+       const SOMETHING_WENT_WRONG = 250;
     }
-    
-If you have no custom API codes used yet, it's perfectly fine to have your class empty.
 
 
 #### ResponseBuilder Configuration ####
@@ -434,7 +419,7 @@ Supported configuration keys (all keys **MUST** be present in config file):
 Code to message mapping example:
 
     'map' => [
-        ApiCode::SOMETHING => 'api.something',
+        ApiCode::SOMETHING_WENT_WRONG => 'api.something_went_wrong',
     ],
 
 If given error code is not present in `map`, `ResponseBuilder` will provide fallback message automatically 
@@ -533,7 +518,7 @@ which should then return your desired JSON structure:
 and 
 
     $data = [ 'foo'=>'bar ];
-    return MyResponseBuilder::errorWithData(ApiCodeBase::SOMETHING_WENT_WRONG, $data);
+    return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
 
 would produce:
 
