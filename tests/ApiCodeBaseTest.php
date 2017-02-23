@@ -83,38 +83,38 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 	/**
-	 * Tests getBaseMapping() with too low code
+	 * Tests getBaseCodeMessageKey() with too low code
 	 *
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testGetBaseMapping_TooLow()
+	public function testGetBaseCodeMessageKey_TooLow()
 	{
-		ApiCodeBase::getBaseMapping(ApiCodeBase::RESERVED_MIN_API_CODE - 1);
+		ApiCodeBase::getBaseCodeMessageKey(ApiCodeBase::RESERVED_MIN_API_CODE - 1);
 	}
 
 	/**
-	 * Tests getBaseMapping() with too high code
+	 * Tests getBaseCodeMessageKey() with too high code
 	 *
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testGetBaseMapping_TooHigh()
+	public function testGetBaseCodeMessageKey_TooHigh()
 	{
-		ApiCodeBase::getBaseMapping(ApiCodeBase::RESERVED_MAX_API_CODE + 1);
+		ApiCodeBase::getBaseCodeMessageKey(ApiCodeBase::RESERVED_MAX_API_CODE + 1);
 	}
 
 	/**
-	 * Tests getBaseMapping()
+	 * Tests getBaseCodeMessageKey()
 	 *
 	 * @return void
 	 */
-	public function testGetBaseMapping()
+	public function testGetBaseCodeMessageKey()
 	{
 		// check how mapped code handling works
-		$mapping = ApiCodeBase::getBaseMapping(ApiCodeBase::OK);
+		$mapping = ApiCodeBase::getBaseCodeMessageKey(ApiCodeBase::OK);
 		$this->assertNotNull($mapping);
 
 		// check how not-mapped code is handled
@@ -126,7 +126,7 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 			}
 		}
 
-		$mapping = ApiCodeBase::getBaseMapping($code);
+		$mapping = ApiCodeBase::getBaseCodeMessageKey($code);
 		$this->assertNull($mapping);
 	}
 
