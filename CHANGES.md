@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* dev
+   * Fixed incorrect exception message thrown in case of incomplete `classes` config mapping (@dragonfire1119)
+
 * v3.0.1 (2017-02-23)
    * Updated `composer.json` to list `laravel/framework` among requirements
 
