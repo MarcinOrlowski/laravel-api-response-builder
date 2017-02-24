@@ -65,8 +65,10 @@ class ExceptionHandlerHelper
 	protected static function error(Exception $exception, $exception_type,
 	                                $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
 	{
-		$api_code = Config::get("response_builder.exception_handler.exception.{$exception_type}.code", $default_api_code);
-		$http_code = Config::get("response_builder.exception_handler.exception.{$exception_type}.http_code", 0);
+		$base_config = 'response_builder.exception_handler.exception';
+
+		$api_code = Config::get("{$base_config}.{$exception_type}.code", $default_api_code);
+		$http_code = Config::get("{$base_config}.{$exception_type}.http_code", 0);
 
 		// check if this is valid HTTP error code
 		if ($http_code === 0) {
@@ -100,7 +102,6 @@ class ExceptionHandlerHelper
 		}
 
 		// let's figure out what event we are handling now
-		$base_config = 'response_builder.exception_handler.exception';
 		if (Config::get("{$base_config}.http_not_found.code", ApiCodeBase::EX_HTTP_NOT_FOUND) === $api_code) {
 			$base_api_code = ApiCodeBase::EX_HTTP_NOT_FOUND;
 		} elseif (Config::get("{$base_config}.http_service_unavailable.code", ApiCodeBase::EX_HTTP_SERVICE_UNAVAILABLE) === $api_code) {
