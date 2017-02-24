@@ -8,6 +8,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * @dev
    * [RB-34] Added option to control ExceptionHandelr behavior on debug builds
+   * ExceptionHandler's debug is now added as `debug` node to make it more clear where it comes from
 
 * v3.0.3 (2017-02-24)
    * No changes. v3.0.2 was incorrectly released
