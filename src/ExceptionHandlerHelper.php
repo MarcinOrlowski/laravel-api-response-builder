@@ -94,11 +94,13 @@ class ExceptionHandlerHelper
 
 		$data = [];
 		if (Config::get('app.debug')) {
-			$data = [
-				'class' => get_class($exception),
-				'file'  => $exception->getFile(),
-				'line'  => $exception->getLine(),
-			];
+			if (Config::get('response_builder.debug.exception_handler.trace_enabled', true)) {
+				$data = ['debug' => [
+					'class' => get_class($exception),
+					'file'  => $exception->getFile(),
+					'line'  => $exception->getLine(),
+				]];
+			}
 		}
 
 		// let's figure out what event we are handling now

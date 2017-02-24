@@ -131,4 +131,25 @@ return [
 
 	],
 
+
+	/*
+	|--------------------------------------------------------------------------
+	| Debug config
+	|--------------------------------------------------------------------------
+	|
+	*/
+
+	'debug' => [
+		'exception_handler' => [
+			/**
+			 * When ExceptionHandler kicks in and this is set to @true (default),
+			 * then **if** your `app.debug` is `true` too, returned JSON structure
+			 * will contain `debug` node with additional exception base trace (class
+			 * name, file name, line number). If `app.debug` is anything but @true,
+			 * no debug info is added.
+			 */
+			'trace_enabled' => true,
+		],
+	],
+
 ];
