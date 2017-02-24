@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v3.0.3 (2017-02-24)
+   * No changes. v3.0.2 was incorrectly released
+
 * v3.0.2 (2017-02-24)
    * [RB-31] Fixed incorrect exception message thrown in case of incomplete `classes` config mapping (@dragonfire1119)
 
