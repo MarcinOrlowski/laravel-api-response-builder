@@ -59,7 +59,7 @@ class ResponseBuilder
 			foreach ($classes as $class_name => $class_config) {
 				foreach ($mandatory_keys as $key_name) {
 					if (!array_key_exists($key_name, $class_config)) {
-						throw new \RuntimeException('CONFIG: Missing "{$key_name}" for "{$class_name}" mapping');
+						throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' mapping");
 					}
 				}
 			}
