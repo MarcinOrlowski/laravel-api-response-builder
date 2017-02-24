@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* dev
+* v3.0.2 (2017-02-24)
    * [RB-31] Fixed incorrect exception message thrown in case of incomplete `classes` config mapping (@dragonfire1119)
 
 * v3.0.1 (2017-02-23)
