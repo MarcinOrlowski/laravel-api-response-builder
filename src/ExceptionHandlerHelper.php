@@ -131,7 +131,6 @@ class ExceptionHandlerHelper
 
 		if ($error_message === '') {
 			$error_message = Lang::get($key, [
-				'error_code' => $api_code,      // LEGACY!
 				'api_code' => $api_code,
 				'message'    => $ex_message,
 				'class'      => get_class($exception),
