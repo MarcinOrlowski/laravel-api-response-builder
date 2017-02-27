@@ -50,7 +50,7 @@ class ResponseBuilder
 
 		if ($classes !== null) {
 			if (!is_array($classes)) {
-				throw new \RuntimeException(sprintf('CONFIG: "classes" mapping must be an array (\'%s\' given)', gettype($classes)));
+				throw new \RuntimeException(sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
 			}
 
 			$mandatory_keys = ['key',
@@ -59,7 +59,7 @@ class ResponseBuilder
 			foreach ($classes as $class_name => $class_config) {
 				foreach ($mandatory_keys as $key_name) {
 					if (!array_key_exists($key_name, $class_config)) {
-						throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' mapping");
+						throw new \RuntimeException(sprintf("CONFIG: Missing '%s' for '%s' class mapping", $key_name, $class_name));
 					}
 				}
 			}
@@ -213,12 +213,12 @@ class ResponseBuilder
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException(sprintf("api_code must be integer ('%s' given)", gettype($api_code)));
+			throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
 		}
 		if (!is_int($http_code)) {
-			throw new \InvalidArgumentException(sprintf("http_code must be integer ('%s' given)", gettype($http_code)));
+			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
 		} elseif (($http_code < 200) || ($http_code > 299)) {
-			throw new \InvalidArgumentException(sprintf('http_code value is invalid. Must be in range 200-299 inclusive, %d given', $http_code));
+			throw new \InvalidArgumentException(sprintf('Invalid http_code (%d). Must be between 200-299 inclusive', $http_code));
 		}
 
 		return static::make(true, $api_code, $api_code, $data, $http_code, $lang_args);
@@ -338,13 +338,13 @@ class ResponseBuilder
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException(sprintf("api_code must be integer ('%s' given)", gettype($api_code)));
+			throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
 		} elseif ($api_code === static::DEFAULT_API_CODE_OK) {
-			throw new \InvalidArgumentException(sprintf('api_code must not be equal to DEFAULT_API_CODE_OK (%d)', static::DEFAULT_API_CODE_OK));
+			throw new \InvalidArgumentException(sprintf('api_code must not be %d (DEFAULT_API_CODE_OK)', static::DEFAULT_API_CODE_OK));
 		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
-			throw new \InvalidArgumentException(sprintf("lang_args must be either array or null ('%s' given)", gettype($lang_args)));
+			throw new \InvalidArgumentException(sprintf('lang_args must be either array or null (%s given)', gettype($lang_args)));
 		} elseif (!is_int($http_code)) {
-			throw new \InvalidArgumentException(sprintf("http_code must be integer ('%s' given)", gettype($http_code)));
+			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
 		} elseif ($http_code < 400) {
 			throw new \InvalidArgumentException('http_code cannot be lower than 400');
 		}
@@ -395,7 +395,7 @@ class ResponseBuilder
 			// no, so it must be an int value
 			if (!is_int($message_or_api_code)) {
 				throw new \InvalidArgumentException(
-					sprintf('Message must be either string or resolvable integer api_code (\'%s\' given)', gettype($message_or_api_code))
+					sprintf('Message must be either string or resolvable integer api_code (%s given)', gettype($message_or_api_code))
 				);
 			}
 
@@ -412,13 +412,13 @@ class ResponseBuilder
 		} else {
 			if (!is_int($api_code)) {
 				throw new \InvalidArgumentException(
-					sprintf("api_code must be integer ('%s' given)", gettype($api_code))
+					sprintf('api_code must be integer (%s given)', gettype($api_code))
 				);
 			}
 
 			if (!ApiCodeBase::isCodeValid($api_code)) {
-				$msg = sprintf("API code value ({$api_code}) is out of allowed range %d-%d",
-					ApiCodeBase::getMinCode(), ApiCodeBase::getMaxCode());
+				$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
+					$api_code, ApiCodeBase::getMinCode(), ApiCodeBase::getMaxCode());
 				throw new \InvalidArgumentException($msg);
 			}
 		}
