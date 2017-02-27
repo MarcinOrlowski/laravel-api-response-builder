@@ -293,7 +293,7 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 *
 	 * @return void
 	 */
-	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $headers = null, $encoding_options)
+	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $headers = null, $encoding_options = null)
 	{
 		if (!is_bool($success)) {
 			$this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));

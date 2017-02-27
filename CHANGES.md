@@ -7,7 +7,8 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 ## CHANGE LOG ##
 
 * @dev
-   * [RB-38] Added `encoding-options` to control data-to-json conversion details
+   * [RB-38] Added `encoding-options` to control data-to-json conversion.
+   * [RB-38] Added optional encoding options args to all methods accepting `data` argument
    * [RB-34] Added option to control ExceptionHandelr behavior on debug builds
    * ExceptionHandler's debug is now added as `debug` node to make it more clear where it comes from
 

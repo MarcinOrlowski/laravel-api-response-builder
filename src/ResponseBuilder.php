@@ -144,20 +144,22 @@ class ResponseBuilder
 	/**
 	 * Returns success
 	 *
-	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code  API code to be returned with the response or @null for default value
-	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
-	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
+	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null $api_code         API code to be returned with the response or @null for default value
+	 * @param array|null   $lang_args        array of arguments passed to Lang if message associated with api_code uses placeholders
+	 * @param integer|null $http_code        HTTP return code to be set for this response or @null for default (200)
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 *
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function success($data = null, $api_code = null, array $lang_args = null, $http_code = null)
+	public static function success($data = null, $api_code = null, array $lang_args = null, $http_code = null, $encoding_options = null)
 	{
 		if ($api_code === null) {
 			$api_code = static::DEFAULT_API_CODE_OK;
 		}
 
-		return static::buildSuccessResponse($data, $api_code, $lang_args, $http_code);
+		return static::buildSuccessResponse($data, $api_code, $lang_args, $http_code, $encoding_options);
 	}
 
 	/**
@@ -193,17 +195,18 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code  numeric code to be returned as 'code' or null for default value
-	 * @param array|null   $lang_args array of arguments passed to Lang if message associated with api_code uses placeholders
-	 * @param integer|null $http_code HTTP return code to be set for this response
+	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null $api_code         numeric code to be returned as 'code' or null for default value
+	 * @param array|null   $lang_args        array of arguments passed to Lang if message associated with api_code uses placeholders
+	 * @param integer|null $http_code        HTTP return code to be set for this response
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
 	 *
 	 */
-	protected static function buildSuccessResponse($data = null, $api_code = null, array $lang_args = null, $http_code = null)
+	protected static function buildSuccessResponse($data = null, $api_code = null, array $lang_args = null, $http_code = null, $encoding_options = null)
 	{
 		if ($http_code === null) {
 			$http_code = static::DEFAULT_HTTP_CODE_OK;
@@ -221,54 +224,57 @@ class ResponseBuilder
 			throw new \InvalidArgumentException(sprintf('Invalid http_code (%d). Must be between 200-299 inclusive', $http_code));
 		}
 
-		return static::make(true, $api_code, $api_code, $data, $http_code, $lang_args);
+		return static::make(true, $api_code, $api_code, $data, $http_code, $lang_args, $encoding_options);
 	}
 
 	/**
 	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error
 	 * message uses placeholders as well as return data payload
 	 *
-	 * @param integer      $api_code  internal API code to be returned
-	 * @param array|null   $lang_args if array, then this passed as arguments to Lang::get() to build final string.
-	 * @param mixed|null   $data      payload array to be returned in 'data' node or response object
-	 * @param integer|null $http_code optional HTTP status code to be used with this response or @null for default
+	 * @param integer      $api_code         internal API code to be returned
+	 * @param array|null   $lang_args        if array, then this passed as arguments to Lang::get() to build final string.
+	 * @param mixed|null   $data             payload array to be returned in 'data' node or response object
+	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for default
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function error($api_code, array $lang_args = null, $data = null, $http_code = null)
+	public static function error($api_code, array $lang_args = null, $data = null, $http_code = null, $encoding_options = null)
 	{
-		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args);
+		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args, $encoding_options);
 	}
 
 	/**
-	 * @param integer    $api_code  numeric code to be returned as 'code'
-	 * @param mixed|null $data      payload to be returned as 'data' node, @null if none
-	 * @param array|null $lang_args |null optional array with arguments passed to Lang::get()
+	 * @param integer      $api_code         numeric code to be returned as 'code'
+	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
+	 * @param array|null   $lang_args        |null optional array with arguments passed to Lang::get()
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithData($api_code, $data, array $lang_args = null)
+	public static function errorWithData($api_code, $data, array $lang_args = null, $encoding_options = null)
 	{
-		return static::buildErrorResponse($data, $api_code, null, $lang_args);
+		return static::buildErrorResponse($data, $api_code, null, $lang_args, $encoding_options);
 	}
 
 	/**
-	 * @param integer    $api_code  numeric code to be returned as 'code'
-	 * @param mixed|null $data      payload to be returned as 'data' node, @null if none
-	 * @param integer    $http_code HTTP error code to be returned with this Cannot be @null
-	 * @param array|null $lang_args |null optional array with arguments passed to Lang::get()
+	 * @param integer      $api_code         numeric code to be returned as 'code'
+	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
+	 * @param integer      $http_code        HTTP error code to be returned with this Cannot be @null
+	 * @param array|null   $lang_args        |null optional array with arguments passed to Lang::get()
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 * @throws \InvalidArgumentException if http_code is @null
 	 */
-	public static function errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args = null)
+	public static function errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args = null, $encoding_options = null)
 	{
 		if ($http_code === null) {
 			throw new \InvalidArgumentException('http_code cannot be null. Use errorWithData() instead');
 		}
 
-		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args);
+		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args, $encoding_options);
 	}
 
 	/**
@@ -290,16 +296,17 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code      numeric code to be returned as 'code'
-	 * @param string       $error_message custom message to be returned as part of error response
-	 * @param mixed|null   $data          payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code     optional HTTP status code to be used with this response or @null for defaults
+	 * @param integer      $api_code         numeric code to be returned as 'code'
+	 * @param string       $error_message    custom message to be returned as part of error response
+	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithMessageAndData($api_code, $error_message, $data, $http_code = null)
+	public static function errorWithMessageAndData($api_code, $error_message, $data, $http_code = null, $encoding_options = null)
 	{
-		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message);
+		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, $encoding_options);
 	}
 
 	/**
@@ -318,12 +325,13 @@ class ResponseBuilder
 	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error message
 	 * uses placeholders as well as return data payload
 	 *
-	 * @param mixed|null   $data      payload array to be returned in 'data' node or response object
-	 * @param integer      $api_code  internal API code value to be returned
-	 * @param integer|null $http_code optional HTTP status code to be used with this response or @null for default
-	 * @param array|null   $lang_args if array, then this passed as arguments to Lang::get() to build final string.
-	 * @param string|null  $message   custom message to be returned as part of error response
-	 * @param array|null   $headers   optional HTTP headers to be returned in error response
+	 * @param mixed|null   $data             payload array to be returned in 'data' node or response object
+	 * @param integer      $api_code         internal API code value to be returned
+	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for default
+	 * @param array|null   $lang_args        if array, then this passed as arguments to Lang::get() to build final string.
+	 * @param string|null  $message          custom message to be returned as part of error response
+	 * @param array|null   $headers          optional HTTP headers to be returned in error response
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -331,7 +339,8 @@ class ResponseBuilder
 	 *
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
-	protected static function buildErrorResponse($data, $api_code, $http_code, $lang_args = null, $message = null, $headers = null)
+	protected static function buildErrorResponse($data, $api_code, $http_code, $lang_args = null, $message = null,
+	                                             $headers = null, $encoding_options = null)
 	{
 		if ($http_code === null) {
 			$http_code = static::DEFAULT_HTTP_CODE_ERROR;
@@ -356,7 +365,7 @@ class ResponseBuilder
 			$headers = [];
 		}
 
-		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers);
+		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers, $encoding_options);
 	}
 
 
