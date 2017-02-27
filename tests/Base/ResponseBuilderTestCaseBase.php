@@ -289,10 +289,11 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 * @param int        $api_code            API code to return
 	 * @param string|int $message_or_api_code Resolvable Api code or message string
 	 * @param array|null $headers             HTTP headers to include
+	 * @param int|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
 	 *
 	 * @return void
 	 */
-	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $headers = null)
+	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $headers = null, $encoding_options)
 	{
 		if (!is_bool($success)) {
 			$this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));
@@ -312,7 +313,8 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 		                                             $data,
 		                                             $http_code,
 		                                             $lang_args,
-		                                             $headers]);
+		                                             $headers,
+		                                             $encoding_options]);
 	}
 
 

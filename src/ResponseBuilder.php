@@ -366,8 +366,9 @@ class ResponseBuilder
 	 * @param string|integer $message_or_api_code message string or API code
 	 * @param mixed|null     $data                optional additional data to be included in response object
 	 * @param integer|null   $http_code           return HTTP code for build Response object
-	 * @param array          $lang_args           |null optional array with arguments passed to Lang::get()
-	 * @param array          $headers             |null optional HTTP headers to be returned in the response
+	 * @param array|null     $lang_args           optional array with arguments passed to Lang::get()
+	 * @param array|null     $headers             optional HTTP headers to be returned in the response
+	 * @param integer|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -376,7 +377,9 @@ class ResponseBuilder
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
 	protected static function make($success, $api_code, $message_or_api_code, $data = null,
-	                               $http_code = null, array $lang_args = null, array $headers = null)
+	                               $http_code = null, array $lang_args = null, array $headers = null,
+	                               $encoding_options = null
+	)
 	{
 		if ($lang_args === null) {
 			$lang_args = ['api_code' => $message_or_api_code];
@@ -388,6 +391,12 @@ class ResponseBuilder
 			$http_code = $success
 				? static::DEFAULT_HTTP_CODE_OK
 				: static::DEFAULT_HTTP_CODE_ERROR;
+		}
+
+		if ($encoding_options === null) {
+			$encoding_options = Config::get('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
+		} elseif (!is_int($encoding_options)) {
+			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
 		}
 
 		// are we given message text already?
@@ -423,6 +432,6 @@ class ResponseBuilder
 			}
 		}
 
-		return Response::json(static::buildResponse($success, $api_code, $message_or_api_code, $data), $http_code, $headers);
+		return Response::json(static::buildResponse($success, $api_code, $message_or_api_code, $data), $http_code, $headers, $encoding_options);
 	}
 }
