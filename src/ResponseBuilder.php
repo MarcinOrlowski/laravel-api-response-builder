@@ -404,7 +404,8 @@ class ResponseBuilder
 
 		if ($encoding_options === null) {
 			$encoding_options = Config::get('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
-		} elseif (!is_int($encoding_options)) {
+		}
+		if (!is_int($encoding_options)) {
 			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
 		}
 
