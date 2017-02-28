@@ -256,7 +256,7 @@ class ResponseBuilder
 	/**
 	 * @param integer      $api_code         numeric code to be returned as 'code'
 	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param array|null   $lang_args        |null optional array with arguments passed to Lang::get()
+	 * @param array|null   $lang_args        optional array with arguments passed to Lang::get()
 	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
@@ -270,7 +270,7 @@ class ResponseBuilder
 	 * @param integer      $api_code         numeric code to be returned as 'code'
 	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
 	 * @param integer      $http_code        HTTP error code to be returned with this Cannot be @null
-	 * @param array|null   $lang_args        |null optional array with arguments passed to Lang::get()
+	 * @param array|null   $lang_args        optional array with arguments passed to Lang::get()
 	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
@@ -289,7 +289,7 @@ class ResponseBuilder
 	/**
 	 * @param integer    $api_code  numeric code to be returned as 'code'
 	 * @param integer    $http_code HTTP return code to be set for this response or @null for default
-	 * @param array|null $lang_args |null optional array with arguments passed to Lang::get()
+	 * @param array|null $lang_args optional array with arguments passed to Lang::get()
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
