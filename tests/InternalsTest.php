@@ -131,6 +131,16 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');
 		$method->invokeArgs($obj, []);
+	}
 
+
+	/**
+	 * Tests if JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT matches const value of DEFAULT_ENODING_OPTIONS
+	 *
+	 * @return void
+	 */
+	public function testDefaultEncodingOptionValue()
+	{
+		$this->assertEquals(JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 	}
 }

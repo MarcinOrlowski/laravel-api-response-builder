@@ -38,6 +38,15 @@ class ResponseBuilder
 	const DEFAULT_API_CODE_OK = ApiCodeBase::OK;
 
 	/**
+	 * Default JSON encoding options
+	 *
+	 * 15 = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
+	 *
+	 * This must be as int due to const limits in PHP disallowing expressions.
+	 */
+	const DEFAULT_ENCODING_OPTIONS = 15;
+
+	/**
 	 * Reads and validates "classes" config mapping
 	 *
 	 * @return array|null Classes mapping as specified in configuration or @null if no such config found
@@ -403,7 +412,7 @@ class ResponseBuilder
 		}
 
 		if ($encoding_options === null) {
-			$encoding_options = Config::get('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
+			$encoding_options = Config::get('encoding_options', static::DEFAULT_ENCODING_OPTIONS);
 		}
 		if (!is_int($encoding_options)) {
 			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
