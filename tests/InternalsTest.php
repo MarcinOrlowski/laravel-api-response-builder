@@ -76,13 +76,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	public function testMake_ValidateEncodingOptionsPreventsEscaping()
 	{
 		$test_string = 'ąćę';
-		$test_string_escaped = '';
-
-		// escape UTF8 for further comparision
-		$offset = 0;
-		while ($offset >= 0) {
-			$test_string_escaped .= sprintf('\u%04x', $this->ord8($test_string, $offset));
-		}
+		$test_string_escaped = $this->escape8($test_string);
 
 		// source data
 		$data = ['test' => $test_string];
@@ -95,7 +89,6 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
 		$result_escaped = $matches[1];
 		$this->assertEquals($test_string_escaped, $result_escaped);
-
 
 		// check if it returns unescaped
 		\Config::set('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);

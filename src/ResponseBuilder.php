@@ -224,7 +224,7 @@ class ResponseBuilder
 			throw new \InvalidArgumentException(sprintf('Invalid http_code (%d). Must be between 200-299 inclusive', $http_code));
 		}
 
-		return static::make(true, $api_code, $api_code, $data, $http_code, $lang_args, $encoding_options);
+		return static::make(true, $api_code, $api_code, $data, $http_code, $lang_args, null, $encoding_options);
 	}
 
 	/**

@@ -168,4 +168,24 @@ abstract class TestCaseBase extends \Orchestra\Testbench\TestCase
 		return $code;
 	}
 
+	/**
+	 * UTF8 escape of given string
+	 *
+	 * @param string $string UTF8 string to escape
+	 *
+	 * @return string
+	 */
+	protected function escape8($string)
+	{
+		$escaped = '';
+
+		// escape UTF8 for further comparision
+		$offset = 0;
+		while ($offset >= 0) {
+			$escaped .= sprintf('\u%04x', $this->ord8($string, $offset));
+		}
+
+		return $escaped;
+	}
+
 }
