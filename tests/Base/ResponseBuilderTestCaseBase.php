@@ -288,31 +288,32 @@ abstract class ResponseBuilderTestCaseBase extends TestCaseBase
 	 * @param boolean    $success             @true if response should indicate success, @false otherwise
 	 * @param int        $api_code            API code to return
 	 * @param string|int $message_or_api_code Resolvable Api code or message string
+	 * @param array|null $data                Data to return
 	 * @param array|null $headers             HTTP headers to include
+	 * @param int|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
 	 *
-	 * @return void
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $headers = null)
+	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $data = null, array $headers = null, $encoding_options = null)
 	{
 		if (!is_bool($success)) {
 			$this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));
 		}
-
 
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'make');
 
 		$http_code = null;
 		$lang_args = null;
-		$data = null;
 
-		$this->response = $method->invokeArgs($obj, [$success,
-		                                             $api_code,
-		                                             $message_or_api_code,
-		                                             $data,
-		                                             $http_code,
-		                                             $lang_args,
-		                                             $headers]);
+		return $method->invokeArgs($obj, [$success,
+		                                  $api_code,
+		                                  $message_or_api_code,
+		                                  $data,
+		                                  $http_code,
+		                                  $lang_args,
+		                                  $headers,
+		                                  $encoding_options]);
 	}
 
 

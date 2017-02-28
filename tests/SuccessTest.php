@@ -32,6 +32,43 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		$this->assertEquals(\Lang::get(ApiCodeBase::getCodeMessageKey(ApiCodeBase::OK)), $j->message);
 	}
 
+	public function testSuccess_EncodingOptions()
+	{
+		$test_string = 'ąćę';
+		$test_string_escaped = $this->escape8($test_string);
+
+		// source data
+		$data = ['test' => $test_string];
+
+		// check if it returns escaped
+		// ensure config is different from what we want
+		\Config::set('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);
+
+		$encoding_options = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT;
+		$resp = ResponseBuilder::success($data, ApiCodeBase::OK, null, null, $encoding_options);
+
+		$matches = [];
+		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+		$result_escaped = $matches[1];
+		$this->assertEquals($test_string_escaped, $result_escaped);
+
+
+		// check if it returns unescaped
+		// ensure config is different from what we want
+		\Config::set('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
+
+		$encoding_options = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE;
+		$resp = ResponseBuilder::success($data, ApiCodeBase::OK, null, null, $encoding_options);
+
+		$matches = [];
+		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+		$result_unescaped = $matches[1];
+		$this->assertEquals($test_string, $result_unescaped);
+
+		// this one is just in case...
+		$this->assertNotEquals($result_escaped, $result_unescaped);
+	}
+
 	/**
 	 * Tests success() with custom API code no custom message
 	 *

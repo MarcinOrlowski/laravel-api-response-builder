@@ -56,6 +56,96 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 
 
 	/**
+	 * Validates make() handling invalid type of encoding_options
+	 *
+	 * @return void
+	 *
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testMake_InvalidEncodingOptions()
+	{
+		\Config::set('response_builder.encoding_options', []);
+		$this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK);
+	}
+
+	/**
+	 * Tests if JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT matches const value of DEFAULT_ENODING_OPTIONS
+	 *
+	 * @return void
+	 */
+	public function testDefaultEncodingOptionValue()
+	{
+		$this->assertEquals(JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+	}
+
+	/**
+	 * Tests fallback to default encoding_options
+	 *
+	 * @return void
+	 */
+	public function testMake_DefaultEncodingOptions()
+	{
+		// source data
+		$test_string = 'ąćę';
+		$test_string_escaped = $this->escape8($test_string);
+		$data = ['test' => $test_string];
+
+		// fallback defaults in action
+		\Config::offsetUnset('encoding_options');
+		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data);
+
+		$matches = [];
+		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+		$result_defaults = $matches[1];
+
+
+		// check if it returns the same when defaults enforced explicitly
+		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data, null, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+
+		$matches = [];
+		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+		$result_defaults_enforced = $matches[1];
+
+		$this->assertEquals($result_defaults, $result_defaults_enforced);
+	}
+
+	/**
+	 * Checks encoding_options influences result JSON data
+	 *
+	 * @return void
+	 */
+	public function testMake_ValidateEncodingOptionsPreventsEscaping()
+	{
+		$test_string = 'ąćę';
+		$test_string_escaped = $this->escape8($test_string);
+
+		// source data
+		$data = ['test' => $test_string];
+
+		// check if it returns escaped
+		\Config::set('response_builder.encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
+		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data);
+
+		$matches = [];
+		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+		$result_escaped = $matches[1];
+		$this->assertEquals($test_string_escaped, $result_escaped);
+
+		// check if it returns unescaped
+		\Config::set('response_builder.encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);
+		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data);
+
+		$matches = [];
+		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+		$result_unescaped = $matches[1];
+		$this->assertEquals($test_string, $result_unescaped);
+
+		// this one is just in case...
+		$this->assertNotEquals($result_escaped, $result_unescaped);
+	}
+
+
+	/**
 	 * Checks make() handling invalid type of api_code argument
 	 *
 	 * @return void
@@ -82,6 +172,6 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');
 		$method->invokeArgs($obj, []);
-
 	}
+
 }
