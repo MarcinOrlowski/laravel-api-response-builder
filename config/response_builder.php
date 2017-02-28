@@ -86,6 +86,28 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
+	| data-to-json encodong options
+	|--------------------------------------------------------------------------
+	|
+	| This controls data JSON encoding. Since 3.1, encoding was relying on
+	| framework defaults, however this caused valid UTF8 characters (i.e. accents)
+	| to be returned escaped, which while technically correct (ant theoretically
+	| transparent) might not be desired effects.
+	|
+	| To prevent escaping, add JSON_UNESCAPED_UNICODE:
+	|    JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE
+	|
+	| Default value:
+	|    JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
+	|
+	| See http://php.net/manual/en/function.json-encode.php for details
+	|
+	*/
+	'encoding_options' => JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT,
+
+
+	/*
+	|--------------------------------------------------------------------------
 	| Exception handler error codes
 	|--------------------------------------------------------------------------
 	|
