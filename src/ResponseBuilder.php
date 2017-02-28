@@ -412,7 +412,7 @@ class ResponseBuilder
 		}
 
 		if ($encoding_options === null) {
-			$encoding_options = Config::get('encoding_options', static::DEFAULT_ENCODING_OPTIONS);
+			$encoding_options = Config::get('response_builder.encoding_options', static::DEFAULT_ENCODING_OPTIONS);
 		}
 		if (!is_int($encoding_options)) {
 			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
