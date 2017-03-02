@@ -1,16 +1,15 @@
 # API Response Builder for Laravel 5 #
 
-
 See [compatibility docs](docs/compatibility.md) for details about backward compatibility!
-
 
 ## CHANGE LOG ##
 
 * @dev
+   * [RB-42] Default value of `encoding_options` include `JSON_UNESCAPED_UNICODE` to prevent unicode escaping
    * [RB-41] Updated documentation
 
 * v3.1.0 (2017-02-28)
-   * [RB-38] Added `encoding-options` to control data-to-json conversion.
+   * [RB-38] Added `encoding_options` to control data-to-json conversion.
    * [RB-38] Added optional encoding options args to all methods accepting `data` argument
    * [RB-34] Added option to control ExceptionHandeler behavior on debug builds
    * ExceptionHandler's debug is now added as `debug` node to make it more clear where it comes from
@@ -109,3 +108,4 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * v1.0.0 (2016-04-11)
    * Initial public release
+

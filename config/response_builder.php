@@ -94,16 +94,16 @@ return [
 	| to be returned escaped, which while technically correct (ant theoretically
 	| transparent) might not be desired effects.
 	|
-	| To prevent escaping, add JSON_UNESCAPED_UNICODE:
+	| To prevent escaping, add JSON_UNESCAPED_UNICODE (default since v3.2):
 	|    JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE
 	|
-	| Default value:
+	| Laravel's value:
 	|    JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 	|
 	| See http://php.net/manual/en/function.json-encode.php for details
 	|
 	*/
-	'encoding_options' => JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT,
+	'encoding_options' => JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE,
 
 
 	/*

@@ -40,11 +40,11 @@ class ResponseBuilder
 	/**
 	 * Default JSON encoding options
 	 *
-	 * 15 = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
+	 * 271 = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE
 	 *
 	 * This must be as int due to const limits in PHP disallowing expressions.
 	 */
-	const DEFAULT_ENCODING_OPTIONS = 15;
+	const DEFAULT_ENCODING_OPTIONS = 271;
 
 	/**
 	 * Reads and validates "classes" config mapping
