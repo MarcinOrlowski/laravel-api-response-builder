@@ -48,7 +48,7 @@ Thanks for all the fish!
  * Localization support,
  * Automatic object conversion with custom mapping,
  * API chaining/cascading support,
- * Provides [exception handler helper](docs/excecptions.md) to ensure your API stays consumable even in case of unexpected,
+ * Provides [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
  * No extra dependencies.
 
 ----
