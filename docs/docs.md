@@ -228,6 +228,7 @@ Methods' arguments:
  * `$http_code` (**int**) valid HTTP return code (see `HttpResponse` class for useful constants),
  * `$lang_args` (**array**) array of arguments passed to `Lang::get()` while building `message`,
  * `$message` (**string**) custom message to be returned as part of error response (avoid, use error code mapping feature).
+ * `$encoding_options` (**int**) data-to-json conversion options as [described in documentation of json_encode()](http://php.net/manual/en/function.json-encode.php). Pass `null` for default `ResponseBuilder::DEFAULT_ENCODING_OPTIONS` ([source](https://github.com/MarcinOrlowski/laravel-api-response-builder/blob/master/src/ResponseBuilder.php#L47)). See [configuration](https://github.com/MarcinOrlowski/laravel-api-response-builder/blob/master/config/response_builder.php#L106) key `encoding_options` too!  
 
 Most arguments of `success()` and `error()` methods are optional, with exception for `$api_code`
 for the latter. Helper methods arguments are partially optional - see signatures below for details.
@@ -253,8 +254,8 @@ See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for
 
 #### Reporting Success ####
 
-    success($data = null, $api_code = null, array $lang_args = [], $http_code = null);
-    successWithCode($api_code = null, array $lang_args = [], $http_code = null);
+    success($data=null, $api_code=null, array $lang_args=[], $http_code=null, $encoding_options=null);
+    successWithCode($api_code=null, array $lang_args=[], $http_code=null);
     successWithHttpCode($http_code);
 
 Usage restrictions:
@@ -263,11 +264,11 @@ Usage restrictions:
 
 #### Reporting Error ####
 
-    error($api_code, $lang_args = [], $data = null, $http_code = HttpResponse::HTTP_BAD_REQUEST);
-    errorWithData($api_code, $data, array $lang_args = []);
-    errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args = []);
-    errorWithHttpCode($api_code, $http_code, $lang_args = []);
-    errorWithMessage($api_code, $error_message, $http_code = HttpResponse::HTTP_BAD_REQUEST);
+    error($api_code, $lang_args=[], $data=null, $http_code=HttpResponse::HTTP_BAD_REQUEST);
+    errorWithData($api_code, $data, array $lang_args=[], $encoding_options=null);
+    errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args=[], $encoding_options=null);
+    errorWithHttpCode($api_code, $http_code, $lang_args=[]);
+    errorWithMessage($api_code, $error_message, $http_code=HttpResponse::HTTP_BAD_REQUEST);
 
 Usage restrictions:
 

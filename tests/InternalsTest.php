@@ -69,13 +69,14 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 	/**
-	 * Tests if JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT matches const value of DEFAULT_ENODING_OPTIONS
+	 * Tests if dist's config detaults matches ResponseBuilder::DEFAULT_ENODING_OPTIONS
 	 *
 	 * @return void
 	 */
 	public function testDefaultEncodingOptionValue()
 	{
-		$this->assertEquals(JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+		$config_defaults = \Config::get('response_builder.encoding_options');
+		$this->assertEquals($config_defaults, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 	}
 
 	/**
@@ -87,7 +88,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	{
 		// source data
 		$test_string = 'ąćę';
-		$test_string_escaped = $this->escape8($test_string);
+//		$test_string_escaped = $this->escape8($test_string);
 		$data = ['test' => $test_string];
 
 		// fallback defaults in action
