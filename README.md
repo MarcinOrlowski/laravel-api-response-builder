@@ -40,15 +40,16 @@ Thanks for all the fish!
 
 ## Features ##
 
- * Supports Laravel 5.1 and newer
- * Easy to use
- * Configurable (with ready-to-use defaults)
- * Localization support
- * Automated object conversion with custom mapping
- * Code ranges to support cascaded APIs
- * Built-in exception handler to ensure your API stays consumable even in case of unexpected
- * No extra dependencies and low requirements
- * Stable, production ready. 
+ * Easy to use,
+ * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
+ * Laravel 5.1, 5.2, 5.3 and 5.4 compatible,
+ * Works on PHP 5.5, 5.6, 7.0, 7.1 and [HHVM](http://hhvm.com/),
+ * Configurable (with ready-to-use defaults),
+ * Localization support,
+ * Automatic object conversion with custom mapping,
+ * API chaining/cascading support,
+ * Provides [exception handler helper](docs/excecptions.md) to ensure your API stays consumable even in case of unexpected,
+ * No extra dependencies.
 
 ----
 
