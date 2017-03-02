@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * [RB-41] Updated documentation
+
 * v3.1.0 (2017-02-28)
    * [RB-38] Added `encoding-options` to control data-to-json conversion.
    * [RB-38] Added optional encoding options args to all methods accepting `data` argument
