@@ -66,8 +66,6 @@ time in case I'd not be able to accept such changes. But if all is good and clea
  * do your changes
  * send pull request
 
-Thanks in advance!
-
 ----
 
 ## License ##
