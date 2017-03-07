@@ -16,7 +16,7 @@ nice, normalized and easy to consume REST API responses.
 
 ## Table of contents ##
 
- **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
+ **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your project's `composer.json` file!**
  
  * [Features](#features)
  * [Documentation](docs/docs.md)
