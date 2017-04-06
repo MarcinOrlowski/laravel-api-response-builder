@@ -4,6 +4,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v3.2.1 (2017-04-06)
+   * [RB-49] Fixed `artisan vendor:publish` not publishing config file correctly
+
 * v3.2.0 (2017-03-02)
    * [RB-42] Default value of `encoding_options` include `JSON_UNESCAPED_UNICODE` to prevent unicode escaping
    * [RB-41] Updated documentation
