@@ -4,7 +4,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v3.2.1 (2017-04-06)
    * [RB-49] Fixed `artisan vendor:publish` not publishing config file correctly
 
 * v3.2.0 (2017-03-02)
