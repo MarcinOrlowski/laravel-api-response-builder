@@ -18,7 +18,7 @@ use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 /**
  * App testing helper trait
  */
-trait AppTestHelper
+trait ApiCodesTestingTrait
 {
 	use ResponseBuilderTestHelper;
 
@@ -79,8 +79,8 @@ trait AppTestHelper
 		/** @var array $codes */
 		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
-			$msg = sprintf('Value of "{$name}" ({$val}) is out of allowed range %d-%d',
-				static::getMinCode(), static::getMaxCode());
+			$msg = sprintf("Value of '{$name}' ({$val}) is out of allowed range %d-%d",
+				$api_codes::getMinCode(), $api_codes::getMaxCode());
 
 			$this->assertTrue($api_codes::isCodeValid($val), $msg);
 		}

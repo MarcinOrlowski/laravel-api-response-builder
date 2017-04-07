@@ -5,6 +5,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 ## CHANGE LOG ##
 
 * @dev
+   * Added `ApiCodesTestingTrait` to test your RB's config and ApiCodes. See `Unit Testing` docs for details 
    * `ApiCodeBase` class is now `final`
 
 * v3.2.1 (2017-04-06)
