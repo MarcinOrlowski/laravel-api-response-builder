@@ -27,7 +27,7 @@
     "laravel/framework": "^5.1"
   },
   "autoload": {
-    "classmap": ["src/", "tests/", "tests/Base/"],
+    "classmap": ["src/", "tests/", "tests/Base/"]
   },
   "autoload-dev": {
     "psr-4": {
