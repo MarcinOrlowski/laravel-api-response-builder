@@ -27,9 +27,7 @@
     "laravel/framework": "^5.1"
   },
   "autoload": {
-    "psr-4": {
-      "MarcinOrlowski\\ResponseBuilder\\": "src"
-    }
+    "classmap": ["src/", "tests/", "tests/Base/"],
   },
   "autoload-dev": {
     "psr-4": {
