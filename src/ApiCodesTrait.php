@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Config;
 /**
  * Reusable ApiCodeBase related methods
  */
-trait ApiCodeBaseTrait
+trait ApiCodesTrait
 {
 	/**
 	 * Returns lowest allowed error code for this module

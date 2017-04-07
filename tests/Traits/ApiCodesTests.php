@@ -18,11 +18,8 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 /**
  * App testing helper trait
  */
-trait ApiCodesTestingTrait
+trait ApiCodesTests
 {
-	use ResponseBuilderTestHelpers;
-
-
 	/**
 	 * Checks if Api codes range is set right
 	 *

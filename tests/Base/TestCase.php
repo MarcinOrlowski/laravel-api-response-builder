@@ -12,9 +12,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-abstract class ResponseBuilderTestCaseBase extends \Orchestra\Testbench\TestCase
+abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-	use \MarcinOrlowski\ResponseBuilder\Tests\Traits\ResponseBuilderTestHelper;
+	use \MarcinOrlowski\ResponseBuilder\Tests\Traits\ResponseBuilderTestHelpers;
 
 	/**
 	 * @return string
