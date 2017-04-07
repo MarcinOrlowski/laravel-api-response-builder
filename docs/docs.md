@@ -573,7 +573,7 @@ Let's assume you got `ApiCodes` class that holds all your constants. Its file is
 and its namespace is `App`. 
 
  To do our tests we first need to augment your `ApiCodes` with some code necessary for testing. This
- code comes as `ApiCodesTrait` trait, but it is not needed for normal daily use, you should avoid
+ code comes as `ApiCodesHelpers` trait, but it is not needed for normal daily use, you should avoid
  adding it to the original `ApiCodes` class. Instead, we create new one that extends `ApiCodes` and
  uses sait trait.
 
@@ -585,16 +585,16 @@ and its namespace is `App`.
  
     <?php
 
-    use MarcinOrlowski\ResponseBuilder\ApiCodesTrait
+    use MarcinOrlowski\ResponseBuilder\ApiCodesHelpers
     class TestableApiCodes extends \App\ApiCodes
     {
-        use ApiCodesTrait;
+        use ApiCodesHelpers;
     }
 
     use MarcinOrlowski\ResponseBuilder\Tests\Traits\ApiCodesTestingTrait;
     class AppCodesTest extends TestCase
     {
- 	    use ApiCodesTestingTrait;
+ 	    use ApiCodesTests;
  
         public function getApiCodesClassName() 
         {

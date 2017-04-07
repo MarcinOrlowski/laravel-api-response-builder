@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Config;
  */
 class BaseApiCodes
 {
-	use ApiCodesTrait;
+	use ApiCodesHelpers;
 
 
 	/**
