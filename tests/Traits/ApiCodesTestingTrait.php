@@ -68,7 +68,7 @@ trait ApiCodesTestingTrait
 	}
 
 	/**
-	 * Checks if all Api codes are in defined and allowed range
+	 * Checks if all Api codes are in correct and allowed range,
 	 *
 	 * @return void
 	 */
@@ -120,43 +120,6 @@ trait ApiCodesTestingTrait
 				sprintf('No lang entry for: %s referenced by %s', $mapping, $this->resolveConstantFromCode($code))
 			);
 		}
-	}
-
-
-	/**
-	 * Checks make() for code with missing message mapping
-	 *
-	 * @return void
-	 */
-	public function testMake_MissingMapping()
-	{
-		$min = $this->min_allowed_code;
-		$max = $this->max_allowed_code;
-
-		/** @var ApiCodeBase $api_codes_class_name */
-		$api_codes_class_name = $this->getApiCodesClassName();
-		$map = $api_codes_class_name::getMap();
-		krsort($map);
-		reset($map);
-
-		$message_or_api_code = null;
-		for ($i = $min; $i < $max; $i++) {
-			if (array_key_exists($i, $map) === false) {
-				$message_or_api_code = $i;
-				break;
-			}
-		}
-
-		if ($message_or_api_code === null) {
-			$this->fail('Failed to find unused Api code value (within declared range) to perform this test');
-		}
-
-		$this->callMakeMethod(true, $message_or_api_code, $message_or_api_code);
-
-		$json_object = json_decode($this->response->getContent());
-		$this->assertTrue(is_object($json_object));
-		$this->assertEquals(\Lang::get($api_codes_class_name::getCodeMessageKey(ApiCodeBase::NO_ERROR_MESSAGE),
-			['api_code' => $message_or_api_code]), $json_object->message);
 	}
 
 }
