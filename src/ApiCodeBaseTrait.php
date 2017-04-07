@@ -63,7 +63,7 @@ trait ApiCodeBaseTrait
 	 */
 	protected static function getReservedMinCode()
 	{
-		return ApiCodeBase::RESERVED_MIN_API_CODE;
+		return BaseApiCodes::RESERVED_MIN_API_CODE;
 	}
 
 	/**
@@ -73,7 +73,7 @@ trait ApiCodeBaseTrait
 	 */
 	protected static function getReservedMaxCode()
 	{
-		return ApiCodeBase::RESERVED_MAX_API_CODE;
+		return BaseApiCodes::RESERVED_MAX_API_CODE;
 	}
 
 	/**
@@ -106,7 +106,7 @@ trait ApiCodeBaseTrait
 		}
 
 		/** @noinspection AdditionOperationOnArraysInspection */
-		return $map + ApiCodeBase::getBaseMap();
+		return $map + BaseApiCodes::getBaseMap();
 	}
 
 	/**
@@ -120,13 +120,13 @@ trait ApiCodeBaseTrait
 	 */
 	public static function getReservedCodeMessageKey($code)
 	{
-		if (($code < ApiCodeBase::RESERVED_MIN_API_CODE) || ($code > ApiCodeBase::RESERVED_MAX_API_CODE)) {
+		if (($code < BaseApiCodes::RESERVED_MIN_API_CODE) || ($code > BaseApiCodes::RESERVED_MAX_API_CODE)) {
 			throw new \InvalidArgumentException(
 				sprintf('Base code value (%d) is out of allowed reserved range %d-%d',
-					$code, ApiCodeBase::RESERVED_MIN_API_CODE, ApiCodeBase::RESERVED_MAX_API_CODE));
+					$code, BaseApiCodes::RESERVED_MIN_API_CODE, BaseApiCodes::RESERVED_MAX_API_CODE));
 		}
 
-		$base_map = ApiCodeBase::getBaseMap();
+		$base_map = BaseApiCodes::getBaseMap();
 		return array_key_exists($code, $base_map) ? $base_map[ $code ] : null;
 	}
 

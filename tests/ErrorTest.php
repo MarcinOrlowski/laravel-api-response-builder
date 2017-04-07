@@ -197,7 +197,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testError_MissingMessageMapping()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		// FIXME we **assume** this is not mapped. But assumptions sucks...
@@ -221,7 +221,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_ApiCodeOK()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
@@ -259,7 +259,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_WrongHttpCodeType()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
@@ -277,7 +277,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_NullHttpCode()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
@@ -300,7 +300,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_TooLowHttpCode()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
@@ -320,7 +320,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_WrongLangArgs()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;

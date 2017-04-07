@@ -122,7 +122,7 @@ class BuildResponseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testMake_WrongMessage()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$message_or_api_code = [];    // invalid

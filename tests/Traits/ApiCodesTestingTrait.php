@@ -13,7 +13,7 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
-use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 
 /**
  * App testing helper trait
@@ -30,7 +30,7 @@ trait ApiCodesTestingTrait
 	 */
 	public function testMinMaxCode()
 	{
-		$obj = new ApiCodeBase();
+		$obj = new BaseApiCodes();
 
 		$get_base_max_code = $this->getProtectedMethod(get_class($obj), 'getReservedMaxCode');
 		$base_max = $get_base_max_code->invokeArgs($obj, []);
@@ -56,7 +56,7 @@ trait ApiCodesTestingTrait
 	 */
 	public function testIfAllCodesGotMapping()
 	{
-		/** @var ApiCodeBase $api_codes */
+		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $codes */
 
@@ -74,7 +74,7 @@ trait ApiCodesTestingTrait
 	 */
 	public function testIfAllCodesAreInRange()
 	{
-		/** @var ApiCodeBase $api_codes */
+		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $codes */
 		$codes = $api_codes::getApiCodeConstants();
@@ -93,7 +93,7 @@ trait ApiCodesTestingTrait
 	 */
 	public function testIfAllApiValuesAreUnique()
 	{
-		/** @var ApiCodeBase $api_codes_class_name */
+		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$items = array_count_values($api_codes_class_name::getMap());
 		foreach ($items as $code => $count) {
@@ -110,7 +110,7 @@ trait ApiCodesTestingTrait
 	 */
 	public function testIfAllCodesAreCorrectlyMapped()
 	{
-		/** @var ApiCodeBase $api_codes_class_name */
+		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		/** @var array $map */
 		$map = $api_codes_class_name::getMap();

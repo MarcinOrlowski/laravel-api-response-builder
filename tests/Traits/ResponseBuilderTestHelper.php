@@ -12,7 +12,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -77,7 +77,7 @@ trait ResponseBuilderTestHelper {
 		$this->random_api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
 		// AND corresponding mapped message mapping
-		$map = $this->getProtectedMember(\MarcinOrlowski\ResponseBuilder\ApiCodeBase::class, 'base_map');
+		$map = $this->getProtectedMember(\MarcinOrlowski\ResponseBuilder\BaseApiCodes::class, 'base_map');
 		$idx = mt_rand(1, count($map));
 
 		$this->random_api_code_message_key = $map[array_keys($map)[$idx-1]];
@@ -126,7 +126,7 @@ trait ResponseBuilderTestHelper {
 	                                         $expected_message = null)
 	{
 		if ($expected_api_code === null) {
-			/** @var ApiCodeBase $api_codes */
+			/** @var BaseApiCodes $api_codes */
 			$api_codes = $this->getApiCodesClassName();
 			$expected_api_code = $api_codes::OK;
 		}
@@ -140,9 +140,9 @@ trait ResponseBuilderTestHelper {
 		}
 
 		if ($expected_message === null) {
-			$key = \MarcinOrlowski\ResponseBuilder\ApiCodeBase::getCodeMessageKey($expected_api_code);
+			$key = \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey($expected_api_code);
 			if ($key === null) {
-				$key = \MarcinOrlowski\ResponseBuilder\ApiCodeBase::getCodeMessageKey(\MarcinOrlowski\ResponseBuilder\ApiCodeBase::OK);
+				$key = \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey(\MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK);
 			}
 			$expected_message = \Lang::get($key, ['api_code' => $expected_api_code]);
 		}
@@ -168,7 +168,7 @@ trait ResponseBuilderTestHelper {
 	                                       $message = null)
 	{
 		if ($expected_api_code === null) {
-			/** @var ApiCodeBase $api_codes_class_name */
+			/** @var BaseApiCodes $api_codes_class_name */
 			$api_codes_class_name = $this->getApiCodesClassName();
 			$expected_api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
 		}
@@ -203,7 +203,7 @@ trait ResponseBuilderTestHelper {
 
 		$this->assertEquals($expected_api_code, $j->code);
 
-		/** @var ApiCodeBase $api_codes_class_name */
+		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$expected_message_string = ($expected_message === null)
 			? \Lang::get($api_codes_class_name::getCodeMessageKey($expected_api_code), ['api_code' => $expected_api_code])
@@ -321,7 +321,7 @@ trait ResponseBuilderTestHelper {
 	 */
 	protected function resolveConstantFromCode($api_code)
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		/** @var array $const */
 		$const = $api_codes_class_name::getApiCodeConstants();

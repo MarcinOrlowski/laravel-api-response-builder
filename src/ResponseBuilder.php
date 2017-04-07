@@ -35,7 +35,7 @@ class ResponseBuilder
 	/**
 	 * Default API code for OK
 	 */
-	const DEFAULT_API_CODE_OK = ApiCodeBase::OK;
+	const DEFAULT_API_CODE_OK = BaseApiCodes::OK;
 
 	/**
 	 * Default JSON encoding options
@@ -428,12 +428,12 @@ class ResponseBuilder
 			}
 
 			// do we have the mapping for this string already?
-			$key = ApiCodeBase::getCodeMessageKey($message_or_api_code);
+			$key = BaseApiCodes::getCodeMessageKey($message_or_api_code);
 			if ($key === null) {
 				// no, get the default one instead
-				$key = ApiCodeBase::getCodeMessageKey($success
-						? ApiCodeBase::OK
-						: ApiCodeBase::NO_ERROR_MESSAGE
+				$key = BaseApiCodes::getCodeMessageKey($success
+						? BaseApiCodes::OK
+						: BaseApiCodes::NO_ERROR_MESSAGE
 				);
 			}
 			$message_or_api_code = \Lang::get($key, $lang_args);
@@ -444,9 +444,9 @@ class ResponseBuilder
 				);
 			}
 
-			if (!ApiCodeBase::isCodeValid($api_code)) {
+			if (!BaseApiCodes::isCodeValid($api_code)) {
 				$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
-					$api_code, ApiCodeBase::getMinCode(), ApiCodeBase::getMaxCode());
+					$api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 				throw new \InvalidArgumentException($msg);
 			}
 		}

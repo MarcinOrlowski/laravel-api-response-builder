@@ -1,7 +1,7 @@
 <?php
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
-use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
@@ -23,7 +23,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testMake_WrongMessage()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$message_or_api_code = [];    // invalid
@@ -65,7 +65,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	public function testMake_InvalidEncodingOptions()
 	{
 		\Config::set('response_builder.encoding_options', []);
-		$this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK);
+		$this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK);
 	}
 
 	/**
@@ -93,7 +93,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 
 		// fallback defaults in action
 		\Config::offsetUnset('encoding_options');
-		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -101,7 +101,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 
 
 		// check if it returns the same when defaults enforced explicitly
-		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data, null, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data, null, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -125,7 +125,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 
 		// check if it returns escaped
 		\Config::set('response_builder.encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
-		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -134,7 +134,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 
 		// check if it returns unescaped
 		\Config::set('response_builder.encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);
-		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -155,7 +155,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testMake_ApiCodeNotIntNorString()
 	{
-		$this->callMakeMethod(true, ApiCodeBase::OK, []);
+		$this->callMakeMethod(true, BaseApiCodes::OK, []);
 	}
 
 

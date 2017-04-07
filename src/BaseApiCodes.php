@@ -15,9 +15,9 @@ namespace MarcinOrlowski\ResponseBuilder;
 use Illuminate\Support\Facades\Config;
 
 /**
- * ApiCode handling class
+ * BaseApiCodes handling class
  */
-final class ApiCodeBase
+class BaseApiCodes
 {
 	use ApiCodeBaseTrait;
 

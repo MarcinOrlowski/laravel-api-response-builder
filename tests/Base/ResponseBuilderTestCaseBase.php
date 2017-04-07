@@ -21,7 +21,7 @@ abstract class ResponseBuilderTestCaseBase extends \Orchestra\Testbench\TestCase
 	 */
 	public function getApiCodesClassName()
 	{
-		return \MarcinOrlowski\ResponseBuilder\ApiCodeBase::class;
+		return \MarcinOrlowski\ResponseBuilder\BaseApiCodes::class;
 	}
 
 }
