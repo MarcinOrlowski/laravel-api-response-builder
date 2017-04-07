@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * Unit test helper trait
  */
-trait ResponseBuilderTestHelpers {
+trait TestingHelpers {
 
 	/**
 	 * @return string

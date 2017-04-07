@@ -20,7 +20,7 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
  */
 trait ApiCodesTestingTrait
 {
-	use ResponseBuilderTestHelpers;
+	use TestingHelpers;
 
 
 	/**

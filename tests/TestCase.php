@@ -14,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-	use Traits\ResponseBuilderTestHelpers;
+	use Traits\TestingHelpers;
 
 	/**
 	 * @return string
