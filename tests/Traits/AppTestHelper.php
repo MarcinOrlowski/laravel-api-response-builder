@@ -11,15 +11,18 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
 use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
 
 /**
- * Class AppTestBase
+ * App testing helper trait
  */
-abstract class AppTestBase extends ResponseBuilderTestCaseBase
+trait AppTestHelper
 {
+	use ResponseBuilderTestHelper;
+
+
 	/**
 	 * Checks if error codes range is set right
 	 *
@@ -27,7 +30,6 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 */
 	public function testMinMaxCode()
 	{
-
 		$obj = $this->getApiCodesObject();
 
 		$get_base_max_code = $this->getProtectedMethod(get_class($obj), 'getReservedMaxCode');
