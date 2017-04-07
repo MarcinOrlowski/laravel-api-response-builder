@@ -4,6 +4,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * `ApiCodeBase` class is now `final`
+
 * v3.2.1 (2017-04-06)
    * [RB-49] Fixed `artisan vendor:publish` not publishing config file correctly
 

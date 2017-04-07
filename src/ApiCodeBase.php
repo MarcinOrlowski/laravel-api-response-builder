@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Config;
 /**
  * ApiCode handling class
  */
-class ApiCodeBase
+final class ApiCodeBase
 {
 	/**
 	 * protected code range - lowest code
