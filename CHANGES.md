@@ -4,6 +4,10 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * Added testing traits to test your RB's config and ApiCodes. See `Unit Testing your ApiCodes` section in docs 
+   * `ApiCodeBase` is now `BaseApiCodes`
+
 * v3.2.1 (2017-04-06)
    * [RB-49] Fixed `artisan vendor:publish` not publishing config file correctly
 

@@ -2,7 +2,7 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class SuccessTest extends Base\ResponseBuilderTestCaseBase
+class SuccessTest extends TestCase
 {
 	/**
 	 * Check success()
@@ -26,10 +26,10 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	public function testSuccess()
 	{
 		$this->response = ResponseBuilder::success();
-		$j = $this->getResponseSuccessObject(ApiCodeBase::OK);
+		$j = $this->getResponseSuccessObject(BaseApiCodes::OK);
 
 		$this->assertNull($j->data);
-		$this->assertEquals(\Lang::get(ApiCodeBase::getCodeMessageKey(ApiCodeBase::OK)), $j->message);
+		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK)), $j->message);
 	}
 
 	public function testSuccess_EncodingOptions()
@@ -45,7 +45,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		\Config::set('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);
 
 		$encoding_options = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT;
-		$resp = ResponseBuilder::success($data, ApiCodeBase::OK, null, null, $encoding_options);
+		$resp = ResponseBuilder::success($data, BaseApiCodes::OK, null, null, $encoding_options);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -58,7 +58,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		\Config::set('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
 
 		$encoding_options = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE;
-		$resp = ResponseBuilder::success($data, ApiCodeBase::OK, null, null, $encoding_options);
+		$resp = ResponseBuilder::success($data, BaseApiCodes::OK, null, null, $encoding_options);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -108,7 +108,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set('response_builder.map', [
-			$this->random_api_code => ApiCodeBase::getCodeMessageKey(ApiCodeBase::NO_ERROR_MESSAGE)
+			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE)
 		]);
 
 		$lang_args = [
@@ -116,7 +116,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		];
 
 		$this->response = ResponseBuilder::success(null, $this->random_api_code, $lang_args);
-		$expected_message = \Lang::get(ApiCodeBase::getCodeMessageKey($this->random_api_code), $lang_args);
+		$expected_message = \Lang::get(BaseApiCodes::getCodeMessageKey($this->random_api_code), $lang_args);
 		$j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
 
 		$this->assertNull($j->data);
@@ -132,7 +132,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set('response_builder.map', [
-			$this->random_api_code => ApiCodeBase::getCodeMessageKey(ApiCodeBase::NO_ERROR_MESSAGE)
+			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE)
 		]);
 
 		$lang_args = [
@@ -140,7 +140,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		];
 
 		$this->response = ResponseBuilder::successWithCode($this->random_api_code, $lang_args);
-		$expected_message = \Lang::get(ApiCodeBase::getCodeMessageKey($this->random_api_code), $lang_args);
+		$expected_message = \Lang::get(BaseApiCodes::getCodeMessageKey($this->random_api_code), $lang_args);
 		$j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
 
 		$this->assertNull($j->data);
@@ -161,7 +161,7 @@ class SuccessTest extends Base\ResponseBuilderTestCaseBase
 		               HttpResponse::HTTP_ACCEPTED => HttpResponse::HTTP_ACCEPTED,
 		               HttpResponse::HTTP_OK       => HttpResponse::HTTP_OK];
 
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		foreach ($payloads as $payload) {

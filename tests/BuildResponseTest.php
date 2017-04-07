@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Config;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class BuildResponseTest extends Base\ResponseBuilderTestCaseBase
+class BuildResponseTest extends TestCase
 {
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
@@ -122,7 +122,7 @@ class BuildResponseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testMake_WrongMessage()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$message_or_api_code = [];    // invalid

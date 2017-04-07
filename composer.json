@@ -27,15 +27,11 @@
     "laravel/framework": "^5.1"
   },
   "autoload": {
-    "psr-4": {
-      "MarcinOrlowski\\ResponseBuilder\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "MarcinOrlowski\\ResponseBuilder\\": "src",
-      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests"
-    }
+    "classmap": [
+      "src/",
+      "tests/",
+      "tests/Traits/"
+    ]
   },
   "require-dev": {
     "marcin-orlowski/coding-standard": "^1.1",
