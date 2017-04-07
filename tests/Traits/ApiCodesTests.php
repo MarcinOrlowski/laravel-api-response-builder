@@ -16,7 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 
 /**
- * App testing helper trait
+ * ApiCodes tests trait
  */
 trait ApiCodesTests
 {
