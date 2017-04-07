@@ -30,8 +30,7 @@ trait AppTestHelper
 	 */
 	public function testMinMaxCode()
 	{
-		$class_name = $this->getApiCodesClassName();
-		$obj = new $class_name();
+		$obj = new ApiCodeBase();
 
 		$get_base_max_code = $this->getProtectedMethod(get_class($obj), 'getReservedMaxCode');
 		$base_max = $get_base_max_code->invokeArgs($obj, []);
@@ -60,7 +59,9 @@ trait AppTestHelper
 		/** @var ApiCodeBase $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $codes */
-		$codes = $api_codes::getApiCodeConstants();
+
+		$reflect = new \ReflectionClass($api_codes);
+		$codes = $reflect->getConstants();
 		foreach ($codes as $name => $val) {
 			$this->assertNotNull($api_codes::getCodeMessageKey($val), "No mapping for {$name}");
 		}
@@ -79,7 +80,7 @@ trait AppTestHelper
 		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
 			$msg = sprintf('Value of "{$name}" ({$val}) is out of allowed range %d-%d',
-			static::getMinCode(), static::getMaxCode());
+				static::getMinCode(), static::getMaxCode());
 
 			$this->assertTrue($api_codes::isCodeValid($val), $msg);
 		}
