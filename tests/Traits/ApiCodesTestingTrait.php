@@ -24,7 +24,7 @@ trait ApiCodesTestingTrait
 
 
 	/**
-	 * Checks if error codes range is set right
+	 * Checks if Api codes range is set right
 	 *
 	 * @return void
 	 */
@@ -50,7 +50,7 @@ trait ApiCodesTestingTrait
 	}
 
 	/**
-	 * Checks if all error codes defined in ApiCodes class contain mapping entry
+	 * Checks if all Api codes defined in ApiCodes class contain mapping entry
 	 *
 	 * @return void
 	 */
@@ -68,7 +68,7 @@ trait ApiCodesTestingTrait
 	}
 
 	/**
-	 * Checks if all error codes are in allowed range
+	 * Checks if all Api codes are in defined and allowed range
 	 *
 	 * @return void
 	 */
@@ -87,17 +87,17 @@ trait ApiCodesTestingTrait
 	}
 
 	/**
-	 * Checks if all defined error code constants are unique (per value)
+	 * Checks if all defined Api code constants' values are unique
 	 *
 	 * @return void
 	 */
-	public function testIfAllErrorValuesAreUnique()
+	public function testIfAllApiValuesAreUnique()
 	{
 		/** @var ApiCodeBase $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$items = array_count_values($api_codes_class_name::getMap());
 		foreach ($items as $code => $count) {
-			$this->assertLessThanOrEqual($count, 1, sprintf("Error code {$code} is not unique. Used {$count} times."));
+			$this->assertLessThanOrEqual($count, 1, sprintf("Value of  '{$code}' is not unique. Used {$count} times."));
 		}
 	}
 
@@ -148,7 +148,7 @@ trait ApiCodesTestingTrait
 		}
 
 		if ($message_or_api_code === null) {
-			$this->fail('Failed to find unused error code value (within declared range) to perform this test');
+			$this->fail('Failed to find unused Api code value (within declared range) to perform this test');
 		}
 
 		$this->callMakeMethod(true, $message_or_api_code, $message_or_api_code);
@@ -156,20 +156,7 @@ trait ApiCodesTestingTrait
 		$json_object = json_decode($this->response->getContent());
 		$this->assertTrue(is_object($json_object));
 		$this->assertEquals(\Lang::get($api_codes_class_name::getCodeMessageKey(ApiCodeBase::NO_ERROR_MESSAGE),
-			['error_code' => $message_or_api_code]), $json_object->message);
-	}
-
-	/**
-	 * Tests if your ApiCodes class is instance of base ApiCodeBase class
-	 *
-	 * @return void
-	 */
-	public function testApiCodesSubclassOfApiCodeBase()
-	{
-		$base_class = ApiCodeBase::class;
-		$api_codes = $this->getApiCodesObject();
-
-		$this->assertInstanceOf($api_codes, $base_class);
+			['api_code' => $message_or_api_code]), $json_object->message);
 	}
 
 }
