@@ -77,7 +77,10 @@ trait AppTestHelper
 		/** @var array $codes */
 		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
-			$this->assertTrue($api_codes::isCodeValid($val), "Value of {$name} is outside allowed range");
+			$msg = sprintf('Value of "{$name}" ({$val}) is out of allowed range %d-%d',
+			static::getMinCode(), static::getMaxCode());
+
+			$this->assertTrue($api_codes::isCodeValid($val), $msg);
 		}
 	}
 
