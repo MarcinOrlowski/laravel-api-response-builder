@@ -18,7 +18,7 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 /**
  * App testing helper trait
  */
-trait ApiCodesTestingTrait
+trait ApiCodesTests
 {
 	use TestingHelpers;
 
