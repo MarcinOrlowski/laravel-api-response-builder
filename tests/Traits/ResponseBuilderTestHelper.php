@@ -250,9 +250,10 @@ trait ResponseBuilderTestHelper {
 // ---------------------------------------------------------
 
 	/**
-	 * Checks if Response's code matches our expectations. If not, shows \MarcinOrlowski\ResponseBuilder\ApiCodeBase::XXX constant name of expected and current values
+	 * Checks if Response's code matches our expectations. If not, shows
+	 * \MarcinOrlowski\ResponseBuilder\ApiCodeBase::XXX constant name of expected and current values
 	 *
-	 * @param int      $expected_code ErrorCodes::XXX code expected
+	 * @param int      $expected_code ApiCode::XXX code expected
 	 * @param StdClass $response_json response json object
 	 *
 	 * @return void

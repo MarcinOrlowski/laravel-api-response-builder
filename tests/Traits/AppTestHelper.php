@@ -51,7 +51,7 @@ trait AppTestHelper
 	}
 
 	/**
-	 * Checks if all error codes defined in ApiCode class contain mapping entry
+	 * Checks if all error codes defined in ApiCodes class contain mapping entry
 	 *
 	 * @return void
 	 */
@@ -159,11 +159,11 @@ trait AppTestHelper
 	}
 
 	/**
-	 * Tests if your ApiCodes class is instance of base ResponseBuilder class
+	 * Tests if your ApiCodes class is instance of base ApiCodeBase class
 	 *
 	 * @return void
 	 */
-	public function testErrorCodesSubclassOfErrorCode()
+	public function testApiCodesSubclassOfApiCodeBase()
 	{
 		$base_class = ApiCodeBase::class;
 		$api_codes = $this->getApiCodesObject();

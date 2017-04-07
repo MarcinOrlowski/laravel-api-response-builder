@@ -217,8 +217,8 @@ class ApiCodeBase
 	{
 		$result = false;
 
-		if ((($code >= ApiCodeBase::getMinCode()) && ($code <= ApiCodeBase::getMaxCode()))
-			|| (($code <= ApiCodeBase::getReservedMaxCode()) && ($code >= ApiCodeBase::getReservedMinCode()))
+		if ((($code >= static::getMinCode()) && ($code <= static::getMaxCode()))
+			|| (($code <= static::getReservedMaxCode()) && ($code >= static::getReservedMinCode()))
 		) {
 			$result = true;
 		}
