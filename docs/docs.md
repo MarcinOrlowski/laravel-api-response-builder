@@ -591,7 +591,7 @@ and its namespace is `App`.
         use ApiCodesHelpers;
     }
 
-    use MarcinOrlowski\ResponseBuilder\Tests\Traits\ApiCodesTestingTrait;
+    use MarcinOrlowski\ResponseBuilder\Tests\Traits\ApiCodesTests;
     class AppCodesTest extends TestCase
     {
  	    use ApiCodesTests;
