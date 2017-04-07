@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class SuccessTest extends Base\TestCase
+class SuccessTest extends TestCase
 {
 	/**
 	 * Check success()

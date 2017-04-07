@@ -14,7 +14,7 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class ApiCodeBaseTest extends Base\TestCase
+class ApiCodeBaseTest extends TestCase
 {
 	/**
 	 * Tests getMinCode() with invalid config

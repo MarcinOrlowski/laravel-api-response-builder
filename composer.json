@@ -30,7 +30,6 @@
     "classmap": [
       "src/",
       "tests/",
-      "tests/Base/",
       "tests/Traits/"
     ]
   },

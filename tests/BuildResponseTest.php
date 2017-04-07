@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Config;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class BuildResponseTest extends Base\TestCase
+class BuildResponseTest extends TestCase
 {
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion

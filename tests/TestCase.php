@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
+namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 /**
  * Laravel API Response Builder
@@ -14,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
  */
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-	use \MarcinOrlowski\ResponseBuilder\Tests\Traits\ResponseBuilderTestHelpers;
+	use Traits\ResponseBuilderTestHelpers;
 
 	/**
 	 * @return string
