@@ -30,7 +30,8 @@ trait AppTestHelper
 	 */
 	public function testMinMaxCode()
 	{
-		$obj = $this->getApiCodesObject();
+		$class_name = $this->getApiCodesClassName();
+		$obj = new $class_name();
 
 		$get_base_max_code = $this->getProtectedMethod(get_class($obj), 'getReservedMaxCode');
 		$base_max = $get_base_max_code->invokeArgs($obj, []);

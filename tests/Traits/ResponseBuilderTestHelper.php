@@ -22,11 +22,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 trait ResponseBuilderTestHelper {
 
 	/**
-	 * @return ApiCodeBase
-	 */
-	abstract public function getApiCodesObject();
-
-	/**
 	 * @return string
 	 */
 	abstract public function getApiCodesClassName();
@@ -68,7 +63,9 @@ trait ResponseBuilderTestHelper {
 		parent::setUp();
 
 		// Obtain configuration params
-		$obj = $this->getApiCodesObject();
+		$class_name = $this->getApiCodesClassName();
+		$obj = new $class_name();
+
 		$method = $this->getProtectedMethod(get_class($obj), 'getMinCode');
 		$this->min_allowed_code = $method->invokeArgs($obj, []);
 
@@ -456,5 +453,6 @@ trait ResponseBuilderTestHelper {
 
 		return $escaped;
 	}
+
 
 }

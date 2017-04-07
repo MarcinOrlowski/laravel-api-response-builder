@@ -17,14 +17,6 @@ abstract class ResponseBuilderTestCaseBase extends \Orchestra\Testbench\TestCase
 	use \MarcinOrlowski\ResponseBuilder\Tests\Traits\ResponseBuilderTestHelper;
 
 	/**
-	 * @return ApiCodeBase
-	 */
-	public function getApiCodesObject()
-	{
-		return new \MarcinOrlowski\ResponseBuilder\ApiCodeBase();
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getApiCodesClassName()
