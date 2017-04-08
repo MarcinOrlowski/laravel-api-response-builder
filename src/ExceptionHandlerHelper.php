@@ -140,11 +140,10 @@ class ExceptionHandlerHelper
 			$base_api_code = BaseApiCodes::EX_AUTHENTICATION_EXCEPTION;
 		} elseif (Config::get("{$base_config}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION) === $api_code) {
 			$base_api_code = BaseApiCodes::EX_VALIDATION_EXCEPTION;
-			$data[ResponseBuilder::KEY_MESSAGES] = $exception->validator->errors()->all();
+			$data[ResponseBuilder::KEY_MESSAGES] = $exception->validator->errors()->messages();
 		} else {
 			$base_api_code = BaseApiCodes::NO_ERROR_MESSAGE;
 		}
-
 
 		$key = BaseApiCodes::getCodeMessageKey($api_code);
 		if ($key === null) {
