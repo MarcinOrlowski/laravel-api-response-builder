@@ -38,7 +38,7 @@
     "phpunit/phpunit": "^4.8",
     "phpunit/php-code-coverage": "^2.2.4",
     "mockery/mockery": "^0.9.8",
-    "orchestra/testbench": "~3.1",
+    "orchestra/testbench": "^3.1",
     "codacy/coverage": "^1.0"
   }
 }
