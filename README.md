@@ -47,7 +47,8 @@ then then feel free to donate to the project. Send some Bitcoins (BTC) to `1Lbfb
  * Localization support,
  * Automatic object conversion with custom mapping,
  * API chaining/cascading support,
- * Provides [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
+ * Includes traits to help unit testing your code,
+ * Provides own [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
  * No extra dependencies.
 
 ----
