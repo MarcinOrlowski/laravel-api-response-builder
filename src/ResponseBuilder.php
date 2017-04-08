@@ -244,7 +244,8 @@ class ResponseBuilder
 		}
 		if (!is_int($http_code)) {
 			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
-		} elseif (($http_code < 200) || ($http_code > 299)) {
+		}
+		if (($http_code < 200) || ($http_code > 299)) {
 			throw new \InvalidArgumentException(sprintf('Invalid http_code (%d). Must be between 200-299 inclusive', $http_code));
 		}
 
@@ -372,13 +373,17 @@ class ResponseBuilder
 
 		if (!is_int($api_code)) {
 			throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
-		} elseif ($api_code === static::DEFAULT_API_CODE_OK) {
+		}
+		if ($api_code === static::DEFAULT_API_CODE_OK) {
 			throw new \InvalidArgumentException(sprintf('api_code must not be %d (DEFAULT_API_CODE_OK)', static::DEFAULT_API_CODE_OK));
-		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
+		}
+		if ((!is_array($lang_args)) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException(sprintf('lang_args must be either array or null (%s given)', gettype($lang_args)));
-		} elseif (!is_int($http_code)) {
+		}
+		if (!is_int($http_code)) {
 			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
-		} elseif ($http_code < 400) {
+		}
+		if ($http_code < 400) {
 			throw new \InvalidArgumentException('http_code cannot be lower than 400');
 		}
 
