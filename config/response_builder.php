@@ -43,7 +43,7 @@ return [
 	|
 	|    ApiCode::SOMETHING => 'api.something',
 	|
-	| See README if you want to provide own messages for built-in codes too.
+	| See docs/exceptions.md if you want to provide own messages for built-in codes too.
 	|
 	*/
 	'map' => [
@@ -135,27 +135,27 @@ return [
 		'exception' => [
 
 //			'http_not_found' => [
-//				'code'      => \App\ApiCode::HTTP_NOT_FOUND,
+//				'code'      => \App\ApiCodes::HTTP_NOT_FOUND,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
 //			],
 //			'http_service_unavailable' => [
-//				'code'      => \App\ApiCode::HTTP_SERVICE_UNAVAILABLE,
+//				'code'      => \App\ApiCodes::HTTP_SERVICE_UNAVAILABLE,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
 //			],
 //			'http_exception' => [
-//				'code'      => \App\ApiCode::HTTP_EXCEPTION,
+//				'code'      => \App\ApiCodes::HTTP_EXCEPTION,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
 //			],
 //			'uncaught_exception' => [
-//				'code'      => \App\ApiCode::UNCAUGHT_EXCEPTION,
+//				'code'      => \App\ApiCodes::UNCAUGHT_EXCEPTION,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_INTERNAL_SERVER_ERROR,
 //			],
 //			'authentication_exception' => [
-//				'code'      => \App\ApiCode::AUTHENTICATION_EXCEPTION,
+//				'code'      => \App\ApiCodes::AUTHENTICATION_EXCEPTION,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNAUTHORIZED,
 //			],
 //			'validation_exception' => [
-//				'code'      => \App\ApiCode::VALIDATION_EXCEPTION,
+//				'code'      => \App\ApiCodes::VALIDATION_EXCEPTION,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNPROCESSABLE_ENTITY,
 //			],
 
