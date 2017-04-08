@@ -174,11 +174,16 @@ return [
 	'debug' => [
 		'exception_handler' => [
 			/**
+			 * Name of the JSON key trace debug data should be put under.
+			 */
+			'trace_key' => 'debug,',
+
+			/**
 			 * When ExceptionHandler kicks in and this is set to @true (default),
 			 * then **if** your `app.debug` is `true` too, returned JSON structure
-			 * will contain `debug` node with additional exception base trace (class
-			 * name, file name, line number). If `app.debug` is anything but @true,
-			 * no debug info is added.
+			 * will contain data_key (`debug` by default) node with additional
+			 * exception base trace (class name, file name, line number). If
+			 * `app.debug` is anything but @true, no debug info is added.
 			 */
 			'trace_enabled' => true,
 		],

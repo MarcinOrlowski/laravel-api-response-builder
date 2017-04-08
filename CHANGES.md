@@ -8,6 +8,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in ExceptionHandler. See new config keys for custom codes
    * [RB-47] ExceptionHandler now supports `FormRequests`, returning all messages in `ResponseBuilder::KEY_MESSAGES` key
    * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled as per `authentication_exception` configuration
+   * [RB=56] Added configurable key for debug trace added to returned JSON response (if enabled)
    * Added traits to help testing your config and ApiCodes with ease. See `Unit Testing your ApiCodes` docs for details 
    * `ApiCodeBase` is now `BaseApiCodes`
 
