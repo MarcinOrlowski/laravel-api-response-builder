@@ -6,8 +6,8 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * @dev
    * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in ExceptionHandler. See new config keys for custom codes
-   * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled as per `authentication_exception` config
-   * Added testing traits to test your RB's config and ApiCodes. See `Unit Testing your ApiCodes` section in docs 
+   * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled as per `authentication_exception` configuration
+   * Added traits to help testing your config and ApiCodes with ease. See `Unit Testing your ApiCodes` docs for details 
    * `ApiCodeBase` is now `BaseApiCodes`
 
 * v3.2.1 (2017-04-06)
