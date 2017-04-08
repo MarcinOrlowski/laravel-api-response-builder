@@ -14,6 +14,8 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 
 use Exception;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
@@ -52,6 +54,8 @@ class ExceptionHandlerHelper
 					$result = static::error($exception, 'http_exception', BaseApiCodes::EX_HTTP_EXCEPTION);
 					break;
 			}
+		} elseif ($exception instanceof ValidationException) {
+			$result = static::error($exception, 'validation_exception', HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
 		} else {
 			$result = static::error($exception, 'uncaught_exception', HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
 		}
@@ -133,7 +137,10 @@ class ExceptionHandlerHelper
 		} elseif (Config::get("{$base_config}.uncaught_exception.code", BaseApiCodes::EX_UNCAUGHT_EXCEPTION) === $api_code) {
 			$base_api_code = BaseApiCodes::EX_UNCAUGHT_EXCEPTION;
 		} elseif (Config::get("{$base_config}.authentication_exception.code", BaseApiCodes::EX_AUTHENTICATION_EXCEPTION) === $api_code) {
-			$base_api_code = BaseApiCodes::EX_UNCAUGHT_EXCEPTION;
+			$base_api_code = BaseApiCodes::EX_AUTHENTICATION_EXCEPTION;
+		} elseif (Config::get("{$base_config}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION) === $api_code) {
+			$base_api_code = BaseApiCodes::EX_VALIDATION_EXCEPTION;
+			$data[ResponseBuilder::KEY_MESSAGES] = $exception->validator->errors()->messages();
 		} else {
 			$base_api_code = BaseApiCodes::NO_ERROR_MESSAGE;
 		}

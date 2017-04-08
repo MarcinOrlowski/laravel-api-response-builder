@@ -37,6 +37,13 @@ class ResponseBuilder
 	 */
 	const DEFAULT_API_CODE_OK = BaseApiCodes::OK;
 
+
+	/**
+	 * Default key to be used by exception handler while processing ValidationException
+	 * to return all the error messages
+	 */
+	const KEY_MESSAGES = 'messages';
+
 	/**
 	 * Default JSON encoding options
 	 *
