@@ -121,9 +121,9 @@ class ExceptionHandlerHelper
 			if (Config::get('response_builder.debug.exception_handler.trace_enabled', true)) {
 				$debug_key = Config::get('response_builder.debug.exception_handler.debug_key', ResponseBuilder::KEY_DEBUG);
 				$data = [$debug_key => [
-					'class' => get_class($exception),
-					'file'  => $exception->getFile(),
-					'line'  => $exception->getLine(),
+					ResponseBuilder::KEY_CLASS => get_class($exception),
+					ResponseBuilder::KEY_FILE  => $exception->getFile(),
+					ResponseBuilder::KEY_LINE  => $exception->getLine(),
 				]];
 			}
 		}
