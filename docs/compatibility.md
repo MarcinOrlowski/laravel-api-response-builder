@@ -1,4 +1,4 @@
-# API Response Builder for Laravel 5 #
+# API Response Builder for Laravel #
 
  `ResponseBuilder` follows [Semantic Versioning](http://semver.org/).
 
@@ -10,10 +10,12 @@
  99,9% of use cases) then you are all fine and no change is needed. But if you were setting own 
  `http_code` or `lang_args` when calling `success()` then you need to update your code. 
  * `:api_code` is now the code value placeholder in all the strings. `:error_code` is no longer supported
- * `ErrorCodes` class is now `ApiCodeBase`
- * ApiCodeBase's `getErrorCodeConstants()` is now `getApiCodeConstants()`
- * ApiCodeBase's `getMapping()` is now `getCodeMessageKey()`
- * ApiCodeBase's `getBaseMapping()` is now `getReservedCodeMessageKey()`
+ * `ErrorCodes` class is now `BaseApiCodes`
+ * BaseApiCodes's `getErrorCodeConstants()` is now `getApiCodeConstants()`
+ * BaseApiCodes's `getMapping()` is now `getCodeMessageKey()`
+ * BaseApiCodes's `getBaseMapping()` is now `getReservedCodeMessageKey()`
+ * Internal constants for `ExeceptionHandlerHelper` supported exceptions are now prefixed with `EX_` (i.e. `HTTP_NOT_FOUND`
+ is now `EX_HTTP_NOT_FOUND`)
 
 ### v2 ###
 

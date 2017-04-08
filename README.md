@@ -1,6 +1,6 @@
-# API Response Builder for Laravel 5 #
+# API Response Builder for Laravel #
 
-`ResponseBuilder` is Laravel5's helper designed to simplify building
+`ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
 
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
@@ -41,7 +41,7 @@ then then feel free to donate to the project. Send some Bitcoins (BTC) to `1Lbfb
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel 5.1, 5.2, 5.3 and 5.4 compatible,
+ * Laravel 5.x, 5.2, 5.3 and 5.4 compatible,
  * Works on PHP 5.5, 5.6, 7.0, 7.1 and [HHVM](http://hhvm.com/),
  * Configurable (with ready-to-use defaults),
  * Localization support,

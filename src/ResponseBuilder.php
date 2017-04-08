@@ -39,6 +39,14 @@ class ResponseBuilder
 
 
 	/**
+	 * Default keys to be used by exception handler while adding debug information
+	 */
+	const KEY_DEBUG = 'debug';
+	const KEY_CLASS = 'class';
+	const KEY_FILE  = 'file';
+	const KEY_LINE  = 'line';
+
+	/**
 	 * Default key to be used by exception handler while processing ValidationException
 	 * to return all the error messages
 	 */

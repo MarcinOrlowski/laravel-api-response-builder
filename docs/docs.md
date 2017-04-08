@@ -1,7 +1,8 @@
-# API Response Builder for Laravel 5 #
+# API Response Builder for Laravel #
 
-`ResponseBuilder` is Laravel5's helper designed to simplify building
+`ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
+
 
 
 ## Table of contents ##
