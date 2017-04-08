@@ -63,6 +63,11 @@ class BaseApiCodes
 	 */
 	const EX_AUTHENTICATION_EXCEPTION = 14;
 
+	/**
+	 * built-in error code for \Illuminate\Auth\AuthenticationException
+	 */
+	const EX_VALIDATION_EXCEPTION = 15;
+
 
 	/**
 	 * @var array built-in codes mapping
@@ -76,6 +81,7 @@ class BaseApiCodes
 		self::EX_HTTP_EXCEPTION           => 'response-builder::builder.http_exception',
 		self::EX_UNCAUGHT_EXCEPTION       => 'response-builder::builder.uncaught_exception',
 		self::EX_AUTHENTICATION_EXCEPTION => 'response-builder::builder.authentication_exception',
+		self::EX_VALIDATION_EXCEPTION     => 'response-builder::builder.validation_exception',
 	];
 
 	// ---------------------------------------------

@@ -21,6 +21,7 @@ return [
 
     // Exception Handler (added in 3.3.0)
     'authentication_exception'     => 'Not authorized to access',
+    'validation_exception'         => 'Invalid data',
 
 ];
 
