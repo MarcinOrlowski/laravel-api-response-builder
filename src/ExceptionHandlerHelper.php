@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 
@@ -43,6 +44,10 @@ class ExceptionHandlerHelper
 					$result = static::error($exception, 'http_service_unavailable', BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE);
 					break;
 
+				case HttpResponse::HTTP_UNAUTHORIZED:
+					$result = static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION);
+					break;
+
 				default:
 					$result = static::error($exception, 'http_exception', BaseApiCodes::EX_HTTP_EXCEPTION);
 					break;
@@ -53,6 +58,21 @@ class ExceptionHandlerHelper
 
 		return $result;
 	}
+
+
+	/**
+	 * Convert an authentication exception into an unauthenticated response.
+	 *
+	 * @param  \Illuminate\Http\Request                 $request
+	 * @param  \Illuminate\Auth\AuthenticationException $exception
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	protected function unauthenticated($request, AuthenticationException $exception)
+	{
+		return static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION);
+	}
+
 
 	/**
 	 * @param Exception $exception         Exception to be processed
@@ -112,6 +132,8 @@ class ExceptionHandlerHelper
 			$base_api_code = BaseApiCodes::EX_HTTP_EXCEPTION;
 		} elseif (Config::get("{$base_config}.uncaught_exception.code", BaseApiCodes::EX_UNCAUGHT_EXCEPTION) === $api_code) {
 			$base_api_code = BaseApiCodes::EX_UNCAUGHT_EXCEPTION;
+		} elseif (Config::get("{$base_config}.authentication_exception.code", BaseApiCodes::EX_AUTHENTICATION_EXCEPTION) === $api_code) {
+			$base_api_code = BaseApiCodes::EX_UNCAUGHT_EXCEPTION;
 		} else {
 			$base_api_code = BaseApiCodes::NO_ERROR_MESSAGE;
 		}
@@ -135,8 +157,8 @@ class ExceptionHandlerHelper
 		if ($error_message === '') {
 			$error_message = Lang::get($key, [
 				'api_code' => $api_code,
-				'message'    => $ex_message,
-				'class'      => get_class($exception),
+				'message'  => $ex_message,
+				'class'    => get_class($exception),
 			]);
 		}
 
