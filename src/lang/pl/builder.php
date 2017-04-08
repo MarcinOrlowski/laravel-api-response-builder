@@ -19,5 +19,8 @@ return [
 	'http_exception'               => 'Wyjątek HTTP :message',
 	'http_service_unavailable'     => 'Trwa przerwa serwisowa',
 
+	// Exception Handler (added in 3.3.0)
+	'authentication_exception'     => 'Brak autoryzacji dostępu',
+
 ];
 

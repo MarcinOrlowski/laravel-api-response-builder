@@ -133,6 +133,7 @@ return [
 		// Map exception to your own error codes. That way, when cascading
 		// you will still know which module thrown this exception
 		'exception' => [
+
 //			'http_not_found' => [
 //				'code'      => \App\ApiCode::HTTP_NOT_FOUND,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
@@ -149,6 +150,11 @@ return [
 //				'code'      => \App\ApiCode::UNCAUGHT_EXCEPTION,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_INTERNAL_SERVER_ERROR,
 //			],
+//			'authentication_exception' => [
+//				'code'      => \App\ApiCode::AUTHENTICATION_EXCEPTION,
+//				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNAUTHORIZED,
+//			],
+
 		],
 
 	],
