@@ -122,16 +122,17 @@ class ResponseBuilder
 	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
 	 * additionally added to reported JSON for easier manual debugging.
 	 *
-	 * @param boolean $success  @true if reposnse indicates success, @false otherwise
-	 * @param integer $api_code response code
-	 * @param string  $message  message to return
-	 * @param mixed   $data     API response data if any
+	 * @param boolean    $success    @true if reposnse indicates success, @false otherwise
+	 * @param integer    $api_code   response code
+	 * @param string     $message    message to return
+	 * @param mixed      $data       API response data if any
+	 * @param array|null $debug_data optional debug data array to be added to returned JSON.
 	 *
 	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse($success, $api_code, $message, $data = null)
+	protected static function buildResponse($success, $api_code, $message, $data = null, $debug_data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
@@ -161,6 +162,15 @@ class ResponseBuilder
 		             'message' => $message,
 		             'data'    => $data,
 		];
+
+		if ($debug_data !== null) {
+			$debug_key = Config::get('response_builder.debug.exception_handler.debug_key', ResponseBuilder::KEY_DEBUG);
+			$data[ $debug_key ] = [
+				ResponseBuilder::KEY_CLASS => get_class($exception),
+				ResponseBuilder::KEY_FILE  => $exception->getFile(),
+				ResponseBuilder::KEY_LINE  => $exception->getLine(),
+			];
+		}
 
 		return $response;
 	}
@@ -335,6 +345,22 @@ class ResponseBuilder
 	}
 
 	/**
+	 * @param integer      $api_code         numeric code to be returned as 'code'
+	 * @param string       $error_message    custom message to be returned as part of error response
+	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public static function errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code = null,
+	                                                       $encoding_options = null, $debug_data = null)
+	{
+		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, $encoding_options, $debug_data);
+	}
+
+	/**
 	 * @param integer      $api_code      numeric code to be returned as 'code'
 	 * @param string       $error_message custom message to be returned as part of error response
 	 * @param integer|null $http_code     optional HTTP status code to be used with this response or @null for defaults
@@ -357,6 +383,7 @@ class ResponseBuilder
 	 * @param string|null  $message          custom message to be returned as part of error response
 	 * @param array|null   $headers          optional HTTP headers to be returned in error response
 	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -365,7 +392,7 @@ class ResponseBuilder
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
 	protected static function buildErrorResponse($data, $api_code, $http_code, $lang_args = null, $message = null,
-	                                             $headers = null, $encoding_options = null)
+	                                             $headers = null, $encoding_options = null, $debug_data = null)
 	{
 		if ($http_code === null) {
 			$http_code = static::DEFAULT_HTTP_CODE_ERROR;
@@ -394,7 +421,7 @@ class ResponseBuilder
 			$headers = [];
 		}
 
-		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers, $encoding_options);
+		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers, $encoding_options, $debug_data);
 	}
 
 
@@ -407,6 +434,7 @@ class ResponseBuilder
 	 * @param array|null     $lang_args           optional array with arguments passed to Lang::get()
 	 * @param array|null     $headers             optional HTTP headers to be returned in the response
 	 * @param integer|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
+	 * @param array|null     $debug_data          optional debug data array to be added to returned JSON.
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -416,7 +444,7 @@ class ResponseBuilder
 	 */
 	protected static function make($success, $api_code, $message_or_api_code, $data = null,
 	                               $http_code = null, array $lang_args = null, array $headers = null,
-	                               $encoding_options = null
+	                               $encoding_options = null, $debug_data = null
 	)
 	{
 		if ($lang_args === null) {
@@ -429,6 +457,10 @@ class ResponseBuilder
 			$http_code = $success
 				? static::DEFAULT_HTTP_CODE_OK
 				: static::DEFAULT_HTTP_CODE_ERROR;
+		}
+
+		if (($debug_data !== null) && (!is_array($debug_data))) {
+			throw new \InvalidArgumentException('debug_data must be either array or null');
 		}
 
 		if ($encoding_options === null) {
@@ -471,6 +503,9 @@ class ResponseBuilder
 			}
 		}
 
-		return Response::json(static::buildResponse($success, $api_code, $message_or_api_code, $data), $http_code, $headers, $encoding_options);
+		return Response::json(
+			static::buildResponse($success, $api_code, $message_or_api_code, $data, $debug_data),
+			$http_code, $headers, $encoding_options
+		);
 	}
 }
