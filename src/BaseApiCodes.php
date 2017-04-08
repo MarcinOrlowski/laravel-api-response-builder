@@ -52,12 +52,16 @@ class BaseApiCodes
 	/**
 	 * built-in error code for HTTP_EXCEPTION
 	 */
-
 	const EX_HTTP_EXCEPTION = 12;
 	/**
 	 * built-in error code for UNCAUGHT_EXCEPTION
 	 */
 	const EX_UNCAUGHT_EXCEPTION = 13;
+
+	/**
+	 * built-in error code for \Illuminate\Auth\AuthenticationException
+	 */
+	const EX_AUTHENTICATION_EXCEPTION = 14;
 
 
 	/**
@@ -71,6 +75,7 @@ class BaseApiCodes
 		self::EX_HTTP_SERVICE_UNAVAILABLE => 'response-builder::builder.http_service_unavailable',
 		self::EX_HTTP_EXCEPTION           => 'response-builder::builder.http_exception',
 		self::EX_UNCAUGHT_EXCEPTION       => 'response-builder::builder.uncaught_exception',
+		self::EX_AUTHENTICATION_EXCEPTION => 'response-builder::builder.authentication_exception',
 	];
 
 	// ---------------------------------------------
