@@ -111,7 +111,8 @@ class BaseApiCodes
 
 
 	/**
-	 * Returns response JSON key value
+	 * Returns response JSON key value. If there's user provided mapping, it takes
+	 * that into account, otherwise fails to default mapping values.
 	 *
 	 * @param string $reference_key JSON response key name reference to look up
 	 *
@@ -149,5 +150,14 @@ class BaseApiCodes
 		return $result;
 	}
 
+	/**
+	 * Returns default response JSON key keys and values
+	 *
+	 * @return array
+	 */
+	public static function getDefaultResponseKeyMap()
+	{
+		return static::$response_key_map;
+	}
 
 }

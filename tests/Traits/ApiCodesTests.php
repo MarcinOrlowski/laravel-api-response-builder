@@ -13,7 +13,9 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
+use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
  * ApiCodes tests trait
@@ -119,6 +121,34 @@ trait ApiCodesTests
 			$this->assertNotEquals($mapping, $str,
 				sprintf('No lang entry for: %s referenced by %s', $mapping, $this->resolveConstantFromCode($code))
 			);
+		}
+	}
+
+	/**
+	 * Checks if all keys used in user provided mapping are valid
+	 * and if the mapped values are unique.
+	 *
+	 * @return void
+	 */
+	public function testIfCustomMappingUsesUniqueValues()
+	{
+		$map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
+		if ($map !== null) {
+			$base_map = BaseApiCodes::getDefaultResponseKeyMap();
+
+			foreach ($map as $key => $val) {
+				// check if reference key are known
+				if (!array_key_exists($key, $base_map)) {
+					$this->fail("Unknown reference key in your mapping: '{%key}'");
+				}
+
+				// check mapping value is unique
+				foreach ($map as $test_key => $test_val) {
+					if (($test_val === $val) && ($test_key !== $key)) {
+						$this->fail("Value used for reference key '{%key}' is not unique (used in '{%test_key}'");
+					}
+				}
+			}
 		}
 	}
 
