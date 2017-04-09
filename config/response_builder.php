@@ -176,7 +176,7 @@ return [
 			/**
 			 * Name of the JSON key trace debug data should be put under.
 			 */
-			'trace_key' => 'debug,',
+			'trace_key' => 'debug',
 
 			/**
 			 * When ExceptionHandler kicks in and this is set to @true (default),
