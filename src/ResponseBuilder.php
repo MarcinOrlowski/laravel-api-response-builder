@@ -165,8 +165,12 @@ class ResponseBuilder
 		];
 
 		if ($trace_data !== null) {
+			$debug_key = Config::get('response_builder.debug.debug_key', ResponseBuilder::KEY_DEBUG);
 			$trace_key = Config::get('response_builder.debug.exception_handler.trace_key', ResponseBuilder::KEY_TRACE);
-			$data->{static::KEY_DEBUG} = [$trace_key => $trace_data];
+
+			$data->{$debug_key} = [
+				$trace_key => $trace_data,
+			];
 		}
 
 		return $response;

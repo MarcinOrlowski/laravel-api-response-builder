@@ -172,6 +172,8 @@ return [
 	*/
 
 	'debug' => [
+//		'debug_key' => 'debug',
+
 		'exception_handler' => [
 			/**
 			 * Name of the JSON key trace data should be put under in `debug` node.

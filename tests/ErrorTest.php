@@ -189,8 +189,9 @@ class ErrorTest extends TestCase
 		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
 		$this->assertEquals($error_message, $j->message);
 
+		$debug_key = \Config::get('response_builder.debug.debug_key', ResponseBuilder::KEY_DEBUG);
 		$trace_key = \Config::get('response_builder.debug.exception_handler.trace_key', ResponseBuilder::KEY_TRACE);
-		$data[ ResponseBuilder::KEY_DEBUG ] = (object)[$trace_key => (object)$trace_data];
+		$data[ $debug_key ] = (object)[$trace_key => (object)$trace_data];
 		$this->assertEquals((object)$data, $j->data);
 	}
 
