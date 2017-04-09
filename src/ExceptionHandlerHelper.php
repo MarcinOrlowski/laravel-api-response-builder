@@ -128,7 +128,7 @@ class ExceptionHandlerHelper
 		}
 
 		// optional payload to return
-		$data = [];
+		$data = null;
 
 		// let's figure out what event we are handling now
 		if (Config::get("{$base_config}.http_not_found.code", BaseApiCodes::EX_HTTP_NOT_FOUND) === $api_code) {
@@ -143,7 +143,7 @@ class ExceptionHandlerHelper
 			$base_api_code = BaseApiCodes::EX_AUTHENTICATION_EXCEPTION;
 		} elseif (Config::get("{$base_config}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION) === $api_code) {
 			$base_api_code = BaseApiCodes::EX_VALIDATION_EXCEPTION;
-			$data[ResponseBuilder::KEY_MESSAGES] = $exception->validator->errors()->messages();
+			$data = [ResponseBuilder::KEY_MESSAGES => $exception->validator->errors()->messages()];
 		} else {
 			$base_api_code = BaseApiCodes::NO_ERROR_MESSAGE;
 		}
