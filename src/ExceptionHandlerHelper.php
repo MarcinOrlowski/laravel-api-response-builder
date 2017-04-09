@@ -17,9 +17,11 @@ use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
+
 
 /**
  * Class ExceptionHandlerHelper
@@ -46,7 +48,7 @@ class ExceptionHandlerHelper
 	 */
 	public static function render($request, Exception $exception)
 	{
-		if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+		if ($exception instanceof HttpException) {
 			switch ($exception->getStatusCode()) {
 				case HttpResponse::HTTP_NOT_FOUND:
 					$result = static::error($exception, static::TYPE_HTTP_NOT_FOUND, BaseApiCodes::EX_HTTP_NOT_FOUND);
@@ -65,9 +67,9 @@ class ExceptionHandlerHelper
 					break;
 			}
 		} elseif ($exception instanceof ValidationException) {
-			$result = static::error($exception, static::TYPE_VALIDATION_EXCEPTION, HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
+			$result = static::error($exception, static::TYPE_VALIDATION_EXCEPTION, BaseApiCodes::EX_VALIDATION_EXCEPTION);
 		} else {
-			$result = static::error($exception, static::TYPE_UNCAUGHT_EXCEPTION, HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
+			$result = static::error($exception, static::TYPE_UNCAUGHT_EXCEPTION, BaseApiCodes::EX_UNCAUGHT_EXCEPTION);
 		}
 
 		return $result;
