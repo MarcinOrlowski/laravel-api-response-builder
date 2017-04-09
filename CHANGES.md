@@ -4,7 +4,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v4.0.0 (2017-04-09)
    * **BACKWARD INCOMPATIBILE CHANGES**
    * [RB-59] Added option to remap response JSON keys to user provided values
    * [RB-54] Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
