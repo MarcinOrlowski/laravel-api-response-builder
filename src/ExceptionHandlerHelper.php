@@ -129,14 +129,12 @@ class ExceptionHandlerHelper
 		}
 
 		$debug_data = null;
-		if (Config::get('app.debug')) {
-			if (Config::get('response_builder.debug.exception_handler.trace_enabled', true)) {
-				$debug_data = [
-					ResponseBuilder::KEY_CLASS => get_class($exception),
-					ResponseBuilder::KEY_FILE  => $exception->getFile(),
-					ResponseBuilder::KEY_LINE  => $exception->getLine(),
-				];
-			}
+		if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true)) {
+			$debug_data = [
+				ResponseBuilder::KEY_CLASS => get_class($exception),
+				ResponseBuilder::KEY_FILE  => $exception->getFile(),
+				ResponseBuilder::KEY_LINE  => $exception->getLine(),
+			];
 		}
 
 		// optional payload to return
@@ -184,7 +182,7 @@ class ExceptionHandlerHelper
 			]);
 		}
 
-		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code, $debug_data);
+		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code, null, $debug_data);
 	}
 
 }
