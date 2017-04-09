@@ -145,7 +145,6 @@ class InternalsTest extends TestCase
 		$this->assertNotEquals($result_escaped, $result_unescaped);
 	}
 
-
 	/**
 	 * Checks make() handling invalid type of api_code argument
 	 *

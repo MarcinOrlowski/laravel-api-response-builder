@@ -173,6 +173,27 @@ class ErrorTest extends TestCase
 	}
 
 	/**
+	 * Tests errorWithMessageAndDataAndDebug()
+	 *
+	 * @return void
+	 */
+	public function testErrorWithMessageAndDataAndDebug()
+	{
+		$debug_data = [$this->getRandomString('key') => $this->getRandomString('val')];
+
+		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
+		$api_code = $this->random_api_code;
+		$error_message = $this->getRandomString('msg');
+		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, null, null, $debug_data);
+
+		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
+		$this->assertEquals($error_message, $j->message);
+
+		$data[ResponseBuilder::KEY_DEBUG] = (object)$debug_data;
+		$this->assertEquals((object)$data, $j->data);
+	}
+
+	/**
 	 * Tests errorWithMessage()
 	 *
 	 * @return void

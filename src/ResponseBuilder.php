@@ -132,7 +132,7 @@ class ResponseBuilder
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse($success, $api_code, $message, $data = null, $debug_data = null)
+	protected static function buildResponse($success, $api_code, $message, $data = null, array $debug_data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
@@ -165,11 +165,7 @@ class ResponseBuilder
 
 		if ($debug_data !== null) {
 			$debug_key = Config::get('response_builder.debug.exception_handler.debug_key', ResponseBuilder::KEY_DEBUG);
-			$data[ $debug_key ] = [
-				ResponseBuilder::KEY_CLASS => get_class($exception),
-				ResponseBuilder::KEY_FILE  => $exception->getFile(),
-				ResponseBuilder::KEY_LINE  => $exception->getLine(),
-			];
+			$data->$debug_key = $debug_data;
 		}
 
 		return $response;
@@ -357,7 +353,7 @@ class ResponseBuilder
 	public static function errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code = null,
 	                                                       $encoding_options = null, $debug_data = null)
 	{
-		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, $encoding_options, $debug_data);
+		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, null, $encoding_options, $debug_data);
 	}
 
 	/**
@@ -444,7 +440,7 @@ class ResponseBuilder
 	 */
 	protected static function make($success, $api_code, $message_or_api_code, $data = null,
 	                               $http_code = null, array $lang_args = null, array $headers = null,
-	                               $encoding_options = null, $debug_data = null
+	                               $encoding_options = null, array $debug_data = null
 	)
 	{
 		if ($lang_args === null) {
@@ -457,10 +453,6 @@ class ResponseBuilder
 			$http_code = $success
 				? static::DEFAULT_HTTP_CODE_OK
 				: static::DEFAULT_HTTP_CODE_ERROR;
-		}
-
-		if (($debug_data !== null) && (!is_array($debug_data))) {
-			throw new \InvalidArgumentException('debug_data must be either array or null');
 		}
 
 		if ($encoding_options === null) {
