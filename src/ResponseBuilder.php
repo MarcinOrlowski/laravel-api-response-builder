@@ -42,6 +42,7 @@ class ResponseBuilder
 	 * Default keys to be used by exception handler while adding debug information
 	 */
 	const KEY_DEBUG = 'debug';
+	const KEY_TRACE = 'trace';
 	const KEY_CLASS = 'class';
 	const KEY_FILE  = 'file';
 	const KEY_LINE  = 'line';
@@ -122,16 +123,17 @@ class ResponseBuilder
 	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
 	 * additionally added to reported JSON for easier manual debugging.
 	 *
-	 * @param boolean $success  @true if reposnse indicates success, @false otherwise
-	 * @param integer $api_code response code
-	 * @param string  $message  message to return
-	 * @param mixed   $data     API response data if any
+	 * @param boolean    $success    @true if reposnse indicates success, @false otherwise
+	 * @param integer    $api_code   response code
+	 * @param string     $message    message to return
+	 * @param mixed      $data       API response data if any
+	 * @param array|null $trace_data optional debug data array to be added to returned JSON.
 	 *
 	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse($success, $api_code, $message, $data = null)
+	protected static function buildResponse($success, $api_code, $message, $data = null, array $trace_data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
@@ -161,6 +163,11 @@ class ResponseBuilder
 		             'message' => $message,
 		             'data'    => $data,
 		];
+
+		if ($trace_data !== null) {
+			$trace_key = Config::get('response_builder.debug.exception_handler.trace_key', ResponseBuilder::KEY_TRACE);
+			$data->{static::KEY_DEBUG} = [$trace_key => $trace_data];
+		}
 
 		return $response;
 	}
@@ -244,7 +251,8 @@ class ResponseBuilder
 		}
 		if (!is_int($http_code)) {
 			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
-		} elseif (($http_code < 200) || ($http_code > 299)) {
+		}
+		if (($http_code < 200) || ($http_code > 299)) {
 			throw new \InvalidArgumentException(sprintf('Invalid http_code (%d). Must be between 200-299 inclusive', $http_code));
 		}
 
@@ -334,6 +342,22 @@ class ResponseBuilder
 	}
 
 	/**
+	 * @param integer      $api_code         numeric code to be returned as 'code'
+	 * @param string       $error_message    custom message to be returned as part of error response
+	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public static function errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code = null,
+	                                                       $encoding_options = null, $debug_data = null)
+	{
+		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, null, $encoding_options, $debug_data);
+	}
+
+	/**
 	 * @param integer      $api_code      numeric code to be returned as 'code'
 	 * @param string       $error_message custom message to be returned as part of error response
 	 * @param integer|null $http_code     optional HTTP status code to be used with this response or @null for defaults
@@ -356,6 +380,7 @@ class ResponseBuilder
 	 * @param string|null  $message          custom message to be returned as part of error response
 	 * @param array|null   $headers          optional HTTP headers to be returned in error response
 	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -364,7 +389,7 @@ class ResponseBuilder
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
 	protected static function buildErrorResponse($data, $api_code, $http_code, $lang_args = null, $message = null,
-	                                             $headers = null, $encoding_options = null)
+	                                             $headers = null, $encoding_options = null, $debug_data = null)
 	{
 		if ($http_code === null) {
 			$http_code = static::DEFAULT_HTTP_CODE_ERROR;
@@ -372,13 +397,17 @@ class ResponseBuilder
 
 		if (!is_int($api_code)) {
 			throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
-		} elseif ($api_code === static::DEFAULT_API_CODE_OK) {
+		}
+		if ($api_code === static::DEFAULT_API_CODE_OK) {
 			throw new \InvalidArgumentException(sprintf('api_code must not be %d (DEFAULT_API_CODE_OK)', static::DEFAULT_API_CODE_OK));
-		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
+		}
+		if ((!is_array($lang_args)) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException(sprintf('lang_args must be either array or null (%s given)', gettype($lang_args)));
-		} elseif (!is_int($http_code)) {
+		}
+		if (!is_int($http_code)) {
 			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
-		} elseif ($http_code < 400) {
+		}
+		if ($http_code < 400) {
 			throw new \InvalidArgumentException('http_code cannot be lower than 400');
 		}
 
@@ -389,7 +418,7 @@ class ResponseBuilder
 			$headers = [];
 		}
 
-		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers, $encoding_options);
+		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers, $encoding_options, $debug_data);
 	}
 
 
@@ -402,6 +431,7 @@ class ResponseBuilder
 	 * @param array|null     $lang_args           optional array with arguments passed to Lang::get()
 	 * @param array|null     $headers             optional HTTP headers to be returned in the response
 	 * @param integer|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
+	 * @param array|null     $debug_data          optional debug data array to be added to returned JSON.
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -411,7 +441,7 @@ class ResponseBuilder
 	 */
 	protected static function make($success, $api_code, $message_or_api_code, $data = null,
 	                               $http_code = null, array $lang_args = null, array $headers = null,
-	                               $encoding_options = null
+	                               $encoding_options = null, array $debug_data = null
 	)
 	{
 		if ($lang_args === null) {
@@ -466,6 +496,9 @@ class ResponseBuilder
 			}
 		}
 
-		return Response::json(static::buildResponse($success, $api_code, $message_or_api_code, $data), $http_code, $headers, $encoding_options);
+		return Response::json(
+			static::buildResponse($success, $api_code, $message_or_api_code, $data, $debug_data),
+			$http_code, $headers, $encoding_options
+		);
 	}
 }

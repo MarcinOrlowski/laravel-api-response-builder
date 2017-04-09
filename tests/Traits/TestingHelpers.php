@@ -160,12 +160,14 @@ trait TestingHelpers {
 	 * @param int|null    $expected_api_code  API code expected in response's 'code' field
 	 * @param int         $expected_http_code Expected HTTP code
 	 * @param string|null $message            Expected return message or @null if we automatically mapped message fits
+	 * @param array       $extra_keys         array of additional keys expected in response structure
 	 *
 	 * @return StdClass response object built from JSON
 	 */
 	public function getResponseErrorObject($expected_api_code = null,
 	                                       $expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
-	                                       $message = null)
+	                                       $message = null,
+	                                       $extra_keys = [])
 	{
 		if ($expected_api_code === null) {
 			/** @var BaseApiCodes $api_codes_class_name */
@@ -177,7 +179,7 @@ trait TestingHelpers {
 			$this->fail(sprintf('TEST: Error HTTP code (%d) cannot be below %d', $expected_http_code, HttpResponse::HTTP_BAD_REQUEST));
 		}
 
-		$j = $this->getResponseObjectRaw($expected_api_code, $expected_http_code, $message);
+		$j = $this->getResponseObjectRaw($expected_api_code, $expected_http_code, $message, $extra_keys);
 		$this->assertEquals(false, $j->success);
 
 		return $j;
@@ -185,13 +187,14 @@ trait TestingHelpers {
 
 
 	/**
-	 * @param int         $expected_api_code
-	 * @param int         $expected_http_code
-	 * @param string|null $expected_message
+	 * @param int         $expected_api_code  expected Api response code
+	 * @param int         $expected_http_code expected HTTP code
+	 * @param string|null $expected_message   expected message string or @null if default
+	 * @param array       $extra_keys         array of additional keys expected in response structure
 	 *
 	 * @return mixed
 	 */
-	private function getResponseObjectRaw($expected_api_code, $expected_http_code, $expected_message = null)
+	private function getResponseObjectRaw($expected_api_code, $expected_http_code, $expected_message = null, array $extra_keys = [])
 	{
 		$actual = $this->response->getStatusCode();
 		$this->assertEquals($expected_http_code, $actual,
@@ -199,7 +202,7 @@ trait TestingHelpers {
 
 		// get response as Json object
 		$j = json_decode($this->response->getContent());
-		$this->validateResponseStructure($j);
+		$this->validateResponseStructure($j, $extra_keys);
 
 		$this->assertEquals($expected_api_code, $j->code);
 
@@ -217,11 +220,12 @@ trait TestingHelpers {
 	/**
 	 * Validates if given $json_object contains all expected elements
 	 *
-	 * @param StdClass $json_object
+	 * @param StdClass $json_object JSON Object hodling Api response to validate
+	 * @param array    $extra_keys  array of additional keys expected in response structure
 	 *
 	 * @return void
 	 */
-	protected function validateResponseStructure($json_object)
+	protected function validateResponseStructure($json_object, array $extra_keys = [])
 	{
 		$this->assertTrue(is_object($json_object));
 
@@ -230,6 +234,8 @@ trait TestingHelpers {
 		          'locale',
 		          'message',
 		          'data'];
+
+		$items = array_merge_recursive($items, $extra_keys);
 		foreach ($items as $item) {
 			$this->assertObjectHasAttribute($item, $json_object, "No '{$item}' element in response structure found");
 		}
@@ -283,10 +289,12 @@ trait TestingHelpers {
 	 * @param array|null $data                Data to return
 	 * @param array|null $headers             HTTP headers to include
 	 * @param int|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
+	 * @param array|null $debug_data          optional data to be included in response JSON
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $data = null, array $headers = null, $encoding_options = null)
+	protected function callMakeMethod($success, $api_code, $message_or_api_code, array $data = null, array $headers = null,
+	                                  $encoding_options = null, array $debug_data = null)
 	{
 		if (!is_bool($success)) {
 			$this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));
@@ -305,7 +313,8 @@ trait TestingHelpers {
 		                                  $http_code,
 		                                  $lang_args,
 		                                  $headers,
-		                                  $encoding_options]);
+		                                  $encoding_options,
+		                                  $debug_data]);
 	}
 
 
