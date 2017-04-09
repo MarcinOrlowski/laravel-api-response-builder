@@ -27,6 +27,16 @@ use Illuminate\Support\Facades\Lang;
 class ExceptionHandlerHelper
 {
 	/**
+	 * Exception types
+	 */
+	const TYPE_HTTP_NOT_FOUND           = 'http_not_found';
+	const TYPE_HTTP_SERVICE_UNAVAILABLE = 'http_service_unavailable';
+	const TYPE_HTTP_UNAUTHORIZED        = 'authentication_exception';
+	const TYPE_DEFAULT                  = 'http_exception';
+	const TYPE_VALIDATION_EXCEPTION     = 'validation_exception';
+	const TYPE_UNCAUGHT_EXCEPTION       = 'uncaught_exception';
+
+	/**
 	 * Render an exception into an HTTP response.
 	 *
 	 * @param  \Illuminate\Http\Request $request   Request object
@@ -39,25 +49,25 @@ class ExceptionHandlerHelper
 		if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
 			switch ($exception->getStatusCode()) {
 				case HttpResponse::HTTP_NOT_FOUND:
-					$result = static::error($exception, 'http_not_found', BaseApiCodes::EX_HTTP_NOT_FOUND);
+					$result = static::error($exception, static::TYPE_HTTP_NOT_FOUND, BaseApiCodes::EX_HTTP_NOT_FOUND);
 					break;
 
 				case HttpResponse::HTTP_SERVICE_UNAVAILABLE:
-					$result = static::error($exception, 'http_service_unavailable', BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE);
+					$result = static::error($exception, static::TYPE_HTTP_SERVICE_UNAVAILABLE, BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE);
 					break;
 
 				case HttpResponse::HTTP_UNAUTHORIZED:
-					$result = static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION);
+					$result = static::error($exception, static::TYPE_HTTP_UNAUTHORIZED, BaseApiCodes::EX_AUTHENTICATION_EXCEPTION);
 					break;
 
 				default:
-					$result = static::error($exception, 'http_exception', BaseApiCodes::EX_HTTP_EXCEPTION);
+					$result = static::error($exception, static::TYPE_DEFAULT, BaseApiCodes::EX_HTTP_EXCEPTION);
 					break;
 			}
 		} elseif ($exception instanceof ValidationException) {
-			$result = static::error($exception, 'validation_exception', HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
+			$result = static::error($exception, static::TYPE_VALIDATION_EXCEPTION, HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
 		} else {
-			$result = static::error($exception, 'uncaught_exception', HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
+			$result = static::error($exception, static::TYPE_UNCAUGHT_EXCEPTION, HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
 		}
 
 		return $result;
@@ -87,7 +97,7 @@ class ExceptionHandlerHelper
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	protected static function error(Exception $exception, $exception_type,
-	                                $default_api_code, $default_http_code = HttpResponse::HTTP_BAD_REQUEST)
+	                                $default_api_code, $default_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR)
 	{
 		$base_config = 'response_builder.exception_handler.exception';
 
