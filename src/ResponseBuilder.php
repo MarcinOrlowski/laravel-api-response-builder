@@ -41,6 +41,10 @@ class ResponseBuilder
 	const CONF_KEY_DEBUG_DEBUG_KEY    = 'response_builder.debug.debug_key';
 	const CONF_KEY_DEBUG_EX_TRACE_KEY = 'response_builder.debug.exception_handler.trace_key';
 	const CONF_KEY_MAP                = 'response_builder.map';
+	const CONF_KEY_ENCODING_OPTIONS   = 'response_builder.encoding_options';
+	const CONF_KEY_CLASSES            = 'response_builder.classes';
+	const CONF_KEY_MIN_CODE           = 'response_builder.min_code';
+	const CONF_KEY_MAX_CODE           = 'response_builder.max_code';
 
 
 	/**
@@ -76,7 +80,7 @@ class ResponseBuilder
 	 */
 	protected static function getClassesMapping()
 	{
-		$classes = Config::get('response_builder.classes');
+		$classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES);
 
 		if ($classes !== null) {
 			if (!is_array($classes)) {
@@ -466,7 +470,7 @@ class ResponseBuilder
 		}
 
 		if ($encoding_options === null) {
-			$encoding_options = Config::get('response_builder.encoding_options', static::DEFAULT_ENCODING_OPTIONS);
+			$encoding_options = Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
 		}
 		if (!is_int($encoding_options)) {
 			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));

@@ -64,7 +64,7 @@ class InternalsTest extends TestCase
 	 */
 	public function testMake_InvalidEncodingOptions()
 	{
-		\Config::set('response_builder.encoding_options', []);
+		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, []);
 		$this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK);
 	}
 
@@ -75,7 +75,7 @@ class InternalsTest extends TestCase
 	 */
 	public function testDefaultEncodingOptionValue()
 	{
-		$config_defaults = \Config::get('response_builder.encoding_options');
+		$config_defaults = \Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS);
 		$this->assertEquals($config_defaults, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 	}
 
@@ -124,7 +124,7 @@ class InternalsTest extends TestCase
 		$data = ['test' => $test_string];
 
 		// check if it returns escaped
-		\Config::set('response_builder.encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
+		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
@@ -133,7 +133,7 @@ class InternalsTest extends TestCase
 		$this->assertEquals($test_string_escaped, $result_escaped);
 
 		// check if it returns unescaped
-		\Config::set('response_builder.encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);
+		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
@@ -167,7 +167,7 @@ class InternalsTest extends TestCase
 	 */
 	public function testGetClassesMapping_WrongType()
 	{
-		\Config::set('response_builder.classes', false);
+		\Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');

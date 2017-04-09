@@ -39,7 +39,7 @@ class BuildResponseTest extends TestCase
 				'method' => 'toArray',
 			],
 		];
-		Config::set('response_builder.classes', $classes);
+		Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
 
 		// WHEN this object is returned
 		$this->response = ResponseBuilder::success($model);
@@ -78,7 +78,7 @@ class BuildResponseTest extends TestCase
 				'method' => 'toArray',
 			],
 		];
-		Config::set('response_builder.classes', $classes);
+		Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
 
 		// AND having the object as part of bigger data set
 		$tmp_base = [];

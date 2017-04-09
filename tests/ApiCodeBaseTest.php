@@ -26,7 +26,7 @@ class ApiCodeBaseTest extends TestCase
 	 */
 	public function testGetMinCode_MissingConfigKey()
 	{
-		\Config::offsetUnset('response_builder.min_code');
+		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MIN_CODE);
 		BaseApiCodes::getMinCode();
 	}
 
@@ -39,7 +39,7 @@ class ApiCodeBaseTest extends TestCase
 	 */
 	public function testGetMaxCode_MissingConfigKey()
 	{
-		\Config::offsetUnset('response_builder.max_code');
+		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAX_CODE);
 		BaseApiCodes::getMaxCode();
 	}
 
