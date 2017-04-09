@@ -6,6 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * @dev
    * **BACKWARD INCOMPATIBILE CHANGES**
+   * [RB-59] Added option to remap response JSON keys to user provided values
    * [RB-54] Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
    * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defails
    * [RB-47] Exception Handler now supports `FormRequests` and returns all messages in `ResponseBuilder::KEY_MESSAGES`

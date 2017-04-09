@@ -84,8 +84,6 @@ class BaseApiCodes
 		self::EX_VALIDATION_EXCEPTION     => 'response-builder::builder.validation_exception',
 	];
 
-	// ---------------------------------------------
-
 	/**
 	 * Returns base code mapping array
 	 *
@@ -94,6 +92,72 @@ class BaseApiCodes
 	public static function getBaseMap()
 	{
 		return static::$base_map;
+	}
+
+	// ---------------------------------------------
+
+	/**
+	 * Default response JSON key mapping
+	 *
+	 * @var array
+	 */
+	protected static $response_key_map = [
+		ResponseBuilder::KEY_SUCCESS => 'success',
+		ResponseBuilder::KEY_CODE    => 'code',
+		ResponseBuilder::KEY_LOCALE  => 'locale',
+		ResponseBuilder::KEY_MESSAGE => 'message',
+		ResponseBuilder::KEY_DATA    => 'data',
+	];
+
+
+	/**
+	 * Returns response JSON key value. If there's user provided mapping, it takes
+	 * that into account, otherwise fails to default mapping values.
+	 *
+	 * @param string $reference_key JSON response key name reference to look up
+	 *
+	 * @return string
+	 *
+	 * @throws \RuntimeException
+	 */
+	public static function getResponseKey($reference_key)
+	{
+		// ensure $key is known
+		if (!array_key_exists($reference_key, static::$response_key_map)) {
+			throw(new \RuntimeException(sprintf('Unknown response key reference "%s"', $reference_key)));
+		}
+
+		$result = static::$response_key_map[ $reference_key ];
+
+		// let's see if there's valid user mapping for that key first
+		$user_map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
+		if ($user_map !== null) {
+			if (!is_array($user_map)) {
+				throw(new \RuntimeException(
+					sprintf('CONFIG: "%s" must be an array (%s given)', ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, gettype($user_map))));
+			}
+			if (array_key_exists($reference_key, $user_map)) {
+				$user_val = $user_map[ $reference_key ];
+				if (!is_string($user_val)) {
+					throw(new \RuntimeException(
+						sprintf('Response key reference "%s" must be mapped to a string (%s given)', $reference_key, gettype($user_val))));
+				}
+
+				$result = $user_val;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Returns default response JSON key keys and values
+	 *
+	 * @return array
+	 */
+	public static function getDefaultResponseKeyMap()
+	{
+		return static::$response_key_map;
 	}
 
 }

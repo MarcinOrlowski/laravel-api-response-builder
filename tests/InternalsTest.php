@@ -1,6 +1,7 @@
 <?php
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
+
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -124,7 +125,7 @@ class InternalsTest extends TestCase
 		$data = ['test' => $test_string];
 
 		// check if it returns escaped
-		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
+		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
@@ -133,7 +134,7 @@ class InternalsTest extends TestCase
 		$this->assertEquals($test_string_escaped, $result_escaped);
 
 		// check if it returns unescaped
-		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);
+		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
@@ -172,6 +173,67 @@ class InternalsTest extends TestCase
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');
 		$method->invokeArgs($obj, []);
+	}
+
+
+	/**
+	 * Tests is custom response key mappings and defaults fallback work
+	 *
+	 * @return void
+	 */
+	public function testCustomResponseMapping()
+	{
+		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
+				ResponseBuilder::KEY_SUCCESS => $this->getRandomString(),
+			]
+		);
+
+		$this->response = ResponseBuilder::success();
+		$j = $this->getResponseSuccessObject(BaseApiCodes::OK);
+	}
+
+
+	/**
+	 * Tests is custom response key mappings and defaults fallback work
+	 *
+	 * @expectedException \RuntimeException
+	 *
+	 * @return void
+	 */
+	public function testGetResponseKey_UnknownKey()
+	{
+		BaseApiCodes::getResponseKey($this->getRandomString());
+	}
+
+	/**
+	 * Tests validation of configuration validation of response key map
+	 *
+	 * @expectedException \RuntimeException
+	 *
+	 * @return void
+	 */
+	public function testResponseKeyMapping_InvalidMap()
+	{
+		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, 'invalid');
+		BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS);
+	}
+
+
+	/**
+	 * Tests validation of configuration validation of response key map
+	 *
+	 * @expectedException \RuntimeException
+	 *
+	 * @return void
+	 */
+	public function testResponseKeyMapping_InvalidMappingValue()
+	{
+		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
+				ResponseBuilder::KEY_SUCCESS => false,
+			]
+		);
+
+		BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS);
 	}
 
 }
