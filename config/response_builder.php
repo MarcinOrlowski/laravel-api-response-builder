@@ -174,9 +174,9 @@ return [
 	'debug' => [
 		'exception_handler' => [
 			/**
-			 * Name of the JSON key trace debug data should be put under.
+			 * Name of the JSON key trace data should be put under in `debug` node.
 			 */
-//			'trace_key' => 'debug',
+//			'trace_key' => 'trace',
 
 			/**
 			 * When ExceptionHandler kicks in and this is set to @true,
