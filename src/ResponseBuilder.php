@@ -38,6 +38,11 @@ class ResponseBuilder
 	const DEFAULT_API_CODE_OK = BaseApiCodes::OK;
 
 
+	const CONF_KEY_DEBUG_DEBUG_KEY    = 'response_builder.debug.debug_key';
+	const CONF_KEY_DEBUG_EX_TRACE_KEY = 'response_builder.debug.exception_handler.trace_key';
+	const CONF_KEY_MAP                = 'response_builder.map';
+
+
 	/**
 	 * Default keys to be used by exception handler while adding debug information
 	 */
@@ -165,8 +170,8 @@ class ResponseBuilder
 		];
 
 		if ($trace_data !== null) {
-			$debug_key = Config::get('response_builder.debug.debug_key', ResponseBuilder::KEY_DEBUG);
-			$trace_key = Config::get('response_builder.debug.exception_handler.trace_key', ResponseBuilder::KEY_TRACE);
+			$debug_key = Config::get(static::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
+			$trace_key = Config::get(static::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE);
 
 			$data->{$debug_key} = [
 				$trace_key => $trace_data,

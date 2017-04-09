@@ -3,6 +3,7 @@
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
  * Laravel API Response Builder
@@ -52,7 +53,7 @@ class ApiCodeBaseTest extends TestCase
 	 */
 	public function testGetMap_MissingConfigKey()
 	{
-		\Config::offsetUnset('response_builder.map');
+		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAP);
 		BaseApiCodes::getMap();
 	}
 
@@ -65,7 +66,7 @@ class ApiCodeBaseTest extends TestCase
 	 */
 	public function testGetMap_WrongConfig()
 	{
-		\Config::set('response_builder.map', false);
+		\Config::set(ResponseBuilder::CONF_KEY_MAP, false);
 		BaseApiCodes::getMap();
 	}
 

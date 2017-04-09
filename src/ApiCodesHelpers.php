@@ -96,13 +96,13 @@ trait ApiCodesHelpers
 	 */
 	public static function getMap()
 	{
-		$map = Config::get('response_builder.map', null);
+		$map = Config::get(ResponseBuilder::CONF_KEY_MAP, null);
 		if ($map === null) {
-			throw new \RuntimeException('CONFIG: Missing "map" key');
+			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', $map));
 		}
 
 		if (!is_array($map)) {
-			throw new \RuntimeException('CONFIG: "map" must be an array');
+			throw new \RuntimeException(sprintf('CONFIG: "%s" must be an array', $map));
 		}
 
 		/** @noinspection AdditionOperationOnArraysInspection */

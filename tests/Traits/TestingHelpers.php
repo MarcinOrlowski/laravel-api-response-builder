@@ -87,7 +87,7 @@ trait TestingHelpers {
 		$this->error_message_map = [
 			$this->random_api_code => $this->random_api_code_message_key,
 		];
-		\Config::set('response_builder.map', $this->error_message_map);
+		\Config::set(ResponseBuilder::CONF_KEY_MAP, $this->error_message_map);
 	}
 
 

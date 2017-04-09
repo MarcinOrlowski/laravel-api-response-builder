@@ -76,7 +76,7 @@ class SuccessTest extends TestCase
 	 */
 	public function testSuccess_ApiCode_NoCustomMessage()
 	{
-		\Config::set('response_builder.map', []);
+		\Config::set(ResponseBuilder::CONF_KEY_MAP, []);
 		$api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
 		$this->response = ResponseBuilder::success(null, $api_code);
@@ -107,7 +107,7 @@ class SuccessTest extends TestCase
 	public function testSuccess_ApiCode_CustomMessageLang()
 	{
 		// for simplicity let's reuse existing message that is using placeholder
-		\Config::set('response_builder.map', [
+		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
 			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE)
 		]);
 
@@ -131,7 +131,7 @@ class SuccessTest extends TestCase
 	public function testSuccessWithCode_ApiCode_CustomMessageLang()
 	{
 		// for simplicity let's reuse existing message that is using placeholder
-		\Config::set('response_builder.map', [
+		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
 			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE)
 		]);
 
