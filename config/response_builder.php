@@ -108,6 +108,28 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
+	| Response JSON keys mapping
+	|--------------------------------------------------------------------------
+	|
+	| TODO
+	|
+	| NOTE: Ensure you have this config file using:
+	|
+	|    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+	|
+	| if you want to use custom mapping
+	|
+	*/
+//	'response_key_map' => [
+//		ResponseBuilder::KEY_SUCCESS => 'success',
+//		ResponseBuilder::KEY_CODE    => 'code',
+//		ResponseBuilder::KEY_LOCALE  => 'locale',
+//		ResponseBuilder::KEY_MESSAGE => 'message',
+//		ResponseBuilder::KEY_DATA    => 'data',
+//	],
+
+	/*
+	|--------------------------------------------------------------------------
 	| Exception handler error codes
 	|--------------------------------------------------------------------------
 	|

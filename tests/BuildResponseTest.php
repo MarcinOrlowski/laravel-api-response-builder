@@ -35,8 +35,8 @@ class BuildResponseTest extends TestCase
 		$model_class_name = get_class($model);
 		$classes = [
 			$model_class_name => [
-				'key'    => $this->getRandomString('single_item_key'),
-				'method' => 'toArray',
+				ResponseBuilder::KEY_KEY    => $this->getRandomString('single_item_key'),
+				ResponseBuilder::KEY_METHOD => 'toArray',
 			],
 		];
 		Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
@@ -74,8 +74,8 @@ class BuildResponseTest extends TestCase
 		$model_class_name = get_class($model_1);
 		$classes = [
 			$model_class_name => [
-				'key'    => 'should-not-be-used',
-				'method' => 'toArray',
+				ResponseBuilder::KEY_KEY    => 'should-not-be-used',
+				ResponseBuilder::KEY_METHOD => 'toArray',
 			],
 		];
 		Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);

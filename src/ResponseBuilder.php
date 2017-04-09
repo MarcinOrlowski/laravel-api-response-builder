@@ -37,7 +37,9 @@ class ResponseBuilder
 	 */
 	const DEFAULT_API_CODE_OK = BaseApiCodes::OK;
 
-
+	/**
+	 * Configuration keys
+	 */
 	const CONF_KEY_DEBUG_DEBUG_KEY    = 'response_builder.debug.debug_key';
 	const CONF_KEY_DEBUG_EX_TRACE_KEY = 'response_builder.debug.exception_handler.trace_key';
 	const CONF_KEY_MAP                = 'response_builder.map';
@@ -45,16 +47,23 @@ class ResponseBuilder
 	const CONF_KEY_CLASSES            = 'response_builder.classes';
 	const CONF_KEY_MIN_CODE           = 'response_builder.min_code';
 	const CONF_KEY_MAX_CODE           = 'response_builder.max_code';
-
+	const CONF_KEY_RESPONSE_KEY_MAP   = 'response_builder.response_key_map';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information
 	 */
-	const KEY_DEBUG = 'debug';
-	const KEY_TRACE = 'trace';
-	const KEY_CLASS = 'class';
-	const KEY_FILE  = 'file';
-	const KEY_LINE  = 'line';
+	const KEY_DEBUG   = 'debug';
+	const KEY_TRACE   = 'trace';
+	const KEY_CLASS   = 'class';
+	const KEY_FILE    = 'file';
+	const KEY_LINE    = 'line';
+	const KEY_KEY     = 'key';
+	const KEY_METHOD  = 'method';
+	const KEY_SUCCESS = 'success';
+	const KEY_CODE    = 'code';
+	const KEY_LOCALE  = 'locale';
+	const KEY_MESSAGE = 'message';
+	const KEY_DATA    = 'data';
 
 	/**
 	 * Default key to be used by exception handler while processing ValidationException
@@ -87,8 +96,8 @@ class ResponseBuilder
 				throw new \RuntimeException(sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
 			}
 
-			$mandatory_keys = ['key',
-			                   'method',
+			$mandatory_keys = [static::KEY_KEY,
+			                   static::KEY_METHOD,
 			];
 			foreach ($classes as $class_name => $class_config) {
 				foreach ($mandatory_keys as $key_name) {
@@ -119,7 +128,7 @@ class ResponseBuilder
 			} elseif (is_object($data_val)) {
 				$obj_class_name = get_class($data_val);
 				if (array_key_exists($obj_class_name, $classes)) {
-					$conversion_method = $classes[ $obj_class_name ]['method'];
+					$conversion_method = $classes[ $obj_class_name ][static::KEY_METHOD];
 					$converted = $data_val->$conversion_method();
 					$data[ $data_key ] = $converted;
 				}
@@ -155,8 +164,8 @@ class ResponseBuilder
 				} elseif (is_object($data)) {
 					$obj_class_name = get_class($data);
 					if (array_key_exists($obj_class_name, $classes)) {
-						$conversion_method = $classes[$obj_class_name]['method'];
-						$data = [$classes[$obj_class_name]['key'] => $data->$conversion_method()];
+						$conversion_method = $classes[$obj_class_name][static::KEY_METHOD];
+						$data = [$classes[$obj_class_name][static::KEY_KEY] => $data->$conversion_method()];
 					}
 				}
 			}
@@ -165,12 +174,12 @@ class ResponseBuilder
 			$data = (object)$data;
 		}
 
-		/** @noinspection UnnecessaryParenthesesInspection */
-		$response = ['success' => $success,
-		             'code'    => $api_code,
-		             'locale'  => \App::getLocale(),
-		             'message' => $message,
-		             'data'    => $data,
+		$response = [
+			BaseApiCodes::getResponseKey(static::KEY_SUCCESS) => $success,
+			BaseApiCodes::getResponseKey(static::KEY_CODE)    => $api_code,
+			BaseApiCodes::getResponseKey(static::KEY_LOCALE)  => \App::getLocale(),
+			BaseApiCodes::getResponseKey(static::KEY_MESSAGE) => $message,
+			BaseApiCodes::getResponseKey(static::KEY_DATA)    => $data,
 		];
 
 		if ($trace_data !== null) {
