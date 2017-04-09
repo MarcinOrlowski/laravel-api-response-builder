@@ -148,7 +148,7 @@ trait TestingHelpers {
 		}
 
 		$j = $this->getResponseObjectRaw($expected_api_code, $expected_http_code, $expected_message);
-		$this->assertEquals(true, $j->success);
+		$this->assertEquals(true, $j->{BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS)});
 
 		return $j;
 	}
@@ -229,18 +229,25 @@ trait TestingHelpers {
 	{
 		$this->assertTrue(is_object($json_object));
 
-		$items = ['success',
-		          'code',
-		          'locale',
-		          'message',
-		          'data'];
+		$items_ref = [
+			ResponseBuilder::KEY_SUCCESS,
+			ResponseBuilder::KEY_CODE,
+			ResponseBuilder::KEY_LOCALE,
+			ResponseBuilder::KEY_MESSAGE,
+			ResponseBuilder::KEY_DATA,
+		];
+
+		$items = [];
+		foreach ($items_ref as $ref) {
+			$items[ $ref ] = BaseApiCodes::getResponseKey($ref);
+		}
 
 		$items = array_merge_recursive($items, $extra_keys);
-		foreach ($items as $item) {
+		foreach ($items as $ref => $item) {
 			$this->assertObjectHasAttribute($item, $json_object, "No '{$item}' element in response structure found");
 		}
 
-		$this->assertTrue(is_bool($json_object->success));
+		$this->assertTrue(is_bool($json_object->{$items[ResponseBuilder::KEY_SUCCESS]}));
 		$this->assertTrue(is_int($json_object->code));
 		$this->assertTrue(is_string($json_object->locale));
 		/** @noinspection UnNecessaryDoubleQuotesInspection */
