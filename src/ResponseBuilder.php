@@ -182,11 +182,7 @@ class ResponseBuilder
 
 		if ($trace_data !== null) {
 			$debug_key = Config::get(static::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
-			$trace_key = Config::get(static::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE);
-
-			$data[$debug_key] = [
-				$trace_key => $trace_data,
-			];
+			$response[$debug_key] = $trace_data;
 		}
 
 		if ($data !== null) {

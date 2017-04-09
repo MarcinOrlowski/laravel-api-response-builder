@@ -62,6 +62,8 @@ trait TestingHelpers {
 	{
 		parent::setUp();
 
+		$this->clearCache();
+
 		// Obtain configuration params
 		$class_name = $this->getApiCodesClassName();
 		$obj = new $class_name();
@@ -90,6 +92,17 @@ trait TestingHelpers {
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, $this->error_message_map);
 	}
 
+
+	/**
+	 * Clears Laravel config/route etc caches...
+	 */
+	protected function clearCache()
+	{
+//		$commands = ['clear-compiled', 'cache:clear', 'view:clear', 'config:clear', 'route:clear'];
+//		foreach ($commands as $command) {
+//			\Illuminate\Support\Facades\Artisan::call($command);
+//		}
+	}
 
 	/**
 	 * Load service providers we need during the tests

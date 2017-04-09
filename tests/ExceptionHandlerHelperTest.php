@@ -67,7 +67,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
 		];
 		foreach ($codes as $params) {
-
 			$status_code = $params['status_code'];
 			$exception_type = $params['exception_type'];
 			$default_api_code = $params['default_api_code'];
@@ -149,8 +148,20 @@ class ExceptionHandlerHelperTest extends TestCase
 	}
 
 
-	public function testRender_UncaughtException()
+	/**
+	 * Tests if optional debug info is properly added to JSON response
+	 *
+	 * @return void
+	 */
+	public function testError_DebugTrace()
 	{
+		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
+
+		$exception = new \RuntimeException();
+
+		$eh = new ExceptionHandlerHelper();
+
+		$j = json_decode($eh->render(null, $exception)->getContent());
 	}
 
 }
