@@ -42,6 +42,7 @@ class ResponseBuilder
 	 * Default keys to be used by exception handler while adding debug information
 	 */
 	const KEY_DEBUG = 'debug';
+	const KEY_TRACE = 'trace';
 	const KEY_CLASS = 'class';
 	const KEY_FILE  = 'file';
 	const KEY_LINE  = 'line';
@@ -126,13 +127,13 @@ class ResponseBuilder
 	 * @param integer    $api_code   response code
 	 * @param string     $message    message to return
 	 * @param mixed      $data       API response data if any
-	 * @param array|null $debug_data optional debug data array to be added to returned JSON.
+	 * @param array|null $trace_data optional debug data array to be added to returned JSON.
 	 *
 	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse($success, $api_code, $message, $data = null, array $debug_data = null)
+	protected static function buildResponse($success, $api_code, $message, $data = null, array $trace_data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
@@ -163,9 +164,9 @@ class ResponseBuilder
 		             'data'    => $data,
 		];
 
-		if ($debug_data !== null) {
-			$debug_key = Config::get('response_builder.debug.exception_handler.debug_key', ResponseBuilder::KEY_DEBUG);
-			$data->$debug_key = $debug_data;
+		if ($trace_data !== null) {
+			$trace_key = Config::get('response_builder.debug.exception_handler.trace_key', ResponseBuilder::KEY_TRACE);
+			$data->{static::KEY_DEBUG} = [$trace_key => $trace_data];
 		}
 
 		return $response;

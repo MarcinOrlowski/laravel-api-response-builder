@@ -179,17 +179,18 @@ class ErrorTest extends TestCase
 	 */
 	public function testErrorWithMessageAndDataAndDebug()
 	{
-		$debug_data = [$this->getRandomString('key') => $this->getRandomString('val')];
+		$trace_data = [$this->getRandomString('key') => $this->getRandomString('val')];
 
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
-		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, null, null, $debug_data);
+		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, null, null, $trace_data);
 
 		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
 		$this->assertEquals($error_message, $j->message);
 
-		$data[ResponseBuilder::KEY_DEBUG] = (object)$debug_data;
+		$trace_key = \Config::get('response_builder.debug.exception_handler.trace_key', ResponseBuilder::KEY_TRACE);
+		$data[ ResponseBuilder::KEY_DEBUG ] = (object)[$trace_key => (object)$trace_data];
 		$this->assertEquals((object)$data, $j->data);
 	}
 
