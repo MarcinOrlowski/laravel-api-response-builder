@@ -40,14 +40,15 @@ class ResponseBuilder
 	/**
 	 * Configuration keys
 	 */
-	const CONF_KEY_DEBUG_DEBUG_KEY    = 'response_builder.debug.debug_key';
-	const CONF_KEY_DEBUG_EX_TRACE_KEY = 'response_builder.debug.exception_handler.trace_key';
-	const CONF_KEY_MAP                = 'response_builder.map';
-	const CONF_KEY_ENCODING_OPTIONS   = 'response_builder.encoding_options';
-	const CONF_KEY_CLASSES            = 'response_builder.classes';
-	const CONF_KEY_MIN_CODE           = 'response_builder.min_code';
-	const CONF_KEY_MAX_CODE           = 'response_builder.max_code';
-	const CONF_KEY_RESPONSE_KEY_MAP   = 'response_builder.response_key_map';
+	const CONF_KEY_DEBUG_DEBUG_KEY        = 'response_builder.debug.debug_key';
+	const CONF_KEY_DEBUG_EX_TRACE_ENABLED = 'response_builder.debug.exception_handler.trace_enabled';
+	const CONF_KEY_DEBUG_EX_TRACE_KEY     = 'response_builder.debug.exception_handler.trace_key';
+	const CONF_KEY_MAP                    = 'response_builder.map';
+	const CONF_KEY_ENCODING_OPTIONS       = 'response_builder.encoding_options';
+	const CONF_KEY_CLASSES                = 'response_builder.classes';
+	const CONF_KEY_MIN_CODE               = 'response_builder.min_code';
+	const CONF_KEY_MAX_CODE               = 'response_builder.max_code';
+	const CONF_KEY_RESPONSE_KEY_MAP       = 'response_builder.response_key_map';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information
@@ -169,9 +170,6 @@ class ResponseBuilder
 					}
 				}
 			}
-
-			// ensure we get object in final JSON structure in data node
-			$data = (object)$data;
 		}
 
 		$response = [
@@ -186,9 +184,14 @@ class ResponseBuilder
 			$debug_key = Config::get(static::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
 			$trace_key = Config::get(static::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE);
 
-			$data->{$debug_key} = [
+			$data[$debug_key] = [
 				$trace_key => $trace_data,
 			];
+		}
+
+		if ($data !== null) {
+			// ensure we get object in final JSON structure in data node
+			$data = (object)$data;
 		}
 
 		return $response;
