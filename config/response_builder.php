@@ -111,13 +111,20 @@ return [
 	| Response JSON keys mapping
 	|--------------------------------------------------------------------------
 	|
-	| TODO
+	| You can remap response JSON keys if really needed.
+	|
+	|
+	| WARNING: there's NO duplicate check at runtime, so if you remap two keys
+	| to the same values you will end up with problems. There's testing trait
+	| to prevent this from happening, so ensure you unit test your app (see docs!)
 	|
 	| NOTE: Ensure you have this config file using:
 	|
 	|    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 	|
-	| if you want to use custom mapping
+	| if you want to use custom mapping.
+	|
+	| It's safe to completely remove/comment out this config element.
 	|
 	*/
 //	'response_key_map' => [
