@@ -128,6 +128,8 @@ trait ApiCodesTests
 	 * Checks if all keys used in user provided mapping are valid
 	 * and if the mapped values are unique.
 	 *
+	 * If no user mapping is found, this test is skipped.
+	 *
 	 * @return void
 	 */
 	public function testIfCustomMappingUsesUniqueValues()
@@ -149,6 +151,8 @@ trait ApiCodesTests
 					}
 				}
 			}
+		} else {
+			$this->markTestSkipped(sprintf('No "%s" mapping found.', ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP));
 		}
 	}
 
