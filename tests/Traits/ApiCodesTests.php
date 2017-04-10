@@ -11,24 +11,28 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-namespace MarcinOrlowski\ResponseBuilder\Tests\Base;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
-use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
- * Class AppTestBase
+ * ApiCodes tests trait
  */
-abstract class AppTestBase extends ResponseBuilderTestCaseBase
+trait ApiCodesTests
 {
+	use TestingHelpers;
+
+
 	/**
-	 * Checks if error codes range is set right
+	 * Checks if Api codes range is set right
 	 *
 	 * @return void
 	 */
 	public function testMinMaxCode()
 	{
-
-		$obj = $this->getApiCodesObject();
+		$obj = new BaseApiCodes();
 
 		$get_base_max_code = $this->getProtectedMethod(get_class($obj), 'getReservedMaxCode');
 		$base_max = $get_base_max_code->invokeArgs($obj, []);
@@ -48,49 +52,54 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	}
 
 	/**
-	 * Checks if all error codes defined in ApiCode class contain mapping entry
+	 * Checks if all Api codes defined in ApiCodes class contain mapping entry
 	 *
 	 * @return void
 	 */
 	public function testIfAllCodesGotMapping()
 	{
-		/** @var ApiCodeBase $api_codes */
+		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $codes */
-		$codes = $api_codes::getApiCodeConstants();
+
+		$reflect = new \ReflectionClass($api_codes);
+		$codes = $reflect->getConstants();
 		foreach ($codes as $name => $val) {
 			$this->assertNotNull($api_codes::getCodeMessageKey($val), "No mapping for {$name}");
 		}
 	}
 
 	/**
-	 * Checks if all error codes are in allowed range
+	 * Checks if all Api codes are in correct and allowed range,
 	 *
 	 * @return void
 	 */
 	public function testIfAllCodesAreInRange()
 	{
-		/** @var ApiCodeBase $api_codes */
+		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $codes */
 		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
-			$this->assertTrue($api_codes::isCodeValid($val), "Value of {$name} is outside allowed range");
+			$msg = sprintf("Value of '{$name}' ({$val}) is out of allowed range %d-%d",
+				$api_codes::getMinCode(), $api_codes::getMaxCode());
+
+			$this->assertTrue($api_codes::isCodeValid($val), $msg);
 		}
 	}
 
 	/**
-	 * Checks if all defined error code constants are unique (per value)
+	 * Checks if all defined Api code constants' values are unique
 	 *
 	 * @return void
 	 */
-	public function testIfAllErrorValuesAreUnique()
+	public function testIfAllApiValuesAreUnique()
 	{
-		/** @var ApiCodeBase $api_codes_class_name */
+		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$items = array_count_values($api_codes_class_name::getMap());
 		foreach ($items as $code => $count) {
-			$this->assertLessThanOrEqual($count, 1, sprintf("Error code {$code} is not unique. Used {$count} times."));
+			$this->assertLessThanOrEqual($count, 1, sprintf("Value of  '{$code}' is not unique. Used {$count} times."));
 		}
 	}
 
@@ -103,7 +112,7 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 	 */
 	public function testIfAllCodesAreCorrectlyMapped()
 	{
-		/** @var ApiCodeBase $api_codes_class_name */
+		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		/** @var array $map */
 		$map = $api_codes_class_name::getMap();
@@ -115,54 +124,36 @@ abstract class AppTestBase extends ResponseBuilderTestCaseBase
 		}
 	}
 
-
 	/**
-	 * Checks make() for code with missing message mapping
+	 * Checks if all keys used in user provided mapping are valid
+	 * and if the mapped values are unique.
+	 *
+	 * If no user mapping is found, this test is skipped.
 	 *
 	 * @return void
 	 */
-	public function testMake_MissingMapping()
+	public function testIfCustomMappingUsesUniqueValues()
 	{
-		$min = $this->min_allowed_code;
-		$max = $this->max_allowed_code;
+		$map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
+		if ($map !== null) {
+			$base_map = BaseApiCodes::getDefaultResponseKeyMap();
 
-		/** @var ApiCodeBase $api_codes_class_name */
-		$api_codes_class_name = $this->getApiCodesClassName();
-		$map = $api_codes_class_name::getMap();
-		krsort($map);
-		reset($map);
+			foreach ($map as $key => $val) {
+				// check if reference key are known
+				if (!array_key_exists($key, $base_map)) {
+					$this->fail("Unknown reference key in your mapping: '{%key}'");
+				}
 
-		$message_or_api_code = null;
-		for ($i = $min; $i < $max; $i++) {
-			if (array_key_exists($i, $map) === false) {
-				$message_or_api_code = $i;
-				break;
+				// check mapping value is unique
+				foreach ($map as $test_key => $test_val) {
+					if (($test_val === $val) && ($test_key !== $key)) {
+						$this->fail("Value used for reference key '{%key}' is not unique (used in '{%test_key}'");
+					}
+				}
 			}
+		} else {
+			$this->markTestSkipped(sprintf('No "%s" mapping found.', ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP));
 		}
-
-		if ($message_or_api_code === null) {
-			$this->fail('Failed to find unused error code value (within declared range) to perform this test');
-		}
-
-		$this->callMakeMethod(true, $message_or_api_code, $message_or_api_code);
-
-		$json_object = json_decode($this->response->getContent());
-		$this->assertTrue(is_object($json_object));
-		$this->assertEquals(\Lang::get($api_codes_class_name::getCodeMessageKey(ApiCodeBase::NO_ERROR_MESSAGE),
-			['error_code' => $message_or_api_code]), $json_object->message);
-	}
-
-	/**
-	 * Tests if your ApiCodes class is instance of base ResponseBuilder class
-	 *
-	 * @return void
-	 */
-	public function testErrorCodesSubclassOfErrorCode()
-	{
-		$base_class = ApiCodeBase::class;
-		$api_codes = $this->getApiCodesObject();
-
-		$this->assertInstanceOf($api_codes, $base_class);
 	}
 
 }

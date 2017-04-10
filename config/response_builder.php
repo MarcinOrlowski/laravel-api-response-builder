@@ -43,7 +43,7 @@ return [
 	|
 	|    ApiCode::SOMETHING => 'api.something',
 	|
-	| See README if you want to provide own messages for built-in codes too.
+	| See docs/exceptions.md if you want to provide own messages for built-in codes too.
 	|
 	*/
 	'map' => [
@@ -108,6 +108,35 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
+	| Response JSON keys mapping
+	|--------------------------------------------------------------------------
+	|
+	| You can remap response JSON keys if really needed.
+	|
+	|
+	| WARNING: there's NO duplicate check at runtime, so if you remap two keys
+	| to the same values you will end up with problems. There's testing trait
+	| to prevent this from happening, so ensure you unit test your app (see docs!)
+	|
+	| NOTE: Ensure you have this config file using:
+	|
+	|    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+	|
+	| if you want to use custom mapping.
+	|
+	| It's safe to completely remove/comment out this config element.
+	|
+	*/
+//	'response_key_map' => [
+//		ResponseBuilder::KEY_SUCCESS => 'success',
+//		ResponseBuilder::KEY_CODE    => 'code',
+//		ResponseBuilder::KEY_LOCALE  => 'locale',
+//		ResponseBuilder::KEY_MESSAGE => 'message',
+//		ResponseBuilder::KEY_DATA    => 'data',
+//	],
+
+	/*
+	|--------------------------------------------------------------------------
 	| Exception handler error codes
 	|--------------------------------------------------------------------------
 	|
@@ -119,36 +148,46 @@ return [
 	*/
 	'exception_handler' => [
 
-		// By default, exception provided messages have higher priority than mapped error messages.
-		// This behaviour can be configured with `use_exception_message_first` option. When option
+		// By default, exception provided messages has higher priority than mapped error messages.
+		// This behaviour can be configured with `use_exception_message_first` option. When it
 		// is set to `true` (which is default value) and when exception's `getMessage()` returns non empty
-		// string, that string will be used as returned as `message` w/o further processing. If
+		// string, that string will be used and returned as `message` w/o further processing. If
 		// it is set to `true` but exception provides no message, then mapped message will be used
 		// and the ":message" placeholder will be substituted with exception class name. When option
-		// is set to @false, then pre 2.0 behaviour takes place and mapped messages will always be used
-		// with `:message` placeholder being substituted with exception message (can if it is empty string).
+		// is set to @false, then mapped messages will always be used with `:message` placeholder
+		// being substituted with exception message (can if it is empty string).
 		'use_exception_message_first' => env('EX_USE_EXCEPTION_MESSAGE', true),
 
 
 		// Map exception to your own error codes. That way, when cascading
 		// you will still know which module thrown this exception
 		'exception' => [
+
 //			'http_not_found' => [
-//				'code'      => \App\ApiCode::HTTP_NOT_FOUND,
+//				'code'      => \App\ApiCodes::HTTP_NOT_FOUND,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
 //			],
 //			'http_service_unavailable' => [
-//				'code'      => \App\ApiCode::HTTP_SERVICE_UNAVAILABLE,
+//				'code'      => \App\ApiCodes::HTTP_SERVICE_UNAVAILABLE,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
 //			],
 //			'http_exception' => [
-//				'code'      => \App\ApiCode::HTTP_EXCEPTION,
+//				'code'      => \App\ApiCodes::HTTP_EXCEPTION,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
 //			],
 //			'uncaught_exception' => [
-//				'code'      => \App\ApiCode::UNCAUGHT_EXCEPTION,
+//				'code'      => \App\ApiCodes::UNCAUGHT_EXCEPTION,
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_INTERNAL_SERVER_ERROR,
 //			],
+//			'authentication_exception' => [
+//				'code'      => \App\ApiCodes::AUTHENTICATION_EXCEPTION,
+//				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNAUTHORIZED,
+//			],
+//			'validation_exception' => [
+//				'code'      => \App\ApiCodes::VALIDATION_EXCEPTION,
+//				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNPROCESSABLE_ENTITY,
+//			],
+
 		],
 
 	],
@@ -162,15 +201,20 @@ return [
 	*/
 
 	'debug' => [
+//		'debug_key' => 'debug',
+
 		'exception_handler' => [
 			/**
-			 * When ExceptionHandler kicks in and this is set to @true (default),
-			 * then **if** your `app.debug` is `true` too, returned JSON structure
-			 * will contain `debug` node with additional exception base trace (class
-			 * name, file name, line number). If `app.debug` is anything but @true,
-			 * no debug info is added.
+			 * Name of the JSON key trace data should be put under in `debug` node.
 			 */
-			'trace_enabled' => true,
+//			'trace_key' => 'trace',
+
+			/**
+			 * When ExceptionHandler kicks in and this is set to @true,
+			 * then returned JSON structure will contain additional debug data
+			 * with information about class name, file name and line number.
+			 */
+			'trace_enabled' => env('APP_DEBUG', false),
 		],
 	],
 

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Config;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class BuildResponseTest extends Base\ResponseBuilderTestCaseBase
+class BuildResponseTest extends TestCase
 {
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
@@ -35,11 +35,11 @@ class BuildResponseTest extends Base\ResponseBuilderTestCaseBase
 		$model_class_name = get_class($model);
 		$classes = [
 			$model_class_name => [
-				'key'    => $this->getRandomString('single_item_key'),
-				'method' => 'toArray',
+				ResponseBuilder::KEY_KEY    => $this->getRandomString('single_item_key'),
+				ResponseBuilder::KEY_METHOD => 'toArray',
 			],
 		];
-		Config::set('response_builder.classes', $classes);
+		Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
 
 		// WHEN this object is returned
 		$this->response = ResponseBuilder::success($model);
@@ -74,11 +74,11 @@ class BuildResponseTest extends Base\ResponseBuilderTestCaseBase
 		$model_class_name = get_class($model_1);
 		$classes = [
 			$model_class_name => [
-				'key'    => 'should-not-be-used',
-				'method' => 'toArray',
+				ResponseBuilder::KEY_KEY    => 'should-not-be-used',
+				ResponseBuilder::KEY_METHOD => 'toArray',
 			],
 		];
-		Config::set('response_builder.classes', $classes);
+		Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
 
 		// AND having the object as part of bigger data set
 		$tmp_base = [];
@@ -122,7 +122,7 @@ class BuildResponseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testMake_WrongMessage()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$message_or_api_code = [];    // invalid

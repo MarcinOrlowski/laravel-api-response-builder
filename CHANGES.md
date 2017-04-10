@@ -4,6 +4,18 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v4.0.0 (2017-04-10)
+   * **BACKWARD INCOMPATIBILE CHANGES**
+   * [RB-59] Added option to remap response JSON keys to user provided values
+   * [RB-54] Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
+   * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defails
+   * [RB-47] Exception Handler now supports `FormRequests` and returns all messages in `ResponseBuilder::KEY_MESSAGES`
+   * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled same way `authentication_exception` is
+   * [RB=56] Added configurable key for debug trace added to returned JSON response (if enabled)
+   * Added traits to help testing your config and ApiCodes with ease. See `Unit Testing your ApiCodes` docs for details 
+   * `ApiCodeBase` class is now named `BaseApiCodes`
+   * [RB-35] ExceptionHandlerHelper is now covered by tests
+
 * v3.2.1 (2017-04-06)
    * [RB-49] Fixed `artisan vendor:publish` not publishing config file correctly
 

@@ -1,6 +1,11 @@
-# API Response Builder for Laravel 5 #
+# API Response Builder for Laravel #
 
  `ResponseBuilder` follows [Semantic Versioning](http://semver.org/).
+
+### v4 ###
+
+ * `ErrorCodes` class is now `BaseApiCodes`
+ * ExceptionHandler's debug trace no longer depends on `APP_DEBUG` value and can be enabled independently
 
 ### v3 ###
 
@@ -14,10 +19,12 @@
  * ApiCodeBase's `getErrorCodeConstants()` is now `getApiCodeConstants()`
  * ApiCodeBase's `getMapping()` is now `getCodeMessageKey()`
  * ApiCodeBase's `getBaseMapping()` is now `getReservedCodeMessageKey()`
+ * Internal constants for `ExeceptionHandlerHelper` supported exceptions are now prefixed with `EX_` (i.e. `HTTP_NOT_FOUND`
+ is now `EX_HTTP_NOT_FOUND`)
 
 ### v2 ###
 
- * First public release.
+ * First public release
 
 ### v1 ###
 

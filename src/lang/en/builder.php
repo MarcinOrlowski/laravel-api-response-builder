@@ -19,5 +19,9 @@ return [
 	'http_exception'               => 'HTTP exception :message',
 	'http_service_unavailable'     => 'Service maintenance in progress',
 
+    // Exception Handler (added in 3.3.0)
+    'authentication_exception'     => 'Not authorized to access',
+    'validation_exception'         => 'Invalid data',
+
 ];
 

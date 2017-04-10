@@ -1,6 +1,6 @@
-# API Response Builder for Laravel 5 #
+# API Response Builder for Laravel #
 
-`ResponseBuilder` is Laravel5's helper designed to simplify building
+`ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
 
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
@@ -41,13 +41,14 @@ then then feel free to donate to the project. Send some Bitcoins (BTC) to `1Lbfb
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel 5.1, 5.2, 5.3 and 5.4 compatible,
+ * Laravel 5.x, 5.2, 5.3 and 5.4 compatible,
  * Works on PHP 5.5, 5.6, 7.0, 7.1 and [HHVM](http://hhvm.com/),
  * Configurable (with ready-to-use defaults),
  * Localization support,
  * Automatic object conversion with custom mapping,
  * API chaining/cascading support,
- * Provides [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
+ * Includes traits to help [unit testing your API code](docs/testing.md),
+ * Provides own [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
  * No extra dependencies.
 
 ----
@@ -57,13 +58,16 @@ then then feel free to donate to the project. Send some Bitcoins (BTC) to `1Lbfb
 Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
 
 If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues)
-**before doing any work**. This will help us save your
-time in case I'd not be able to accept such changes. But if all is good and clear then follow common routine:
+**before doing any work**. This will help us save your time in case I'd not be accept PR either completely or in proposed form.
+But if all is good and clear then follow common routine:
 
- * fork the project
- * create new branch
- * do your changes
- * send pull request
+ * fork the project,
+ * create new branch,
+ * do your changes,
+ * add tests covering your changes,
+ * ensure **ALL** tests pass,
+ * send pull request,
+ * glory.
 
 ----
 

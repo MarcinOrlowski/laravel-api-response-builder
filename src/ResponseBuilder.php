@@ -35,7 +35,42 @@ class ResponseBuilder
 	/**
 	 * Default API code for OK
 	 */
-	const DEFAULT_API_CODE_OK = ApiCodeBase::OK;
+	const DEFAULT_API_CODE_OK = BaseApiCodes::OK;
+
+	/**
+	 * Configuration keys
+	 */
+	const CONF_KEY_DEBUG_DEBUG_KEY        = 'response_builder.debug.debug_key';
+	const CONF_KEY_DEBUG_EX_TRACE_ENABLED = 'response_builder.debug.exception_handler.trace_enabled';
+	const CONF_KEY_DEBUG_EX_TRACE_KEY     = 'response_builder.debug.exception_handler.trace_key';
+	const CONF_KEY_MAP                    = 'response_builder.map';
+	const CONF_KEY_ENCODING_OPTIONS       = 'response_builder.encoding_options';
+	const CONF_KEY_CLASSES                = 'response_builder.classes';
+	const CONF_KEY_MIN_CODE               = 'response_builder.min_code';
+	const CONF_KEY_MAX_CODE               = 'response_builder.max_code';
+	const CONF_KEY_RESPONSE_KEY_MAP       = 'response_builder.response_key_map';
+
+	/**
+	 * Default keys to be used by exception handler while adding debug information
+	 */
+	const KEY_DEBUG   = 'debug';
+	const KEY_TRACE   = 'trace';
+	const KEY_CLASS   = 'class';
+	const KEY_FILE    = 'file';
+	const KEY_LINE    = 'line';
+	const KEY_KEY     = 'key';
+	const KEY_METHOD  = 'method';
+	const KEY_SUCCESS = 'success';
+	const KEY_CODE    = 'code';
+	const KEY_LOCALE  = 'locale';
+	const KEY_MESSAGE = 'message';
+	const KEY_DATA    = 'data';
+
+	/**
+	 * Default key to be used by exception handler while processing ValidationException
+	 * to return all the error messages
+	 */
+	const KEY_MESSAGES = 'messages';
 
 	/**
 	 * Default JSON encoding options
@@ -55,15 +90,15 @@ class ResponseBuilder
 	 */
 	protected static function getClassesMapping()
 	{
-		$classes = Config::get('response_builder.classes');
+		$classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES);
 
 		if ($classes !== null) {
 			if (!is_array($classes)) {
 				throw new \RuntimeException(sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
 			}
 
-			$mandatory_keys = ['key',
-			                   'method',
+			$mandatory_keys = [static::KEY_KEY,
+			                   static::KEY_METHOD,
 			];
 			foreach ($classes as $class_name => $class_config) {
 				foreach ($mandatory_keys as $key_name) {
@@ -94,7 +129,7 @@ class ResponseBuilder
 			} elseif (is_object($data_val)) {
 				$obj_class_name = get_class($data_val);
 				if (array_key_exists($obj_class_name, $classes)) {
-					$conversion_method = $classes[ $obj_class_name ]['method'];
+					$conversion_method = $classes[ $obj_class_name ][static::KEY_METHOD];
 					$converted = $data_val->$conversion_method();
 					$data[ $data_key ] = $converted;
 				}
@@ -107,16 +142,17 @@ class ResponseBuilder
 	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
 	 * additionally added to reported JSON for easier manual debugging.
 	 *
-	 * @param boolean $success  @true if reposnse indicates success, @false otherwise
-	 * @param integer $api_code response code
-	 * @param string  $message  message to return
-	 * @param mixed   $data     API response data if any
+	 * @param boolean    $success    @true if reposnse indicates success, @false otherwise
+	 * @param integer    $api_code   response code
+	 * @param string     $message    message to return
+	 * @param mixed      $data       API response data if any
+	 * @param array|null $trace_data optional debug data array to be added to returned JSON.
 	 *
 	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse($success, $api_code, $message, $data = null)
+	protected static function buildResponse($success, $api_code, $message, $data = null, array $trace_data = null)
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
@@ -129,23 +165,30 @@ class ResponseBuilder
 				} elseif (is_object($data)) {
 					$obj_class_name = get_class($data);
 					if (array_key_exists($obj_class_name, $classes)) {
-						$conversion_method = $classes[$obj_class_name]['method'];
-						$data = [$classes[$obj_class_name]['key'] => $data->$conversion_method()];
+						$conversion_method = $classes[$obj_class_name][static::KEY_METHOD];
+						$data = [$classes[$obj_class_name][static::KEY_KEY] => $data->$conversion_method()];
 					}
 				}
 			}
+		}
 
+		$response = [
+			BaseApiCodes::getResponseKey(static::KEY_SUCCESS) => $success,
+			BaseApiCodes::getResponseKey(static::KEY_CODE)    => $api_code,
+			BaseApiCodes::getResponseKey(static::KEY_LOCALE)  => \App::getLocale(),
+			BaseApiCodes::getResponseKey(static::KEY_MESSAGE) => $message,
+			BaseApiCodes::getResponseKey(static::KEY_DATA)    => $data,
+		];
+
+		if ($trace_data !== null) {
+			$debug_key = Config::get(static::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
+			$response[$debug_key] = $trace_data;
+		}
+
+		if ($data !== null) {
 			// ensure we get object in final JSON structure in data node
 			$data = (object)$data;
 		}
-
-		/** @noinspection UnnecessaryParenthesesInspection */
-		$response = ['success' => $success,
-		             'code'    => $api_code,
-		             'locale'  => \App::getLocale(),
-		             'message' => $message,
-		             'data'    => $data,
-		];
 
 		return $response;
 	}
@@ -229,7 +272,8 @@ class ResponseBuilder
 		}
 		if (!is_int($http_code)) {
 			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
-		} elseif (($http_code < 200) || ($http_code > 299)) {
+		}
+		if (($http_code < 200) || ($http_code > 299)) {
 			throw new \InvalidArgumentException(sprintf('Invalid http_code (%d). Must be between 200-299 inclusive', $http_code));
 		}
 
@@ -319,6 +363,22 @@ class ResponseBuilder
 	}
 
 	/**
+	 * @param integer      $api_code         numeric code to be returned as 'code'
+	 * @param string       $error_message    custom message to be returned as part of error response
+	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public static function errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code = null,
+	                                                       $encoding_options = null, $debug_data = null)
+	{
+		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, null, $encoding_options, $debug_data);
+	}
+
+	/**
 	 * @param integer      $api_code      numeric code to be returned as 'code'
 	 * @param string       $error_message custom message to be returned as part of error response
 	 * @param integer|null $http_code     optional HTTP status code to be used with this response or @null for defaults
@@ -341,6 +401,7 @@ class ResponseBuilder
 	 * @param string|null  $message          custom message to be returned as part of error response
 	 * @param array|null   $headers          optional HTTP headers to be returned in error response
 	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -349,7 +410,7 @@ class ResponseBuilder
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
 	protected static function buildErrorResponse($data, $api_code, $http_code, $lang_args = null, $message = null,
-	                                             $headers = null, $encoding_options = null)
+	                                             $headers = null, $encoding_options = null, $debug_data = null)
 	{
 		if ($http_code === null) {
 			$http_code = static::DEFAULT_HTTP_CODE_ERROR;
@@ -357,13 +418,17 @@ class ResponseBuilder
 
 		if (!is_int($api_code)) {
 			throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
-		} elseif ($api_code === static::DEFAULT_API_CODE_OK) {
+		}
+		if ($api_code === static::DEFAULT_API_CODE_OK) {
 			throw new \InvalidArgumentException(sprintf('api_code must not be %d (DEFAULT_API_CODE_OK)', static::DEFAULT_API_CODE_OK));
-		} elseif ((!is_array($lang_args)) && ($lang_args !== null)) {
+		}
+		if ((!is_array($lang_args)) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException(sprintf('lang_args must be either array or null (%s given)', gettype($lang_args)));
-		} elseif (!is_int($http_code)) {
+		}
+		if (!is_int($http_code)) {
 			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
-		} elseif ($http_code < 400) {
+		}
+		if ($http_code < 400) {
 			throw new \InvalidArgumentException('http_code cannot be lower than 400');
 		}
 
@@ -374,7 +439,7 @@ class ResponseBuilder
 			$headers = [];
 		}
 
-		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers, $encoding_options);
+		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers, $encoding_options, $debug_data);
 	}
 
 
@@ -387,6 +452,7 @@ class ResponseBuilder
 	 * @param array|null     $lang_args           optional array with arguments passed to Lang::get()
 	 * @param array|null     $headers             optional HTTP headers to be returned in the response
 	 * @param integer|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
+	 * @param array|null     $debug_data          optional debug data array to be added to returned JSON.
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
@@ -396,7 +462,7 @@ class ResponseBuilder
 	 */
 	protected static function make($success, $api_code, $message_or_api_code, $data = null,
 	                               $http_code = null, array $lang_args = null, array $headers = null,
-	                               $encoding_options = null
+	                               $encoding_options = null, array $debug_data = null
 	)
 	{
 		if ($lang_args === null) {
@@ -412,7 +478,7 @@ class ResponseBuilder
 		}
 
 		if ($encoding_options === null) {
-			$encoding_options = Config::get('response_builder.encoding_options', static::DEFAULT_ENCODING_OPTIONS);
+			$encoding_options = Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
 		}
 		if (!is_int($encoding_options)) {
 			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
@@ -428,12 +494,12 @@ class ResponseBuilder
 			}
 
 			// do we have the mapping for this string already?
-			$key = ApiCodeBase::getCodeMessageKey($message_or_api_code);
+			$key = BaseApiCodes::getCodeMessageKey($message_or_api_code);
 			if ($key === null) {
 				// no, get the default one instead
-				$key = ApiCodeBase::getCodeMessageKey($success
-						? ApiCodeBase::OK
-						: ApiCodeBase::NO_ERROR_MESSAGE
+				$key = BaseApiCodes::getCodeMessageKey($success
+						? BaseApiCodes::OK
+						: BaseApiCodes::NO_ERROR_MESSAGE
 				);
 			}
 			$message_or_api_code = \Lang::get($key, $lang_args);
@@ -444,13 +510,16 @@ class ResponseBuilder
 				);
 			}
 
-			if (!ApiCodeBase::isCodeValid($api_code)) {
+			if (!BaseApiCodes::isCodeValid($api_code)) {
 				$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
-					$api_code, ApiCodeBase::getMinCode(), ApiCodeBase::getMaxCode());
+					$api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 				throw new \InvalidArgumentException($msg);
 			}
 		}
 
-		return Response::json(static::buildResponse($success, $api_code, $message_or_api_code, $data), $http_code, $headers, $encoding_options);
+		return Response::json(
+			static::buildResponse($success, $api_code, $message_or_api_code, $data, $debug_data),
+			$http_code, $headers, $encoding_options
+		);
 	}
 }

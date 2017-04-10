@@ -1,7 +1,8 @@
 <?php
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
-use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
@@ -14,7 +15,7 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class InternalsTest extends Base\ResponseBuilderTestCaseBase
+class InternalsTest extends TestCase
 {
 	/**
 	 * @return void
@@ -23,7 +24,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testMake_WrongMessage()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$message_or_api_code = [];    // invalid
@@ -64,8 +65,8 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testMake_InvalidEncodingOptions()
 	{
-		\Config::set('response_builder.encoding_options', []);
-		$this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK);
+		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, []);
+		$this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK);
 	}
 
 	/**
@@ -75,7 +76,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testDefaultEncodingOptionValue()
 	{
-		$config_defaults = \Config::get('response_builder.encoding_options');
+		$config_defaults = \Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS);
 		$this->assertEquals($config_defaults, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 	}
 
@@ -93,7 +94,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 
 		// fallback defaults in action
 		\Config::offsetUnset('encoding_options');
-		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -101,7 +102,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 
 
 		// check if it returns the same when defaults enforced explicitly
-		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data, null, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data, null, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -124,8 +125,8 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 		$data = ['test' => $test_string];
 
 		// check if it returns escaped
-		\Config::set('response_builder.encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
-		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data);
+		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -133,8 +134,8 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 		$this->assertEquals($test_string_escaped, $result_escaped);
 
 		// check if it returns unescaped
-		\Config::set('response_builder.encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);
-		$resp = $this->callMakeMethod(true, ApiCodeBase::OK, ApiCodeBase::OK, $data);
+		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -145,7 +146,6 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 		$this->assertNotEquals($result_escaped, $result_unescaped);
 	}
 
-
 	/**
 	 * Checks make() handling invalid type of api_code argument
 	 *
@@ -155,7 +155,7 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testMake_ApiCodeNotIntNorString()
 	{
-		$this->callMakeMethod(true, ApiCodeBase::OK, []);
+		$this->callMakeMethod(true, BaseApiCodes::OK, []);
 	}
 
 
@@ -168,11 +168,72 @@ class InternalsTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testGetClassesMapping_WrongType()
 	{
-		\Config::set('response_builder.classes', false);
+		\Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');
 		$method->invokeArgs($obj, []);
+	}
+
+
+	/**
+	 * Tests is custom response key mappings and defaults fallback work
+	 *
+	 * @return void
+	 */
+	public function testCustomResponseMapping()
+	{
+		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
+				ResponseBuilder::KEY_SUCCESS => $this->getRandomString(),
+			]
+		);
+
+		$this->response = ResponseBuilder::success();
+		$j = $this->getResponseSuccessObject(BaseApiCodes::OK);
+	}
+
+
+	/**
+	 * Tests is custom response key mappings and defaults fallback work
+	 *
+	 * @expectedException \RuntimeException
+	 *
+	 * @return void
+	 */
+	public function testGetResponseKey_UnknownKey()
+	{
+		BaseApiCodes::getResponseKey($this->getRandomString());
+	}
+
+	/**
+	 * Tests validation of configuration validation of response key map
+	 *
+	 * @expectedException \RuntimeException
+	 *
+	 * @return void
+	 */
+	public function testResponseKeyMapping_InvalidMap()
+	{
+		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, 'invalid');
+		BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS);
+	}
+
+
+	/**
+	 * Tests validation of configuration validation of response key map
+	 *
+	 * @expectedException \RuntimeException
+	 *
+	 * @return void
+	 */
+	public function testResponseKeyMapping_InvalidMappingValue()
+	{
+		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
+				ResponseBuilder::KEY_SUCCESS => false,
+			]
+		);
+
+		BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS);
 	}
 
 }

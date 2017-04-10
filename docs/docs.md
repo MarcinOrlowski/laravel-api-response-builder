@@ -1,7 +1,8 @@
-# API Response Builder for Laravel 5 #
+# API Response Builder for Laravel #
 
-`ResponseBuilder` is Laravel5's helper designed to simplify building
+`ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
+
 
 
 ## Table of contents ##
@@ -16,9 +17,9 @@ nice, normalized and easy to consume REST API responses.
  * [Handling Exceptions API way](#handling-exceptions-api-way)
  * [Manipulating Response Object](#manipulating-response-object)
  * [Overriding built-in messages](#overriding-built-in-messages)
+ * [Unit testing your ApiCodes](testing.md)
  * [License](#license)
  * [Notes](#notes)
- * [Changelog](CHANGES.md)
 
 ----
 
@@ -116,8 +117,8 @@ as this, due to array-to-object conversion, would produce:
       }
     }
 
-which most likely is not what you expect. To avoid this you, need to make your array part of 
-data object, which simply means wrapping it into another array like this:
+which most likely is not what you expect. To avoid this you need to make your array part of 
+the data object, which simply means wrapping it into another array:
 
     // this is RIGHT
     $returned_array = [1,2,3];
@@ -190,67 +191,73 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
 ## Return Codes ##
 
  All return codes are integers however the meaning of the code is fully up to you. The only exception
- is `0` (zero) which **ALWAYS** means **success** (and you cannot use `0` with `error()` mehods).
+ is `0` (zero) which **ALWAYS** means **success** and you cannot use `0` with `error()` mehods (but
+ you **can** have other codes for success than `0`).
 
 #### Code Ranges ####
 
-In one of our projects we had multiple APIs chained together (so one API called another). So we wanted
-to be able to chain API invocations and still be able to tell which one failed in case of problems.
-For example our API consumer call method of publicly exposed API "A". That API uses internal API "B"
-method, but under the hood "B" also delegates some work and talks to API "C". In case of failure of
-method in "C", API consumer would see its' return code. This simplifies the code and helps keep features
-separated but to make this work you must ensure no API return code overlaps, otherwise you cannot easily
-tell which one in your chain failed. For that reason `ResponseBuilder` supports code ranges, allowing you
-to configure `min_code` and `max_code` you want to be allowed in given API. No code outside this range would
-be allowed by `ResponseBuilder` so once you assign non-overlapping ranges to your modules, your live
-will be easier and `ResponseBuilder` will fail (throwing an exception) if wrong code is used, so your
-unit tests should detect any error code clash easily.
+ In one of my projects we had multiple APIs chained together (so one API called another, remote API).
+ I wanted to be able to chain API invocations in the way that in case of problems (and cascading
+ failure) I still would able to tell which one failed first. For example our API client app calls
+ method of publicly exposed API "A". That API "A" internally calls method of completely different
+ and separate API "B". Under the hood API "B" delegates some work and talks to API "C". When something
+ go wrong and "C"'s metod fail, client shall see "C"'s error code and error message, not the "A"'s.
+ To acheive this each API you chain return unique error codes and the values are unique per whole chain
+ To support that `ResponseBuilder` features code ranges, allowing you to configure `min_code` and 
+ `max_code` you want to be allowed to use in given API. `ResponseBuilder` will ensure no values not
+ from that range is ever returned, so to make the whole chain "clear", you only need to properly assign
+ non-overlapping ranges to your APIs and `ResponseBuilder` do the rest. Any attempt to violate code range
+ ends up with exception thrown.
 
-If you do not need code ranges for your API, just set `max_code` in configuration file to some very high value.
+ **IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by `ResponseBuilder` and must not be used 
+ directly nor assigned to your codes.
 
-**IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by `ResponseBuilder` and must not be used directly
- nor assigned to your codes.
+ **NOTE:** code ranges feature cannot be turned off, but if you do not need it or you just have one API
+ or no chaining, then just set `max_code` in your configuration file to some very high value.
 
 ----
 
 ## Exposed Methods ##
 
-All `ResponseBuilder` methods are **static**, and for simplicity of use, it's recommended to
-add the following `use` to your code:
+ All `ResponseBuilder` methods are **static**, and for simplicity of use, it's recommended to
+ add the following `use` to your code:
 
     use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 
-Methods' arguments:
+ Methods' arguments:
 
  * `$api_code` (**int**) any integer value you want to be returned in `code`,
  * `$data` (**mixed**|**null**) any data you want to be returned in your response as `data` node,
  * `$http_code` (**int**) valid HTTP return code (see `HttpResponse` class for useful constants),
  * `$lang_args` (**array**) array of arguments passed to `Lang::get()` while building `message`,
  * `$message` (**string**) custom message to be returned as part of error response (avoid, use error code mapping feature).
- * `$encoding_options` (**int**) data-to-json conversion options as [described in documentation of json_encode()](http://php.net/manual/en/function.json-encode.php). Pass `null` for default `ResponseBuilder::DEFAULT_ENCODING_OPTIONS` ([source](https://github.com/MarcinOrlowski/laravel-api-response-builder/blob/master/src/ResponseBuilder.php#L47)). See [configuration](https://github.com/MarcinOrlowski/laravel-api-response-builder/blob/master/config/response_builder.php#L106) key `encoding_options` too!  
+ * `$encoding_options` (**int**) data-to-json conversion options as [described in documentation of json_encode()](http://php.net/manual/en/function.json-encode.php). Pass `null` for default `ResponseBuilder::DEFAULT_ENCODING_OPTIONS` ([source](https://github.com/MarcinOrlowski/laravel-api-response-builder/blob/master/src/ResponseBuilder.php#L47)). See [configuration](https://github.com/MarcinOrlowski/laravel-api-response-builder/blob/master/config/response_builder.php#L106) (see config's `encoding_options` too)
 
-Most arguments of `success()` and `error()` methods are optional, with exception for `$api_code`
-for the latter. Helper methods arguments are partially optional - see signatures below for details.
+ Most arguments of `success()` and `error()` are optional, with exception for `$api_code`
+ for the `error()` and related methods. Helper methods arguments are partially optional - see
+ signatures below for details.
 
-**NOTE:** `$data` can be of any type you want (i.e. `string`), however to ensure returned JSON structure 
-is unaffected and `data` is always an object, type casting is done internally. There's no smart logic 
-but dumb `$data = (object)$data;` with the exception for classes configured with "classes" mapping. In
-such case conversion method is called on the object and result is returned instead. Laravel's
-`Model` and `Collection` classes are pre-configured but you can add additional classes just by
-creating entry in "classes" mapping. 
+ **NOTE:** `$data` can be of any type you want (i.e. `string`) however, to enforce constant JSON structure 
+ of the response, `data` is always an object. If you pass anything else, type casting will be done internally.
+ There's no smart logic here, just ordinary `$data = (object)$data;`. The nly exception are classes configured
+ with "classes" mapping (see configuration details). In such case configured conversion method is called on
+ the provided object and result is returned instead. Laravel's  `Model` and `Collection` classes are pre-configured
+ but you can add additional classes just by creating entry in configuration `classes` mapping. 
 
-I recommend you ensure `$data` is an `array` (with mentioned exception) prior passing it to `ResponseBuilder` 
-methods unless you intentionally want the oddities like array keys keys `0` or `scalar` to happen.
+ I recommend you always pass `$data` as an `array` or object with conversion mapping configured, otherwise
+ passing other tipes to `ResponseBuilder` may end up with response JSON featuring oddities like array keys
+ keys `0` or `scalar`.
 
-**IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
-value matches W3C meaning of the code. `ResponseBuilder` will throw `\InvalidArgumentException` if 
-you try to call `success()` and  related methods with `$http_code` not being in range of 200-299. 
-The same will happen if you try to call `error()` but `$http_code` will be lower than 400.
+ **IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
+ value matches W3C meaning of the code. `ResponseBuilder` will throw `\InvalidArgumentException` if 
+ you try to call `success()` ()and related methods) with `$http_code` not being in range of 200-299. 
+ The same will happen if you try to call `error()` (and familiy) with `$http_code` lower than 400.
 
-Redirection codes (3xx) cannot be used with `ResponseBuilder`.
+ Other HTTP codes, like redirection (3xx) or (5xx) are not allowed and will throw `\InvalidArgumentException`.
 
-See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details on HTTP codes.
+ See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details about
+ available HTTP codes and its meaning.
 
 #### Reporting Success ####
 
@@ -258,9 +265,9 @@ See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for
     successWithCode($api_code=null, array $lang_args=[], $http_code=null);
     successWithHttpCode($http_code);
 
-Usage restrictions:
+ Usage restrictions:
 
-* `$http_code` must be in range from 200 to 299
+ * `$http_code` must be in range from 200 to 299
 
 #### Reporting Error ####
 
@@ -270,25 +277,25 @@ Usage restrictions:
     errorWithHttpCode($api_code, $http_code, $lang_args=[]);
     errorWithMessage($api_code, $error_message, $http_code=HttpResponse::HTTP_BAD_REQUEST);
 
-Usage restrictions:
+ Usage restrictions:
 
-* `$api_code` must not be 0
-* `$http_code` must not be lower than 400
+ * `$api_code` must not be 0 (zero)
+ * `$http_code` must not be lower than 400
 
 ----
 
 ## Data Conversion ##
 
-`ResponseBuilder` can save you some work by automatically converting certain objects
-prior returning response array. i.e. you can pass Eloquent's Model or Collection
-object directly and have it converted to array automatically.
+ `ResponseBuilder` can save you some work by automatically converting certain objects
+ prior returning response array. i.e. you can pass Eloquent's Model or Collection
+ object directly and have it converted to array automatically.
 
-For example, passing `Model` object:
+ For example, passing `Model` object:
 
     $flight = App\Flight::where(...)->first();
     return ResponseBuilder::success($flight);
 
-will return:
+ will return:
 
     {
        "item": {
@@ -298,12 +305,12 @@ will return:
        }
     }
 
-Or you have more data, the pass `Collection`:
+ Or you have more data, the pass `Collection`:
 
     $flights = App\Flight::where(...)->get();
     return ResponseBuilder::success($flights);
 
-which would return array of objects as expected:
+ which would return array of objects as expected:
 
     {
        "items": [
@@ -319,21 +326,21 @@ which would return array of objects as expected:
        ]
     }
 
-The result is keyed `item` and `items`, depending on class name (therefore you will always get `items` 
-keys even if `Collection` holds one or even zero elements) is the given object of and the
-whole magic is done by calling method configured for given class.
+ The result is keyed `item` and `items`, depending on class name (therefore you will always get `items` 
+ keys even if `Collection` holds one or even zero elements) is the given object of and the
+ whole magic is done by calling method configured for given class.
 
-The whole functionality is configurable via `classes` mapping array (see config file for details).
+ The whole functionality is configurable via `classes` mapping array (see config file for details).
 
-When you pass the array it will be walked recursively and the conversion will take place
-on all known elements as well:
+ When you pass the array it will be walked recursively and the conversion will take place
+ on all known elements as well:
 
     $data = [
        'flight' = App\Flight::where(...)->first(),
        'planes' = App\Plane::where(...)->get(),
     ];
 
-would produce the following response (contrary to the previous examples, source array keys are preserved):
+ would produce the following response (contrary to the previous examples, source array keys are preserved):
 
     {
        "flight": {

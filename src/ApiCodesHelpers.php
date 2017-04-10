@@ -15,62 +15,10 @@ namespace MarcinOrlowski\ResponseBuilder;
 use Illuminate\Support\Facades\Config;
 
 /**
- * ApiCode handling class
+ * Reusable ApiCodeBase related methods
  */
-class ApiCodeBase
+trait ApiCodesHelpers
 {
-	/**
-	 * protected code range - lowest code
-	 */
-	const RESERVED_MIN_API_CODE = 0;
-
-	/**
-	 * protected code range - highest code
-	 */
-	const RESERVED_MAX_API_CODE = 63;
-
-
-	/**
-	 * built-in codes: OK
-	 */
-	const OK = 0;
-	/**
-	 * built-in code for fallback message mapping
-	 */
-	const NO_ERROR_MESSAGE = 1;
-	/**
-	 * built-in error code for HTTP_NOT_FOUND exception
-	 */
-	const EX_HTTP_NOT_FOUND = 10;
-	/**
-	 * built-in error code for HTTP_SERVICE_UNAVAILABLE exception
-	 */
-	const EX_HTTP_SERVICE_UNAVAILABLE = 11;
-	/**
-	 * built-in error code for HTTP_EXCEPTION
-	 */
-
-	const EX_HTTP_EXCEPTION = 12;
-	/**
-	 * built-in error code for UNCAUGHT_EXCEPTION
-	 */
-	const EX_UNCAUGHT_EXCEPTION = 13;
-
-
-	/**
-	 * @var array built-in codes mapping
-	 */
-	protected static $base_map = [
-		self::OK               => 'response-builder::builder.ok',
-		self::NO_ERROR_MESSAGE => 'response-builder::builder.no_error_message',
-
-		self::EX_HTTP_NOT_FOUND           => 'response-builder::builder.http_not_found',
-		self::EX_HTTP_SERVICE_UNAVAILABLE => 'response-builder::builder.http_service_unavailable',
-		self::EX_HTTP_EXCEPTION           => 'response-builder::builder.http_exception',
-		self::EX_UNCAUGHT_EXCEPTION       => 'response-builder::builder.uncaught_exception',
-	];
-
-
 	/**
 	 * Returns lowest allowed error code for this module
 	 *
@@ -80,10 +28,10 @@ class ApiCodeBase
 	 */
 	public static function getMinCode()
 	{
-		$min_code = Config::get('response_builder.min_code', null);
+		$min_code = Config::get(ResponseBuilder::CONF_KEY_MIN_CODE, null);
 
 		if ($min_code === null) {
-			throw new \RuntimeException('CONFIG: Missing "min_code" key');
+			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', ResponseBuilder::CONF_KEY_MIN_CODE));
 		}
 
 		return $min_code;
@@ -98,10 +46,10 @@ class ApiCodeBase
 	 */
 	public static function getMaxCode()
 	{
-		$max_code = Config::get('response_builder.max_code', null);
+		$max_code = Config::get(ResponseBuilder::CONF_KEY_MAX_CODE, null);
 
 		if ($max_code === null) {
-			throw new \RuntimeException('CONFIG: Missing "max_code" key');
+			throw new \RuntimeException(sprintf('CONFIG: Missing "max_code" key', ResponseBuilder::CONF_KEY_MAX_CODE));
 		}
 
 		return $max_code;
@@ -115,7 +63,7 @@ class ApiCodeBase
 	 */
 	protected static function getReservedMinCode()
 	{
-		return static::RESERVED_MIN_API_CODE;
+		return BaseApiCodes::RESERVED_MIN_API_CODE;
 	}
 
 	/**
@@ -125,7 +73,7 @@ class ApiCodeBase
 	 */
 	protected static function getReservedMaxCode()
 	{
-		return static::RESERVED_MAX_API_CODE;
+		return BaseApiCodes::RESERVED_MAX_API_CODE;
 	}
 
 	/**
@@ -148,17 +96,17 @@ class ApiCodeBase
 	 */
 	public static function getMap()
 	{
-		$map = Config::get('response_builder.map', null);
+		$map = Config::get(ResponseBuilder::CONF_KEY_MAP, null);
 		if ($map === null) {
-			throw new \RuntimeException('CONFIG: Missing "map" key');
+			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', $map));
 		}
 
 		if (!is_array($map)) {
-			throw new \RuntimeException('CONFIG: "map" must be an array');
+			throw new \RuntimeException(sprintf('CONFIG: "%s" must be an array', $map));
 		}
 
 		/** @noinspection AdditionOperationOnArraysInspection */
-		return $map + static::$base_map;
+		return $map + BaseApiCodes::getBaseMap();
 	}
 
 	/**
@@ -172,15 +120,14 @@ class ApiCodeBase
 	 */
 	public static function getReservedCodeMessageKey($code)
 	{
-		if (($code < ApiCodeBase::RESERVED_MIN_API_CODE) || ($code > ApiCodeBase::RESERVED_MAX_API_CODE)) {
+		if (($code < BaseApiCodes::RESERVED_MIN_API_CODE) || ($code > BaseApiCodes::RESERVED_MAX_API_CODE)) {
 			throw new \InvalidArgumentException(
 				sprintf('Base code value (%d) is out of allowed reserved range %d-%d',
-					$code, ApiCodeBase::RESERVED_MIN_API_CODE, ApiCodeBase::RESERVED_MAX_API_CODE));
+					$code, BaseApiCodes::RESERVED_MIN_API_CODE, BaseApiCodes::RESERVED_MAX_API_CODE));
 		}
 
-		return array_key_exists($code, static::$base_map)
-			? static::$base_map[ $code ]
-			: null;
+		$base_map = BaseApiCodes::getBaseMap();
+		return array_key_exists($code, $base_map) ? $base_map[ $code ] : null;
 	}
 
 
@@ -217,8 +164,8 @@ class ApiCodeBase
 	{
 		$result = false;
 
-		if ((($code >= ApiCodeBase::getMinCode()) && ($code <= ApiCodeBase::getMaxCode()))
-			|| (($code <= ApiCodeBase::getReservedMaxCode()) && ($code >= ApiCodeBase::getReservedMinCode()))
+		if ((($code >= static::getMinCode()) && ($code <= static::getMaxCode()))
+			|| (($code <= static::getReservedMaxCode()) && ($code >= static::getReservedMinCode()))
 		) {
 			$result = true;
 		}

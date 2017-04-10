@@ -15,9 +15,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class ErrorTest extends Base\ResponseBuilderTestCaseBase
+class ErrorTest extends TestCase
 {
-
 	/**
 	 * Check success()
 	 *
@@ -174,6 +173,37 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	}
 
 	/**
+	 * Tests errorWithMessageAndDataAndDebug()
+	 *
+	 * @return void
+	 */
+	public function testErrorWithMessageAndDataAndDebug()
+	{
+		$trace_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE);
+		$trace_data = [
+			$trace_key => (object)[
+				$this->getRandomString('trace_key') => $this->getRandomString('trace_val'),
+			],
+		];
+
+		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
+		$api_code = $this->random_api_code;
+		$error_message = $this->getRandomString('msg');
+
+		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
+		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, null, null, $trace_data);
+
+		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
+		$this->assertEquals($error_message, $j->message);
+		$this->assertEquals((object)$data, $j->data);
+
+		$debug_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
+//		var_dump((object)$trace_data);
+//		var_dump($j->debug_key);
+		$this->assertEquals((object)$trace_data, $j->$debug_key);
+	}
+
+	/**
 	 * Tests errorWithMessage()
 	 *
 	 * @return void
@@ -197,7 +227,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testError_MissingMessageMapping()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		// FIXME we **assume** this is not mapped. But assumptions sucks...
@@ -221,7 +251,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_ApiCodeOK()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
@@ -259,7 +289,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_WrongHttpCodeType()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
@@ -277,7 +307,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_NullHttpCode()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
@@ -300,7 +330,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_TooLowHttpCode()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
@@ -320,7 +350,7 @@ class ErrorTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testBuildErrorResponse_WrongLangArgs()
 	{
-		/** @var \MarcinOrlowski\ResponseBuilder\ApiCodeBase $api_codes_class_name */
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;

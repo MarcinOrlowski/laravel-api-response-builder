@@ -2,7 +2,8 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
  * Laravel API Response Builder
@@ -14,7 +15,7 @@ use MarcinOrlowski\ResponseBuilder\ApiCodeBase;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
+class ApiCodeBaseTest extends TestCase
 {
 	/**
 	 * Tests getMinCode() with invalid config
@@ -25,8 +26,8 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testGetMinCode_MissingConfigKey()
 	{
-		\Config::offsetUnset('response_builder.min_code');
-		ApiCodeBase::getMinCode();
+		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MIN_CODE);
+		BaseApiCodes::getMinCode();
 	}
 
 	/**
@@ -38,8 +39,8 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testGetMaxCode_MissingConfigKey()
 	{
-		\Config::offsetUnset('response_builder.max_code');
-		ApiCodeBase::getMaxCode();
+		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAX_CODE);
+		BaseApiCodes::getMaxCode();
 	}
 
 
@@ -52,8 +53,8 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testGetMap_MissingConfigKey()
 	{
-		\Config::offsetUnset('response_builder.map');
-		ApiCodeBase::getMap();
+		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAP);
+		BaseApiCodes::getMap();
 	}
 
 	/**
@@ -65,8 +66,8 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testGetMap_WrongConfig()
 	{
-		\Config::set('response_builder.map', false);
-		ApiCodeBase::getMap();
+		\Config::set(ResponseBuilder::CONF_KEY_MAP, false);
+		BaseApiCodes::getMap();
 	}
 
 
@@ -79,7 +80,7 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testGetCodeMessageKey_OutOfRange()
 	{
-		ApiCodeBase::getCodeMessageKey(ApiCodeBase::RESERVED_MAX_API_CODE + 1);
+		BaseApiCodes::getCodeMessageKey(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
 	}
 
 	/**
@@ -91,7 +92,7 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testGetReservedCodeMessageKey_TooLow()
 	{
-		ApiCodeBase::getReservedCodeMessageKey(ApiCodeBase::RESERVED_MIN_API_CODE - 1);
+		BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::RESERVED_MIN_API_CODE - 1);
 	}
 
 	/**
@@ -103,7 +104,7 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	 */
 	public function testGetReservedCodeMessageKey_TooHigh()
 	{
-		ApiCodeBase::getReservedCodeMessageKey(ApiCodeBase::RESERVED_MAX_API_CODE + 1);
+		BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
 	}
 
 	/**
@@ -114,19 +115,19 @@ class ApiCodeBaseTest extends Base\ResponseBuilderTestCaseBase
 	public function testGetReservedCodeMessageKey()
 	{
 		// check how mapped code handling works
-		$mapping = ApiCodeBase::getReservedCodeMessageKey(ApiCodeBase::OK);
+		$mapping = BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::OK);
 		$this->assertNotNull($mapping);
 
 		// check how not-mapped code is handled
-		$base_map = $this->getProtectedMember(ApiCodeBase::class, 'base_map');
+		$base_map = $this->getProtectedMember(BaseApiCodes::class, 'base_map');
 
-		for ($code = ApiCodeBase::RESERVED_MIN_API_CODE; $code < ApiCodeBase::RESERVED_MAX_API_CODE; $code++) {
+		for ($code = BaseApiCodes::RESERVED_MIN_API_CODE; $code < BaseApiCodes::RESERVED_MAX_API_CODE; $code++) {
 			if (!array_key_exists($code, $base_map)) {
 				break;
 			}
 		}
 
-		$mapping = ApiCodeBase::getReservedCodeMessageKey($code);
+		$mapping = BaseApiCodes::getReservedCodeMessageKey($code);
 		$this->assertNull($mapping);
 	}
 
