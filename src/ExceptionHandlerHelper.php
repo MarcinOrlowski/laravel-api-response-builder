@@ -116,10 +116,10 @@ class ExceptionHandlerHelper
 			}
 
 			// can it be considered valid HTTP error code?
-			if ($http_code < 400) {
+			if (($http_code < 400) || ($http_code > 499)) {
 				$http_code = 0;
 			}
-		} elseif ($http_code < 400) {
+		} elseif (($http_code < 400) || ($http_code > 499)) {
 			$http_code = 0;
 		}
 
@@ -128,12 +128,14 @@ class ExceptionHandlerHelper
 			$http_code = $default_http_code;
 		}
 
-		$debug_data = null;
-		if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true)) {
-			$debug_data = [
-				ResponseBuilder::KEY_CLASS => get_class($exception),
-				ResponseBuilder::KEY_FILE  => $exception->getFile(),
-				ResponseBuilder::KEY_LINE  => $exception->getLine(),
+		$trace_data = null;
+		if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, false)) {
+			$trace_data = [
+				Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE) => [
+					ResponseBuilder::KEY_CLASS => get_class($exception),
+					ResponseBuilder::KEY_FILE  => $exception->getFile(),
+					ResponseBuilder::KEY_LINE  => $exception->getLine(),
+				],
 			];
 		}
 
@@ -166,6 +168,18 @@ class ExceptionHandlerHelper
 		// let's build error message
 		$error_message = '';
 		$ex_message = trim($exception->getMessage());
+
+		// ensure we won't fail due to exception incorect encoding
+		if (!mb_check_encoding($ex_message, 'UTF-8')) {
+			// let's check there's iconv and mb_string available
+			if (function_exists('iconv') && function_exists('mb_detec_encoding')) {
+				$ex_message = iconv(mb_detect_encoding($ex_message, mb_detect_order(), true), 'UTF-8', $ex_message);
+			} else {
+				// lame fallback, in case there's no iconv/mb_string installed
+				$ex_message = htmlspecialchars_decode(htmlspecialchars($ex_message, ENT_SUBSTITUTE, 'UTF-8'));
+			}
+		}
+
 		if (Config::get('response_builder.exception_handler.use_exception_message_first', true)) {
 			if ($ex_message === '') {
 				$ex_message = get_class($exception);
@@ -182,7 +196,7 @@ class ExceptionHandlerHelper
 			]);
 		}
 
-		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code, null, $debug_data);
+		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code, null, $trace_data);
 	}
 
 }

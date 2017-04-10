@@ -4,6 +4,12 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v4.0.1 (2017-04-10)
+   * TestingHelpers trait's `validateResponseStructure()` method is now public
+   * [RB-64] Fixed Exception Handler generated HTTP code being out of allowed range in some cases
+   * [RB-65] Exception Handler Helper now deals with messages using non-UTF8 or broken encoding 
+   * Exception Handler's trace data is now properly placed into `trace` leaf
+
 * v4.0.0 (2017-04-10)
    * **BACKWARD INCOMPATIBILE CHANGES**
    * [RB-59] Added option to remap response JSON keys to user provided values
@@ -11,7 +17,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defails
    * [RB-47] Exception Handler now supports `FormRequests` and returns all messages in `ResponseBuilder::KEY_MESSAGES`
    * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled same way `authentication_exception` is
-   * [RB=56] Added configurable key for debug trace added to returned JSON response (if enabled)
+   * [RB-56] Added configurable key for debug trace added to returned JSON response (if enabled)
    * Added traits to help testing your config and ApiCodes with ease. See `Unit Testing your ApiCodes` docs for details 
    * `ApiCodeBase` class is now named `BaseApiCodes`
    * [RB-35] ExceptionHandlerHelper is now covered by tests

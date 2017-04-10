@@ -366,13 +366,15 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
 
 ## Requirements ##
 
-There're no special requirements. Once you fulfill Laravel's requirements you are all good. Minimum
-versions `ResponseBuilder` is tested against are:
+Minimum requirements:
 
-  * PHP 5.5+
-  * Laravel 5.1.45+
+  * PHP 5.5
+  * Laravel 5.1.45
 
-all newer versions of PHP and Laravel are also supported out of the box.
+The following PHP extensions are optional but strongly recommended: 
+
+   * iconv
+   * mb_string
 
 ----
 

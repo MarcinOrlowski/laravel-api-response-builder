@@ -238,7 +238,7 @@ trait TestingHelpers {
 	 *
 	 * @return void
 	 */
-	protected function validateResponseStructure($json_object, array $extra_keys = [])
+	public function validateResponseStructure($json_object, array $extra_keys = [])
 	{
 		$this->assertTrue(is_object($json_object));
 
