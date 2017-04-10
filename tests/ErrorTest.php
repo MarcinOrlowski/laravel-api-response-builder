@@ -179,20 +179,28 @@ class ErrorTest extends TestCase
 	 */
 	public function testErrorWithMessageAndDataAndDebug()
 	{
-		$trace_data = [$this->getRandomString('key') => $this->getRandomString('val')];
+		$trace_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE);
+		$trace_data = [
+			$trace_key => (object)[
+				$this->getRandomString('trace_key') => $this->getRandomString('trace_val'),
+			],
+		];
 
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
+
+		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
 		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, null, null, $trace_data);
 
 		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
 		$this->assertEquals($error_message, $j->message);
+		$this->assertEquals((object)$data, $j->data);
 
 		$debug_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
-		$trace_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE);
-		$data[ $debug_key ] = (object)[$trace_key => (object)$trace_data];
-		$this->assertEquals((object)$data, $j->data);
+//		var_dump((object)$trace_data);
+//		var_dump($j->debug_key);
+		$this->assertEquals((object)$trace_data, $j->$debug_key);
 	}
 
 	/**
