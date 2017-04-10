@@ -49,7 +49,7 @@ then then feel free to donate to the project. Send some Bitcoins (BTC) to `1Lbfb
  * API chaining/cascading support,
  * Includes traits to help [unit testing your API code](docs/testing.md),
  * Provides own [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
- * No extra dependencies.
+ * No extra mandatory dependencies.
 
 ----
 
