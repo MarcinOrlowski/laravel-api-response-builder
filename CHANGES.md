@@ -4,7 +4,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v4.0.1 (2017-04-10)
    * TestingHelpers trait's `validateResponseStructure()` method is now public
    * [RB-64] Fixed Exception Handler generated HTTP code being out of allowed range in some cases
    * [RB-65] Exception Handler Helper now deals with messages using non-UTF8 or broken encoding 
