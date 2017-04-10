@@ -129,11 +129,13 @@ class ExceptionHandlerHelper
 		}
 
 		$trace_data = null;
-		if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true)) {
+		if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, false)) {
 			$trace_data = [
-				ResponseBuilder::KEY_CLASS => get_class($exception),
-				ResponseBuilder::KEY_FILE  => $exception->getFile(),
-				ResponseBuilder::KEY_LINE  => $exception->getLine(),
+				Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE) => [
+					ResponseBuilder::KEY_CLASS => get_class($exception),
+					ResponseBuilder::KEY_FILE  => $exception->getFile(),
+					ResponseBuilder::KEY_LINE  => $exception->getLine(),
+				],
 			];
 		}
 
