@@ -116,10 +116,10 @@ class ExceptionHandlerHelper
 			}
 
 			// can it be considered valid HTTP error code?
-			if ($http_code < 400) {
+			if (($http_code < 400) || ($http_code > 499)) {
 				$http_code = 0;
 			}
-		} elseif ($http_code < 400) {
+		} elseif (($http_code < 400) || ($http_code > 499)) {
 			$http_code = 0;
 		}
 
@@ -128,9 +128,9 @@ class ExceptionHandlerHelper
 			$http_code = $default_http_code;
 		}
 
-		$debug_data = null;
+		$trace_data = null;
 		if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true)) {
-			$debug_data = [
+			$trace_data = [
 				ResponseBuilder::KEY_CLASS => get_class($exception),
 				ResponseBuilder::KEY_FILE  => $exception->getFile(),
 				ResponseBuilder::KEY_LINE  => $exception->getLine(),
@@ -182,7 +182,7 @@ class ExceptionHandlerHelper
 			]);
 		}
 
-		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code, null, $debug_data);
+		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code, null, $trace_data);
 	}
 
 }

@@ -6,6 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * @dev
    * TestingHelpers trait's `validateResponseStructure()` method is now public
+   * [RB-64] Fixed Exception Handler generated HTTP code being out of allowed range in some cases
 
 * v4.0.0 (2017-04-10)
    * **BACKWARD INCOMPATIBILE CHANGES**
