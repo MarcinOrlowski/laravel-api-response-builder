@@ -4,6 +4,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * TestingHelpers trait's `validateResponseStructure()` method is now public
+
 * v4.0.0 (2017-04-10)
    * **BACKWARD INCOMPATIBILE CHANGES**
    * [RB-59] Added option to remap response JSON keys to user provided values
