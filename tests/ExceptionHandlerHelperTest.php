@@ -64,7 +64,6 @@ class ExceptionHandlerHelperTest extends TestCase
 //				'default_api_code' => BaseApiCodes::EX_UNCAUGHT_EXCEPTION,
 //			],
 
-
 		];
 		foreach ($codes as $params) {
 			$status_code = $params['status_code'];
@@ -88,15 +87,9 @@ class ExceptionHandlerHelperTest extends TestCase
 					$exception = new $cls($status_code);
 					break;
 
-//				default:
-//					$msg = \Lang::get($key, [
-//						'api_code' => $api_code,
-//						'message'  => $ex_message,
-//						'class'    => get_class($exception),
-//					]);
-//
-//					$exception = new $cls($msg, $status_code);
-//					break;
+				default:
+					$this->fail("Unknown exception class: '{$cls}'");
+					break;
 			}
 
 
