@@ -19,7 +19,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 /**
  * Unit test helper trait
  */
-trait TestingHelpers {
+trait TestingHelpers
+{
 
 	/**
 	 * @return string
@@ -82,7 +83,7 @@ trait TestingHelpers {
 		$map = $this->getProtectedMember(\MarcinOrlowski\ResponseBuilder\BaseApiCodes::class, 'base_map');
 		$idx = mt_rand(1, count($map));
 
-		$this->random_api_code_message_key = $map[array_keys($map)[$idx-1]];
+		$this->random_api_code_message_key = $map[ array_keys($map)[ $idx - 1 ] ];
 		$this->random_api_code_message = \Lang::get($this->random_api_code_message_key, [
 			'api_code' => $this->random_api_code,
 		]);
@@ -231,6 +232,21 @@ trait TestingHelpers {
 
 
 	/**
+	 * Use assertValidResponse() instead
+	 *
+	 * @param StdClass $json_object
+	 * @param array    $extra_keys
+	 *
+	 * @return void
+	 *
+	 * @deprecated Use assertValidResponse() instead
+	 */
+	public function validateResponseStructure($json_object, array $extra_keys = [])
+	{
+		$this->assertValidResponse($json_object, $extra_keys);
+	}
+
+	/**
 	 * Validates if given $json_object contains all expected elements
 	 *
 	 * @param StdClass $json_object JSON Object hodling Api response to validate
@@ -238,7 +254,7 @@ trait TestingHelpers {
 	 *
 	 * @return void
 	 */
-	public function validateResponseStructure($json_object, array $extra_keys = [])
+	public function assertValidResponse($json_object, array $extra_keys = [])
 	{
 		$this->assertTrue(is_object($json_object));
 
@@ -260,7 +276,7 @@ trait TestingHelpers {
 			$this->assertObjectHasAttribute($item, $json_object, "No '{$item}' element in response structure found");
 		}
 
-		$this->assertTrue(is_bool($json_object->{$items[ResponseBuilder::KEY_SUCCESS]}));
+		$this->assertTrue(is_bool($json_object->{$items[ ResponseBuilder::KEY_SUCCESS ]}));
 		$this->assertTrue(is_int($json_object->code));
 		$this->assertTrue(is_string($json_object->locale));
 		/** @noinspection UnNecessaryDoubleQuotesInspection */
@@ -483,6 +499,5 @@ trait TestingHelpers {
 
 		return $escaped;
 	}
-
 
 }
