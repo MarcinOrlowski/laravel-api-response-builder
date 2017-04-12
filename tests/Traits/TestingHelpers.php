@@ -92,20 +92,6 @@ trait TestingHelpers
 	}
 
 
-	/**
-	 * Load service providers we need during the tests
-	 *
-	 * @param \Illuminate\Foundation\Application $app
-	 *
-	 * @return array
-	 */
-	protected function getPackageProviders($app)
-	{
-		return [
-			\MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider::class,
-		];
-	}
-
 	// -----------------------------------------------------------
 
 
