@@ -3,7 +3,6 @@
 `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
 
-
 ## Unit testing your ApiCodes ##
 
 `ResponseBuilder` ships with traits that you can use to ensure your ApiCodes class and its values
@@ -51,3 +50,33 @@ and its namespace is `App`.
 
 
  And that's it. From now on, you have your `ApiCodes` covered with tests too.
+
+
+## Testing other code using ResponseBuilder ##
+
+ If you want to test other code that uses response builder, then there provided traits can also be 
+ helpful. Let's say your Laravel API exposes `/v1/session/foo` which is expected to return some
+ data. Let's test the response structure and data:
+ 
+    <?php
+    
+    use MarcinOrlowski\ResponseBuilder\Tests\Traits\TestingHelpers;
+    class LoginTest extends \Illuminate\Foundation\Testing\TestCase
+    {
+        use TestingHelpers;
+        
+        public function testLogin()
+        {
+            // call your method
+            $response = $this->call('POST', '/v1/session/foo');
+            
+            // get the JSON object
+            $j = json_decode($response->getContent());
+            
+            // validate JSON structure matches what ResponseBuilder produced
+            $this->assertValidResponse($j);
+            
+            // some other tests of your choice
+            $this->assertTrue($j->success);
+        }
+    }
