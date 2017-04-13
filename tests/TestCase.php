@@ -24,4 +24,21 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 		return \MarcinOrlowski\ResponseBuilder\BaseApiCodes::class;
 	}
 
+
+	// -----------------------------------------------------------
+
+	/**
+	 * [Orchestra] Load service providers we need during the tests
+	 *
+	 * @param \Illuminate\Foundation\Application $app
+	 *
+	 * @return array
+	 */
+	protected function getPackageProviders($app)
+	{
+		return [
+			\MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider::class,
+		];
+	}
+
 }

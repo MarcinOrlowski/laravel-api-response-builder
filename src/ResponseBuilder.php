@@ -428,8 +428,8 @@ class ResponseBuilder
 		if (!is_int($http_code)) {
 			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
 		}
-		if ($http_code < 400) {
-			throw new \InvalidArgumentException('http_code cannot be lower than 400');
+		if (($http_code < 400) || ($http_code > 499)) {
+			throw new \InvalidArgumentException('http_code must be in range from 400 to 499 inclusive');
 		}
 
 		if ($message === null) {
