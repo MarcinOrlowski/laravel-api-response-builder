@@ -4,7 +4,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v4.0.2 (2017-04-13)
    * Enforced HTTP code for error messages fits 400-499 range
    * `validateResponseStructure()` deprecated in favor of `assertValidResponse()` 
    * Moved Orchestra's `getPackageProviders()` out of `TestingHelpers` trait
