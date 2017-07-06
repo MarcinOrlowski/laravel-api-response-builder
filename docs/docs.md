@@ -240,7 +240,7 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
 
  **NOTE:** `$data` can be of any type you want (i.e. `string`) however, to enforce constant JSON structure 
  of the response, `data` is always an object. If you pass anything else, type casting will be done internally.
- There's no smart logic here, just ordinary `$data = (object)$data;`. The nly exception are classes configured
+ There's no smart logic here, just ordinary `$data = (object)$data;`. The only exception are classes configured
  with "classes" mapping (see configuration details). In such case configured conversion method is called on
  the provided object and result is returned instead. Laravel's  `Model` and `Collection` classes are pre-configured
  but you can add additional classes just by creating entry in configuration `classes` mapping. 
@@ -251,8 +251,8 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
 
  **IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
  value matches W3C meaning of the code. `ResponseBuilder` will throw `\InvalidArgumentException` if 
- you try to call `success()` ()and related methods) with `$http_code` not being in range of 200-299. 
- The same will happen if you try to call `error()` (and familiy) with `$http_code` lower than 400.
+ you try to call `success()` (and related methods) with `$http_code` not being in range of 200-299. 
+ The same will happen if you try to call `error()` (and family) with `$http_code` lower than 400.
 
  Other HTTP codes, like redirection (3xx) or (5xx) are not allowed and will throw `\InvalidArgumentException`.
 
