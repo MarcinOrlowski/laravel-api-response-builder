@@ -43,7 +43,7 @@ then then feel free to donate to the project. Send some Bitcoins (BTC) to `1Lbfb
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
  * Laravel 5.x, 5.2, 5.3, 5.4 and 5.5 compatible,
  * Supports Laravel 5.5's auto-discovery feature
- * Works on PHP 5.5, 5.6, 7.0, 7.1, 7.2 and [HHVM](http://hhvm.com/),
+ * Works on PHP 5.5, 5.6, 7.0, 7.1 and 7.2 ([HHVM](http://hhvm.com/) should work too!),
  * Configurable (with ready-to-use defaults),
  * Localization support,
  * Automatic object conversion with custom mapping,
