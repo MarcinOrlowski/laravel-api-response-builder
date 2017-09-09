@@ -240,7 +240,7 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
 
  **NOTE:** `$data` can be of any type you want (i.e. `string`) however, to enforce constant JSON structure 
  of the response, `data` is always an object. If you pass anything else, type casting will be done internally.
- There's no smart logic here, just ordinary `$data = (object)$data;`. The nly exception are classes configured
+ There's no smart logic here, just ordinary `$data = (object)$data;`. The only exception are classes configured
  with "classes" mapping (see configuration details). In such case configured conversion method is called on
  the provided object and result is returned instead. Laravel's  `Model` and `Collection` classes are pre-configured
  but you can add additional classes just by creating entry in configuration `classes` mapping. 
@@ -251,8 +251,8 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
 
  **IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
  value matches W3C meaning of the code. `ResponseBuilder` will throw `\InvalidArgumentException` if 
- you try to call `success()` ()and related methods) with `$http_code` not being in range of 200-299. 
- The same will happen if you try to call `error()` (and familiy) with `$http_code` lower than 400.
+ you try to call `success()` (and related methods) with `$http_code` not being in range of 200-299. 
+ The same will happen if you try to call `error()` (and family) with `$http_code` lower than 400.
 
  Other HTTP codes, like redirection (3xx) or (5xx) are not allowed and will throw `\InvalidArgumentException`.
 
@@ -393,11 +393,19 @@ and tweak this file according to your needs. If you are fine with defaults, this
 can safely be skipped (you can also remove published `config/response_builder.php` file).
 
 
-#### Laravel setup ####
+#### Laravel 5.5+ setup ####
 
-Edit `app/config.php` and add the following line to your `providers` array:
+`ResponseBuilder` supports Laravel 5.5's auto-discovery feature, so if you are using such
+version, you do not need to do much to make it work.
+
+#### Laravel older than 5.5 ####
+
+If you use Laravel 5.4 or older, then you need to manually register `ResponseBuilder` provider
+for Laravel to know about it existence. Edit `app/config.php` and add the following line to your
+`providers` array:
 
     MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
+
 
 #### ApiCodes class ####
 
