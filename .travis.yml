@@ -1,6 +1,6 @@
 ##################################################################################
 #
-# Laravel API Response Builder
+# Laravel API Response Builder Travis CI config file
 #
 # @package   MarcinOrlowski\ResponseBuilder
 #
@@ -18,13 +18,14 @@ php:
   - 5.6
   - 7.0
   - 7.1
-  - hhvm
+  - 7.2
 
 env:
   - LARAVEL_VERSION="5.1"
   - LARAVEL_VERSION="5.2"
   - LARAVEL_VERSION="5.3"
   - LARAVEL_VERSION="5.4"
+  - LARAVEL_VERSION="5.5"
 
 matrix:
   exclude:
@@ -32,6 +33,10 @@ matrix:
       env: LARAVEL_VERSION="5.3"
     - php: 5.5
       env: LARAVEL_VERSION="5.4"
+    - php: 5.5
+      env: LARAVEL_VERSION="5.5"
+    - php: 5.6
+      env: LARAVEL_VERSION="5.5"
 
 cache:
   directories:
@@ -39,7 +44,7 @@ cache:
 
 before_script:
 #   Disable coverage (hhvm does not feature xdebug)
-  - if [ $TRAVIS_PHP_VERSION != hhvm ] ; then phpenv config-rm xdebug.ini ; fi
+  - if [ ${TRAVIS_PHP_VERSION} != hhvm && ${TRAVIS_PHP_VERSION} != 7.2 ] ; then phpenv config-rm xdebug.ini ; fi
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
   - FLAGS="--prefer-dist"
   - composer install ${FLAGS}
