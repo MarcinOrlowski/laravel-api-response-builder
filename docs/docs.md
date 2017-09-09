@@ -393,11 +393,19 @@ and tweak this file according to your needs. If you are fine with defaults, this
 can safely be skipped (you can also remove published `config/response_builder.php` file).
 
 
-#### Laravel setup ####
+#### Laravel 5.5+ setup ####
 
-Edit `app/config.php` and add the following line to your `providers` array:
+`ResponseBuilder` supports Laravel 5.5's auto-discovery feature, so if you are using such
+version, you do not need to do much to make it work.
+
+#### Laravel older than 5.5 ####
+
+If you use Laravel 5.4 or older, then you need to manually register `ResponseBuilder` provider
+for Laravel to know about it existence. Edit `app/config.php` and add the following line to your
+`providers` array:
 
     MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
+
 
 #### ApiCodes class ####
 
