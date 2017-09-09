@@ -5,7 +5,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 ## CHANGE LOG ##
 
 * v4.1.0 (2017-09-09)
-   * Added support for Laravel 5.5's autodiscovery feature
+   * Added support for Laravel 5.5's auto-discovery feature
 
 * v4.0.2 (2017-04-13)
    * Enforced HTTP code for error messages fits 400-499 range
