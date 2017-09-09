@@ -25,6 +25,7 @@ env:
   - LARAVEL_VERSION="5.2"
   - LARAVEL_VERSION="5.3"
   - LARAVEL_VERSION="5.4"
+  - LARAVEL_VERSION="5.5"
 
 matrix:
   exclude:
