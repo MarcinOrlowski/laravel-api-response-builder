@@ -4,6 +4,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v4.1.2 (2017-09-10)
+   * Corrected docs
+
 * v4.1.1 (2017-09-10)
    * Fixed `version` in `composer.json` file
 

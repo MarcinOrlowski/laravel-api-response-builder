@@ -23,16 +23,6 @@ nice, normalized and easy to consume REST API responses.
 
 ----
 
-## Donations ##
-
-`ResponseBuilder` is free software (see [License](#license)) and you can use it fully free of charge in any of your projects, open source or commercial, however if you feel it prevent you from reinventing the wheel, helped having your projects done or simply saved you time and money then then feel free to donate to the project. Send some Bitcoins (BTC) to `1LbfbmZ1KfSNNTGAEHtP63h7FPDEPTa3Yo`.
-
-![BTC](http://i.imgur.com/mUe8olT.png)
-
-Thanks for all the fish!
-
-----
-
 ## Response structure ##
 
 Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not only when I develop the API itself, but also when I later consume its output while writing client (i.e. mobile) applications. So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of the values. Sample response:
