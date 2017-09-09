@@ -4,6 +4,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v4.1.1 (2017-09-10)
+   * Fixed `version` in `composer.json` file
+
 * v4.1.0 (2017-09-09)
    * [RB-70] Added support for Laravel 5.5's auto-discovery feature
 
