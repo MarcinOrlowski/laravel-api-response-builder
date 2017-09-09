@@ -1,6 +1,6 @@
 ##################################################################################
 #
-# Laravel API Response Builder
+# Laravel API Response Builder Travis CI config file
 #
 # @package   MarcinOrlowski\ResponseBuilder
 #
@@ -33,6 +33,10 @@ matrix:
       env: LARAVEL_VERSION="5.3"
     - php: 5.5
       env: LARAVEL_VERSION="5.4"
+    - php: 5.5
+      env: LARAVEL_VERSION="5.5"
+    - php: 5.6
+      env: LARAVEL_VERSION="5.5"
 
 cache:
   directories:
