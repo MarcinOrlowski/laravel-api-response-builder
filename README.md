@@ -1,8 +1,3 @@
-# API Response Builder for Laravel #
-
-`ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
-nice, normalized and easy to consume REST API responses.
-
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
 [![Codacy Grade Badge](https://api.codacy.com/project/badge/Grade/44f427e872e2480597bde0242417a2a7)](https://www.codacy.com/app/MarcinOrlowski/laravel-api-response-builder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MarcinOrlowski/laravel-api-response-builder&amp;utm_campaign=Badge_Grade)
@@ -15,15 +10,52 @@ nice, normalized and easy to consume REST API responses.
 [![Latest Unstable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/unstable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=dev)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
 
-## Table of contents ##
+# API Response Builder for Laravel #
 
- **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
+`ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
+nice, normalized and easy to consume REST API responses.
+
+Conclude your controller method with simple
+
+    return ResponseBuilder::success();
+
+and your client will get nice JSON like:
+
+    {
+      "success": true,
+      "code": 0,
+      "locale": "en",
+      "message": "OK",
+      "data": null
+    }
+
+Something went wrong? Just do
+
+    return ResponseBuilder::error(250);
+
+This will produce the following JSON response:
+
+    {
+       "success": false,
+       "code": 250,
+       "locale": "en",
+       "message": "Your error message for code 250",
+       "data": null
+    }
+
+Nice and easy! And there's **much** more you can do with `ResponseBuilder`'s API. See docs for developer documentation and examples!
+
+----
+
+## Table of contents ##
 
  * [Features](#features)
  * [Documentation](docs/docs.md)
  * [Bugs reports and pull requests](#contributing)
  * [License](#license)
  * [Changelog](CHANGES.md)
+
+ **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
 
 ----
 
