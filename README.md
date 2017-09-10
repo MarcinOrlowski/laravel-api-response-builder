@@ -1,3 +1,5 @@
+# API Response Builder for Laravel 5.x #
+
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
 [![Codacy Grade Badge](https://api.codacy.com/project/badge/Grade/44f427e872e2480597bde0242417a2a7)](https://www.codacy.com/app/MarcinOrlowski/laravel-api-response-builder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MarcinOrlowski/laravel-api-response-builder&amp;utm_campaign=Badge_Grade)
@@ -10,7 +12,20 @@
 [![Latest Unstable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/unstable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=dev)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
 
-# API Response Builder for Laravel #
+## Table of contents ##
+
+ * [Introduction[(#introduction)
+ * [Features](#features)
+ * [Documentation](docs/docs.md)
+ * [Bugs reports and pull requests](#contributing)
+ * [License](#license)
+ * [Changelog](CHANGES.md)
+
+ **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
+
+----
+
+## Introduction ##
 
 `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
@@ -47,17 +62,6 @@ Nice and easy! And there's **much, much more** you can do with rich `ResponseBui
 
 ----
 
-## Table of contents ##
-
- * [Features](#features)
- * [Documentation](docs/docs.md)
- * [Bugs reports and pull requests](#contributing)
- * [License](#license)
- * [Changelog](CHANGES.md)
-
- **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
-
-----
 
 ## Features ##
 
