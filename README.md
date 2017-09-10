@@ -19,7 +19,7 @@ Conclude your controller method with simple
 
     return ResponseBuilder::success();
 
-and your client will get nice JSON like:
+and your client will get nice JSON like
 
     {
       "success": true,
@@ -33,7 +33,7 @@ Something went wrong? Just do
 
     return ResponseBuilder::error(250);
 
-This will produce the following JSON response:
+and the following JSON response will be returned
 
     {
        "success": false,
@@ -43,7 +43,7 @@ This will produce the following JSON response:
        "data": null
     }
 
-Nice and easy! And there's **much** more you can do with `ResponseBuilder`'s API. See docs for developer documentation and examples!
+Nice and easy! And there's **much, much more** you can do with rich `ResponseBuilder`'s API. See library documentation and its detailed usage examples!
 
 ----
 
