@@ -1,7 +1,4 @@
-# API Response Builder for Laravel #
-
-`ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
-nice, normalized and easy to consume REST API responses.
+# API Response Builder for Laravel 5.x #
 
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
@@ -17,15 +14,54 @@ nice, normalized and easy to consume REST API responses.
 
 ## Table of contents ##
 
- **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
-
+ * [Introduction[(#introduction)
  * [Features](#features)
  * [Documentation](docs/docs.md)
  * [Bugs reports and pull requests](#contributing)
  * [License](#license)
  * [Changelog](CHANGES.md)
 
+ **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
+
 ----
+
+## Introduction ##
+
+`ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
+nice, normalized and easy to consume REST API responses.
+
+Conclude your controller method with simple
+
+    return ResponseBuilder::success();
+
+and your client will get nice JSON like
+
+    {
+      "success": true,
+      "code": 0,
+      "locale": "en",
+      "message": "OK",
+      "data": null
+    }
+
+Something went wrong? Just do
+
+    return ResponseBuilder::error(250);
+
+and the following JSON response will be returned
+
+    {
+       "success": false,
+       "code": 250,
+       "locale": "en",
+       "message": "Your error message for code 250",
+       "data": null
+    }
+
+Nice and easy! And there's **much, much more** you can do with rich `ResponseBuilder`'s API. See library documentation and its detailed usage examples!
+
+----
+
 
 ## Features ##
 
