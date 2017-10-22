@@ -14,7 +14,7 @@
 
 ## Table of contents ##
 
- * [Introduction[(#introduction)
+ * [Introduction](#introduction)
  * [Features](#features)
  * [Documentation](docs/docs.md)
  * [Bugs reports and pull requests](#contributing)
