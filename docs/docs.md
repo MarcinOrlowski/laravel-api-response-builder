@@ -3,8 +3,6 @@
 `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
 nice, normalized and easy to consume REST API responses.
 
-
-
 ## Table of contents ##
  
  * [Response structure](#response-structure)
@@ -316,12 +314,26 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
        ]
     }
 
- The result is keyed `item` and `items`, depending on class name (therefore you will always get `items` 
- keys even if `Collection` holds one or even zero elements) is the given object of and the
- whole magic is done by calling method configured for given class.
+ The result is keyed `item` and `items`, depending on class mapping configuration (by default `Collection` is using `items` no matter we return one or even zero elements) is the given object of and the whole magic is done by calling method configured for given class.
 
- The whole functionality is configurable via `classes` mapping array (see config file for details).
-
+ The whole functionality is configurable via `classes` mapping array:
+ 
+     'classes' => [
+		     Illuminate\Database\Eloquent\Model::class => [
+			     'key'    => 'item',
+			     'method' => 'toArray',
+		     ],
+		     Illuminate\Database\Eloquent\Collection::class => [
+			     'key'    => 'items',
+			     'method' => 'toArray',
+		     ],
+	     ],
+ 
+ The above confgures two classes (`Model` and `Collection`). Whenver object of that class is spotted, method specified in `method` key would be called on that obhject and data that method returns will be returned in JSON object using key specidied in `key`.
+ 
+ So in above example, if we get `Collection`, then `ResponseBuilder` would call `toArray()` on it, and result data would
+ be added in returned JSON in `items` object.
+ 
  When you pass the array it will be walked recursively and the conversion will take place
  on all known elements as well:
 
