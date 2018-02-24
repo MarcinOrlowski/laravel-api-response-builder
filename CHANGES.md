@@ -4,6 +4,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v4.1.5 (2018-02-24)
+   * Fixed `version` in `composer.json` file
+
 * v4.1.4 (2018-02-24)
    * Updated tests to run on PHP 5.6 too
    * Corrected docs
