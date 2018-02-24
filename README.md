@@ -69,8 +69,8 @@ Nice and easy! And there's **much, much more** you can do with rich `ResponseBui
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel 5.x, 5.2, 5.3, 5.4 and 5.5 compatible,
- * Supports Laravel 5.5's auto-discovery feature
+ * Laravel 5.x, 5.2, 5.3, 5.4, 5.5 and 5.6 compatible,
+ * Supports Laravel [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518) (5.5 and up),
  * Works on PHP 5.5, 5.6, 7.0, 7.1, 7.2 and [HHVM](http://hhvm.com/),
  * Configurable (with ready-to-use defaults),
  * Localization support,
@@ -78,7 +78,7 @@ Nice and easy! And there's **much, much more** you can do with rich `ResponseBui
  * API chaining/cascading support,
  * Includes traits to help [unit testing your API code](docs/testing.md),
  * Provides own [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
- * No extra mandatory dependencies.
+ * No extra dependencies.
 
 ----
 
@@ -102,5 +102,6 @@ But if all is good and clear then follow common routine:
 
 ## License ##
 
-* Written and copyrighted &copy;2016-2017 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
+* Written and copyrighted &copy;2016-2018 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
 * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
