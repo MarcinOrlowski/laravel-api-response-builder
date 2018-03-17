@@ -65,12 +65,11 @@
 
 ----
 
-
 ## Features ##
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel 5.x, 5.2, 5.3, 5.4, 5.5 and 5.6 compatible,
+ * Laravel 5.2, 5.3, 5.4, 5.5 and 5.6 compatible,
  * Supports Laravel [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518) (5.5 and up),
  * Works on PHP 5.5, 5.6, 7.0, 7.1, 7.2 and [HHVM](http://hhvm.com/),
  * Configurable (with ready-to-use defaults),
