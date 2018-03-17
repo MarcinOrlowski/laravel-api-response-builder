@@ -22,7 +22,6 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 
-
 /**
  * Class ExceptionHandlerHelper
  */

@@ -1,5 +1,7 @@
 <?php
 
+namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
+
 /**
  * Laravel API Response Builder
  *
@@ -10,8 +12,6 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-
-namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;

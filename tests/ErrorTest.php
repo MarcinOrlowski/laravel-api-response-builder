@@ -2,9 +2,6 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
 /**
  * Laravel API Response Builder
  *
@@ -15,6 +12,10 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
+
 class ErrorTest extends TestCase
 {
 	/**

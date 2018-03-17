@@ -6,6 +6,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Providers;
  * Laravel API Response Builder
  *
  * @package   MarcinOrlowski\ResponseBuilder
+ *
  * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * @copyright 2016-2018 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT

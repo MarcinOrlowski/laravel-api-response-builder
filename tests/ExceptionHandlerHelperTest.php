@@ -2,15 +2,6 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Mockery\Exception\RuntimeException;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-
 /**
  * Laravel API Response Builder
  *
@@ -21,6 +12,16 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use Mockery\Exception\RuntimeException;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 class ExceptionHandlerHelperTest extends TestCase
 {
 	/**

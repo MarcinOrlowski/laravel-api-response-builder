@@ -13,7 +13,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-
 /**
  * Class TestModel to verify auto-conversion feature
  */

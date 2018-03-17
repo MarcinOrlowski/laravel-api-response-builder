@@ -2,9 +2,6 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Illuminate\Support\Facades\Config;
-
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 
 /**
@@ -17,6 +14,10 @@ use Illuminate\Support\Facades\Config;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use Illuminate\Support\Facades\Config;
+
 class BuildResponseTest extends TestCase
 {
 	/**
