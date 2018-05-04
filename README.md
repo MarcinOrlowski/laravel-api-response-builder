@@ -17,7 +17,7 @@
  * [Introduction](#introduction)
  * [Features](#features)
  * [Documentation](docs/docs.md)
-   [Requirements](docs/docs.md#requirements)
+ * [Requirements](docs/docs.md#requirements)
  * [Installation and Configuration](docs/docs.md#installation-and-configuration)
  * [Bugs reports and pull requests](#contributing)
  * [License](#license)
