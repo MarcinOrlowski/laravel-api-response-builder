@@ -4,6 +4,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v4.1.6 (2018-07-20)
+   * Documentation updated
+
 * v4.1.5 (2018-02-24)
    * Fixed `version` in `composer.json` file
 
@@ -25,13 +28,13 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * v4.0.2 (2017-04-13)
    * Enforced HTTP code for error messages fits 400-499 range
-   * `validateResponseStructure()` deprecated in favor of `assertValidResponse()` 
+   * `validateResponseStructure()` deprecated in favor of `assertValidResponse()`
    * Moved Orchestra's `getPackageProviders()` out of `TestingHelpers` trait
 
 * v4.0.1 (2017-04-10)
    * TestingHelpers trait's `validateResponseStructure()` method is now public
    * [RB-64] Fixed Exception Handler generated HTTP code being out of allowed range in some cases
-   * [RB-65] Exception Handler Helper now deals with messages using non-UTF8 or broken encoding 
+   * [RB-65] Exception Handler Helper now deals with messages using non-UTF8 or broken encoding
    * Exception Handler's trace data is now properly placed into `trace` leaf
 
 * v4.0.0 (2017-04-10)
@@ -42,7 +45,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * [RB-47] Exception Handler now supports `FormRequests` and returns all messages in `ResponseBuilder::KEY_MESSAGES`
    * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled same way `authentication_exception` is
    * [RB-56] Added configurable key for debug trace added to returned JSON response (if enabled)
-   * Added traits to help testing your config and ApiCodes with ease. See `Unit Testing your ApiCodes` docs for details 
+   * Added traits to help testing your config and ApiCodes with ease. See `Unit Testing your ApiCodes` docs for details
    * `ApiCodeBase` class is now named `BaseApiCodes`
    * [RB-35] ExceptionHandlerHelper is now covered by tests
 
@@ -102,7 +105,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 * v2.1.0 (2016-05-16)
    * Eloquent Model can now be directly returned as response payload.
    * Eloquent Collection can now be directly returned as response payload.
-   * Added some config parameters (see `config/response_builder.php` in `vendor/....`) 
+   * Added some config parameters (see `config/response_builder.php` in `vendor/....`)
    * You can now pass literally anything to be returned in `data` payload, however data type conversion will be enforced to ensure returning data matches specification
    * Updated documentation
 

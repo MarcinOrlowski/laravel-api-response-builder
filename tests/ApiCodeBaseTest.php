@@ -2,9 +2,6 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-
 /**
  * Laravel API Response Builder
  *
@@ -15,6 +12,10 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+
 class ApiCodeBaseTest extends TestCase
 {
 	/**

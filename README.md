@@ -17,7 +17,7 @@
  * [Introduction](#introduction)
  * [Features](#features)
  * [Documentation](docs/docs.md)
-   [Requirements](docs/docs.md#requirements)
+ * [Requirements](docs/docs.md#requirements)
  * [Installation and Configuration](docs/docs.md#installation-and-configuration)
  * [Bugs reports and pull requests](#contributing)
  * [License](#license)
@@ -29,14 +29,14 @@
 
 ## Introduction ##
 
-`ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
-nice, normalized and easy to consume REST API responses.
+ `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
+ nice, normalized and easy to consume REST API responses.
 
-Conclude your controller method with simple
+ Conclude your controller method with simple
 
     return ResponseBuilder::success();
 
-and your client will get nice JSON like
+ and your client will get nice JSON like
 
     {
       "success": true,
@@ -46,11 +46,11 @@ and your client will get nice JSON like
       "data": null
     }
 
-Something went wrong? Just do
+ Something went wrong? Just do
 
     return ResponseBuilder::error(250);
 
-and the following JSON response will be returned
+ and the following JSON response will be returned
 
     {
        "success": false,
@@ -60,16 +60,16 @@ and the following JSON response will be returned
        "data": null
     }
 
-Nice and easy! And there's **much, much more** you can do with rich `ResponseBuilder`'s API. See library documentation and its detailed usage examples!
+ Nice and easy! And yes, `message` can be easily customized! Also there're **much, much more** you can do with
+ rich `ResponseBuilder`'s API. See [library documentation](docs/docs.md) for details and usage examples!
 
 ----
-
 
 ## Features ##
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel 5.x, 5.2, 5.3, 5.4, 5.5 and 5.6 compatible,
+ * Laravel 5.2, 5.3, 5.4, 5.5 and 5.6 compatible,
  * Supports Laravel [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518) (5.5 and up),
  * Works on PHP 5.5, 5.6, 7.0, 7.1, 7.2 and [HHVM](http://hhvm.com/),
  * Configurable (with ready-to-use defaults),
@@ -84,11 +84,11 @@ Nice and easy! And there's **much, much more** you can do with rich `ResponseBui
 
 ## Contributing ##
 
-Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
+ Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
 
-If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues)
-**before doing any work**. This will help us save your time in case I'd not be accept PR either completely or in proposed form.
-But if all is good and clear then follow common routine:
+ If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues)
+ **before doing any work**. This will help us save your time in case I'd not be accept PR either completely or in proposed form.
+ But if all is good and clear then follow common routine:
 
  * fork the project,
  * create new branch,
@@ -102,6 +102,6 @@ But if all is good and clear then follow common routine:
 
 ## License ##
 
-* Written and copyrighted &copy;2016-2018 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
-* ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+ * Written and copyrighted &copy;2016-2018 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
