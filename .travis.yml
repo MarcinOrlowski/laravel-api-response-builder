@@ -43,27 +43,31 @@ matrix:
       env: LARAVEL_VERSION="5.6"
     - php: 5.5
       env: LARAVEL_VERSION="5.7"
+
     - php: 5.6
       env: LARAVEL_VERSION="5.5"
     - php: 5.6
       env: LARAVEL_VERSION="5.6"
-    - php: 5.7
+    - php: 5.6
       env: LARAVEL_VERSION="5.7"
+
     - php: hhvm
       env: LARAVEL_VERSION="5.5"
     - php: hhvm
       env: LARAVEL_VERSION="5.6"
+    - php: hhvm
+      env: LARAVEL_VERSION="5.7"
 
 cache:
   directories:
     - ${HOME}/.composer/cache/files
 
 before_script:
-#   Disable coverage (hhvm does not feature xdebug)
-  - if [ ${TRAVIS_PHP_VERSION} != hhvm && ${TRAVIS_PHP_VERSION} != 7.2 ] ; then phpenv config-rm xdebug.ini ; fi
+#   Disable coverage (hhvm nor PHP7.2+ does not feature xdebug)
+  - if [ "${TRAVIS_PHP_VERSION}" != "hhvm" && "${TRAVIS_PHP_VERSION}" != "7.2" && "${TRAVIS_PHP_VERSION}" != "7.3" ] ; then phpenv config-rm xdebug.ini ; fi
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
   - FLAGS="--prefer-dist"
-  - composer install ${FLAGS}
+  - composer install "${FLAGS}"
 
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
