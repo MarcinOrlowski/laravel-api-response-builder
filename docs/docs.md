@@ -579,7 +579,7 @@ This would produce expected and much cleaner data structure:
 
 ## License ##
 
- * Written and copyrighted &copy;2016-2018 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * Written and copyrighted &copy;2016-2019 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 ----

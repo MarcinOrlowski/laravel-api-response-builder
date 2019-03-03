@@ -5,7 +5,7 @@
 # @package   MarcinOrlowski\ResponseBuilder
 #
 # @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
-# @copyright 2016-2017 Marcin Orlowski
+# @copyright 2016-2019 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
 #
@@ -19,6 +19,7 @@ php:
   - 7.0
   - 7.1
   - 7.2
+  - 7.3
   - hhvm
 
 env:
