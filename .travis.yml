@@ -64,9 +64,7 @@ cache:
 
 before_script:
   # Some PHP versions does not feature xdebug so we need to disable coverage
-  - [ ${TRAVIS_PHP_VERSION} != hhvm ] && phpenv config-rm xdebug.ini
-  - [ ${TRAVIS_PHP_VERSION} != 7.2 ]  && phpenv config-rm xdebug.ini
-  - [ ${TRAVIS_PHP_VERSION} != 7.3 ]  && phpenv config-rm xdebug.ini
+  - if [ ${TRAVIS_PHP_VERSION} != hhvm && ${TRAVIS_PHP_VERSION} != 7.2 && ${TRAVIS_PHP_VERSION} != 7.3 ]; then phpenv config-rm xdebug.ini ; fi
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
   - FLAGS="--prefer-dist"
   - composer install "${FLAGS}"
