@@ -72,6 +72,8 @@ before_script:
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
   - FLAGS="--prefer-dist"
   - composer install "${FLAGS}"
+  # We need to tweak signature so setUp() and tearDown() and strip ": void" otherwise PHP will fail complaining
+  # This only affects Laravel 5.8 as it pulls recent Orchestra that features signature changes.
   - "if [ ${LARAVEL_VERSION} == 5.8 ]; then sed -i 's/): void' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
