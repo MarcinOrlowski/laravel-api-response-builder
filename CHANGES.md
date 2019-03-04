@@ -7,8 +7,8 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 * v4.1.7 (2019-03-03)
    * Added PHP 7.3 to testing setup
    * Added Laravel 5.7 and Laravel 5.8 to testing setup
-   * Corrected tests for env for Laravel 5.5, 5.6
-   * Removed tests on HHVM  
+   * Corrected test env setup for Laravel 5.5, 5.6
+   * Removed tests on HHVM from Travis config  
 
 * v4.1.6 (2018-07-20)
    * Documentation updated
