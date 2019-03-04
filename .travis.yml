@@ -30,6 +30,7 @@ env:
   - LARAVEL_VERSION="5.5"
   - LARAVEL_VERSION="5.6"
   - LARAVEL_VERSION="5.7"
+  - LARAVEL_VERSION="5.8"
 
 matrix:
   exclude:
@@ -50,6 +51,15 @@ matrix:
       env: LARAVEL_VERSION="5.6"
     - php: 5.6
       env: LARAVEL_VERSION="5.7"
+    - php: 5.6
+      env: LARAVEL_VERSION="5.8"
+
+    - php: 7.0
+      env: LARAVEL_VERSION="5.6"
+    - php: 7.0
+      env: LARAVEL_VERSION="5.7"
+    - php: 7.0
+      env: LARAVEL_VERSION="5.8"
 
     - php: hhvm
       env: LARAVEL_VERSION="5.5"
@@ -57,6 +67,8 @@ matrix:
       env: LARAVEL_VERSION="5.6"
     - php: hhvm
       env: LARAVEL_VERSION="5.7"
+    - php: hhvm
+      env: LARAVEL_VERSION="5.8"
 
 cache:
   directories:
