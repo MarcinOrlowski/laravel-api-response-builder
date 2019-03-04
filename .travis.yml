@@ -72,8 +72,7 @@ before_script:
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
   - FLAGS="--prefer-dist"
   - composer install "${FLAGS}"
-  # Quick hack to make tests work with recent Orchestra
-  - if [ ${LARAVEL_VERSION} == 5.8 ]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi
+  - "if [ ${LARAVEL_VERSION} == 5.8 ]; then sed -i 's/) void' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
 
