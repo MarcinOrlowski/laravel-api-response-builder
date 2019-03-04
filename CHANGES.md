@@ -4,6 +4,12 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v4.1.7 (2019-03-03)
+   * Added PHP 7.3 to testing setup
+   * Added Laravel 5.7 and Laravel 5.8 to testing setup
+   * Corrected test env setup for Laravel 5.5, 5.6
+   * Removed tests on HHVM from Travis config  
+
 * v4.1.6 (2018-07-20)
    * Documentation updated
 
@@ -38,7 +44,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Exception Handler's trace data is now properly placed into `trace` leaf
 
 * v4.0.0 (2017-04-10)
-   * **BACKWARD INCOMPATIBILE CHANGES**
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * [RB-59] Added option to remap response JSON keys to user provided values
    * [RB-54] Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
    * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defails
@@ -59,7 +65,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 * v3.1.0 (2017-02-28)
    * [RB-38] Added `encoding_options` to control data-to-json conversion.
    * [RB-38] Added optional encoding options args to all methods accepting `data` argument
-   * [RB-34] Added option to control ExceptionHandeler behavior on debug builds
+   * [RB-34] Added option to control ExceptionHandler behavior on debug builds
    * ExceptionHandler's debug is now added as `debug` node to make it more clear where it comes from
 
 * v3.0.3 (2017-02-24)
@@ -72,7 +78,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Updated `composer.json` to list `laravel/framework` among requirements
 
 * v3.0.0 (2017-02-23)
-   * **BACKWARD INCOMPATIBILE CHANGES**
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * [RB-17] `success()` now allows to return API code as well
    * Corrected default config file containing faulty and unneeded `use` entries
    * [RB-20] Renamed ErrorCode class to ApiCodeBase
@@ -93,7 +99,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception if `http_code` is `null`
    * `http_code` can be handed as null to all other methods and it will be replaced by default codes
    * `classes` mapping now features `method` field to specify method name to call for automatic object conversion
-   * [RB-10] When $data is an array, all elements mapped via "classes" config will be converted recursively
+   * [RB-10] When `$data` is an `array`, all elements mapped via "classes" config will be converted recursively
    * [RB-3] Unit tests are now part of the package
 
 * v2.1.2 (2016-08-24)
@@ -129,7 +135,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Code cleanup
 
 * v1.4.1 (2016-04-14)
-   * Removed pointless Handler's overloading to report()
+   * Removed pointless Handler's overloading of `report()`
    * Code style cleanup
 
 * v1.4.0 (2016-04-12)
@@ -152,7 +158,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * v1.0.1 (2016-04-11)
    * Docs cleanup
-   * Added extras/ with ready to use exception handler
+   * Added `extras/` with ready to use exception handler
 
 * v1.0.0 (2016-04-11)
    * Initial public release

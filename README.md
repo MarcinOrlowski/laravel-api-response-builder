@@ -69,9 +69,9 @@
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel 5.2, 5.3, 5.4, 5.5 and 5.6 compatible,
+ * Laravel 5.1 to 5.8 compatible,
  * Supports Laravel [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518) (5.5 and up),
- * Works on PHP 5.5, 5.6, 7.0, 7.1, 7.2 and [HHVM](http://hhvm.com/),
+ * Works on PHP 5.5, 5.6, 7.0, 7.1, 7.2 and 7.3,
  * Configurable (with ready-to-use defaults),
  * Localization support,
  * Automatic object conversion with custom mapping,
@@ -102,6 +102,6 @@
 
 ## License ##
 
- * Written and copyrighted &copy;2016-2018 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * Written and copyrighted &copy;2016-2019 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 

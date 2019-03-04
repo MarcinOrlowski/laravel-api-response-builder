@@ -4,7 +4,7 @@
 
 ### v4 ###
 
- * `ErrorCodes` class is now `BaseApiCodes`
+ * `ApiCodeBase` class is now `BaseApiCodes`
  * ExceptionHandler's debug trace no longer depends on `APP_DEBUG` value and can be enabled independently
 
 ### v3 ###
