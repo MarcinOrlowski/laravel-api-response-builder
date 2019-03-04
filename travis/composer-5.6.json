@@ -1,7 +1,7 @@
 {
   "name": "marcin-orlowski/laravel-api-response-builder",
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.1.13"
   },
   "autoload": {
     "psr-4": {
@@ -15,10 +15,10 @@
     }
   },
   "require-dev": {
-    "orchestra/testbench": "3.4.*",
-    "laravel/framework": "5.6.*",
-    "phpunit/phpunit": "~5.7",
-    "phpunit/php-code-coverage": "^4.0.4",
+    "orchestra/testbench": "~3.5",
+    "laravel/framework": "~5.6",
+    "phpunit/phpunit": "~7.5",
+    "phpunit/php-code-coverage": "~6.0",
     "codacy/coverage": "~1.0"
   }
 }

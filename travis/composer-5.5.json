@@ -15,10 +15,10 @@
     }
   },
   "require-dev": {
-    "orchestra/testbench": "3.4.*",
-    "laravel/framework": "5.5.*",
-    "phpunit/phpunit": "~5.7",
-    "phpunit/php-code-coverage": "^4.0.4",
+    "orchestra/testbench": "~3.5",
+    "laravel/framework": "~5.5",
+    "phpunit/phpunit": "~6.0",
+    "phpunit/php-code-coverage": "~5.3",
     "codacy/coverage": "~1.0"
   }
 }
