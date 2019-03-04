@@ -1,6 +1,6 @@
 {
   "name": "marcin-orlowski/laravel-api-response-builder",
-  "description": "Helps building nice, normalized and easy to consume REST API responses.",
+  "description": "Helps building nice, normalized and easy to consume Laravel REST API.",
   "homepage": "https://github.com/MarcinOrlowski/laravel-api-response-builder",
   "version": "4.1.7",
   "keywords": [
