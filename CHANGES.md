@@ -44,7 +44,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Exception Handler's trace data is now properly placed into `trace` leaf
 
 * v4.0.0 (2017-04-10)
-   * **BACKWARD INCOMPATIBILE CHANGES** ([more info](docs/compatibility.md))
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * [RB-59] Added option to remap response JSON keys to user provided values
    * [RB-54] Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
    * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defails
@@ -78,7 +78,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Updated `composer.json` to list `laravel/framework` among requirements
 
 * v3.0.0 (2017-02-23)
-   * **BACKWARD INCOMPATIBILE CHANGES** ([more info](docs/compatibility.md))
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * [RB-17] `success()` now allows to return API code as well
    * Corrected default config file containing faulty and unneeded `use` entries
    * [RB-20] Renamed ErrorCode class to ApiCodeBase
