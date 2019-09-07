@@ -238,8 +238,8 @@ This would produce expected and much cleaner data structure:
  but you can add additional classes just by creating entry in configuration `classes` mapping.
 
  I recommend you always pass `$data` as an `array` or object with conversion mapping configured, otherwise
- passing other tipes to `ResponseBuilder` may end up with response JSON featuring oddities like array keys
- keys `0` or `scalar`.
+ passing other types to `ResponseBuilder` may end up with response JSON featuring oddities like array keys
+ keys named `0` or `scalar`.
 
  **IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
  value matches W3C meaning of the code. `ResponseBuilder` will throw `\InvalidArgumentException` if
@@ -584,8 +584,3 @@ This would produce expected and much cleaner data structure:
  * Written and copyrighted &copy;2016-2019 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
-----
-
-## Notes ##
-
-* `ResponseBuilder` is **not** compatible with Lumen framework, mainly due to lack of Lang class. If you would like to help making `ResponseBuilder` usable with Lumen, speak up or (better) send pull request!
