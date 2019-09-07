@@ -234,15 +234,9 @@ class ResponseBuilder
 	 * @param integer $http_code HTTP return code to be set for this response
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
-	 *
-	 * @throws \InvalidArgumentException when http_code is @null
 	 */
 	public static function successWithHttpCode(int $http_code):  \Symfony\Component\HttpFoundation\Response
 	{
-		if ($http_code === null) {
-			throw new \InvalidArgumentException('http_code cannot be null. Use success() instead');
-		}
-
 		return static::buildSuccessResponse(null, static::DEFAULT_API_CODE_OK, [], $http_code);
 	}
 
@@ -260,18 +254,12 @@ class ResponseBuilder
 	protected static function buildSuccessResponse($data = null, int $api_code = null, array $lang_args = null,
 	                                               int $http_code = null, int $encoding_options = null): \Symfony\Component\HttpFoundation\Response
 	{
-		if ($http_code === null) {
-			$http_code = static::DEFAULT_HTTP_CODE_OK;
-		}
 		if ($api_code === null) {
 			$api_code = static::DEFAULT_API_CODE_OK;
 		}
 
-		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
-		}
-		if (!is_int($http_code)) {
-			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
+		if ($http_code === null) {
+			$http_code = static::DEFAULT_HTTP_CODE_OK;
 		}
 		if (($http_code < 200) || ($http_code > 299)) {
 			throw new \InvalidArgumentException(sprintf('Invalid http_code (%d). Must be between 200-299 inclusive', $http_code));
@@ -319,16 +307,10 @@ class ResponseBuilder
 	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
-	 *
-	 * @throws \InvalidArgumentException if http_code is @null
 	 */
 	public static function errorWithDataAndHttpCode(int $api_code, $data, int $http_code, array $lang_args = null,
 	                                                int $encoding_options = null): \Symfony\Component\HttpFoundation\Response
 	{
-		if ($http_code === null) {
-			throw new \InvalidArgumentException('http_code cannot be null. Use errorWithData() instead');
-		}
-
 		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args, $encoding_options);
 	}
 
@@ -338,15 +320,9 @@ class ResponseBuilder
 	 * @param array|null $lang_args optional array with arguments passed to Lang::get()
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
-	 *
-	 * @throws \InvalidArgumentException if http_code is @null
 	 */
 	public static function errorWithHttpCode(int $api_code, int $http_code, array $lang_args = null): \Symfony\Component\HttpFoundation\Response
 	{
-		if ($http_code === null) {
-			throw new \InvalidArgumentException('http_code cannot be null. Use error() instead');
-		}
-
 		return static::buildErrorResponse(null, $api_code, $http_code, $lang_args);
 	}
 
@@ -419,17 +395,11 @@ class ResponseBuilder
 			$http_code = static::DEFAULT_HTTP_CODE_ERROR;
 		}
 
-		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
-		}
 		if ($api_code === static::DEFAULT_API_CODE_OK) {
 			throw new \InvalidArgumentException(sprintf('api_code must not be %d (DEFAULT_API_CODE_OK)', static::DEFAULT_API_CODE_OK));
 		}
 		if ((!is_array($lang_args)) && ($lang_args !== null)) {
 			throw new \InvalidArgumentException(sprintf('lang_args must be either array or null (%s given)', gettype($lang_args)));
-		}
-		if (!is_int($http_code)) {
-			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
 		}
 		if (($http_code < 400) || ($http_code > 499)) {
 			throw new \InvalidArgumentException('http_code must be in range from 400 to 499 inclusive');
@@ -482,9 +452,6 @@ class ResponseBuilder
 		if ($encoding_options === null) {
 			$encoding_options = Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
 		}
-		if (!is_int($encoding_options)) {
-			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
-		}
 
 		// are we given message text already?
 		if (!is_string($message_or_api_code)) {
@@ -506,15 +473,8 @@ class ResponseBuilder
 			}
 			$message_or_api_code = \Lang::get($key, $lang_args);
 		} else {
-			if (!is_int($api_code)) {
-				throw new \InvalidArgumentException(
-					sprintf('api_code must be integer (%s given)', gettype($api_code))
-				);
-			}
-
 			if (!BaseApiCodes::isCodeValid($api_code)) {
-				$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
-					$api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+				$msg = sprintf('API code value (%d) is out of allowed range %d-%d', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 				throw new \InvalidArgumentException($msg);
 			}
 		}
