@@ -26,13 +26,13 @@ php:
   - 7.3
 
 env:
-  - LARAVEL_VERSION="5.1"
-  - LARAVEL_VERSION="5.2"
-  - LARAVEL_VERSION="5.3"
-  - LARAVEL_VERSION="5.4"
-  - LARAVEL_VERSION="5.5"
-  - LARAVEL_VERSION="5.6"
-  - LARAVEL_VERSION="5.7"
+#  - LARAVEL_VERSION="5.1"
+#  - LARAVEL_VERSION="5.2"
+#  - LARAVEL_VERSION="5.3"
+#  - LARAVEL_VERSION="5.4"
+#  - LARAVEL_VERSION="5.5"
+#  - LARAVEL_VERSION="5.6"
+#  - LARAVEL_VERSION="5.7"
   - LARAVEL_VERSION="5.8"
   - LARAVEL_VERSION="6.0"
 
@@ -89,6 +89,8 @@ before_script:
   # We need to tweak signature so setUp() and tearDown() and strip ": void" otherwise PHP will fail complaining
   # This affects Laravel 5.8+ as they pull recent Orchestra that features method signature changes.
   - "if [ ${LARAVEL_VERSION} == 5.8 ]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
+  - "if [ ${LARAVEL_VERSION} == 6.0 ]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
+
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
 
