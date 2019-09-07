@@ -4,7 +4,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* dev
+* v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup
 
 * v4.1.7 (2019-03-03)
