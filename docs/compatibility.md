@@ -1,4 +1,6 @@
-# API Response Builder for Laravel #
+![REST API Response Builder for Laravel](img/laravel-logolockup-rgb-red.png)
+
+# REST API Response Builder for Laravel #
 
  `ResponseBuilder` follows [Semantic Versioning](http://semver.org/).
 
