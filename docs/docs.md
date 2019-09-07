@@ -1,4 +1,6 @@
-# API Response Builder for Laravel #
+![img/laravel-logolockup-rgb-red.png]
+
+# REST API Response Builder for Laravel #
 
  `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
  nice, normalized and easy to consume REST API responses.

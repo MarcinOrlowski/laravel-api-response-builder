@@ -1,4 +1,6 @@
-# API Response Builder for Laravel 5.x #
+![docs/img/laravel-logolockup-rgb-red.png]
+
+# REST API Response Builder for Laravel #
 
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
