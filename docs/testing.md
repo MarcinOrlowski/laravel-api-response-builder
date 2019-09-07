@@ -1,4 +1,4 @@
-![img/laravel-logolockup-rgb-red.png]
+![REST API Response Builder for Laravel](img/laravel-logolockup-rgb-red.png)
 
 # REST API Response Builder for Laravel #
 

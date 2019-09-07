@@ -1,4 +1,6 @@
-# API Response Builder for Laravel 5 #
+![REST API Response Builder for Laravel](docs/img/laravel-logolockup-rgb-red.png)
+
+# REST API Response Builder for Laravel #
 
 See [compatibility docs](docs/compatibility.md) for details about backward compatibility!
 
