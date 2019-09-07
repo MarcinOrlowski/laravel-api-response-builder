@@ -134,18 +134,6 @@ class BuildResponseTest extends TestCase
 	/**
 	 * @return void
 	 */
-	public function testMake_CustomMessageAndWrongCode(): void
-	{
-		$this->expectException(\InvalidArgumentException::class);
-
-		$api_code = [];    // invalid
-		/** @noinspection PhpParamsInspection */
-		$this->callMakeMethod(true, $api_code, 'message');
-	}
-
-	/**
-	 * @return void
-	 */
 	public function testMake_CustomMessageAndCodeOutOfRange(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);

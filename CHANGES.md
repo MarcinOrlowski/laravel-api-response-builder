@@ -6,6 +6,11 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v6.0.0 (@dev)
+   * Requires Laravel 6.0+ and PHP 7.2+
+   * Added method arguments/returns type hints
+   * Removed unit tests for features now guarded by PHP via type hints
+
 * v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup
 
