@@ -24,7 +24,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccess()
+	public function testSuccess(): void
 	{
 		$this->response = ResponseBuilder::success();
 		$j = $this->getResponseSuccessObject(BaseApiCodes::OK);
@@ -33,7 +33,7 @@ class SuccessTest extends TestCase
 		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK)), $j->message);
 	}
 
-	public function testSuccess_EncodingOptions()
+	public function testSuccess_EncodingOptions(): void
 	{
 		$test_string = 'ąćę';
 		$test_string_escaped = $this->escape8($test_string);
@@ -75,7 +75,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccess_ApiCode_NoCustomMessage()
+	public function testSuccess_ApiCode_NoCustomMessage(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, []);
 		$api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
@@ -91,7 +91,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccess_ApiCode_CustomMessage()
+	public function testSuccess_ApiCode_CustomMessage(): void
 	{
 		$this->response = ResponseBuilder::success(null, $this->random_api_code);
 		$j = $this->getResponseSuccessObject($this->random_api_code);
@@ -105,7 +105,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccess_ApiCode_CustomMessageLang()
+	public function testSuccess_ApiCode_CustomMessageLang(): void
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
@@ -129,7 +129,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccessWithCode_ApiCode_CustomMessageLang()
+	public function testSuccessWithCode_ApiCode_CustomMessageLang(): void
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
@@ -152,7 +152,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccess_DataAndHttpCode()
+	public function testSuccess_DataAndHttpCode(): void
 	{
 		$payloads = [
 			null,
@@ -184,7 +184,7 @@ class SuccessTest extends TestCase
 	 *
 	 * Tests successWithHttpCode()
 	 */
-	public function testSuccessHttpCode()
+	public function testSuccessHttpCode(): void
 	{
 		$http_codes = [HttpResponse::HTTP_ACCEPTED,
 		               HttpResponse::HTTP_OK];
@@ -203,7 +203,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccess_ApiCodeMustBeInt()
+	public function testSuccess_ApiCodeMustBeInt(): void
 	{
 		ResponseBuilder::success(null, 'foo');
 	}
@@ -213,7 +213,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccess_HttpCodeNull()
+	public function testSuccess_HttpCodeNull(): void
 	{
 		ResponseBuilder::successWithHttpCode(null);
 	}
@@ -223,7 +223,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccessWithInvalidHttpCode()
+	public function testSuccessWithInvalidHttpCode(): void
 	{
 		ResponseBuilder::successWithHttpCode('invalid');
 	}
@@ -233,7 +233,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccessWithTooBigHttpCode()
+	public function testSuccessWithTooBigHttpCode(): void
 	{
 		ResponseBuilder::successWithHttpCode(666);
 	}
@@ -243,7 +243,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccessWithTooLowHttpCode()
+	public function testSuccessWithTooLowHttpCode(): void
 	{
 		ResponseBuilder::successWithHttpCode(0);
 	}
@@ -252,8 +252,10 @@ class SuccessTest extends TestCase
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testBuildSuccessResponse_InvalidReturnCode()
+	public function testBuildSuccessResponse_InvalidReturnCode(): void
 	{
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'buildSuccessResponse');

@@ -36,7 +36,7 @@ class TestModel
 	 *
 	 * @return array
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return [
 			'val' => $this->val,

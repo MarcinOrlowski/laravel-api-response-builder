@@ -23,7 +23,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testError()
+	public function testError(): void
 	{
 		// GIVEN random error code
 		$api_code = $this->random_api_code;
@@ -44,7 +44,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testError_WithDataHttpCode()
+	public function testError_WithDataHttpCode(): void
 	{
 		$http_codes = [HttpResponse::HTTP_CONFLICT,
 		               HttpResponse::HTTP_BAD_REQUEST,
@@ -76,7 +76,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithData()
+	public function testErrorWithData(): void
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 		$api_code = $this->random_api_code;
@@ -91,7 +91,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithDataAndHttpCode()
+	public function testErrorWithDataAndHttpCode(): void
 	{
 		$http_codes = [HttpResponse::HTTP_CONFLICT,
 		               HttpResponse::HTTP_BAD_REQUEST,
@@ -116,7 +116,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testErrorWithDataAndHttpCode_HttpCodeNull()
+	public function testErrorWithDataAndHttpCode_HttpCodeNull(): void
 	{
 //		$this->expectException(\InvalidArgumentException::class);
 		ResponseBuilder::errorWithDataAndHttpCode($this->random_api_code, null, null);
@@ -127,7 +127,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithHttpCode()
+	public function testErrorWithHttpCode(): void
 	{
 		$http_codes = [HttpResponse::HTTP_CONFLICT,
 		               HttpResponse::HTTP_BAD_REQUEST,
@@ -151,7 +151,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testErrorWithHttpCode_NullHttpCode()
+	public function testErrorWithHttpCode_NullHttpCode(): void
 	{
 		ResponseBuilder::errorWithHttpCode($this->random_api_code, null);
 	}
@@ -161,7 +161,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithMessageAndData()
+	public function testErrorWithMessageAndData(): void
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 		$api_code = $this->random_api_code;
@@ -178,7 +178,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithMessageAndDataAndDebug()
+	public function testErrorWithMessageAndDataAndDebug(): void
 	{
 		$trace_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE);
 		$trace_data = [
@@ -199,8 +199,6 @@ class ErrorTest extends TestCase
 		$this->assertEquals((object)$data, $j->data);
 
 		$debug_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
-//		var_dump((object)$trace_data);
-//		var_dump($j->debug_key);
 		$this->assertEquals((object)$trace_data, $j->$debug_key);
 	}
 
@@ -209,7 +207,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithMessage()
+	public function testErrorWithMessage(): void
 	{
 		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
@@ -226,7 +224,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testError_MissingMessageMapping()
+	public function testError_MissingMessageMapping(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -249,8 +247,10 @@ class ErrorTest extends TestCase
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testBuildErrorResponse_ApiCodeOK()
+	public function testBuildErrorResponse_ApiCodeOK(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -270,8 +270,11 @@ class ErrorTest extends TestCase
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
+	 *
+	 * @throws \ReflectionException
+	 *
 	 */
-	public function testBuildErrorResponse_WrongApiCodeType()
+	public function testBuildErrorResponse_WrongApiCodeType(): void
 	{
 		$data = null;
 		$http_code = 404;
@@ -287,8 +290,10 @@ class ErrorTest extends TestCase
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testBuildErrorResponse_WrongHttpCodeType()
+	public function testBuildErrorResponse_WrongHttpCodeType(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -305,8 +310,10 @@ class ErrorTest extends TestCase
 	 * Tests buildErrorResponse() fed with @null as http_code
 	 *
 	 * @return void
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testBuildErrorResponse_NullHttpCode()
+	public function testBuildErrorResponse_NullHttpCode(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -328,8 +335,10 @@ class ErrorTest extends TestCase
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testBuildErrorResponse_TooLowHttpCode()
+	public function testBuildErrorResponse_TooLowHttpCode(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -348,8 +357,10 @@ class ErrorTest extends TestCase
 	 * @return void
 	 *
 	 * @expectedException \InvalidArgumentException
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testBuildErrorResponse_WrongLangArgs()
+	public function testBuildErrorResponse_WrongLangArgs(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -372,8 +383,10 @@ class ErrorTest extends TestCase
 	 * @param mixed|null $lang_args
 	 *
 	 * @return mixed
+	 *
+	 * @throws \ReflectionException
 	 */
-	protected function callBuildErrorResponse($data, $api_code, $http_code, $lang_args)
+	protected function callBuildErrorResponse($data, int $api_code = null, int $http_code = null, $lang_args = null)
 	{
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'buildErrorResponse');

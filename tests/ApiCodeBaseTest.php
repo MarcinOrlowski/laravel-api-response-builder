@@ -25,7 +25,7 @@ class ApiCodeBaseTest extends TestCase
 	 *
 	 * @expectedException \RuntimeException
 	 */
-	public function testGetMinCode_MissingConfigKey()
+	public function testGetMinCode_MissingConfigKey(): void
 	{
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MIN_CODE);
 		BaseApiCodes::getMinCode();
@@ -38,7 +38,7 @@ class ApiCodeBaseTest extends TestCase
 	 *
 	 * @expectedException \RuntimeException
 	 */
-	public function testGetMaxCode_MissingConfigKey()
+	public function testGetMaxCode_MissingConfigKey(): void
 	{
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAX_CODE);
 		BaseApiCodes::getMaxCode();
@@ -52,7 +52,7 @@ class ApiCodeBaseTest extends TestCase
 	 *
 	 * @expectedException \RuntimeException
 	 */
-	public function testGetMap_MissingConfigKey()
+	public function testGetMap_MissingConfigKey(): void
 	{
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAP);
 		BaseApiCodes::getMap();
@@ -65,7 +65,7 @@ class ApiCodeBaseTest extends TestCase
 	 *
 	 * @expectedException \RuntimeException
 	 */
-	public function testGetMap_WrongConfig()
+	public function testGetMap_WrongConfig(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, false);
 		BaseApiCodes::getMap();
@@ -79,7 +79,7 @@ class ApiCodeBaseTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testGetCodeMessageKey_OutOfRange()
+	public function testGetCodeMessageKey_OutOfRange(): void
 	{
 		BaseApiCodes::getCodeMessageKey(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
 	}
@@ -91,7 +91,7 @@ class ApiCodeBaseTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testGetReservedCodeMessageKey_TooLow()
+	public function testGetReservedCodeMessageKey_TooLow(): void
 	{
 		BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::RESERVED_MIN_API_CODE - 1);
 	}
@@ -103,7 +103,7 @@ class ApiCodeBaseTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testGetReservedCodeMessageKey_TooHigh()
+	public function testGetReservedCodeMessageKey_TooHigh(): void
 	{
 		BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
 	}
@@ -112,8 +112,10 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getReservedCodeMessageKey()
 	 *
 	 * @return void
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testGetReservedCodeMessageKey()
+	public function testGetReservedCodeMessageKey(): void
 	{
 		// check how mapped code handling works
 		$mapping = BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::OK);

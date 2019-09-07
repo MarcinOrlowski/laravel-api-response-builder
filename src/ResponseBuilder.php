@@ -88,7 +88,7 @@ class ResponseBuilder
 	 *
 	 * @throws \RuntimeException if "classes" mapping is invalid
 	 */
-	protected static function getClassesMapping()
+	protected static function getClassesMapping(): ?array
 	{
 		$classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES);
 
@@ -121,7 +121,7 @@ class ResponseBuilder
 	 *
 	 * @return void
 	 */
-	protected static function convert(array $classes, array &$data)
+	protected static function convert(array $classes, array &$data): void
 	{
 		foreach ($data as $data_key => &$data_val) {
 			if (is_array($data_val)) {
@@ -142,7 +142,7 @@ class ResponseBuilder
 	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
 	 * additionally added to reported JSON for easier manual debugging.
 	 *
-	 * @param boolean    $success    @true if reposnse indicates success, @false otherwise
+	 * @param boolean    $success    @true if response indicates success, @false otherwise
 	 * @param integer    $api_code   response code
 	 * @param string     $message    message to return
 	 * @param mixed      $data       API response data if any
@@ -152,7 +152,7 @@ class ResponseBuilder
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse($success, $api_code, $message, $data = null, array $trace_data = null)
+	protected static function buildResponse(bool $success, int $api_code, string $message, $data = null, array $trace_data = null): array
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
@@ -202,10 +202,10 @@ class ResponseBuilder
 	 * @param integer|null $http_code        HTTP return code to be set for this response or @null for default (200)
 	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
 	 *
-	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function success($data = null, $api_code = null, array $lang_args = null, $http_code = null, $encoding_options = null)
+	public static function success($data = null, $api_code = null, array $lang_args = null,
+	                               int $http_code = null, int $encoding_options = null): \Symfony\Component\HttpFoundation\Response
 	{
 		if ($api_code === null) {
 			$api_code = static::DEFAULT_API_CODE_OK;
@@ -223,7 +223,7 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function successWithCode($api_code, array $lang_args = null, $http_code = null)
+	public static function successWithCode(int $api_code=null, array $lang_args = null,int $http_code = null): \Symfony\Component\HttpFoundation\Response
 	{
 		return static::success(null, $api_code, $lang_args, $http_code);
 	}
@@ -237,7 +237,7 @@ class ResponseBuilder
 	 *
 	 * @throws \InvalidArgumentException when http_code is @null
 	 */
-	public static function successWithHttpCode($http_code)
+	public static function successWithHttpCode(int $http_code):  \Symfony\Component\HttpFoundation\Response
 	{
 		if ($http_code === null) {
 			throw new \InvalidArgumentException('http_code cannot be null. Use success() instead');
@@ -256,9 +256,9 @@ class ResponseBuilder
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
-	 *
 	 */
-	protected static function buildSuccessResponse($data = null, $api_code = null, array $lang_args = null, $http_code = null, $encoding_options = null)
+	protected static function buildSuccessResponse($data = null, int $api_code = null, array $lang_args = null,
+	                                               int $http_code = null, int $encoding_options = null): \Symfony\Component\HttpFoundation\Response
 	{
 		if ($http_code === null) {
 			$http_code = static::DEFAULT_HTTP_CODE_OK;
@@ -292,7 +292,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function error($api_code, array $lang_args = null, $data = null, $http_code = null, $encoding_options = null)
+	public static function error(int $api_code, array $lang_args = null, $data = null, int $http_code = null,
+	                             int $encoding_options = null): \Symfony\Component\HttpFoundation\Response
 	{
 		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args, $encoding_options);
 	}
@@ -305,7 +306,7 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithData($api_code, $data, array $lang_args = null, $encoding_options = null)
+	public static function errorWithData(int $api_code, $data, array $lang_args = null, int $encoding_options = null): \Symfony\Component\HttpFoundation\Response
 	{
 		return static::buildErrorResponse($data, $api_code, null, $lang_args, $encoding_options);
 	}
@@ -321,7 +322,8 @@ class ResponseBuilder
 	 *
 	 * @throws \InvalidArgumentException if http_code is @null
 	 */
-	public static function errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args = null, $encoding_options = null)
+	public static function errorWithDataAndHttpCode(int $api_code, $data, int $http_code, array $lang_args = null,
+	                                                int $encoding_options = null): \Symfony\Component\HttpFoundation\Response
 	{
 		if ($http_code === null) {
 			throw new \InvalidArgumentException('http_code cannot be null. Use errorWithData() instead');
@@ -339,7 +341,7 @@ class ResponseBuilder
 	 *
 	 * @throws \InvalidArgumentException if http_code is @null
 	 */
-	public static function errorWithHttpCode($api_code, $http_code, array $lang_args = null)
+	public static function errorWithHttpCode(int $api_code, int $http_code, array $lang_args = null): \Symfony\Component\HttpFoundation\Response
 	{
 		if ($http_code === null) {
 			throw new \InvalidArgumentException('http_code cannot be null. Use error() instead');
@@ -357,7 +359,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithMessageAndData($api_code, $error_message, $data, $http_code = null, $encoding_options = null)
+	public static function errorWithMessageAndData(int $api_code, string $error_message, $data,
+	                                               int $http_code = null, int $encoding_options = null): \Symfony\Component\HttpFoundation\Response
 	{
 		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, $encoding_options);
 	}
@@ -372,8 +375,8 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code = null,
-	                                                       $encoding_options = null, $debug_data = null)
+	public static function errorWithMessageAndDataAndDebug(int $api_code, string $error_message, $data, int $http_code = null,
+	                                                       int $encoding_options = null, array $debug_data = null): \Symfony\Component\HttpFoundation\Response
 	{
 		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, null, $encoding_options, $debug_data);
 	}
@@ -385,7 +388,7 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function errorWithMessage($api_code, $error_message, $http_code = null)
+	public static function errorWithMessage(int $api_code, string $error_message, int $http_code = null): \Symfony\Component\HttpFoundation\Response
 	{
 		return static::buildErrorResponse(null, $api_code, $http_code, [], $error_message);
 	}
@@ -409,8 +412,8 @@ class ResponseBuilder
 	 *
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
-	protected static function buildErrorResponse($data, $api_code, $http_code, $lang_args = null, $message = null,
-	                                             $headers = null, $encoding_options = null, $debug_data = null)
+	protected static function buildErrorResponse($data, int $api_code, int $http_code=null, array $lang_args = null, string $message = null,
+	                                             array $headers = null, int $encoding_options = null, array $debug_data = null): \Symfony\Component\HttpFoundation\Response
 	{
 		if ($http_code === null) {
 			$http_code = static::DEFAULT_HTTP_CODE_ERROR;
@@ -444,7 +447,7 @@ class ResponseBuilder
 
 
 	/**
-	 * @param boolean        $success             @true if reponse indicate success, @false otherwise
+	 * @param boolean        $success             @true if response indicate success, @false otherwise
 	 * @param integer        $api_code            internal code you want to return with the message
 	 * @param string|integer $message_or_api_code message string or API code
 	 * @param mixed|null     $data                optional additional data to be included in response object
@@ -460,10 +463,9 @@ class ResponseBuilder
 	 *
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
-	protected static function make($success, $api_code, $message_or_api_code, $data = null,
-	                               $http_code = null, array $lang_args = null, array $headers = null,
-	                               $encoding_options = null, array $debug_data = null
-	)
+	protected static function make(bool $success, int $api_code, $message_or_api_code, $data = null,
+	                               int $http_code = null, array $lang_args = null, array $headers = null,
+	                               int $encoding_options = null, array $debug_data = null): \Symfony\Component\HttpFoundation\Response
 	{
 		if ($lang_args === null) {
 			$lang_args = ['api_code' => $message_or_api_code];

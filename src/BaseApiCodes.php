@@ -121,7 +121,7 @@ class BaseApiCodes
 	 *
 	 * @throws \RuntimeException
 	 */
-	public static function getResponseKey($reference_key)
+	public static function getResponseKey($reference_key): string
 	{
 		// ensure $key is known
 		if (!array_key_exists($reference_key, static::$response_key_map)) {
@@ -134,14 +134,14 @@ class BaseApiCodes
 		$user_map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
 		if ($user_map !== null) {
 			if (!is_array($user_map)) {
-				throw(new \RuntimeException(
-					sprintf('CONFIG: "%s" must be an array (%s given)', ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, gettype($user_map))));
+				throw new \RuntimeException(
+					sprintf('CONFIG: "%s" must be an array (%s given)', ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, gettype($user_map)));
 			}
 			if (array_key_exists($reference_key, $user_map)) {
 				$user_val = $user_map[ $reference_key ];
 				if (!is_string($user_val)) {
-					throw(new \RuntimeException(
-						sprintf('Response key reference "%s" must be mapped to a string (%s given)', $reference_key, gettype($user_val))));
+					throw new \RuntimeException(
+						sprintf('Response key reference "%s" must be mapped to a string (%s given)', $reference_key, gettype($user_val)));
 				}
 
 				$result = $user_val;
@@ -156,7 +156,7 @@ class BaseApiCodes
 	 *
 	 * @return array
 	 */
-	public static function getDefaultResponseKeyMap()
+	public static function getDefaultResponseKeyMap(): array
 	{
 		return static::$response_key_map;
 	}

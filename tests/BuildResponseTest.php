@@ -25,7 +25,7 @@ class BuildResponseTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testBuildResponse_ClassAutoConversionSingleElement()
+	public function testBuildResponse_ClassAutoConversionSingleElement(): void
 	{
 
 		// GIVEN model object with randomly set member value
@@ -58,7 +58,7 @@ class BuildResponseTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testBuildResponse_ClassAutoConversionAsPartOfDataset()
+	public function testBuildResponse_ClassAutoConversionAsPartOfDataset(): void
 	{
 
 		// GIVEN model object with randomly set member value
@@ -121,7 +121,7 @@ class BuildResponseTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_WrongMessage()
+	public function testMake_WrongMessage(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -136,7 +136,7 @@ class BuildResponseTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_CustomMessageAndWrongCode()
+	public function testMake_CustomMessageAndWrongCode(): void
 	{
 		$api_code = [];    // invalid
 		/** @noinspection PhpParamsInspection */
@@ -148,7 +148,7 @@ class BuildResponseTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_CustomMessageAndCodeOutOfRange()
+	public function testMake_CustomMessageAndCodeOutOfRange(): void
 	{
 		$api_code = $this->max_allowed_code + 1;    // invalid
 		$this->callMakeMethod(true, $api_code, 'message');

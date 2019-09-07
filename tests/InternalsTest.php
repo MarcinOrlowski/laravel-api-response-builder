@@ -23,7 +23,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_WrongMessage()
+	public function testMake_WrongMessage(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -38,7 +38,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_CustomMessageAndWrongCode()
+	public function testMake_CustomMessageAndWrongCode(): void
 	{
 		$api_code = [];    // invalid
 		/** @noinspection PhpParamsInspection */
@@ -50,7 +50,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_CustomMessageAndCodeOutOfRange()
+	public function testMake_CustomMessageAndCodeOutOfRange(): void
 	{
 		$api_code = $this->max_allowed_code + 1;    // invalid
 		$this->callMakeMethod(true, $api_code, 'message');
@@ -64,7 +64,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_InvalidEncodingOptions()
+	public function testMake_InvalidEncodingOptions(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, []);
 		$this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK);
@@ -75,7 +75,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testDefaultEncodingOptionValue()
+	public function testDefaultEncodingOptionValue(): void
 	{
 		$config_defaults = \Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS);
 		$this->assertEquals($config_defaults, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
@@ -86,7 +86,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testMake_DefaultEncodingOptions()
+	public function testMake_DefaultEncodingOptions(): void
 	{
 		// source data
 		$test_string = 'ąćę';
@@ -117,7 +117,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testMake_ValidateEncodingOptionsPreventsEscaping()
+	public function testMake_ValidateEncodingOptionsPreventsEscaping(): void
 	{
 		$test_string = 'ąćę';
 		$test_string_escaped = $this->escape8($test_string);
@@ -154,7 +154,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testMake_ApiCodeNotIntNorString()
+	public function testMake_ApiCodeNotIntNorString(): void
 	{
 		$this->callMakeMethod(true, BaseApiCodes::OK, []);
 	}
@@ -166,8 +166,10 @@ class InternalsTest extends TestCase
 	 * @return void
 	 *
 	 * @expectedException \RuntimeException
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testGetClassesMapping_WrongType()
+	public function testGetClassesMapping_WrongType(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
@@ -182,7 +184,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testCustomResponseMapping()
+	public function testCustomResponseMapping(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
 				ResponseBuilder::KEY_SUCCESS => $this->getRandomString(),
@@ -201,7 +203,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testGetResponseKey_UnknownKey()
+	public function testGetResponseKey_UnknownKey(): void
 	{
 		BaseApiCodes::getResponseKey($this->getRandomString());
 	}
@@ -213,7 +215,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testResponseKeyMapping_InvalidMap()
+	public function testResponseKeyMapping_InvalidMap(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, 'invalid');
 		BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS);
@@ -227,7 +229,7 @@ class InternalsTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testResponseKeyMapping_InvalidMappingValue()
+	public function testResponseKeyMapping_InvalidMappingValue(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
 				ResponseBuilder::KEY_SUCCESS => false,

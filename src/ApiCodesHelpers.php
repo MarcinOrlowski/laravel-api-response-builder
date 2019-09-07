@@ -27,7 +27,7 @@ trait ApiCodesHelpers
 	 *
 	 * @throws \RuntimeException Throws exception if no min_code set up
 	 */
-	public static function getMinCode()
+	public static function getMinCode(): int
 	{
 		$min_code = Config::get(ResponseBuilder::CONF_KEY_MIN_CODE, null);
 
@@ -45,7 +45,7 @@ trait ApiCodesHelpers
 	 *
 	 * @throws \RuntimeException Throws exception if no max_code set up
 	 */
-	public static function getMaxCode()
+	public static function getMaxCode(): int
 	{
 		$max_code = Config::get(ResponseBuilder::CONF_KEY_MAX_CODE, null);
 
@@ -62,7 +62,7 @@ trait ApiCodesHelpers
 	 *
 	 * @return integer
 	 */
-	protected static function getReservedMinCode()
+	protected static function getReservedMinCode(): int
 	{
 		return BaseApiCodes::RESERVED_MIN_API_CODE;
 	}
@@ -82,7 +82,7 @@ trait ApiCodesHelpers
 	 *
 	 * @return array
 	 */
-	public static function getApiCodeConstants()
+	public static function getApiCodeConstants(): array
 	{
 		$reflect = new \ReflectionClass(get_called_class());
 		return $reflect->getConstants();
@@ -95,7 +95,7 @@ trait ApiCodesHelpers
 	 *
 	 * @throws \RuntimeException Thrown when builder map is not configured.
 	 */
-	public static function getMap()
+	public static function getMap(): array
 	{
 		$map = Config::get(ResponseBuilder::CONF_KEY_MAP, null);
 		if ($map === null) {
@@ -119,7 +119,7 @@ trait ApiCodesHelpers
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed reserved range.
 	 */
-	public static function getReservedCodeMessageKey($code)
+	public static function getReservedCodeMessageKey($code): ?string
 	{
 		if (($code < BaseApiCodes::RESERVED_MIN_API_CODE) || ($code > BaseApiCodes::RESERVED_MAX_API_CODE)) {
 			throw new \InvalidArgumentException(
@@ -128,7 +128,7 @@ trait ApiCodesHelpers
 		}
 
 		$base_map = BaseApiCodes::getBaseMap();
-		return array_key_exists($code, $base_map) ? $base_map[ $code ] : null;
+		return $base_map[ $code ] ?? null;
 	}
 
 
@@ -141,7 +141,7 @@ trait ApiCodesHelpers
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed range.
 	 */
-	public static function getCodeMessageKey($api_code)
+	public static function getCodeMessageKey($api_code): ?string
 	{
 		if (!static::isCodeValid($api_code)) {
 			$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
@@ -151,7 +151,7 @@ trait ApiCodesHelpers
 
 		$map = static::getMap();
 
-		return array_key_exists($api_code, $map) ? $map[ $api_code ] : null;
+		return $map[ $api_code ] ?? null;
 	}
 
 	/**
@@ -161,7 +161,7 @@ trait ApiCodesHelpers
 	 *
 	 * @return boolean
 	 */
-	public static function isCodeValid($code)
+	public static function isCodeValid($code): bool
 	{
 		$result = false;
 

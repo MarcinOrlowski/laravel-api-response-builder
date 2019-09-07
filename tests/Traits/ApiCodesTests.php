@@ -30,7 +30,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 */
-	public function testMinMaxCode()
+	public function testMinMaxCode(): void
 	{
 		$obj = new BaseApiCodes();
 
@@ -55,8 +55,10 @@ trait ApiCodesTests
 	 * Checks if all Api codes defined in ApiCodes class contain mapping entry
 	 *
 	 * @return void
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testIfAllCodesGotMapping()
+	public function testIfAllCodesGotMapping(): void
 	{
 		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
@@ -74,7 +76,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 */
-	public function testIfAllCodesAreInRange()
+	public function testIfAllCodesAreInRange(): void
 	{
 		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
@@ -93,7 +95,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 */
-	public function testIfAllApiValuesAreUnique()
+	public function testIfAllApiValuesAreUnique(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -110,7 +112,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 */
-	public function testIfAllCodesAreCorrectlyMapped()
+	public function testIfAllCodesAreCorrectlyMapped(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -132,7 +134,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 */
-	public function testIfCustomMappingUsesUniqueValues()
+	public function testIfCustomMappingUsesUniqueValues(): void
 	{
 		$map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
 		if ($map !== null) {

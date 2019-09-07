@@ -29,7 +29,7 @@ class ExceptionHandlerHelperTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testRender_HttpException()
+	public function testRender_HttpException(): void
 	{
 		$codes = [
 
@@ -147,7 +147,7 @@ class ExceptionHandlerHelperTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testError_DebugTrace()
+	public function testError_DebugTrace(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
 
