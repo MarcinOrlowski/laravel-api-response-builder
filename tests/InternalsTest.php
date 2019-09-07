@@ -20,11 +20,11 @@ class InternalsTest extends TestCase
 {
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testMake_WrongMessage(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
@@ -35,11 +35,11 @@ class InternalsTest extends TestCase
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testMake_CustomMessageAndWrongCode(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$api_code = [];    // invalid
 		/** @noinspection PhpParamsInspection */
 		$this->callMakeMethod(true, $api_code, 'message');
@@ -47,11 +47,11 @@ class InternalsTest extends TestCase
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testMake_CustomMessageAndCodeOutOfRange(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$api_code = $this->max_allowed_code + 1;    // invalid
 		$this->callMakeMethod(true, $api_code, 'message');
 	}
@@ -61,11 +61,11 @@ class InternalsTest extends TestCase
 	 * Validates make() handling invalid type of encoding_options
 	 *
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testMake_InvalidEncodingOptions(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, []);
 		$this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK);
 	}
@@ -151,11 +151,11 @@ class InternalsTest extends TestCase
 	 * Checks make() handling invalid type of api_code argument
 	 *
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testMake_ApiCodeNotIntNorString(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->callMakeMethod(true, BaseApiCodes::OK, []);
 	}
 
@@ -165,12 +165,12 @@ class InternalsTest extends TestCase
 	 *
 	 * @return void
 	 *
-	 * @expectedException \RuntimeException
-	 *
 	 * @throws \ReflectionException
 	 */
 	public function testGetClassesMapping_WrongType(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
 		$obj = new ResponseBuilder();
@@ -199,24 +199,24 @@ class InternalsTest extends TestCase
 	/**
 	 * Tests is custom response key mappings and defaults fallback work
 	 *
-	 * @expectedException \RuntimeException
-	 *
 	 * @return void
 	 */
 	public function testGetResponseKey_UnknownKey(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		BaseApiCodes::getResponseKey($this->getRandomString());
 	}
 
 	/**
 	 * Tests validation of configuration validation of response key map
 	 *
-	 * @expectedException \RuntimeException
-	 *
 	 * @return void
 	 */
 	public function testResponseKeyMapping_InvalidMap(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, 'invalid');
 		BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS);
 	}
@@ -225,12 +225,12 @@ class InternalsTest extends TestCase
 	/**
 	 * Tests validation of configuration validation of response key map
 	 *
-	 * @expectedException \RuntimeException
-	 *
 	 * @return void
 	 */
 	public function testResponseKeyMapping_InvalidMappingValue(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
 				ResponseBuilder::KEY_SUCCESS => false,
 			]

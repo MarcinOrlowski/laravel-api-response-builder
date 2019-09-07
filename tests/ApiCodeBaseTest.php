@@ -22,11 +22,11 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getMinCode() with invalid config
 	 *
 	 * @return void
-	 *
-	 * @expectedException \RuntimeException
 	 */
 	public function testGetMinCode_MissingConfigKey(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MIN_CODE);
 		BaseApiCodes::getMinCode();
 	}
@@ -35,25 +35,24 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getMaxCode() with invalid config
 	 *
 	 * @return void
-	 *
-	 * @expectedException \RuntimeException
 	 */
 	public function testGetMaxCode_MissingConfigKey(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAX_CODE);
 		BaseApiCodes::getMaxCode();
 	}
-
 
 	/**
 	 * Tests getMap() with missing config
 	 *
 	 * @return void
-	 *
-	 * @expectedException \RuntimeException
 	 */
 	public function testGetMap_MissingConfigKey(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAP);
 		BaseApiCodes::getMap();
 	}
@@ -62,11 +61,11 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getMap() with wrong config
 	 *
 	 * @return void
-	 *
-	 * @expectedException \RuntimeException
 	 */
 	public function testGetMap_WrongConfig(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, false);
 		BaseApiCodes::getMap();
 	}
@@ -76,11 +75,11 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getCodeMessageKey() for code outside of allowed range
 	 *
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testGetCodeMessageKey_OutOfRange(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		BaseApiCodes::getCodeMessageKey(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
 	}
 
@@ -88,11 +87,11 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getReservedCodeMessageKey() with too low code
 	 *
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testGetReservedCodeMessageKey_TooLow(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::RESERVED_MIN_API_CODE - 1);
 	}
 
@@ -100,11 +99,11 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getReservedCodeMessageKey() with too high code
 	 *
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testGetReservedCodeMessageKey_TooHigh(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
 	}
 
@@ -133,5 +132,4 @@ class ApiCodeBaseTest extends TestCase
 		$mapping = BaseApiCodes::getReservedCodeMessageKey($code);
 		$this->assertNull($mapping);
 	}
-
 }

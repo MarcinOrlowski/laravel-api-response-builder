@@ -200,63 +200,63 @@ class SuccessTest extends TestCase
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSuccess_ApiCodeMustBeInt(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		ResponseBuilder::success(null, 'foo');
 	}
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSuccess_HttpCodeNull(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		ResponseBuilder::successWithHttpCode(null);
 	}
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSuccessWithInvalidHttpCode(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		ResponseBuilder::successWithHttpCode('invalid');
 	}
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSuccessWithTooBigHttpCode(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		ResponseBuilder::successWithHttpCode(666);
 	}
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSuccessWithTooLowHttpCode(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		ResponseBuilder::successWithHttpCode(0);
 	}
 
 	/**
 	 * @return void
 	 *
-	 * @expectedException \InvalidArgumentException
-	 *
 	 * @throws \ReflectionException
 	 */
 	public function testBuildSuccessResponse_InvalidReturnCode(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$obj = new ResponseBuilder();
 		$method = $this->getProtectedMethod(get_class($obj), 'buildSuccessResponse');
 		$method->invokeArgs($obj, [null,

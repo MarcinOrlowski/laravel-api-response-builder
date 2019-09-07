@@ -300,6 +300,8 @@ trait TestingHelpers
 	 * @param array|null $debug_data          optional data to be included in response JSON
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
+	 *
+	 * @throws \ReflectionException
 	 */
 	protected function callMakeMethod(bool $success, int $api_code, $message_or_api_code, array $data = null, array $headers = null,
 	                                  int $encoding_options = null, array $debug_data = null): \Symfony\Component\HttpFoundation\Response

@@ -118,11 +118,11 @@ class BuildResponseTest extends TestCase
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testMake_WrongMessage(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
@@ -133,11 +133,11 @@ class BuildResponseTest extends TestCase
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testMake_CustomMessageAndWrongCode(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$api_code = [];    // invalid
 		/** @noinspection PhpParamsInspection */
 		$this->callMakeMethod(true, $api_code, 'message');
@@ -145,11 +145,11 @@ class BuildResponseTest extends TestCase
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testMake_CustomMessageAndCodeOutOfRange(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$api_code = $this->max_allowed_code + 1;    // invalid
 		$this->callMakeMethod(true, $api_code, 'message');
 	}
