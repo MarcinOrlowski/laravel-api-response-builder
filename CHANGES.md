@@ -1,8 +1,13 @@
-# API Response Builder for Laravel 5 #
+![REST API Response Builder for Laravel](docs/img/laravel-logolockup-rgb-red.png)
+
+# REST API Response Builder for Laravel #
 
 See [compatibility docs](docs/compatibility.md) for details about backward compatibility!
 
 ## CHANGE LOG ##
+
+* v4.1.8 (2019-08-07)
+   * Added Laravel 6 to testing setup
 
 * v4.1.7 (2019-03-03)
    * Added PHP 7.3 to testing setup

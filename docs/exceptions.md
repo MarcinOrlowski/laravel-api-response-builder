@@ -1,3 +1,5 @@
+![REST API Response Builder for Laravel](img/laravel-logolockup-rgb-red.png)
+
 # Exception Handling with Response Builder #
 
  Properly designed REST API should never hit consumer with anything but JSON. While it looks like easy task, 
