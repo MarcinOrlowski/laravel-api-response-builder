@@ -182,7 +182,8 @@ trait TestingHelpers
 	 *
 	 * @return mixed
 	 */
-	private function getResponseObjectRaw(int $expected_api_code, int $expected_http_code, string $expected_message = null, array $extra_keys = [])
+	private function getResponseObjectRaw(int $expected_api_code, int $expected_http_code,
+	                                      string $expected_message = null, array $extra_keys = [])
 	{
 		$actual = $this->response->getStatusCode();
 		$this->assertEquals($expected_http_code, $actual,

@@ -98,8 +98,8 @@ class ExceptionHandlerHelper
 	 *
 	 * @return HttpResponse
 	 */
-	protected static function error(Exception $exception, $exception_type,
-	                                $default_api_code, $default_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse
+	protected static function error(Exception $exception, $exception_type, $default_api_code,
+	                                $default_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse
 	{
 		$base_config = 'response_builder.exception_handler.exception';
 

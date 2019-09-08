@@ -154,7 +154,8 @@ class ResponseBuilder
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse(bool $success, int $api_code, string $message, $data = null, array $debug_data = null): array
+	protected static function buildResponse(bool $success, int $api_code, string $message,$data = null,
+	                                        array $debug_data = null): array
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
@@ -225,7 +226,8 @@ class ResponseBuilder
 	 *
 	 * @return HttpResponse
 	 */
-	public static function successWithCode(int $api_code = null, array $lang_args = null, int $http_code = null): HttpResponse
+	public static function successWithCode(int $api_code = null, array $lang_args = null,
+	                                       int $http_code = null): HttpResponse
 	{
 		return static::success(null, $api_code, $lang_args, $http_code);
 	}
@@ -270,16 +272,20 @@ class ResponseBuilder
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
+			throw new \InvalidArgumentException(
+				sprintf('api_code must be integer (%s given)', gettype($api_code)));
 		}
 		if (!is_int($http_code)) {
-			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
+			throw new \InvalidArgumentException(
+				sprintf('http_code must be integer (%s given)', gettype($http_code)));
 		}
 		if (($http_code < 200) || ($http_code > 299)) {
-			throw new \InvalidArgumentException(sprintf('Invalid http_code (%d). Must be between 200-299 inclusive', $http_code));
+			throw new \InvalidArgumentException(
+				sprintf('Invalid http_code (%d). Must be between 200-299 inclusive', $http_code));
 		}
 
-		return static::make(true, $api_code, $api_code, $data, $http_code, $lang_args, null, $encoding_options);
+		return static::make(true, $api_code, $api_code, $data,
+			$http_code, $lang_args, null, $encoding_options);
 	}
 
 	/**
@@ -308,7 +314,8 @@ class ResponseBuilder
 	 *
 	 * @return HttpResponse
 	 */
-	public static function errorWithData(int $api_code, $data, array $lang_args = null, int $encoding_options = null): HttpResponse
+	public static function errorWithData(int $api_code, $data, array $lang_args = null,
+	                                     int $encoding_options = null): HttpResponse
 	{
 		return static::buildErrorResponse($data, $api_code, null, $lang_args, $encoding_options);
 	}
@@ -377,8 +384,9 @@ class ResponseBuilder
 	 *
 	 * @return HttpResponse
 	 */
-	public static function errorWithMessageAndDataAndDebug(int $api_code, string $error_message, $data, int $http_code = null,
-	                                                       int $encoding_options = null, array $debug_data = null): HttpResponse
+	public static function errorWithMessageAndDataAndDebug(int $api_code, string $error_message, $data,
+	                                                       int $http_code = null, int $encoding_options = null,
+	                                                       array $debug_data = null): HttpResponse
 	{
 		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, null, $encoding_options, $debug_data);
 	}
@@ -405,7 +413,8 @@ class ResponseBuilder
 	 * @param array|null   $lang_args        if array, then this passed as arguments to Lang::get() to build final string.
 	 * @param string|null  $message          custom message to be returned as part of error response
 	 * @param array|null   $headers          optional HTTP headers to be returned in error response
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param integer|null $encoding_options see see json_encode() docs for valid option values. Use @null to fall back to
+	 *                                       config's value or defaults
 	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
 	 *
 	 * @return HttpResponse
@@ -414,24 +423,29 @@ class ResponseBuilder
 	 *
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
-	protected static function buildErrorResponse($data, int $api_code, int $http_code = null, array $lang_args = null, string $message = null,
-	                                             array $headers = null, int $encoding_options = null, array $debug_data = null): HttpResponse
+	protected static function buildErrorResponse($data, int $api_code, int $http_code = null, array $lang_args = null,
+	                                             string $message = null, array $headers = null, int $encoding_options = null,
+	                                             array $debug_data = null): HttpResponse
 	{
 		if ($http_code === null) {
 			$http_code = static::DEFAULT_HTTP_CODE_ERROR;
 		}
 
 		if (!is_int($api_code)) {
-			throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
+			throw new \InvalidArgumentException(
+				sprintf('api_code must be integer (%s given)', gettype($api_code)));
 		}
 		if ($api_code === static::DEFAULT_API_CODE_OK) {
-			throw new \InvalidArgumentException(sprintf('api_code must not be %d (DEFAULT_API_CODE_OK)', static::DEFAULT_API_CODE_OK));
+			throw new \InvalidArgumentException(
+				sprintf('api_code must not be %d (DEFAULT_API_CODE_OK)', static::DEFAULT_API_CODE_OK));
 		}
 		if ((!is_array($lang_args)) && ($lang_args !== null)) {
-			throw new \InvalidArgumentException(sprintf('lang_args must be either array or null (%s given)', gettype($lang_args)));
+			throw new \InvalidArgumentException(
+				sprintf('lang_args must be either array or null (%s given)', gettype($lang_args)));
 		}
 		if (!is_int($http_code)) {
-			throw new \InvalidArgumentException(sprintf('http_code must be integer (%s given)', gettype($http_code)));
+			throw new \InvalidArgumentException(
+				sprintf('http_code must be integer (%s given)', gettype($http_code)));
 		}
 		if (($http_code < 400) || ($http_code > 499)) {
 			throw new \InvalidArgumentException('http_code must be in range from 400 to 499 inclusive');
@@ -443,7 +457,8 @@ class ResponseBuilder
 			$headers = [];
 		}
 
-		return static::make(false, $api_code, $message_or_api_code, $data, $http_code, $lang_args, $headers, $encoding_options, $debug_data);
+		return static::make(false, $api_code, $message_or_api_code, $data, $http_code,
+			$lang_args, $headers, $encoding_options, $debug_data);
 	}
 
 	/**
@@ -480,19 +495,23 @@ class ResponseBuilder
 					: static::DEFAULT_HTTP_CODE_ERROR;
 			}
 			if ($encoding_options === null) {
-				$encoding_options = Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
+				$encoding_options = Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS,
+					static::DEFAULT_ENCODING_OPTIONS);
 			}
 			if (!is_int($encoding_options)) {
-				throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
+				throw new \InvalidArgumentException(
+					sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
 			}
 
 			if (!is_int($api_code)) {
-				throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
+				throw new \InvalidArgumentException(
+					sprintf('api_code must be integer (%s given)', gettype($api_code)));
 			}
 
 			if (!(is_int($message_or_api_code) || is_string($message_or_api_code))) {
 				throw new \InvalidArgumentException(
-					sprintf('Message must be either string or resolvable integer api_code (%s given)', gettype($message_or_api_code))
+					sprintf('Message must be either string or resolvable integer api_code (%s given)',
+						gettype($message_or_api_code))
 				);
 			}
 

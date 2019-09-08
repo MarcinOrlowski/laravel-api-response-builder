@@ -15,6 +15,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Fixed exception message of `ApiCodesHelpers::getMaxCode()`.
    * Fixed error code fallback in `testRender_HttpException()` test.
    * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
+   * Reformatted code for better on-line readability on Github.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.
