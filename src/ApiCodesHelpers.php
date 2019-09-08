@@ -51,7 +51,7 @@ trait ApiCodesHelpers
 		$max_code = Config::get(ResponseBuilder::CONF_KEY_MAX_CODE, null);
 
 		if ($max_code === null) {
-			throw new \RuntimeException(sprintf('CONFIG: Missing "max_code" key', ResponseBuilder::CONF_KEY_MAX_CODE));
+			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', ResponseBuilder::CONF_KEY_MAX_CODE));
 		}
 
 		return $max_code;
