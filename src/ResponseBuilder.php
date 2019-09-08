@@ -40,6 +40,16 @@ class ResponseBuilder
 	public const DEFAULT_API_CODE_OK = BaseApiCodes::OK;
 
 	/**
+	 * Min allowed HTTP code for errorXXX()
+	 */
+	public const ERROR_HTTP_CODE_MIN = 400;
+
+	/**
+	 * Max allowed HTTP code for errorXXX()
+	 */
+	public const ERROR_HTTP_CODE_MAX = 599;
+
+	/**
 	 * Configuration keys
 	 */
 	public const CONF_KEY_DEBUG_DEBUG_KEY        = 'response_builder.debug.debug_key';
@@ -435,7 +445,7 @@ class ResponseBuilder
 		}
 
 		Validator::assertInt('http_code', $http_code);
-		Validator::assertIntRange('http_code', $http_code, 400, 499);
+		Validator::assertIntRange('http_code', $http_code, static::ERROR_HTTP_CODE_MIN, static::ERROR_HTTP_CODE_MAX);
 
 		$message_or_api_code = $message ?? $api_code;
 

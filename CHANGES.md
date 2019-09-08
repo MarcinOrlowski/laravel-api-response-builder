@@ -18,6 +18,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Reformatted code for better on-line readability on Github.
    * `ResponseBuilder::errorWithDataAndHttpCode()` accepts now `null` as http code
    * `ResponseBuilder::errorWithHttpCode()` accepts now `null` as http code
+   * Fixed `ExceptionHandlerHelper` converting http codes above 499 to 400.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.
