@@ -1,4 +1,11 @@
 <?php
+/**
+ * Disable return type hint inspection as we do not have it specified in that
+ * class for a purpose. The base class is also not having return type hints.
+ *
+ * @noinspection ReturnTypeCanBeDeclaredInspection
+ */
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
@@ -16,9 +23,6 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Illuminate\Support\ServiceProvider;
 
-/**
- * Class ResponseBuilderServiceProvider
- */
 class ResponseBuilderServiceProvider extends ServiceProvider
 {
 	/**

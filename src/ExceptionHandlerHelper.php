@@ -46,7 +46,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function render($request, Exception $exception)
+	public static function render($request, Exception $exception): HttpResponse
 	{
 		if ($exception instanceof HttpException) {
 			switch ($exception->getStatusCode()) {
@@ -84,7 +84,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected function unauthenticated($request, AuthenticationException $exception)
+	protected function unauthenticated($request, AuthenticationException $exception): HttpResponse
 	{
 		return static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION);
 	}
@@ -99,7 +99,7 @@ class ExceptionHandlerHelper
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	protected static function error(Exception $exception, $exception_type,
-	                                $default_api_code, $default_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR)
+	                                $default_api_code, $default_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse
 	{
 		$base_config = 'response_builder.exception_handler.exception';
 

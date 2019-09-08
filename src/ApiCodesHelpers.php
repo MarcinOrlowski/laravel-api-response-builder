@@ -75,7 +75,7 @@ trait ApiCodesHelpers
 	 *
 	 * @return integer
 	 */
-	protected static function getReservedMaxCode()
+	protected static function getReservedMaxCode(): int
 	{
 		return BaseApiCodes::RESERVED_MAX_API_CODE;
 	}
