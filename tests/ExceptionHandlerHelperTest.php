@@ -116,7 +116,7 @@ class ExceptionHandlerHelperTest extends TestCase
 			}
 
 
-			$j = json_decode($eh->render(null, $exception)->getContent());
+			$j = json_decode($eh->render(null, $exception)->getContent(), false);
 
 			$this->assertValidResponse($j);
 			$this->assertNull($j->data);
@@ -154,7 +154,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
 		$eh = new ExceptionHandlerHelper();
 
-		$j = json_decode($eh->render(null, $exception)->getContent());
+		$j = json_decode($eh->render(null, $exception)->getContent(), false);
 
 		$this->assertValidResponse($j);
 		$this->assertNull($j->data);
