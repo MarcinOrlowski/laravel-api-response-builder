@@ -467,46 +467,32 @@ class ResponseBuilder
 	                               int $http_code = null, array $lang_args = null, array $headers = null,
 	                               int $encoding_options = null, array $debug_data = null): HttpResponse
 	{
-		if ($lang_args === null) {
-			$lang_args = ['api_code' => $message_or_api_code];
-		}
-		if ($headers === null) {
-			$headers = [];
-		}
-		if ($http_code === null) {
-			$http_code = $success
-				? static::DEFAULT_HTTP_CODE_OK
-				: static::DEFAULT_HTTP_CODE_ERROR;
-		}
-		if ($encoding_options === null) {
-			$encoding_options = Config::get(self::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
-		}
-		if (!is_int($encoding_options)) {
-			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
-		}
+		{
+			if ($lang_args === null) {
+				$lang_args = ['api_code' => $message_or_api_code];
+			}
+			if ($headers === null) {
+				$headers = [];
+			}
+			if ($http_code === null) {
+				$http_code = $success
+					? static::DEFAULT_HTTP_CODE_OK
+					: static::DEFAULT_HTTP_CODE_ERROR;
+			}
+			if ($encoding_options === null) {
+				$encoding_options = Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
+			}
+			if (!is_int($encoding_options)) {
+				throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
+			}
 
-		// are we given message text already?
-		if (!is_string($message_or_api_code)) {
-			// no, so it must be an int value
-			if (!is_int($message_or_api_code)) {
+			if (!is_int($api_code)) {
+				throw new \InvalidArgumentException(sprintf('api_code must be integer (%s given)', gettype($api_code)));
+			}
+
+			if (!(is_int($message_or_api_code) || is_string($message_or_api_code))) {
 				throw new \InvalidArgumentException(
 					sprintf('Message must be either string or resolvable integer api_code (%s given)', gettype($message_or_api_code))
-				);
-			}
-			// do we have the mapping for this string already?
-			$key = BaseApiCodes::getCodeMessageKey($message_or_api_code);
-			if ($key === null) {
-				// no, get the default one instead
-				$key = BaseApiCodes::getCodeMessageKey($success
-					? BaseApiCodes::OK
-					: BaseApiCodes::NO_ERROR_MESSAGE
-				);
-			}
-			$message_or_api_code = \Lang::get($key, $lang_args);
-		} else {
-			if (!is_int($api_code)) {
-				throw new \InvalidArgumentException(
-					sprintf('api_code must be integer (%s given)', gettype($api_code))
 				);
 			}
 
@@ -515,11 +501,25 @@ class ResponseBuilder
 					$api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 				throw new \InvalidArgumentException($msg);
 			}
-		}
 
-		return Response::json(
-			static::buildResponse($success, $api_code, $message_or_api_code, $data, $debug_data),
-			$http_code, $headers, $encoding_options
-		);
+			// we got code, not message string, so we need to check if we have the mapping for
+			// this string already configured.
+			if (is_int($message_or_api_code)) {
+				$key = BaseApiCodes::getCodeMessageKey($message_or_api_code);
+				if ($key === null) {
+					// nope, let's get the default one instead
+					$key = BaseApiCodes::getCodeMessageKey($success
+						? BaseApiCodes::OK
+						: BaseApiCodes::NO_ERROR_MESSAGE
+					);
+				}
+				$message_or_api_code = \Lang::get($key, $lang_args);
+			}
+
+			return Response::json(
+				static::buildResponse($success, $api_code, $message_or_api_code, $data, $debug_data),
+				$http_code, $headers, $encoding_options
+			);
+		}
 	}
 }
