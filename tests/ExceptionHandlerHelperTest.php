@@ -22,6 +22,7 @@ use Mockery\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/** @noinspection PhpMissingDocCommentInspection */
 class ExceptionHandlerHelperTest extends TestCase
 {
 	/**

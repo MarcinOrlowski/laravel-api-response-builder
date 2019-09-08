@@ -110,6 +110,17 @@ class ErrorTest extends TestCase
 	}
 
 	/**
+	 * Tests errorWithDataAndHttpCode() with http_code null
+	 *
+	 * @return void
+	 */
+	public function testErrorWithDataAndHttpCode_HttpCodeNull(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		ResponseBuilder::errorWithDataAndHttpCode($this->random_api_code, null, null);
+	}
+
+	/**
 	 * Tests errorWithHttpCode()
 	 *
 	 * @return void
@@ -129,6 +140,17 @@ class ErrorTest extends TestCase
 			$j = $this->getResponseErrorObject($api_code, $http_code);
 			$this->assertNull($j->data);
 		}
+	}
+
+	/**
+	 * Tests errorWithHttpCode() with @null as http_code
+	 *
+	 * @return void
+	 */
+	public function testErrorWithHttpCode_NullHttpCode(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		ResponseBuilder::errorWithHttpCode($this->random_api_code, null);
 	}
 
 	/**
@@ -220,8 +242,6 @@ class ErrorTest extends TestCase
 	 * Tests buildErrorResponse() fed with not allowed OK api code
 	 *
 	 * @return void
-	 *
-	 * @throws \ReflectionException
 	 */
 	public function testBuildErrorResponse_ApiCodeOK(): void
 	{
@@ -240,11 +260,46 @@ class ErrorTest extends TestCase
 
 
 	/**
+	 * Tests buildErrorResponse() fed with api_code in form of disallowed variable type
+	 *
+	 * @return void
+	 */
+	public function testBuildErrorResponse_WrongApiCodeType(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		$data = null;
+		$http_code = 404;
+		$api_code = 'wrong-error-code';
+		$lang_args = null;
+
+		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
+	}
+
+	/**
+	 * Tests buildErrorResponse() fed with http_code in form of disallowed variable type
+	 *
+	 * @return void
+	 */
+	public function testBuildErrorResponse_WrongHttpCodeType(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
+		$api_codes_class_name = $this->getApiCodesClassName();
+
+		$data = null;
+		$http_code = 'string-is-invalid';
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$lang_args = null;
+
+		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
+	}
+
+	/**
 	 * Tests buildErrorResponse() fed with @null as http_code
 	 *
 	 * @return void
-	 *
-	 * @throws \ReflectionException
 	 */
 	public function testBuildErrorResponse_NullHttpCode(): void
 	{
@@ -266,8 +321,6 @@ class ErrorTest extends TestCase
 	 * Tests buildErrorResponse() fed with http code out of allowed bounds
 	 *
 	 * @return void
-	 *
-	 * @throws \ReflectionException
 	 */
 	public function testBuildErrorResponse_TooLowHttpCode(): void
 	{
@@ -285,7 +338,30 @@ class ErrorTest extends TestCase
 	}
 
 	/**
+	 * Tests buildErrorResponse() fed with wrong lang_args data
+	 *
+	 * @return void
+	 */
+	public function testBuildErrorResponse_WrongLangArgs(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
+		$api_codes_class_name = $this->getApiCodesClassName();
+
+		$data = null;
+		$http_code = 404;
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$lang_args = 'string-is-invalid';
+
+		/** @noinspection PhpParamsInspection */
+		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
+	}
+
+	/**
 	 * Calls protected method buildErrorResponse()
+	 *
+	 * @noinspection PhpDocMissingThrowsInspection
 	 *
 	 * @param mixed|null $data
 	 * @param int|null   $api_code
@@ -293,12 +369,11 @@ class ErrorTest extends TestCase
 	 * @param mixed|null $lang_args
 	 *
 	 * @return mixed
-	 *
-	 * @throws \ReflectionException
 	 */
-	protected function callBuildErrorResponse($data, int $api_code = null, int $http_code = null, $lang_args = null)
+	protected function callBuildErrorResponse($data, $api_code, $http_code, $lang_args): void
 	{
 		$obj = new ResponseBuilder();
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$method = $this->getProtectedMethod(get_class($obj), 'buildErrorResponse');
 
 		return $method->invokeArgs($obj, [$data,
