@@ -232,12 +232,12 @@ trait TestingHelpers
 			$this->assertObjectHasAttribute($item, $json_object, "No '{$item}' element in response structure found");
 		}
 
-		$this->assertTrue(is_bool($json_object->{$items[ ResponseBuilder::KEY_SUCCESS ]}));
-		$this->assertTrue(is_int($json_object->code));
-		$this->assertTrue(is_string($json_object->locale));
+		$this->assertIsBool($json_object->{$items[ ResponseBuilder::KEY_SUCCESS ]});
+		$this->assertIsInt($json_object->code);
+		$this->assertIsString($json_object->locale);
 		/** @noinspection UnNecessaryDoubleQuotesInspection */
 		$this->assertNotEquals(trim($json_object->locale), '', "'message' cannot be empty string");
-		$this->assertTrue(is_string($json_object->message));
+		$this->assertIsString($json_object->message);
 		/** @noinspection UnNecessaryDoubleQuotesInspection */
 		$this->assertNotEquals(trim($json_object->message), '', "'locale' cannot be empty string");
 		$this->assertTrue(($json_object->data === null) || is_object($json_object->data),
