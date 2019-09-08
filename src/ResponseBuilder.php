@@ -27,52 +27,52 @@ class ResponseBuilder
 	/**
 	 * Default HTTP code to be used with success responses
 	 */
-	const DEFAULT_HTTP_CODE_OK = HttpResponse::HTTP_OK;
+	public const DEFAULT_HTTP_CODE_OK = HttpResponse::HTTP_OK;
 
 	/**
 	 * Default HTTP code to be used with error responses
 	 */
-	const DEFAULT_HTTP_CODE_ERROR = HttpResponse::HTTP_BAD_REQUEST;
+	public const DEFAULT_HTTP_CODE_ERROR = HttpResponse::HTTP_BAD_REQUEST;
 
 	/**
 	 * Default API code for OK
 	 */
-	const DEFAULT_API_CODE_OK = BaseApiCodes::OK;
+	public const DEFAULT_API_CODE_OK = BaseApiCodes::OK;
 
 	/**
 	 * Configuration keys
 	 */
-	const CONF_KEY_DEBUG_DEBUG_KEY        = 'response_builder.debug.debug_key';
-	const CONF_KEY_DEBUG_EX_TRACE_ENABLED = 'response_builder.debug.exception_handler.trace_enabled';
-	const CONF_KEY_DEBUG_EX_TRACE_KEY     = 'response_builder.debug.exception_handler.trace_key';
-	const CONF_KEY_MAP                    = 'response_builder.map';
-	const CONF_KEY_ENCODING_OPTIONS       = 'response_builder.encoding_options';
-	const CONF_KEY_CLASSES                = 'response_builder.classes';
-	const CONF_KEY_MIN_CODE               = 'response_builder.min_code';
-	const CONF_KEY_MAX_CODE               = 'response_builder.max_code';
-	const CONF_KEY_RESPONSE_KEY_MAP       = 'response_builder.response_key_map';
+	public const CONF_KEY_DEBUG_DEBUG_KEY        = 'response_builder.debug.debug_key';
+	public const CONF_KEY_DEBUG_EX_TRACE_ENABLED = 'response_builder.debug.exception_handler.trace_enabled';
+	public const CONF_KEY_DEBUG_EX_TRACE_KEY     = 'response_builder.debug.exception_handler.trace_key';
+	public const CONF_KEY_MAP                    = 'response_builder.map';
+	public const CONF_KEY_ENCODING_OPTIONS       = 'response_builder.encoding_options';
+	public const CONF_KEY_CLASSES                = 'response_builder.classes';
+	public const CONF_KEY_MIN_CODE               = 'response_builder.min_code';
+	public const CONF_KEY_MAX_CODE               = 'response_builder.max_code';
+	public const CONF_KEY_RESPONSE_KEY_MAP       = 'response_builder.response_key_map';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information
 	 */
-	const KEY_DEBUG   = 'debug';
-	const KEY_TRACE   = 'trace';
-	const KEY_CLASS   = 'class';
-	const KEY_FILE    = 'file';
-	const KEY_LINE    = 'line';
-	const KEY_KEY     = 'key';
-	const KEY_METHOD  = 'method';
-	const KEY_SUCCESS = 'success';
-	const KEY_CODE    = 'code';
-	const KEY_LOCALE  = 'locale';
-	const KEY_MESSAGE = 'message';
-	const KEY_DATA    = 'data';
+	public const KEY_DEBUG   = 'debug';
+	public const KEY_TRACE   = 'trace';
+	public const KEY_CLASS   = 'class';
+	public const KEY_FILE    = 'file';
+	public const KEY_LINE    = 'line';
+	public const KEY_KEY     = 'key';
+	public const KEY_METHOD  = 'method';
+	public const KEY_SUCCESS = 'success';
+	public const KEY_CODE    = 'code';
+	public const KEY_LOCALE  = 'locale';
+	public const KEY_MESSAGE = 'message';
+	public const KEY_DATA    = 'data';
 
 	/**
 	 * Default key to be used by exception handler while processing ValidationException
 	 * to return all the error messages
 	 */
-	const KEY_MESSAGES = 'messages';
+	public const KEY_MESSAGES = 'messages';
 
 	/**
 	 * Default JSON encoding options
@@ -81,7 +81,7 @@ class ResponseBuilder
 	 *
 	 * This must be as int due to const limits in PHP disallowing expressions.
 	 */
-	const DEFAULT_ENCODING_OPTIONS = 271;
+	public const DEFAULT_ENCODING_OPTIONS = 271;
 
 	/**
 	 * Reads and validates "classes" config mapping

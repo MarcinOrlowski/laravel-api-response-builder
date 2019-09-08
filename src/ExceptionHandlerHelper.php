@@ -31,12 +31,12 @@ class ExceptionHandlerHelper
 	/**
 	 * Exception types
 	 */
-	const TYPE_HTTP_NOT_FOUND           = 'http_not_found';
-	const TYPE_HTTP_SERVICE_UNAVAILABLE = 'http_service_unavailable';
-	const TYPE_HTTP_UNAUTHORIZED        = 'authentication_exception';
-	const TYPE_DEFAULT                  = 'http_exception';
-	const TYPE_VALIDATION_EXCEPTION     = 'validation_exception';
-	const TYPE_UNCAUGHT_EXCEPTION       = 'uncaught_exception';
+	public const TYPE_HTTP_NOT_FOUND           = 'http_not_found';
+	public const TYPE_HTTP_SERVICE_UNAVAILABLE = 'http_service_unavailable';
+	public const TYPE_HTTP_UNAUTHORIZED        = 'authentication_exception';
+	public const TYPE_DEFAULT                  = 'http_exception';
+	public const TYPE_VALIDATION_EXCEPTION     = 'validation_exception';
+	public const TYPE_UNCAUGHT_EXCEPTION       = 'uncaught_exception';
 
 	/**
 	 * Render an exception into an HTTP response.

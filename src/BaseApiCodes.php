@@ -27,48 +27,48 @@ class BaseApiCodes
 	/**
 	 * protected code range - lowest code
 	 */
-	const RESERVED_MIN_API_CODE = 0;
+	public const RESERVED_MIN_API_CODE = 0;
 
 	/**
 	 * protected code range - highest code
 	 */
-	const RESERVED_MAX_API_CODE = 63;
+	public const RESERVED_MAX_API_CODE = 63;
 
 
 	/**
 	 * built-in codes: OK
 	 */
-	const OK = 0;
+	public const OK = 0;
 	/**
 	 * built-in code for fallback message mapping
 	 */
-	const NO_ERROR_MESSAGE = 1;
+	public const NO_ERROR_MESSAGE = 1;
 	/**
 	 * built-in error code for HTTP_NOT_FOUND exception
 	 */
-	const EX_HTTP_NOT_FOUND = 10;
+	public const EX_HTTP_NOT_FOUND = 10;
 	/**
 	 * built-in error code for HTTP_SERVICE_UNAVAILABLE exception
 	 */
-	const EX_HTTP_SERVICE_UNAVAILABLE = 11;
+	public const EX_HTTP_SERVICE_UNAVAILABLE = 11;
 	/**
 	 * built-in error code for HTTP_EXCEPTION
 	 */
-	const EX_HTTP_EXCEPTION = 12;
+	public const EX_HTTP_EXCEPTION = 12;
 	/**
 	 * built-in error code for UNCAUGHT_EXCEPTION
 	 */
-	const EX_UNCAUGHT_EXCEPTION = 13;
+	public const EX_UNCAUGHT_EXCEPTION = 13;
 
 	/**
 	 * built-in error code for \Illuminate\Auth\AuthenticationException
 	 */
-	const EX_AUTHENTICATION_EXCEPTION = 14;
+	public const EX_AUTHENTICATION_EXCEPTION = 14;
 
 	/**
 	 * built-in error code for \Illuminate\Auth\AuthenticationException
 	 */
-	const EX_VALIDATION_EXCEPTION = 15;
+	public const EX_VALIDATION_EXCEPTION = 15;
 
 
 	/**
