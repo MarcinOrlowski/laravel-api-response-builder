@@ -4,6 +4,10 @@
 
  `ResponseBuilder` follows [Semantic Versioning](http://semver.org/).
 
+### v6 ###
+
+ * Requires Laravel 6.0+ and PHP 7.2+
+
 ### v4 ###
 
  * `ApiCodeBase` class is now `BaseApiCodes`
