@@ -30,10 +30,11 @@ trait ApiCodesHelpers
 	 */
 	public static function getMinCode(): int
 	{
-		$min_code = Config::get(ResponseBuilder::CONF_KEY_MIN_CODE, null);
+		$key = ResponseBuilder::CONF_KEY_MIN_CODE;
+		$min_code = Config::get($key, null);
 
 		if ($min_code === null) {
-			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', ResponseBuilder::CONF_KEY_MIN_CODE));
+			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', $key));
 		}
 
 		return $min_code;
@@ -48,10 +49,11 @@ trait ApiCodesHelpers
 	 */
 	public static function getMaxCode(): int
 	{
-		$max_code = Config::get(ResponseBuilder::CONF_KEY_MAX_CODE, null);
+		$key = ResponseBuilder::CONF_KEY_MAX_CODE;
+		$max_code = Config::get($key, null);
 
 		if ($max_code === null) {
-			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', ResponseBuilder::CONF_KEY_MAX_CODE));
+			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', $key));
 		}
 
 		return $max_code;
