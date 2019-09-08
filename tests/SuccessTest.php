@@ -17,7 +17,6 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-/** @noinspection PhpMissingDocCommentInspection */
 class SuccessTest extends TestCase
 {
 	/**

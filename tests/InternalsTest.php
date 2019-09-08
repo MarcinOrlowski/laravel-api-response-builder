@@ -16,10 +16,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
-/** @noinspection PhpMissingDocCommentInspection */
 class InternalsTest extends TestCase
 {
-
 	/**
 	 * @noinspection PhpDocMissingThrowsInspection
 	 *
