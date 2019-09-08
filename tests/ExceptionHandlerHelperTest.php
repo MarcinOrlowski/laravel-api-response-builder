@@ -119,7 +119,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
 			$j = json_decode($eh->render(null, $exception)->getContent());
 
-			$this->validateResponseStructure($j);
+			$this->assertValidResponse($j);
 			$this->assertNull($j->data);
 
 			$ex_message = trim($exception->getMessage());
@@ -157,7 +157,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
 		$j = json_decode($eh->render(null, $exception)->getContent());
 
-		$this->validateResponseStructure($j);
+		$this->assertValidResponse($j);
 		$this->assertNull($j->data);
 
 		$key = ResponseBuilder::KEY_DEBUG;

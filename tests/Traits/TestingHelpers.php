@@ -190,7 +190,7 @@ trait TestingHelpers
 
 		// get response as Json object
 		$j = json_decode($this->response->getContent(), false);
-		$this->validateResponseStructure($j, $extra_keys);
+		$this->assertValidResponse($j, $extra_keys);
 
 		$this->assertEquals($expected_api_code, $j->code);
 
@@ -200,22 +200,6 @@ trait TestingHelpers
 		$this->assertEquals($expected_message_string, $j->message);
 
 		return $j;
-	}
-
-
-	/**
-	 * Use assertValidResponse() instead
-	 *
-	 * @param \StdClass $json_object
-	 * @param array    $extra_keys
-	 *
-	 * @return void
-	 *
-	 * @deprecated Use assertValidResponse() instead
-	 */
-	public function validateResponseStructure(\StdClass $json_object, array $extra_keys = []): void
-	{
-		$this->assertValidResponse($json_object, $extra_keys);
 	}
 
 	/**
