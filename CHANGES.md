@@ -14,6 +14,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Corrected test cases list in `testSuccess_DataAndHttpCode()`.
    * Fixed exception message of `ApiCodesHelpers::getMaxCode()`.
    * Fixed error code fallback in `testRender_HttpException()` test.
+   * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
 
 * v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup

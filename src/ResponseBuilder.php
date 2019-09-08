@@ -92,7 +92,7 @@ class ResponseBuilder
 	 */
 	protected static function getClassesMapping(): ?array
 	{
-		$classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES);
+		$classes = Config::get(self::CONF_KEY_CLASSES);
 
 		if ($classes !== null) {
 			if (!is_array($classes)) {
@@ -183,7 +183,7 @@ class ResponseBuilder
 		];
 
 		if ($debug_data !== null) {
-			$debug_key = Config::get(static::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
+			$debug_key = Config::get(static::CONF_KEY_DEBUG_DEBUG_KEY, self::KEY_DEBUG);
 			$response[ $debug_key ] = $debug_data;
 		}
 
@@ -364,7 +364,7 @@ class ResponseBuilder
 	public static function errorWithMessageAndData(int $api_code, string $error_message, $data,
 	                                               int $http_code = null, int $encoding_options = null): \Symfony\Component\HttpFoundation\Response
 	{
-		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, $encoding_options);
+		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message,  null, $encoding_options);
 	}
 
 	/**
@@ -392,7 +392,7 @@ class ResponseBuilder
 	 */
 	public static function errorWithMessage(int $api_code, string $error_message, int $http_code = null): \Symfony\Component\HttpFoundation\Response
 	{
-		return static::buildErrorResponse(null, $api_code, $http_code, [], $error_message);
+		return static::buildErrorResponse(null, $api_code, $http_code, null, $error_message);
 	}
 
 	/**
@@ -479,7 +479,7 @@ class ResponseBuilder
 				: static::DEFAULT_HTTP_CODE_ERROR;
 		}
 		if ($encoding_options === null) {
-			$encoding_options = Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
+			$encoding_options = Config::get(self::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
 		}
 		if (!is_int($encoding_options)) {
 			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
