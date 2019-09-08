@@ -472,7 +472,7 @@ class ResponseBuilder
 				: static::DEFAULT_HTTP_CODE_ERROR;
 		}
 		if ($encoding_options === null) {
-			$encoding_options = Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS,
+			$encoding_options = Config::get(self::CONF_KEY_ENCODING_OPTIONS,
 				static::DEFAULT_ENCODING_OPTIONS);
 		}
 

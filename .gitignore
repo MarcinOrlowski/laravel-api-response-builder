@@ -1,4 +1,3 @@
-.phpunit.result.cache
 .idea/
 vendor/
 composer.lock
