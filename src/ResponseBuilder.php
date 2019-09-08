@@ -329,9 +329,9 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer    $api_code  numeric code to be returned as 'code'
-	 * @param integer    $http_code HTTP return code to be set for this response or @null for default
-	 * @param array|null $lang_args optional array with arguments passed to Lang::get()
+	 * @param integer      $api_code  numeric code to be returned as 'code'
+	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default
+	 * @param array|null   $lang_args optional array with arguments passed to Lang::get()
 	 *
 	 * @return HttpResponse
 	 *
@@ -339,10 +339,6 @@ class ResponseBuilder
 	 */
 	public static function errorWithHttpCode(int $api_code, int $http_code, array $lang_args = null): HttpResponse
 	{
-		if ($http_code === null) {
-			throw new \InvalidArgumentException('http_code cannot be null. Use error() instead');
-		}
-
 		return static::buildErrorResponse(null, $api_code, $http_code, $lang_args);
 	}
 
@@ -418,6 +414,10 @@ class ResponseBuilder
 			$http_code = static::DEFAULT_HTTP_CODE_ERROR;
 		}
 
+		if ($headers === null) {
+			$headers = [];
+		}
+
 		Validator::assertInt('api_code', $api_code);
 
 		if ($api_code === static::DEFAULT_API_CODE_OK) {
@@ -434,10 +434,6 @@ class ResponseBuilder
 		Validator::assertIntRange('http_code', $http_code, 400, 499);
 
 		$message_or_api_code = $message ?? $api_code;
-
-		if ($headers === null) {
-			$headers = [];
-		}
 
 		return static::make(false, $api_code, $message_or_api_code, $data, $http_code,
 			$lang_args, $headers, $encoding_options, $debug_data);
