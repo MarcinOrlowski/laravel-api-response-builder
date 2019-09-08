@@ -10,18 +10,17 @@
  */
 return [
 
-	'ok'                           => 'OK',
-	'no_error_message'             => 'Błąd #:api_code',
+	'ok'                       => 'OK',
+	'no_error_message'         => 'Błąd #:api_code',
 
 	// can be used by Exception Handler (if enabled)
-	'uncaught_exception'           => 'Nieprzechwycony wyjątek :message',
-	'http_not_found'               => 'Nieznana metoda',
-	'http_exception'               => 'Wyjątek HTTP :message',
-	'http_service_unavailable'     => 'Trwa przerwa serwisowa',
+	'uncaught_exception'       => 'Nieprzechwycony wyjątek :message',
+	'http_not_found'           => 'Nieznana metoda',
+	'http_exception'           => 'Wyjątek HTTP :message',
+	'http_service_unavailable' => 'Trwa przerwa serwisowa',
 
 	// Exception Handler (added in 3.3.0)
-	'authentication_exception'     => 'Brak autoryzacji dostępu',
-	'validation_exception'         => 'Nieprawidłowe dane',
+	'authentication_exception' => 'Brak autoryzacji dostępu',
+	'validation_exception'     => 'Nieprawidłowe dane',
 
 ];
-
