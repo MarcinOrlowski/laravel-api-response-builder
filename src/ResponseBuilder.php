@@ -75,11 +75,11 @@ class ResponseBuilder
 	public const KEY_MESSAGES = 'messages';
 
 	/**
-	 * Default JSON encoding options
+	 * Default JSON encoding options. Must be specified as final value (i.e. 271) and NOT
+	 * exression i.e. `JSON_HEX_TAG|JSON_HEX_APOS|...` as such syntax is not yet supported
+	 * by PHP.
 	 *
 	 * 271 = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE
-	 *
-	 * This must be as int due to const limits in PHP disallowing expressions.
 	 */
 	public const DEFAULT_ENCODING_OPTIONS = 271;
 
