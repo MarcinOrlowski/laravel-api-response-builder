@@ -18,7 +18,10 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class InternalsTest extends TestCase
 {
+
 	/**
+	 * @noinspection PhpDocMissingThrowsInspection
+	 *
 	 * @return void
 	 */
 	public function testMake_WrongMessage(): void
@@ -30,10 +33,13 @@ class InternalsTest extends TestCase
 
 		$message_or_api_code = [];    // invalid
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code);
 	}
 
 	/**
+	 * @noinspection PhpDocMissingThrowsInspection
+	 *
 	 * @return void
 	 */
 	public function testMake_CustomMessageAndCodeOutOfRange(): void
@@ -41,12 +47,15 @@ class InternalsTest extends TestCase
 		$this->expectException(\InvalidArgumentException::class);
 
 		$api_code = $this->max_allowed_code + 1;    // invalid
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, $api_code, 'message');
 	}
 
 
 	/**
 	 * Validates make() handling invalid type of encoding_options
+	 *
+	 * @noinspection PhpDocMissingThrowsInspection
 	 *
 	 * @return void
 	 */
@@ -55,6 +64,7 @@ class InternalsTest extends TestCase
 		$this->expectException(\InvalidArgumentException::class);
 
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, []);
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK);
 	}
 
@@ -72,6 +82,8 @@ class InternalsTest extends TestCase
 	/**
 	 * Tests fallback to default encoding_options
 	 *
+	 * @noinspection PhpDocMissingThrowsInspection
+	 *
 	 * @return void
 	 */
 	public function testMake_DefaultEncodingOptions(): void
@@ -83,6 +95,7 @@ class InternalsTest extends TestCase
 
 		// fallback defaults in action
 		\Config::offsetUnset('encoding_options');
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
@@ -91,6 +104,7 @@ class InternalsTest extends TestCase
 
 
 		// check if it returns the same when defaults enforced explicitly
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data, null, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 
 		$matches = [];
@@ -102,6 +116,8 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Checks encoding_options influences result JSON data
+	 *
+	 * @noinspection PhpDocMissingThrowsInspection
 	 *
 	 * @return void
 	 */
@@ -115,6 +131,7 @@ class InternalsTest extends TestCase
 
 		// check if it returns escaped
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
@@ -124,6 +141,7 @@ class InternalsTest extends TestCase
 
 		// check if it returns unescaped
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK, BaseApiCodes::OK, $data);
 
 		$matches = [];
@@ -139,11 +157,14 @@ class InternalsTest extends TestCase
 	 * Checks make() handling invalid type of api_code argument
 	 *
 	 * @return void
+	 *
+	 * @throws \ReflectionException
 	 */
 	public function testMake_ApiCodeNotIntNorString(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, BaseApiCodes::OK, []);
 	}
 

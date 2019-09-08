@@ -117,6 +117,8 @@ class BuildResponseTest extends TestCase
 
 
 	/**
+	 * @noinspection PhpDocMissingThrowsInspection
+	 *
 	 * @return void
 	 */
 	public function testMake_WrongMessage(): void
@@ -128,10 +130,13 @@ class BuildResponseTest extends TestCase
 
 		$message_or_api_code = [];    // invalid
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code);
 	}
 
 	/**
+	 * @noinspection PhpDocMissingThrowsInspection
+	 *
 	 * @return void
 	 */
 	public function testMake_CustomMessageAndCodeOutOfRange(): void
@@ -139,6 +144,7 @@ class BuildResponseTest extends TestCase
 		$this->expectException(\InvalidArgumentException::class);
 
 		$api_code = $this->max_allowed_code + 1;    // invalid
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, $api_code, 'message');
 	}
 

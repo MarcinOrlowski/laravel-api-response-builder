@@ -84,9 +84,11 @@ trait ApiCodesHelpers
 	 * Returns array of error code constants defined in this class. Used mainly for debugging/tests
 	 *
 	 * @return array
+	 * @throws \ReflectionException
 	 */
 	public static function getApiCodeConstants(): array
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$reflect = new \ReflectionClass(get_called_class());
 		return $reflect->getConstants();
 	}
