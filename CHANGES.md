@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * Fixed ApiCodesHelpers::getMaxCode() exception message
+
 * v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup
 
