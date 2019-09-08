@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v4.1.9 (2019-08-08)
    * Fixed ApiCodesHelpers::getMaxCode() exception message
    * Fixed ResponseBuilder::errorWithMessageAndData() not passing args properly
 
