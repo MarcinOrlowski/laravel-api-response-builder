@@ -7,9 +7,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 ## CHANGE LOG ##
 
 * v6.0.0 (@dev)
-   * Requires Laravel 6.0+ and PHP 7.2+
-   * Added method arguments/returns type hints
-   * Removed unit tests for features now guarded by PHP via type hints
+   * Requires Laravel 6.0+ and PHP 7.2+ (see docs for legacy support hints).
+   * Added method arguments/returns type hints.
+   * Removed unit tests for features now guarded by PHP via type hints.
    * Fixed `testError_DebugTrace()` not testing much.
    * Corrected test cases list in `testSuccess_DataAndHttpCode()`.
    * Fixed exception message of `ApiCodesHelpers::getMaxCode()`.
@@ -17,7 +17,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
 
 * v5.0.0
-   * Skipped to catch up with Laravel version numberation.
+   * Skipped to catch up with Laravel version numeration.
 
 * v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup
