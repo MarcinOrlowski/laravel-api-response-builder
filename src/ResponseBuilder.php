@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
 
@@ -25,7 +26,7 @@ class ResponseBuilder
 	/**
 	 * Default HTTP code to be used with success responses
 	 */
-	const DEFAULT_HTTP_CODE_OK    = HttpResponse::HTTP_OK;
+	const DEFAULT_HTTP_CODE_OK = HttpResponse::HTTP_OK;
 
 	/**
 	 * Default HTTP code to be used with error responses
@@ -129,7 +130,7 @@ class ResponseBuilder
 			} elseif (is_object($data_val)) {
 				$obj_class_name = get_class($data_val);
 				if (array_key_exists($obj_class_name, $classes)) {
-					$conversion_method = $classes[ $obj_class_name ][static::KEY_METHOD];
+					$conversion_method = $classes[ $obj_class_name ][ static::KEY_METHOD ];
 					$converted = $data_val->$conversion_method();
 					$data[ $data_key ] = $converted;
 				}
@@ -146,13 +147,13 @@ class ResponseBuilder
 	 * @param integer    $api_code   response code
 	 * @param string     $message    message to return
 	 * @param mixed      $data       API response data if any
-	 * @param array|null $trace_data optional debug data array to be added to returned JSON.
+	 * @param array|null $debug_data optional debug data array to be added to returned JSON.
 	 *
 	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse(bool $success, int $api_code, string $message, $data = null, array $trace_data = null): array
+	protected static function buildResponse(bool $success, int $api_code, string $message, $data = null, array $debug_data = null): array
 	{
 		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
 		if ($data !== null) {
@@ -165,8 +166,8 @@ class ResponseBuilder
 				} elseif (is_object($data)) {
 					$obj_class_name = get_class($data);
 					if (array_key_exists($obj_class_name, $classes)) {
-						$conversion_method = $classes[$obj_class_name][static::KEY_METHOD];
-						$data = [$classes[$obj_class_name][static::KEY_KEY] => $data->$conversion_method()];
+						$conversion_method = $classes[ $obj_class_name ][ static::KEY_METHOD ];
+						$data = [$classes[ $obj_class_name ][ static::KEY_KEY ] => $data->$conversion_method()];
 					}
 				}
 			}
@@ -180,9 +181,9 @@ class ResponseBuilder
 			BaseApiCodes::getResponseKey(static::KEY_DATA)    => $data,
 		];
 
-		if ($trace_data !== null) {
+		if ($debug_data !== null) {
 			$debug_key = Config::get(static::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
-			$response[$debug_key] = $trace_data;
+			$response[ $debug_key ] = $debug_data;
 		}
 
 		if ($data !== null) {
@@ -223,7 +224,7 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function successWithCode(int $api_code=null, array $lang_args = null,int $http_code = null): \Symfony\Component\HttpFoundation\Response
+	public static function successWithCode(int $api_code = null, array $lang_args = null, int $http_code = null): \Symfony\Component\HttpFoundation\Response
 	{
 		return static::success(null, $api_code, $lang_args, $http_code);
 	}
@@ -235,7 +236,7 @@ class ResponseBuilder
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public static function successWithHttpCode(int $http_code):  \Symfony\Component\HttpFoundation\Response
+	public static function successWithHttpCode(int $http_code): \Symfony\Component\HttpFoundation\Response
 	{
 		return static::buildSuccessResponse(null, static::DEFAULT_API_CODE_OK, [], $http_code);
 	}
@@ -388,7 +389,7 @@ class ResponseBuilder
 	 *
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
-	protected static function buildErrorResponse($data, int $api_code, int $http_code=null, array $lang_args = null, string $message = null,
+	protected static function buildErrorResponse($data, int $api_code, int $http_code = null, array $lang_args = null, string $message = null,
 	                                             array $headers = null, int $encoding_options = null, array $debug_data = null): \Symfony\Component\HttpFoundation\Response
 	{
 		if ($http_code === null) {
@@ -448,11 +449,12 @@ class ResponseBuilder
 				? static::DEFAULT_HTTP_CODE_OK
 				: static::DEFAULT_HTTP_CODE_ERROR;
 		}
-
 		if ($encoding_options === null) {
 			$encoding_options = Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
 		}
-
+		if (!is_int($encoding_options)) {
+			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
+		}
 		// are we given message text already?
 		if (!is_string($message_or_api_code)) {
 			// no, so it must be an int value
@@ -461,20 +463,25 @@ class ResponseBuilder
 					sprintf('Message must be either string or resolvable integer api_code (%s given)', gettype($message_or_api_code))
 				);
 			}
-
 			// do we have the mapping for this string already?
 			$key = BaseApiCodes::getCodeMessageKey($message_or_api_code);
 			if ($key === null) {
 				// no, get the default one instead
 				$key = BaseApiCodes::getCodeMessageKey($success
-						? BaseApiCodes::OK
-						: BaseApiCodes::NO_ERROR_MESSAGE
+					? BaseApiCodes::OK
+					: BaseApiCodes::NO_ERROR_MESSAGE
 				);
 			}
 			$message_or_api_code = \Lang::get($key, $lang_args);
 		} else {
+			if (!is_int($api_code)) {
+				throw new \InvalidArgumentException(
+					sprintf('api_code must be integer (%s given)', gettype($api_code))
+				);
+			}
 			if (!BaseApiCodes::isCodeValid($api_code)) {
-				$msg = sprintf('API code value (%d) is out of allowed range %d-%d', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+				$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
+					$api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 				throw new \InvalidArgumentException($msg);
 			}
 		}
