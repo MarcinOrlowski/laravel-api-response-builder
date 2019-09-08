@@ -114,17 +114,10 @@ class ExceptionHandlerHelper
 			} else {
 				$http_code = $exception->getCode();
 			}
-
-			// can it be considered valid HTTP error code?
-			if (($http_code < 400) || ($http_code > 499)) {
-				$http_code = 0;
-			}
-		} elseif (($http_code < 400) || ($http_code > 499)) {
-			$http_code = 0;
 		}
 
-		// still no code? use default
-		if ($http_code === 0) {
+		// can it be considered valid HTTP error code?
+		if (($http_code < 400) || ($http_code > 499)) {
 			$http_code = $default_http_code;
 		}
 
