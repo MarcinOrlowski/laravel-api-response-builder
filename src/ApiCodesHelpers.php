@@ -59,7 +59,6 @@ trait ApiCodesHelpers
 		return $max_code;
 	}
 
-
 	/**
 	 * Returns lowest possible reserved code used by predefined Response Builder's messages
 	 *

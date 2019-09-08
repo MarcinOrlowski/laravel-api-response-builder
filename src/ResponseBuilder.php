@@ -364,7 +364,7 @@ class ResponseBuilder
 	public static function errorWithMessageAndData(int $api_code, string $error_message, $data,
 	                                               int $http_code = null, int $encoding_options = null): HttpResponse
 	{
-		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message,  null, $encoding_options);
+		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, null, $encoding_options);
 	}
 
 	/**

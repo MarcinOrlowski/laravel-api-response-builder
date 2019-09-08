@@ -19,6 +19,10 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.
 
+* v4.1.9 (2019-08-08)
+   * Fixed ApiCodesHelpers::getMaxCode() exception message
+   * Fixed ResponseBuilder::errorWithMessageAndData() not passing args properly
+
 * v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup
 
