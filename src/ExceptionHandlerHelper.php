@@ -15,13 +15,12 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 
 use Exception;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Validator;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class ExceptionHandlerHelper
@@ -119,7 +118,7 @@ class ExceptionHandlerHelper
 		}
 
 		// can it be considered valid HTTP error code?
-		if (($http_code < 400) || ($http_code > 499)) {
+		if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
 			$http_code = $default_http_code;
 		}
 
