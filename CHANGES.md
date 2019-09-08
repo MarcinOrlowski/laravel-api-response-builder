@@ -16,6 +16,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Fixed error code fallback in `testRender_HttpException()` test.
    * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
    * Reformatted code for better on-line readability on Github.
+   * `ResponseBuilder::errorWithDataAndHttpCode()` accepts now `null` as http code
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.
