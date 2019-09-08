@@ -16,6 +16,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Fixed error code fallback in `testRender_HttpException()` test.
    * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
 
+* v5.0.0
+   * Skipped to catch up with Laravel version numberation.
+
 * v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup
 
