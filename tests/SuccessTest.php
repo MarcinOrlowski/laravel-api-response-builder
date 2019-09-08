@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class SuccessTest extends TestCase
 {
 	/**
-	 * @var \Symfony\Component\HttpFoundation\Response
+	 * @var HttpResponse
 	 */
 	protected $response;
 

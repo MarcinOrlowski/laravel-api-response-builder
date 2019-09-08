@@ -283,12 +283,12 @@ trait TestingHelpers
 	 * @param int|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
 	 * @param array|null $debug_data          optional data to be included in response JSON
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return HttpResponse
 	 *
 	 * @throws \ReflectionException
 	 */
 	protected function callMakeMethod(bool $success, int $api_code, $message_or_api_code, array $data = null, array $headers = null,
-	                                  int $encoding_options = null, array $debug_data = null): \Symfony\Component\HttpFoundation\Response
+	                                  int $encoding_options = null, array $debug_data = null): HttpResponse
 	{
 		if (!is_bool($success)) {
 			$this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));

@@ -19,7 +19,7 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 class InternalsTest extends TestCase
 {
 	/**
-	 * @var \Symfony\Component\HttpFoundation\Response
+	 * @var HttpResponse
 	 */
 	protected $response;
 

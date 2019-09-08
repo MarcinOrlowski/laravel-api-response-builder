@@ -44,7 +44,7 @@ class ExceptionHandlerHelper
 	 * @param  \Illuminate\Http\Request $request   Request object
 	 * @param  \Exception               $exception Exception
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return HttpResponse
 	 */
 	public static function render($request, Exception $exception): HttpResponse
 	{
@@ -82,7 +82,7 @@ class ExceptionHandlerHelper
 	 * @param  \Illuminate\Http\Request                 $request
 	 * @param  \Illuminate\Auth\AuthenticationException $exception
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return HttpResponse
 	 */
 	protected function unauthenticated($request, AuthenticationException $exception): HttpResponse
 	{
@@ -96,7 +96,7 @@ class ExceptionHandlerHelper
 	 * @param integer   $default_api_code  API code to return
 	 * @param integer   $default_http_code HTTP code to return
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return HttpResponse
 	 */
 	protected static function error(Exception $exception, $exception_type,
 	                                $default_api_code, $default_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse

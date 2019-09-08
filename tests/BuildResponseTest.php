@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Config;
 class BuildResponseTest extends TestCase
 {
 	/**
-	 * @var \Symfony\Component\HttpFoundation\Response
+	 * @var HttpResponse
 	 */
 	protected $response;
 
