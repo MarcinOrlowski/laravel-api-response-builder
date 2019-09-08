@@ -437,14 +437,13 @@ class ResponseBuilder
 			throw new \InvalidArgumentException('http_code must be in range from 400 to 499 inclusive');
 		}
 
-		if ($message === null) {
-			$message = $api_code;
-		}
+		$message_or_api_code = $message ?? $api_code;
+
 		if ($headers === null) {
 			$headers = [];
 		}
 
-		return static::make(false, $api_code, $message, $data, $http_code, $lang_args, $headers, $encoding_options, $debug_data);
+		return static::make(false, $api_code, $message_or_api_code, $data, $http_code, $lang_args, $headers, $encoding_options, $debug_data);
 	}
 
 	/**

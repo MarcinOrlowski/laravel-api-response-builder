@@ -82,7 +82,7 @@ class ExceptionHandlerHelper
 	 * @param  \Illuminate\Http\Request                 $request
 	 * @param  \Illuminate\Auth\AuthenticationException $exception
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	protected function unauthenticated($request, AuthenticationException $exception)
 	{
