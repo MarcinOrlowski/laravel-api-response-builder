@@ -172,7 +172,8 @@ class ErrorTest extends TestCase
 		$error_message = $this->getRandomString('msg');
 
 		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
-		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, null, null, $trace_data);
+		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message,
+			$data, null, null, $trace_data);
 
 		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
 		$this->assertEquals($error_message, $j->message);

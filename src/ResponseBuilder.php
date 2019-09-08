@@ -96,7 +96,8 @@ class ResponseBuilder
 
 		if ($classes !== null) {
 			if (!is_array($classes)) {
-				throw new \RuntimeException(sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
+				throw new \RuntimeException(
+					sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
 			}
 
 			$mandatory_keys = [static::KEY_KEY,
@@ -105,7 +106,8 @@ class ResponseBuilder
 			foreach ($classes as $class_name => $class_config) {
 				foreach ($mandatory_keys as $key_name) {
 					if (!array_key_exists($key_name, $class_config)) {
-						throw new \RuntimeException(sprintf("CONFIG: Missing '%s' for '%s' class mapping", $key_name, $class_name));
+						throw new \RuntimeException(
+							sprintf("CONFIG: Missing '%s' for '%s' class mapping", $key_name, $class_name));
 					}
 				}
 			}
@@ -354,7 +356,8 @@ class ResponseBuilder
 	public static function errorWithMessageAndData(int $api_code, string $error_message, $data,
 	                                               int $http_code = null, int $encoding_options = null): HttpResponse
 	{
-		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, null, $encoding_options);
+		return static::buildErrorResponse($data, $api_code, $http_code, null,
+			$error_message, null, $encoding_options);
 	}
 
 	/**
@@ -371,7 +374,8 @@ class ResponseBuilder
 	                                                       int $http_code = null, int $encoding_options = null,
 	                                                       array $debug_data = null): HttpResponse
 	{
-		return static::buildErrorResponse($data, $api_code, $http_code, null, $error_message, null, $encoding_options, $debug_data);
+		return static::buildErrorResponse($data, $api_code, $http_code, null,
+			$error_message, null, $encoding_options, $debug_data);
 	}
 
 	/**

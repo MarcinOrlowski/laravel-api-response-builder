@@ -55,15 +55,18 @@ class ExceptionHandlerHelper
 					break;
 
 				case HttpResponse::HTTP_SERVICE_UNAVAILABLE:
-					$result = static::error($exception, static::TYPE_HTTP_SERVICE_UNAVAILABLE, BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE);
+					$result = static::error($exception, static::TYPE_HTTP_SERVICE_UNAVAILABLE,
+						BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE);
 					break;
 
 				case HttpResponse::HTTP_UNAUTHORIZED:
-					$result = static::error($exception, static::TYPE_HTTP_UNAUTHORIZED, BaseApiCodes::EX_AUTHENTICATION_EXCEPTION);
+					$result = static::error($exception, static::TYPE_HTTP_UNAUTHORIZED,
+						BaseApiCodes::EX_AUTHENTICATION_EXCEPTION);
 					break;
 
 				default:
-					$result = static::error($exception, static::TYPE_DEFAULT, BaseApiCodes::EX_HTTP_EXCEPTION);
+					$result = static::error($exception, static::TYPE_DEFAULT,
+						BaseApiCodes::EX_HTTP_EXCEPTION);
 					break;
 			}
 		} elseif ($exception instanceof ValidationException) {
@@ -74,7 +77,6 @@ class ExceptionHandlerHelper
 
 		return $result;
 	}
-
 
 	/**
 	 * Convert an authentication exception into an unauthenticated response.

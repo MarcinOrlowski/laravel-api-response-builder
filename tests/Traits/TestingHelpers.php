@@ -288,8 +288,9 @@ trait TestingHelpers
 	 *
 	 * @throws \ReflectionException
 	 */
-	protected function callMakeMethod(bool $success, int $api_code, $message_or_api_code, array $data = null, array $headers = null,
-	                                  int $encoding_options = null, array $debug_data = null): HttpResponse
+	protected function callMakeMethod(bool $success, int $api_code, $message_or_api_code, array $data = null,
+	                                  array $headers = null, int $encoding_options = null,
+	                                  array $debug_data = null): HttpResponse
 	{
 		if (!is_bool($success)) {
 			$this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));
