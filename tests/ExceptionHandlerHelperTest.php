@@ -82,6 +82,8 @@ class ExceptionHandlerHelperTest extends TestCase
 			$eh = new ExceptionHandlerHelper();
 
 			$cls = $params['class'];
+			$exception = null;
+			/** @noinspection DegradedSwitchInspection */
 			switch ($cls) {
 				case HttpException::class:
 					$exception = new $cls($status_code);
@@ -101,20 +103,12 @@ class ExceptionHandlerHelperTest extends TestCase
 				} else {
 					$http_code = $exception->getCode();
 				}
-
-				// can it be considered valid HTTP error code?
-				if ($http_code < 400) {
-					$http_code = 0;
-				}
-			} elseif ($http_code < 400) {
-				$http_code = 0;
 			}
 
-			// still no code? use default
-			if ($http_code === 0) {
+			// can it be considered valid HTTP error code?
+			if ($http_code < 400) {
 				$http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
 			}
-
 
 			$j = json_decode($eh->render(null, $exception)->getContent(), false);
 

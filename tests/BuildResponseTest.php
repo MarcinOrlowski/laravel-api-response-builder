@@ -131,6 +131,7 @@ class BuildResponseTest extends TestCase
 		$message_or_api_code = [];    // invalid
 
 		/** @noinspection PhpUnhandledExceptionInspection */
+		/** @noinspection PhpParamsInspection */
 		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code);
 	}
 

@@ -19,7 +19,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 class TestModel
 {
 	/** @var string|null */
-	protected $val = null;
+	protected $val;
 
 	/**
 	 * TestModel constructor.

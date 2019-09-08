@@ -33,6 +33,7 @@ class InternalsTest extends TestCase
 		$message_or_api_code = [];    // invalid
 
 		/** @noinspection PhpUnhandledExceptionInspection */
+		/** @noinspection PhpParamsInspection */
 		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code);
 	}
 
@@ -164,6 +165,7 @@ class InternalsTest extends TestCase
 		$this->expectException(\InvalidArgumentException::class);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
+		/** @noinspection PhpParamsInspection */
 		$this->callMakeMethod(true, BaseApiCodes::OK, []);
 	}
 
