@@ -20,6 +20,11 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class SuccessTest extends TestCase
 {
 	/**
+	 * @var \Symfony\Component\HttpFoundation\Response
+	 */
+	protected $response;
+
+	/**
 	 * Check success()
 	 *
 	 * @return void
@@ -148,7 +153,7 @@ class SuccessTest extends TestCase
 	}
 
 	/**
-	 * Checks success() with valid payload and HTTP code
+	 * Checks success() with valid payload types and HTTP code
 	 *
 	 * @return void
 	 */
@@ -158,23 +163,27 @@ class SuccessTest extends TestCase
 			null,
 			[$this->getRandomString() => $this->getRandomString()],
 		];
-		$http_codes = [HttpResponse::HTTP_OK       => null,
-		               HttpResponse::HTTP_ACCEPTED => HttpResponse::HTTP_ACCEPTED,
-		               HttpResponse::HTTP_OK       => HttpResponse::HTTP_OK];
+		$http_codes = [
+			[HttpResponse::HTTP_OK => null],
+			[HttpResponse::HTTP_ACCEPTED => HttpResponse::HTTP_ACCEPTED],
+			[HttpResponse::HTTP_OK => HttpResponse::HTTP_OK],
+		];
 
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		foreach ($payloads as $payload) {
-			foreach ($http_codes as $http_code_expect => $http_code_send) {
-				$this->response = ResponseBuilder::success($payload, null, [], $http_code_send);
+			foreach ($http_codes as $http_code) {
+				foreach ($http_code as $http_code_expect => $http_code_send) {
+					$this->response = ResponseBuilder::success($payload, null, [], $http_code_send);
 
-				$j = $this->getResponseSuccessObject($api_codes_class_name::OK, $http_code_expect);
+					$j = $this->getResponseSuccessObject($api_codes_class_name::OK, $http_code_expect);
 
-				if ($payload !== null) {
-					$payload = (object)$payload;
+					if ($payload !== null) {
+						$payload = (object)$payload;
+					}
+					$this->assertEquals($payload, $j->data);
 				}
-				$this->assertEquals($payload, $j->data);
 			}
 		}
 	}

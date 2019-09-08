@@ -11,6 +11,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Added method arguments/returns type hints
    * Removed unit tests for features now guarded by PHP via type hints
    * Fixed `testError_DebugTrace()` not testing much.
+   * Corrected test cases list in `testSuccess_DataAndHttpCode()`.
 
 * v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup
