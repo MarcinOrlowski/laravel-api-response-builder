@@ -201,6 +201,36 @@ class SuccessTest extends TestCase
 	/**
 	 * @return void
 	 */
+	public function testSuccess_ApiCodeMustBeInt(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		ResponseBuilder::success(null, 'foo');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSuccess_HttpCodeNull(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		ResponseBuilder::successWithHttpCode(null);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSuccessWithInvalidHttpCode(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		ResponseBuilder::successWithHttpCode('invalid');
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testSuccessWithTooBigHttpCode(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
@@ -216,6 +246,21 @@ class SuccessTest extends TestCase
 		$this->expectException(\InvalidArgumentException::class);
 
 		ResponseBuilder::successWithHttpCode(0);
+	}
+
+	/**
+	 * @return void
+	 *
+	 * @throws \ReflectionException
+	 */
+	public function testBuildSuccessResponse_InvalidReturnCode(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		$obj = new ResponseBuilder();
+		$method = $this->getProtectedMethod(get_class($obj), 'buildSuccessResponse');
+		$method->invokeArgs($obj, [null,
+		                           'string-is-invalid-code']);
 	}
 
 }
