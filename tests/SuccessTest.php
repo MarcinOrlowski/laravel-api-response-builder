@@ -83,7 +83,7 @@ class SuccessTest extends TestCase
 	public function testSuccess_ApiCode_NoCustomMessage(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, []);
-		$api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
+		$api_code = random_int($this->min_allowed_code, $this->max_allowed_code);
 
 		$this->response = ResponseBuilder::success(null, $api_code);
 		$j = $this->getResponseSuccessObject($api_code);
