@@ -91,7 +91,7 @@ class BaseApiCodes
 	 *
 	 * @return array
 	 */
-	public static function getBaseMap()
+	public static function getBaseMap(): array
 	{
 		return static::$base_map;
 	}
@@ -126,7 +126,7 @@ class BaseApiCodes
 	{
 		// ensure $key is known
 		if (!array_key_exists($reference_key, static::$response_key_map)) {
-			throw(new \RuntimeException(sprintf('Unknown response key reference "%s"', $reference_key)));
+			throw new \RuntimeException(sprintf('Unknown response key reference "%s"', $reference_key));
 		}
 
 		$result = static::$response_key_map[ $reference_key ];
