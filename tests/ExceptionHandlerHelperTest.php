@@ -82,6 +82,8 @@ class ExceptionHandlerHelperTest extends TestCase
 			$eh = new ExceptionHandlerHelper();
 
 			$cls = $params['class'];
+
+			/** @var \Exception $exception */
 			$exception = null;
 			/** @noinspection DegradedSwitchInspection */
 			switch ($cls) {

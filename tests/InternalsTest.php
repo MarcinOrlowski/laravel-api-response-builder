@@ -19,6 +19,11 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 class InternalsTest extends TestCase
 {
 	/**
+	 * @var \Symfony\Component\HttpFoundation\Response
+	 */
+	protected $response;
+
+	/**
 	 * @noinspection PhpDocMissingThrowsInspection
 	 *
 	 * @return void

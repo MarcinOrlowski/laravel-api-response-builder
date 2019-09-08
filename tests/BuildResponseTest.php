@@ -21,6 +21,11 @@ use Illuminate\Support\Facades\Config;
 class BuildResponseTest extends TestCase
 {
 	/**
+	 * @var \Symfony\Component\HttpFoundation\Response
+	 */
+	protected $response;
+
+	/**
 	 * Tests if buildResponse() would properly handle auto conversion
 	 *
 	 * @return void
