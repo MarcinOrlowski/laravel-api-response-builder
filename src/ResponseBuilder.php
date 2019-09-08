@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
+
 /**
  * Builds standardized \Symfony\Component\HttpFoundation\Response response object
  */
@@ -484,7 +485,7 @@ class ResponseBuilder
 		if (!is_int($encoding_options)) {
 			throw new \InvalidArgumentException(sprintf('encoding_options must be integer (%s given)', gettype($encoding_options)));
 		}
-		
+
 		// are we given message text already?
 		if (!is_string($message_or_api_code)) {
 			// no, so it must be an int value
