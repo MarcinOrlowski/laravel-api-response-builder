@@ -213,19 +213,17 @@ class ResponseBuilder
 	 *
 	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
 	 * @param integer|null $api_code         API code to be returned with the response or @null for default value
-	 * @param array|null   $lang_args        array of arguments passed to Lang if message associated with api_code uses placeholders
+	 * @param array|null   $lang_args        array of arguments passed to Lang if message associated with api_code
+	 *                                       uses placeholders
 	 * @param integer|null $http_code        HTTP return code to be set for this response or @null for default (200)
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                       config's value or defaults
 	 *
 	 * @return HttpResponse
 	 */
 	public static function success($data = null, $api_code = null, array $lang_args = null,
 	                               int $http_code = null, int $encoding_options = null): HttpResponse
 	{
-		if ($api_code === null) {
-			$api_code = static::DEFAULT_API_CODE_OK;
-		}
-
 		return static::buildSuccessResponse($data, $api_code, $lang_args, $http_code, $encoding_options);
 	}
 
@@ -247,27 +245,24 @@ class ResponseBuilder
 	/**
 	 * Returns success with custom HTTP code
 	 *
-	 * @param integer $http_code HTTP return code to be set for this response
+	 * @param integer|null $http_code HTTP return code to be set for this response. If @null is passed, falls back
+	 *                                to DEFAULT_HTTP_CODE_OK.
 	 *
 	 * @return HttpResponse
-	 *
-	 * @throws \InvalidArgumentException when http_code is @null
 	 */
-	public static function successWithHttpCode(int $http_code): HttpResponse
+	public static function successWithHttpCode(int $http_code = null): HttpResponse
 	{
-		if ($http_code === null) {
-			throw new \InvalidArgumentException('http_code cannot be null. Use success() instead');
-		}
-
 		return static::buildSuccessResponse(null, static::DEFAULT_API_CODE_OK, [], $http_code);
 	}
 
 	/**
 	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
 	 * @param integer|null $api_code         numeric code to be returned as 'code' or null for default value
-	 * @param array|null   $lang_args        array of arguments passed to Lang if message associated with api_code uses placeholders
+	 * @param array|null   $lang_args        array of arguments passed to Lang if message associated with api_code
+	 *                                       uses placeholders
 	 * @param integer|null $http_code        HTTP return code to be set for this response
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                       config's value or defaults
 	 *
 	 * @return HttpResponse
 	 *
@@ -437,11 +432,6 @@ class ResponseBuilder
 		if ($api_code === static::DEFAULT_API_CODE_OK) {
 			throw new \InvalidArgumentException(
 				sprintf('api_code must not be %d (DEFAULT_API_CODE_OK)', static::DEFAULT_API_CODE_OK));
-		}
-
-		if ((!is_array($lang_args)) && ($lang_args !== null)) {
-			throw new \InvalidArgumentException(
-				sprintf('lang_args must be either array or null (%s given)', gettype($lang_args)));
 		}
 
 		Validator::assertInt('http_code', $http_code);

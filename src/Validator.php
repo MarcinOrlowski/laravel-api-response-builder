@@ -13,12 +13,6 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Response;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
-
 class Validator
 {
 	/**
@@ -29,7 +23,6 @@ class Validator
 	 */
 	public static function assertInt(string $key, $var): void
 	{
-
 		if (!is_int($var)) {
 			$msg = sprintf('"%s" must be an integer (%s given)', $key, gettype($var));
 			throw new \InvalidArgumentException($msg);
@@ -48,23 +41,14 @@ class Validator
 	{
 		self::assertInt($key, $var);
 
-		if (($min > $var) && ($var > $max)) {
-			throw new \InvalidArgumentException(
-				sprintf('Invalid value of "%s" (%d). Must be between %d-%d inclusive', $key, $var, $min, $max));
+		if ($min > $max) {
+			throw new \RuntimeException(
+				sprintf('%s: Invalid range for "%s". Ensure bounds are not swapped.', __FUNCTION__, $key));
 		}
-	}
 
-	/**
-	 * @param string $key
-	 * @param mixed  $var
-	 *
-	 * @throws \InvalidArgumentException
-	 */
-	public static function assertNull(string $key, $var): void
-	{
-		if ($var !== null) {
-			$msg = sprintf('"%s" must be null (%s given)', $key, gettype($var));
-			throw new \InvalidArgumentException($msg);
+		if (($min > $var) || ($var > $max)) {
+			throw new \InvalidArgumentException(
+				sprintf('Invalid value of "%s" (%d). Must be between %d-%d inclusive.', $key, $var, $min, $max));
 		}
 	}
 }

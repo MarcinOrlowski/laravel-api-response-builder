@@ -204,6 +204,12 @@ class SuccessTest extends TestCase
 		}
 	}
 
+	// tests that passing null as argument to successWithHttpCode() it will fall back to defaults.
+	public function testSuccessWithNullAsHttpCode(): void
+	{
+		$response = ResponseBuilder::successWithHttpCode(null);
+		$this->assertEquals(ResponseBuilder::DEFAULT_HTTP_CODE_OK, $response->getStatusCode());
+	}
 
 	//----[ success ]-------------------------------------------
 

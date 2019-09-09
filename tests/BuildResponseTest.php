@@ -66,7 +66,6 @@ class BuildResponseTest extends TestCase
 	 */
 	public function testBuildResponse_ClassAutoConversionAsPartOfDataset(): void
 	{
-
 		// GIVEN model object with randomly set member value
 		$model_1_val = $this->getRandomString('model_1');
 		$model_1 = new TestModel($model_1_val);
