@@ -15,7 +15,7 @@ return [
 
 	// can be used by Exception Handler (if enabled)
 	'uncaught_exception'       => 'Nieprzechwycony wyjątek :message',
-	'http_not_found'           => 'Nieznana metoda',
+	'http_not_found'           => 'Element nie znaleziony',
 	'http_exception'           => 'Wyjątek HTTP :message',
 	'http_service_unavailable' => 'Trwa przerwa serwisowa',
 

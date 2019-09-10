@@ -15,7 +15,8 @@ return [
 
 	// can be used by Exception Handler (if enabled)
 	'uncaught_exception'       => 'Uncaught exception :message',
-	'http_not_found'           => 'Unknown method',
+	// we talking API call here, hence we have http_not_found
+	'http_not_found'           => 'Item not found',
 	'http_exception'           => 'HTTP exception :message',
 	'http_service_unavailable' => 'Service maintenance in progress',
 
