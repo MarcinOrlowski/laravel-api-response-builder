@@ -148,7 +148,7 @@ return [
 	*/
 	'exception_handler' => [
 
-		// By default, exception provided messages has higher priority than mapped error messages.
+		// By default, exception provided message has higher priority than one configured in mapping here.
 		// This behaviour can be configured with `use_exception_message_first` option. When it
 		// is set to `true` (which is default value) and when exception's `getMessage()` returns non empty
 		// string, that string will be used and returned as `message` w/o further processing. If
