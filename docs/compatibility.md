@@ -7,6 +7,12 @@
 ### v6 ###
 
  * Requires Laravel 6.0+ and PHP 7.2+
+ * [Low] Changed default HTTP code associated with each exception handled by `ExceptionHandler`. With no custom
+  settings it will now return different HTTP code for different exception handled, while previously implementation
+  could always return `HTTP_BAD_REQUEST`. All users running on default settings, however, unless you client apps
+  are HTTP code sensitive, the impact of this change is very low. Additionally, if you set `http_code` field
+  inf your settings in ` exception_handler` then these entries were always handled properly, so nothing changes
+  if that's your setup.
 
 ### v4 ###
 
