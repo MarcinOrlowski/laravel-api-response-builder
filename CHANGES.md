@@ -23,6 +23,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * `ExceptionHandler` now falls back to `EX_UNCAUGHT_EXCEPTION` for all the cases.
    * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
    * `ExceptionHandler` returns more Exception-type related HTTP codes now.
+   * Removed `exception_handler.use_exception_message_first` feature.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.

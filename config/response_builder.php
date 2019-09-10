@@ -148,17 +148,6 @@ return [
 	*/
 	'exception_handler' => [
 
-		// By default, exception provided message has higher priority than one configured in mapping here.
-		// This behaviour can be configured with `use_exception_message_first` option. When it
-		// is set to `true` (which is default value) and when exception's `getMessage()` returns non empty
-		// string, that string will be used and returned as `message` w/o further processing. If
-		// it is set to `true` but exception provides no message, then mapped message will be used
-		// and the ":message" placeholder will be substituted with exception class name. When option
-		// is set to @false, then mapped messages will always be used with `:message` placeholder
-		// being substituted with exception message (can if it is empty string).
-		'use_exception_message_first' => env('EX_USE_EXCEPTION_MESSAGE', true),
-
-
 		// Map exception to your own error codes. That way, when cascading
 		// you will still know which module thrown this exception
 		'exception' => [

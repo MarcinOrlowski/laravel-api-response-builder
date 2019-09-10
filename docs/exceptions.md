@@ -124,18 +124,6 @@
  `:api_code` being substituted by actual code assigned to this exception and `:message`
  replaced by exception's `getMessage()` return value.
 
-## Exceptions with messages ##
-
- By default, messages obtained from `Exception` object have higher priority over configuration
- mapped error messages, which makes return messages usually more descriptive. This behaviour can
- be configured with `use_exception_message_first` option or by setting `EX_USE_EXCEPTION_MESSAGE`
- env variable. When it's `true` (default) **and** when exception's `getMessage()` returns non 
- empty string, then that string will be used as returned as `message`. If it is set to `true`
- but exception provides no message, then mapped message will be used and the `:message` placeholder
- will be substituted with exception class name. When option is set to `false`, then mapped messages
- will always be used  with `:message` placeholder being substituted with exception message (can if 
- it is empty string).
-
 ## Exception Handler conflicts ##
 
  Please note that some 3rd party packages may also provide own exception handling helpers and may 

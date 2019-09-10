@@ -158,9 +158,7 @@ class ExceptionHandlerHelper
 			$key = BaseApiCodes::getReservedCodeMessageKey($base_api_code);
 		}
 
-		// let's build error message
-		$error_message = '';
-
+		// let's build error error_message
 		$ex_message = trim($exception->getMessage());
 
 		// ensure we won't fail due to exception incorect encoding
@@ -175,21 +173,25 @@ class ExceptionHandlerHelper
 			}
 		}
 
-		// If exception messaage is not provided...
-		if (($ex_message === '')
-			// and this feature is enabled in the config, the we will use built-in error message and pass
-			// exception class name as value for :message placeholder
-			&& Config::get('response_builder.exception_handler.use_exception_message_first', true)) {
-			$ex_message = get_class($exception);
+		/** @var string $error_message final error error_message */
+		$error_message = $ex_message;
+		$ex_message = get_class($exception);
+
+		if ($ex_message === '') {
+			$error_message = Lang::get($key, [
+				'api_code'      => $api_code,
+				'error_message' => $ex_message,
+				'message'       => get_class($exception),
+			]);
 		}
 
-		// if we do not have any message in the hand yet, we need to fall back to built-in string configured
+		// if we do not have any error_message in the hand yet, we need to fall back to built-in string configured
 		// for this particular exception.
 		if ($error_message === '') {
 			$error_message = Lang::get($key, [
-				'api_code' => $api_code,
-				'message'  => $ex_message,
-				'class'    => get_class($exception),
+				'api_code'      => $api_code,
+				'error_message' => $ex_message,
+				'message'       => get_class($exception),
 			]);
 		}
 
