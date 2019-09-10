@@ -53,30 +53,33 @@ class ExceptionHandlerHelper
 		if ($exception instanceof HttpException) {
 			switch ($exception->getStatusCode()) {
 				case HttpResponse::HTTP_NOT_FOUND:
-					$result = static::error($exception, static::TYPE_HTTP_NOT_FOUND_KEY, BaseApiCodes::EX_HTTP_NOT_FOUND);
+					$result = static::error($exception, static::TYPE_HTTP_NOT_FOUND_KEY,
+						BaseApiCodes::EX_HTTP_NOT_FOUND, HttpResponse::HTTP_NOT_FOUND);
 					break;
 
 				case HttpResponse::HTTP_SERVICE_UNAVAILABLE:
 					$result = static::error($exception, static::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY,
-						BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE);
+						BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE, HttpResponse::HTTP_SERVICE_UNAVAILABLE);
 					break;
 
 				case HttpResponse::HTTP_UNAUTHORIZED:
 					$result = static::error($exception, static::TYPE_HTTP_UNAUTHORIZED_KEY,
-						BaseApiCodes::EX_AUTHENTICATION_EXCEPTION);
+						BaseApiCodes::EX_AUTHENTICATION_EXCEPTION, HttpResponse::HTTP_UNAUTHORIZED);
 					break;
 
 				default:
 					$result = static::error($exception, static::TYPE_HTTP_EXCEPTION_KEY,
-						BaseApiCodes::EX_HTTP_EXCEPTION);
+						BaseApiCodes::EX_HTTP_EXCEPTION, HttpResponse::HTTP_BAD_REQUEST);
 					break;
 			}
 		} elseif ($exception instanceof ValidationException) {
-			$result = static::error($exception, static::TYPE_VALIDATION_EXCEPTION_KEY, BaseApiCodes::EX_VALIDATION_EXCEPTION);
+			$result = static::error($exception, static::TYPE_VALIDATION_EXCEPTION_KEY,
+				BaseApiCodes::EX_VALIDATION_EXCEPTION, HttpResponse::HTTP_BAD_REQUEST);
 		}
 
 		if ($result === null) {
-			$result = static::error($exception, static::TYPE_UNCAUGHT_EXCEPTION_KEY, BaseApiCodes::EX_UNCAUGHT_EXCEPTION);
+			$result = static::error($exception, static::TYPE_UNCAUGHT_EXCEPTION_KEY,
+				BaseApiCodes::EX_UNCAUGHT_EXCEPTION, HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
 		}
 
 		return $result;
@@ -110,7 +113,7 @@ class ExceptionHandlerHelper
 		$base_config = 'response_builder.exception_handler.exception';
 
 		$api_code = Config::get("{$base_config}.{$exception_type}.code", $default_api_code);
-		$http_code = Config::get("{$base_config}.{$exception_type}.http_code", 0);
+		$http_code = Config::get("{$base_config}.{$exception_type}.http_code", $default_http_code);
 
 		// check if we now have valid HTTP error code for this case or need to make one up.
 		if ($http_code === 0) {

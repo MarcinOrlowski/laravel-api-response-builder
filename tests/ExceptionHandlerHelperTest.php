@@ -66,7 +66,7 @@ class ExceptionHandlerHelperTest extends TestCase
 		foreach ($codes as $exception_type => $params) {
 			$base_config_key = 'response_builder.exception_handler.exception';
 			$response_api_code = \Config::get("{$base_config_key}.{$exception_type}.code", $params['default_response_api_code']);
-			$http_code = \Config::get("{$base_config_key}.{$exception_type}.http_code", $params['default_http_code']);
+			$wanted_http_code = \Config::get("{$base_config_key}.{$exception_type}.wanted_http_code", $params['default_http_code']);
 
 			$key = BaseApiCodes::getCodeMessageKey($response_api_code);
 			if ($key === null) {
@@ -76,7 +76,7 @@ class ExceptionHandlerHelperTest extends TestCase
 			$expect_data_node_null = true;
 			switch ($params['exception_class']) {
 				case HttpException::class:
-					$exception = new $params['exception_class']($http_code);
+					$exception = new $params['exception_class']($wanted_http_code);
 					break;
 
 				case ValidationException::class:
@@ -88,7 +88,7 @@ class ExceptionHandlerHelperTest extends TestCase
 					break;
 
 				default:
-					$exception = new $params['exception_class'](null, $http_code);
+					$exception = new $params['exception_class'](null, $wanted_http_code);
 					break;
 			}
 
@@ -116,8 +116,8 @@ class ExceptionHandlerHelperTest extends TestCase
 			]);
 
 			$this->assertEquals($error_message, $eh_response_json->message);
-			$this->assertEquals($http_code, $eh_response->getStatusCode(),
-				sprintf('Unexpected HTTP code value for "%s".', $http_code));
+			$this->assertEquals($wanted_http_code, $eh_response->getStatusCode(),
+				sprintf('Unexpected HTTP code value for "%s".', $exception_type));
 		}
 	}
 

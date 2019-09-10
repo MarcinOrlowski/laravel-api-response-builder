@@ -22,6 +22,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Changed default built-in message for `HTTP_NOT_FOUND` error.
    * `ExceptionHandler` now falls back to `EX_UNCAUGHT_EXCEPTION` for all the cases.
    * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
+   * `ExceptionHandler` returns more Exception-type related HTTP codes now.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.
