@@ -55,69 +55,86 @@ class ExceptionHandlerHelperTest extends TestCase
 				'default_http_code'         => HttpResponse::HTTP_UNAUTHORIZED,
 				'default_response_api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION,
 			],
-
-			ExceptionHandlerHelper::TYPE_VALIDATION_EXCEPTION_KEY => [
+			ExceptionHandlerHelper::TYPE_VALIDATION_EXCEPTION_KEY     => [
 				'exception_class'           => ValidationException::class,
 				'default_http_code'         => HttpResponse::HTTP_BAD_REQUEST,
 				'default_response_api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION,
+				'validate_message'          => false,
+				'has_data_node'             => true,
 			],
-
 		];
+
 		foreach ($codes as $exception_type => $params) {
-			$base_config_key = 'response_builder.exception_handler.exception';
-			$response_api_code = \Config::get("{$base_config_key}.{$exception_type}.code", $params['default_response_api_code']);
-			$wanted_http_code = \Config::get("{$base_config_key}.{$exception_type}.wanted_http_code", $params['default_http_code']);
+			$this->doTestSingleException($exception_type, $params['exception_class'],
+				$params['default_http_code'], $params['default_response_api_code'],
+				$params['validate_message'] ?? true,
+				$params['has_data_node'] ?? false);
+		}
+	}
 
-			$key = BaseApiCodes::getCodeMessageKey($response_api_code);
-			if ($key === null) {
-				$key = BaseApiCodes::getReservedCodeMessageKey($response_api_code);
-			}
+	protected function doTestSingleException(string $exception_type, string $exception_class,
+	                                         int $default_http_code, int $default_response_api_code,
+	                                         bool $validate_message = true, bool $has_data_node = false): void
+	{
+		$base_config_key = 'response_builder.exception_handler.exception';
+		$response_api_code = \Config::get("{$base_config_key}.{$exception_type}.code", $default_response_api_code);
+		$wanted_http_code = \Config::get("{$base_config_key}.{$exception_type}.wanted_http_code", $default_http_code);
 
-			$expect_data_node_null = true;
-			switch ($params['exception_class']) {
-				case HttpException::class:
-					$exception = new $params['exception_class']($wanted_http_code);
-					break;
+		$key = BaseApiCodes::getCodeMessageKey($response_api_code);
+		if ($key === null) {
+			$key = BaseApiCodes::getReservedCodeMessageKey($response_api_code);
+		}
 
-				case ValidationException::class:
-					$rules = ['title' => 'required|min:10|max:255'];
-					$data = ['title' => ''];
-					$validator = app('validator')->make($data, $rules);
-					$exception = new ValidationException($validator);
-					$expect_data_node_null = false;
-					break;
+		$expect_data_node_null = true;
+		switch ($exception_class) {
+			case HttpException::class:
+				$exception = new $exception_class($wanted_http_code);
+				break;
 
-				default:
-					$exception = new $params['exception_class'](null, $wanted_http_code);
-					break;
-			}
+			case ValidationException::class:
+				$rules = ['title' => 'required|min:10|max:255'];
+				$data = ['title' => ''];
+				$validator = app('validator')->make($data, $rules);
+				$exception = new ValidationException($validator);
+				$expect_data_node_null = false;
+				break;
 
-			// hand the exception to the handler and examine its response JSON
-			$eh = new ExceptionHandlerHelper();
-			$eh_response = $eh->render(null, $exception);
-			$eh_response_json = json_decode($eh_response->getContent(), false);
+			default:
+				$exception = new $exception_class(null, $wanted_http_code);
+				break;
+		}
 
-			$this->assertValidResponse($eh_response_json);
-			if ($expect_data_node_null) {
-				$this->assertNull($eh_response_json->data);
-			}
+		// hand the exception to the handler and examine its response JSON
+		$eh = new ExceptionHandlerHelper();
+		$eh_response = $eh->render(null, $exception);
+		$eh_response_json = json_decode($eh_response->getContent(), false);
 
-			$ex_message = trim($exception->getMessage());
-			if (\Config::get('response_builder.exception_handler.use_exception_message_first', true)) {
-				if ($ex_message === '') {
-					$ex_message = get_class($exception);
-				}
-			}
+		$this->assertValidResponse($eh_response_json);
+		if ($expect_data_node_null) {
+			$this->assertNull($eh_response_json->data);
+		}
 
-			$error_message = \Lang::get($key, [
-				'response_api_code' => $response_api_code,
-				'message'           => $ex_message,
-				'class'             => get_class($exception),
-			]);
+		$ex_message = trim($exception->getMessage());
+		if ($ex_message === '') {
+			$ex_message = get_class($exception);
+		}
 
+		$error_message = \Lang::get($key, [
+			'response_api_code' => $response_api_code,
+			'message'           => $ex_message,
+			'class'             => get_class($exception),
+		]);
+
+		if ($validate_message) {
 			$this->assertEquals($error_message, $eh_response_json->message);
-			$this->assertEquals($wanted_http_code, $eh_response->getStatusCode(),
-				sprintf('Unexpected HTTP code value for "%s".', $exception_type));
+		}
+		$this->assertEquals($wanted_http_code, $eh_response->getStatusCode(),
+			sprintf('Unexpected HTTP code value for "%s".', $exception_type));
+		if ($has_data_node) {
+			$data = $eh_response_json->{ResponseBuilder::KEY_DATA};
+			$this->assertNotNull($data);
+			$this->assertObjectHasAttribute(ResponseBuilder::KEY_MESSAGES, $data);
+			$this->assertIsObject($data->{ResponseBuilder::KEY_MESSAGES});
 		}
 	}
 
