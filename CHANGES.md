@@ -20,6 +20,8 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * `ResponseBuilder::errorWithHttpCode()` accepts now `null` as http code
    * Fixed `ExceptionHandlerHelper` converting http codes above 499 to 400.
    * Changed default built-in message for `HTTP_NOT_FOUND` error.
+   * `ExceptionHandler` now falls back to `EX_UNCAUGHT_EXCEPTION` for all the cases.
+   * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.

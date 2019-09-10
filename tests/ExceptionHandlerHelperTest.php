@@ -13,12 +13,10 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Mockery\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -32,72 +30,67 @@ class ExceptionHandlerHelperTest extends TestCase
 	public function testRender_HttpException(): void
 	{
 		$codes = [
-			[
+			ExceptionHandlerHelper::TYPE_HTTP_NOT_FOUND_KEY           => [
 				'exception_class'           => HttpException::class,
-				'exception_status_code'     => HttpResponse::HTTP_NOT_FOUND,
-				'exception_type'            => ExceptionHandlerHelper::TYPE_HTTP_NOT_FOUND,
+				'default_http_code'         => HttpResponse::HTTP_NOT_FOUND,
 				'default_response_api_code' => BaseApiCodes::EX_HTTP_NOT_FOUND,
 			],
-			[
+			ExceptionHandlerHelper::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY => [
 				'exception_class'           => HttpException::class,
-				'exception_status_code'     => HttpResponse::HTTP_SERVICE_UNAVAILABLE,
-				'exception_type'            => ExceptionHandlerHelper::TYPE_HTTP_SERVICE_UNAVAILABLE,
+				'default_http_code'         => HttpResponse::HTTP_SERVICE_UNAVAILABLE,
 				'default_response_api_code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE,
 			],
-			[
+			ExceptionHandlerHelper::TYPE_HTTP_EXCEPTION_KEY           => [
 				'exception_class'           => HttpException::class,
-				'exception_status_code'     => HttpResponse::HTTP_UNAUTHORIZED,
-				'exception_type'            => ExceptionHandlerHelper::TYPE_HTTP_UNAUTHORIZED,
-				'default_response_api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION,
-			],
-			[
-				'exception_class'           => HttpException::class,
-				'exception_status_code'     => HttpResponse::HTTP_BAD_REQUEST,
-				'exception_type'            => ExceptionHandlerHelper::TYPE_DEFAULT,
+				'default_http_code'         => HttpResponse::HTTP_BAD_REQUEST,
 				'default_response_api_code' => BaseApiCodes::EX_HTTP_EXCEPTION,
 			],
-		];
-		foreach ($codes as $params) {
-			$exception_type = $params['exception_type'];
+			ExceptionHandlerHelper::TYPE_UNCAUGHT_EXCEPTION_KEY       => [
+				'exception_class'           => \RuntimeException::class,
+				'default_http_code'         => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+				'default_response_api_code' => BaseApiCodes::EX_UNCAUGHT_EXCEPTION,
+			],
+			ExceptionHandlerHelper::TYPE_HTTP_UNAUTHORIZED_KEY        => [
+				'exception_class'           => HttpException::class,
+				'default_http_code'         => HttpResponse::HTTP_UNAUTHORIZED,
+				'default_response_api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION,
+			],
 
-			$base_config = 'response_builder.exception_handler.exception';
-			$response_api_code = \Config::get("{$base_config}.{$exception_type}.code", $params['default_response_api_code']);
-//			$http_code = \Config::get("{$base_config}.{$exception_type}.http_code", 0);
+			ExceptionHandlerHelper::TYPE_VALIDATION_EXCEPTION_KEY => [
+				'exception_class'           => ValidationException::class,
+				'default_http_code'         => HttpResponse::HTTP_BAD_REQUEST,
+				'default_response_api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION,
+			],
+
+		];
+		foreach ($codes as $exception_type => $params) {
+			$base_config_key = 'response_builder.exception_handler.exception';
+			$response_api_code = \Config::get("{$base_config_key}.{$exception_type}.code", $params['default_response_api_code']);
+			$http_code = \Config::get("{$base_config_key}.{$exception_type}.http_code", $params['default_http_code']);
 
 			$key = BaseApiCodes::getCodeMessageKey($response_api_code);
 			if ($key === null) {
 				$key = BaseApiCodes::getReservedCodeMessageKey($response_api_code);
 			}
 
-			$exception_class_under_test = $params['exception_class'];
-
-			/** @var \Exception $exception */
-			$exception = null;
-			/** @noinspection DegradedSwitchInspection */
-			switch ($exception_class_under_test) {
+			$expect_data_node_null = true;
+			switch ($params['exception_class']) {
 				case HttpException::class:
-					$exception = new $exception_class_under_test($params['exception_status_code']);
+					$exception = new $params['exception_class']($http_code);
+					break;
+
+				case ValidationException::class:
+					$rules = ['title' => 'required|min:10|max:255'];
+					$data = ['title' => ''];
+					$validator = app('validator')->make($data, $rules);
+					$exception = new ValidationException($validator);
+					$expect_data_node_null = false;
 					break;
 
 				default:
-					$this->fail("Unknown exception class: '{$exception_class_under_test}'");
+					$exception = new $params['exception_class'](null, $http_code);
 					break;
 			}
-
-//			// check if this is valid HTTP error code
-//			if ($http_code === 0) {
-//				// no code, let's try getting the exception status
-//				if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
-//					$http_code = $exception->getStatusCode();
-//				} else {
-//					$http_code = $exception->getCode();
-//				}
-//			}
-//
-//			// can it be considered valid HTTP error code?
-//			if ($http_code < 400) {
-//				$http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
-//			}
 
 			// hand the exception to the handler and examine its response JSON
 			$eh = new ExceptionHandlerHelper();
@@ -105,7 +98,9 @@ class ExceptionHandlerHelperTest extends TestCase
 			$eh_response_json = json_decode($eh_response->getContent(), false);
 
 			$this->assertValidResponse($eh_response_json);
-			$this->assertNull($eh_response_json->data);
+			if ($expect_data_node_null) {
+				$this->assertNull($eh_response_json->data);
+			}
 
 			$ex_message = trim($exception->getMessage());
 			if (\Config::get('response_builder.exception_handler.use_exception_message_first', true)) {
@@ -121,8 +116,8 @@ class ExceptionHandlerHelperTest extends TestCase
 			]);
 
 			$this->assertEquals($error_message, $eh_response_json->message);
-			$this->assertEquals($params['exception_status_code'], $eh_response->getStatusCode(),
-				sprintf('Unexpected HTTP code value for "%s".', $params['exception_status_code']));
+			$this->assertEquals($http_code, $eh_response->getStatusCode(),
+				sprintf('Unexpected HTTP code value for "%s".', $http_code));
 		}
 	}
 
