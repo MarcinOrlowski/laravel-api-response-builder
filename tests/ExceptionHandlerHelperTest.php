@@ -82,7 +82,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
 		$key = BaseApiCodes::getCodeMessageKey($response_api_code);
 		if ($key === null) {
-			$key = BaseApiCodes::getReservedCodeMessageKey($response_api_code);
+			$key = BaseApiCodes::getCodeMessageKey($response_api_code);
 		}
 
 		$expect_data_node_null = true;

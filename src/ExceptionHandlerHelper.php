@@ -155,7 +155,7 @@ class ExceptionHandlerHelper
 
 		$key = BaseApiCodes::getCodeMessageKey($api_code);
 		if ($key === null) {
-			$key = BaseApiCodes::getReservedCodeMessageKey($base_api_code);
+			$key = BaseApiCodes::getCodeMessageKey($base_api_code);
 		}
 
 		// let's build error error_message

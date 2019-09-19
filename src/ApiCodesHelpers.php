@@ -95,27 +95,6 @@ trait ApiCodesHelpers
 	}
 
 	/**
-	 * Returns locale mappings for given base api code or @null if there's no mapping
-	 *
-	 * @param integer $code Base (built-in) code to look for mapped message for.
-	 *
-	 * @return string|null
-	 *
-	 * @throws \InvalidArgumentException If $code is not in allowed reserved range.
-	 */
-	public static function getReservedCodeMessageKey($code): ?string
-	{
-		if (($code < BaseApiCodes::RESERVED_MIN_API_CODE) || ($code > BaseApiCodes::RESERVED_MAX_API_CODE)) {
-			throw new \InvalidArgumentException(
-				sprintf('Base code value (%d) is out of allowed reserved range %d-%d',
-					$code, BaseApiCodes::RESERVED_MIN_API_CODE, BaseApiCodes::RESERVED_MAX_API_CODE));
-		}
-
-		$base_map = BaseApiCodes::getBaseMap();
-		return $base_map[ $code ] ?? null;
-	}
-
-	/**
 	 * Returns locale mappings key for given api code or @null if there's no mapping
 	 *
 	 * @param integer $api_code Api code to look for mapped message for.

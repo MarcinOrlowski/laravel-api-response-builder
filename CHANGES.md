@@ -28,7 +28,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Removed `exception_handler.use_exception_message_first` feature.
    * Reserved code range lowered to 19 (from 63).
    * Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
-   * Removed `getReservedMinCode()` and `getReservedMinCode()` from `ApiCodesHelpers` trait.
+   * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` from `ApiCodesHelpers` trait.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.
