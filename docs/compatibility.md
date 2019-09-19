@@ -8,7 +8,7 @@
 ### v6 ###
 
  * Requires Laravel 6.0+ and PHP 7.2+
- * [BREAK] In previous versions built-in reserved codes were hardcoded and always in range of 1-63 which somehow, in certain
+ * [BREAKING] In previous versions built-in reserved codes were hardcoded and always in range of 1-63 which somehow, in certain
  situations contradicted the idea of code ranges. Starting from v6, all API codes (incl. built-in) are always within user
  assigned code range. This implies some breaking changes to the configuration of `ResponseBuilder`. Your API codes are no longer
  defined as fixed value (i.e. `const SOMETHING_WENT_WRONG = 172;`) but as **offset** from your range starting value (`min_code`).
@@ -23,6 +23,7 @@
  of this change is very low. Additionally, if you already set `http_code` field in your config (in ` exception_handler` block)
  then you need to change it from final value to **offset** as mentioned above.
  * [Low] Removed `exception_handler.use_exception_message_first` feature.
+ * [Low] Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
 
 
 ### v5 ###

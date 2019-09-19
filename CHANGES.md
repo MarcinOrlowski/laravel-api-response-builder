@@ -27,6 +27,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * `ExceptionHandler` returns more Exception-type related HTTP codes now.
    * Removed `exception_handler.use_exception_message_first` feature.
    * Reserved code range lowered to 19 (from 63).
+   * Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.

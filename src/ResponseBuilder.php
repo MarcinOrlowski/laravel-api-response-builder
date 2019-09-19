@@ -35,11 +35,6 @@ class ResponseBuilder
 	public const DEFAULT_HTTP_CODE_ERROR = HttpResponse::HTTP_BAD_REQUEST;
 
 	/**
-	 * Default API code for OK
-	 */
-	public const DEFAULT_API_CODE_OK = BaseApiCodes::OK;
-
-	/**
 	 * Min allowed HTTP code for errorXXX()
 	 */
 	public const ERROR_HTTP_CODE_MIN = 400;
@@ -252,7 +247,7 @@ class ResponseBuilder
 	 */
 	public static function successWithHttpCode(int $http_code = null): HttpResponse
 	{
-		return static::buildSuccessResponse(null, static::DEFAULT_API_CODE_OK, [], $http_code);
+		return static::buildSuccessResponse(null, BaseApiCodes::OK, [], $http_code);
 	}
 
 	/**
@@ -275,7 +270,7 @@ class ResponseBuilder
 			$http_code = static::DEFAULT_HTTP_CODE_OK;
 		}
 		if ($api_code === null) {
-			$api_code = static::DEFAULT_API_CODE_OK;
+			$api_code = BaseApiCodes::OK;
 		}
 
 		Validator::assertInt('api_code', $api_code);
@@ -429,9 +424,9 @@ class ResponseBuilder
 
 		Validator::assertInt('api_code', $api_code);
 
-		if ($api_code === static::DEFAULT_API_CODE_OK) {
+		if ($api_code === BaseApiCodes::OK) {
 			throw new \InvalidArgumentException(
-				sprintf('api_code must not be %d (DEFAULT_API_CODE_OK)', static::DEFAULT_API_CODE_OK));
+				sprintf('api_code must not be %d (OK)', BaseApiCodes::OK));
 		}
 
 		Validator::assertInt('http_code', $http_code);

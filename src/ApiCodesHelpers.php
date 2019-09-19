@@ -135,7 +135,6 @@ trait ApiCodesHelpers
 		return $base_map[ $code ] ?? null;
 	}
 
-
 	/**
 	 * Returns locale mappings key for given api code or @null if there's no mapping
 	 *
@@ -169,9 +168,7 @@ trait ApiCodesHelpers
 	{
 		$result = false;
 
-		if ((($code >= static::getMinCode()) && ($code <= static::getMaxCode()))
-			|| (($code <= static::getReservedMaxCode()) && ($code >= static::getReservedMinCode()))
-		) {
+		if ($code === BaseApiCodes::OK || (($code >= static::getMinCode()) && ($code <= static::getMaxCode()))) {
 			$result = true;
 		}
 
