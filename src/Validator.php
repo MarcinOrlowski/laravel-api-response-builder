@@ -43,7 +43,7 @@ class Validator
 
 		if ($min > $max) {
 			throw new \RuntimeException(
-				sprintf('%s: Invalid range for "%s". Ensure bounds are not swapped.', __FUNCTION__, $key));
+				sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.', __FUNCTION__, $key));
 		}
 
 		if (($min > $var) || ($var > $max)) {
