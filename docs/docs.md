@@ -374,8 +374,8 @@ This would produce expected and much cleaner data structure:
 
  Minimum requirements:
 
-  * PHP 5.5
-  * Laravel 5.1.45
+  * PHP 7.2+
+  * Laravel 6.*
 
  The following PHP extensions are optional but strongly recommended:
 
@@ -398,20 +398,10 @@ This would produce expected and much cleaner data structure:
  and tweak this file according to your needs. If you are fine with defaults, this step
  can safely be skipped (you can also remove published `config/response_builder.php` file).
 
+#### Setup ####
 
-#### Laravel 5.5+ setup ####
-
- `ResponseBuilder` supports Laravel 5.5's auto-discovery feature, so if you are using such
- version, you do not need to do much to make it work.
-
-#### Laravel older than 5.5 ####
-
- If you use Laravel 5.4 or older, then you need to manually register `ResponseBuilder` provider
- for Laravel to know about it existence. Edit `app/config.php` and add the following line to your
- `providers` array:
-
-    MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
-
+ `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once
+ installed with default configuration.
 
 #### ApiCodes class ####
 

@@ -7,7 +7,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 ## CHANGE LOG ##
 
 * v6.0.0 (2019-08-08)
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Requires Laravel 6.0+ and PHP 7.2+ (see docs for legacy support hints).
+   * All API codes are now configured as **offset** from `min_code`.
    * Added method arguments/returns type hints.
    * Removed unit tests for features now guarded by PHP via type hints.
    * Fixed `testError_DebugTrace()` not testing much.
@@ -16,8 +18,8 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Fixed error code fallback in `testRender_HttpException()` test.
    * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
    * Reformatted code for better on-line readability on Github.
-   * `ResponseBuilder::errorWithDataAndHttpCode()` accepts now `null` as http code
-   * `ResponseBuilder::errorWithHttpCode()` accepts now `null` as http code
+   * `ResponseBuilder::errorWithDataAndHttpCode()` accepts now `null` as http code.
+   * `ResponseBuilder::errorWithHttpCode()` accepts now `null` as http code.
    * Fixed `ExceptionHandlerHelper` converting http codes above 499 to 400.
    * Changed default built-in message for `HTTP_NOT_FOUND` error.
    * `ExceptionHandler` now falls back to `EX_UNCAUGHT_EXCEPTION` for all the cases.
