@@ -89,7 +89,7 @@ trait ApiCodesTests
 			$msg = sprintf("Value of '{$name}' ({$val}) is out of allowed range %d-%d",
 				$api_codes::getMinCode(), $api_codes::getMaxCode());
 
-			$this->assertTrue($api_codes::isCodeValid($val), $msg);
+			$this->assertTrue($api_codes::isCodeOffsetValid($val), $msg);
 		}
 	}
 

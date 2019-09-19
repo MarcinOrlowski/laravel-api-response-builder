@@ -38,6 +38,9 @@ trait TestingHelpers
 	/** @var int */
 	protected $random_api_code;
 
+	/** @var int */
+	protected $max_allowed_offset;
+
 	/** @var array */
 	protected $error_message_map = [];
 
@@ -74,9 +77,11 @@ trait TestingHelpers
 		$method = $this->getProtectedMethod(get_class($obj), 'getMaxCode');
 		$this->max_allowed_code = $method->invokeArgs($obj, []);
 
+		$this->max_allowed_offset = $this->max_allowed_code - $this->min_allowed_code;
+
 		// generate random api_code
 		/** @noinspection RandomApiMigrationInspection */
-		$this->random_api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
+		$this->random_api_code = mt_rand(0, $this->max_allowed_offset);
 
 		// AND corresponding mapped message mapping
 		$map = $this->getProtectedMember(\MarcinOrlowski\ResponseBuilder\BaseApiCodes::class, 'base_map');

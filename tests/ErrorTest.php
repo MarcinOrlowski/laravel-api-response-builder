@@ -211,7 +211,7 @@ class ErrorTest extends TestCase
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		// FIXME we **assume** this is not mapped. But assumptions sucks...
-		$api_code = $this->max_allowed_code - 1;
+		$api_code = $this->max_allowed_offset - 1;
 		$this->response = ResponseBuilder::error($api_code);
 
 		$key = $api_codes_class_name::getCodeMessageKey($api_codes_class_name::NO_ERROR_MESSAGE);

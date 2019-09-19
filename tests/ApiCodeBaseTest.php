@@ -69,17 +69,4 @@ class ApiCodeBaseTest extends TestCase
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, false);
 		BaseApiCodes::getMap();
 	}
-
-
-	/**
-	 * Tests getCodeMessageKey() for code outside of allowed range
-	 *
-	 * @return void
-	 */
-	public function testGetCodeMessageKey_OutOfRange(): void
-	{
-		$this->expectException(\InvalidArgumentException::class);
-
-		BaseApiCodes::getCodeMessageKey(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
-	}
 }
