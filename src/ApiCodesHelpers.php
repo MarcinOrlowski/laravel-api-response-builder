@@ -60,26 +60,6 @@ trait ApiCodesHelpers
 	}
 
 	/**
-	 * Returns lowest possible reserved code used by predefined Response Builder's messages
-	 *
-	 * @return integer
-	 */
-	protected static function getReservedMinCode(): int
-	{
-		return BaseApiCodes::RESERVED_MIN_API_CODE;
-	}
-
-	/**
-	 * Returns highest possible reserved code used by predefined Response Builder's messages
-	 *
-	 * @return integer
-	 */
-	protected static function getReservedMaxCode(): int
-	{
-		return BaseApiCodes::RESERVED_MAX_API_CODE;
-	}
-
-	/**
 	 * Returns array of error code constants defined in this class. Used mainly for debugging/tests
 	 *
 	 * @return array
@@ -173,6 +153,19 @@ trait ApiCodesHelpers
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Checks if given $code_offset is valid in this module and can be safely used
+	 *
+	 * @param integer $code_offset Code offset to check
+	 *
+	 * @return boolean
+	 */
+	public static function isCodeOffsetValid($code_offset): bool
+	{
+		$max_code_offset = static::getMaxCode() - static::getMinCode();
+		return $code_offset <= $max_code_offset;
 	}
 
 }

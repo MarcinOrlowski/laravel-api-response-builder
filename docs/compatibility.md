@@ -24,6 +24,7 @@
  then you need to change it from final value to **offset** as mentioned above.
  * [Low] Removed `exception_handler.use_exception_message_first` feature.
  * [Low] Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
+ * [Low] Removed `getReservedMinCode()` and `getReservedMinCode()` from `ApiCodesHelpers` trait.
 
 
 ### v5 ###
