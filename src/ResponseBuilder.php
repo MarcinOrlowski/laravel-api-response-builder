@@ -478,9 +478,9 @@ class ResponseBuilder
 		Validator::assertInt('encoding_options', $encoding_options);
 
 		Validator::assertInt('api_code', $api_code);
-		if (!BaseApiCodes::isCodeValid($api_code)) {
-			$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
-				$api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+		if (!BaseApiCodes::isCodeOffsetValid($api_code)) {
+			$max_code_offset = BaseApiCodes::getMaxCodeOffset();
+			$msg = "API code offset value ({$api_code}) is out of allowed range 0-{$max_code_offset}";
 			throw new \InvalidArgumentException($msg);
 		}
 
