@@ -60,6 +60,16 @@ trait ApiCodesHelpers
 	}
 
 	/**
+	 * Returns max allowed code offset for this range.
+	 *
+	 * @return int
+	 */
+	public static function getMaxCodeOffset(): int
+	{
+		return static::getMaxCode() - static::getMinCode();
+	}
+
+	/**
 	 * Returns array of error code constants defined in this class. Used mainly for debugging/tests
 	 *
 	 * @return array
@@ -97,41 +107,23 @@ trait ApiCodesHelpers
 	/**
 	 * Returns locale mappings key for given api code or @null if there's no mapping
 	 *
-	 * @param integer $api_code Api code to look for mapped message for.
+	 * @param integer $api_code_offset Api code to look for mapped message for.
 	 *
 	 * @return string|null
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed range.
 	 */
-	public static function getCodeMessageKey($api_code): ?string
+	public static function getCodeMessageKey($api_code_offset): ?string
 	{
-		if (!static::isCodeValid($api_code)) {
-			$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
-				$api_code, static::getMinCode(), static::getMaxCode());
+		if (!static::isCodeOffsetValid($api_code_offset)) {
+			$max_code_offset = static::getMaxCodeOffset();
+			$msg = "API code offset value ({$api_code_offset}) is out of allowed range 0-{$max_code_offset}";
 			throw new \InvalidArgumentException($msg);
 		}
 
 		$map = static::getMap();
 
-		return $map[ $api_code ] ?? null;
-	}
-
-	/**
-	 * Checks if given $code can is valid in this module and can be safely used
-	 *
-	 * @param integer $code Code to check
-	 *
-	 * @return boolean
-	 */
-	public static function isCodeValid($code): bool
-	{
-		$result = false;
-
-		if ($code === BaseApiCodes::OK || (($code >= static::getMinCode()) && ($code <= static::getMaxCode()))) {
-			$result = true;
-		}
-
-		return $result;
+		return $map[ $api_code_offset ] ?? null;
 	}
 
 	/**
@@ -143,8 +135,7 @@ trait ApiCodesHelpers
 	 */
 	public static function isCodeOffsetValid($code_offset): bool
 	{
-		$max_code_offset = static::getMaxCode() - static::getMinCode();
-		return $code_offset <= $max_code_offset;
+		return $code_offset <= static::getMaxCodeOffset();
 	}
 
 }
