@@ -135,7 +135,7 @@ trait ApiCodesHelpers
 	 */
 	public static function isCodeOffsetValid($code_offset): bool
 	{
-		return $code_offset <= static::getMaxCodeOffset();
+		return ($code_offset >= 0) && ($code_offset <= static::getMaxCodeOffset());
 	}
 
 }
