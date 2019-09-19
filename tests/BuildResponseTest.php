@@ -140,7 +140,8 @@ class BuildResponseTest extends TestCase
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		/** @noinspection PhpParamsInspection */
-		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code_offset);
+		$code_ok = $api_codes_class_name::getCodeForInternalOffset($api_codes_class_name::OK_OFFSET);
+		$this->callMakeMethod(true, $code_ok, $message_or_api_code_offset);
 	}
 
 	/**

@@ -33,32 +33,32 @@ class ExceptionHandlerHelperTest extends TestCase
 			ExceptionHandlerHelper::TYPE_HTTP_NOT_FOUND_KEY           => [
 				'exception_class'           => HttpException::class,
 				'default_http_code'         => HttpResponse::HTTP_NOT_FOUND,
-				'default_response_api_code' => BaseApiCodes::EX_HTTP_NOT_FOUND,
+				'default_response_api_code' => BaseApiCodes::EX_HTTP_NOT_FOUND_OFFSET,
 			],
 			ExceptionHandlerHelper::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY => [
 				'exception_class'           => HttpException::class,
 				'default_http_code'         => HttpResponse::HTTP_SERVICE_UNAVAILABLE,
-				'default_response_api_code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE,
+				'default_response_api_code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET,
 			],
 			ExceptionHandlerHelper::TYPE_HTTP_EXCEPTION_KEY           => [
 				'exception_class'           => HttpException::class,
 				'default_http_code'         => HttpResponse::HTTP_BAD_REQUEST,
-				'default_response_api_code' => BaseApiCodes::EX_HTTP_EXCEPTION,
+				'default_response_api_code' => BaseApiCodes::EX_HTTP_EXCEPTION_OFFSET,
 			],
 			ExceptionHandlerHelper::TYPE_UNCAUGHT_EXCEPTION_KEY       => [
 				'exception_class'           => \RuntimeException::class,
 				'default_http_code'         => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-				'default_response_api_code' => BaseApiCodes::EX_UNCAUGHT_EXCEPTION,
+				'default_response_api_code' => BaseApiCodes::EX_UNCAUGHT_EXCEPTION_OFFSET,
 			],
 			ExceptionHandlerHelper::TYPE_HTTP_UNAUTHORIZED_KEY        => [
 				'exception_class'           => HttpException::class,
 				'default_http_code'         => HttpResponse::HTTP_UNAUTHORIZED,
-				'default_response_api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION,
+				'default_response_api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION_OFFSET,
 			],
 			ExceptionHandlerHelper::TYPE_VALIDATION_EXCEPTION_KEY     => [
 				'exception_class'           => ValidationException::class,
 				'default_http_code'         => HttpResponse::HTTP_BAD_REQUEST,
-				'default_response_api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION,
+				'default_response_api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION_OFFSET,
 				'validate_message'          => false,
 				'has_data_node'             => true,
 			],

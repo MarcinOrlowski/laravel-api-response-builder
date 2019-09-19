@@ -246,7 +246,7 @@ class ResponseBuilder
 	 */
 	public static function successWithHttpCode(int $http_code = null): HttpResponse
 	{
-		return static::buildSuccessResponse(null, BaseApiCodes::OK, [], $http_code);
+		return static::buildSuccessResponse(null, BaseApiCodes::getCodeForInternalOffset(BaseApiCodes::OK_OFFSET), [], $http_code);
 	}
 
 	/**
@@ -265,7 +265,7 @@ class ResponseBuilder
 	                                               int $http_code = null, int $encoding_options = null): HttpResponse
 	{
 		$http_code = $http_code ?? static::DEFAULT_HTTP_CODE_OK;
-		$api_code_offset = $api_code_offset ?? BaseApiCodes::OK;
+		$api_code_offset = $api_code_offset ?? BaseApiCodes::getCodeForInternalOffset(BaseApiCodes::OK_OFFSET);
 
 		Validator::assertInt('api_code_offset', $api_code_offset);
 		Validator::assertInt('http_code', $http_code);
@@ -413,9 +413,9 @@ class ResponseBuilder
 
 		Validator::assertInt('api_code_offset', $api_code_offset);
 		Validator::assertIntRange('api_code_offset', $api_code_offset, 0, BaseApiCodes::getMaxCodeOffset());
-		if ($api_code_offset === BaseApiCodes::OK) {
-			throw new \InvalidArgumentException(
-				sprintf('api_code_offset value must not equal %d (reserved for OK)', BaseApiCodes::OK));
+		$code_ok = BaseApiCodes::getCodeForInternalOffset(BaseApiCodes::OK_OFFSET);
+		if ($api_code_offset === $code_ok) {
+			throw new \InvalidArgumentException("api_code_offset value must not be equal {$code_ok} (reserved for OK)");
 		}
 
 		Validator::assertInt('http_code', $http_code);
@@ -448,7 +448,6 @@ class ResponseBuilder
 	                               int $http_code = null, array $lang_args = null, array $headers = null,
 	                               int $encoding_options = null, array $debug_data = null): HttpResponse
 	{
-		$lang_args = $lang_args ?? ['api_code' => $message_or_api_code_offset];
 		$headers = $headers ?? [];
 		$http_code = $http_code ?? ($success ? static::DEFAULT_HTTP_CODE_OK : static::DEFAULT_HTTP_CODE_ERROR);
 		$encoding_options = $encoding_options ?? Config::get(self::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
@@ -469,24 +468,23 @@ class ResponseBuilder
 			);
 		}
 
+		// get the public API code as exposed to the clients
+		$final_api_code = $api_code_offset;
+		if ($api_code_offset > 0) {
+			$final_api_code += BaseApiCodes::getMinCode();
+		}
+
 		// we got code, not message string, so we need to check if we have the mapping for
 		// this string already configured.
 		if (is_int($message_or_api_code_offset)) {
 			$key = BaseApiCodes::getCodeMessageKey($message_or_api_code_offset);
 			if ($key === null) {
 				// nope, let's get the default one instead
-				$key = BaseApiCodes::getCodeMessageKey($success
-					? BaseApiCodes::OK
-					: BaseApiCodes::NO_ERROR_MESSAGE
-				);
+				$key = BaseApiCodes::getCodeMessageKey(
+					$success ? BaseApiCodes::OK_OFFSET : BaseApiCodes::NO_ERROR_MESSAGE_OFFSET);
 			}
+			$lang_args = $lang_args ?? ['api_code' => $message_or_api_code_offset];
 			$message_or_api_code_offset = \Lang::get($key, $lang_args);
-		}
-
-		// get the public API code as exposed to the clients
-		$final_api_code = $api_code_offset;
-		if ($api_code_offset > 0) {
-			$final_api_code += BaseApiCodes::getMinCode();
 		}
 
 		return Response::json(

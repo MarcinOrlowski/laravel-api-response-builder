@@ -210,11 +210,11 @@ class ErrorTest extends TestCase
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		// FIXME we **assume** this is not mapped. But assumptions sucks...
+		// FIXME we **assume** this code is not set nor mapped. But assumptions suck...
 		$api_code_offset = $this->max_allowed_offset - 1;
 		$this->response = ResponseBuilder::error($api_code_offset);
 
-		$key = $api_codes_class_name::getCodeMessageKey($api_codes_class_name::NO_ERROR_MESSAGE);
+		$key = $api_codes_class_name::getCodeMessageKey($api_codes_class_name::NO_ERROR_MESSAGE_OFFSET);
 		$lang_args = ['api_code' => $api_code_offset];
 		$msg = \Lang::get($key, $lang_args);
 
@@ -236,7 +236,7 @@ class ErrorTest extends TestCase
 
 		$data = null;
 		$http_code = 404;
-		$api_code_offset = $api_codes_class_name::OK;
+		$api_code_offset = $api_codes_class_name::OK_OFFSET;
 		$lang_args = null;
 
 		$this->callBuildErrorResponse($data, $api_code_offset, $http_code, $lang_args);
@@ -255,7 +255,7 @@ class ErrorTest extends TestCase
 
 		$data = null;
 		$http_code = null;
-		$api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE_OFFSET;
 		$lang_args = null;
 
 		$this->response = $this->callBuildErrorResponse($data, $api_code_offset, $http_code, $lang_args);
@@ -278,7 +278,7 @@ class ErrorTest extends TestCase
 
 		$data = null;
 		$http_code = 0;
-		$api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE_OFFSET;
 		$lang_args = null;
 
 		$this->callBuildErrorResponse($data, $api_code_offset, $http_code, $lang_args);
@@ -290,20 +290,20 @@ class ErrorTest extends TestCase
 	 * @noinspection PhpDocMissingThrowsInspection
 	 *
 	 * @param mixed|null $data
-	 * @param int|null   $api_code
+	 * @param int|null   $api_code_offset
 	 * @param int|null   $http_code
 	 * @param mixed|null $lang_args
 	 *
 	 * @return mixed
 	 */
-	protected function callBuildErrorResponse($data, $api_code, $http_code, $lang_args)
+	protected function callBuildErrorResponse($data, $api_code_offset, $http_code, $lang_args)
 	{
 		$obj = new ResponseBuilder();
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$method = $this->getProtectedMethod(get_class($obj), 'buildErrorResponse');
 
 		return $method->invokeArgs($obj, [$data,
-		                                  $api_code,
+		                                  $api_code_offset,
 		                                  $http_code,
 		                                  $lang_args]);
 	}

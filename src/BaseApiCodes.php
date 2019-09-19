@@ -23,7 +23,6 @@ class BaseApiCodes
 {
 	use ApiCodesHelpers;
 
-
 	/**
 	 * protected code range - lowest code offset for reserved range
 	 */
@@ -34,56 +33,54 @@ class BaseApiCodes
 	 */
 	public const RESERVED_MAX_API_CODE = 19;
 
-
 	/**
 	 * built-in codes: OK
 	 */
-	public const OK = 0;
+	public const OK_OFFSET = 0;
 	/**
 	 * built-in code for fallback message mapping
 	 */
-	public const NO_ERROR_MESSAGE = 1;
+	public const NO_ERROR_MESSAGE_OFFSET = 1;
 	/**
 	 * built-in error code for HTTP_NOT_FOUND exception
 	 */
-	public const EX_HTTP_NOT_FOUND = 10;
+	public const EX_HTTP_NOT_FOUND_OFFSET = 10;
 	/**
 	 * built-in error code for HTTP_SERVICE_UNAVAILABLE exception
 	 */
-	public const EX_HTTP_SERVICE_UNAVAILABLE = 11;
+	public const EX_HTTP_SERVICE_UNAVAILABLE_OFFSET = 11;
 	/**
 	 * built-in error code for HTTP_EXCEPTION
 	 */
-	public const EX_HTTP_EXCEPTION = 12;
+	public const EX_HTTP_EXCEPTION_OFFSET = 12;
 	/**
 	 * built-in error code for UNCAUGHT_EXCEPTION
 	 */
-	public const EX_UNCAUGHT_EXCEPTION = 13;
+	public const EX_UNCAUGHT_EXCEPTION_OFFSET = 13;
 
 	/**
 	 * built-in error code for \Illuminate\Auth\AuthenticationException
 	 */
-	public const EX_AUTHENTICATION_EXCEPTION = 14;
+	public const EX_AUTHENTICATION_EXCEPTION_OFFSET = 14;
 
 	/**
 	 * built-in error code for \Illuminate\Auth\AuthenticationException
 	 */
-	public const EX_VALIDATION_EXCEPTION = 15;
+	public const EX_VALIDATION_EXCEPTION_OFFSET = 15;
 
 
 	/**
 	 * @var array built-in codes mapping
 	 */
 	protected static $base_map = [
-		self::OK                          => 'response-builder::builder.ok',
-		self::NO_ERROR_MESSAGE            => 'response-builder::builder.no_error_message',
-
-		self::EX_HTTP_NOT_FOUND           => 'response-builder::builder.http_not_found',
-		self::EX_HTTP_SERVICE_UNAVAILABLE => 'response-builder::builder.http_service_unavailable',
-		self::EX_HTTP_EXCEPTION           => 'response-builder::builder.http_exception',
-		self::EX_UNCAUGHT_EXCEPTION       => 'response-builder::builder.uncaught_exception',
-		self::EX_AUTHENTICATION_EXCEPTION => 'response-builder::builder.authentication_exception',
-		self::EX_VALIDATION_EXCEPTION     => 'response-builder::builder.validation_exception',
+		self::OK_OFFSET                          => 'response-builder::builder.ok',
+		self::NO_ERROR_MESSAGE_OFFSET            => 'response-builder::builder.no_error_message',
+		self::EX_HTTP_NOT_FOUND_OFFSET           => 'response-builder::builder.http_not_found',
+		self::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET => 'response-builder::builder.http_service_unavailable',
+		self::EX_HTTP_EXCEPTION_OFFSET           => 'response-builder::builder.http_exception',
+		self::EX_UNCAUGHT_EXCEPTION_OFFSET       => 'response-builder::builder.uncaught_exception',
+		self::EX_AUTHENTICATION_EXCEPTION_OFFSET => 'response-builder::builder.authentication_exception',
+		self::EX_VALIDATION_EXCEPTION_OFFSET     => 'response-builder::builder.validation_exception',
 	];
 
 	/**
@@ -162,6 +159,26 @@ class BaseApiCodes
 	public static function getDefaultResponseKeyMap(): array
 	{
 		return static::$response_key_map;
+	}
+
+
+	/**
+	 * Returns final API code for internal code offset (i.e. OK_OFFSET)
+	 *
+	 * @param int $internal_code_offset
+	 *
+	 * @return int
+	 */
+	public static function getCodeForInternalOffset(int $internal_code_offset): int
+	{
+		$min = static::RESERVED_MIN_API_CODE;
+		$max = static::RESERVED_MAX_API_CODE;
+		if (($internal_code_offset < $min) || ($internal_code_offset > $max)) {
+			throw new \InvalidArgumentException(
+				sprintf('Invalid internal code offset (%d). Must be between %d-%d inclusive.', $internal_code_offset, $min, $max));
+		}
+
+		return ($internal_code_offset === static::OK_OFFSET) ? 0 : $internal_code_offset + static::getMinCode();
 	}
 
 }

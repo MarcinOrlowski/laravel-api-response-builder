@@ -121,7 +121,7 @@ trait TestingHelpers
 		if ($expected_api_code_offset === null) {
 			/** @var BaseApiCodes $api_codes */
 			$api_codes = $this->getApiCodesClassName();
-			$expected_api_code_offset = $api_codes::OK;
+			$expected_api_code_offset = $api_codes::OK_OFFSET;
 		}
 
 		$expected_http_code = $expected_http_code ?? ResponseBuilder::DEFAULT_HTTP_CODE_OK;
@@ -132,7 +132,7 @@ trait TestingHelpers
 		if ($expected_message === null) {
 			$key = \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey($expected_api_code_offset);
 			$key = $key ?? \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey(
-					\MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK);
+					\MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK_OFFSET);
 			$expected_message = \Lang::get($key, ['api_code' => $expected_api_code_offset]);
 		}
 
@@ -161,11 +161,16 @@ trait TestingHelpers
 		if ($expected_api_code_offset === null) {
 			/** @var BaseApiCodes $api_codes_class_name */
 			$api_codes_class_name = $this->getApiCodesClassName();
-			$expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE;
+			$expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE_OFFSET;
 		}
 
-		if ($expected_http_code < HttpResponse::HTTP_BAD_REQUEST) {
-			$this->fail(sprintf('TEST: Error HTTP code (%d) cannot be below %d', $expected_http_code, HttpResponse::HTTP_BAD_REQUEST));
+		if ($expected_http_code > ResponseBuilder::ERROR_HTTP_CODE_MAX) {
+			$this->fail(sprintf('TEST: Error HTTP code (%d) cannot be above %d',
+				$expected_http_code, ResponseBuilder::ERROR_HTTP_CODE_MAX));
+		}
+		if ($expected_http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
+			$this->fail(sprintf('TEST: Error HTTP code (%d) cannot be below %d',
+				$expected_http_code, ResponseBuilder::ERROR_HTTP_CODE_MIN));
 		}
 
 		$j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message, $extra_keys);
@@ -220,7 +225,7 @@ trait TestingHelpers
 	 */
 	public function assertValidResponse(\StdClass $json_object, array $extra_keys = []): void
 	{
-		$this->assertTrue(is_object($json_object));
+		$this->assertIsObject($json_object);
 
 		$items_ref = [
 			ResponseBuilder::KEY_SUCCESS,

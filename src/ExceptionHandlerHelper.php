@@ -54,32 +54,32 @@ class ExceptionHandlerHelper
 			switch ($exception->getStatusCode()) {
 				case HttpResponse::HTTP_NOT_FOUND:
 					$result = static::error($exception, static::TYPE_HTTP_NOT_FOUND_KEY,
-						BaseApiCodes::EX_HTTP_NOT_FOUND, HttpResponse::HTTP_NOT_FOUND);
+						BaseApiCodes::EX_HTTP_NOT_FOUND_OFFSET, HttpResponse::HTTP_NOT_FOUND);
 					break;
 
 				case HttpResponse::HTTP_SERVICE_UNAVAILABLE:
 					$result = static::error($exception, static::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY,
-						BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE, HttpResponse::HTTP_SERVICE_UNAVAILABLE);
+						BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET, HttpResponse::HTTP_SERVICE_UNAVAILABLE);
 					break;
 
 				case HttpResponse::HTTP_UNAUTHORIZED:
 					$result = static::error($exception, static::TYPE_HTTP_UNAUTHORIZED_KEY,
-						BaseApiCodes::EX_AUTHENTICATION_EXCEPTION, HttpResponse::HTTP_UNAUTHORIZED);
+						BaseApiCodes::EX_AUTHENTICATION_EXCEPTION_OFFSET, HttpResponse::HTTP_UNAUTHORIZED);
 					break;
 
 				default:
 					$result = static::error($exception, static::TYPE_HTTP_EXCEPTION_KEY,
-						BaseApiCodes::EX_HTTP_EXCEPTION, HttpResponse::HTTP_BAD_REQUEST);
+						BaseApiCodes::EX_HTTP_EXCEPTION_OFFSET, HttpResponse::HTTP_BAD_REQUEST);
 					break;
 			}
 		} elseif ($exception instanceof ValidationException) {
 			$result = static::error($exception, static::TYPE_VALIDATION_EXCEPTION_KEY,
-				BaseApiCodes::EX_VALIDATION_EXCEPTION, HttpResponse::HTTP_BAD_REQUEST);
+				BaseApiCodes::EX_VALIDATION_EXCEPTION_OFFSET, HttpResponse::HTTP_BAD_REQUEST);
 		}
 
 		if ($result === null) {
 			$result = static::error($exception, static::TYPE_UNCAUGHT_EXCEPTION_KEY,
-				BaseApiCodes::EX_UNCAUGHT_EXCEPTION, HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
+				BaseApiCodes::EX_UNCAUGHT_EXCEPTION_OFFSET, HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
 		}
 
 		return $result;
@@ -95,7 +95,7 @@ class ExceptionHandlerHelper
 	 */
 	protected function unauthenticated($request, AuthenticationException $exception): HttpResponse
 	{
-		return static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION);
+		return static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION_OFFSET);
 	}
 
 	/**
@@ -132,14 +132,14 @@ class ExceptionHandlerHelper
 
 		// let's figure out what event we are handling now
 		$known_codes = [
-			self::TYPE_HTTP_NOT_FOUND_KEY           => BaseApiCodes::EX_HTTP_NOT_FOUND,
-			self::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE,
-			self::TYPE_UNCAUGHT_EXCEPTION_KEY       => BaseApiCodes::EX_UNCAUGHT_EXCEPTION,
-			self::TYPE_AUTHENTICATION_EXCEPTION_KEY => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION,
-			self::TYPE_VALIDATION_EXCEPTION_KEY     => BaseApiCodes::EX_VALIDATION_EXCEPTION,
-			self::TYPE_HTTP_EXCEPTION_KEY           => BaseApiCodes::EX_HTTP_EXCEPTION,
+			self::TYPE_HTTP_NOT_FOUND_KEY           => BaseApiCodes::EX_HTTP_NOT_FOUND_OFFSET,
+			self::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET,
+			self::TYPE_UNCAUGHT_EXCEPTION_KEY       => BaseApiCodes::EX_UNCAUGHT_EXCEPTION_OFFSET,
+			self::TYPE_AUTHENTICATION_EXCEPTION_KEY => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION_OFFSET,
+			self::TYPE_VALIDATION_EXCEPTION_KEY     => BaseApiCodes::EX_VALIDATION_EXCEPTION_OFFSET,
+			self::TYPE_HTTP_EXCEPTION_KEY           => BaseApiCodes::EX_HTTP_EXCEPTION_OFFSET,
 		];
-		$base_api_code_offset = BaseApiCodes::NO_ERROR_MESSAGE;
+		$base_api_code_offset = BaseApiCodes::NO_ERROR_MESSAGE_OFFSET;
 		foreach ($known_codes as $item_config_key => $item_api_code) {
 			if ($api_code_offset === Config::get("{$base_config}.{$item_config_key}.code", $item_api_code)) {
 				$base_api_code_offset = $api_code_offset;
@@ -149,7 +149,8 @@ class ExceptionHandlerHelper
 
 		/** @var array|null $data Optional payload to return */
 		$data = null;
-		if ($api_code_offset === Config::get("{$base_config}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION)) {
+		if ($api_code_offset === Config::get("{$base_config}.validation_exception.code",
+				BaseApiCodes::EX_VALIDATION_EXCEPTION_OFFSET)) {
 			$data = [ResponseBuilder::KEY_MESSAGES => $exception->validator->errors()->messages()];
 		}
 
