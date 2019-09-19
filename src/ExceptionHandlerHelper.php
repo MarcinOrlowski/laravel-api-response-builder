@@ -99,20 +99,20 @@ class ExceptionHandlerHelper
 	}
 
 	/**
-	 * @param Exception $exception         Exception to be processed
-	 * @param string    $exception_type    Category of the exception
-	 * @param integer   $default_api_code  API code to return
-	 * @param integer   $default_http_code HTTP code to return
+	 * @param Exception $exception               Exception to be processed
+	 * @param string    $exception_type          Category of the exception
+	 * @param integer   $default_api_code_offset API code to return
+	 * @param integer   $default_http_code       HTTP code to return
 	 *
 	 * @return HttpResponse
 	 */
-	protected static function error(Exception $exception, $exception_type, $default_api_code,
+	protected static function error(Exception $exception, $exception_type, $default_api_code_offset,
 	                                $default_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse
 	{
 		// common prefix for config key
 		$base_config = 'response_builder.exception_handler.exception';
 
-		$api_code = Config::get("{$base_config}.{$exception_type}.code", $default_api_code);
+		$api_code_offset = Config::get("{$base_config}.{$exception_type}.code", $default_api_code_offset);
 		$http_code = Config::get("{$base_config}.{$exception_type}.http_code", $default_http_code);
 
 		// check if we now have valid HTTP error code for this case or need to make one up.
@@ -139,23 +139,23 @@ class ExceptionHandlerHelper
 			self::TYPE_VALIDATION_EXCEPTION_KEY     => BaseApiCodes::EX_VALIDATION_EXCEPTION,
 			self::TYPE_HTTP_EXCEPTION_KEY           => BaseApiCodes::EX_HTTP_EXCEPTION,
 		];
-		$base_api_code = BaseApiCodes::NO_ERROR_MESSAGE;
+		$base_api_code_offset = BaseApiCodes::NO_ERROR_MESSAGE;
 		foreach ($known_codes as $item_config_key => $item_api_code) {
-			if ($api_code === Config::get("{$base_config}.{$item_config_key}.code", $item_api_code)) {
-				$base_api_code = $api_code;
+			if ($api_code_offset === Config::get("{$base_config}.{$item_config_key}.code", $item_api_code)) {
+				$base_api_code_offset = $api_code_offset;
 				break;
 			}
 		}
 
 		/** @var array|null $data Optional payload to return */
 		$data = null;
-		if ($api_code === Config::get("{$base_config}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION)) {
+		if ($api_code_offset === Config::get("{$base_config}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION)) {
 			$data = [ResponseBuilder::KEY_MESSAGES => $exception->validator->errors()->messages()];
 		}
 
-		$key = BaseApiCodes::getCodeMessageKey($api_code);
+		$key = BaseApiCodes::getCodeMessageKey($api_code_offset);
 		if ($key === null) {
-			$key = BaseApiCodes::getCodeMessageKey($base_api_code);
+			$key = BaseApiCodes::getCodeMessageKey($base_api_code_offset);
 		}
 
 		// let's build error error_message
@@ -179,7 +179,7 @@ class ExceptionHandlerHelper
 
 		if ($ex_message === '') {
 			$error_message = Lang::get($key, [
-				'api_code'      => $api_code,
+				'api_code'      => $api_code_offset,
 				'error_message' => $ex_message,
 				'message'       => get_class($exception),
 			]);
@@ -189,7 +189,7 @@ class ExceptionHandlerHelper
 		// for this particular exception.
 		if ($error_message === '') {
 			$error_message = Lang::get($key, [
-				'api_code'      => $api_code,
+				'api_code'      => $api_code_offset,
 				'error_message' => $ex_message,
 				'message'       => get_class($exception),
 			]);
@@ -208,7 +208,7 @@ class ExceptionHandlerHelper
 			];
 		}
 
-		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code, null, $trace_data);
+		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code_offset, $error_message, $data, $http_code, null, $trace_data);
 	}
 
 }

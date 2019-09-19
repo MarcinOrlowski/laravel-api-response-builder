@@ -77,10 +77,10 @@ class ExceptionHandlerHelperTest extends TestCase
 	                                         bool $validate_message = true, bool $has_data_node = false): void
 	{
 		$base_config_key = 'response_builder.exception_handler.exception';
-		$response_api_code = \Config::get("{$base_config_key}.{$exception_type}.code", $default_response_api_code);
+		$response_api_code_offset = \Config::get("{$base_config_key}.{$exception_type}.code", $default_response_api_code);
 		$wanted_http_code = \Config::get("{$base_config_key}.{$exception_type}.wanted_http_code", $default_http_code);
 
-		$key = BaseApiCodes::getCodeMessageKey($response_api_code);
+		$key = BaseApiCodes::getCodeMessageKey($response_api_code_offset);
 		$expect_data_node_null = true;
 		switch ($exception_class) {
 			case HttpException::class:
@@ -116,7 +116,7 @@ class ExceptionHandlerHelperTest extends TestCase
 		}
 
 		$error_message = \Lang::get($key, [
-			'response_api_code' => $response_api_code,
+			'response_api_code' => $response_api_code_offset,
 			'message'           => $ex_message,
 			'class'             => get_class($exception),
 		]);

@@ -35,11 +35,11 @@ class InternalsTest extends TestCase
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		$message_or_api_code = [];    // invalid
+		$message_or_api_code_offset = [];    // invalid
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		/** @noinspection PhpParamsInspection */
-		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code);
+		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code_offset);
 	}
 
 	/**
@@ -51,9 +51,9 @@ class InternalsTest extends TestCase
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
-		$api_code = $this->max_allowed_code + 1;    // invalid
+		$api_code_offset = $this->max_allowed_offset + 1;    // invalid
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callMakeMethod(true, $api_code, 'message');
+		$this->callMakeMethod(true, $api_code_offset, 'message');
 	}
 
 
@@ -159,7 +159,7 @@ class InternalsTest extends TestCase
 	}
 
 	/**
-	 * Checks make() handling invalid type of api_code argument
+	 * Checks make() handling invalid type of api_code_offset argument
 	 *
 	 * @return void
 	 *
