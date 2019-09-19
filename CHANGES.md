@@ -26,6 +26,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
    * `ExceptionHandler` returns more Exception-type related HTTP codes now.
    * Removed `exception_handler.use_exception_message_first` feature.
+   * Reserved code range lowered to 19 (from 63).
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.

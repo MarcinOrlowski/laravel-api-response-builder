@@ -18,9 +18,9 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
- * ApiCodes tests trait. USe this trait to test your ApiCodes class.
+ * ApiCodes tests trait. Use this trait to test your ApiCodes class.
  * NOTE: that this trait reads class constants, therefore using it with any other class, or ApiCode class not based
- * on recommended `const`s will most likely not work.
+ * on recommended `const`s will not work.
  *
  * Please see [docs/testing.md](docs/testing.md) for more info about testing own code with provided helpers.
  */

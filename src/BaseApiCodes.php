@@ -25,14 +25,14 @@ class BaseApiCodes
 
 
 	/**
-	 * protected code range - lowest code
+	 * protected code range - lowest code offset for reserved range
 	 */
 	public const RESERVED_MIN_API_CODE = 0;
 
 	/**
-	 * protected code range - highest code
+	 * protected code range - highest code offset for reserved range
 	 */
-	public const RESERVED_MAX_API_CODE = 63;
+	public const RESERVED_MAX_API_CODE = 19;
 
 
 	/**
@@ -75,8 +75,8 @@ class BaseApiCodes
 	 * @var array built-in codes mapping
 	 */
 	protected static $base_map = [
-		self::OK               => 'response-builder::builder.ok',
-		self::NO_ERROR_MESSAGE => 'response-builder::builder.no_error_message',
+		self::OK                          => 'response-builder::builder.ok',
+		self::NO_ERROR_MESSAGE            => 'response-builder::builder.no_error_message',
 
 		self::EX_HTTP_NOT_FOUND           => 'response-builder::builder.http_not_found',
 		self::EX_HTTP_SERVICE_UNAVAILABLE => 'response-builder::builder.http_service_unavailable',
