@@ -266,12 +266,8 @@ class ResponseBuilder
 	protected static function buildSuccessResponse($data = null, int $api_code = null, array $lang_args = null,
 	                                               int $http_code = null, int $encoding_options = null): HttpResponse
 	{
-		if ($http_code === null) {
-			$http_code = static::DEFAULT_HTTP_CODE_OK;
-		}
-		if ($api_code === null) {
-			$api_code = BaseApiCodes::OK;
-		}
+		$http_code = $http_code ?? static::DEFAULT_HTTP_CODE_OK;
+		$api_code = $api_code ?? BaseApiCodes::OK;
 
 		Validator::assertInt('api_code', $api_code);
 		Validator::assertInt('http_code', $http_code);
@@ -440,7 +436,7 @@ class ResponseBuilder
 
 	/**
 	 * @param boolean        $success             @true if response indicate success, @false otherwise
-	 * @param integer        $api_code            internal code you want to return with the message
+	 * @param integer        $api_code_offset     internal code you want to return with the message
 	 * @param string|integer $message_or_api_code message string or API code
 	 * @param mixed|null     $data                optional additional data to be included in response object
 	 * @param integer|null   $http_code           return HTTP code for build Response object
@@ -455,32 +451,21 @@ class ResponseBuilder
 	 *
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
-	protected static function make(bool $success, int $api_code, $message_or_api_code, $data = null,
+	protected static function make(bool $success, int $api_code_offset, $message_or_api_code, $data = null,
 	                               int $http_code = null, array $lang_args = null, array $headers = null,
 	                               int $encoding_options = null, array $debug_data = null): HttpResponse
 	{
-		if ($lang_args === null) {
-			$lang_args = ['api_code' => $message_or_api_code];
-		}
-		if ($headers === null) {
-			$headers = [];
-		}
-		if ($http_code === null) {
-			$http_code = $success
-				? static::DEFAULT_HTTP_CODE_OK
-				: static::DEFAULT_HTTP_CODE_ERROR;
-		}
-		if ($encoding_options === null) {
-			$encoding_options = Config::get(self::CONF_KEY_ENCODING_OPTIONS,
-				static::DEFAULT_ENCODING_OPTIONS);
-		}
+		$lang_args = $lang_args ?? ['api_code' => $message_or_api_code];
+		$headers = $headers ?? [];
+		$http_code = $http_code ?? $success ? static::DEFAULT_HTTP_CODE_OK : static::DEFAULT_HTTP_CODE_ERROR;
+		$encoding_options = $encoding_options ?? Config::get(self::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
 
 		Validator::assertInt('encoding_options', $encoding_options);
 
-		Validator::assertInt('api_code', $api_code);
-		if (!BaseApiCodes::isCodeOffsetValid($api_code)) {
+		Validator::assertInt('api_code', $api_code_offset);
+		if (!BaseApiCodes::isCodeOffsetValid($api_code_offset)) {
 			$max_code_offset = BaseApiCodes::getMaxCodeOffset();
-			$msg = "API code offset value ({$api_code}) is out of allowed range 0-{$max_code_offset}";
+			$msg = "API code offset value ({$api_code_offset}) is out of allowed range 0-{$max_code_offset}";
 			throw new \InvalidArgumentException($msg);
 		}
 
@@ -506,7 +491,7 @@ class ResponseBuilder
 		}
 
 		return Response::json(
-			static::buildResponse($success, $api_code, $message_or_api_code, $data, $debug_data),
+			static::buildResponse($success, $api_code_offset, $message_or_api_code, $data, $debug_data),
 			$http_code, $headers, $encoding_options
 		);
 	}

@@ -81,10 +81,6 @@ class ExceptionHandlerHelperTest extends TestCase
 		$wanted_http_code = \Config::get("{$base_config_key}.{$exception_type}.wanted_http_code", $default_http_code);
 
 		$key = BaseApiCodes::getCodeMessageKey($response_api_code);
-		if ($key === null) {
-			$key = BaseApiCodes::getCodeMessageKey($response_api_code);
-		}
-
 		$expect_data_node_null = true;
 		switch ($exception_class) {
 			case HttpException::class:

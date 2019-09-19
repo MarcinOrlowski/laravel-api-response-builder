@@ -124,19 +124,15 @@ trait TestingHelpers
 			$expected_api_code = $api_codes::OK;
 		}
 
-		if ($expected_http_code === null) {
-			$expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_OK;
-		}
-
+		$expected_http_code = $expected_http_code ?? ResponseBuilder::DEFAULT_HTTP_CODE_OK;
 		if (($expected_http_code < 200) || ($expected_http_code > 299)) {
 			$this->fail("TEST: Success HTTP code ($expected_http_code) in not in range: 200-299.");
 		}
 
 		if ($expected_message === null) {
 			$key = \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey($expected_api_code);
-			if ($key === null) {
-				$key = \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey(\MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK);
-			}
+			$key = $key ?? \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey(
+				\MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK);
 			$expected_message = \Lang::get($key, ['api_code' => $expected_api_code]);
 		}
 
@@ -202,7 +198,8 @@ trait TestingHelpers
 
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
-		$expected_message_string = $expected_message ?? \Lang::get($api_codes_class_name::getCodeMessageKey($expected_api_code), ['api_code' => $expected_api_code]);
+		$expected_message_string = $expected_message ?? \Lang::get(
+			$api_codes_class_name::getCodeMessageKey($expected_api_code), ['api_code' => $expected_api_code]);
 		$this->assertEquals($expected_message_string, $j->message);
 
 		return $j;
