@@ -9,24 +9,23 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 * v6.0.0 (2019-08-08)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Requires Laravel 6.0+ and PHP 7.2+ (see docs for legacy support hints).
-   * All API codes are now configured as **offset** from `min_code`.
-   * Added method arguments/returns type hints.
-   * Removed unit tests for features now guarded by PHP via type hints.
-   * Fixed `testError_DebugTrace()` not testing much.
-   * Corrected test cases list in `testSuccess_DataAndHttpCode()`.
-   * Fixed exception message of `ApiCodesHelpers::getMaxCode()`.
-   * Fixed error code fallback in `testRender_HttpException()` test.
+   * All API codes are now withing defined code range, incl. built-in codes.
+   * Reserved code range lowered from former 63 down to 19.
+   * Added type hints to all method arguments and return values
+   * `ExceptionHandler` returns Exception-type related HTTP codes now as per configuration.
    * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
-   * Reformatted code for better on-line readability on Github.
+   * Fixed exception message of `ApiCodesHelpers::getMaxCode()`.
+   * Corrected test cases list in `testSuccess_DataAndHttpCode()`.
+   * Fixed error code fallback in `testRender_HttpException()` test.
+   * Fixed `testError_DebugTrace()` not containing any asserts.
+   * Reformatted code to not exceed 132 columns, for better on-line readability.
    * `ResponseBuilder::errorWithDataAndHttpCode()` accepts now `null` as http code.
    * `ResponseBuilder::errorWithHttpCode()` accepts now `null` as http code.
-   * Fixed `ExceptionHandlerHelper` converting http codes above 499 to 400.
+   * Fixed `ExceptionHandlerHelper` replacing HTTP codes above 499 with 400.
    * Changed default built-in message for `HTTP_NOT_FOUND` error.
    * `ExceptionHandler` now falls back to `EX_UNCAUGHT_EXCEPTION` for all the cases.
    * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
-   * `ExceptionHandler` returns more Exception-type related HTTP codes now.
    * Removed `exception_handler.use_exception_message_first` feature.
-   * Reserved code range lowered to 19 (from 63).
    * Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
    * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()`, `isCodeValid()` methods.
 
