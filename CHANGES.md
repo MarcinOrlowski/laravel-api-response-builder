@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* v6.0.0 (2019-08-08)
+@dev
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Requires Laravel 6.0+ and PHP 7.2+ (see docs for legacy support hints).
    * All API codes are now withing defined code range, incl. built-in codes.
@@ -28,6 +28,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Removed `exception_handler.use_exception_message_first` feature.
    * Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
    * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods.
+   * Removed internal API code constants. Use corresponding methods to get proprt code value.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.
