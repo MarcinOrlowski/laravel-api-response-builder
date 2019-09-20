@@ -11,11 +11,6 @@
  provides drop-in replacement for Laravel's handler. Once installed, it ensures only JSON response will be 
  returned no matter what happens.
 
-## IMPORTANT ##
-
- While `ResponseBuilder` itself will work with Laravel 5.1, `ExceptionHandlerHelper` requires you use
- Laravel 5.2 or newer. 
-
 ## Using Exception Handler Helper ##
 
  To make it works, edit `app/Exceptions/Handler.php` file, and add
@@ -77,13 +72,13 @@
  You can also configure HTTP return code to use with each exception, by using `http_code` key
  for each of exceptions you need.
 
- **NOTE:** you must use valid HTTP error code. Codes outside of range from `400` (`HttpResponse::HTTP_BAD_REQUEST`)
- to `499` will be ignored and default value will be used instead.
+ **NOTE:** you must use valid HTTP error code. Codes outside of range from `400` (`BaseApiCodes::ERROR_HTTP_CODE_MIN`)
+ to `599` (`BaseApiCodes::ERROR_HTTP_CODE_MAX`) will be ignored and default value will be used instead.
 
  I.e. to alter HTTP code for `http_not_found`:
  
     'http_not_found' => [
-        'code'      => BaseApiCodes::EX_HTTP_NOT_FOUND,
+        'code'      => BaseApiCodes::EX_HTTP_NOT_FOUND(),
         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
     ],
 
@@ -97,7 +92,7 @@
         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
     ],
     'http_service_unavailable' => [
-        'code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE,
+        'code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
     ],
     'uncaught_exception' => [
     ],
@@ -112,12 +107,12 @@
  and add appropriate entry to `map` array:
 
     `map` => [
-        BaseApiCodes::EX_HTTP_NOT_FOUND           => 'api.http_not_found',
-        BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE => 'api.http_service_unavailable',
-        BaseApiCodes::EX_HTTP_EXCEPTION           => 'api.http_exception',
-        BaseApiCodes::EX_UNCAUGHT_EXCEPTION       => 'api.uncaught_exception',
-        BaseApiCodes::EX_AUTHENTICATION_EXCEPTION => 'api.authentication_exception',
-        BaseApiCodes::EX_VALIDATION_EXCEPTION     => 'api.validation_exception',
+        BaseApiCodes::EX_HTTP_NOT_FOUND()           => 'api.http_not_found',
+        BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE() => 'api.http_service_unavailable',
+        BaseApiCodes::EX_HTTP_EXCEPTION()           => 'api.http_exception',
+        BaseApiCodes::EX_UNCAUGHT_EXCEPTION()       => 'api.uncaught_exception',
+        BaseApiCodes::EX_AUTHENTICATION_EXCEPTION() => 'api.authentication_exception',
+        BaseApiCodes::EX_VALIDATION_EXCEPTION()     => 'api.validation_exception',
         ...
     ],
 
