@@ -39,7 +39,7 @@ class InternalsTest extends TestCase
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		/** @noinspection PhpParamsInspection */
-		$this->callMakeMethod(true, $api_codes_class_name::OK_OFFSET, $message_or_api_code);
+		$this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
 	}
 
 	/**
@@ -70,7 +70,7 @@ class InternalsTest extends TestCase
 
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, []);
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callMakeMethod(true, BaseApiCodes::OK_OFFSET, BaseApiCodes::OK_OFFSET);
+		$this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK());
 	}
 
 	/**
@@ -101,8 +101,7 @@ class InternalsTest extends TestCase
 		// fallback defaults in action
 		\Config::offsetUnset('encoding_options');
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$resp = $this->callMakeMethod(true,
-			BaseApiCodes::OK_OFFSET, BaseApiCodes::OK_OFFSET, $data);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -111,7 +110,7 @@ class InternalsTest extends TestCase
 
 		// check if it returns the same when defaults enforced explicitly
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$resp = $this->callMakeMethod(true, BaseApiCodes::OK_OFFSET, BaseApiCodes::OK_OFFSET, $data,
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data,
 			null, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 
 		$matches = [];
@@ -139,7 +138,7 @@ class InternalsTest extends TestCase
 		// check if it returns escaped
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$resp = $this->callMakeMethod(true, BaseApiCodes::OK_OFFSET, BaseApiCodes::OK_OFFSET, $data);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -150,7 +149,7 @@ class InternalsTest extends TestCase
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS,
 			JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$resp = $this->callMakeMethod(true, BaseApiCodes::OK_OFFSET, BaseApiCodes::OK_OFFSET, $data);
+		$resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -174,7 +173,7 @@ class InternalsTest extends TestCase
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		/** @noinspection PhpParamsInspection */
-		$this->callMakeMethod(true, BaseApiCodes::OK_OFFSET, []);
+		$this->callMakeMethod(true, BaseApiCodes::OK(), []);
 	}
 
 
@@ -210,7 +209,7 @@ class InternalsTest extends TestCase
 		);
 
 		$this->response = ResponseBuilder::success();
-		$this->getResponseSuccessObject(BaseApiCodes::OK_OFFSET);
+		$this->getResponseSuccessObject(BaseApiCodes::OK());
 	}
 
 

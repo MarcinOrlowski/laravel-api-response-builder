@@ -119,7 +119,7 @@ trait TestingHelpers
 		if ($expected_api_code_offset === null) {
 			/** @var BaseApiCodes $api_codes */
 			$api_codes = $this->getApiCodesClassName();
-			$expected_api_code_offset = $api_codes::OK_OFFSET;
+			$expected_api_code_offset = $this->getProtectedConstant($api_codes, 'OK_OFFSET');
 		}
 
 		$expected_http_code = $expected_http_code ?? ResponseBuilder::DEFAULT_HTTP_CODE_OK;
@@ -130,7 +130,7 @@ trait TestingHelpers
 		if ($expected_message === null) {
 			$key = \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey($expected_api_code_offset);
 			$key = $key ?? \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey(
-					\MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK_OFFSET);
+					\MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK());
 			$expected_message = \Lang::get($key, ['api_code' => $expected_api_code_offset]);
 		}
 

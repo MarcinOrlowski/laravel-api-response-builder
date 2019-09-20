@@ -32,10 +32,10 @@ class SuccessTest extends TestCase
 	public function testSuccess(): void
 	{
 		$this->response = ResponseBuilder::success();
-		$j = $this->getResponseSuccessObject(BaseApiCodes::OK_OFFSET);
+		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
 		$this->assertNull($j->data);
-		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK_OFFSET)), $j->message);
+		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
 	}
 
 	public function testSuccess_EncodingOptions(): void
@@ -51,7 +51,7 @@ class SuccessTest extends TestCase
 		\Config::set('encoding_options', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
 
 		$encoding_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
-		$resp = ResponseBuilder::success($data, BaseApiCodes::OK_OFFSET, null, null, $encoding_options);
+		$resp = ResponseBuilder::success($data, BaseApiCodes::OK(), null, null, $encoding_options);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -64,7 +64,7 @@ class SuccessTest extends TestCase
 		\Config::set('encoding_options', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 
 		$encoding_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE;
-		$resp = ResponseBuilder::success($data, BaseApiCodes::OK_OFFSET, null, null, $encoding_options);
+		$resp = ResponseBuilder::success($data, BaseApiCodes::OK(), null, null, $encoding_options);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -175,7 +175,7 @@ class SuccessTest extends TestCase
 				foreach ($http_code as $http_code_expect => $http_code_send) {
 					$this->response = ResponseBuilder::success($payload, null, [], $http_code_send);
 
-					$j = $this->getResponseSuccessObject($api_codes_class_name::OK_OFFSET, $http_code_expect);
+					$j = $this->getResponseSuccessObject($api_codes_class_name::OK(), $http_code_expect);
 
 					if ($payload !== null) {
 						$payload = (object)$payload;

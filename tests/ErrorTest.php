@@ -236,7 +236,7 @@ class ErrorTest extends TestCase
 
 		$data = null;
 		$http_code = 404;
-		$api_code = $api_codes_class_name::OK_OFFSET;
+		$api_code = $api_codes_class_name::OK();
 		$lang_args = null;
 
 		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
