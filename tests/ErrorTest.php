@@ -299,8 +299,9 @@ class ErrorTest extends TestCase
 	protected function callBuildErrorResponse($data, $api_code, $http_code, $lang_args)
 	{
 		$obj = new ResponseBuilder();
+
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$method = $this->getProtectedMethod(get_class($obj), 'buildErrorResponse');
+		$method = $this->getProtectedMethod($obj, 'buildErrorResponse');
 
 		return $method->invokeArgs($obj, [$data,
 		                                  $api_code,

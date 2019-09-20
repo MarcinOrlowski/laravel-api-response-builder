@@ -112,7 +112,7 @@ class InternalsTest extends TestCase
 		// check if it returns the same when defaults enforced explicitly
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK_OFFSET, BaseApiCodes::OK_OFFSET, $data,
-			null,ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+			null, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -192,7 +192,7 @@ class InternalsTest extends TestCase
 		\Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
 		$obj = new ResponseBuilder();
-		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');
+		$method = $this->getProtectedMethod($obj, 'getClassesMapping');
 		$method->invokeArgs($obj, []);
 	}
 
@@ -260,20 +260,26 @@ class InternalsTest extends TestCase
 
 	public function testGetCodeForInternalOffset_OffsetOutOfMaxBounds(): void
 	{
+		$obj = new BaseApiCodes();
+		$max = $this->getProtectedConstant($obj, 'RESERVED_MAX_API_CODE');
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$method = $this->getProtectedMethod($obj, 'getCodeForInternalOffset');
+
 		$this->expectException(\InvalidArgumentException::class);
-		BaseApiCodes::getCodeForInternalOffset(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
+		$method->invokeArgs($obj, [$max + 1]);
 	}
 
 	public function testGetCodeForInternalOffset_OffsetOutOfMinBounds(): void
 	{
+		$obj = new BaseApiCodes();
+		$min = $this->getProtectedConstant($obj, 'RESERVED_MIN_API_CODE');
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$method = $this->getProtectedMethod($obj, 'getCodeForInternalOffset');
+
 		$this->expectException(\InvalidArgumentException::class);
-
-		$obj = new ResponseBuilder();
-		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');
-		$method->invokeArgs($obj, []);
-
-
-		BaseApiCodes::getCodeForInternalOffset(BaseApiCodes::RESERVED_MIN_API_CODE - 1);
+		$method->invokeArgs($obj, [$min - 1]);
 	}
 
 }

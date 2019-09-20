@@ -351,21 +351,21 @@ trait TestingHelpers
 	 *
 	 * Usage example:
 	 * ----------------
-	 *   $method = $this->getProtectedMethod('App\Foo', 'someMethod');
 	 *   $obj = new \App\Foo();
+	 *   $method = $this->getProtectedMethod($obj, 'someMethod');
 	 *   $result = $method->invokeArgs($obj, ...);
 	 *
-	 * @param string $class_name  method's class name to, i.e. "Bar". Can be namespaced i.e. "Foo\Bar" (no starting backslash)
-	 * @param string $method_name method name to call
+	 * @param string|object $cls  method's class name to, i.e. "Bar". Can be namespaced i.e. "Foo\Bar" (no starting backslash)
+	 * @param string        $name method name to call
 	 *
 	 * @return \ReflectionMethod
 	 *
 	 * @throws \ReflectionException
 	 */
-	protected function getProtectedMethod(string $class_name, string $method_name): \ReflectionMethod
+	protected function getProtectedMethod($cls, string $name): \ReflectionMethod
 	{
-		$class = new \ReflectionClass($class_name);
-		$method = $class->getMethod($method_name);
+		$class = new \ReflectionClass($cls);
+		$method = $class->getMethod($name);
 		$method->setAccessible(true);
 
 		return $method;
@@ -374,20 +374,36 @@ trait TestingHelpers
 	/**
 	 * Returns value of otherwise non-public member of the class
 	 *
-	 * @param string $class_name  class name to get member from
-	 * @param string $member_name member name
+	 * @param string|object $cls  class name to get member from, or instance of that class
+	 * @param string        $name member name to grab (i.e. `max_length`)
 	 *
 	 * @return mixed
 	 *
 	 * @throws \ReflectionException
 	 */
-	protected function getProtectedMember(string $class_name, string $member_name)
+	protected function getProtectedMember($cls, string $name)
 	{
-		$reflection = new \ReflectionClass($class_name);
-		$property = $reflection->getProperty($member_name);
+		$reflection = new \ReflectionClass($cls);
+		$property = $reflection->getProperty($name);
 		$property->setAccessible(true);
 
-		return $property->getValue($class_name);
+		return $property->getValue($cls);
+	}
+
+	/**
+	 * Returns value of otherwise non-public member of the class
+	 *
+	 * @param string|object $cls  class name to get member from, or instance of that class
+	 * @param string        $name name of constant to grab (i.e. `FOO`)
+	 *
+	 * @return mixed
+	 * @throws \ReflectionException
+	 */
+	protected function getProtectedConstant($cls, string $name)
+	{
+		$reflection = new \ReflectionClass($cls);
+
+		return $reflection->getConstant($name);
 	}
 
 	/**
