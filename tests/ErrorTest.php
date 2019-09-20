@@ -19,11 +19,16 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class ErrorTest extends TestCase
 {
 	/**
+	 * @var HttpResponse
+	 */
+	protected $response;
+
+	/**
 	 * Check success()
 	 *
 	 * @return void
 	 */
-	public function testError()
+	public function testError(): void
 	{
 		// GIVEN random error code
 		$api_code = $this->random_api_code;
@@ -44,7 +49,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testError_WithDataHttpCode()
+	public function testError_WithDataHttpCode(): void
 	{
 		$http_codes = [HttpResponse::HTTP_CONFLICT,
 		               HttpResponse::HTTP_BAD_REQUEST,
@@ -76,7 +81,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithData()
+	public function testErrorWithData(): void
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 		$api_code = $this->random_api_code;
@@ -91,35 +96,22 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithDataAndHttpCode()
+	public function testErrorWithDataAndHttpCode(): void
 	{
-		$http_codes = [HttpResponse::HTTP_CONFLICT,
-		               HttpResponse::HTTP_BAD_REQUEST,
-		               HttpResponse::HTTP_FAILED_DEPENDENCY,
-		               ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
+		$http_codes = [
+			HttpResponse::HTTP_CONFLICT,
+			HttpResponse::HTTP_BAD_REQUEST,
+			HttpResponse::HTTP_FAILED_DEPENDENCY,
+			ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
 		];
 
 		foreach ($http_codes as $http_code) {
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-			$api_code = $this->random_api_code;
-			$this->response = ResponseBuilder::errorWithDataAndHttpCode($api_code, $data, $http_code);
+			$this->response = ResponseBuilder::errorWithDataAndHttpCode($this->random_api_code, $data, $http_code);
 
-			$j = $this->getResponseErrorObject($api_code, $http_code);
+			$j = $this->getResponseErrorObject($this->random_api_code, $http_code);
 			$this->assertEquals((object)$data, $j->data);
 		}
-	}
-
-	/**
-	 * Tests errorWithDataAndHttpCode() with http_code null
-	 *
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testErrorWithDataAndHttpCode_HttpCodeNull()
-	{
-//		$this->expectException(\InvalidArgumentException::class);
-		ResponseBuilder::errorWithDataAndHttpCode($this->random_api_code, null, null);
 	}
 
 	/**
@@ -127,33 +119,21 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithHttpCode()
+	public function testErrorWithHttpCode(): void
 	{
-		$http_codes = [HttpResponse::HTTP_CONFLICT,
-		               HttpResponse::HTTP_BAD_REQUEST,
-		               HttpResponse::HTTP_FAILED_DEPENDENCY,
-		               ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
+		$http_codes = [
+			HttpResponse::HTTP_CONFLICT,
+			HttpResponse::HTTP_BAD_REQUEST,
+			HttpResponse::HTTP_FAILED_DEPENDENCY,
+			ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
 		];
 
 		foreach ($http_codes as $http_code) {
-			$api_code = $this->random_api_code;
-			$this->response = ResponseBuilder::errorWithHttpCode($api_code, $http_code);
+			$this->response = ResponseBuilder::errorWithHttpCode($this->random_api_code, $http_code);
 
-			$j = $this->getResponseErrorObject($api_code, $http_code);
+			$j = $this->getResponseErrorObject($this->random_api_code, $http_code);
 			$this->assertNull($j->data);
 		}
-	}
-
-	/**
-	 * Tests errorWithHttpCode() with @null as http_code
-	 *
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testErrorWithHttpCode_NullHttpCode()
-	{
-		ResponseBuilder::errorWithHttpCode($this->random_api_code, null);
 	}
 
 	/**
@@ -161,7 +141,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithMessageAndData()
+	public function testErrorWithMessageAndData(): void
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 		$api_code = $this->random_api_code;
@@ -178,7 +158,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithMessageAndDataAndDebug()
+	public function testErrorWithMessageAndDataAndDebug(): void
 	{
 		$trace_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE);
 		$trace_data = [
@@ -192,15 +172,14 @@ class ErrorTest extends TestCase
 		$error_message = $this->getRandomString('msg');
 
 		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
-		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, null, null, $trace_data);
+		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message,
+			$data, null, null, $trace_data);
 
 		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $error_message);
 		$this->assertEquals($error_message, $j->message);
 		$this->assertEquals((object)$data, $j->data);
 
 		$debug_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
-//		var_dump((object)$trace_data);
-//		var_dump($j->debug_key);
 		$this->assertEquals((object)$trace_data, $j->$debug_key);
 	}
 
@@ -209,7 +188,7 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testErrorWithMessage()
+	public function testErrorWithMessage(): void
 	{
 		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
@@ -226,16 +205,16 @@ class ErrorTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testError_MissingMessageMapping()
+	public function testError_MissingMessageMapping(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		// FIXME we **assume** this is not mapped. But assumptions sucks...
+		// FIXME we **assume** this code is not set nor mapped. But assumptions suck...
 		$api_code = $this->max_allowed_code - 1;
 		$this->response = ResponseBuilder::error($api_code);
 
-		$key = $api_codes_class_name::getCodeMessageKey($api_codes_class_name::NO_ERROR_MESSAGE);
+		$key = $api_codes_class_name::getCodeMessageKey($api_codes_class_name::NO_ERROR_MESSAGE());
 		$lang_args = ['api_code' => $api_code];
 		$msg = \Lang::get($key, $lang_args);
 
@@ -247,73 +226,36 @@ class ErrorTest extends TestCase
 	 * Tests buildErrorResponse() fed with not allowed OK api code
 	 *
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
-	public function testBuildErrorResponse_ApiCodeOK()
+	public function testBuildErrorResponse_ApiCodeOK(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
 		$http_code = 404;
-		$api_code = $api_codes_class_name::OK;
+		$api_code = $api_codes_class_name::OK();
 		$lang_args = null;
 
 		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 	}
 
-
-	/**
-	 * Tests buildErrorResponse() fed with api_code in form of disallowed variable type
-	 *
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testBuildErrorResponse_WrongApiCodeType()
-	{
-		$data = null;
-		$http_code = 404;
-		$api_code = 'wrong-error-code';
-		$lang_args = null;
-
-		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
-	}
-
-	/**
-	 * Tests buildErrorResponse() fed with http_code in form of disallowed variable type
-	 *
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testBuildErrorResponse_WrongHttpCodeType()
-	{
-		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
-		$api_codes_class_name = $this->getApiCodesClassName();
-
-		$data = null;
-		$http_code = 'string-is-invalid';
-		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
-		$lang_args = null;
-
-		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
-	}
 
 	/**
 	 * Tests buildErrorResponse() fed with @null as http_code
 	 *
 	 * @return void
 	 */
-	public function testBuildErrorResponse_NullHttpCode()
+	public function testBuildErrorResponse_NullHttpCode(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
 		$http_code = null;
-		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE();
 		$lang_args = null;
 
 		$this->response = $this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
@@ -326,57 +268,40 @@ class ErrorTest extends TestCase
 	 * Tests buildErrorResponse() fed with http code out of allowed bounds
 	 *
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
-	public function testBuildErrorResponse_TooLowHttpCode()
+	public function testBuildErrorResponse_TooLowHttpCode(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		$data = null;
 		$http_code = 0;
-		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE();
 		$lang_args = null;
 
 		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 	}
 
 	/**
-	 * Tests buildErrorResponse() fed with wrong lang_args data
-	 *
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testBuildErrorResponse_WrongLangArgs()
-	{
-		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
-		$api_codes_class_name = $this->getApiCodesClassName();
-
-		$data = null;
-		$http_code = 404;
-		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE;
-		$lang_args = 'string-is-invalid';
-
-		/** @noinspection PhpParamsInspection */
-		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
-	}
-
-	/**
 	 * Calls protected method buildErrorResponse()
 	 *
-	 * @param mixed|null $data
-	 * @param int|null   $api_code
-	 * @param int|null   $http_code
-	 * @param mixed|null $lang_args
+	 * @noinspection PhpDocMissingThrowsInspection
+	 *
+	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
+	 * @param integer|null $api_code  API code to be returned with the response
+	 * @param integer|null $http_code HTTP error code to be returned with this Cannot be @null
+	 * @param array|null   $lang_args arguments array passed to Lang::get() for messages with placeholders
 	 *
 	 * @return mixed
 	 */
 	protected function callBuildErrorResponse($data, $api_code, $http_code, $lang_args)
 	{
 		$obj = new ResponseBuilder();
-		$method = $this->getProtectedMethod(get_class($obj), 'buildErrorResponse');
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$method = $this->getProtectedMethod($obj, 'buildErrorResponse');
 
 		return $method->invokeArgs($obj, [$data,
 		                                  $api_code,

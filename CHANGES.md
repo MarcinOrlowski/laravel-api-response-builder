@@ -6,9 +6,36 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+@dev
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * Requires Laravel 6.0+ and PHP 7.2+ (see docs for legacy support hints).
+   * All API codes are now withing defined code range, incl. built-in codes.
+   * Reserved code range lowered from former 63 down to 19.
+   * Added type hints to all method arguments and return values
+   * `ExceptionHandler` returns Exception-type related HTTP codes now as per configuration.
+   * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
+   * Fixed exception message of `ApiCodesHelpers::getMaxCode()`.
+   * Corrected test cases list in `testSuccess_DataAndHttpCode()`.
+   * Fixed error code fallback in `testRender_HttpException()` test.
+   * Fixed `testError_DebugTrace()` not containing any asserts.
+   * Reformatted code to not exceed 132 columns, for better on-line readability.
+   * `ResponseBuilder::errorWithDataAndHttpCode()` accepts now `null` as http code.
+   * `ResponseBuilder::errorWithHttpCode()` accepts now `null` as http code.
+   * Fixed `ExceptionHandlerHelper` replacing HTTP codes above 499 with 400.
+   * Changed default built-in message for `HTTP_NOT_FOUND` error.
+   * `ExceptionHandler` now falls back to `EX_UNCAUGHT_EXCEPTION` for all the cases.
+   * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
+   * Removed `exception_handler.use_exception_message_first` feature.
+   * Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
+   * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods.
+   * Removed internal API code constants. Use corresponding methods to get proprt code value.
+
+* v5.0.0
+   * Skipped to catch up with Laravel version numeration.
+
 * v4.1.9 (2019-08-08)
-   * Fixed ApiCodesHelpers::getMaxCode() exception message
-   * Fixed ResponseBuilder::errorWithMessageAndData() not passing args properly
+   * Fixed `ApiCodesHelpers::getMaxCode()` exception message
+   * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing args properly
 
 * v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup

@@ -11,11 +11,6 @@
  provides drop-in replacement for Laravel's handler. Once installed, it ensures only JSON response will be 
  returned no matter what happens.
 
-## IMPORTANT ##
-
- While `ResponseBuilder` itself will work with Laravel 5.1, `ExceptionHandlerHelper` requires you use
- Laravel 5.2 or newer. 
-
 ## Using Exception Handler Helper ##
 
  To make it works, edit `app/Exceptions/Handler.php` file, and add
@@ -77,13 +72,13 @@
  You can also configure HTTP return code to use with each exception, by using `http_code` key
  for each of exceptions you need.
 
- **NOTE:** you must use valid HTTP error code. Codes outside of range from `400` (`HttpResponse::HTTP_BAD_REQUEST`)
- to `499` will be ignored and default value will be used instead.
+ **NOTE:** you must use valid HTTP error code. Codes outside of range from `400` (`BaseApiCodes::ERROR_HTTP_CODE_MIN`)
+ to `599` (`BaseApiCodes::ERROR_HTTP_CODE_MAX`) will be ignored and default value will be used instead.
 
  I.e. to alter HTTP code for `http_not_found`:
  
     'http_not_found' => [
-        'code'      => BaseApiCodes::EX_HTTP_NOT_FOUND,
+        'code'      => BaseApiCodes::EX_HTTP_NOT_FOUND(),
         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
     ],
 
@@ -97,7 +92,7 @@
         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
     ],
     'http_service_unavailable' => [
-        'code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE,
+        'code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
     ],
     'uncaught_exception' => [
     ],
@@ -111,30 +106,20 @@
  If you want to override built-in messages for any (or all) exceptions, edit `config/response_builder.php`
  and add appropriate entry to `map` array:
 
-    BaseApiCodes::EX_HTTP_NOT_FOUND           => 'api.http_not_found',
-    BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE => 'api.http_service_unavailable',
-    BaseApiCodes::EX_HTTP_EXCEPTION           => 'api.http_exception',
-    BaseApiCodes::EX_UNCAUGHT_EXCEPTION       => 'api.uncaught_exception',
-    BaseApiCodes::EX_AUTHENTICATION_EXCEPTION => 'api.authentication_exception',
-    BaseApiCodes::EX_VALIDATION_EXCEPTION     => 'api.validation_exception',
-
+    `map` => [
+        BaseApiCodes::EX_HTTP_NOT_FOUND()           => 'api.http_not_found',
+        BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE() => 'api.http_service_unavailable',
+        BaseApiCodes::EX_HTTP_EXCEPTION()           => 'api.http_exception',
+        BaseApiCodes::EX_UNCAUGHT_EXCEPTION()       => 'api.uncaught_exception',
+        BaseApiCodes::EX_AUTHENTICATION_EXCEPTION() => 'api.authentication_exception',
+        BaseApiCodes::EX_VALIDATION_EXCEPTION()     => 'api.validation_exception',
+        ...
+    ],
 
  where `api.xxxx` entry must be valid localization string key from your app's localization strings
  pool as per Lang's requirements. You can use placeholders in your messages. Supported are 
  `:api_code` being substituted by actual code assigned to this exception and `:message`
  replaced by exception's `getMessage()` return value.
-
-## Exceptions with messages ##
-
- By default, messages obtained from `Exception` object have higher priority over configuration
- mapped error messages, which makes return messages usually more descriptive. This behaviour can
- be configured with `use_exception_message_first` option or by setting `EX_USE_EXCEPTION_MESSAGE`
- env variable. When it's `true` (default) **and** when exception's `getMessage()` returns non 
- empty string, then that string will be used as returned as `message`. If it is set to `true`
- but exception provides no message, then mapped message will be used and the `:message` placeholder
- will be substituted with exception class name. When option is set to `false`, then mapped messages
- will always be used  with `:message` placeholder being substituted with exception message (can if 
- it is empty string).
 
 ## Exception Handler conflicts ##
 

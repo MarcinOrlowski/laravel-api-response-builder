@@ -21,11 +21,16 @@ use Illuminate\Support\Facades\Config;
 class BuildResponseTest extends TestCase
 {
 	/**
+	 * @var HttpResponse
+	 */
+	protected $response;
+
+	/**
 	 * Tests if buildResponse() would properly handle auto conversion
 	 *
 	 * @return void
 	 */
-	public function testBuildResponse_ClassAutoConversionSingleElement()
+	public function testBuildResponse_ClassAutoConversionSingleElement(): void
 	{
 
 		// GIVEN model object with randomly set member value
@@ -58,9 +63,8 @@ class BuildResponseTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testBuildResponse_ClassAutoConversionAsPartOfDataset()
+	public function testBuildResponse_ClassAutoConversionAsPartOfDataset(): void
 	{
-
 		// GIVEN model object with randomly set member value
 		$model_1_val = $this->getRandomString('model_1');
 		$model_1 = new TestModel($model_1_val);
@@ -99,7 +103,7 @@ class BuildResponseTest extends TestCase
 		$this->assertNotNull($j->data);
 
 		// single key item must not be used
-		$this->assertObjectNotHasAttribute($classes[ $model_class_name ]['key'], $j->data, 'Single item key found but it should not');
+		$this->assertObjectNotHasAttribute($classes[ $model_class_name ]['key'], $j->data, 'Single item key found but should not');
 		// instead original key must be preserved
 		$this->assertObjectHasAttribute($model_1_data_key, $j->data, "Unable to find '{$model_1_data_key}' model 1 key'");
 		$this->assertEquals($model_1_val, $j->data->{$model_1_data_key}->val);
@@ -117,40 +121,35 @@ class BuildResponseTest extends TestCase
 
 
 	/**
-	 * @return void
+	 * @noinspection PhpDocMissingThrowsInspection
 	 *
-	 * @expectedException \InvalidArgumentException
+	 * @return void
 	 */
-	public function testMake_WrongMessage()
+	public function testMake_WrongMessage(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		$message_or_api_code = [];    // invalid
+		$message_or_api_code = [];    // invalid data type
 
-		$this->callMakeMethod(true, $api_codes_class_name::OK, $message_or_api_code);
-	}
-
-	/**
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testMake_CustomMessageAndWrongCode()
-	{
-		$api_code = [];    // invalid
+		/** @noinspection PhpUnhandledExceptionInspection */
 		/** @noinspection PhpParamsInspection */
-		$this->callMakeMethod(true, $api_code, 'message');
+		$this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
 	}
 
 	/**
-	 * @return void
+	 * @noinspection PhpDocMissingThrowsInspection
 	 *
-	 * @expectedException \InvalidArgumentException
+	 * @return void
 	 */
-	public function testMake_CustomMessageAndCodeOutOfRange()
+	public function testMake_CustomMessageAndCodeOutOfRange(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		$api_code = $this->max_allowed_code + 1;    // invalid
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, $api_code, 'message');
 	}
 

@@ -73,7 +73,7 @@
             $response = $this->call('POST', '/v1/session/foo');
             
             // get the JSON object
-            $j = json_decode($response->getContent());
+            $j = json_decode($response->getContent(), false);
             
             // validate JSON structure matches what ResponseBuilder produced
             $this->assertValidResponse($j);

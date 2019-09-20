@@ -25,7 +25,10 @@
 
 ## Response structure ##
 
- Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not only when I develop the API itself, but also when I later consume its output while writing client (i.e. mobile) applications. So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of the values. Sample response:
+ Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not
+ only when I develop the API itself, but also when I later consume its output while writing client (i.e. mobile) applications.
+ So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of 
+ the values. Sample response:
 
     {
       "success": true,
@@ -41,7 +44,7 @@
   * `code` (**int**) your own return code (usually used when `success` indicates failure),
   * `locale` (**string**) locale used for returned text error message (obtained automatically via `\App::getLocale()`). This helps when your API is multilingual so clients can check returned data is in correct language version,
   * `message` (**string**) human readable message. Usually explains meaning of `code` value,
-  * `data` (**object**|**null**) whatever additional data your API produces will be returned here. Even you return no extra data that key  still be here, however with `null` value.
+  * `data` (**object**|**null**) whatever additional data your API produces will be returned here. Even you return no extra data that key itself still be present response JSON.
 
  **NOTE:** If you need to return other/different fields in **core** response structure (not in `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for guidance of how to do that.
 
@@ -68,8 +71,8 @@
       "data": null
     }
 
- If you would like to return some data with your success response (which pretty much always the case :),
- wrap it into `array` and pass it to `success()` as argument:
+ If you would like to return some data with your success response (which pretty much always the case :), wrap it into `array` and 
+ pass it to `success()` as argument:
 
     $data = [ "foo" => "bar" ];
     return ResponseBuilder::success($data);
@@ -86,13 +89,11 @@
       }
     }
 
- `ResponseBuilder` is able to do the object conversion on-the-fly. Classes like Eloquent's Model or
- Collection are pre-configured, but you can easily make any other class handled.
- See [Data Conversion](#data-conversion) chapter for more details.
+ `ResponseBuilder` is able to do the object conversion on-the-fly. Classes like Eloquent's Model or Collection are pre-configured,
+ but you can easily make any other class handled. See [Data Conversion](#data-conversion) chapter for more details.
 
-
- **IMPORTANT:** `data` node is **always** a JSON Object. This is **enforced** by design,  therefore
- if you need to  return an array, you cannot pass it directly:
+ **IMPORTANT:** `data` node is **always** a JSON Object. This is **enforced** by the library design, therefore if you need to
+ return an array, you cannot pass it directly:
 
     // this is WRONG
     $returned_array = [1,2,3];
@@ -109,8 +110,8 @@ as this, due to array-to-object conversion, would produce:
       }
     }
 
- which most likely is not what you expect. To avoid this you need to make your array part of
- the data object, which simply means wrapping it into another array:
+ which most likely is not what you expect. To avoid this you need to make your array part of the data object, which simply means 
+ wrapping it into another array:
 
     // this is RIGHT
     $returned_array = [1,2,3];
@@ -132,15 +133,13 @@ This would produce expected and much cleaner data structure:
     $data = [[1,2,3]];
     return ResponseBuilder::success($data);
 
- as what you get in result depends on what is the index of first element of `$data`, which can simply
- be anything.
+ as what you get in result depends on what is the index of first element of `$data`, which can simply be anything.
 
 #### Errors ####
 
- Returning errors is almost as simple as returning success, however you need to provide at least error
- code to `error()` method which will be then reported back to caller
- (see [Installation and Configuration](#installation-and-configuration)). Indicating failure is
- as easy as:
+ Returning errors is almost as simple as returning success, however you need to provide at least error code to `error()` method
+ which will be then reported back to caller (see [Installation and Configuration](#installation-and-configuration)). Indicating
+ failure is as easy as:
 
     return ResponseBuilder::error(ApiCode::SOMETHING_WENT_WRONG);
 
@@ -154,25 +153,23 @@ This would produce expected and much cleaner data structure:
        "data": null
     }
 
- Please note the `message` key in the above JSON. `ResponseBuilder` tries to automatically obtain error
- message for each code you pass. This is all configured in `config/response_builder.php` file, with
- use of `map` array. See [ResponseBuilder Configuration](#response-builder-configuration) for more details.
- If there's no dedicated message configured for given error code, `message` value is provided with use
- of built-in generic fallback message "Error #xxx", as shown above.
+ Please note the `message` key in the above JSON. `ResponseBuilder` tries to automatically obtain error message for each code you
+ pass. This is all configured in `config/response_builder.php` file, with use of `map` array. 
+ See [ResponseBuilder Configuration](#response-builder-configuration) for more details. If there's no dedicated message configured
+ for given error code, `message` value is provided with use of built-in generic fallback message "Error #xxx", as shown above.
 
- As `ResponseBuilder` uses Laravel's `Lang` package for localisation, you can use the same features with
- your messages as you use across the whole application, including message placeholders:
+ As `ResponseBuilder` uses Laravel's `Lang` package for localisation, you can use the same features with your messages as you use
+ across the whole application, including message placeholders:
 
     return ResponseBuilder::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $login]);
 
- and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be
- correctly replaced with content of your `$login` variable.
+ and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be correctly replaced with content of
+ your `$login` variable.
 
- You can, however this is not really recommended, override built-in error message mapping too as
- `ResponseBuilder` comes with `errorWithMessage()` method, which expects string message as argument.
- This means you can just pass any string you want and it will be returned as `message` element
- in JSON response regardless the `code` value. Please note this method is pretty low-level and string
- is used as is without any further processing. If you want to use `Lang`'s placeholders here, you need
+ You can, however this is not really recommended, override built-in error message mapping too as `ResponseBuilder` comes with
+ `errorWithMessage()` method, which expects string message as argument. This means you can just pass any string you want and 
+ it will be returned as `message` element in JSON response regardless the `code` value. Please note this method is pretty 
+ low-level and string is used as is without any further processing. If you want to use `Lang`'s placeholders here, you need
  to handle them yourself by calling `Lang::get()` manually first and pass the result:
 
     $msg = Lang::get('message.something_wrong', ['login' => $login]);
@@ -183,36 +180,32 @@ This would produce expected and much cleaner data structure:
 ## Return Codes ##
 
  All return codes are integers however the meaning of the code is fully up to you. The only exception
- is `0` (zero) which **ALWAYS** means **success** and you cannot use `0` with `error()` mehods (but
- you **can** have other codes for success than `0`).
+ is `0` (zero) which **ALWAYS** means **success** and you cannot use `0` with `error()` methods (but
+ you can have other codes for success than `0` if needed).
 
 #### Code Ranges ####
 
- In one of my projects we had multiple APIs chained together (so one API called another, remote API).
- I wanted to be able to chain API invocations in the way that in case of problems (and cascading
- failure) I still would able to tell which one failed first. For example our API client app calls
- method of publicly exposed API "A". That API "A" internally calls method of completely different
- and separate API "B". Under the hood API "B" delegates some work and talks to API "C". When something
- go wrong and "C"'s metod fail, client shall see "C"'s error code and error message, not the "A"'s.
- To acheive this each API you chain return unique error codes and the values are unique per whole chain
- To support that `ResponseBuilder` features code ranges, allowing you to configure `min_code` and
- `max_code` you want to be allowed to use in given API. `ResponseBuilder` will ensure no values not
- from that range is ever returned, so to make the whole chain "clear", you only need to properly assign
- non-overlapping ranges to your APIs and `ResponseBuilder` do the rest. Any attempt to violate code range
- ends up with exception thrown.
+ In one of my projects we had multiple APIs chained together (so one API called another, remote API). I wanted to be able to chain
+ API invocations in the way that in case of problems (and cascading failure) I still would able to tell which one failed first. 
+ For example our API client app calls method of publicly exposed API "A". That API "A" internally calls method of completely
+ different and separate API "B". Under the hood API "B" delegates some work and talks to API "C". When something go wrong and
+ "C"'s metod fail, client shall see "C"'s error code and error message, not the "A"'s. To acheive this each API you chain return
+ unique error codes and the values are unique per whole chain To support that `ResponseBuilder` features code ranges, allowing 
+ you to configure `min_code` and `max_code` you want to be allowed to use in given API. `ResponseBuilder` will ensure no values not
+ from that range is ever returned, so to make the whole chain "clear", you only need to properly assign non-overlapping ranges to 
+ your APIs and `ResponseBuilder` do the rest. Any attempt to violate code range ends up with exception thrown.
 
- **IMPORTANT:** codes from `0` to `63` (inclusive) are reserved by `ResponseBuilder` and must not be used
- directly nor assigned to your codes.
+ **IMPORTANT:** first `20` codes in your range (from `0` to `19` inclusive) are reserved for `ResponseBuilder` internals and 
+ must not be used directly nor assigned to your codes.
 
- **NOTE:** code ranges feature cannot be turned off, but if you do not need it or you just have one API
- or no chaining, then just set `max_code` in your configuration file to some very high value.
+ **NOTE:** code ranges cannot be turned off, but if you do not need it or you just have one API or need no chaining, then just
+ set `max_code` in your configuration file to some very high value if needed or defaults do not fit.
 
 ----
 
 ## Exposed Methods ##
 
- All `ResponseBuilder` methods are **static**, and for simplicity of use, it's recommended to
- add the following `use` to your code:
+ All `ResponseBuilder` methods are **static**, and for simplicity of use, it's recommended to add the following `use` to your code:
 
     use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -234,7 +227,7 @@ This would produce expected and much cleaner data structure:
  of the response, `data` is always an object. If you pass anything else, type casting will be done internally.
  There's no smart logic here, just ordinary `$data = (object)$data;`. The only exception are classes configured
  with "classes" mapping (see configuration details). In such case configured conversion method is called on
- the provided object and result is returned instead. Laravel's  `Model` and `Collection` classes are pre-configured
+ the provided object and result is returned instead. Laravel's `Model` and `Collection` classes are pre-configured
  but you can add additional classes just by creating entry in configuration `classes` mapping.
 
  I recommend you always pass `$data` as an `array` or object with conversion mapping configured, otherwise
@@ -374,8 +367,8 @@ This would produce expected and much cleaner data structure:
 
  Minimum requirements:
 
-  * PHP 5.5
-  * Laravel 5.1.45
+  * PHP 7.2+
+  * Laravel 6.*
 
  The following PHP extensions are optional but strongly recommended:
 
@@ -398,20 +391,10 @@ This would produce expected and much cleaner data structure:
  and tweak this file according to your needs. If you are fine with defaults, this step
  can safely be skipped (you can also remove published `config/response_builder.php` file).
 
+#### Setup ####
 
-#### Laravel 5.5+ setup ####
-
- `ResponseBuilder` supports Laravel 5.5's auto-discovery feature, so if you are using such
- version, you do not need to do much to make it work.
-
-#### Laravel older than 5.5 ####
-
- If you use Laravel 5.4 or older, then you need to manually register `ResponseBuilder` provider
- for Laravel to know about it existence. Edit `app/config.php` and add the following line to your
- `providers` array:
-
-    MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
-
+ `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once
+ installed with default configuration.
 
 #### ApiCodes class ####
 

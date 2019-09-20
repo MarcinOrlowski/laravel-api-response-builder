@@ -20,7 +20,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	/**
 	 * @return string
 	 */
-	public function getApiCodesClassName()
+	public function getApiCodesClassName(): string
 	{
 		return \MarcinOrlowski\ResponseBuilder\BaseApiCodes::class;
 	}
@@ -34,7 +34,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	 *
 	 * @return array
 	 */
-	protected function getPackageProviders($app)
+	protected function getPackageProviders($app): array
 	{
 		return [
 			\MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider::class,
