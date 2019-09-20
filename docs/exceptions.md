@@ -111,13 +111,15 @@
  If you want to override built-in messages for any (or all) exceptions, edit `config/response_builder.php`
  and add appropriate entry to `map` array:
 
-    BaseApiCodes::EX_HTTP_NOT_FOUND           => 'api.http_not_found',
-    BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE => 'api.http_service_unavailable',
-    BaseApiCodes::EX_HTTP_EXCEPTION           => 'api.http_exception',
-    BaseApiCodes::EX_UNCAUGHT_EXCEPTION       => 'api.uncaught_exception',
-    BaseApiCodes::EX_AUTHENTICATION_EXCEPTION => 'api.authentication_exception',
-    BaseApiCodes::EX_VALIDATION_EXCEPTION     => 'api.validation_exception',
-
+    `map` => [
+        BaseApiCodes::EX_HTTP_NOT_FOUND           => 'api.http_not_found',
+        BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE => 'api.http_service_unavailable',
+        BaseApiCodes::EX_HTTP_EXCEPTION           => 'api.http_exception',
+        BaseApiCodes::EX_UNCAUGHT_EXCEPTION       => 'api.uncaught_exception',
+        BaseApiCodes::EX_AUTHENTICATION_EXCEPTION => 'api.authentication_exception',
+        BaseApiCodes::EX_VALIDATION_EXCEPTION     => 'api.validation_exception',
+        ...
+    ],
 
  where `api.xxxx` entry must be valid localization string key from your app's localization strings
  pool as per Lang's requirements. You can use placeholders in your messages. Supported are 
