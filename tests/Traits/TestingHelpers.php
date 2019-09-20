@@ -159,7 +159,7 @@ trait TestingHelpers
 		if ($expected_api_code_offset === null) {
 			/** @var BaseApiCodes $api_codes_class_name */
 			$api_codes_class_name = $this->getApiCodesClassName();
-			$expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE_OFFSET;
+			$expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE();
 		}
 
 		if ($expected_http_code > ResponseBuilder::ERROR_HTTP_CODE_MAX) {

@@ -53,8 +53,7 @@ class BuildResponseTest extends TestCase
 
 		// THEN returned response object should have it auto converted
 		$this->assertNotNull($j->data);
-		$this->assertObjectHasAttribute($classes[ $model_class_name ]['key'], $j->data,
-			'No single item key element not found');
+		$this->assertObjectHasAttribute($classes[ $model_class_name ]['key'], $j->data, 'No single item key element not found');
 		$this->assertEquals($model_val, $j->data->{$classes[ $model_class_name ]['key']}->val);
 	}
 
@@ -104,16 +103,13 @@ class BuildResponseTest extends TestCase
 		$this->assertNotNull($j->data);
 
 		// single key item must not be used
-		$this->assertObjectNotHasAttribute($classes[ $model_class_name ]['key'], $j->data,
-			'Single item key found but it should not');
+		$this->assertObjectNotHasAttribute($classes[ $model_class_name ]['key'], $j->data, 'Single item key found but should not');
 		// instead original key must be preserved
-		$this->assertObjectHasAttribute($model_1_data_key, $j->data,
-			"Unable to find '{$model_1_data_key}' model 1 key'");
+		$this->assertObjectHasAttribute($model_1_data_key, $j->data, "Unable to find '{$model_1_data_key}' model 1 key'");
 		$this->assertEquals($model_1_val, $j->data->{$model_1_data_key}->val);
 
 		$this->assertObjectHasAttribute('nested', $j->data);
-		$this->assertObjectHasAttribute($model_2_data_key, $j->data->nested,
-			"Unable to find '{$model_2_data_key}' model 2 key'");
+		$this->assertObjectHasAttribute($model_2_data_key, $j->data->nested, "Unable to find '{$model_2_data_key}' model 2 key'");
 		$this->assertEquals($model_2_val, $j->data->nested->{$model_2_data_key}->val);
 
 		// and all other elements of data set should also be here
@@ -136,12 +132,11 @@ class BuildResponseTest extends TestCase
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		$message_or_api_code = [];    // invalid
+		$message_or_api_code = [];    // invalid data type
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		/** @noinspection PhpParamsInspection */
-		$code_ok = $api_codes_class_name::OK();
-		$this->callMakeMethod(true, $code_ok, $message_or_api_code);
+		$this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
 	}
 
 	/**

@@ -387,7 +387,7 @@ class ResponseBuilder
 	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error message
 	 * uses placeholders as well as return data payload
 	 *
-	 * @param mixed|null   $data             payload array to be returned in 'data' node or response object
+	 * @param mixed|null   $data             payload array to be returned in 'data' node or response object or @null if none
 	 * @param integer      $api_code         API code to be returned with the response
 	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for default
 	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
@@ -414,7 +414,7 @@ class ResponseBuilder
 		Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 		$code_ok = BaseApiCodes::OK();
 		if ($api_code === $code_ok) {
-			throw new \InvalidArgumentException("api_code value must not be equal {$code_ok} (reserved for OK)");
+			throw new \InvalidArgumentException("Error response cannot use api_code of value  {$code_ok} which is reserved for OK");
 		}
 
 		Validator::assertInt('http_code', $http_code);

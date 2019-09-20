@@ -118,11 +118,9 @@ class ExceptionHandlerHelper
 		// check if we now have valid HTTP error code for this case or need to make one up.
 		if ($http_code === 0) {
 			// no code, let's try o get the exception status
-			if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
-				$http_code = $exception->getStatusCode();
-			} else {
-				$http_code = $exception->getCode();
-			}
+			$http_code = ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException)
+				? $exception->getStatusCode()
+				: $exception->getCode();
 		}
 
 		// can it be considered valid HTTP error code?
@@ -150,6 +148,7 @@ class ExceptionHandlerHelper
 		/** @var array|null $data Optional payload to return */
 		$data = null;
 		if ($api_code === Config::get("{$base_config}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION())) {
+			/** @var ValidationException $exception */
 			$data = [ResponseBuilder::KEY_MESSAGES => $exception->validator->errors()->messages()];
 		}
 

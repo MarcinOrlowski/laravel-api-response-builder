@@ -88,8 +88,9 @@ class ExceptionHandlerHelperTest extends TestCase
 				break;
 
 			case ValidationException::class:
-				$rules = ['title' => 'required|min:10|max:255'];
 				$data = ['title' => ''];
+				$rules = ['title' => 'required|min:10|max:255'];
+				/** @noinspection PhpUnhandledExceptionInspection */
 				$validator = app('validator')->make($data, $rules);
 				$exception = new ValidationException($validator);
 				$expect_data_node_null = false;

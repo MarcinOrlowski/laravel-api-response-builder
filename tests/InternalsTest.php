@@ -95,7 +95,6 @@ class InternalsTest extends TestCase
 	{
 		// source data
 		$test_string = 'ąćę';
-//		$test_string_escaped = $this->escape8($test_string);
 		$data = ['test' => $test_string];
 
 		// fallback defaults in action
@@ -204,9 +203,8 @@ class InternalsTest extends TestCase
 	public function testCustomResponseMapping(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
-				ResponseBuilder::KEY_SUCCESS => $this->getRandomString(),
-			]
-		);
+			ResponseBuilder::KEY_SUCCESS => $this->getRandomString(),
+		]);
 
 		$this->response = ResponseBuilder::success();
 		$this->getResponseSuccessObject(BaseApiCodes::OK());
@@ -221,7 +219,6 @@ class InternalsTest extends TestCase
 	public function testGetResponseKey_UnknownKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
-
 		BaseApiCodes::getResponseKey($this->getRandomString());
 	}
 
@@ -233,7 +230,6 @@ class InternalsTest extends TestCase
 	public function testResponseKeyMapping_InvalidMap(): void
 	{
 		$this->expectException(\RuntimeException::class);
-
 		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, 'invalid');
 		BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS);
 	}

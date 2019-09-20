@@ -123,7 +123,7 @@ trait ApiCodesHelpers
 	}
 
 	/**
-	 * Returns final API code for internal code offset (i.e. OK_OFFSET)
+	 * Returns final API code for internal code, remapped to configured code range
 	 *
 	 * @param int $internal_code
 	 *
@@ -138,7 +138,7 @@ trait ApiCodesHelpers
 				sprintf('Invalid internal code (%d). Must be between %d-%d inclusive.', $internal_code, $min, $max));
 		}
 
-		return ($internal_code === static::OK_OFFSET) ? 0 : $internal_code + static::getMinCode();
+		return ($internal_code === 0) ? 0 : $internal_code + static::getMinCode();
 	}
 
 }
