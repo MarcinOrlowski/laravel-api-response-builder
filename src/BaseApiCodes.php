@@ -74,7 +74,7 @@ class BaseApiCodes
 	 *
 	 * @return array
 	 */
-	public static function getBaseMap(): array
+	protected static function getBaseMap(): array
 	{
 		/**
 		 * @var array built-in codes mapping
@@ -92,20 +92,6 @@ class BaseApiCodes
 	}
 
 	// ---------------------------------------------
-
-	/**
-	 * Default response JSON key mapping
-	 *
-	 * @var array
-	 */
-	protected static $response_key_map = [
-		ResponseBuilder::KEY_SUCCESS => 'success',
-		ResponseBuilder::KEY_CODE    => 'code',
-		ResponseBuilder::KEY_LOCALE  => 'locale',
-		ResponseBuilder::KEY_MESSAGE => 'message',
-		ResponseBuilder::KEY_DATA    => 'data',
-	];
-
 
 	/**
 	 * Returns API code for internal code OK
@@ -199,12 +185,25 @@ class BaseApiCodes
 	 */
 	public static function getResponseKey($reference_key): string
 	{
+		/**
+		 * Default response JSON key mapping
+		 *
+		 * @var array
+		 */
+		$response_key_map = [
+			ResponseBuilder::KEY_SUCCESS => 'success',
+			ResponseBuilder::KEY_CODE    => 'code',
+			ResponseBuilder::KEY_LOCALE  => 'locale',
+			ResponseBuilder::KEY_MESSAGE => 'message',
+			ResponseBuilder::KEY_DATA    => 'data',
+		];
+
 		// ensure $key is known
-		if (!array_key_exists($reference_key, static::$response_key_map)) {
+		if (!array_key_exists($reference_key, $response_key_map)) {
 			throw new \RuntimeException(sprintf('Unknown response key reference "%s"', $reference_key));
 		}
 
-		$result = static::$response_key_map[ $reference_key ];
+		$result = $response_key_map[ $reference_key ];
 
 		// let's see if there's valid user mapping for that key first
 		$user_map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
