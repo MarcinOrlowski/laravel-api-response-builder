@@ -31,13 +31,13 @@ class ErrorTest extends TestCase
 	public function testError(): void
 	{
 		// GIVEN random error code
-		$api_code_offset = $this->random_api_code_offset;
+		$api_code = $this->random_api_code;
 
 		// WHEN we report error
-		$this->response = ResponseBuilder::error($api_code_offset);
+		$this->response = ResponseBuilder::error($api_code);
 
 		// THEN returned message contains given error code and mapped message
-		$j = $this->getResponseErrorObject($api_code_offset);
+		$j = $this->getResponseErrorObject($api_code);
 		$this->assertEquals($this->random_api_code_message, $j->message);
 
 		// AND no data
@@ -62,13 +62,13 @@ class ErrorTest extends TestCase
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
 
 			// AND error code
-			$api_code_offset = $this->random_api_code_offset;
+			$api_code = $this->random_api_code;
 
 			// WHEN we report error
-			$this->response = ResponseBuilder::error($api_code_offset, null, $data, $http_code);
+			$this->response = ResponseBuilder::error($api_code, null, $data, $http_code);
 
 			// THEN returned message contains given error code and mapped message
-			$j = $this->getResponseErrorObject($api_code_offset, $http_code);
+			$j = $this->getResponseErrorObject($api_code, $http_code);
 			$this->assertEquals($this->random_api_code_message, $j->message);
 
 			// AND passed data
@@ -84,10 +84,10 @@ class ErrorTest extends TestCase
 	public function testErrorWithData(): void
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-		$api_code_offset = $this->random_api_code_offset;
-		$this->response = ResponseBuilder::errorWithData($api_code_offset, $data);
+		$api_code = $this->random_api_code;
+		$this->response = ResponseBuilder::errorWithData($api_code, $data);
 
-		$j = $this->getResponseErrorObject($api_code_offset);
+		$j = $this->getResponseErrorObject($api_code);
 		$this->assertEquals((object)$data, $j->data);
 	}
 
@@ -107,9 +107,9 @@ class ErrorTest extends TestCase
 
 		foreach ($http_codes as $http_code) {
 			$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-			$this->response = ResponseBuilder::errorWithDataAndHttpCode($this->random_api_code_offset, $data, $http_code);
+			$this->response = ResponseBuilder::errorWithDataAndHttpCode($this->random_api_code, $data, $http_code);
 
-			$j = $this->getResponseErrorObject($this->random_api_code_offset, $http_code);
+			$j = $this->getResponseErrorObject($this->random_api_code, $http_code);
 			$this->assertEquals((object)$data, $j->data);
 		}
 	}
@@ -129,9 +129,9 @@ class ErrorTest extends TestCase
 		];
 
 		foreach ($http_codes as $http_code) {
-			$this->response = ResponseBuilder::errorWithHttpCode($this->random_api_code_offset, $http_code);
+			$this->response = ResponseBuilder::errorWithHttpCode($this->random_api_code, $http_code);
 
-			$j = $this->getResponseErrorObject($this->random_api_code_offset, $http_code);
+			$j = $this->getResponseErrorObject($this->random_api_code, $http_code);
 			$this->assertNull($j->data);
 		}
 	}
@@ -144,7 +144,7 @@ class ErrorTest extends TestCase
 	public function testErrorWithMessageAndData(): void
 	{
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-		$api_code = $this->random_api_code_offset;
+		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
 		$this->response = ResponseBuilder::errorWithMessageAndData($api_code, $error_message, $data);
 
@@ -168,7 +168,7 @@ class ErrorTest extends TestCase
 		];
 
 		$data = [$this->getRandomString('key') => $this->getRandomString('val')];
-		$api_code = $this->random_api_code_offset;
+		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
 
 		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
@@ -190,7 +190,7 @@ class ErrorTest extends TestCase
 	 */
 	public function testErrorWithMessage(): void
 	{
-		$api_code = $this->random_api_code_offset;
+		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
 		$this->response = ResponseBuilder::errorWithMessage($api_code, $error_message);
 
@@ -211,14 +211,14 @@ class ErrorTest extends TestCase
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		// FIXME we **assume** this code is not set nor mapped. But assumptions suck...
-		$api_code_offset = $this->max_allowed_offset - 1;
-		$this->response = ResponseBuilder::error($api_code_offset);
+		$api_code = $this->max_allowed_code - 1;
+		$this->response = ResponseBuilder::error($api_code);
 
-		$key = $api_codes_class_name::getCodeMessageKey($api_codes_class_name::NO_ERROR_MESSAGE_OFFSET);
-		$lang_args = ['api_code' => $api_code_offset];
+		$key = $api_codes_class_name::getCodeMessageKey($api_codes_class_name::NO_ERROR_MESSAGE());
+		$lang_args = ['api_code' => $api_code];
 		$msg = \Lang::get($key, $lang_args);
 
-		$j = $this->getResponseErrorObject($api_code_offset, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $msg);
+		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $msg);
 		$this->assertNull($j->data);
 	}
 
@@ -236,10 +236,10 @@ class ErrorTest extends TestCase
 
 		$data = null;
 		$http_code = 404;
-		$api_code_offset = $api_codes_class_name::OK_OFFSET;
+		$api_code = $api_codes_class_name::OK_OFFSET;
 		$lang_args = null;
 
-		$this->callBuildErrorResponse($data, $api_code_offset, $http_code, $lang_args);
+		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 	}
 
 
@@ -255,10 +255,10 @@ class ErrorTest extends TestCase
 
 		$data = null;
 		$http_code = null;
-		$api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE_OFFSET;
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE();
 		$lang_args = null;
 
-		$this->response = $this->callBuildErrorResponse($data, $api_code_offset, $http_code, $lang_args);
+		$this->response = $this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 
 		$http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
 		$this->assertEquals($http_code, $this->response->getStatusCode());
@@ -278,10 +278,10 @@ class ErrorTest extends TestCase
 
 		$data = null;
 		$http_code = 0;
-		$api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE_OFFSET;
+		$api_code = $api_codes_class_name::NO_ERROR_MESSAGE();
 		$lang_args = null;
 
-		$this->callBuildErrorResponse($data, $api_code_offset, $http_code, $lang_args);
+		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 	}
 
 	/**
@@ -289,21 +289,21 @@ class ErrorTest extends TestCase
 	 *
 	 * @noinspection PhpDocMissingThrowsInspection
 	 *
-	 * @param mixed|null $data
-	 * @param int|null   $api_code_offset
-	 * @param int|null   $http_code
-	 * @param mixed|null $lang_args
+	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
+	 * @param integer|null $api_code  API code offset to be returned with the response
+	 * @param integer|null $http_code HTTP error code to be returned with this Cannot be @null
+	 * @param array|null   $lang_args arguments array passed to Lang::get() for messages with placeholders
 	 *
 	 * @return mixed
 	 */
-	protected function callBuildErrorResponse($data, $api_code_offset, $http_code, $lang_args)
+	protected function callBuildErrorResponse($data, $api_code, $http_code, $lang_args)
 	{
 		$obj = new ResponseBuilder();
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$method = $this->getProtectedMethod(get_class($obj), 'buildErrorResponse');
 
 		return $method->invokeArgs($obj, [$data,
-		                                  $api_code_offset,
+		                                  $api_code,
 		                                  $http_code,
 		                                  $lang_args]);
 	}

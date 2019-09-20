@@ -70,27 +70,25 @@ class BaseApiCodes
 
 
 	/**
-	 * @var array built-in codes mapping
-	 */
-	protected static $base_map = [
-		self::OK_OFFSET                          => 'response-builder::builder.ok',
-		self::NO_ERROR_MESSAGE_OFFSET            => 'response-builder::builder.no_error_message',
-		self::EX_HTTP_NOT_FOUND_OFFSET           => 'response-builder::builder.http_not_found',
-		self::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET => 'response-builder::builder.http_service_unavailable',
-		self::EX_HTTP_EXCEPTION_OFFSET           => 'response-builder::builder.http_exception',
-		self::EX_UNCAUGHT_EXCEPTION_OFFSET       => 'response-builder::builder.uncaught_exception',
-		self::EX_AUTHENTICATION_EXCEPTION_OFFSET => 'response-builder::builder.authentication_exception',
-		self::EX_VALIDATION_EXCEPTION_OFFSET     => 'response-builder::builder.validation_exception',
-	];
-
-	/**
 	 * Returns base code mapping array
 	 *
 	 * @return array
 	 */
 	public static function getBaseMap(): array
 	{
-		return static::$base_map;
+		/**
+		 * @var array built-in codes mapping
+		 */
+		return [
+			self::OK()                          => 'response-builder::builder.ok',
+			self::NO_ERROR_MESSAGE()            => 'response-builder::builder.no_error_message',
+			self::EX_HTTP_NOT_FOUND()           => 'response-builder::builder.http_not_found',
+			self::EX_HTTP_SERVICE_UNAVAILABLE() => 'response-builder::builder.http_service_unavailable',
+			self::EX_HTTP_EXCEPTION()           => 'response-builder::builder.http_exception',
+			self::EX_UNCAUGHT_EXCEPTION()       => 'response-builder::builder.uncaught_exception',
+			self::EX_AUTHENTICATION_EXCEPTION() => 'response-builder::builder.authentication_exception',
+			self::EX_VALIDATION_EXCEPTION()     => 'response-builder::builder.validation_exception',
+		];
 	}
 
 	// ---------------------------------------------
@@ -108,6 +106,86 @@ class BaseApiCodes
 		ResponseBuilder::KEY_DATA    => 'data',
 	];
 
+
+	/**
+	 * Returns API code for internal code OK
+	 *
+	 * @return int valid API code in current range
+	 */
+	public static function OK(): int
+	{
+		return static::getCodeForInternalOffset(static::OK_OFFSET);
+	}
+
+	/**
+	 * Returns API code for internal code NO_ERROR_MESSAGE
+	 *
+	 * @return int valid API code in current range
+	 */
+	public static function NO_ERROR_MESSAGE(): int
+	{
+		return static::getCodeForInternalOffset(static::NO_ERROR_MESSAGE_OFFSET);
+	}
+
+	/**
+	 * Returns API code for internal code EX_HTTP_NOT_FOUND
+	 *
+	 * @return int valid API code in current range
+	 */
+	public static function EX_HTTP_NOT_FOUND(): int
+	{
+		return static::getCodeForInternalOffset(static::EX_HTTP_NOT_FOUND_OFFSET);
+	}
+
+	/**
+	 * Returns API code for internal code EX_HTTP_EXCEPTION
+	 *
+	 * @return int valid API code in current range
+	 */
+	public static function EX_HTTP_EXCEPTION(): int
+	{
+		return static::getCodeForInternalOffset(static::EX_HTTP_EXCEPTION_OFFSET);
+	}
+
+	/**
+	 * Returns API code for internal code EX_UNCAUGHT_EXCEPTION
+	 *
+	 * @return int valid API code in current range
+	 */
+	public static function EX_UNCAUGHT_EXCEPTION(): int
+	{
+		return static::getCodeForInternalOffset(static::EX_UNCAUGHT_EXCEPTION_OFFSET);
+	}
+
+	/**
+	 * Returns API code for internal code EX_AUTHENTICATION_EXCEPTION
+	 *
+	 * @return int valid API code in current range
+	 */
+	public static function EX_AUTHENTICATION_EXCEPTION(): int
+	{
+		return static::getCodeForInternalOffset(static::EX_AUTHENTICATION_EXCEPTION_OFFSET);
+	}
+
+	/**
+	 * Returns API code for internal code EX_VALIDATION_EXCEPTION
+	 *
+	 * @return int valid API code in current range
+	 */
+	public static function EX_VALIDATION_EXCEPTION(): int
+	{
+		return static::getCodeForInternalOffset(static::EX_VALIDATION_EXCEPTION_OFFSET);
+	}
+
+	/**
+	 * Returns API code for internal code EX_HTTP_SERVICE_UNAVAILABLE
+	 *
+	 * @return int valid API code in current range
+	 */
+	public static function EX_HTTP_SERVICE_UNAVAILABLE(): int
+	{
+		return static::getCodeForInternalOffset(static::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET);
+	}
 
 	/**
 	 * Returns response JSON key value. If there's user provided mapping, it takes
@@ -159,26 +237,6 @@ class BaseApiCodes
 	public static function getDefaultResponseKeyMap(): array
 	{
 		return static::$response_key_map;
-	}
-
-
-	/**
-	 * Returns final API code for internal code offset (i.e. OK_OFFSET)
-	 *
-	 * @param int $internal_code_offset
-	 *
-	 * @return int
-	 */
-	public static function getCodeForInternalOffset(int $internal_code_offset): int
-	{
-		$min = static::RESERVED_MIN_API_CODE;
-		$max = static::RESERVED_MAX_API_CODE;
-		if (($internal_code_offset < $min) || ($internal_code_offset > $max)) {
-			throw new \InvalidArgumentException(
-				sprintf('Invalid internal code offset (%d). Must be between %d-%d inclusive.', $internal_code_offset, $min, $max));
-		}
-
-		return ($internal_code_offset === static::OK_OFFSET) ? 0 : $internal_code_offset + static::getMinCode();
 	}
 
 }

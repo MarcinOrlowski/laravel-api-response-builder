@@ -27,7 +27,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
    * Removed `exception_handler.use_exception_message_first` feature.
    * Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
-   * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()`, `isCodeValid()` methods.
+   * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.

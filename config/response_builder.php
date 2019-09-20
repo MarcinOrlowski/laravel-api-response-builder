@@ -9,6 +9,8 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+
 return [
 
 	/*
@@ -45,10 +47,12 @@ return [
 	|
 	| See docs/exceptions.md if you want to provide own messages for built-in codes too.
 	|
+	| NOTE: map MUST be processed by BaseApiCodes::buildCodeMapping() method.
+	|
 	*/
-	'map' => [
+	'map' => BaseApiCodes::buildCodeMapping([
 
-	],
+	]),
 
 
 	/*

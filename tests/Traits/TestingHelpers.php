@@ -36,10 +36,7 @@ trait TestingHelpers
 	protected $max_allowed_code;
 
 	/** @var int */
-	protected $random_api_code_offset;
-
-	/** @var int */
-	protected $max_allowed_offset;
+	protected $random_api_code;
 
 	/** @var array */
 	protected $error_message_map = [];
@@ -77,11 +74,9 @@ trait TestingHelpers
 		$method = $this->getProtectedMethod(get_class($obj), 'getMaxCode');
 		$this->max_allowed_code = $method->invokeArgs($obj, []);
 
-		$this->max_allowed_offset = $this->max_allowed_code - $this->min_allowed_code;
-
 		// generate random api_code
 		/** @noinspection RandomApiMigrationInspection */
-		$this->random_api_code_offset = mt_rand(0, $this->max_allowed_offset);
+		$this->random_api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
 		// AND corresponding mapped message mapping
 
@@ -92,10 +87,10 @@ trait TestingHelpers
 
 		$this->random_api_code_message_key = $map[ array_keys($map)[ $idx - 1 ] ];
 		$this->random_api_code_message = \Lang::get($this->random_api_code_message_key, [
-			'api_code' => $this->random_api_code_offset,
+			'api_code' => $this->random_api_code,
 		]);
 		$this->error_message_map = [
-			$this->random_api_code_offset => $this->random_api_code_message_key,
+			$this->random_api_code => $this->random_api_code_message_key,
 		];
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, $this->error_message_map);
 	}
@@ -191,7 +186,7 @@ trait TestingHelpers
 	 *
 	 * @return mixed
 	 */
-	private function getResponseObjectRaw(int $expected_api_code_offset, int $expected_http_code,
+	private function getResponseObjectRaw(int $expected_api_code, int $expected_http_code,
 	                                      string $expected_message = null, array $extra_keys = [])
 	{
 		$actual = $this->response->getStatusCode();
@@ -202,17 +197,12 @@ trait TestingHelpers
 		$j = json_decode($this->response->getContent(), false);
 		$this->assertValidResponse($j, $extra_keys);
 
-		$expected_api_code = $expected_api_code_offset;
-		if ($expected_api_code_offset > 0) {
-			$expected_api_code += BaseApiCodes::getMinCode();
-		}
-
 		$this->assertEquals($expected_api_code, $j->code);
 
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$expected_message_string = $expected_message ?? \Lang::get(
-				$api_codes_class_name::getCodeMessageKey($expected_api_code_offset), ['api_code' => $expected_api_code_offset]);
+				$api_codes_class_name::getCodeMessageKey($expected_api_code), ['api_code' => $expected_api_code]);
 		$this->assertEquals($expected_message_string, $j->message);
 
 		return $j;

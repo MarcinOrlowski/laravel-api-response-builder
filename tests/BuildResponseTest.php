@@ -136,12 +136,12 @@ class BuildResponseTest extends TestCase
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		$message_or_api_code_offset = [];    // invalid
+		$message_or_api_code = [];    // invalid
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		/** @noinspection PhpParamsInspection */
-		$code_ok = $api_codes_class_name::getCodeForInternalOffset($api_codes_class_name::OK_OFFSET);
-		$this->callMakeMethod(true, $code_ok, $message_or_api_code_offset);
+		$code_ok = $api_codes_class_name::OK();
+		$this->callMakeMethod(true, $code_ok, $message_or_api_code);
 	}
 
 	/**
@@ -153,9 +153,9 @@ class BuildResponseTest extends TestCase
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
-		$api_code_offset = $this->max_allowed_offset + 1;    // invalid
+		$api_code = $this->max_allowed_code + 1;    // invalid
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callMakeMethod(true, $api_code_offset, 'message');
+		$this->callMakeMethod(true, $api_code, 'message');
 	}
 
 }

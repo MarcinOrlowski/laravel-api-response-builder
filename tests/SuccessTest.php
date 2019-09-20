@@ -83,8 +83,8 @@ class SuccessTest extends TestCase
 	public function testSuccess_ApiCode_NoCustomMessage(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, []);
-		$this->response = ResponseBuilder::success(null, $this->random_api_code_offset);
-		$j = $this->getResponseSuccessObject($this->random_api_code_offset);
+		$this->response = ResponseBuilder::success(null, $this->random_api_code);
+		$j = $this->getResponseSuccessObject($this->random_api_code);
 
 		$this->assertNull($j->data);
 	}
@@ -96,8 +96,8 @@ class SuccessTest extends TestCase
 	 */
 	public function testSuccess_ApiCode_CustomMessage(): void
 	{
-		$this->response = ResponseBuilder::success(null, $this->random_api_code_offset);
-		$j = $this->getResponseSuccessObject($this->random_api_code_offset);
+		$this->response = ResponseBuilder::success(null, $this->random_api_code);
+		$j = $this->getResponseSuccessObject($this->random_api_code);
 
 		$this->assertNull($j->data);
 	}
@@ -112,16 +112,16 @@ class SuccessTest extends TestCase
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
-			$this->random_api_code_offset => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE_OFFSET),
+			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE()),
 		]);
 
 		$lang_args = [
 			'api_code' => $this->getRandomString('foo'),
 		];
 
-		$this->response = ResponseBuilder::success(null, $this->random_api_code_offset, $lang_args);
-		$expected_message = \Lang::get(BaseApiCodes::getCodeMessageKey($this->random_api_code_offset), $lang_args);
-		$j = $this->getResponseSuccessObject($this->random_api_code_offset, null, $expected_message);
+		$this->response = ResponseBuilder::success(null, $this->random_api_code, $lang_args);
+		$expected_message = \Lang::get(BaseApiCodes::getCodeMessageKey($this->random_api_code), $lang_args);
+		$j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
 
 		$this->assertNull($j->data);
 	}
@@ -136,16 +136,16 @@ class SuccessTest extends TestCase
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
-			$this->random_api_code_offset => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE_OFFSET),
+			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE()),
 		]);
 
 		$lang_args = [
 			'api_code' => $this->getRandomString('foo'),
 		];
 
-		$this->response = ResponseBuilder::successWithCode($this->random_api_code_offset, $lang_args);
-		$expected_message = \Lang::get(BaseApiCodes::getCodeMessageKey($this->random_api_code_offset), $lang_args);
-		$j = $this->getResponseSuccessObject($this->random_api_code_offset, null, $expected_message);
+		$this->response = ResponseBuilder::successWithCode($this->random_api_code, $lang_args);
+		$expected_message = \Lang::get(BaseApiCodes::getCodeMessageKey($this->random_api_code), $lang_args);
+		$j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
 
 		$this->assertNull($j->data);
 	}

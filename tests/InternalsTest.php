@@ -35,11 +35,11 @@ class InternalsTest extends TestCase
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
-		$message_or_api_code_offset = [];    // invalid
+		$message_or_api_code = [];    // invalid
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		/** @noinspection PhpParamsInspection */
-		$this->callMakeMethod(true, $api_codes_class_name::OK_OFFSET, $message_or_api_code_offset);
+		$this->callMakeMethod(true, $api_codes_class_name::OK_OFFSET, $message_or_api_code);
 	}
 
 	/**
@@ -51,9 +51,9 @@ class InternalsTest extends TestCase
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
-		$api_code_offset = $this->max_allowed_offset + 1;    // invalid
+		$api_code = $this->max_allowed_code + 1;    // invalid
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callMakeMethod(true, $api_code_offset, 'message');
+		$this->callMakeMethod(true, $api_code, 'message');
 	}
 
 
@@ -162,7 +162,7 @@ class InternalsTest extends TestCase
 	}
 
 	/**
-	 * Checks make() handling invalid type of api_code_offset argument
+	 * Checks make() handling invalid type of api_code argument
 	 *
 	 * @return void
 	 *
@@ -267,6 +267,12 @@ class InternalsTest extends TestCase
 	public function testGetCodeForInternalOffset_OffsetOutOfMinBounds(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
+
+		$obj = new ResponseBuilder();
+		$method = $this->getProtectedMethod(get_class($obj), 'getClassesMapping');
+		$method->invokeArgs($obj, []);
+
+
 		BaseApiCodes::getCodeForInternalOffset(BaseApiCodes::RESERVED_MIN_API_CODE - 1);
 	}
 

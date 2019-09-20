@@ -33,32 +33,32 @@ class ExceptionHandlerHelperTest extends TestCase
 			ExceptionHandlerHelper::TYPE_HTTP_NOT_FOUND_KEY           => [
 				'exception_class'           => HttpException::class,
 				'default_http_code'         => HttpResponse::HTTP_NOT_FOUND,
-				'default_response_api_code' => BaseApiCodes::EX_HTTP_NOT_FOUND_OFFSET,
+				'default_response_api_code' => BaseApiCodes::EX_HTTP_NOT_FOUND(),
 			],
 			ExceptionHandlerHelper::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY => [
 				'exception_class'           => HttpException::class,
 				'default_http_code'         => HttpResponse::HTTP_SERVICE_UNAVAILABLE,
-				'default_response_api_code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET,
+				'default_response_api_code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
 			],
 			ExceptionHandlerHelper::TYPE_HTTP_EXCEPTION_KEY           => [
 				'exception_class'           => HttpException::class,
 				'default_http_code'         => HttpResponse::HTTP_BAD_REQUEST,
-				'default_response_api_code' => BaseApiCodes::EX_HTTP_EXCEPTION_OFFSET,
+				'default_response_api_code' => BaseApiCodes::EX_HTTP_EXCEPTION(),
 			],
 			ExceptionHandlerHelper::TYPE_UNCAUGHT_EXCEPTION_KEY       => [
 				'exception_class'           => \RuntimeException::class,
 				'default_http_code'         => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-				'default_response_api_code' => BaseApiCodes::EX_UNCAUGHT_EXCEPTION_OFFSET,
+				'default_response_api_code' => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
 			],
 			ExceptionHandlerHelper::TYPE_HTTP_UNAUTHORIZED_KEY        => [
 				'exception_class'           => HttpException::class,
 				'default_http_code'         => HttpResponse::HTTP_UNAUTHORIZED,
-				'default_response_api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION_OFFSET,
+				'default_response_api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
 			],
 			ExceptionHandlerHelper::TYPE_VALIDATION_EXCEPTION_KEY     => [
 				'exception_class'           => ValidationException::class,
 				'default_http_code'         => HttpResponse::HTTP_BAD_REQUEST,
-				'default_response_api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION_OFFSET,
+				'default_response_api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
 				'validate_message'          => false,
 				'has_data_node'             => true,
 			],
@@ -77,10 +77,10 @@ class ExceptionHandlerHelperTest extends TestCase
 	                                         bool $validate_message = true, bool $has_data_node = false): void
 	{
 		$base_config_key = 'response_builder.exception_handler.exception';
-		$response_api_code_offset = \Config::get("{$base_config_key}.{$exception_type}.code", $default_response_api_code);
+		$response_api_code = \Config::get("{$base_config_key}.{$exception_type}.code", $default_response_api_code);
 		$wanted_http_code = \Config::get("{$base_config_key}.{$exception_type}.wanted_http_code", $default_http_code);
 
-		$key = BaseApiCodes::getCodeMessageKey($response_api_code_offset);
+		$key = BaseApiCodes::getCodeMessageKey($response_api_code);
 		$expect_data_node_null = true;
 		switch ($exception_class) {
 			case HttpException::class:
@@ -116,7 +116,7 @@ class ExceptionHandlerHelperTest extends TestCase
 		}
 
 		$error_message = \Lang::get($key, [
-			'response_api_code' => $response_api_code_offset,
+			'response_api_code' => $response_api_code,
 			'message'           => $ex_message,
 			'class'             => get_class($exception),
 		]);
