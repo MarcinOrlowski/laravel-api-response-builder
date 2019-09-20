@@ -84,7 +84,10 @@ trait TestingHelpers
 		$this->random_api_code_offset = mt_rand(0, $this->max_allowed_offset);
 
 		// AND corresponding mapped message mapping
-		$map = $this->getProtectedMember(\MarcinOrlowski\ResponseBuilder\BaseApiCodes::class, 'base_map');
+
+		$obj = new BaseApiCodes();
+		$method = $this->getProtectedMethod(get_class($obj), 'getBaseMap');
+		$map = $method->invokeArgs($obj, []);
 		$idx = mt_rand(1, count($map));
 
 		$this->random_api_code_message_key = $map[ array_keys($map)[ $idx - 1 ] ];
