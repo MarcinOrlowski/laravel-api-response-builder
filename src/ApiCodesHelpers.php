@@ -119,40 +119,7 @@ trait ApiCodesHelpers
 
 	public static function isCodeValid($code): bool
 	{
-
-		$r = ($code === 0) || (($code >= static::getMinCode()) && ($code <= static::getMaxCode()));
-
-//		if ($code != 0) {
-//			var_dump([
-//				$code => $r,
-//			]);
-//		}
-		return $r;
-	}
-
-	/**
-	 * Remaps source $map_with_offsets, assuming all keys from reserved range
-	 * should be remapped to final public codes. Codes from outside that range
-	 * are copied unaltered.
-	 *
-	 * @param array $map_with_offsets source mapping (as in config `map`)
-	 *
-	 * @return array
-	 */
-	public static function buildCodeMapping(array $map_with_offsets): array
-	{
-		$map = [];
-		foreach ($map_with_offsets as $code_offset => $val) {
-			if (($code_offset >= static::RESERVED_MIN_API_CODE) && ($code_offset <= static::RESERVED_MAX_API_CODE)) {
-				$key = static::getCodeForInternalOffset($code_offset);
-			} else {
-				$key = $code_offset;
-			}
-
-			$map[ $key ] = $val;
-		}
-
-		return $map;
+		return ($code === 0) || (($code >= static::getMinCode()) && ($code <= static::getMaxCode()));
 	}
 
 	/**

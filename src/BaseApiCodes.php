@@ -229,14 +229,4 @@ class BaseApiCodes
 		return $result;
 	}
 
-	/**
-	 * Returns default response JSON key keys and values
-	 *
-	 * @return array
-	 */
-	public static function getDefaultResponseKeyMap(): array
-	{
-		return static::$response_key_map;
-	}
-
 }

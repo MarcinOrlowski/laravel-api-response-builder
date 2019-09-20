@@ -9,8 +9,6 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-
 return [
 
 	/*
@@ -50,9 +48,9 @@ return [
 	| NOTE: map MUST be processed by BaseApiCodes::buildCodeMapping() method.
 	|
 	*/
-	'map' => BaseApiCodes::buildCodeMapping([
+	'map' => [
 
-	]),
+	],
 
 
 	/*
