@@ -261,7 +261,7 @@ class InternalsTest extends TestCase
 	public function testGetCodeForInternalOffset_OffsetOutOfMaxBounds(): void
 	{
 		$obj = new BaseApiCodes();
-		$max = $this->getProtectedConstant($obj, 'RESERVED_MAX_API_CODE');
+		$max = $this->getProtectedConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$method = $this->getProtectedMethod($obj, 'getCodeForInternalOffset');
@@ -273,7 +273,7 @@ class InternalsTest extends TestCase
 	public function testGetCodeForInternalOffset_OffsetOutOfMinBounds(): void
 	{
 		$obj = new BaseApiCodes();
-		$min = $this->getProtectedConstant($obj, 'RESERVED_MIN_API_CODE');
+		$min = $this->getProtectedConstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$method = $this->getProtectedMethod($obj, 'getCodeForInternalOffset');

@@ -224,7 +224,7 @@ class ResponseBuilder
 	/**
 	 * Returns success
 	 *
-	 * @param integer|null $api_code  API code offset to be returned with the response or @null for default `OK` code
+	 * @param integer|null $api_code  API code to be returned with the response or @null for default `OK` code
 	 * @param array|null   $lang_args arguments passed to Lang if message associated with API code uses placeholders
 	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
 	 *
@@ -278,7 +278,7 @@ class ResponseBuilder
 	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error
 	 * message uses placeholders as well as return data payload
 	 *
-	 * @param integer      $api_code         API code offset to be returned with the response
+	 * @param integer      $api_code         API code to be returned with the response
 	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
 	 * @param mixed|null   $data             payload array to be returned in 'data' node or response object
 	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for default
@@ -293,7 +293,7 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code         API code offset to be returned with the response
+	 * @param integer      $api_code         API code to be returned with the response
 	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
 	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
 	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
@@ -307,7 +307,7 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code         API code offset to be returned with the response
+	 * @param integer      $api_code         API code to be returned with the response
 	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
 	 * @param integer|null $http_code        HTTP error code to be returned with this Cannot be @null
 	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
@@ -324,7 +324,7 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code  API code offset to be returned with the response
+	 * @param integer      $api_code  API code to be returned with the response
 	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default
 	 * @param array|null   $lang_args arguments array passed to Lang::get() for messages with placeholders
 	 *
@@ -338,7 +338,7 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code         API code offset to be returned with the response
+	 * @param integer      $api_code         API code to be returned with the response
 	 * @param string       $error_message    custom message to be returned as part of error response
 	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
 	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
@@ -354,7 +354,7 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code         API code offset to be returned with the response
+	 * @param integer      $api_code         API code to be returned with the response
 	 * @param string       $error_message    custom message to be returned as part of error response
 	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
 	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
@@ -372,7 +372,7 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code      API code offset to be returned with the response
+	 * @param integer      $api_code      API code to be returned with the response
 	 * @param string       $error_message custom message to be returned as part of error response
 	 * @param integer|null $http_code     optional HTTP status code to be used with this response or @null for defaults
 	 *

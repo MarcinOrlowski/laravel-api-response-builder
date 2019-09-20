@@ -290,7 +290,7 @@ class ErrorTest extends TestCase
 	 * @noinspection PhpDocMissingThrowsInspection
 	 *
 	 * @param mixed|null   $data      payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code  API code offset to be returned with the response
+	 * @param integer|null $api_code  API code to be returned with the response
 	 * @param integer|null $http_code HTTP error code to be returned with this Cannot be @null
 	 * @param array|null   $lang_args arguments array passed to Lang::get() for messages with placeholders
 	 *

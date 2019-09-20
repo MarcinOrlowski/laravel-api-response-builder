@@ -109,7 +109,7 @@ trait ApiCodesHelpers
 		if (!static::isCodeValid($api_code)) {
 			$min = static::getMinCode();
 			$max = static::getMaxCode();
-			throw new \InvalidArgumentException("API code offset value ({$api_code}) is out of allowed range {$min}-{$max}");
+			throw new \InvalidArgumentException("API code value ({$api_code}) is out of allowed range {$min}-{$max}");
 		}
 
 		$map = static::getMap();
@@ -125,20 +125,20 @@ trait ApiCodesHelpers
 	/**
 	 * Returns final API code for internal code offset (i.e. OK_OFFSET)
 	 *
-	 * @param int $internal_code_offset
+	 * @param int $internal_code
 	 *
 	 * @return int
 	 */
-	protected static function getCodeForInternalOffset(int $internal_code_offset): int
+	protected static function getCodeForInternalOffset(int $internal_code): int
 	{
-		$min = static::RESERVED_MIN_API_CODE;
-		$max = static::RESERVED_MAX_API_CODE;
-		if (($internal_code_offset < $min) || ($internal_code_offset > $max)) {
+		$min = static::RESERVED_MIN_API_CODE_OFFSET;
+		$max = static::RESERVED_MAX_API_CODE_OFFSET;
+		if (($internal_code < $min) || ($internal_code > $max)) {
 			throw new \InvalidArgumentException(
-				sprintf('Invalid internal code offset (%d). Must be between %d-%d inclusive.', $internal_code_offset, $min, $max));
+				sprintf('Invalid internal code (%d). Must be between %d-%d inclusive.', $internal_code, $min, $max));
 		}
 
-		return ($internal_code_offset === static::OK_OFFSET) ? 0 : $internal_code_offset + static::getMinCode();
+		return ($internal_code === static::OK_OFFSET) ? 0 : $internal_code + static::getMinCode();
 	}
 
 }
