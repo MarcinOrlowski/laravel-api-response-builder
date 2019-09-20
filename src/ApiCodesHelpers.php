@@ -79,6 +79,7 @@ trait ApiCodesHelpers
 	{
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$reflect = new \ReflectionClass(get_called_class());
+
 		return $reflect->getConstants();
 	}
 
@@ -138,4 +139,28 @@ trait ApiCodesHelpers
 		return ($code_offset >= 0) && ($code_offset <= static::getMaxCodeOffset());
 	}
 
+	/**
+	 * Remaps source $map_with_offsets, assuming all keys from reserved range
+	 * should be remapped to final public codes. Codes from outside that range
+	 * are copied unaltered.
+	 *
+	 * @param array $map_with_offsets source mapping (as in config `map`)
+	 *
+	 * @return array
+	 */
+	public static function buildCodeMapping(array $map_with_offsets): array
+	{
+		$map = [];
+		foreach ($map_with_offsets as $code_offset => $val) {
+			if (($code_offset >= static::RESERVED_MIN_API_CODE) && ($code_offset <= static::RESERVED_MAX_API_CODE)) {
+				$key = static::getCodeForInternalOffset($code_offset);
+			} else {
+				$key = $code_offset;
+			}
+
+			$map[ $key ] = $val;
+		}
+
+		return $map;
+	}
 }
