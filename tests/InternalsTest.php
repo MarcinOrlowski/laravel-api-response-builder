@@ -257,6 +257,13 @@ class InternalsTest extends TestCase
 	}
 
 
+	/**
+	 * Tests getCodeForInternalOffset() out of bounds handling
+	 *
+	 * @return void
+	 *
+	 * @throws \ReflectionException
+	 */
 	public function testGetCodeForInternalOffset_OffsetOutOfMaxBounds(): void
 	{
 		$obj = new BaseApiCodes();
@@ -269,6 +276,13 @@ class InternalsTest extends TestCase
 		$method->invokeArgs($obj, [$max + 1]);
 	}
 
+	/**
+	 * Tests getCodeForInternalOffset() out of bounds handling
+	 *
+	 * @return void
+	 *
+	 * @throws \ReflectionException
+	 */
 	public function testGetCodeForInternalOffset_OffsetOutOfMinBounds(): void
 	{
 		$obj = new BaseApiCodes();
