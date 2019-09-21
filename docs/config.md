@@ -20,7 +20,6 @@
  * [map](#map)
  * [min_code](#min_code)
  * [max_code](#max_code)
- * [response_key_map](#response_key_map)
 
 ## classes ##
  
@@ -176,31 +175,4 @@ See [Exception Handling with Response Builder](docs/exceptions.md) if you want t
 
 ```PHP
 'max_code' => 1024,
-```
-
-## response_key_map ##
-
-You can use own string in produced JSON response if for any reason you cannot use default values (not recommended!)
-
-> WARNING: Currently there's **NO** duplicate check at runtime, so if you remap two keys to the same values you would end up 
-with problems. There's testing trait to prevent this from happening, so ensure you unit test your app before you deploy
-> 
-> [see docs!](docs/testing.md).
-
-> NOTE: Ensure you have this config file using:
-
-    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-
-if you want to use custom mapping. It's safe to completely remove/comment out this config element.
-
-Default mapping:
-
-```php
-'response_key_map' => [
-    ResponseBuilder::KEY_SUCCESS => 'success',
-    ResponseBuilder::KEY_CODE    => 'code',
-    ResponseBuilder::KEY_LOCALE  => 'locale',
-    ResponseBuilder::KEY_MESSAGE => 'message',
-    ResponseBuilder::KEY_DATA    => 'data',
-],
 ```

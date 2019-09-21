@@ -203,29 +203,7 @@ class BaseApiCodes
 			throw new \RuntimeException(sprintf('Unknown response key reference "%s"', $reference_key));
 		}
 
-		$result = $response_key_map[ $reference_key ];
-
-		// let's see if there's valid user mapping for that key first
-		$user_map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
-		if ($user_map !== null) {
-			if (!is_array($user_map)) {
-				throw new \RuntimeException(
-					sprintf('CONFIG: "%s" must be an array (%s given)',
-						ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, gettype($user_map)));
-			}
-			if (array_key_exists($reference_key, $user_map)) {
-				$user_val = $user_map[ $reference_key ];
-				if (!is_string($user_val)) {
-					throw new \RuntimeException(
-						sprintf('Response key reference "%s" must be mapped to a string (%s given)',
-							$reference_key, gettype($user_val)));
-				}
-
-				$result = $user_val;
-			}
-		}
-
-		return $result;
+		return $response_key_map[ $reference_key ];
 	}
 
 }

@@ -222,36 +222,6 @@ class InternalsTest extends TestCase
 		BaseApiCodes::getResponseKey($this->getRandomString());
 	}
 
-	/**
-	 * Tests validation of configuration validation of response key map
-	 *
-	 * @return void
-	 */
-	public function testResponseKeyMapping_InvalidMap(): void
-	{
-		$this->expectException(\RuntimeException::class);
-		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, 'invalid');
-		BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS);
-	}
-
-
-	/**
-	 * Tests validation of configuration validation of response key map
-	 *
-	 * @return void
-	 */
-	public function testResponseKeyMapping_InvalidMappingValue(): void
-	{
-		$this->expectException(\RuntimeException::class);
-
-		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
-				ResponseBuilder::KEY_SUCCESS => false,
-			]
-		);
-
-		BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS);
-	}
-
 
 	/**
 	 * Tests getCodeForInternalOffset() out of bounds handling

@@ -2,6 +2,8 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Providers;
 
+use Illuminate\Support\Arr;
+
 /**
  * Laravel API Response Builder
  *
