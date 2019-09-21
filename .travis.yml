@@ -18,61 +18,14 @@ language: php
 dist: trusty
 
 php:
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
   - 7.2
   - 7.3
 
 env:
-  - LARAVEL_VERSION="5.1"
-  - LARAVEL_VERSION="5.2"
-  - LARAVEL_VERSION="5.3"
-  - LARAVEL_VERSION="5.4"
-  - LARAVEL_VERSION="5.5"
-  - LARAVEL_VERSION="5.6"
-  - LARAVEL_VERSION="5.7"
-  - LARAVEL_VERSION="5.8"
   - LARAVEL_VERSION="6.0"
 
 matrix:
   exclude:
-    - php: 5.5
-      env: LARAVEL_VERSION="5.3"
-    - php: 5.5
-      env: LARAVEL_VERSION="5.4"
-    - php: 5.5
-      env: LARAVEL_VERSION="5.5"
-    - php: 5.5
-      env: LARAVEL_VERSION="5.6"
-    - php: 5.5
-      env: LARAVEL_VERSION="5.7"
-    - php: 5.5
-      env: LARAVEL_VERSION="5.8"
-    - php: 5.5
-      env: LARAVEL_VERSION="6.0"
-
-    - php: 5.6
-      env: LARAVEL_VERSION="5.5"
-    - php: 5.6
-      env: LARAVEL_VERSION="5.6"
-    - php: 5.6
-      env: LARAVEL_VERSION="5.7"
-    - php: 5.6
-      env: LARAVEL_VERSION="5.8"
-    - php: 5.6
-      env: LARAVEL_VERSION="6.0"
-
-    - php: 7.0
-      env: LARAVEL_VERSION="5.6"
-    - php: 7.0
-      env: LARAVEL_VERSION="5.7"
-    - php: 7.0
-      env: LARAVEL_VERSION="5.8"
-    - php: 7.0
-      env: LARAVEL_VERSION="6.0"
-
     - php: 7.1
       env: LARAVEL_VERSION="6.0"
 
@@ -88,7 +41,6 @@ before_script:
   - composer install "${FLAGS}"
   # We need to tweak signature so setUp() and tearDown() and strip ": void" otherwise PHP will fail complaining
   # This affects Laravel 5.8+ as they pull recent Orchestra that features method signature changes.
-  - "if [ ${LARAVEL_VERSION} == 5.8 ]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
   - "if [ ${LARAVEL_VERSION} == 6.0 ]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
   - "if [ ${LARAVEL_VERSION} == 6.0 ]; then sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php ; fi"
 

@@ -20,20 +20,25 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class SuccessTest extends TestCase
 {
 	/**
+	 * @var HttpResponse
+	 */
+	protected $response;
+
+	/**
 	 * Check success()
 	 *
 	 * @return void
 	 */
-	public function testSuccess()
+	public function testSuccess(): void
 	{
 		$this->response = ResponseBuilder::success();
-		$j = $this->getResponseSuccessObject(BaseApiCodes::OK);
+		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
 		$this->assertNull($j->data);
-		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK)), $j->message);
+		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
 	}
 
-	public function testSuccess_EncodingOptions()
+	public function testSuccess_EncodingOptions(): void
 	{
 		$test_string = 'ąćę';
 		$test_string_escaped = $this->escape8($test_string);
@@ -43,10 +48,10 @@ class SuccessTest extends TestCase
 
 		// check if it returns escaped
 		// ensure config is different from what we want
-		\Config::set('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE);
+		\Config::set('encoding_options', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
 
-		$encoding_options = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT;
-		$resp = ResponseBuilder::success($data, BaseApiCodes::OK, null, null, $encoding_options);
+		$encoding_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
+		$resp = ResponseBuilder::success($data, BaseApiCodes::OK(), null, null, $encoding_options);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -56,10 +61,10 @@ class SuccessTest extends TestCase
 
 		// check if it returns unescaped
 		// ensure config is different from what we want
-		\Config::set('encoding_options', JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT);
+		\Config::set('encoding_options', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 
-		$encoding_options = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE;
-		$resp = ResponseBuilder::success($data, BaseApiCodes::OK, null, null, $encoding_options);
+		$encoding_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE;
+		$resp = ResponseBuilder::success($data, BaseApiCodes::OK(), null, null, $encoding_options);
 
 		$matches = [];
 		$this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -75,13 +80,11 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccess_ApiCode_NoCustomMessage()
+	public function testSuccess_ApiCode_NoCustomMessage(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, []);
-		$api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
-
-		$this->response = ResponseBuilder::success(null, $api_code);
-		$j = $this->getResponseSuccessObject($api_code);
+		$this->response = ResponseBuilder::success(null, $this->random_api_code);
+		$j = $this->getResponseSuccessObject($this->random_api_code);
 
 		$this->assertNull($j->data);
 	}
@@ -91,7 +94,7 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccess_ApiCode_CustomMessage()
+	public function testSuccess_ApiCode_CustomMessage(): void
 	{
 		$this->response = ResponseBuilder::success(null, $this->random_api_code);
 		$j = $this->getResponseSuccessObject($this->random_api_code);
@@ -105,11 +108,11 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccess_ApiCode_CustomMessageLang()
+	public function testSuccess_ApiCode_CustomMessageLang(): void
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
-			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE)
+			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE()),
 		]);
 
 		$lang_args = [
@@ -129,11 +132,11 @@ class SuccessTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSuccessWithCode_ApiCode_CustomMessageLang()
+	public function testSuccessWithCode_ApiCode_CustomMessageLang(): void
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
-			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE)
+			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE()),
 		]);
 
 		$lang_args = [
@@ -148,33 +151,37 @@ class SuccessTest extends TestCase
 	}
 
 	/**
-	 * Checks success() with valid payload and HTTP code
+	 * Checks success() with valid payload types and HTTP code
 	 *
 	 * @return void
 	 */
-	public function testSuccess_DataAndHttpCode()
+	public function testSuccess_DataAndHttpCode(): void
 	{
 		$payloads = [
 			null,
 			[$this->getRandomString() => $this->getRandomString()],
 		];
-		$http_codes = [HttpResponse::HTTP_OK       => null,
-		               HttpResponse::HTTP_ACCEPTED => HttpResponse::HTTP_ACCEPTED,
-		               HttpResponse::HTTP_OK       => HttpResponse::HTTP_OK];
+		$http_codes = [
+			[HttpResponse::HTTP_OK => null],
+			[HttpResponse::HTTP_ACCEPTED => HttpResponse::HTTP_ACCEPTED],
+			[HttpResponse::HTTP_OK => HttpResponse::HTTP_OK],
+		];
 
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
 
 		foreach ($payloads as $payload) {
-			foreach ($http_codes as $http_code_expect => $http_code_send) {
-				$this->response = ResponseBuilder::success($payload, null, [], $http_code_send);
+			foreach ($http_codes as $http_code) {
+				foreach ($http_code as $http_code_expect => $http_code_send) {
+					$this->response = ResponseBuilder::success($payload, null, [], $http_code_send);
 
-				$j = $this->getResponseSuccessObject($api_codes_class_name::OK, $http_code_expect);
+					$j = $this->getResponseSuccessObject($api_codes_class_name::OK(), $http_code_expect);
 
-				if ($payload !== null) {
-					$payload = (object)$payload;
+					if ($payload !== null) {
+						$payload = (object)$payload;
+					}
+					$this->assertEquals($payload, $j->data);
 				}
-				$this->assertEquals($payload, $j->data);
 			}
 		}
 	}
@@ -184,10 +191,12 @@ class SuccessTest extends TestCase
 	 *
 	 * Tests successWithHttpCode()
 	 */
-	public function testSuccessHttpCode()
+	public function testSuccessHttpCode(): void
 	{
-		$http_codes = [HttpResponse::HTTP_ACCEPTED,
-		               HttpResponse::HTTP_OK];
+		$http_codes = [
+			HttpResponse::HTTP_ACCEPTED,
+			HttpResponse::HTTP_OK,
+		];
 		foreach ($http_codes as $http_code) {
 			$this->response = ResponseBuilder::successWithHttpCode($http_code);
 			$j = $this->getResponseSuccessObject(0, $http_code);
@@ -195,70 +204,32 @@ class SuccessTest extends TestCase
 		}
 	}
 
+	// tests that passing null as argument to successWithHttpCode() it will fall back to defaults.
+	public function testSuccessWithNullAsHttpCode(): void
+	{
+		$response = ResponseBuilder::successWithHttpCode(null);
+		$this->assertEquals(ResponseBuilder::DEFAULT_HTTP_CODE_OK, $response->getStatusCode());
+	}
 
 	//----[ success ]-------------------------------------------
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccess_ApiCodeMustBeInt()
+	public function testSuccessWithTooBigHttpCode(): void
 	{
-		ResponseBuilder::success(null, 'foo');
-	}
+		$this->expectException(\InvalidArgumentException::class);
 
-	/**
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testSuccess_HttpCodeNull()
-	{
-		ResponseBuilder::successWithHttpCode(null);
-	}
-
-	/**
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testSuccessWithInvalidHttpCode()
-	{
-		ResponseBuilder::successWithHttpCode('invalid');
-	}
-
-	/**
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testSuccessWithTooBigHttpCode()
-	{
 		ResponseBuilder::successWithHttpCode(666);
 	}
 
 	/**
 	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSuccessWithTooLowHttpCode()
+	public function testSuccessWithTooLowHttpCode(): void
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		ResponseBuilder::successWithHttpCode(0);
 	}
-
-	/**
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testBuildSuccessResponse_InvalidReturnCode()
-	{
-		$obj = new ResponseBuilder();
-		$method = $this->getProtectedMethod(get_class($obj), 'buildSuccessResponse');
-		$method->invokeArgs($obj, [null,
-		                           'string-is-invalid-code']);
-	}
-
 }

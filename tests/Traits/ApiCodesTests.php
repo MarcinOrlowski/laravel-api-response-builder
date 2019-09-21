@@ -18,19 +18,22 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 /**
- * ApiCodes tests trait
+ * ApiCodes tests trait. Use this trait to test your ApiCodes class.
+ * NOTE: that this trait reads class constants, therefore using it with any other class, or ApiCode class not based
+ * on recommended `const`s will not work.
+ *
+ * Please see [docs/testing.md](docs/testing.md) for more info about testing own code with provided helpers.
  */
 trait ApiCodesTests
 {
 	use TestingHelpers;
-
 
 	/**
 	 * Checks if Api codes range is set right
 	 *
 	 * @return void
 	 */
-	public function testMinMaxCode()
+	public function testMinMaxCode(): void
 	{
 		$obj = new BaseApiCodes();
 
@@ -55,8 +58,10 @@ trait ApiCodesTests
 	 * Checks if all Api codes defined in ApiCodes class contain mapping entry
 	 *
 	 * @return void
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function testIfAllCodesGotMapping()
+	public function testIfAllCodesGotMapping(): void
 	{
 		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
@@ -74,7 +79,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 */
-	public function testIfAllCodesAreInRange()
+	public function testIfAllCodesAreInRange(): void
 	{
 		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
@@ -93,7 +98,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 */
-	public function testIfAllApiValuesAreUnique()
+	public function testIfAllApiValuesAreUnique(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -110,7 +115,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 */
-	public function testIfAllCodesAreCorrectlyMapped()
+	public function testIfAllCodesAreCorrectlyMapped(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -132,7 +137,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 */
-	public function testIfCustomMappingUsesUniqueValues()
+	public function testIfCustomMappingUsesUniqueValues(): void
 	{
 		$map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
 		if ($map !== null) {
@@ -156,4 +161,4 @@ trait ApiCodesTests
 		}
 	}
 
-}
+} // end of ApiCodesTests trait

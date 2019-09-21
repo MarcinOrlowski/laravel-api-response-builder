@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
 
@@ -27,12 +28,13 @@ trait ApiCodesHelpers
 	 *
 	 * @throws \RuntimeException Throws exception if no min_code set up
 	 */
-	public static function getMinCode()
+	public static function getMinCode(): int
 	{
-		$min_code = Config::get(ResponseBuilder::CONF_KEY_MIN_CODE, null);
+		$key = ResponseBuilder::CONF_KEY_MIN_CODE;
+		$min_code = Config::get($key, null);
 
 		if ($min_code === null) {
-			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', ResponseBuilder::CONF_KEY_MIN_CODE));
+			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', $key));
 		}
 
 		return $min_code;
@@ -45,46 +47,29 @@ trait ApiCodesHelpers
 	 *
 	 * @throws \RuntimeException Throws exception if no max_code set up
 	 */
-	public static function getMaxCode()
+	public static function getMaxCode(): int
 	{
-		$max_code = Config::get(ResponseBuilder::CONF_KEY_MAX_CODE, null);
+		$key = ResponseBuilder::CONF_KEY_MAX_CODE;
+		$max_code = Config::get($key, null);
 
 		if ($max_code === null) {
-			throw new \RuntimeException(sprintf('CONFIG: Missing "max_code" key', ResponseBuilder::CONF_KEY_MAX_CODE));
+			throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', $key));
 		}
 
 		return $max_code;
-	}
-
-
-	/**
-	 * Returns lowest possible reserved code used by predefined Response Builder's messages
-	 *
-	 * @return integer
-	 */
-	protected static function getReservedMinCode()
-	{
-		return BaseApiCodes::RESERVED_MIN_API_CODE;
-	}
-
-	/**
-	 * Returns highest possible reserved code used by predefined Response Builder's messages
-	 *
-	 * @return integer
-	 */
-	protected static function getReservedMaxCode()
-	{
-		return BaseApiCodes::RESERVED_MAX_API_CODE;
 	}
 
 	/**
 	 * Returns array of error code constants defined in this class. Used mainly for debugging/tests
 	 *
 	 * @return array
+	 * @throws \ReflectionException
 	 */
-	public static function getApiCodeConstants()
+	public static function getApiCodeConstants(): array
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$reflect = new \ReflectionClass(get_called_class());
+
 		return $reflect->getConstants();
 	}
 
@@ -95,7 +80,7 @@ trait ApiCodesHelpers
 	 *
 	 * @throws \RuntimeException Thrown when builder map is not configured.
 	 */
-	public static function getMap()
+	public static function getMap(): array
 	{
 		$map = Config::get(ResponseBuilder::CONF_KEY_MAP, null);
 		if ($map === null) {
@@ -111,28 +96,6 @@ trait ApiCodesHelpers
 	}
 
 	/**
-	 * Returns locale mappings for given base api code or @null if there's no mapping
-	 *
-	 * @param integer $code Base (built-in) code to look for mapped message for.
-	 *
-	 * @return string|null
-	 *
-	 * @throws \InvalidArgumentException If $code is not in allowed reserved range.
-	 */
-	public static function getReservedCodeMessageKey($code)
-	{
-		if (($code < BaseApiCodes::RESERVED_MIN_API_CODE) || ($code > BaseApiCodes::RESERVED_MAX_API_CODE)) {
-			throw new \InvalidArgumentException(
-				sprintf('Base code value (%d) is out of allowed reserved range %d-%d',
-					$code, BaseApiCodes::RESERVED_MIN_API_CODE, BaseApiCodes::RESERVED_MAX_API_CODE));
-		}
-
-		$base_map = BaseApiCodes::getBaseMap();
-		return array_key_exists($code, $base_map) ? $base_map[ $code ] : null;
-	}
-
-
-	/**
 	 * Returns locale mappings key for given api code or @null if there's no mapping
 	 *
 	 * @param integer $api_code Api code to look for mapped message for.
@@ -141,37 +104,41 @@ trait ApiCodesHelpers
 	 *
 	 * @throws \InvalidArgumentException If $code is not in allowed range.
 	 */
-	public static function getCodeMessageKey($api_code)
+	public static function getCodeMessageKey($api_code): ?string
 	{
 		if (!static::isCodeValid($api_code)) {
-			$msg = sprintf('API code value (%d) is out of allowed range %d-%d',
-				$api_code, static::getMinCode(), static::getMaxCode());
-			throw new \InvalidArgumentException($msg);
+			$min = static::getMinCode();
+			$max = static::getMaxCode();
+			throw new \InvalidArgumentException("API code value ({$api_code}) is out of allowed range {$min}-{$max}");
 		}
 
 		$map = static::getMap();
 
-		return array_key_exists($api_code, $map) ? $map[ $api_code ] : null;
+		return $map[ $api_code ] ?? null;
+	}
+
+	public static function isCodeValid($code): bool
+	{
+		return ($code === 0) || (($code >= static::getMinCode()) && ($code <= static::getMaxCode()));
 	}
 
 	/**
-	 * Checks if given $code can is valid in this module and can be safely used
+	 * Returns final API code for internal code, remapped to configured code range
 	 *
-	 * @param integer $code Code to check
+	 * @param int $internal_code
 	 *
-	 * @return boolean
+	 * @return int
 	 */
-	public static function isCodeValid($code)
+	protected static function getCodeForInternalOffset(int $internal_code): int
 	{
-		$result = false;
-
-		if ((($code >= static::getMinCode()) && ($code <= static::getMaxCode()))
-			|| (($code <= static::getReservedMaxCode()) && ($code >= static::getReservedMinCode()))
-		) {
-			$result = true;
+		$min = static::RESERVED_MIN_API_CODE_OFFSET;
+		$max = static::RESERVED_MAX_API_CODE_OFFSET;
+		if (($internal_code < $min) || ($internal_code > $max)) {
+			throw new \InvalidArgumentException(
+				sprintf('Invalid internal code (%d). Must be between %d-%d inclusive.', $internal_code, $min, $max));
 		}
 
-		return $result;
+		return ($internal_code === 0) ? 0 : $internal_code + static::getMinCode();
 	}
 
 }

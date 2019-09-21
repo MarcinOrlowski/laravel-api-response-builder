@@ -19,7 +19,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 class TestModel
 {
 	/** @var string|null */
-	protected $val = null;
+	protected $val;
 
 	/**
 	 * TestModel constructor.
@@ -36,7 +36,7 @@ class TestModel
 	 *
 	 * @return array
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return [
 			'val' => $this->val,

@@ -22,11 +22,11 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getMinCode() with invalid config
 	 *
 	 * @return void
-	 *
-	 * @expectedException \RuntimeException
 	 */
-	public function testGetMinCode_MissingConfigKey()
+	public function testGetMinCode_MissingConfigKey(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MIN_CODE);
 		BaseApiCodes::getMinCode();
 	}
@@ -35,25 +35,24 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getMaxCode() with invalid config
 	 *
 	 * @return void
-	 *
-	 * @expectedException \RuntimeException
 	 */
-	public function testGetMaxCode_MissingConfigKey()
+	public function testGetMaxCode_MissingConfigKey(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAX_CODE);
 		BaseApiCodes::getMaxCode();
 	}
-
 
 	/**
 	 * Tests getMap() with missing config
 	 *
 	 * @return void
-	 *
-	 * @expectedException \RuntimeException
 	 */
-	public function testGetMap_MissingConfigKey()
+	public function testGetMap_MissingConfigKey(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAP);
 		BaseApiCodes::getMap();
 	}
@@ -62,74 +61,12 @@ class ApiCodeBaseTest extends TestCase
 	 * Tests getMap() with wrong config
 	 *
 	 * @return void
-	 *
-	 * @expectedException \RuntimeException
 	 */
-	public function testGetMap_WrongConfig()
+	public function testGetMap_WrongConfig(): void
 	{
+		$this->expectException(\RuntimeException::class);
+
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, false);
 		BaseApiCodes::getMap();
 	}
-
-
-	/**
-	 * Tests getCodeMessageKey() for code outside of allowed range
-	 *
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testGetCodeMessageKey_OutOfRange()
-	{
-		BaseApiCodes::getCodeMessageKey(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
-	}
-
-	/**
-	 * Tests getReservedCodeMessageKey() with too low code
-	 *
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testGetReservedCodeMessageKey_TooLow()
-	{
-		BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::RESERVED_MIN_API_CODE - 1);
-	}
-
-	/**
-	 * Tests getReservedCodeMessageKey() with too high code
-	 *
-	 * @return void
-	 *
-	 * @expectedException \InvalidArgumentException
-	 */
-	public function testGetReservedCodeMessageKey_TooHigh()
-	{
-		BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::RESERVED_MAX_API_CODE + 1);
-	}
-
-	/**
-	 * Tests getReservedCodeMessageKey()
-	 *
-	 * @return void
-	 */
-	public function testGetReservedCodeMessageKey()
-	{
-		// check how mapped code handling works
-		$mapping = BaseApiCodes::getReservedCodeMessageKey(BaseApiCodes::OK);
-		$this->assertNotNull($mapping);
-
-		// check how not-mapped code is handled
-		$base_map = $this->getProtectedMember(BaseApiCodes::class, 'base_map');
-
-		for ($code = BaseApiCodes::RESERVED_MIN_API_CODE; $code < BaseApiCodes::RESERVED_MAX_API_CODE; $code++) {
-			if (!array_key_exists($code, $base_map)) {
-				break;
-			}
-		}
-
-		$mapping = BaseApiCodes::getReservedCodeMessageKey($code);
-		$this->assertNull($mapping);
-	}
-
 }

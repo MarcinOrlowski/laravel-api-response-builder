@@ -4,10 +4,43 @@
 
  `ResponseBuilder` follows [Semantic Versioning](http://semver.org/).
 
+
+### v6 ###
+
+ * Requires Laravel 6.0+ and PHP 7.2+
+ * [BREAKING] In previous versions built-in reserved codes were hardcoded and always in range of 1-63 which somehow, in certain
+ situations contradicted the idea of code ranges. Starting from v6, all API codes (incl. built-in) are always within user
+ assigned code range. This implies some breaking changes to the configuration of `ResponseBuilder`. Your API codes are no longer
+ defined as fixed value (i.e. `const SOMETHING_WENT_WRONG = 172;`) but as **offset** from your range starting value (`min_code`).
+ Default range starts at 100, so the above constant should now be `const SOMETHING_WENT_WRONG = 72;` (hint: you can write this as
+ `const SOMETHING_WENT_WRONG = +72;` which may improve code readability). Please note that code value must be lower than defined
+ `max_code` therefore pay attention if you are going to change your ranges. If i.e. you'd change your range to be 100-150, then
+ `SOMETHING_WENT_WRONG` would require new code assignment as `100+72 > 150`. Also note that first 19 values in your range
+ (and also `OK` value of `0`) are reserved, therefore the lowest offset you can use is `20`.
+ * [Low] Changed default HTTP code associated with each exception handled by `ExceptionHandler`. With no custom settings it will
+ now return different HTTP code for different exception handled, while previously implementation could always return 
+ `HTTP_BAD_REQUEST`. All users running on default settings, however, unless you client apps are HTTP code sensitive, the impact
+ of this change is very low. Additionally, if you already set `http_code` field in your config (in ` exception_handler` block)
+ then you need to change it from final value to **offset** as mentioned above.
+ * [Low] Removed `exception_handler.use_exception_message_first` feature.
+ * [Low] Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
+ * [Low] Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods from `ApiCodesHelpers` trait.
+ * [Low] All `ResponseBuilder` internal code constants are removed. If you need to get the valid API code for internal codes, 
+ use `BaseApiCodes` class' methods: `OK()`, `NO_ERROR_MESSAGE()`, `EX_HTTP_NOT_FOUND()`, `EX_HTTP_SERVICE_UNAVAILABLE()`,
+ `EX_HTTP_EXCEPTION()`, `EX_UNCAUGHT_EXCEPTION()`, `EX_AUTHENTICATION_EXCEPTION()` and `EX_VALIDATION_EXCEPTION()` that would
+ return valid API code in currently configured range.
+ * [Low] Removed `response_key_map` configuration option.
+			
+### v5 ###
+
+ * No public release.
+
+
 ### v4 ###
 
  * `ApiCodeBase` class is now `BaseApiCodes`
  * ExceptionHandler's debug trace no longer depends on `APP_DEBUG` value and can be enabled independently
+
 
 ### v3 ###
 
@@ -24,9 +57,11 @@
  * Internal constants for `ExeceptionHandlerHelper` supported exceptions are now prefixed with `EX_` (i.e. `HTTP_NOT_FOUND`
  is now `EX_HTTP_NOT_FOUND`)
 
+
 ### v2 ###
 
  * First public release
+
 
 ### v1 ###
 
