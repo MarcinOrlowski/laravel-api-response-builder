@@ -29,6 +29,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
    * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods.
    * Removed internal API code constants. Use corresponding methods to get proprt code value.
+   * Reimplemented Laravel config merger to support multi-dimensional configuration arrays too.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.

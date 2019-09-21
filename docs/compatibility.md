@@ -28,7 +28,8 @@
  * [Low] All `ResponseBuilder` internal code constants are removed. If you need to get the valid API code for internal codes, 
  use `BaseApiCodes` class' methods: `OK()`, `NO_ERROR_MESSAGE()`, `EX_HTTP_NOT_FOUND()`, `EX_HTTP_SERVICE_UNAVAILABLE()`,
  `EX_HTTP_EXCEPTION()`, `EX_UNCAUGHT_EXCEPTION()`, `EX_AUTHENTICATION_EXCEPTION()` and `EX_VALIDATION_EXCEPTION()` that would
- return valid API code in currently configured range.  
+ return valid API code in currently configured range.
+ * Reimplemented Laravel config merger to support multi-dimensional configuration arrays too.  
 			
 ### v5 ###
 
