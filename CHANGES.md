@@ -31,6 +31,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Removed internal API code constants. Use corresponding methods to get proprt code value.
    * Reimplemented Laravel config merger to support multi-dimensional configuration arrays too.
    * Removed `response_key_map` configuration option. 
+   * You can now return HTTP codes from 5xx range with all error responses. 
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.
