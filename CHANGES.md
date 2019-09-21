@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-@dev
+* v6.0.0 (2019-09-20)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Requires Laravel 6.0+ and PHP 7.2+ (see docs for legacy support hints).
    * All API codes are now withing defined code range, incl. built-in codes.
