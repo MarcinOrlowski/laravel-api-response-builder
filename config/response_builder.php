@@ -3,15 +3,12 @@
 /**
  * Laravel API Response Builder - configuration file
  *
+ * See docs/config.md for detailed documentation
+ *
  * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * @copyright 2016-2019 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
- */
-
- /*
- * See docs/config.md for detailed documentation
- *
  */
 
 return [
@@ -29,7 +26,8 @@ return [
 	|-----------------------------------------------------------------------------------------------------------
 	|
 	*/
-	'map'      => [
+	'map' => [
+
 	],
 
 	/*
