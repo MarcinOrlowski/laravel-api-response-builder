@@ -14,7 +14,7 @@
  Available configuration options and its current default values:
  
  * [classes](#classes)
- * [debug WIP!](#debug)
+ * [debug](#debug)
  * [encoding_options](#encoding_options)
  * [exception_handler](#exception_handler)
  * [map](#map)
@@ -114,46 +114,46 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
 Default exception handling configuration:
 
 ```php
-    'exception_handler' => [
-        'exception' => [
-            'http_not_found' => [
-                'code'      => \App\ApiCodes::HTTP_NOT_FOUND(),
-                'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
-            ],
-            'http_service_unavailable' => [
-                'code'      => \App\ApiCodes::HTTP_SERVICE_UNAVAILABLE(),
-                'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
-            ],
-            'http_exception' => [
-                'code'      => \App\ApiCodes::HTTP_EXCEPTION(),
-                'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
-			],
-            'uncaught_exception' => [
-                'code'      => \App\ApiCodes::UNCAUGHT_EXCEPTION(),
-                'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_INTERNAL_SERVER_ERROR,
-            ],
-            'authentication_exception' => [
-                'code'      => \App\ApiCodes::AUTHENTICATION_EXCEPTION(),
-                'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNAUTHORIZED,
-            ],
-            'validation_exception' => [
-                'code'      => \App\ApiCodes::VALIDATION_EXCEPTION(),
-                'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNPROCESSABLE_ENTITY,
-            ],
+'exception_handler' => [
+    'exception' => [
+        'http_not_found' => [
+            'code'      => \App\ApiCodes::HTTP_NOT_FOUND(),
+            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
         ],
+        'http_service_unavailable' => [
+            'code'      => \App\ApiCodes::HTTP_SERVICE_UNAVAILABLE(),
+            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
+        ],
+        'http_exception' => [
+            'code'      => \App\ApiCodes::HTTP_EXCEPTION(),
+            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
+        ],
+        'uncaught_exception' => [
+            'code'      => \App\ApiCodes::UNCAUGHT_EXCEPTION(),
+            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_INTERNAL_SERVER_ERROR,
+        ],
+        'authentication_exception' => [
+            'code'      => \App\ApiCodes::AUTHENTICATION_EXCEPTION(),
+            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNAUTHORIZED,
+        ],
+        'validation_exception' => [
+            'code'      => \App\ApiCodes::VALIDATION_EXCEPTION(),
+            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNPROCESSABLE_ENTITY,
+        ],
+    ],
 ```
 
 ## map ##
 
-`ResponseBuilder can automatically use text error message associated with error code and return in the
-response. To be able to do that, we need a map that would tell us which translation we should
-use
-for which error code
+`ResponseBuilder` can automatically use text error message associated with error code and return in the
+response, once its configured to know which string to use for which code. `ResponseBuilder` uses standard
+Laravel's `Lang` facade to process strings.
 
-`ResponseBuilder` uses standard Laravel's `Lang` facade:
-
-```php`
-ApiCode::SOMETHING => 'api.something',
+```php
+'map' => [
+	ApiCode::SOMETHING => 'api.something',
+	...
+],
 ```
 	
 See [Exception Handling with Response Builder](docs/exceptions.md) if you want to provide own messages for built-in codes.
