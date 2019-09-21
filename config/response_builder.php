@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Laravel API Response Builder - config file
+ * Laravel API Response Builder - configuration file
  *
  * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * @copyright 2016-2019 Marcin Orlowski
@@ -9,23 +9,16 @@
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-return [
+ /*
+ * See docs/config.md for detailed documentation
+ *
+ */
 
+return [
 	/*
 	|-----------------------------------------------------------------------------------------------------------
 	| Code range settings
 	|-----------------------------------------------------------------------------------------------------------
-	|
-	| This option controls code range allowed error codes to use. This is helpful when you use i.e. many
-	| chained APIs and you would like to ensure all error codes are unique. By assigning different ranges
-	| to your API and by properly setting min_code and max_code you have this guarded by ResponseBuilder
-	| at runtime.
-	|
-	| NOTE ResponseBuilder reserves codes small pool of codes for internal use. See docs for more details.
-	|
-	| min_code - Min error code assigned for this module (inclusive)
-	| max_code - Max error code assigned for this module (inclusive)
-	|
 	*/
 	'min_code' => 100,
 	'max_code' => 1024,
@@ -35,49 +28,25 @@ return [
 	| Error code to message mapping
 	|-----------------------------------------------------------------------------------------------------------
 	|
-	| ResponseBuilder automatically "translates" your error code to more human readable form, that's why this
-	| mapping is needed. ResponseBuilder uses standard Laravel's Lang
-	|
-	|    ApiCode::SOMETHING => 'api.something',
-	|
-	| See docs/exceptions.md if you want to provide own messages for built-in codes.
-	|
 	*/
 	'map'      => [
-
 	],
-
 
 	/*
 	|-----------------------------------------------------------------------------------------------------------
 	| Response Builder classes
 	|-----------------------------------------------------------------------------------------------------------
 	|
-	| Response Builder can auto-convert objects given as return $data. This is handled by "classes" mapping.
-	| The key is class name to check object against, and configuration elements include:
-	|
-	| "key" (string) (mandatory)
-	|   - name of the key to be used in returned JSON after object is converted.
-	|
-	| "method" (string) (mandatory)
-	|   - name of argument-less method to be called on the object for conversion
-	|
-	| See docs for more details.
-	|
 	*/
-
 	'classes'           => [
-
 		Illuminate\Database\Eloquent\Model::class => [
 			'key'    => 'item',
 			'method' => 'toArray',
 		],
-
 		Illuminate\Database\Eloquent\Collection::class => [
 			'key'    => 'items',
 			'method' => 'toArray',
 		],
-
 	],
 
 	/*
@@ -85,42 +54,13 @@ return [
 	| data-to-json encodong options
 	|-----------------------------------------------------------------------------------------------------------
 	|
-	| This controls data JSON encoding. Since 3.1, encoding was relying on framework defaults, however this
-	| caused valid UTF-8 characters (i.e. accents) to be returned escaped, which while technically correct
-	| ant theoretically transparent) might not be desired effects.
-	|
-	| To prevent escaping, add JSON_UNESCAPED_UNICODE (default since v3.2):
-	|    JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE
-	|
-	| Laravel's value:
-	|    JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
-	|
-	| See http://php.net/manual/en/function.json-encode.php for details
-	|
 	*/
 	'encoding_options'  => JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE,
-
 
 	/*
 	|-----------------------------------------------------------------------------------------------------------
 	| Response JSON keys mapping
 	|-----------------------------------------------------------------------------------------------------------
-	|
-	| You can remap response JSON keys if really needed.
-	|
-	|
-	| WARNING: there's NO duplicate check at runtime, so if you remap two keys to the same values you will end
-	| up with problems. There's testing trait to prevent this from happening, so ensure you unit test your app
-	| (see docs!).
-	|
-	| NOTE: Ensure you have this config file using:
-	|
-	|    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-	|
-	| if you want to use custom mapping.
-	|
-	| It's safe to completely remove/comment out this config element.
-	|
 	*/
 	//	'response_key_map' => [
 	//		ResponseBuilder::KEY_SUCCESS => 'success',
@@ -135,17 +75,9 @@ return [
 	| Exception handler error codes
 	|-----------------------------------------------------------------------------------------------------------
 	|
-	| If you use ResponseBuilder's Exception handler helper, you must map events to error codes you assigned.
-	|
-	| See README for details
-	|
 	*/
 	'exception_handler' => [
-
-		// Map exception to your own error codes. That way, when cascading you will still know which
-		// module thrown this exception
 		'exception' => [
-
 //			'http_not_found' => [
 //				'code'      => \App\ApiCodes::HTTP_NOT_FOUND(),
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
@@ -170,11 +102,8 @@ return [
 //				'code'      => \App\ApiCodes::VALIDATION_EXCEPTION(),
 //				'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNPROCESSABLE_ENTITY,
 //			],
-
 		],
-
 	],
-
 
 	/*
 	|-----------------------------------------------------------------------------------------------------------
@@ -182,23 +111,12 @@ return [
 	|-----------------------------------------------------------------------------------------------------------
 	|
 	*/
-
 	'debug' => [
 //		'debug_key' => 'debug',
-
-'exception_handler' => [
-	/**
-	 * Name of the JSON key trace data should be put under in `debug` node.
-	 */
-	//			'trace_key' => 'trace',
-
-	/**
-	 * When ExceptionHandler kicks in and this is set to @true,
-	 * then returned JSON structure will contain additional debug data
-	 * with information about class name, file name and line number.
-	 */
-	'trace_enabled' => env('APP_DEBUG', false),
-],
+		'exception_handler' => [
+//			'trace_key' => 'trace',
+			'trace_enabled' => env('APP_DEBUG', false),
+		],
 	],
 
 ];

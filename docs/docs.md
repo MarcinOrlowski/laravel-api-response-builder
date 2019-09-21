@@ -383,13 +383,9 @@ This would produce expected and much cleaner data structure:
 
     composer require marcin-orlowski/laravel-api-response-builder
 
- If you want to change defaults then you should publish configuration file to
- your `config/` folder once package is installed:
-
-    php artisan vendor:publish
-
- and tweak this file according to your needs. If you are fine with defaults, this step
- can safely be skipped (you can also remove published `config/response_builder.php` file).
+ If you want to use different configuration than `ResponseBuilder` defaults,
+ publish and edit configuration file as described in [Configuration file](config.md)
+ documentation.
 
 #### Setup ####
 
