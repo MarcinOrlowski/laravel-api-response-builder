@@ -9,7 +9,11 @@
     "api",
     "builder",
     "rest",
-    "helper"
+    "helper",
+    "php7",
+    "mobile",
+    "android",
+    "ios"
   ],
   "license": "MIT",
   "authors": [
