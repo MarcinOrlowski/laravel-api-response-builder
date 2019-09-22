@@ -1,4 +1,4 @@
-![REST API Response Builder for Laravel](img/laravel-logolockup-rgb-red.png)
+![REST API Response Builder for Laravel](img/logo.png)
 
 # Configuration file #
  If you want to change `ResponseBuilder` default configuration you need to use config file. Use package provided configuration
