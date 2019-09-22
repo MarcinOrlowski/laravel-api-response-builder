@@ -15,7 +15,12 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="api-response-builder-logo.svg">
+   sodipodi:docname="api-response-builder-logo.svg"
+   inkscape:export-filename="/home/carlos/Downloads/api-response-builder-logo.png"
+   inkscape:export-xdpi="37.330002"
+   inkscape:export-ydpi="37.330002">
+  <title
+     id="title4925">Laravel API Response Builder logo</title>
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -47,7 +52,15 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title>Laravel API Response Builder logo</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Marcin Orlowski</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:date>2019-09-22</dc:date>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>
     </rdf:RDF>
   </metadata>

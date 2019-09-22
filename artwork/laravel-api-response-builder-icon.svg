@@ -16,11 +16,13 @@
    viewBox="0 0 512 512"
    style="enable-background:new 0 0 512 512;"
    xml:space="preserve"
-   sodipodi:docname="api-response-builder-logo.svg"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"><metadata
+   sodipodi:docname="api-response-builder-icon.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"><title
+   id="title1070">Laravel API Response Builder icon</title><metadata
    id="metadata3891"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>Laravel API Response Builder icon</dc:title><dc:date>2019-09-22</dc:date><dc:creator><cc:Agent><dc:title>Marcin Orlowski</dc:title></cc:Agent></dc:creator><cc:license
+         rdf:resource="" /><dc:source>https://github.com/MarcinOrlowski/laravel-api-response-builder</dc:source><dc:description></dc:description></cc:Work></rdf:RDF></metadata><defs
    id="defs3889" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
