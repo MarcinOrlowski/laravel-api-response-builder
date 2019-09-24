@@ -301,12 +301,10 @@ class ErrorTest extends TestCase
 		$obj = new ResponseBuilder();
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$method = $this->getProtectedMethod($obj, 'buildErrorResponse');
-
-		return $method->invokeArgs($obj, [$data,
-		                                  $api_code,
-		                                  $http_code,
-		                                  $lang_args]);
+		return $this->callProtectedMethod($obj, 'buildErrorResponse', [$data,
+		                                                               $api_code,
+		                                                               $http_code,
+		                                                               $lang_args]);
 	}
 
 }

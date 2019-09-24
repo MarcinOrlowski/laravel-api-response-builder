@@ -185,13 +185,12 @@ class InternalsTest extends TestCase
 	 */
 	public function testGetClassesMapping_WrongType(): void
 	{
-		$this->expectException(\RuntimeException::class);
-
 		\Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
-		$obj = new ResponseBuilder();
-		$method = $this->getProtectedMethod($obj, 'getClassesMapping');
-		$method->invokeArgs($obj, []);
+		$this->expectException(\RuntimeException::class);
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod(new ResponseBuilder(), 'getClassesMapping');
 	}
 
 
@@ -235,11 +234,9 @@ class InternalsTest extends TestCase
 		$obj = new BaseApiCodes();
 		$max = $this->getProtectedConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
 
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$method = $this->getProtectedMethod($obj, 'getCodeForInternalOffset');
-
 		$this->expectException(\InvalidArgumentException::class);
-		$method->invokeArgs($obj, [$max + 1]);
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$max + 1]);
 	}
 
 	/**
@@ -254,11 +251,9 @@ class InternalsTest extends TestCase
 		$obj = new BaseApiCodes();
 		$min = $this->getProtectedConstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
 
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$method = $this->getProtectedMethod($obj, 'getCodeForInternalOffset');
-
 		$this->expectException(\InvalidArgumentException::class);
-		$method->invokeArgs($obj, [$min - 1]);
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$min - 1]);
 	}
 
 }

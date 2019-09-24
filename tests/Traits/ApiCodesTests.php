@@ -31,20 +31,15 @@ trait ApiCodesTests
 	/**
 	 * Checks if Api codes range is set right
 	 *
-	 * @return void
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testMinMaxCode(): void
 	{
 		$obj = new BaseApiCodes();
 
-		$get_base_max_code = $this->getProtectedMethod(get_class($obj), 'getReservedMaxCode');
-		$base_max = $get_base_max_code->invokeArgs($obj, []);
-
-		$get_min_code = $this->getProtectedMethod(get_class($obj), 'getMinCode');
-		$min = $get_min_code->invokeArgs($obj, []);
-
-		$get_max_code = $this->getProtectedMethod(get_class($obj), 'getMaxCode');
-		$max = $get_max_code->invokeArgs($obj, []);
+		$base_max = $this->callProtectedMethod(get_class($obj), 'getReservedMaxCode');
+		$min = $this->callProtectedMethod(get_class($obj), 'getMinCode');
+		$max = $this->callProtectedMethod(get_class($obj), 'getMaxCode');
 
 		$this->assertNotNull($base_max);
 		$this->assertNotNull($min);

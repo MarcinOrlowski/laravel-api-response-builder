@@ -29,7 +29,7 @@ class ValidatorTest extends TestCase
 		Validator::assertInt(__FUNCTION__, 'chicken');
 	}
 
-	// check testAssertIntRange() main variable type is ensured to be integer.
+	// check if assertIntRange() main variable type is ensured to be integer.
 	public function testAssertIntRangeVarType(): void
 	{
 		// ensure main variable is an integer
@@ -37,7 +37,7 @@ class ValidatorTest extends TestCase
 		Validator::assertIntRange(__FUNCTION__, 'string', 100, 200);
 	}
 
-	// check testAssertIntRange() range $min and $max are in right order.
+	// check if assertIntRange() range $min and $max are in right order.
 	public function testAssertIntRangeMinMaxOrder(): void
 	{
 		// ensure main variable is an integer
@@ -45,7 +45,7 @@ class ValidatorTest extends TestCase
 		Validator::assertIntRange(__FUNCTION__, 300, 500, 200);
 	}
 
-	// check testAssertIntRange() to ensure we check $var is in range
+	// check if assertIntRange() to ensure we check $var is in range
 	// and $max bounds only
 	public function testAssertIntRangeVarInMinMaxRange(): void
 	{

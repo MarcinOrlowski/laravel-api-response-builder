@@ -177,10 +177,8 @@ class SuccessTest extends TestCase
 
 					$j = $this->getResponseSuccessObject($api_codes_class_name::OK(), $http_code_expect);
 
-					if ($payload !== null) {
-						$payload = (object)$payload;
-					}
-					$this->assertEquals($payload, $j->data);
+					$expected_payload = is_array($payload) ? (object)$payload : $payload;
+					$this->assertEquals($expected_payload, $j->data);
 				}
 			}
 		}
@@ -191,7 +189,8 @@ class SuccessTest extends TestCase
 	 *
 	 * Tests successWithHttpCode()
 	 */
-	public function testSuccessHttpCode(): void
+	public
+	function testSuccessHttpCode(): void
 	{
 		$http_codes = [
 			HttpResponse::HTTP_ACCEPTED,
@@ -204,19 +203,21 @@ class SuccessTest extends TestCase
 		}
 	}
 
-	// tests that passing null as argument to successWithHttpCode() it will fall back to defaults.
-	public function testSuccessWithNullAsHttpCode(): void
+// tests that passing null as argument to successWithHttpCode() it will fall back to defaults.
+	public
+	function testSuccessWithNullAsHttpCode(): void
 	{
 		$response = ResponseBuilder::successWithHttpCode(null);
 		$this->assertEquals(ResponseBuilder::DEFAULT_HTTP_CODE_OK, $response->getStatusCode());
 	}
 
-	//----[ success ]-------------------------------------------
+//----[ success ]-------------------------------------------
 
 	/**
 	 * @return void
 	 */
-	public function testSuccessWithTooBigHttpCode(): void
+	public
+	function testSuccessWithTooBigHttpCode(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
@@ -226,7 +227,8 @@ class SuccessTest extends TestCase
 	/**
 	 * @return void
 	 */
-	public function testSuccessWithTooLowHttpCode(): void
+	public
+	function testSuccessWithTooLowHttpCode(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
