@@ -343,9 +343,9 @@ trait TestingHelpers
 	/**
 	 * Calls protected method of $object, passing optional array of arguments.
 	 *
-	 * @param object $obj_or_class Object to call $method_name on or name of the class.
-	 * @param string $method_name  Name of method to called.
-	 * @param array  $args         Optional array of arguments (empty array if no args to pass).
+	 * @param object|string $obj_or_class Object to call $method_name on or name of the class.
+	 * @param string        $method_name  Name of method to called.
+	 * @param array         $args         Optional array of arguments (empty array if no args to pass).
 	 *
 	 * @return mixed
 	 *
