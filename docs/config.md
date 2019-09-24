@@ -41,7 +41,7 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
  
 ## debug ##
 
-```json
+```php
 'debug' => [
     'debug_key' => 'debug',
 
@@ -60,7 +60,7 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
 	 * with information about class name, file name and line number.
 	 */
 
-```jsob
+```json
 {
     "success": false,
     "code": 0,
@@ -90,7 +90,7 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
  
     JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 
- See http://php.net/manual/en/function.json-encode.php for details.
+ See [json_encode() manual](http://php.net/manual/en/function.json-encode.php) for more details.
 
 ## exception_handler ##
 
@@ -164,7 +164,7 @@ See [Exception Handling with Response Builder](docs/exceptions.md) if you want t
 
  NOTE ResponseBuilder reserves first 19 codes for its own needs. First code you can use is 20th code in your pool.
 
-```PHP
+```php
 'min_code' => 100,
 ```
 
@@ -173,6 +173,6 @@ See [Exception Handling with Response Builder](docs/exceptions.md) if you want t
  Min api code in assigned for this module (inclusive)
  This option defines highest allowed (inclusive) code that can be used.
 
-```PHP
+```php
 'max_code' => 1024,
 ```

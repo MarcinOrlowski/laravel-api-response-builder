@@ -163,7 +163,7 @@ class InternalsTest extends TestCase
 
 
 	/**
-	 * Validates handling of wrong data type by getClassesMapping()
+	 * Validates handling of incomplete class mapping configuration by getClassesMapping()
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -177,6 +177,17 @@ class InternalsTest extends TestCase
 		$this->callProtectedMethod(new ResponseBuilder(), 'getClassesMapping');
 	}
 
+	public function testGetClassesMapping_IncompleteMappingConfiguration(): void
+	{
+		\Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+			self::class => [],
+		]);
+
+		$this->expectException(\RuntimeException::class);
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod(new ResponseBuilder(), 'getClassesMapping');
+	}
 
 	/**
 	 * Tests is custom response key mappings and defaults fallback work
@@ -232,4 +243,33 @@ class InternalsTest extends TestCase
 		$this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$min - 1]);
 	}
 
+
+	public function testGetCodeMessageKey_WithKeyOutOfBounds(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		BaseApiCodes::getCodeMessageKey(BaseApiCodes::getMaxCode() + 1);
+	}
+
+	public function testGetApiCodeConstants(): void
+	{
+		$expected = [
+			'RESERVED_MIN_API_CODE_OFFSET',
+			'RESERVED_MAX_API_CODE_OFFSET',
+
+			'OK_OFFSET',
+			'NO_ERROR_MESSAGE_OFFSET',
+			'EX_HTTP_NOT_FOUND_OFFSET',
+			'EX_HTTP_SERVICE_UNAVAILABLE_OFFSET',
+			'EX_HTTP_EXCEPTION_OFFSET',
+			'EX_UNCAUGHT_EXCEPTION_OFFSET',
+			'EX_AUTHENTICATION_EXCEPTION_OFFSET',
+			'EX_VALIDATION_EXCEPTION_OFFSET',
+		];
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$consts = BaseApiCodes::getApiCodeConstants();
+
+		foreach ($expected as $key) {
+			$this->assertArrayHasKey($key, $consts);
+		}
+	}
 }

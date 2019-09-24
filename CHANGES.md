@@ -8,6 +8,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * @dev
    * Added new project logo.
+   * Added more unit tests.
 
 * v6.0.0 (2019-09-20)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))

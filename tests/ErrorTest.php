@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -183,6 +184,14 @@ class ErrorTest extends TestCase
 		$this->assertNull($j->data);
 	}
 
+	/**
+	 * Checks if using errorXXX() with OK() code triggers resistance.
+	 */
+	public function testErrorWithOkCode(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		ResponseBuilder::error(BaseApiCodes::OK());
+	}
 
 	/**
 	 * Tests error() handling api code with no message mapping
@@ -221,7 +230,6 @@ class ErrorTest extends TestCase
 
 		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 	}
-
 
 	/**
 	 * Tests buildErrorResponse() fed with @null as http_code

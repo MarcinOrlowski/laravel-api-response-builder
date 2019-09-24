@@ -117,6 +117,8 @@ class BuildResponseTest extends TestCase
 	/**
 	 * Checks if buildResponse() would throw InvalidArgument exception on unusupported payload type
 	 *
+	 * @param mixed $data Test data as yelded by dataProvider
+	 *
 	 * @dataProvider dataProvider_testBuildResponse_InvalidDataType
 	 */
 	public function testBuildResponse_InvalidDataType($data): void
@@ -125,6 +127,9 @@ class BuildResponseTest extends TestCase
 		ResponseBuilder::success($data);
 	}
 
+	/**
+	 * Data provider for testBuildResponse_InvalidDataType test
+	 */
 	public function dataProvider_testBuildResponse_InvalidDataType(): array
 	{
 		return [

@@ -20,17 +20,21 @@
  Next, modify handler's `render()` method body to ensure it calls calls our `ExceptionHandlerHelper`'s.
  Default handler as of Laravel 5.2 has been significantly simplified and by default it looks like this:
 
-    public function render($request, Exception $e)
-    {
-        return parent::render($request, $e);
-    }
+```php
+public function render($request, Exception $e)
+{
+    return parent::render($request, $e);
+}
+```
 
  After your edit it shall look like this:
 
-    public function render($request, Exception $e)
-    {
-        return ExceptionHandlerHelper::render($request, $e);
-    }
+```php
+public function render($request, Exception $e)
+{
+    return ExceptionHandlerHelper::render($request, $e);
+}
+```
 
  From now on, in case of any troubles, regular and standardized JSON responses will be
  returned by your API instead of HTML page.
@@ -47,15 +51,18 @@
  codes **within your allowed code range** (constants can be named as you like), representing
  cases `ExceptionHandlerHelper` handles:
 
-    const HTTP_NOT_FOUND = ...;
-    const HTTP_SERVICE_UNAVAILABLE = ...;
-    const HTTP_EXCEPTION = ...;
-    const UNCAUGHT_EXCEPTION = ...;
-    const AUTHENTICATION_EXCEPTION = ...;
-    const VALIDATION_EXCEPTION = ...;
+```php
+public const HTTP_NOT_FOUND = ...;
+public const HTTP_SERVICE_UNAVAILABLE = ...;
+public const HTTP_EXCEPTION = ...;
+public const UNCAUGHT_EXCEPTION = ...;
+public const AUTHENTICATION_EXCEPTION = ...;
+public const VALIDATION_EXCEPTION = ...;
+```
 
  then edit `config/response_builder.php` file to map exceptions to your codes:
 
+```php
 	'exception_handler' => [
 		'exception' => [
 			'http_not_found'           => ['code' => ApiCode::HTTP_NOT_FOUND],
@@ -66,6 +73,7 @@
 			'validation_exception'     => ['code' => ApiCode::VALIDATION_EXCEPTION],
 		],
     ],
+```
 
 ## HTTP return codes ##
 
@@ -77,10 +85,12 @@
 
  I.e. to alter HTTP code for `http_not_found`:
  
-    'http_not_found' => [
-        'code'      => BaseApiCodes::EX_HTTP_NOT_FOUND(),
-        'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-    ],
+```php
+'http_not_found' => [
+    'code'      => BaseApiCodes::EX_HTTP_NOT_FOUND(),
+    'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+],
+```
 
  See default config `vendor/marcin-orlowski/laravel-api-response-builder/config/response_builder.php`
  file for all entries you can modify.
@@ -88,14 +98,16 @@
  Both keys `code` and `http_code` are optional and can be used selectively according to your needs.
  Helper will fall back to defaults if these are not found:
 
-    'http_not_found' => [
-        'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-    ],
-    'http_service_unavailable' => [
-        'code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
-    ],
-    'uncaught_exception' => [
-    ],
+```php
+'http_not_found' => [
+    'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+],
+'http_service_unavailable' => [
+    'code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
+],
+'uncaught_exception' => [
+],
+````
 
  Helper will try to use exception's status code if no dedicated `http_code` value is provided but it will fall
  to default `HttpResponse::HTTP_BAD_REQUEST` code (`HttpResponse::HTTP_INTERNAL_SERVER_ERROR` for uncaught
@@ -106,15 +118,17 @@
  If you want to override built-in messages for any (or all) exceptions, edit `config/response_builder.php`
  and add appropriate entry to `map` array:
 
-    `map` => [
-        BaseApiCodes::EX_HTTP_NOT_FOUND()           => 'api.http_not_found',
-        BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE() => 'api.http_service_unavailable',
-        BaseApiCodes::EX_HTTP_EXCEPTION()           => 'api.http_exception',
-        BaseApiCodes::EX_UNCAUGHT_EXCEPTION()       => 'api.uncaught_exception',
-        BaseApiCodes::EX_AUTHENTICATION_EXCEPTION() => 'api.authentication_exception',
-        BaseApiCodes::EX_VALIDATION_EXCEPTION()     => 'api.validation_exception',
-        ...
-    ],
+```php
+'map' => [
+    BaseApiCodes::EX_HTTP_NOT_FOUND()           => 'api.http_not_found',
+    BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE() => 'api.http_service_unavailable',
+    BaseApiCodes::EX_HTTP_EXCEPTION()           => 'api.http_exception',
+    BaseApiCodes::EX_UNCAUGHT_EXCEPTION()       => 'api.uncaught_exception',
+    BaseApiCodes::EX_AUTHENTICATION_EXCEPTION() => 'api.authentication_exception',
+    BaseApiCodes::EX_VALIDATION_EXCEPTION()     => 'api.validation_exception',
+    ...
+],
+```
 
  where `api.xxxx` entry must be valid localization string key from your app's localization strings
  pool as per Lang's requirements. You can use placeholders in your messages. Supported are 
@@ -132,8 +146,10 @@
  package, then you must **NOT** use its `OAuthExceptionHandlerMiddleware` class and ensure it is not set,
  by inspecting `app/Kernel.php` file and ensuring the following line (if present) is removed or commented out:
 
-    // remove or comment out
-    'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware',
+```php
+// remove or comment out
+'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware',
+```
 
 ## Notes ##
 

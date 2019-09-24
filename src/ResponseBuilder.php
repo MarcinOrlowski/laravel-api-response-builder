@@ -382,9 +382,12 @@ class ResponseBuilder
 		$http_code = $http_code ?? static::DEFAULT_HTTP_CODE_ERROR;
 		$headers = $headers ?? [];
 
-		Validator::assertInt('api_code', $api_code);
-		Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 		$code_ok = BaseApiCodes::OK();
+
+		Validator::assertInt('api_code', $api_code);
+		if ($api_code !== $code_ok) {
+			Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+		}
 		if ($api_code === $code_ok) {
 			throw new \InvalidArgumentException("Error response cannot use api_code of value  {$code_ok} which is reserved for OK");
 		}
