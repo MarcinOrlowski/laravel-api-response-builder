@@ -105,8 +105,9 @@ class ResponseBuilder
 					sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
 			}
 
-			$mandatory_keys = [static::KEY_KEY,
-			                   static::KEY_METHOD,
+			$mandatory_keys = [
+				static::KEY_KEY,
+				static::KEY_METHOD,
 			];
 			foreach ($classes as $class_name => $class_config) {
 				foreach ($mandatory_keys as $key_name) {
@@ -120,6 +121,29 @@ class ResponseBuilder
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Checks if we have "classes" mapping configured for $data object class.
+	 * Returns @true if there's valid config for this class.
+	 *
+	 * @param object $data Object to check mapping for.
+	 *
+	 * @return bool
+	 *
+	 * @throws \InvalidArgumentException if $data is not an object.
+	 */
+	protected static function hasClassesMapping(object $data): bool
+	{
+		$result = false;
+		foreach (static::getClassesMapping() as $cls => $params) {
+			if ($data instanceof $cls) {
+				$result = true;
+				break;
+			}
+		}
+
+		return $result;
 	}
 
 	/**
@@ -146,7 +170,6 @@ class ResponseBuilder
 			}
 		}
 	}
-
 
 	/**
 	 * Returns success
@@ -215,8 +238,7 @@ class ResponseBuilder
 		Validator::assertInt('http_code', $http_code);
 		Validator::assertIntRange('http_code', $http_code, 200, 299);
 
-		return static::make(true, $api_code, $api_code, $data,
-			$http_code, $lang_args, null, $encoding_options);
+		return static::make(true, $api_code, $api_code, $data, $http_code, $lang_args, null, $encoding_options);
 	}
 
 	/**
@@ -389,7 +411,8 @@ class ResponseBuilder
 	 *
 	 * @return HttpResponse
 	 *
-	 * @throws \InvalidArgumentException If code is neither a string nor valid integer code.
+	 * @throws \InvalidArgumentException If $api_code is neither a string nor valid integer code.
+	 * @throws \InvalidArgumentException if $data is an object of class that is not configured in "classes" mapping.
 	 *
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
@@ -425,6 +448,7 @@ class ResponseBuilder
 				// nope, let's get the default one instead
 				$key = BaseApiCodes::getCodeMessageKey($success ? BaseApiCodes::OK() : BaseApiCodes::NO_ERROR_MESSAGE());
 			}
+
 			$lang_args = $lang_args ?? ['api_code' => $message_or_api_code];
 			$message_or_api_code = \Lang::get($key, $lang_args);
 		}
@@ -439,11 +463,11 @@ class ResponseBuilder
 	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
 	 * additionally added to reported JSON for easier manual debugging.
 	 *
-	 * @param boolean    $success    @true if response indicates success, @false otherwise
-	 * @param integer    $api_code   response code
-	 * @param string     $message    message to return
-	 * @param mixed      $data       API response data if any
-	 * @param array|null $debug_data optional debug data array to be added to returned JSON.
+	 * @param boolean           $success    @true if response indicates success, @false otherwise
+	 * @param integer           $api_code   response code
+	 * @param string            $message    message to return
+	 * @param object|array|null $data       API response data if any
+	 * @param array|null        $debug_data optional debug data array to be added to returned JSON.
 	 *
 	 * @return array response ready to be encoded as json and sent back to client
 	 *
@@ -452,8 +476,18 @@ class ResponseBuilder
 	protected static function buildResponse(bool $success, int $api_code, string $message, $data = null,
 	                                        array $debug_data = null): array
 	{
-		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
+		// ensure $data is either @null, array or object of class with configured mapping.
 		if ($data !== null) {
+			if (!is_array($data) && !is_object($data)) {
+				throw new \InvalidArgumentException(
+					sprintf('Invalid payload data. Must be null, array or class with mapping ("%s" given).', gettype($data)));
+			} elseif (is_object($data)) {
+				if (!static::hasClassesMapping($data)) {
+					throw new \InvalidArgumentException(sprintf('No mapping configured for "%s" class.', get_class($data)));
+				}
+			}
+
+			// Preliminary validation passed. Let's walk and convert...
 			// we can do some auto-conversion on known class types, so check for that first
 			/** @var array $classes */
 			$classes = static::getClassesMapping();
@@ -470,7 +504,7 @@ class ResponseBuilder
 			}
 		}
 
-		if ($data !== null) {
+		if ($data !== null && !is_object($data)) {
 			// ensure we get object in final JSON structure in data node
 			$data = (object)$data;
 		}
