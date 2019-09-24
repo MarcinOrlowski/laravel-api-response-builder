@@ -25,8 +25,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_WrongMessage(): void
 	{
@@ -44,8 +42,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_CustomMessageAndCodeOutOfRange(): void
 	{
@@ -61,8 +57,6 @@ class InternalsTest extends TestCase
 	 * Validates make() handling invalid type of encoding_options
 	 *
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_InvalidEncodingOptions(): void
 	{
@@ -75,8 +69,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Tests if dist's config detaults matches ResponseBuilder::DEFAULT_ENODING_OPTIONS
-	 *
-	 * @return void
 	 */
 	public function testDefaultEncodingOptionValue(): void
 	{
@@ -88,8 +80,6 @@ class InternalsTest extends TestCase
 	 * Tests fallback to default encoding_options
 	 *
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_DefaultEncodingOptions(): void
 	{
@@ -123,8 +113,6 @@ class InternalsTest extends TestCase
 	 * Checks encoding_options influences result JSON data
 	 *
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_ValidateEncodingOptionsPreventsEscaping(): void
 	{
@@ -162,8 +150,6 @@ class InternalsTest extends TestCase
 	/**
 	 * Checks make() handling invalid type of api_code argument
 	 *
-	 * @return void
-	 *
 	 * @throws \ReflectionException
 	 */
 	public function testMake_ApiCodeNotIntNorString(): void
@@ -178,8 +164,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Validates handling of wrong data type by getClassesMapping()
-	 *
-	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -196,8 +180,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Tests is custom response key mappings and defaults fallback work
-	 *
-	 * @return void
 	 */
 	public function testCustomResponseMapping(): void
 	{
@@ -212,8 +194,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Tests is custom response key mappings and defaults fallback work
-	 *
-	 * @return void
 	 */
 	public function testGetResponseKey_UnknownKey(): void
 	{
@@ -224,8 +204,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Tests getCodeForInternalOffset() out of bounds handling
-	 *
-	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -241,8 +219,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Tests getCodeForInternalOffset() out of bounds handling
-	 *
-	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */

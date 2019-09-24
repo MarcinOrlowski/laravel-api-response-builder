@@ -52,8 +52,6 @@ trait ApiCodesTests
 	/**
 	 * Checks if all Api codes defined in ApiCodes class contain mapping entry
 	 *
-	 * @return void
-	 *
 	 * @throws \ReflectionException
 	 */
 	public function testIfAllCodesGotMapping(): void
@@ -71,8 +69,6 @@ trait ApiCodesTests
 
 	/**
 	 * Checks if all Api codes are in correct and allowed range,
-	 *
-	 * @return void
 	 */
 	public function testIfAllCodesAreInRange(): void
 	{
@@ -90,8 +86,6 @@ trait ApiCodesTests
 
 	/**
 	 * Checks if all defined Api code constants' values are unique
-	 *
-	 * @return void
 	 */
 	public function testIfAllApiValuesAreUnique(): void
 	{
@@ -107,8 +101,6 @@ trait ApiCodesTests
 	 * Checks if all codes are mapped to existing locale strings
 	 *
 	 * TODO: check translations too
-	 *
-	 * @return void
 	 */
 	public function testIfAllCodesAreCorrectlyMapped(): void
 	{
@@ -129,8 +121,6 @@ trait ApiCodesTests
 	 * and if the mapped values are unique.
 	 *
 	 * If no user mapping is found, this test is skipped.
-	 *
-	 * @return void
 	 */
 	public function testIfCustomMappingUsesUniqueValues(): void
 	{

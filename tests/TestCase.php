@@ -12,20 +12,18 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
 	use Traits\TestingHelpers;
 
 	/**
-	 * @return string
+	 * Returns ApiCodes class name. We need that done this way, so you can easily plug-and-play
+	 * out testing trait into your project.
 	 */
 	public function getApiCodesClassName(): string
 	{
 		return \MarcinOrlowski\ResponseBuilder\BaseApiCodes::class;
 	}
-
-	// -----------------------------------------------------------
 
 	/**
 	 * [Orchestra] Load service providers we need during the tests

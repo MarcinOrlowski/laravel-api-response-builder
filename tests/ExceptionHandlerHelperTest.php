@@ -24,8 +24,6 @@ class ExceptionHandlerHelperTest extends TestCase
 {
 	/**
 	 * Check exception handler behavior when given different types of exception.
-	 *
-	 * @return void
 	 */
 	public function testRender_HttpException(): void
 	{
@@ -137,8 +135,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
 	/**
 	 * Tests if optional debug info is properly added to JSON response
-	 *
-	 * @return void
 	 */
 	public function testError_DebugTrace(): void
 	{

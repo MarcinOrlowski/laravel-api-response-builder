@@ -454,7 +454,7 @@ trait TestingHelpers
 			}
 			$code = $codetemp;
 		}
-		$offset += 1;
+		$offset++;
 		if ($offset >= strlen($string)) {
 			$offset = -1;
 		}

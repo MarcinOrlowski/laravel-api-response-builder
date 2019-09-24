@@ -20,8 +20,6 @@ class ApiCodeBaseTest extends TestCase
 {
 	/**
 	 * Tests getMinCode() with invalid config
-	 *
-	 * @return void
 	 */
 	public function testGetMinCode_MissingConfigKey(): void
 	{
@@ -33,8 +31,6 @@ class ApiCodeBaseTest extends TestCase
 
 	/**
 	 * Tests getMaxCode() with invalid config
-	 *
-	 * @return void
 	 */
 	public function testGetMaxCode_MissingConfigKey(): void
 	{
@@ -46,8 +42,6 @@ class ApiCodeBaseTest extends TestCase
 
 	/**
 	 * Tests getMap() with missing config
-	 *
-	 * @return void
 	 */
 	public function testGetMap_MissingConfigKey(): void
 	{
@@ -59,8 +53,6 @@ class ApiCodeBaseTest extends TestCase
 
 	/**
 	 * Tests getMap() with wrong config
-	 *
-	 * @return void
 	 */
 	public function testGetMap_WrongConfig(): void
 	{

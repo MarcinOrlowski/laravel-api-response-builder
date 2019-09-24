@@ -26,15 +26,13 @@ class TestModel
 	 *
 	 * @param string $val
 	 */
-	public function __construct($val)
+	public function __construct(string $val)
 	{
 		$this->val = $val;
 	}
 
 	/**
 	 * Converts model to array
-	 *
-	 * @return array
 	 */
 	public function toArray(): array
 	{
