@@ -91,9 +91,9 @@ class ResponseBuilder
 	/**
 	 * Reads and validates "classes" config mapping
 	 *
-	 * @return array|null Classes mapping as specified in configuration or @null if no such config found
+	 * @return array Classes mapping as specified in configuration or empty array if configuration found
 	 *
-	 * @throws \RuntimeException if "classes" mapping is invalid
+	 * @throws \RuntimeException if "classes" mapping is technically invalid (i.e. not array etc).
 	 */
 	protected static function getClassesMapping(): ?array
 	{
@@ -111,11 +111,12 @@ class ResponseBuilder
 			foreach ($classes as $class_name => $class_config) {
 				foreach ($mandatory_keys as $key_name) {
 					if (!array_key_exists($key_name, $class_config)) {
-						throw new \RuntimeException(
-							sprintf("CONFIG: Missing '%s' for '%s' class mapping", $key_name, $class_name));
+						throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' class mapping");
 					}
 				}
 			}
+		} else {
+			$classes = [];
 		}
 
 		return $classes;
@@ -146,6 +147,293 @@ class ResponseBuilder
 		}
 	}
 
+
+	/**
+	 * Returns success
+	 *
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $api_code         API code to be returned with the response or @null for default `OK` code
+	 * @param array|null        $lang_args        arguments passed to Lang if message associated with API code uses placeholders
+	 * @param integer|null      $http_code        HTTP return code to be set for this response or @null for default (200)
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
+	 *
+	 * @return HttpResponse
+	 */
+	public static function success($data = null, $api_code = null, array $lang_args = null,
+	                               int $http_code = null, int $encoding_options = null): HttpResponse
+	{
+		return static::buildSuccessResponse($data, $api_code, $lang_args, $http_code, $encoding_options);
+	}
+
+	/**
+	 * Returns success
+	 *
+	 * @param integer|null $api_code  API code to be returned with the response or @null for default `OK` code
+	 * @param array|null   $lang_args arguments passed to Lang if message associated with API code uses placeholders
+	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
+	 *
+	 * @return HttpResponse
+	 */
+	public static function successWithCode(int $api_code = null, array $lang_args = null, int $http_code = null): HttpResponse
+	{
+		return static::success(null, $api_code, $lang_args, $http_code);
+	}
+
+	/**
+	 * Returns success with custom HTTP code
+	 *
+	 * @param integer|null $http_code HTTP return code to be set for this response. If @null is passed, falls back
+	 *                                to DEFAULT_HTTP_CODE_OK.
+	 *
+	 * @return HttpResponse
+	 */
+	public static function successWithHttpCode(int $http_code = null): HttpResponse
+	{
+		return static::buildSuccessResponse(null, BaseApiCodes::OK(), [], $http_code);
+	}
+
+	/**
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $api_code         API code to be returned with the response or @null for `OK` code
+	 * @param array|null        $lang_args        arguments passed to Lang if message associated with API code uses placeholders
+	 * @param integer|null      $http_code        HTTP return code to be set for this response
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
+	 *
+	 * @return HttpResponse
+	 *
+	 * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
+	 */
+	protected static function buildSuccessResponse($data = null, int $api_code = null, array $lang_args = null,
+	                                               int $http_code = null, int $encoding_options = null): HttpResponse
+	{
+		$http_code = $http_code ?? static::DEFAULT_HTTP_CODE_OK;
+		$api_code = $api_code ?? BaseApiCodes::OK();
+
+		Validator::assertInt('api_code', $api_code);
+		Validator::assertInt('http_code', $http_code);
+		Validator::assertIntRange('http_code', $http_code, 200, 299);
+
+		return static::make(true, $api_code, $api_code, $data,
+			$http_code, $lang_args, null, $encoding_options);
+	}
+
+	/**
+	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error
+	 * message uses placeholders as well as return data payload
+	 *
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param array|null        $lang_args        arguments array passed to Lang::get() for messages with placeholders
+	 * @param object|array|null $data             payload array to be returned in 'data' node or response object
+	 * @param integer|null      $http_code        optional HTTP status code to be used with this response or @null for default
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
+	 *
+	 * @return HttpResponse
+	 */
+	public static function error(int $api_code, array $lang_args = null, $data = null, int $http_code = null,
+	                             int $encoding_options = null): HttpResponse
+	{
+		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args, $encoding_options);
+	}
+
+	/**
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param array|null        $lang_args        arguments array passed to Lang::get() for messages with placeholders
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
+	 *
+	 * @return HttpResponse
+	 */
+	public static function errorWithData(int $api_code, $data, array $lang_args = null,
+	                                     int $encoding_options = null): HttpResponse
+	{
+		return static::buildErrorResponse($data, $api_code, null, $lang_args, $encoding_options);
+	}
+
+	/**
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $http_code        HTTP error code to be returned with this Cannot be @null
+	 * @param array|null        $lang_args        arguments array passed to Lang::get() for messages with placeholders
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
+	 *
+	 * @return HttpResponse
+	 *
+	 * @throws \InvalidArgumentException if http_code is @null
+	 */
+	public static function errorWithDataAndHttpCode(int $api_code, $data, int $http_code, array $lang_args = null,
+	                                                int $encoding_options = null): HttpResponse
+	{
+		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args, $encoding_options);
+	}
+
+	/**
+	 * @param integer      $api_code  API code to be returned with the response
+	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default
+	 * @param array|null   $lang_args arguments array passed to Lang::get() for messages with placeholders
+	 *
+	 * @return HttpResponse
+	 *
+	 * @throws \InvalidArgumentException if http_code is @null
+	 */
+	public static function errorWithHttpCode(int $api_code, int $http_code, array $lang_args = null): HttpResponse
+	{
+		return static::buildErrorResponse(null, $api_code, $http_code, $lang_args);
+	}
+
+	/**
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param string            $error_message    custom message to be returned as part of error response
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $http_code        optional HTTP status code to be used with this response or @null for defaults
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's
+	 *                                            value or defaults
+	 *
+	 * @return HttpResponse
+	 */
+	public static function errorWithMessageAndData(int $api_code, string $error_message, $data,
+	                                               int $http_code = null, int $encoding_options = null): HttpResponse
+	{
+		return static::buildErrorResponse($data, $api_code, $http_code, null,
+			$error_message, null, $encoding_options);
+	}
+
+	/**
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param string            $error_message    custom message to be returned as part of error response
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $http_code        optional HTTP status code to be used with this response or @null for defaults
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
+	 * @param array|null        $debug_data       optional debug data array to be added to returned JSON.
+	 *
+	 * @return HttpResponse
+	 */
+	public static function errorWithMessageAndDataAndDebug(int $api_code, string $error_message, $data,
+	                                                       int $http_code = null, int $encoding_options = null,
+	                                                       array $debug_data = null): HttpResponse
+	{
+		return static::buildErrorResponse($data, $api_code, $http_code, null,
+			$error_message, null, $encoding_options, $debug_data);
+	}
+
+	/**
+	 * @param integer      $api_code      API code to be returned with the response
+	 * @param string       $error_message custom message to be returned as part of error response
+	 * @param integer|null $http_code     optional HTTP status code to be used with this response or @null for defaults
+	 *
+	 * @return HttpResponse
+	 */
+	public static function errorWithMessage(int $api_code, string $error_message, int $http_code = null): HttpResponse
+	{
+		return static::buildErrorResponse(null, $api_code, $http_code, null, $error_message);
+	}
+
+	/**
+	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error message
+	 * uses placeholders as well as return data payload
+	 *
+	 * @param object|array|null $data             payload array to be returned in 'data' node or response object or @null if none
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param integer|null      $http_code        optional HTTP status code to be used with this response or @null for default
+	 * @param array|null        $lang_args        arguments array passed to Lang::get() for messages with placeholders
+	 * @param string|null       $message          custom message to be returned as part of error response
+	 * @param array|null        $headers          optional HTTP headers to be returned in error response
+	 * @param integer|null      $encoding_options see see json_encode() docs for valid option values. Use @null to fall back to
+	 *                                            config's value or defaults
+	 * @param array|null        $debug_data       optional debug data array to be added to returned JSON.
+	 *
+	 * @return HttpResponse
+	 *
+	 * @throws \InvalidArgumentException Thrown if $code is not correct, outside the range, equals OK code etc.
+	 *
+	 * @noinspection MoreThanThreeArgumentsInspection
+	 */
+	protected static function buildErrorResponse($data, int $api_code, int $http_code = null, array $lang_args = null,
+	                                             string $message = null, array $headers = null, int $encoding_options = null,
+	                                             array $debug_data = null): HttpResponse
+	{
+		$http_code = $http_code ?? static::DEFAULT_HTTP_CODE_ERROR;
+		$headers = $headers ?? [];
+
+		Validator::assertInt('api_code', $api_code);
+		Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+		$code_ok = BaseApiCodes::OK();
+		if ($api_code === $code_ok) {
+			throw new \InvalidArgumentException("Error response cannot use api_code of value  {$code_ok} which is reserved for OK");
+		}
+
+		Validator::assertInt('http_code', $http_code);
+		Validator::assertIntRange('http_code', $http_code, static::ERROR_HTTP_CODE_MIN, static::ERROR_HTTP_CODE_MAX);
+
+		$message_or_api_code = $message ?? $api_code;
+
+		return static::make(false, $api_code, $message_or_api_code, $data, $http_code,
+			$lang_args, $headers, $encoding_options, $debug_data);
+	}
+
+	/**
+	 * @param boolean           $success             @true if response indicate success, @false otherwise
+	 * @param integer           $api_code            API code to be returned with the response
+	 * @param string|integer    $message_or_api_code message string or valid API code
+	 * @param object|array|null $data                optional additional data to be included in response object
+	 * @param integer|null      $http_code           return HTTP code for build Response object
+	 * @param array|null        $lang_args           arguments array passed to Lang::get() for messages with placeholders
+	 * @param array|null        $headers             optional HTTP headers to be returned in the response
+	 * @param integer|null      $encoding_options    see http://php.net/manual/en/function.json-encode.php
+	 * @param array|null        $debug_data          optional debug data array to be added to returned JSON.
+	 *
+	 * @return HttpResponse
+	 *
+	 * @throws \InvalidArgumentException If code is neither a string nor valid integer code.
+	 *
+	 * @noinspection MoreThanThreeArgumentsInspection
+	 */
+	protected static function make(bool $success, int $api_code, $message_or_api_code, $data = null,
+	                               int $http_code = null, array $lang_args = null, array $headers = null,
+	                               int $encoding_options = null, array $debug_data = null): HttpResponse
+	{
+		$headers = $headers ?? [];
+		$http_code = $http_code ?? ($success ? static::DEFAULT_HTTP_CODE_OK : static::DEFAULT_HTTP_CODE_ERROR);
+		$encoding_options = $encoding_options ?? Config::get(self::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
+
+		Validator::assertInt('encoding_options', $encoding_options);
+
+		Validator::assertInt('api_code', $api_code);
+		if (!BaseApiCodes::isCodeValid($api_code)) {
+			$min = BaseApiCodes::getMinCode();
+			$max = BaseApiCodes::getMaxCode();
+			throw new \InvalidArgumentException("API code value ({$api_code}) is out of allowed range {$min}-{$max}");
+		}
+
+		if (!(is_int($message_or_api_code) || is_string($message_or_api_code))) {
+			throw new \InvalidArgumentException(
+				sprintf('Message must be either string or resolvable integer API code (%s given)',
+					gettype($message_or_api_code))
+			);
+		}
+
+		// we got code, not message string, so we need to check if we have the mapping for
+		// this string already configured.
+		if (is_int($message_or_api_code)) {
+			$key = BaseApiCodes::getCodeMessageKey($message_or_api_code);
+			if ($key === null) {
+				// nope, let's get the default one instead
+				$key = BaseApiCodes::getCodeMessageKey($success ? BaseApiCodes::OK() : BaseApiCodes::NO_ERROR_MESSAGE());
+			}
+			$lang_args = $lang_args ?? ['api_code' => $message_or_api_code];
+			$message_or_api_code = \Lang::get($key, $lang_args);
+		}
+
+		return Response::json(
+			static::buildResponse($success, $api_code, $message_or_api_code, $data, $debug_data),
+			$http_code, $headers, $encoding_options
+		);
+	}
 
 	/**
 	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
@@ -203,285 +491,5 @@ class ResponseBuilder
 		return $response;
 	}
 
-	/**
-	 * Returns success
-	 *
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code         API code to be returned with the response or @null for default `OK` code
-	 * @param array|null   $lang_args        arguments passed to Lang if message associated with API code uses placeholders
-	 * @param integer|null $http_code        HTTP return code to be set for this response or @null for default (200)
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
-	 *                                       config's value or defaults
-	 *
-	 * @return HttpResponse
-	 */
-	public static function success($data = null, $api_code = null, array $lang_args = null,
-	                               int $http_code = null, int $encoding_options = null): HttpResponse
-	{
-		return static::buildSuccessResponse($data, $api_code, $lang_args, $http_code, $encoding_options);
-	}
 
-	/**
-	 * Returns success
-	 *
-	 * @param integer|null $api_code  API code to be returned with the response or @null for default `OK` code
-	 * @param array|null   $lang_args arguments passed to Lang if message associated with API code uses placeholders
-	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default (200)
-	 *
-	 * @return HttpResponse
-	 */
-	public static function successWithCode(int $api_code = null, array $lang_args = null, int $http_code = null): HttpResponse
-	{
-		return static::success(null, $api_code, $lang_args, $http_code);
-	}
-
-	/**
-	 * Returns success with custom HTTP code
-	 *
-	 * @param integer|null $http_code HTTP return code to be set for this response. If @null is passed, falls back
-	 *                                to DEFAULT_HTTP_CODE_OK.
-	 *
-	 * @return HttpResponse
-	 */
-	public static function successWithHttpCode(int $http_code = null): HttpResponse
-	{
-		return static::buildSuccessResponse(null, BaseApiCodes::OK(), [], $http_code);
-	}
-
-	/**
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code         API code to be returned with the response or @null for `OK` code
-	 * @param array|null   $lang_args        arguments passed to Lang if message associated with API code uses placeholders
-	 * @param integer|null $http_code        HTTP return code to be set for this response
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
-	 *                                       config's value or defaults
-	 *
-	 * @return HttpResponse
-	 *
-	 * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
-	 */
-	protected static function buildSuccessResponse($data = null, int $api_code = null, array $lang_args = null,
-	                                               int $http_code = null, int $encoding_options = null): HttpResponse
-	{
-		$http_code = $http_code ?? static::DEFAULT_HTTP_CODE_OK;
-		$api_code = $api_code ?? BaseApiCodes::OK();
-
-		Validator::assertInt('api_code', $api_code);
-		Validator::assertInt('http_code', $http_code);
-		Validator::assertIntRange('http_code', $http_code, 200, 299);
-
-		return static::make(true, $api_code, $api_code, $data,
-			$http_code, $lang_args, null, $encoding_options);
-	}
-
-	/**
-	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error
-	 * message uses placeholders as well as return data payload
-	 *
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
-	 * @param mixed|null   $data             payload array to be returned in 'data' node or response object
-	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for default
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
-	 *
-	 * @return HttpResponse
-	 */
-	public static function error(int $api_code, array $lang_args = null, $data = null, int $http_code = null,
-	                             int $encoding_options = null): HttpResponse
-	{
-		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args, $encoding_options);
-	}
-
-	/**
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
-	 *
-	 * @return HttpResponse
-	 */
-	public static function errorWithData(int $api_code, $data, array $lang_args = null,
-	                                     int $encoding_options = null): HttpResponse
-	{
-		return static::buildErrorResponse($data, $api_code, null, $lang_args, $encoding_options);
-	}
-
-	/**
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code        HTTP error code to be returned with this Cannot be @null
-	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
-	 *
-	 * @return HttpResponse
-	 *
-	 * @throws \InvalidArgumentException if http_code is @null
-	 */
-	public static function errorWithDataAndHttpCode(int $api_code, $data, int $http_code, array $lang_args = null,
-	                                                int $encoding_options = null): HttpResponse
-	{
-		return static::buildErrorResponse($data, $api_code, $http_code, $lang_args, $encoding_options);
-	}
-
-	/**
-	 * @param integer      $api_code  API code to be returned with the response
-	 * @param integer|null $http_code HTTP return code to be set for this response or @null for default
-	 * @param array|null   $lang_args arguments array passed to Lang::get() for messages with placeholders
-	 *
-	 * @return HttpResponse
-	 *
-	 * @throws \InvalidArgumentException if http_code is @null
-	 */
-	public static function errorWithHttpCode(int $api_code, int $http_code, array $lang_args = null): HttpResponse
-	{
-		return static::buildErrorResponse(null, $api_code, $http_code, $lang_args);
-	}
-
-	/**
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param string       $error_message    custom message to be returned as part of error response
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
-	 *
-	 * @return HttpResponse
-	 */
-	public static function errorWithMessageAndData(int $api_code, string $error_message, $data,
-	                                               int $http_code = null, int $encoding_options = null): HttpResponse
-	{
-		return static::buildErrorResponse($data, $api_code, $http_code, null,
-			$error_message, null, $encoding_options);
-	}
-
-	/**
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param string       $error_message    custom message to be returned as part of error response
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
-	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
-	 *
-	 * @return HttpResponse
-	 */
-	public static function errorWithMessageAndDataAndDebug(int $api_code, string $error_message, $data,
-	                                                       int $http_code = null, int $encoding_options = null,
-	                                                       array $debug_data = null): HttpResponse
-	{
-		return static::buildErrorResponse($data, $api_code, $http_code, null,
-			$error_message, null, $encoding_options, $debug_data);
-	}
-
-	/**
-	 * @param integer      $api_code      API code to be returned with the response
-	 * @param string       $error_message custom message to be returned as part of error response
-	 * @param integer|null $http_code     optional HTTP status code to be used with this response or @null for defaults
-	 *
-	 * @return HttpResponse
-	 */
-	public static function errorWithMessage(int $api_code, string $error_message, int $http_code = null): HttpResponse
-	{
-		return static::buildErrorResponse(null, $api_code, $http_code, null, $error_message);
-	}
-
-	/**
-	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error message
-	 * uses placeholders as well as return data payload
-	 *
-	 * @param mixed|null   $data             payload array to be returned in 'data' node or response object or @null if none
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for default
-	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
-	 * @param string|null  $message          custom message to be returned as part of error response
-	 * @param array|null   $headers          optional HTTP headers to be returned in error response
-	 * @param integer|null $encoding_options see see json_encode() docs for valid option values. Use @null to fall back to
-	 *                                       config's value or defaults
-	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
-	 *
-	 * @return HttpResponse
-	 *
-	 * @throws \InvalidArgumentException Thrown if $code is not correct, outside the range, equals OK code etc.
-	 *
-	 * @noinspection MoreThanThreeArgumentsInspection
-	 */
-	protected static function buildErrorResponse($data, int $api_code, int $http_code = null, array $lang_args = null,
-	                                             string $message = null, array $headers = null, int $encoding_options = null,
-	                                             array $debug_data = null): HttpResponse
-	{
-		$http_code = $http_code ?? static::DEFAULT_HTTP_CODE_ERROR;
-		$headers = $headers ?? [];
-
-		Validator::assertInt('api_code', $api_code);
-		Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
-		$code_ok = BaseApiCodes::OK();
-		if ($api_code === $code_ok) {
-			throw new \InvalidArgumentException("Error response cannot use api_code of value  {$code_ok} which is reserved for OK");
-		}
-
-		Validator::assertInt('http_code', $http_code);
-		Validator::assertIntRange('http_code', $http_code, static::ERROR_HTTP_CODE_MIN, static::ERROR_HTTP_CODE_MAX);
-
-		$message_or_api_code = $message ?? $api_code;
-
-		return static::make(false, $api_code, $message_or_api_code, $data, $http_code,
-			$lang_args, $headers, $encoding_options, $debug_data);
-	}
-
-	/**
-	 * @param boolean        $success             @true if response indicate success, @false otherwise
-	 * @param integer        $api_code            API code to be returned with the response
-	 * @param string|integer $message_or_api_code message string or valid API code
-	 * @param mixed|null     $data                optional additional data to be included in response object
-	 * @param integer|null   $http_code           return HTTP code for build Response object
-	 * @param array|null     $lang_args           arguments array passed to Lang::get() for messages with placeholders
-	 * @param array|null     $headers             optional HTTP headers to be returned in the response
-	 * @param integer|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
-	 * @param array|null     $debug_data          optional debug data array to be added to returned JSON.
-	 *
-	 * @return HttpResponse
-	 *
-	 * @throws \InvalidArgumentException If code is neither a string nor valid integer code.
-	 *
-	 * @noinspection MoreThanThreeArgumentsInspection
-	 */
-	protected static function make(bool $success, int $api_code, $message_or_api_code, $data = null,
-	                               int $http_code = null, array $lang_args = null, array $headers = null,
-	                               int $encoding_options = null, array $debug_data = null): HttpResponse
-	{
-		$headers = $headers ?? [];
-		$http_code = $http_code ?? ($success ? static::DEFAULT_HTTP_CODE_OK : static::DEFAULT_HTTP_CODE_ERROR);
-		$encoding_options = $encoding_options ?? Config::get(self::CONF_KEY_ENCODING_OPTIONS, static::DEFAULT_ENCODING_OPTIONS);
-
-		Validator::assertInt('encoding_options', $encoding_options);
-
-		Validator::assertInt('api_code', $api_code);
-		if (!BaseApiCodes::isCodeValid($api_code)) {
-			$min = BaseApiCodes::getMinCode();
-			$max = BaseApiCodes::getMaxCode();
-			throw new \InvalidArgumentException("API code value ({$api_code}) is out of allowed range {$min}-{$max}");
-		}
-
-		if (!(is_int($message_or_api_code) || is_string($message_or_api_code))) {
-			throw new \InvalidArgumentException(
-				sprintf('Message must be either string or resolvable integer API code (%s given)',
-					gettype($message_or_api_code))
-			);
-		}
-
-		// we got code, not message string, so we need to check if we have the mapping for
-		// this string already configured.
-		if (is_int($message_or_api_code)) {
-			$key = BaseApiCodes::getCodeMessageKey($message_or_api_code);
-			if ($key === null) {
-				// nope, let's get the default one instead
-				$key = BaseApiCodes::getCodeMessageKey($success ? BaseApiCodes::OK() : BaseApiCodes::NO_ERROR_MESSAGE());
-			}
-			$lang_args = $lang_args ?? ['api_code' => $message_or_api_code];
-			$message_or_api_code = \Lang::get($key, $lang_args);
-		}
-
-		return Response::json(
-			static::buildResponse($success, $api_code, $message_or_api_code, $data, $debug_data),
-			$http_code, $headers, $encoding_options
-		);
-	}
 }
