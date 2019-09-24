@@ -68,9 +68,7 @@ trait ApiCodesHelpers
 	public static function getApiCodeConstants(): array
 	{
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$reflect = new \ReflectionClass(get_called_class());
-
-		return $reflect->getConstants();
+		return (new \ReflectionClass(static::class))->getConstants();
 	}
 
 	/**

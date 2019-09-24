@@ -100,8 +100,7 @@ class ExceptionHandlerHelperTest extends TestCase
 		}
 
 		// hand the exception to the handler and examine its response JSON
-		$eh = new ExceptionHandlerHelper();
-		$eh_response = $eh->render(null, $exception);
+		$eh_response = ExceptionHandlerHelper::render(null, $exception);
 		$eh_response_json = json_decode($eh_response->getContent(), false);
 
 		$this->assertValidResponse($eh_response_json);
@@ -142,9 +141,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
 		$exception = new \RuntimeException();
 
-		$eh = new ExceptionHandlerHelper();
-
-		$j = json_decode($eh->render(null, $exception)->getContent(), false);
+		$j = json_decode(ExceptionHandlerHelper::render(null, $exception)->getContent(), false);
 
 		$this->assertValidResponse($j);
 		$this->assertNull($j->data);

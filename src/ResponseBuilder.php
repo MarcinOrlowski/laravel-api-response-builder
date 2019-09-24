@@ -484,10 +484,10 @@ class ResponseBuilder
 			if (!is_array($data) && !is_object($data)) {
 				throw new \InvalidArgumentException(
 					sprintf('Invalid payload data. Must be null, array or class with mapping ("%s" given).', gettype($data)));
-			} elseif (is_object($data)) {
-				if (!static::hasClassesMapping($data)) {
-					throw new \InvalidArgumentException(sprintf('No mapping configured for "%s" class.', get_class($data)));
-				}
+			}
+
+			if (is_object($data) && !static::hasClassesMapping($data)) {
+				throw new \InvalidArgumentException(sprintf('No mapping configured for "%s" class.', get_class($data)));
 			}
 
 			// Preliminary validation passed. Let's walk and convert...
