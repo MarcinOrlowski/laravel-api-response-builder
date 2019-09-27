@@ -46,7 +46,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @return HttpResponse
 	 */
-	public static function render(/** @scrutinizer ignore-unused */$request, Exception $exception): HttpResponse
+	public static function render(/** @scrutinizer ignore-unused */ $request, Exception $exception): HttpResponse
 	{
 		$result = null;
 
@@ -93,7 +93,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @return HttpResponse
 	 */
-	protected function unauthenticated(/** @scrutinizer ignore-unused */$request, AuthenticationException $exception): HttpResponse
+	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request, AuthenticationException $exception): HttpResponse
 	{
 		return static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION());
 	}
