@@ -17,6 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Illuminate\Support\Facades\Config;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class BuildResponseTest extends TestCase
 {
@@ -188,6 +189,7 @@ class BuildResponseTest extends TestCase
 	public function testGetClassesMapping_NoMappingConfig(): void
 	{
 		// remove any classes config
+		/** @noinspection PhpUndefinedMethodInspection */
 		Config::offsetUnset(ResponseBuilder::CONF_KEY_CLASSES);
 
 		/** @noinspection PhpUnhandledExceptionInspection */

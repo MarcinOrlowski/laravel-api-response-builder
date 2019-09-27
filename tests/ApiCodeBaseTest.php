@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedClassInspection */
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
@@ -25,6 +25,7 @@ class ApiCodeBaseTest extends TestCase
 	{
 		$this->expectException(\RuntimeException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MIN_CODE);
 		BaseApiCodes::getMinCode();
 	}
@@ -36,6 +37,7 @@ class ApiCodeBaseTest extends TestCase
 	{
 		$this->expectException(\RuntimeException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAX_CODE);
 		BaseApiCodes::getMaxCode();
 	}
@@ -47,6 +49,7 @@ class ApiCodeBaseTest extends TestCase
 	{
 		$this->expectException(\RuntimeException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAP);
 		BaseApiCodes::getMap();
 	}
@@ -58,6 +61,7 @@ class ApiCodeBaseTest extends TestCase
 	{
 		$this->expectException(\RuntimeException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, false);
 		BaseApiCodes::getMap();
 	}

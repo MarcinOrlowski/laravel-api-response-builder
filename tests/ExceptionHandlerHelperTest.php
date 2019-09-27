@@ -75,7 +75,9 @@ class ExceptionHandlerHelperTest extends TestCase
 	                                         bool $validate_message = true, bool $has_data_node = false): void
 	{
 		$base_config_key = 'response_builder.exception_handler.exception';
+		/** @noinspection PhpUndefinedClassInspection */
 		$response_api_code = \Config::get("{$base_config_key}.{$exception_type}.code", $default_response_api_code);
+		/** @noinspection PhpUndefinedClassInspection */
 		$wanted_http_code = \Config::get("{$base_config_key}.{$exception_type}.wanted_http_code", $default_http_code);
 
 		$key = BaseApiCodes::getCodeMessageKey($response_api_code);
@@ -113,6 +115,7 @@ class ExceptionHandlerHelperTest extends TestCase
 			$ex_message = get_class($exception);
 		}
 
+		/** @noinspection PhpUndefinedClassInspection */
 		$error_message = \Lang::get($key, [
 			'response_api_code' => $response_api_code,
 			'message'           => $ex_message,
@@ -137,6 +140,7 @@ class ExceptionHandlerHelperTest extends TestCase
 	 */
 	public function testError_DebugTrace(): void
 	{
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
 
 		$exception = new \RuntimeException();

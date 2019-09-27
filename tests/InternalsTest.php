@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class InternalsTest extends TestCase
 {
@@ -62,6 +63,7 @@ class InternalsTest extends TestCase
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, []);
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK());
@@ -123,6 +125,7 @@ class InternalsTest extends TestCase
 		$data = ['test' => $test_string];
 
 		// check if it returns escaped
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);

@@ -128,6 +128,7 @@ class SuccessTest extends TestCase
 	public function testSuccessWithCode_ApiCode_CustomMessageLang(): void
 	{
 		// for simplicity let's reuse existing message that is using placeholder
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
 			$this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE()),
 		]);

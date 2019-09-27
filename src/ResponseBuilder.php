@@ -512,6 +512,7 @@ class ResponseBuilder
 			$data = (object)$data;
 		}
 
+		/** @noinspection PhpUndefinedClassInspection */
 		$response = [
 			BaseApiCodes::getResponseKey(static::KEY_SUCCESS) => $success,
 			BaseApiCodes::getResponseKey(static::KEY_CODE)    => $api_code,
