@@ -26,9 +26,10 @@
 ## Response structure ##
 
  Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not
- only when I develop the API itself, but also when I later consume its output while writing client (i.e. mobile) applications.
- So JSON response with this package is **always** of the same core structure and **all keys** are always present no matter of 
- the values. Sample response:
+ only when I develop the API itself, but also when I'd try to use it i.e. in mobile applicationsm, therefore response created with
+ this package **guarantees** consisten JSON structure.
+ 
+ Default response will always contains at least the following elements:
 
 ```json
 {
@@ -42,24 +43,24 @@
 
  where
 
-  * `success` (**boolean**) tells response indicates API method failure or success,
-  * `code` (**int**) your own return code (usually used when `success` indicates failure),
-  * `locale` (**string**) locale used for returned text error message (obtained automatically via `\App::getLocale()`). This helps when your API is multilingual so clients can check returned data is in correct language version,
-  * `message` (**string**) human readable message. Usually explains meaning of `code` value,
-  * `data` (**object**|**array**|**null**) whatever additional data your API produces will be returned here. Even you return no extra data that key itself still be present response JSON.
+  * `success` (**boolean**) indicates API method failure or success,
+  * `code` (**int**) is your own return code (usually used when returning error message or other failure),
+  * `locale` (**string**) represents locale used for returned error message (obtained automatically via `\App::getLocale()`). This helps processing the response if you support multiple languages,
+  * `message` (**string**) human readable message that is ready to display and explains human readable explanation of the `code` value,
+  * `data` (**object**|**array**|**null**) if you return any additional data with your reply, it would end here. If no extra data is needed, that key still be present in the response with `null` value.
 
- **NOTE:** If you need to return other/different fields in **core** response structure (not in `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for guidance of how to do that.
+ **NOTE:** If you need to return other/different elements in the aboive structure (not in your `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for detailed information about how to achieve this.
 
 ----
 
 ## Usage examples ##
 
- The following assumes package is properly installed and enabled. These steps are described in
- details later, so keep reading.
+ The following examples assume `ResponseBuilder` is properly installed and available to your Laravel application. Installation
+ steps are described in details in further chapters, if help is needed.
 
 #### Success ####
 
- To report success from your API, just conclude your Controller method with:
+ To report response indicating i.e. operation success, simply your Controller method with:
 
     return ResponseBuilder::success();
 
@@ -75,8 +76,7 @@
 }
 ```
 
- If you would like to return some data with your success response (which pretty much always the case :), wrap it into `array` and 
- pass it to `success()` as argument:
+ If you would like to return some data with it (which pretty much always the case :), pass it to `success()` as argument:
 
 ```php
 $data = [ 'foo' => 'bar' ];
@@ -97,11 +97,34 @@ return ResponseBuilder::success($data);
 }
 ```
 
- `ResponseBuilder` is able to do the object conversion on-the-fly. Classes like Eloquent's Model or Collection are pre-configured,
- but you can easily make any other class handled. See [Data Conversion](#data-conversion) chapter for more details.
+ **NOTE:** As all the data in the response structure must be represented in JSON, `ResponseBuilder` only accepts certain types of
+ data - you can either pass an `array` or object of any class that can be converted to valid JSON (i.e. Eloquent's Model or
+ Collection). Data conversion goes on-the-fly, if you need any additional classes supported than said Model or Collection (which
+ are pre-configured), you need to instruct `ResponseBuilder` how to deal with it. See [Data Conversion](#data-conversion) chapter
+ for more details. Attempt to pass unsupported data type (i.e. literals) will throw the exception.  
 
- **IMPORTANT:** `data` node is **always** a JSON Object. This is **enforced** by the library design, therefore if you need to
- return an array, you cannot pass it directly:
+ **IMPORTANT:** `data` node is **always** an JSON Object. This is **enforced** by the library design, therefore if you need to
+ return your data array as array and just its elements as shown in above example, you must wrap it in another array:
+
+```php
+// this is CORRECT
+$returned_array = [1,2,3];
+$data = ['my_array' => $returned_array];
+return ResponseBuilder::success($data);
+```
+
+ which would give:
+
+```json
+{
+   ...
+   "data": {
+      "my_array": [1, 2, 3]
+   }
+}
+```
+
+ **IMPORTANT:** do NOT wrap the payload into array without giving it the key would, due to conversion to JSON object: 
 
 ```php
 // this is WRONG
@@ -109,7 +132,7 @@ $returned_array = [1,2,3];
 return ResponseBuilder::success($returned_array);
 ```
 
-as this, due to array-to-object conversion, would produce:
+would give you wrong `data` structure: 
 
 ```json
 {
@@ -122,46 +145,49 @@ as this, due to array-to-object conversion, would produce:
 }
 ```
 
- which most likely is not what you expect. To avoid this you need to make your array part of the data object, which simply means 
- wrapping it into another array:
-
-```php
-// this is RIGHT
-$returned_array = [1,2,3];
-$data = ['my_array' => $returned_array];
-return ResponseBuilder::success($data);
-```
-
-This would produce expected and much cleaner data structure:
-
-```json
-{
-   ...
-   "data": {
-      "my_array": [1, 2, 3]
-   }
-}
-```
-
-**WARNING:** do NOT wrap the payload into array without giving it the key:
+ which most likely is not what your client expects. Note that you must also not use this as side effect, because created
+ keys are based on array internals:
 
 ```php
 // this is WRONG
-$data = [[1,2,3]];
-return ResponseBuilder::success($data);
+$returned_array = [1,2,3];
+unset($returned_array[1]);
+return ResponseBuilder::success($returned_array);
 ```
-
- as what you get in result depends on what is the index of first element of `$data`, which can simply be anything.
+ 
+ would give non-sequential keys:
+ 
+```json
+{
+  ...
+  "data": {
+     "0": 1,
+     "2": 3
+  }
+}
+```
 
 #### Errors ####
 
- Returning errors is almost as simple as returning success, however you need to provide at least error code to `error()` method
- which will be then reported back to caller (see [Installation and Configuration](#installation-and-configuration)). Indicating
- failure is as easy as:
+ Returning error responses is also simple, however in such case you are required to need to additionally pass at least your own
+ error code to `error()` to tell the client what the error it is:
 
+```php
+    return ResponseBuilder::error(<CODE>);
+```
+
+ To make your life easier (and your code [automatically testable](testing.md)) you should put all error codes you use
+ in separate `ApiCodes` class, as its `public const`s, which would improve code readability and would prevent certain
+ types of coding error from happening. Please see [Installation and Configuration](#installation-and-configuration) 
+ for details.
+ 
+ Example usage:
+
+```php
     return ResponseBuilder::error(ApiCode::SOMETHING_WENT_WRONG);
-
- This will produce the following JSON response:
+```
+ 
+ which would produce the following JSON response:
 
 ```json
 {
@@ -173,10 +199,10 @@ return ResponseBuilder::success($data);
 }
 ```
 
- Please note the `message` key in the above JSON. `ResponseBuilder` tries to automatically obtain error message for each code you
- pass. This is all configured in `config/response_builder.php` file, with use of `map` array. 
- See [ResponseBuilder Configuration](#response-builder-configuration) for more details. If there's no dedicated message configured
- for given error code, `message` value is provided with use of built-in generic fallback message "Error #xxx", as shown above.
+ Please see the value of `message` element above. `ResponseBuilder` tries to automatically obtain text error message associated 
+ with the error code used. If there's no message associated, it will fall back to default, generic error "Error #xxx", as shown 
+ above. Such association needs to be configured in `config/response_builder.php` file, using `map` array, so see 
+ [ResponseBuilder Configuration](#response-builder-configuration) for more information. 
 
  As `ResponseBuilder` uses Laravel's `Lang` package for localisation, you can use the same features with your messages as you use
  across the whole application, including message placeholders:
@@ -186,7 +212,7 @@ return ResponseBuilder::success($data);
  and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be correctly replaced with content of
  your `$login` variable.
 
- You can, however this is not really recommended, override built-in error message mapping too as `ResponseBuilder` comes with
+ You can, however this is not recommended, override built-in error message mapping too as `ResponseBuilder` comes with
  `errorWithMessage()` method, which expects string message as argument. This means you can just pass any string you want and 
  it will be returned as `message` element in JSON response regardless the `code` value. Please note this method is pretty 
  low-level and string is used as is without any further processing. If you want to use `Lang`'s placeholders here, you need
@@ -434,7 +460,7 @@ $data = [
 #### ApiCodes class ####
 
  To keep your source readable and clear, it's strongly recommended to create separate class
- `ApiCode.php` (i.e. in `app/`) and keep all codes there as `const`. This way you protect
+ `ApiCode.php` (i.e. in `app/`) and keep all codes there as `public const`. This way you protect
  yourself from using wrong code or save your time in case you will need to refactor code
  range in future. For example, your imaginary `app/ApiCode.php` can look like this:
 
