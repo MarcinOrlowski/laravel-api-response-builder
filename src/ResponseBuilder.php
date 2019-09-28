@@ -135,15 +135,7 @@ class ResponseBuilder
 	 */
 	protected static function hasClassesMapping(object $data): bool
 	{
-		$result = false;
-		foreach (static::getClassesMapping() as $cls => $params) {
-			if ($data instanceof $cls) {
-				$result = true;
-				break;
-			}
-		}
-
-		return $result;
+		return array_key_exists(get_class($data), static::getClassesMapping());
 	}
 
 	/**
