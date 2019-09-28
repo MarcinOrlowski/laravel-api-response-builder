@@ -11,7 +11,8 @@
 
 # Configuration options #
 
- Available configuration options and its current default values:
+ Available configuration options and its current default values listed in alphabetical order. Please note, that in majority
+ of use cases it should be perfectly sufficient to just use defaults and only tune the config when needed.
  
  * [classes](#classes)
  * [debug](#debug)
@@ -34,7 +35,7 @@ The entry key is a class name to check passed `data` object against, and configu
         ],
 ],
 ```
-Where `method` is name of the method to that `ResponseBuilder` should call on the object to obtain array representation of its 
+Where `method` is a name of the method to that `ResponseBuilder` should call on the object to obtain array representation of its 
 internal state, while `key` is a string that will be used as the JSON response as key to array representation.
 
 See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
