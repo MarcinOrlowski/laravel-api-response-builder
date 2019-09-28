@@ -35,18 +35,25 @@ trait ApiCodesTests
 	 */
 	public function testMinMaxCode(): void
 	{
-		$obj = new BaseApiCodes();
-
-		$base_max = $this->callProtectedMethod(get_class($obj), 'getReservedMaxCode');
-		$min = $this->callProtectedMethod(get_class($obj), 'getMinCode');
-		$max = $this->callProtectedMethod(get_class($obj), 'getMaxCode');
-
-		$this->assertNotNull($base_max);
+		$min = $this->callProtectedMethod(BaseApiCodes::class, 'getMinCode');
 		$this->assertNotNull($min);
+
+		$max = $this->callProtectedMethod(BaseApiCodes::class, 'getMaxCode');
 		$this->assertNotNull($max);
 
-		$this->assertTrue($min > $base_max);
 		$this->assertTrue($max > $min);
+	}
+
+	/**
+	 * Checks if defined code range is large enough to accomodate built-in codes.
+	 */
+	public function testCodeRangeIsLargeEnough(): void
+	{
+		$base_max = BaseApiCodes::RESERVED_MAX_API_CODE_OFFSET;
+		$min = $this->callProtectedMethod(BaseApiCodes::class, 'getMinCode');
+		$max = $this->callProtectedMethod(BaseApiCodes::class, 'getMaxCode');
+
+		$this->assertTrue(($max - $min) > $base_max);
 	}
 
 	/**
