@@ -7,9 +7,11 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 ## CHANGE LOG ##
 
 * @dev
-   * Added new project logo.
-   * Added more unit tests.
-   * Worked arround Laravel's config merger wnot working properly with multi-dimensional config array.
+   * Created new library logo (see `artwork/` folder)
+   * Added more unit tests to improve coverage.
+   * Updated documentation.
+   * Worked arround Laravel's config merger wnot working properly with multi-dimensional config arrays.
+   * Corrected ApiCodesTests trait failing on some methods.
 
 * v6.0.0 (2019-09-20)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
