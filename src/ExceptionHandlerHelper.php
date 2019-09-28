@@ -39,7 +39,7 @@ class ExceptionHandlerHelper
 	public const TYPE_AUTHENTICATION_EXCEPTION_KEY = 'authentication_exception';
 
 	/**
-	 * Render an exception into an HTTP response.
+	 * Render an exception into valid API response.
 	 *
 	 * @param \Illuminate\Http\Request $request   Request object
 	 * @param \Exception               $exception Exception
@@ -99,6 +99,8 @@ class ExceptionHandlerHelper
 	}
 
 	/**
+	 * Process singe error and produce valid API response
+	 *
 	 * @param Exception $exception         Exception to be processed
 	 * @param string    $exception_type    Category of the exception
 	 * @param integer   $default_api_code  API code to return
@@ -117,7 +119,7 @@ class ExceptionHandlerHelper
 
 		// check if we now have valid HTTP error code for this case or need to make one up.
 		if ($http_code === 0) {
-			// no code, let's try o get the exception status
+			// no code, let's try to get the exception status
 			$http_code = ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException)
 				? $exception->getStatusCode()
 				: $exception->getCode();
