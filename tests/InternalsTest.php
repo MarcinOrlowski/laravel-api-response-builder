@@ -193,30 +193,6 @@ class InternalsTest extends TestCase
 	}
 
 	/**
-	 * Tests is custom response key mappings and defaults fallback work
-	 */
-	public function testCustomResponseMapping(): void
-	{
-		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
-			ResponseBuilder::KEY_SUCCESS => $this->getRandomString(),
-		]);
-
-		$this->response = ResponseBuilder::success();
-		$this->getResponseSuccessObject(BaseApiCodes::OK());
-	}
-
-
-	/**
-	 * Tests is custom response key mappings and defaults fallback work
-	 */
-	public function testGetResponseKey_UnknownKey(): void
-	{
-		$this->expectException(\RuntimeException::class);
-		BaseApiCodes::getResponseKey($this->getRandomString());
-	}
-
-
-	/**
 	 * Tests getCodeForInternalOffset() out of bounds handling
 	 *
 	 * @throws \ReflectionException

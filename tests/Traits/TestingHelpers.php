@@ -132,7 +132,7 @@ trait TestingHelpers
 		}
 
 		$j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $expected_message);
-		$this->assertEquals(true, $j->{BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS)});
+		$this->assertEquals(true, $j->{ResponseBuilder::KEY_SUCCESS});
 
 		return $j;
 	}
@@ -144,14 +144,12 @@ trait TestingHelpers
 	 * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default value
 	 * @param int         $expected_http_code       Expected HTTP code
 	 * @param string|null $message                  Expected return message or @null if we automatically mapped message fits
-	 * @param array       $extra_keys               array of additional keys expected in response structure
 	 *
 	 * @return \StdClass response object built from JSON
 	 */
 	public function getResponseErrorObject(int $expected_api_code_offset = null,
 	                                       int $expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
-	                                       string $message = null,
-	                                       array $extra_keys = []): \StdClass
+	                                       string $message = null): \StdClass
 	{
 		if ($expected_api_code_offset === null) {
 			/** @var BaseApiCodes $api_codes_class_name */
@@ -168,7 +166,7 @@ trait TestingHelpers
 				$expected_http_code, ResponseBuilder::ERROR_HTTP_CODE_MIN));
 		}
 
-		$j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message, $extra_keys);
+		$j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message);
 		$this->assertEquals(false, $j->success);
 
 		return $j;
@@ -176,10 +174,10 @@ trait TestingHelpers
 
 
 	/**
-	 * @param int         $expected_api_code_offset expected Api response code offset
-	 * @param int         $expected_http_code       expected HTTP code
-	 * @param string|null $expected_message         expected message string or @null if default
-	 * @param array       $extra_keys               array of additional keys expected in response structure
+	 * @param int         $expected_api_code  expected Api response code offset
+	 * @param int         $expected_http_code expected HTTP code
+	 * @param string|null $expected_message   expected message string or @null if default
+	 * @param array       $extra_keys         array of additional keys expected in response structure
 	 *
 	 * @return mixed
 	 */
@@ -209,33 +207,13 @@ trait TestingHelpers
 	 * Validates if given $json_object contains all expected elements
 	 *
 	 * @param \StdClass $json_object JSON Object holding Api response to validate
-	 * @param array     $extra_keys  array of additional keys expected in response structure
 	 *
 	 * @return void
 	 */
-	public function assertValidResponse(\StdClass $json_object, array $extra_keys = []): void
+	public function assertValidResponse(\StdClass $json_object): void
 	{
 		$this->assertIsObject($json_object);
-
-		$items_ref = [
-			ResponseBuilder::KEY_SUCCESS,
-			ResponseBuilder::KEY_CODE,
-			ResponseBuilder::KEY_LOCALE,
-			ResponseBuilder::KEY_MESSAGE,
-			ResponseBuilder::KEY_DATA,
-		];
-
-		$items = [];
-		foreach ($items_ref as $ref) {
-			$items[ $ref ] = BaseApiCodes::getResponseKey($ref);
-		}
-
-		$items = array_merge_recursive($items, $extra_keys);
-		foreach ($items as $ref => $item) {
-			$this->assertObjectHasAttribute($item, $json_object, "No '{$item}' element in response structure found");
-		}
-
-		$this->assertIsBool($json_object->{$items[ ResponseBuilder::KEY_SUCCESS ]});
+		$this->assertIsBool($json_object->{ResponseBuilder::KEY_SUCCESS});
 		$this->assertIsInt($json_object->code);
 		$this->assertIsString($json_object->locale);
 		/** @noinspection UnNecessaryDoubleQuotesInspection */

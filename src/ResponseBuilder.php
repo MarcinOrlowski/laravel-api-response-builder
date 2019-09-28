@@ -55,7 +55,7 @@ class ResponseBuilder
 	public const CONF_KEY_CLASSES                = 'response_builder.classes';
 	public const CONF_KEY_MIN_CODE               = 'response_builder.min_code';
 	public const CONF_KEY_MAX_CODE               = 'response_builder.max_code';
-	public const CONF_KEY_RESPONSE_KEY_MAP       = 'response_builder.response_key_map';
+	public const CONF_KEY_RESPONSE_KEY_MAP       = 'response_builder.map';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information
@@ -514,11 +514,11 @@ class ResponseBuilder
 
 		/** @noinspection PhpUndefinedClassInspection */
 		$response = [
-			BaseApiCodes::getResponseKey(static::KEY_SUCCESS) => $success,
-			BaseApiCodes::getResponseKey(static::KEY_CODE)    => $api_code,
-			BaseApiCodes::getResponseKey(static::KEY_LOCALE)  => \App::getLocale(),
-			BaseApiCodes::getResponseKey(static::KEY_MESSAGE) => $message,
-			BaseApiCodes::getResponseKey(static::KEY_DATA)    => $data,
+			static::KEY_SUCCESS => $success,
+			static::KEY_CODE    => $api_code,
+			static::KEY_LOCALE  => \App::getLocale(),
+			static::KEY_MESSAGE => $message,
+			static::KEY_DATA    => $data,
 		];
 
 		if ($debug_data !== null) {

@@ -172,36 +172,19 @@ class BaseApiCodes
 	}
 
 	/**
-	 * Returns response JSON key value. If there's user provided mapping, it takes
-	 * that into account, otherwise fails to default mapping values.
+	 * Returns default response JSON key fields mapping
 	 *
-	 * @param string $reference_key JSON response key name reference to look up
-	 *
-	 * @return string
-	 *
-	 * @throws \RuntimeException
+	 * @return array
 	 */
-	public static function getResponseKey($reference_key): string
+	public static function getResponseFieldsMap(): array
 	{
-		/**
-		 * Default response JSON key mapping
-		 *
-		 * @var array
-		 */
-		$response_key_map = [
+		return [
 			ResponseBuilder::KEY_SUCCESS => 'success',
 			ResponseBuilder::KEY_CODE    => 'code',
 			ResponseBuilder::KEY_LOCALE  => 'locale',
 			ResponseBuilder::KEY_MESSAGE => 'message',
 			ResponseBuilder::KEY_DATA    => 'data',
 		];
-
-		// ensure $key is known
-		if (!array_key_exists($reference_key, $response_key_map)) {
-			throw new \RuntimeException(sprintf('Unknown response key reference "%s"', $reference_key));
-		}
-
-		return $response_key_map[ $reference_key ];
 	}
 
 }

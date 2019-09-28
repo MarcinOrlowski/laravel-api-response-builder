@@ -7,8 +7,14 @@
 
 ### v6 ###
 
+#### v6.1 ####
+ * `[Very Low]` Removed ability to define own names for response keys which reduces code complexity and simplifies the
+ library. From now one you need to stick to default names now (`success`, `code`, `message`, `locale`, `data`).
+
+#### v6.0 ####
+
  * Requires Laravel 6.0+ and PHP 7.2+
- * [BREAKING] In previous versions built-in reserved codes were hardcoded and always in range of 1-63 which, in general
+ * `[BREAKING]` In previous versions built-in reserved codes were hardcoded and always in range of 1-63 which, in general
  contradicted the whole idea of having code ranges. Starting from v6, all your API codes are always within user assigned code range
  including built-in codes. This implies some breaking changes to the configuration of `ResponseBuilder` and some changes
  in the way built-in codes are handled. Because all built-in codes are now remapped to user defined code range, all built-in code
@@ -19,14 +25,14 @@
  available public functions. Additionally, first 20 codes (0 to 19 incluside) of your code range is reserved for built-in codes, 
  which means that if you define your code range to be `100`-`199` then you cannot use codes `100` to `119` for own purposes.
  The first code you can assign to own API code is `120`. 
- * [Low] Removed `exception_handler.use_exception_message_first` feature.
- * [Low] Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
- * [Low] Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods from `ApiCodesHelpers` trait.
- * [Low] All `ResponseBuilder` internal code constants are removed. If you need to get the valid API code for internal codes, 
+ * `[Low]` Removed `exception_handler.use_exception_message_first` feature.
+ * `[Low]` Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
+ * `[Low]` Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods from `ApiCodesHelpers` trait.
+ * `[Low]` All `ResponseBuilder` internal code constants are removed. If you need to get the valid API code for internal codes, 
  use `BaseApiCodes` class' methods: `OK()`, `NO_ERROR_MESSAGE()`, `EX_HTTP_NOT_FOUND()`, `EX_HTTP_SERVICE_UNAVAILABLE()`,
  `EX_HTTP_EXCEPTION()`, `EX_UNCAUGHT_EXCEPTION()`, `EX_AUTHENTICATION_EXCEPTION()` and `EX_VALIDATION_EXCEPTION()` that would
  return valid API code in currently configured range.
- * [Low] Removed `response_key_map` configuration option.
+ * `[Low]` Removed `response_key_map` configuration option.
 			
 ### v5 ###
 
