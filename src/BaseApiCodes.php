@@ -24,12 +24,12 @@ class BaseApiCodes
 	/**
 	 * protected code range - lowest code for reserved range.
 	 */
-	protected const RESERVED_MIN_API_CODE_OFFSET = 0;
+	public const RESERVED_MIN_API_CODE_OFFSET = 0;
 
 	/**
 	 * protected code range - highest code for reserved range
 	 */
-	protected const RESERVED_MAX_API_CODE_OFFSET = 19;
+	public const RESERVED_MAX_API_CODE_OFFSET = 19;
 
 	/**
 	 * built-in codes: OK
