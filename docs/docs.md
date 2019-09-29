@@ -626,7 +626,7 @@ return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
  reserved range:
 
 ```php
-MarcinOrlowski\ResponseBuilder\ApiCodeBase::OK => 'my_messages.ok',
+MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK() => 'my_messages.ok',
 ```
 
  and from now on, each `success()` will be returning your message instead of built-in one.
@@ -634,7 +634,7 @@ MarcinOrlowski\ResponseBuilder\ApiCodeBase::OK => 'my_messages.ok',
  To override default error message used when given error code has no entry in `map`, add the following:
 
 ```php
-MarcinOrlowski\ResponseBuilder\ApiCodeBase::NO_ERROR_MESSAGE => 'my_messages.default_error_message',
+MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.default_error_message',
 ````
 
  You can use `:api_code` placeholder in the message and it will be substituted actual error code value.
