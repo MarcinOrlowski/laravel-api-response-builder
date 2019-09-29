@@ -66,23 +66,20 @@ trait TestingHelpers
 
 		// Obtain configuration params
 		$class_name = $this->getApiCodesClassName();
+
 		$obj = new $class_name();
-
-		$method = $this->getProtectedMethod(get_class($obj), 'getMinCode');
-		$this->min_allowed_code = $method->invokeArgs($obj, []);
-
-		$method = $this->getProtectedMethod(get_class($obj), 'getMaxCode');
-		$this->max_allowed_code = $method->invokeArgs($obj, []);
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->min_allowed_code = $this->callProtectedMethod($obj, 'getMinCode');
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->max_allowed_code = $this->callProtectedMethod($obj, 'getMaxCode');
 
 		// generate random api_code
 		/** @noinspection RandomApiMigrationInspection */
 		$this->random_api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
 		// AND corresponding mapped message mapping
-
-		$obj = new BaseApiCodes();
-		$method = $this->getProtectedMethod(get_class($obj), 'getBaseMap');
-		$map = $method->invokeArgs($obj, []);
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$map = $this->callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
 		$idx = mt_rand(1, count($map));
 
 		$this->random_api_code_message_key = $map[ array_keys($map)[ $idx - 1 ] ];
@@ -135,7 +132,7 @@ trait TestingHelpers
 		}
 
 		$j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $expected_message);
-		$this->assertEquals(true, $j->{BaseApiCodes::getResponseKey(ResponseBuilder::KEY_SUCCESS)});
+		$this->assertEquals(true, $j->{ResponseBuilder::KEY_SUCCESS});
 
 		return $j;
 	}
@@ -147,14 +144,12 @@ trait TestingHelpers
 	 * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default value
 	 * @param int         $expected_http_code       Expected HTTP code
 	 * @param string|null $message                  Expected return message or @null if we automatically mapped message fits
-	 * @param array       $extra_keys               array of additional keys expected in response structure
 	 *
 	 * @return \StdClass response object built from JSON
 	 */
 	public function getResponseErrorObject(int $expected_api_code_offset = null,
 	                                       int $expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
-	                                       string $message = null,
-	                                       array $extra_keys = []): \StdClass
+	                                       string $message = null): \StdClass
 	{
 		if ($expected_api_code_offset === null) {
 			/** @var BaseApiCodes $api_codes_class_name */
@@ -171,7 +166,7 @@ trait TestingHelpers
 				$expected_http_code, ResponseBuilder::ERROR_HTTP_CODE_MIN));
 		}
 
-		$j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message, $extra_keys);
+		$j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message);
 		$this->assertEquals(false, $j->success);
 
 		return $j;
@@ -179,10 +174,10 @@ trait TestingHelpers
 
 
 	/**
-	 * @param int         $expected_api_code_offset expected Api response code offset
-	 * @param int         $expected_http_code       expected HTTP code
-	 * @param string|null $expected_message         expected message string or @null if default
-	 * @param array       $extra_keys               array of additional keys expected in response structure
+	 * @param int         $expected_api_code  expected Api response code offset
+	 * @param int         $expected_http_code expected HTTP code
+	 * @param string|null $expected_message   expected message string or @null if default
+	 * @param array       $extra_keys         array of additional keys expected in response structure
 	 *
 	 * @return mixed
 	 */
@@ -212,33 +207,13 @@ trait TestingHelpers
 	 * Validates if given $json_object contains all expected elements
 	 *
 	 * @param \StdClass $json_object JSON Object holding Api response to validate
-	 * @param array     $extra_keys  array of additional keys expected in response structure
 	 *
 	 * @return void
 	 */
-	public function assertValidResponse(\StdClass $json_object, array $extra_keys = []): void
+	public function assertValidResponse(\StdClass $json_object): void
 	{
 		$this->assertIsObject($json_object);
-
-		$items_ref = [
-			ResponseBuilder::KEY_SUCCESS,
-			ResponseBuilder::KEY_CODE,
-			ResponseBuilder::KEY_LOCALE,
-			ResponseBuilder::KEY_MESSAGE,
-			ResponseBuilder::KEY_DATA,
-		];
-
-		$items = [];
-		foreach ($items_ref as $ref) {
-			$items[ $ref ] = BaseApiCodes::getResponseKey($ref);
-		}
-
-		$items = array_merge_recursive($items, $extra_keys);
-		foreach ($items as $ref => $item) {
-			$this->assertObjectHasAttribute($item, $json_object, "No '{$item}' element in response structure found");
-		}
-
-		$this->assertIsBool($json_object->{$items[ ResponseBuilder::KEY_SUCCESS ]});
+		$this->assertIsBool($json_object->{ResponseBuilder::KEY_SUCCESS});
 		$this->assertIsInt($json_object->code);
 		$this->assertIsString($json_object->locale);
 		/** @noinspection UnNecessaryDoubleQuotesInspection */
@@ -301,26 +276,23 @@ trait TestingHelpers
 			$this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));
 		}
 
-		$obj = new ResponseBuilder();
-		$method = $this->getProtectedMethod(get_class($obj), 'make');
-
 		$http_code = null;
 		$lang_args = null;
 
-		return $method->invokeArgs($obj, [$success,
-		                                  $api_code_offset,
-		                                  $message_or_api_code_offset,
-		                                  $data,
-		                                  $http_code,
-		                                  $lang_args,
-		                                  $headers,
-		                                  $encoding_options,
-		                                  $debug_data]);
+		/** @noinspection PhpUnhandledExceptionInspection */
+		return $this->callProtectedMethod(
+			ResponseBuilder::class, 'make', [$success,
+			                                 $api_code_offset,
+			                                 $message_or_api_code_offset,
+			                                 $data,
+			                                 $http_code,
+			                                 $lang_args,
+			                                 $headers,
+			                                 $encoding_options,
+			                                 $debug_data]);
 	}
 
-
 	// -------------------------------
-
 
 	/**
 	 * Returns ErrorCode constant name referenced by its value
@@ -347,28 +319,31 @@ trait TestingHelpers
 	}
 
 	/**
-	 * Helper to let test protected/private methods
+	 * Calls protected method of $object, passing optional array of arguments.
 	 *
-	 * Usage example:
-	 * ----------------
-	 *   $obj = new \App\Foo();
-	 *   $method = $this->getProtectedMethod($obj, 'someMethod');
-	 *   $result = $method->invokeArgs($obj, ...);
+	 * @param object|string $obj_or_class Object to call $method_name on or name of the class.
+	 * @param string        $method_name  Name of method to called.
+	 * @param array         $args         Optional array of arguments (empty array if no args to pass).
 	 *
-	 * @param string|object $cls  method's class name to, i.e. "Bar". Can be namespaced i.e. "Foo\Bar" (no starting backslash)
-	 * @param string        $name method name to call
-	 *
-	 * @return \ReflectionMethod
+	 * @return mixed
 	 *
 	 * @throws \ReflectionException
 	 */
-	protected function getProtectedMethod($cls, string $name): \ReflectionMethod
+	protected function callProtectedMethod($obj_or_class, string $method_name, array $args = [])
 	{
-		$class = new \ReflectionClass($cls);
-		$method = $class->getMethod($name);
+		if (is_object($obj_or_class)) {
+			$obj = $obj_or_class;
+		} elseif (is_string($obj_or_class)) {
+			$obj = new $obj_or_class();
+		} else {
+			throw new \RuntimeException('getProtectedMethod() expects object or valid class name argument');
+		}
+
+		$reflection = new \ReflectionClass($obj);
+		$method = $reflection->getMethod($method_name);
 		$method->setAccessible(true);
 
-		return $method;
+		return $method->invokeArgs($obj, $args);
 	}
 
 	/**
@@ -457,7 +432,7 @@ trait TestingHelpers
 			}
 			$code = $codetemp;
 		}
-		$offset += 1;
+		$offset++;
 		if ($offset >= strlen($string)) {
 			$offset = -1;
 		}

@@ -55,7 +55,7 @@ class ResponseBuilder
 	public const CONF_KEY_CLASSES                = 'response_builder.classes';
 	public const CONF_KEY_MIN_CODE               = 'response_builder.min_code';
 	public const CONF_KEY_MAX_CODE               = 'response_builder.max_code';
-	public const CONF_KEY_RESPONSE_KEY_MAP       = 'response_builder.response_key_map';
+	public const CONF_KEY_RESPONSE_KEY_MAP       = 'response_builder.map';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information
@@ -91,9 +91,9 @@ class ResponseBuilder
 	/**
 	 * Reads and validates "classes" config mapping
 	 *
-	 * @return array|null Classes mapping as specified in configuration or @null if no such config found
+	 * @return array Classes mapping as specified in configuration or empty array if configuration found
 	 *
-	 * @throws \RuntimeException if "classes" mapping is invalid
+	 * @throws \RuntimeException if "classes" mapping is technically invalid (i.e. not array etc).
 	 */
 	protected static function getClassesMapping(): ?array
 	{
@@ -105,20 +105,37 @@ class ResponseBuilder
 					sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
 			}
 
-			$mandatory_keys = [static::KEY_KEY,
-			                   static::KEY_METHOD,
+			$mandatory_keys = [
+				static::KEY_KEY,
+				static::KEY_METHOD,
 			];
 			foreach ($classes as $class_name => $class_config) {
 				foreach ($mandatory_keys as $key_name) {
 					if (!array_key_exists($key_name, $class_config)) {
-						throw new \RuntimeException(
-							sprintf("CONFIG: Missing '%s' for '%s' class mapping", $key_name, $class_name));
+						throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' class mapping");
 					}
 				}
 			}
+		} else {
+			$classes = [];
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Checks if we have "classes" mapping configured for $data object class.
+	 * Returns @true if there's valid config for this class.
+	 *
+	 * @param object $data Object to check mapping for.
+	 *
+	 * @return bool
+	 *
+	 * @throws \InvalidArgumentException if $data is not an object.
+	 */
+	protected static function hasClassesMapping(object $data): bool
+	{
+		return array_key_exists(get_class($data), static::getClassesMapping());
 	}
 
 	/**
@@ -146,72 +163,15 @@ class ResponseBuilder
 		}
 	}
 
-
-	/**
-	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
-	 * additionally added to reported JSON for easier manual debugging.
-	 *
-	 * @param boolean    $success    @true if response indicates success, @false otherwise
-	 * @param integer    $api_code   response code
-	 * @param string     $message    message to return
-	 * @param mixed      $data       API response data if any
-	 * @param array|null $debug_data optional debug data array to be added to returned JSON.
-	 *
-	 * @return array response ready to be encoded as json and sent back to client
-	 *
-	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
-	 */
-	protected static function buildResponse(bool $success, int $api_code, string $message, $data = null,
-	                                        array $debug_data = null): array
-	{
-		// ensure data is serialized as object, not plain array, regardless what we are provided as argument
-		if ($data !== null) {
-			// we can do some auto-conversion on known class types, so check for that first
-			/** @var array $classes */
-			$classes = static::getClassesMapping();
-			if (($classes !== null) && (count($classes) > 0)) {
-				if (is_array($data)) {
-					static::convert($classes, $data);
-				} elseif (is_object($data)) {
-					$obj_class_name = get_class($data);
-					if (array_key_exists($obj_class_name, $classes)) {
-						$conversion_method = $classes[ $obj_class_name ][ static::KEY_METHOD ];
-						$data = [$classes[ $obj_class_name ][ static::KEY_KEY ] => $data->$conversion_method()];
-					}
-				}
-			}
-		}
-
-		if ($data !== null) {
-			// ensure we get object in final JSON structure in data node
-			$data = (object)$data;
-		}
-
-		$response = [
-			BaseApiCodes::getResponseKey(static::KEY_SUCCESS) => $success,
-			BaseApiCodes::getResponseKey(static::KEY_CODE)    => $api_code,
-			BaseApiCodes::getResponseKey(static::KEY_LOCALE)  => \App::getLocale(),
-			BaseApiCodes::getResponseKey(static::KEY_MESSAGE) => $message,
-			BaseApiCodes::getResponseKey(static::KEY_DATA)    => $data,
-		];
-
-		if ($debug_data !== null) {
-			$debug_key = Config::get(static::CONF_KEY_DEBUG_DEBUG_KEY, self::KEY_DEBUG);
-			$response[ $debug_key ] = $debug_data;
-		}
-
-		return $response;
-	}
-
 	/**
 	 * Returns success
 	 *
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code         API code to be returned with the response or @null for default `OK` code
-	 * @param array|null   $lang_args        arguments passed to Lang if message associated with API code uses placeholders
-	 * @param integer|null $http_code        HTTP return code to be set for this response or @null for default (200)
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
-	 *                                       config's value or defaults
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $api_code         API code to be returned with the response or @null for default `OK` code
+	 * @param array|null        $lang_args        arguments passed to Lang if message associated with API code uses placeholders
+	 * @param integer|null      $http_code        HTTP return code to be set for this response or @null for default (200)
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
 	 *
 	 * @return HttpResponse
 	 */
@@ -249,12 +209,12 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $api_code         API code to be returned with the response or @null for `OK` code
-	 * @param array|null   $lang_args        arguments passed to Lang if message associated with API code uses placeholders
-	 * @param integer|null $http_code        HTTP return code to be set for this response
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
-	 *                                       config's value or defaults
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $api_code         API code to be returned with the response or @null for `OK` code
+	 * @param array|null        $lang_args        arguments passed to Lang if message associated with API code uses placeholders
+	 * @param integer|null      $http_code        HTTP return code to be set for this response
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
 	 *
 	 * @return HttpResponse
 	 *
@@ -270,19 +230,19 @@ class ResponseBuilder
 		Validator::assertInt('http_code', $http_code);
 		Validator::assertIntRange('http_code', $http_code, 200, 299);
 
-		return static::make(true, $api_code, $api_code, $data,
-			$http_code, $lang_args, null, $encoding_options);
+		return static::make(true, $api_code, $api_code, $data, $http_code, $lang_args, null, $encoding_options);
 	}
 
 	/**
 	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error
 	 * message uses placeholders as well as return data payload
 	 *
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
-	 * @param mixed|null   $data             payload array to be returned in 'data' node or response object
-	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for default
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param array|null        $lang_args        arguments array passed to Lang::get() for messages with placeholders
+	 * @param object|array|null $data             payload array to be returned in 'data' node or response object
+	 * @param integer|null      $http_code        optional HTTP status code to be used with this response or @null for default
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
 	 *
 	 * @return HttpResponse
 	 */
@@ -293,10 +253,11 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param array|null        $lang_args        arguments array passed to Lang::get() for messages with placeholders
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
 	 *
 	 * @return HttpResponse
 	 */
@@ -307,11 +268,12 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code        HTTP error code to be returned with this Cannot be @null
-	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $http_code        HTTP error code to be returned with this Cannot be @null
+	 * @param array|null        $lang_args        arguments array passed to Lang::get() for messages with placeholders
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
 	 *
 	 * @return HttpResponse
 	 *
@@ -338,11 +300,12 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param string       $error_message    custom message to be returned as part of error response
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param string            $error_message    custom message to be returned as part of error response
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $http_code        optional HTTP status code to be used with this response or @null for defaults
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's
+	 *                                            value or defaults
 	 *
 	 * @return HttpResponse
 	 */
@@ -354,12 +317,13 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param string       $error_message    custom message to be returned as part of error response
-	 * @param mixed|null   $data             payload to be returned as 'data' node, @null if none
-	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for defaults
-	 * @param integer|null $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use config's value or defaults
-	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param string            $error_message    custom message to be returned as part of error response
+	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
+	 * @param integer|null      $http_code        optional HTTP status code to be used with this response or @null for defaults
+	 * @param integer|null      $encoding_options see http://php.net/manual/en/function.json-encode.php or @null to use
+	 *                                            config's value or defaults
+	 * @param array|null        $debug_data       optional debug data array to be added to returned JSON.
 	 *
 	 * @return HttpResponse
 	 */
@@ -387,15 +351,15 @@ class ResponseBuilder
 	 * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error message
 	 * uses placeholders as well as return data payload
 	 *
-	 * @param mixed|null   $data             payload array to be returned in 'data' node or response object or @null if none
-	 * @param integer      $api_code         API code to be returned with the response
-	 * @param integer|null $http_code        optional HTTP status code to be used with this response or @null for default
-	 * @param array|null   $lang_args        arguments array passed to Lang::get() for messages with placeholders
-	 * @param string|null  $message          custom message to be returned as part of error response
-	 * @param array|null   $headers          optional HTTP headers to be returned in error response
-	 * @param integer|null $encoding_options see see json_encode() docs for valid option values. Use @null to fall back to
-	 *                                       config's value or defaults
-	 * @param array|null   $debug_data       optional debug data array to be added to returned JSON.
+	 * @param object|array|null $data             payload array to be returned in 'data' node or response object or @null if none
+	 * @param integer           $api_code         API code to be returned with the response
+	 * @param integer|null      $http_code        optional HTTP status code to be used with this response or @null for default
+	 * @param array|null        $lang_args        arguments array passed to Lang::get() for messages with placeholders
+	 * @param string|null       $message          custom message to be returned as part of error response
+	 * @param array|null        $headers          optional HTTP headers to be returned in error response
+	 * @param integer|null      $encoding_options see see json_encode() docs for valid option values. Use @null to fall back to
+	 *                                            config's value or defaults
+	 * @param array|null        $debug_data       optional debug data array to be added to returned JSON.
 	 *
 	 * @return HttpResponse
 	 *
@@ -410,9 +374,12 @@ class ResponseBuilder
 		$http_code = $http_code ?? static::DEFAULT_HTTP_CODE_ERROR;
 		$headers = $headers ?? [];
 
-		Validator::assertInt('api_code', $api_code);
-		Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 		$code_ok = BaseApiCodes::OK();
+
+		Validator::assertInt('api_code', $api_code);
+		if ($api_code !== $code_ok) {
+			Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+		}
 		if ($api_code === $code_ok) {
 			throw new \InvalidArgumentException("Error response cannot use api_code of value  {$code_ok} which is reserved for OK");
 		}
@@ -427,19 +394,20 @@ class ResponseBuilder
 	}
 
 	/**
-	 * @param boolean        $success             @true if response indicate success, @false otherwise
-	 * @param integer        $api_code            API code to be returned with the response
-	 * @param string|integer $message_or_api_code message string or valid API code
-	 * @param mixed|null     $data                optional additional data to be included in response object
-	 * @param integer|null   $http_code           return HTTP code for build Response object
-	 * @param array|null     $lang_args           arguments array passed to Lang::get() for messages with placeholders
-	 * @param array|null     $headers             optional HTTP headers to be returned in the response
-	 * @param integer|null   $encoding_options    see http://php.net/manual/en/function.json-encode.php
-	 * @param array|null     $debug_data          optional debug data array to be added to returned JSON.
+	 * @param boolean           $success             @true if response indicate success, @false otherwise
+	 * @param integer           $api_code            API code to be returned with the response
+	 * @param string|integer    $message_or_api_code message string or valid API code
+	 * @param object|array|null $data                optional additional data to be included in response object
+	 * @param integer|null      $http_code           return HTTP code for build Response object
+	 * @param array|null        $lang_args           arguments array passed to Lang::get() for messages with placeholders
+	 * @param array|null        $headers             optional HTTP headers to be returned in the response
+	 * @param integer|null      $encoding_options    see http://php.net/manual/en/function.json-encode.php
+	 * @param array|null        $debug_data          optional debug data array to be added to returned JSON.
 	 *
 	 * @return HttpResponse
 	 *
-	 * @throws \InvalidArgumentException If code is neither a string nor valid integer code.
+	 * @throws \InvalidArgumentException If $api_code is neither a string nor valid integer code.
+	 * @throws \InvalidArgumentException if $data is an object of class that is not configured in "classes" mapping.
 	 *
 	 * @noinspection MoreThanThreeArgumentsInspection
 	 */
@@ -475,6 +443,7 @@ class ResponseBuilder
 				// nope, let's get the default one instead
 				$key = BaseApiCodes::getCodeMessageKey($success ? BaseApiCodes::OK() : BaseApiCodes::NO_ERROR_MESSAGE());
 			}
+
 			$lang_args = $lang_args ?? ['api_code' => $message_or_api_code];
 			$message_or_api_code = \Lang::get($key, $lang_args);
 		}
@@ -484,4 +453,73 @@ class ResponseBuilder
 			$http_code, $headers, $encoding_options
 		);
 	}
+
+	/**
+	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
+	 * additionally added to reported JSON for easier manual debugging.
+	 *
+	 * @param boolean           $success    @true if response indicates success, @false otherwise
+	 * @param integer           $api_code   response code
+	 * @param string            $message    message to return
+	 * @param object|array|null $data       API response data if any
+	 * @param array|null        $debug_data optional debug data array to be added to returned JSON.
+	 *
+	 * @return array response ready to be encoded as json and sent back to client
+	 *
+	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
+	 */
+	protected static function buildResponse(bool $success, int $api_code, string $message, $data = null,
+	                                        array $debug_data = null): array
+	{
+		// ensure $data is either @null, array or object of class with configured mapping.
+		if ($data !== null) {
+			if (!is_array($data) && !is_object($data)) {
+				throw new \InvalidArgumentException(
+					sprintf('Invalid payload data. Must be null, array or class with mapping ("%s" given).', gettype($data)));
+			}
+
+			if (is_object($data) && !static::hasClassesMapping($data)) {
+				throw new \InvalidArgumentException(sprintf('No mapping configured for "%s" class.', get_class($data)));
+			}
+
+			// Preliminary validation passed. Let's walk and convert...
+			// we can do some auto-conversion on known class types, so check for that first
+			/** @var array $classes */
+			$classes = static::getClassesMapping();
+			if (($classes !== null) && (count($classes) > 0)) {
+				if (is_array($data)) {
+					static::convert($classes, $data);
+				} elseif (is_object($data)) {
+					$obj_class_name = get_class($data);
+					if (array_key_exists($obj_class_name, $classes)) {
+						$conversion_method = $classes[ $obj_class_name ][ static::KEY_METHOD ];
+						$data = [$classes[ $obj_class_name ][ static::KEY_KEY ] => $data->$conversion_method()];
+					}
+				}
+			}
+		}
+
+		if ($data !== null && !is_object($data)) {
+			// ensure we get object in final JSON structure in data node
+			$data = (object)$data;
+		}
+
+		/** @noinspection PhpUndefinedClassInspection */
+		$response = [
+			static::KEY_SUCCESS => $success,
+			static::KEY_CODE    => $api_code,
+			static::KEY_LOCALE  => \App::getLocale(),
+			static::KEY_MESSAGE => $message,
+			static::KEY_DATA    => $data,
+		];
+
+		if ($debug_data !== null) {
+			$debug_key = Config::get(static::CONF_KEY_DEBUG_DEBUG_KEY, self::KEY_DEBUG);
+			$response[ $debug_key ] = $debug_data;
+		}
+
+		return $response;
+	}
+
+
 }

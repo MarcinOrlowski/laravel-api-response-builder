@@ -68,9 +68,7 @@ trait ApiCodesHelpers
 	public static function getApiCodeConstants(): array
 	{
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$reflect = new \ReflectionClass(get_called_class());
-
-		return $reflect->getConstants();
+		return (new \ReflectionClass(static::class))->getConstants();
 	}
 
 	/**
@@ -135,7 +133,7 @@ trait ApiCodesHelpers
 		$max = static::RESERVED_MAX_API_CODE_OFFSET;
 		if (($internal_code < $min) || ($internal_code > $max)) {
 			throw new \InvalidArgumentException(
-				sprintf('Invalid internal code (%d). Must be between %d-%d inclusive.', $internal_code, $min, $max));
+				"Invalid internal code ({$internal_code}). Must be between {$min}-{$max} inclusive.");
 		}
 
 		return ($internal_code === 0) ? 0 : $internal_code + static::getMinCode();

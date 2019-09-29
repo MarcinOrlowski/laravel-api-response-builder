@@ -17,6 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Illuminate\Support\Facades\Config;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class BuildResponseTest extends TestCase
 {
@@ -27,8 +28,6 @@ class BuildResponseTest extends TestCase
 
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
-	 *
-	 * @return void
 	 */
 	public function testBuildResponse_ClassAutoConversionSingleElement(): void
 	{
@@ -58,10 +57,7 @@ class BuildResponseTest extends TestCase
 	}
 
 	/**
-	 * Tests if buildResponse() would properly handle auto conversion
-	 * when mapped class is part of bigger data set
-	 *
-	 * @return void
+	 * Tests if buildResponse() would properly handle auto conversion when mapped class is part of bigger data set
 	 */
 	public function testBuildResponse_ClassAutoConversionAsPartOfDataset(): void
 	{
@@ -119,11 +115,34 @@ class BuildResponseTest extends TestCase
 		}
 	}
 
+	/**
+	 * Checks if buildResponse() would throw InvalidArgument exception on unusupported payload type
+	 *
+	 * @param mixed $data Test data as yelded by dataProvider
+	 *
+	 * @dataProvider dataProvider_testBuildResponse_InvalidDataType
+	 */
+	public function testBuildResponse_InvalidDataType($data): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		ResponseBuilder::success($data);
+	}
+
+	/**
+	 * Data provider for testBuildResponse_InvalidDataType test
+	 */
+	public function dataProvider_testBuildResponse_InvalidDataType(): array
+	{
+		return [
+			[(object)['no' => 'mapping']],
+			['invalid'],
+			[666],
+		];
+	}
+
 
 	/**
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_WrongMessage(): void
 	{
@@ -141,8 +160,6 @@ class BuildResponseTest extends TestCase
 
 	/**
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_CustomMessageAndCodeOutOfRange(): void
 	{
@@ -153,4 +170,31 @@ class BuildResponseTest extends TestCase
 		$this->callMakeMethod(true, $api_code, 'message');
 	}
 
+	/**
+	 * Checks if getClassesMapping would throw exception on invalid configuration data
+	 */
+	public function testGetClassesMapping_InvalidConfigurationData(): void
+	{
+		Config::set(ResponseBuilder::CONF_KEY_CLASSES, 'invalid');
+
+		$this->expectException(\RuntimeException::class);
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod(ResponseBuilder::class, 'getClassesMapping');
+	}
+
+	/**
+	 * Checks if getClassesMapping would return empty array if there's no "classes" config entry
+	 */
+	public function testGetClassesMapping_NoMappingConfig(): void
+	{
+		// remove any classes config
+		/** @noinspection PhpUndefinedMethodInspection */
+		Config::offsetUnset(ResponseBuilder::CONF_KEY_CLASSES);
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$result = $this->callProtectedMethod(ResponseBuilder::class, 'getClassesMapping');
+		$this->assertIsArray($result);
+		$this->assertEmpty($result);
+	}
 }

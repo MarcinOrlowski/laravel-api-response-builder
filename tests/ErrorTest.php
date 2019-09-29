@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -25,8 +26,6 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Check success()
-	 *
-	 * @return void
 	 */
 	public function testError(): void
 	{
@@ -46,8 +45,6 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests error() with various http codes and random payload
-	 *
-	 * @return void
 	 */
 	public function testError_WithDataHttpCode(): void
 	{
@@ -78,8 +75,6 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithData()
-	 *
-	 * @return void
 	 */
 	public function testErrorWithData(): void
 	{
@@ -93,8 +88,6 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithDataAndHttpCode()
-	 *
-	 * @return void
 	 */
 	public function testErrorWithDataAndHttpCode(): void
 	{
@@ -116,8 +109,6 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithHttpCode()
-	 *
-	 * @return void
 	 */
 	public function testErrorWithHttpCode(): void
 	{
@@ -138,8 +129,6 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithMessageAndData()
-	 *
-	 * @return void
 	 */
 	public function testErrorWithMessageAndData(): void
 	{
@@ -155,11 +144,10 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithMessageAndDataAndDebug()
-	 *
-	 * @return void
 	 */
 	public function testErrorWithMessageAndDataAndDebug(): void
 	{
+		/** @noinspection PhpUndefinedClassInspection */
 		$trace_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE);
 		$trace_data = [
 			$trace_key => (object)[
@@ -171,6 +159,7 @@ class ErrorTest extends TestCase
 		$api_code = $this->random_api_code;
 		$error_message = $this->getRandomString('msg');
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
 		$this->response = ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message,
 			$data, null, null, $trace_data);
@@ -179,14 +168,13 @@ class ErrorTest extends TestCase
 		$this->assertEquals($error_message, $j->message);
 		$this->assertEquals((object)$data, $j->data);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		$debug_key = \Config::get(ResponseBuilder::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
 		$this->assertEquals((object)$trace_data, $j->$debug_key);
 	}
 
 	/**
 	 * Tests errorWithMessage()
-	 *
-	 * @return void
 	 */
 	public function testErrorWithMessage(): void
 	{
@@ -199,11 +187,17 @@ class ErrorTest extends TestCase
 		$this->assertNull($j->data);
 	}
 
+	/**
+	 * Checks if using errorXXX() with OK() code triggers resistance.
+	 */
+	public function testErrorWithOkCode(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		ResponseBuilder::error(BaseApiCodes::OK());
+	}
 
 	/**
 	 * Tests error() handling api code with no message mapping
-	 *
-	 * @return void
 	 */
 	public function testError_MissingMessageMapping(): void
 	{
@@ -216,6 +210,7 @@ class ErrorTest extends TestCase
 
 		$key = $api_codes_class_name::getCodeMessageKey($api_codes_class_name::NO_ERROR_MESSAGE());
 		$lang_args = ['api_code' => $api_code];
+		/** @noinspection PhpUndefinedClassInspection */
 		$msg = \Lang::get($key, $lang_args);
 
 		$j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $msg);
@@ -224,8 +219,6 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests buildErrorResponse() fed with not allowed OK api code
-	 *
-	 * @return void
 	 */
 	public function testBuildErrorResponse_ApiCodeOK(): void
 	{
@@ -242,11 +235,8 @@ class ErrorTest extends TestCase
 		$this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
 	}
 
-
 	/**
 	 * Tests buildErrorResponse() fed with @null as http_code
-	 *
-	 * @return void
 	 */
 	public function testBuildErrorResponse_NullHttpCode(): void
 	{
@@ -266,8 +256,6 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests buildErrorResponse() fed with http code out of allowed bounds
-	 *
-	 * @return void
 	 */
 	public function testBuildErrorResponse_TooLowHttpCode(): void
 	{
@@ -301,12 +289,10 @@ class ErrorTest extends TestCase
 		$obj = new ResponseBuilder();
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$method = $this->getProtectedMethod($obj, 'buildErrorResponse');
-
-		return $method->invokeArgs($obj, [$data,
-		                                  $api_code,
-		                                  $http_code,
-		                                  $lang_args]);
+		return $this->callProtectedMethod($obj, 'buildErrorResponse', [$data,
+		                                                               $api_code,
+		                                                               $http_code,
+		                                                               $lang_args]);
 	}
 
 }

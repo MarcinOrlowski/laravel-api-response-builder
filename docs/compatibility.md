@@ -1,4 +1,4 @@
-![REST API Response Builder for Laravel](img/laravel-logolockup-rgb-red.png)
+![REST API Response Builder for Laravel](img/logo.png)
 
 # REST API Response Builder for Laravel #
 
@@ -7,29 +7,32 @@
 
 ### v6 ###
 
+#### v6.1 ####
+ * `[Very Low]` Removed ability to define own names for response keys which reduces code complexity and simplifies the
+ library. From now one you need to stick to default names now (`success`, `code`, `message`, `locale`, `data`).
+
+#### v6.0 ####
+
  * Requires Laravel 6.0+ and PHP 7.2+
- * [BREAKING] In previous versions built-in reserved codes were hardcoded and always in range of 1-63 which somehow, in certain
- situations contradicted the idea of code ranges. Starting from v6, all API codes (incl. built-in) are always within user
- assigned code range. This implies some breaking changes to the configuration of `ResponseBuilder`. Your API codes are no longer
- defined as fixed value (i.e. `const SOMETHING_WENT_WRONG = 172;`) but as **offset** from your range starting value (`min_code`).
- Default range starts at 100, so the above constant should now be `const SOMETHING_WENT_WRONG = 72;` (hint: you can write this as
- `const SOMETHING_WENT_WRONG = +72;` which may improve code readability). Please note that code value must be lower than defined
- `max_code` therefore pay attention if you are going to change your ranges. If i.e. you'd change your range to be 100-150, then
- `SOMETHING_WENT_WRONG` would require new code assignment as `100+72 > 150`. Also note that first 19 values in your range
- (and also `OK` value of `0`) are reserved, therefore the lowest offset you can use is `20`.
- * [Low] Changed default HTTP code associated with each exception handled by `ExceptionHandler`. With no custom settings it will
- now return different HTTP code for different exception handled, while previously implementation could always return 
- `HTTP_BAD_REQUEST`. All users running on default settings, however, unless you client apps are HTTP code sensitive, the impact
- of this change is very low. Additionally, if you already set `http_code` field in your config (in ` exception_handler` block)
- then you need to change it from final value to **offset** as mentioned above.
- * [Low] Removed `exception_handler.use_exception_message_first` feature.
- * [Low] Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
- * [Low] Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods from `ApiCodesHelpers` trait.
- * [Low] All `ResponseBuilder` internal code constants are removed. If you need to get the valid API code for internal codes, 
+ * `[BREAKING]` In previous versions built-in reserved codes were hardcoded and always in range of 1-63 which, in general
+ contradicted the whole idea of having code ranges. Starting from v6, all your API codes are always within user assigned code range
+ including built-in codes. This implies some breaking changes to the configuration of `ResponseBuilder` and some changes
+ in the way built-in codes are handled. Because all built-in codes are now remapped to user defined code range, all built-in code
+ constants like `OK` or `EX_HTTP_SERVICE_UNAVAILABLE`, previously defined in `BaseApiCodes` class are gone. If you for any reason
+ need to get the value of built in code, use  what's the value You can still have If you need to get the value of
+ built-in code you need to use replacement methods. These are named the same way as the constants, so if you want to get code 
+ of `ApiCodes::OK` you need to call `ApiCodes::OK()` (or directly, `BaseApiCodes::OK()`). See `BaseApiCodes` class for all
+ available public functions. Additionally, first 20 codes (0 to 19 incluside) of your code range is reserved for built-in codes, 
+ which means that if you define your code range to be `100`-`199` then you cannot use codes `100` to `119` for own purposes.
+ The first code you can assign to own API code is `120`. 
+ * `[Low]` Removed `exception_handler.use_exception_message_first` feature.
+ * `[Low]` Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
+ * `[Low]` Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods from `ApiCodesHelpers` trait.
+ * `[Low]` All `ResponseBuilder` internal code constants are removed. If you need to get the valid API code for internal codes, 
  use `BaseApiCodes` class' methods: `OK()`, `NO_ERROR_MESSAGE()`, `EX_HTTP_NOT_FOUND()`, `EX_HTTP_SERVICE_UNAVAILABLE()`,
  `EX_HTTP_EXCEPTION()`, `EX_UNCAUGHT_EXCEPTION()`, `EX_AUTHENTICATION_EXCEPTION()` and `EX_VALIDATION_EXCEPTION()` that would
  return valid API code in currently configured range.
- * [Low] Removed `response_key_map` configuration option.
+ * `[Low]` Removed `response_key_map` configuration option.
 			
 ### v5 ###
 

@@ -1,4 +1,4 @@
-![REST API Response Builder for Laravel](img/laravel-logolockup-rgb-red.png)
+![REST API Response Builder for Laravel](img/logo.png)
 
 # Configuration file #
  If you want to change `ResponseBuilder` default configuration you need to use config file. Use package provided configuration
@@ -11,7 +11,8 @@
 
 # Configuration options #
 
- Available configuration options and its current default values:
+ Available configuration options and its current default values listed in alphabetical order. Please note, that in majority
+ of use cases it should be perfectly sufficient to just use defaults and only tune the config when needed.
  
  * [classes](#classes)
  * [debug](#debug)
@@ -34,14 +35,14 @@ The entry key is a class name to check passed `data` object against, and configu
         ],
 ],
 ```
-Where `method` is name of the method to that `ResponseBuilder` should call on the object to obtain array representation of its 
+Where `method` is a name of the method to that `ResponseBuilder` should call on the object to obtain array representation of its 
 internal state, while `key` is a string that will be used as the JSON response as key to array representation.
 
 See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
  
 ## debug ##
 
-```json
+```php
 'debug' => [
     'debug_key' => 'debug',
 
@@ -60,7 +61,7 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
 	 * with information about class name, file name and line number.
 	 */
 
-```jsob
+```json
 {
     "success": false,
     "code": 0,
@@ -90,7 +91,7 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
  
     JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 
- See http://php.net/manual/en/function.json-encode.php for details.
+ See [json_encode() manual](http://php.net/manual/en/function.json-encode.php) for more details.
 
 ## exception_handler ##
 
@@ -164,7 +165,7 @@ See [Exception Handling with Response Builder](docs/exceptions.md) if you want t
 
  NOTE ResponseBuilder reserves first 19 codes for its own needs. First code you can use is 20th code in your pool.
 
-```PHP
+```php
 'min_code' => 100,
 ```
 
@@ -173,6 +174,6 @@ See [Exception Handling with Response Builder](docs/exceptions.md) if you want t
  Min api code in assigned for this module (inclusive)
  This option defines highest allowed (inclusive) code that can be used.
 
-```PHP
+```php
 'max_code' => 1024,
 ```

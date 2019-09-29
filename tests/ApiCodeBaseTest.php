@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedClassInspection */
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
@@ -20,52 +20,48 @@ class ApiCodeBaseTest extends TestCase
 {
 	/**
 	 * Tests getMinCode() with invalid config
-	 *
-	 * @return void
 	 */
 	public function testGetMinCode_MissingConfigKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MIN_CODE);
 		BaseApiCodes::getMinCode();
 	}
 
 	/**
 	 * Tests getMaxCode() with invalid config
-	 *
-	 * @return void
 	 */
 	public function testGetMaxCode_MissingConfigKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAX_CODE);
 		BaseApiCodes::getMaxCode();
 	}
 
 	/**
 	 * Tests getMap() with missing config
-	 *
-	 * @return void
 	 */
 	public function testGetMap_MissingConfigKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::offsetUnset(ResponseBuilder::CONF_KEY_MAP);
 		BaseApiCodes::getMap();
 	}
 
 	/**
 	 * Tests getMap() with wrong config
-	 *
-	 * @return void
 	 */
 	public function testGetMap_WrongConfig(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, false);
 		BaseApiCodes::getMap();
 	}

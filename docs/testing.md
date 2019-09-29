@@ -1,4 +1,4 @@
-![REST API Response Builder for Laravel](img/laravel-logolockup-rgb-red.png)
+![REST API Response Builder for Laravel](img/logo.png)
 
 # REST API Response Builder for Laravel #
 
@@ -31,25 +31,26 @@
   
  Create `ApiCodesTest.php` file in `tests` folder with the following content:
  
-    <?php
+```php
+<?php
 
-    use MarcinOrlowski\ResponseBuilder\ApiCodesHelpers
-    class TestableApiCodes extends \App\ApiCodes
+use MarcinOrlowski\ResponseBuilder\ApiCodesHelpers;
+class TestableApiCodes extends \App\ApiCodes
+{
+    use ApiCodesHelpers;
+}
+
+use MarcinOrlowski\ResponseBuilder\Tests\Traits\ApiCodesTests;
+class AppCodesTest extends TestCase
+{
+    use ApiCodesTests;
+
+    public function getApiCodesClassName() 
     {
-        use ApiCodesHelpers;
+        return TestableApiCodes::class;
     }
-
-    use MarcinOrlowski\ResponseBuilder\Tests\Traits\ApiCodesTests;
-    class AppCodesTest extends TestCase
-    {
- 	    use ApiCodesTests;
- 
-        public function getApiCodesClassName() 
-        {
- 		    return TestableApiCodes::class;
- 	    }
-     }
-
+}
+```
 
  And that's it. From now on, you have your `ApiCodes` covered with tests too.
 
@@ -60,25 +61,27 @@
  helpful. Let's say your Laravel API exposes `/v1/session/foo` which is expected to return some
  data. Let's test the response structure and data:
  
-    <?php
+```php
+<?php
+
+use MarcinOrlowski\ResponseBuilder\Tests\Traits\TestingHelpers;
+class LoginTest extends \Illuminate\Foundation\Testing\TestCase
+{
+    use TestingHelpers;
     
-    use MarcinOrlowski\ResponseBuilder\Tests\Traits\TestingHelpers;
-    class LoginTest extends \Illuminate\Foundation\Testing\TestCase
+    public function testLogin(): void
     {
-        use TestingHelpers;
+        // call your method
+        $response = $this->call('POST', '/v1/session/foo');
         
-        public function testLogin()
-        {
-            // call your method
-            $response = $this->call('POST', '/v1/session/foo');
-            
-            // get the JSON object
-            $j = json_decode($response->getContent(), false);
-            
-            // validate JSON structure matches what ResponseBuilder produced
-            $this->assertValidResponse($j);
-            
-            // some other tests of your choice
-            $this->assertTrue($j->success);
-        }
+        // get the JSON object
+        $j = json_decode($response->getContent(), false);
+        
+        // validate JSON structure matches what ResponseBuilder produced
+        $this->assertValidResponse($j);
+        
+        // some other tests of your choice
+        $this->assertTrue($j->success);
     }
+}
+```

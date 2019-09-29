@@ -14,8 +14,6 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Support\Facades\Config;
-
 /**
  * BaseApiCodes handling class
  */
@@ -26,12 +24,12 @@ class BaseApiCodes
 	/**
 	 * protected code range - lowest code for reserved range.
 	 */
-	protected const RESERVED_MIN_API_CODE_OFFSET = 0;
+	public const RESERVED_MIN_API_CODE_OFFSET = 0;
 
 	/**
 	 * protected code range - highest code for reserved range
 	 */
-	protected const RESERVED_MAX_API_CODE_OFFSET = 19;
+	public const RESERVED_MAX_API_CODE_OFFSET = 19;
 
 	/**
 	 * built-in codes: OK
@@ -174,36 +172,19 @@ class BaseApiCodes
 	}
 
 	/**
-	 * Returns response JSON key value. If there's user provided mapping, it takes
-	 * that into account, otherwise fails to default mapping values.
+	 * Returns default response JSON key fields mapping
 	 *
-	 * @param string $reference_key JSON response key name reference to look up
-	 *
-	 * @return string
-	 *
-	 * @throws \RuntimeException
+	 * @return array
 	 */
-	public static function getResponseKey($reference_key): string
+	public static function getResponseFieldsMap(): array
 	{
-		/**
-		 * Default response JSON key mapping
-		 *
-		 * @var array
-		 */
-		$response_key_map = [
+		return [
 			ResponseBuilder::KEY_SUCCESS => 'success',
 			ResponseBuilder::KEY_CODE    => 'code',
 			ResponseBuilder::KEY_LOCALE  => 'locale',
 			ResponseBuilder::KEY_MESSAGE => 'message',
 			ResponseBuilder::KEY_DATA    => 'data',
 		];
-
-		// ensure $key is known
-		if (!array_key_exists($reference_key, $response_key_map)) {
-			throw new \RuntimeException(sprintf('Unknown response key reference "%s"', $reference_key));
-		}
-
-		return $response_key_map[ $reference_key ];
 	}
 
 }

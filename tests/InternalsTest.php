@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class InternalsTest extends TestCase
 {
@@ -25,8 +26,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_WrongMessage(): void
 	{
@@ -44,8 +43,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_CustomMessageAndCodeOutOfRange(): void
 	{
@@ -61,13 +58,12 @@ class InternalsTest extends TestCase
 	 * Validates make() handling invalid type of encoding_options
 	 *
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_InvalidEncodingOptions(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, []);
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK());
@@ -75,8 +71,6 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Tests if dist's config detaults matches ResponseBuilder::DEFAULT_ENODING_OPTIONS
-	 *
-	 * @return void
 	 */
 	public function testDefaultEncodingOptionValue(): void
 	{
@@ -88,8 +82,6 @@ class InternalsTest extends TestCase
 	 * Tests fallback to default encoding_options
 	 *
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_DefaultEncodingOptions(): void
 	{
@@ -123,8 +115,6 @@ class InternalsTest extends TestCase
 	 * Checks encoding_options influences result JSON data
 	 *
 	 * @noinspection PhpDocMissingThrowsInspection
-	 *
-	 * @return void
 	 */
 	public function testMake_ValidateEncodingOptionsPreventsEscaping(): void
 	{
@@ -135,6 +125,7 @@ class InternalsTest extends TestCase
 		$data = ['test' => $test_string];
 
 		// check if it returns escaped
+		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
@@ -162,8 +153,6 @@ class InternalsTest extends TestCase
 	/**
 	 * Checks make() handling invalid type of api_code argument
 	 *
-	 * @return void
-	 *
 	 * @throws \ReflectionException
 	 */
 	public function testMake_ApiCodeNotIntNorString(): void
@@ -177,56 +166,34 @@ class InternalsTest extends TestCase
 
 
 	/**
-	 * Validates handling of wrong data type by getClassesMapping()
-	 *
-	 * @return void
+	 * Validates handling of incomplete class mapping configuration by getClassesMapping()
 	 *
 	 * @throws \ReflectionException
 	 */
 	public function testGetClassesMapping_WrongType(): void
 	{
-		$this->expectException(\RuntimeException::class);
-
 		\Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
-		$obj = new ResponseBuilder();
-		$method = $this->getProtectedMethod($obj, 'getClassesMapping');
-		$method->invokeArgs($obj, []);
+		$this->expectException(\RuntimeException::class);
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod(new ResponseBuilder(), 'getClassesMapping');
 	}
 
-
-	/**
-	 * Tests is custom response key mappings and defaults fallback work
-	 *
-	 * @return void
-	 */
-	public function testCustomResponseMapping(): void
+	public function testGetClassesMapping_IncompleteMappingConfiguration(): void
 	{
-		\Config::set(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, [
-			ResponseBuilder::KEY_SUCCESS => $this->getRandomString(),
+		\Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+			self::class => [],
 		]);
 
-		$this->response = ResponseBuilder::success();
-		$this->getResponseSuccessObject(BaseApiCodes::OK());
-	}
-
-
-	/**
-	 * Tests is custom response key mappings and defaults fallback work
-	 *
-	 * @return void
-	 */
-	public function testGetResponseKey_UnknownKey(): void
-	{
 		$this->expectException(\RuntimeException::class);
-		BaseApiCodes::getResponseKey($this->getRandomString());
-	}
 
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod(new ResponseBuilder(), 'getClassesMapping');
+	}
 
 	/**
 	 * Tests getCodeForInternalOffset() out of bounds handling
-	 *
-	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -235,17 +202,13 @@ class InternalsTest extends TestCase
 		$obj = new BaseApiCodes();
 		$max = $this->getProtectedConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
 
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$method = $this->getProtectedMethod($obj, 'getCodeForInternalOffset');
-
 		$this->expectException(\InvalidArgumentException::class);
-		$method->invokeArgs($obj, [$max + 1]);
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$max + 1]);
 	}
 
 	/**
 	 * Tests getCodeForInternalOffset() out of bounds handling
-	 *
-	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -254,11 +217,38 @@ class InternalsTest extends TestCase
 		$obj = new BaseApiCodes();
 		$min = $this->getProtectedConstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
 
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$method = $this->getProtectedMethod($obj, 'getCodeForInternalOffset');
-
 		$this->expectException(\InvalidArgumentException::class);
-		$method->invokeArgs($obj, [$min - 1]);
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$min - 1]);
 	}
 
+
+	public function testGetCodeMessageKey_WithKeyOutOfBounds(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		BaseApiCodes::getCodeMessageKey(BaseApiCodes::getMaxCode() + 1);
+	}
+
+	public function testGetApiCodeConstants(): void
+	{
+		$expected = [
+			'RESERVED_MIN_API_CODE_OFFSET',
+			'RESERVED_MAX_API_CODE_OFFSET',
+
+			'OK_OFFSET',
+			'NO_ERROR_MESSAGE_OFFSET',
+			'EX_HTTP_NOT_FOUND_OFFSET',
+			'EX_HTTP_SERVICE_UNAVAILABLE_OFFSET',
+			'EX_HTTP_EXCEPTION_OFFSET',
+			'EX_UNCAUGHT_EXCEPTION_OFFSET',
+			'EX_AUTHENTICATION_EXCEPTION_OFFSET',
+			'EX_VALIDATION_EXCEPTION_OFFSET',
+		];
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$consts = BaseApiCodes::getApiCodeConstants();
+
+		foreach ($expected as $key) {
+			$this->assertArrayHasKey($key, $consts);
+		}
+	}
 }

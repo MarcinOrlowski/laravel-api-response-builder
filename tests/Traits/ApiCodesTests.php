@@ -28,64 +28,106 @@ trait ApiCodesTests
 {
 	use TestingHelpers;
 
+	protected function getConstantsToIgnore(): array
+	{
+		return [
+			'RESERVED_MIN_API_CODE_OFFSET',
+			'RESERVED_MAX_API_CODE_OFFSET',
+		];
+	}
+
+	protected function getConstantsNowMethods(): array
+	{
+		return ['OK_OFFSET',
+		        'NO_ERROR_MESSAGE_OFFSET',
+		        'EX_HTTP_NOT_FOUND_OFFSET',
+		        'EX_HTTP_SERVICE_UNAVAILABLE_OFFSET',
+		        'EX_HTTP_EXCEPTION_OFFSET',
+		        'EX_UNCAUGHT_EXCEPTION_OFFSET',
+		        'EX_AUTHENTICATION_EXCEPTION_OFFSET',
+		        'EX_VALIDATION_EXCEPTION_OFFSET',];
+	}
+
 	/**
 	 * Checks if Api codes range is set right
 	 *
-	 * @return void
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testMinMaxCode(): void
 	{
-		$obj = new BaseApiCodes();
-
-		$get_base_max_code = $this->getProtectedMethod(get_class($obj), 'getReservedMaxCode');
-		$base_max = $get_base_max_code->invokeArgs($obj, []);
-
-		$get_min_code = $this->getProtectedMethod(get_class($obj), 'getMinCode');
-		$min = $get_min_code->invokeArgs($obj, []);
-
-		$get_max_code = $this->getProtectedMethod(get_class($obj), 'getMaxCode');
-		$max = $get_max_code->invokeArgs($obj, []);
-
-		$this->assertNotNull($base_max);
+		$min = $this->callProtectedMethod(BaseApiCodes::class, 'getMinCode');
 		$this->assertNotNull($min);
+
+		$max = $this->callProtectedMethod(BaseApiCodes::class, 'getMaxCode');
 		$this->assertNotNull($max);
 
-		$this->assertTrue($min > $base_max);
 		$this->assertTrue($max > $min);
+	}
+
+	/**
+	 * Checks if defined code range is large enough to accomodate built-in codes.
+	 */
+	public function testCodeRangeIsLargeEnough(): void
+	{
+		$base_max = BaseApiCodes::RESERVED_MAX_API_CODE_OFFSET;
+		$min = $this->callProtectedMethod(BaseApiCodes::class, 'getMinCode');
+		$max = $this->callProtectedMethod(BaseApiCodes::class, 'getMaxCode');
+
+		$this->assertTrue(($max - $min) > $base_max);
 	}
 
 	/**
 	 * Checks if all Api codes defined in ApiCodes class contain mapping entry
 	 *
-	 * @return void
-	 *
 	 * @throws \ReflectionException
 	 */
 	public function testIfAllCodesGotMapping(): void
 	{
+		$const_to_ignore = $this->getConstantsToIgnore();
+		$const_now_method = $this->getConstantsNowMethods();
+
 		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $codes */
+		$codes = $api_codes::getApiCodeConstants();
 
-		$reflect = new \ReflectionClass($api_codes);
-		$codes = $reflect->getConstants();
 		foreach ($codes as $name => $val) {
+			if (in_array($name, $const_to_ignore, true)) {
+				$this->assertTrue(true);
+				continue;
+			}
+
+			if (in_array($name, $const_now_method, true)) {
+				$name = str_replace('_OFFSET', '', $name);
+				$val = BaseApiCodes::$name();
+			}
+
 			$this->assertNotNull($api_codes::getCodeMessageKey($val), "No mapping for {$name}");
 		}
 	}
 
 	/**
 	 * Checks if all Api codes are in correct and allowed range,
-	 *
-	 * @return void
 	 */
 	public function testIfAllCodesAreInRange(): void
 	{
+		$const_to_ignore = $this->getConstantsToIgnore();
+		$const_now_method = $this->getConstantsNowMethods();
+
 		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
 		/** @var array $codes */
 		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
+			if (in_array($name, $const_to_ignore, true)) {
+				$this->assertTrue(true);
+				continue;
+			}
+
+			if (in_array($name, $const_now_method, true)) {
+				$name = str_replace('_OFFSET', '', $name);
+				$val = BaseApiCodes::$name();
+			}
 			$msg = sprintf("Value of '{$name}' ({$val}) is out of allowed range %d-%d",
 				$api_codes::getMinCode(), $api_codes::getMaxCode());
 
@@ -95,10 +137,9 @@ trait ApiCodesTests
 
 	/**
 	 * Checks if all defined Api code constants' values are unique
-	 *
-	 * @return void
 	 */
-	public function testIfAllApiValuesAreUnique(): void
+	public
+	function testIfAllApiValuesAreUnique(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -112,10 +153,9 @@ trait ApiCodesTests
 	 * Checks if all codes are mapped to existing locale strings
 	 *
 	 * TODO: check translations too
-	 *
-	 * @return void
 	 */
-	public function testIfAllCodesAreCorrectlyMapped(): void
+	public
+	function testIfAllCodesAreCorrectlyMapped(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -134,31 +174,30 @@ trait ApiCodesTests
 	 * and if the mapped values are unique.
 	 *
 	 * If no user mapping is found, this test is skipped.
-	 *
-	 * @return void
 	 */
-	public function testIfCustomMappingUsesUniqueValues(): void
-	{
-		$map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
-		if ($map !== null) {
-			$base_map = BaseApiCodes::getDefaultResponseKeyMap();
-
-			foreach ($map as $key => $val) {
-				// check if reference key are known
-				if (!array_key_exists($key, $base_map)) {
-					$this->fail("Unknown reference key in your mapping: '{%key}'");
-				}
-
-				// check mapping value is unique
-				foreach ($map as $test_key => $test_val) {
-					if (($test_val === $val) && ($test_key !== $key)) {
-						$this->fail("Value used for reference key '{%key}' is not unique (used in '{%test_key}'");
-					}
-				}
-			}
-		} else {
-			$this->markTestSkipped(sprintf('No "%s" mapping found.', ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP));
-		}
-	}
+//	public
+//	function testIfCustomMappingUsesUniqueValues(): void
+//	{
+//		$map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
+//		if ($map !== null) {
+//			$base_map = BaseApiCodes::getResponseFieldsMap();
+//
+//			foreach ($map as $key => $val) {
+//				// check if reference key are known
+//				if (!array_key_exists($key, $base_map)) {
+//					$this->fail("Unknown reference key in your mapping: '{$key}'");
+//				}
+//
+//				// check mapping value is unique
+//				foreach ($map as $test_key => $test_val) {
+//					if (($test_val === $val) && ($test_key !== $key)) {
+//						$this->fail("Value used for reference key '{$key}' is not unique (used in '{$test_key}'");
+//					}
+//				}
+//			}
+//		} else {
+//			$this->markTestSkipped(sprintf('No "%s" mapping found.', ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP));
+//		}
+//	}
 
 } // end of ApiCodesTests trait
