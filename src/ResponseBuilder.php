@@ -135,6 +135,7 @@ class ResponseBuilder
 	 */
 	protected static function hasClassesMapping(object $data): bool
 	{
+		// check for exact class name match...
 		return array_key_exists(get_class($data), static::getClassesMapping());
 	}
 
@@ -151,7 +152,7 @@ class ResponseBuilder
 	{
 		foreach ($data as $data_key => &$data_val) {
 			if (is_array($data_val)) {
-				static::convert($classes, $data_val);
+				Converter::convert($classes, $data_val);
 			} elseif (is_object($data_val)) {
 				$obj_class_name = get_class($data_val);
 				if (array_key_exists($obj_class_name, $classes)) {
@@ -478,14 +479,14 @@ class ResponseBuilder
 					sprintf('Invalid payload data. Must be null, array or class with mapping ("%s" given).', gettype($data)));
 			}
 
-			if (is_object($data) && !static::hasClassesMapping($data)) {
+			if (is_object($data) && !Converter::hasClassesMapping($data)) {
 				throw new \InvalidArgumentException(sprintf('No mapping configured for "%s" class.', get_class($data)));
 			}
 
 			// Preliminary validation passed. Let's walk and convert...
 			// we can do some auto-conversion on known class types, so check for that first
 			/** @var array $classes */
-			$classes = static::getClassesMapping();
+			$classes = Converter::getClassesMapping();
 			if (($classes !== null) && (count($classes) > 0)) {
 				if (is_array($data)) {
 					static::convert($classes, $data);

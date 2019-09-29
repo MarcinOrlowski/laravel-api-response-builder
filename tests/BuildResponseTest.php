@@ -170,31 +170,4 @@ class BuildResponseTest extends TestCase
 		$this->callMakeMethod(true, $api_code, 'message');
 	}
 
-	/**
-	 * Checks if getClassesMapping would throw exception on invalid configuration data
-	 */
-	public function testGetClassesMapping_InvalidConfigurationData(): void
-	{
-		Config::set(ResponseBuilder::CONF_KEY_CLASSES, 'invalid');
-
-		$this->expectException(\RuntimeException::class);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callProtectedMethod(ResponseBuilder::class, 'getClassesMapping');
-	}
-
-	/**
-	 * Checks if getClassesMapping would return empty array if there's no "classes" config entry
-	 */
-	public function testGetClassesMapping_NoMappingConfig(): void
-	{
-		// remove any classes config
-		/** @noinspection PhpUndefinedMethodInspection */
-		Config::offsetUnset(ResponseBuilder::CONF_KEY_CLASSES);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$result = $this->callProtectedMethod(ResponseBuilder::class, 'getClassesMapping');
-		$this->assertIsArray($result);
-		$this->assertEmpty($result);
-	}
 }
