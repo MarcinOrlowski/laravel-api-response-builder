@@ -8,7 +8,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * 6.1.0 (2019-09-28)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
-   * Created new library logo (see `artwork/` folder)
+   * Created new library logo (see [artwork/](artwork/) folder).
    * Added more unit tests to improve coverage.
    * Updated documentation.
    * Worked arround Laravel's config merger wnot working properly with multi-dimensional config arrays.
@@ -18,13 +18,13 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * v6.0.0 (2019-09-20)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
-   * Requires Laravel 6.0+ and PHP 7.2+ (see docs for legacy support hints).
+   * Requires Laravel 6.0+ and PHP 7.2+ (see [docs](docs/legacy.md) for legacy support hints).
    * All API codes are now withing defined code range, incl. built-in codes.
-   * Reserved code range lowered from former 63 down to 19.
+   * Reserved codes reduced to 19 (from former 63).
    * Added type hints to all method arguments and return values
-   * `ExceptionHandler` returns Exception-type related HTTP codes now as per configuration.
+   * `ExceptionHandler` responses use exception specific HTTP code.
    * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
-   * Fixed exception message of `ApiCodesHelpers::getMaxCode()`.
+   * Fixed exception message thrown by `ApiCodesHelpers::getMaxCode()`.
    * Corrected test cases list in `testSuccess_DataAndHttpCode()`.
    * Fixed error code fallback in `testRender_HttpException()` test.
    * Fixed `testError_DebugTrace()` not containing any asserts.
@@ -79,7 +79,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Fixed `version` in `composer.json` file
 
 * v4.1.0 (2017-09-09)
-   * [RB-70] Added support for Laravel 5.5's auto-discovery feature
+   * `[RB-70]` Added support for Laravel 5.5's auto-discovery feature
 
 * v4.0.2 (2017-04-13)
    * Enforced HTTP code for error messages fits 400-499 range
@@ -88,49 +88,49 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * v4.0.1 (2017-04-10)
    * TestingHelpers trait's `validateResponseStructure()` method is now public
-   * [RB-64] Fixed Exception Handler generated HTTP code being out of allowed range in some cases
-   * [RB-65] Exception Handler Helper now deals with messages using non-UTF8 or broken encoding
+   * `[RB-64]` Fixed Exception Handler generated HTTP code being out of allowed range in some cases
+   * `[RB-65]` Exception Handler Helper now deals with messages using non-UTF8 or broken encoding
    * Exception Handler's trace data is now properly placed into `trace` leaf
 
 * v4.0.0 (2017-04-10)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
-   * [RB-59] Added option to remap response JSON keys to user provided values
-   * [RB-54] Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
-   * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defails
-   * [RB-47] Exception Handler now supports `FormRequests` and returns all messages in `ResponseBuilder::KEY_MESSAGES`
+   * `[RB-59]` Added option to remap response JSON keys to user provided values
+   * `[RB-54]` Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
+   * `[RB-37]` Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defails
+   * `[RB-47]` Exception Handler now supports `FormRequests` and returns all messages in `ResponseBuilder::KEY_MESSAGES`
    * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled same way `authentication_exception` is
-   * [RB-56] Added configurable key for debug trace added to returned JSON response (if enabled)
+   * `[RB-56]` Added configurable key for debug trace added to returned JSON response (if enabled)
    * Added traits to help testing your config and ApiCodes with ease. See `Unit Testing your ApiCodes` docs for details
    * `ApiCodeBase` class is now named `BaseApiCodes`
-   * [RB-35] ExceptionHandlerHelper is now covered by tests
+   * `[RB-35]` ExceptionHandlerHelper is now covered by tests
 
 * v3.2.1 (2017-04-06)
-   * [RB-49] Fixed `artisan vendor:publish` not publishing config file correctly
+   * `[RB-49] Fixed `artisan vendor:publish` not publishing config file correctly
 
 * v3.2.0 (2017-03-02)
-   * [RB-42] Default value of `encoding_options` include `JSON_UNESCAPED_UNICODE` to prevent unicode escaping
-   * [RB-41] Updated documentation
+   * `[RB-42] Default value of `encoding_options` include `JSON_UNESCAPED_UNICODE` to prevent unicode escaping
+   * `[RB-41]` Updated documentation
 
 * v3.1.0 (2017-02-28)
-   * [RB-38] Added `encoding_options` to control data-to-json conversion.
-   * [RB-38] Added optional encoding options args to all methods accepting `data` argument
-   * [RB-34] Added option to control ExceptionHandler behavior on debug builds
+   * `[RB-38] Added `encoding_options` to control data-to-json conversion.
+   * `[RB-38] Added optional encoding options args to all methods accepting `data` argument
+   * `[RB-34]` Added option to control ExceptionHandler behavior on debug builds
    * ExceptionHandler's debug is now added as `debug` node to make it more clear where it comes from
 
 * v3.0.3 (2017-02-24)
    * No changes. v3.0.2 was incorrectly released
 
 * v3.0.2 (2017-02-24)
-   * [RB-31] Fixed incorrect exception message thrown in case of incomplete `classes` config mapping (@dragonfire1119)
+   * `[RB-31] Fixed incorrect exception message thrown in case of incomplete `classes` config mapping (@dragonfire1119)
 
 * v3.0.1 (2017-02-23)
    * Updated `composer.json` to list `laravel/framework` among requirements
 
 * v3.0.0 (2017-02-23)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
-   * [RB-17] `success()` now allows to return API code as well
+   * `[RB-17] `success()` now allows to return API code as well
    * Corrected default config file containing faulty and unneeded `use` entries
-   * [RB-20] Renamed ErrorCode class to ApiCodeBase
+   * `[RB-20]` Renamed ErrorCode class to ApiCodeBase
    * ApiCodeBase's `getMinCode()` and `getMaxCode()` are now `public`
    * Improved error messages to be even more informative
    * All exceptions thrown due to misconfiguration have `CONFIG: ` message prefix now
@@ -138,18 +138,18 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * `:api_code` is now code placeholder in strings (`:error_code` is no longer supported)
    * Default HTTP codes are now declared as constants `DEFAULT_HTTP_CODE_xxx` if you need to know them
    * `ApiCodeBase::getMap()` now ensures `map` config entry of expected `array` type
-   * [RB-26] Added `successWithCode()` method
+   * `[RB-26]` Added `successWithCode()` method
 
 * v2.2.1 (2017-02-20)
    * Documentation split into separate files
 
 * v2.2.0 (2017-02-20)
-   * [RB-5] Fixed error code range not being checked when used with custom message strings
+   * `[RB-5]` Fixed error code range not being checked when used with custom message strings
    * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception if `http_code` is `null`
    * `http_code` can be handed as null to all other methods and it will be replaced by default codes
    * `classes` mapping now features `method` field to specify method name to call for automatic object conversion
-   * [RB-10] When `$data` is an `array`, all elements mapped via "classes" config will be converted recursively
-   * [RB-3] Unit tests are now part of the package
+   * `[RB-10] When `$data` is an `array`, all elements mapped via "classes" config will be converted recursively
+   * `[RB-3]` Unit tests are now part of the package
 
 * v2.1.2 (2016-08-24)
    * Fixed exception code handling in ExceptionHandlerHelper (reported by Adrian Chen @absszero)
