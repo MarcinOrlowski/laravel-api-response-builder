@@ -15,23 +15,16 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Illuminate\Support\Facades\Config;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class BuildResponseTest extends TestCase
 {
-	/**
-	 * @var HttpResponse
-	 */
-	protected $response;
-
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
 	 */
 	public function testBuildResponse_ClassAutoConversionSingleElement(): void
 	{
-
 		// GIVEN model object with randomly set member value
 		$model_val = $this->getRandomString('model');
 		$model = new TestModel($model_val);

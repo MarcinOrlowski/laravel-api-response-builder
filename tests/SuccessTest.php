@@ -20,11 +20,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class SuccessTest extends TestCase
 {
 	/**
-	 * @var HttpResponse
-	 */
-	protected $response;
-
-	/**
 	 * Check plain success() invocation
 	 */
 	public function testSuccess(): void

@@ -14,6 +14,11 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
+	/**
+	 * @var HttpResponse
+	 */
+	protected $response;
+
 	use Traits\TestingHelpers;
 
 	/**
