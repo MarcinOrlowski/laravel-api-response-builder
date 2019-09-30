@@ -167,6 +167,9 @@ trait ApiCodesTests
 		}
 	}
 
+	/**
+	 * Tests if "classes" config entries properly set.
+	 */
 	public function testConfig_ClassesMappingEntries(): void
 	{
 		$classes = \Config::get(ResponseBuilder::CONF_KEY_CLASSES) ?? [];
