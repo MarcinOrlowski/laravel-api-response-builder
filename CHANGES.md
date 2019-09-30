@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+@dev
+   * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
+
 * 6.1.0 (2019-09-28)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Created new library logo (see [artwork/](artwork/) folder).

@@ -56,6 +56,16 @@ class Converter
 
 		// check for exact class name match...
 		$result = array_key_exists(get_class($data), $classes);
+		if (!$result) {
+			// no exact match, then lets try with `instanceof`
+			$data_cls = get_class($data);
+			foreach($classes as $class_name => $params) {
+				if ($data_cls instanceof  $class_name) {
+					$result = true;
+					break;
+				}
+			}
+		}
 
 		return $result;
 	}
