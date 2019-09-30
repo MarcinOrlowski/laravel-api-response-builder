@@ -188,35 +188,4 @@ trait ApiCodesTests
 		}
 	}
 
-	/**
-	 * Checks if all keys used in user provided mapping are valid
-	 * and if the mapped values are unique.
-	 *
-	 * If no user mapping is found, this test is skipped.
-	 */
-//	public
-//	function testIfCustomMappingUsesUniqueValues(): void
-//	{
-//		$map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
-//		if ($map !== null) {
-//			$base_map = BaseApiCodes::getResponseFieldsMap();
-//
-//			foreach ($map as $key => $val) {
-//				// check if reference key are known
-//				if (!array_key_exists($key, $base_map)) {
-//					$this->fail("Unknown reference key in your mapping: '{$key}'");
-//				}
-//
-//				// check mapping value is unique
-//				foreach ($map as $test_key => $test_val) {
-//					if (($test_val === $val) && ($test_key !== $key)) {
-//						$this->fail("Value used for reference key '{$key}' is not unique (used in '{$test_key}'");
-//					}
-//				}
-//			}
-//		} else {
-//			$this->markTestSkipped(sprintf('No "%s" mapping found.', ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP));
-//		}
-//	}
-
 } // end of ApiCodesTests trait
