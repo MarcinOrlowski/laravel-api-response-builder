@@ -13,9 +13,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * ApiCodes tests trait. Use this trait to test your ApiCodes class.
@@ -138,8 +138,7 @@ trait ApiCodesTests
 	/**
 	 * Checks if all defined Api code constants' values are unique
 	 */
-	public
-	function testIfAllApiValuesAreUnique(): void
+	public function testIfAllApiValuesAreUnique(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -154,8 +153,7 @@ trait ApiCodesTests
 	 *
 	 * TODO: check translations too
 	 */
-	public
-	function testIfAllCodesAreCorrectlyMapped(): void
+	public function testIfAllCodesAreCorrectlyMapped(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -166,6 +164,27 @@ trait ApiCodesTests
 			$this->assertNotEquals($mapping, $str,
 				sprintf('No lang entry for: %s referenced by %s', $mapping, $this->resolveConstantFromCode($code))
 			);
+		}
+	}
+
+	public function testConfig_ClassesMappingEntries(): void
+	{
+		$classes = \Config::get(ResponseBuilder::CONF_KEY_CLASSES) ?? [];
+		if (count($classes) === 0) {
+			// to make PHPUnit not complaining about no assertion.
+			$this->assertTrue(true);
+			return;
+		}
+
+		$mandatory_keys = [
+			ResponseBuilder::KEY_KEY,
+			ResponseBuilder::KEY_METHOD,
+		];
+		foreach ($classes as $class_name => $class_config) {
+			foreach ($mandatory_keys as $key_name) {
+				/** @var TestCase $this */
+				$this->assertArrayHasKey($key_name, $class_config);
+			}
 		}
 	}
 

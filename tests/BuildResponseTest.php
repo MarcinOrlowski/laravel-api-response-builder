@@ -133,7 +133,6 @@ class BuildResponseTest extends TestCase
 		];
 	}
 
-
 	/**
 	 * @noinspection PhpDocMissingThrowsInspection
 	 */
@@ -162,5 +161,4 @@ class BuildResponseTest extends TestCase
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, $api_code, 'message');
 	}
-
 }
