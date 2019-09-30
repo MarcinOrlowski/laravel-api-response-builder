@@ -29,7 +29,7 @@ class Converter
 	 *
 	 * @throws \RuntimeException if "classes" mapping is technically invalid (i.e. not array etc).
 	 */
-	public static function getClassesMapping(): ?array
+	public static function getClassesMapping(): array
 	{
 		$classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES) ?? [];
 		if (!is_array($classes)) {
@@ -52,8 +52,12 @@ class Converter
 	 */
 	public static function hasClassesMapping(object $data): bool
 	{
+		$classes = static::getClassesMapping();
+
 		// check for exact class name match...
-		return array_key_exists(get_class($data), static::getClassesMapping());
+		$result = array_key_exists(get_class($data), $classes);
+
+		return $result;
 	}
 
 	/**
