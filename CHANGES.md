@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* 6.1.2 (2019-10-02)
+   * Corrected ServiceProvider used for tests.
+
 * 6.1.1 (2019-10-02)
    * Fixed `ResponseBuilderServiceProvider` using unreferenced `Arr` class method (reported by yassir3wad).
 
