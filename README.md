@@ -39,14 +39,17 @@
 
 ## Why should I use it? ##
 
- `ResponseBuilder` is written with REST API developers in mind, which mainly means its features are designed to simplify work of API 
- developers like you, with simple API, multiple use-cases covered, optional on-the-fly data conversion, localization support, 
- automatic error message building). But structure of produced JSON responses is desinged with **your** users in mind, in the
- way that allows them consume your responses easily - they get strict and predictable JSON structure with all the fields they may
- need to consume your response without a hassle or special cases. You are even covered in case of problems as provided Exception 
- Handler will ensure your API still talk JSON (and not HTML) if unexpected occurs.
+ `ResponseBuilder` is written for REST API developers by REST API developer and is based on my long lasting experiencde on both
+ "sides" (API dev and API consumer) of variety of REST APIs. Lightweight, with simple to use public methods, covering multiple 
+ potential use-cases, on-the-fly data conversion, localization support, automatic error message building, support
+ for chainged APIs and (hopefuly) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder` 
+ is desinged with **users of your API** in mind, which helps them easily deal with your API with ease. They get simple, well
+ defined and predictable JSON structure responses with all the fields needed to consume it without any unnecessary a hassle nor 
+ other trickery. You are even covered in case of emergency as provided Exception Handler ensures your API keeps talking JSON (and 
+ not HTML) to its clients if case of any unexpected and unhandled exception.
  
- And as a bonus, you get useful traits to cover your whole `ResponseBuilder` related configuration and files with unit tests.
+ Did I mention, you also get testing traits that would automatically cover your whole `ResponseBuilder` related code with 
+ unit tests with just a few lines of code?
 
 ## Usage examples ##
  
