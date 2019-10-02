@@ -9,6 +9,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 @dev
    * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
    * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources) data class.
+   * Added unit test for `ResponseBuilderServiceProvider::mergeConfg()`.
 
 * 6.1.2 (2019-10-02)
    * Corrected ServiceProvider used for tests.
