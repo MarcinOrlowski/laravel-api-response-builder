@@ -10,6 +10,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
    * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources) data class.
 
+* 6.1.2 (2019-10-02)
+   * Corrected ServiceProvider used for tests.
+
 * 6.1.1 (2019-10-02)
    * Fixed `ResponseBuilderServiceProvider` using unreferenced `Arr` class method (reported by yassir3wad).
    
