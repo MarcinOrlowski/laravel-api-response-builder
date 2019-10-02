@@ -17,7 +17,9 @@
 
 ## Table of contents ##
 
- * [Introduction](#introduction)
+ * [Intriduction](#introduction)
+ * [Why should I use it?](#benefits)
+ * [Usage examples](#usage-examples)
  * [Features](#features)
  * [Documentation](docs/docs.md)
  * [Requirements](docs/docs.md#requirements)
@@ -35,7 +37,18 @@
  `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
  nice, normalized and easy to consume REST API responses.
 
- Conclude your controller method with simple
+## Why should I use it? ##
+
+ `ResponseBuilder` is written with REST API developers in mind, which mainly means its features are designed to simplify work of API 
+ developers like you, with simple API, multiple use-cases covered, optional on-the-fly data conversion, localization support, 
+ automatic error message building). But structure of produced JSON responses is desinged with **your** users in mind, in the
+ way that allows them consume your responses easily - they get strict and predictable JSON structure with all the fields they may
+ need to consume your response without a hassle or special cases. You are even covered in case of problems as provided Exception 
+ Handler will ensure your API still talk JSON (and not HTML) if unexpected occurs.
+
+## Usage examples ##
+ 
+ Operation successful? Conclude your controller method with:
 
     return ResponseBuilder::success();
 
@@ -49,7 +62,7 @@
       "data": null
     }
 
- Something went wrong? Just do
+ Something went wrong? Just do:
 
     return ResponseBuilder::error(250);
 
@@ -64,7 +77,7 @@
     }
 
  Nice and easy! And yes, `message` can be easily customized! Also there're **much, much more** you can do with
- rich `ResponseBuilder`'s API. See [library documentation](docs/docs.md) for details and usage examples!
+ rich `ResponseBuilder` API. See [library documentation](docs/docs.md) for details and more examples!
 
 ----
 
