@@ -17,8 +17,8 @@ return [
 	| Code range settings
 	|-----------------------------------------------------------------------------------------------------------
 	*/
-	'min_code' => 100,
-	'max_code' => 1024,
+	'min_code'          => 100,
+	'max_code'          => 1024,
 
 	/*
 	|-----------------------------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return [
 	|-----------------------------------------------------------------------------------------------------------
 	|
 	*/
-	'map' => [
+	'map'               => [
 
 	],
 
@@ -37,12 +37,16 @@ return [
 	|
 	*/
 	'classes'           => [
-		Illuminate\Database\Eloquent\Model::class => [
+		Illuminate\Database\Eloquent\Model::class          => [
 			'key'    => 'item',
 			'method' => 'toArray',
 		],
-		Illuminate\Database\Eloquent\Collection::class => [
+		Illuminate\Database\Eloquent\Collection::class     => [
 			'key'    => 'items',
+			'method' => 'toArray',
+		],
+		Illuminate\Http\Resources\Json\JsonResource::class => [
+			'key'    => 'item',
 			'method' => 'toArray',
 		],
 	],
@@ -96,10 +100,10 @@ return [
 	|-----------------------------------------------------------------------------------------------------------
 	|
 	*/
-	'debug' => [
-//		'debug_key' => 'debug',
+	'debug'             => [
+		'debug_key'         => 'debug',
 		'exception_handler' => [
-//			'trace_key' => 'trace',
+			'trace_key'     => 'trace',
 			'trace_enabled' => env('APP_DEBUG', false),
 		],
 	],
