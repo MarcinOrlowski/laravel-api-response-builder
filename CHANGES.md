@@ -9,6 +9,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 @dev
    * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
 
+* 6.1.1 (2019-10-02)
+   * Fixed `ResponseBuilderServiceProvider` using unreferenced `Arr` class method (reported by yassir3wad).
+
 * 6.1.0 (2019-09-28)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Created new library logo (see [artwork/](artwork/) folder).

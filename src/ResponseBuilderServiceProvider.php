@@ -86,7 +86,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 			if (!is_array($value)) {
 				continue;
 			}
-			if (!Arr::exists($merging, $key)) {
+			if (!array_key_exists($key, $merging)) {
 				continue;
 			}
 			if (is_numeric($key)) {
