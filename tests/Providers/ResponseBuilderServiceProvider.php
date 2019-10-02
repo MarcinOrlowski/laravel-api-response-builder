@@ -46,10 +46,13 @@ class ResponseBuilderServiceProvider extends \MarcinOrlowski\ResponseBuilder\Res
 
 		$this->loadTranslationsFrom(__DIR__ . '/../../src/lang', 'response-builder');
 	}
+<<<<<<< HEAD
 
 	/** *******************************************************************************************
 	 * Support for multi-dimensional config array. Built-in config merge only supports flat arrays.
 	 *
 	 */
 
+=======
+>>>>>>> master
 }
