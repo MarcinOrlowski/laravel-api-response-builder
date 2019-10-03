@@ -37,7 +37,7 @@
  `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building  nice, normalized and easy to consume 
  REST API responses.
 
-## Why should I use it? ##
+## Benefits ##
 
  `ResponseBuilder` is written for REST API developers by REST API developer and is based on my long lasting experiencde on both
  "sides" (API dev and API consumer) of variety of REST APIs. Lightweight, with simple to use public methods, covering multiple 
