@@ -34,8 +34,8 @@
 
 ## Introduction ##
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building  nice, normalized and easy to consume 
- REST API responses.
+ `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building  nice, normalized and standarized
+ and easy to consume REST API JSON responses.
 
 ## Benefits ##
 
@@ -45,7 +45,12 @@
  for chainged APIs and (hopefuly) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder` 
  is desinged with **users of your API** in mind, which helps them easily deal with your API with ease. They get simple, well
  defined and predictable JSON structure responses with all the fields needed to consume it without any unnecessary a hassle nor 
- other trickery. You are even covered in case of emergency as provided Exception Handler ensures your API keeps talking JSON (and 
+ other trickery. 
+ 
+ Android developers can use [ApiResponse](https://github.com/MarcinOrlowski/ApiResponse) library to handle `ResponseBuilder` 
+ responses produced in their mobile applications.   
+ 
+ You are even covered in case of emergency as provided Exception Handler ensures your API keeps talking JSON (and 
  not HTML) to its clients if case of any unexpected and unhandled exception.
  
  Did I mention, you also get testing traits that would automatically cover your whole `ResponseBuilder` related code with 
