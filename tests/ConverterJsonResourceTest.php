@@ -18,8 +18,15 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class ConverterTest extends TestCase
+class ConverterJsonResourceTest extends TestCase
 {
+	public function testConverter_JsonResource(): void
+	{
+
+
+	}
+
+
 	/**
 	 * Checks if Converter's constructor would throw exception when configuration is invalid.
 	 */
