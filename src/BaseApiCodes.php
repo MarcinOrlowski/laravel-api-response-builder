@@ -171,20 +171,4 @@ class BaseApiCodes
 		return static::getCodeForInternalOffset(static::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET);
 	}
 
-	/**
-	 * Returns default response JSON key fields mapping
-	 *
-	 * @return array
-	 */
-	public static function getResponseFieldsMap(): array
-	{
-		return [
-			ResponseBuilder::KEY_SUCCESS => 'success',
-			ResponseBuilder::KEY_CODE    => 'code',
-			ResponseBuilder::KEY_LOCALE  => 'locale',
-			ResponseBuilder::KEY_MESSAGE => 'message',
-			ResponseBuilder::KEY_DATA    => 'data',
-		];
-	}
-
 }
