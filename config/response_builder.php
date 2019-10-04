@@ -41,6 +41,10 @@ return [
 			'key'    => 'item',
 			'method' => 'toArray',
 		],
+		Illuminate\Support\Collection::class               => [
+			'key'    => 'items',
+			'method' => 'toArray',
+		],
 		Illuminate\Database\Eloquent\Collection::class     => [
 			'key'    => 'items',
 			'method' => 'toArray',
