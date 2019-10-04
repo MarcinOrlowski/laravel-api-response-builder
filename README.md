@@ -24,7 +24,7 @@
  * [Documentation](docs/docs.md)
  * [Requirements](docs/docs.md#requirements)
  * [Installation and Configuration](docs/docs.md#installation-and-configuration)
- * [Bugs reports and pull requests](#contributing)
+ * [Bugs reports and pull requests](CONTRIBUTING.md)
  * [License](#license)
  * [Changelog](CHANGES.md)
 
@@ -104,24 +104,6 @@
  * Includes traits to help [unit testing your API code](docs/testing.md),
  * Provides own [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
  * No extra dependencies.
-
-----
-
-## Contributing ##
-
- Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
-
- If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues)
- **before doing any work**. This will help us save your time in case I'd not be accept PR either completely or in proposed form.
- But if all is good and clear then follow common routine:
-
- * fork the project,
- * create new branch,
- * do your changes,
- * add tests covering your changes,
- * ensure **ALL** tests pass,
- * send pull request,
- * glory.
 
 ----
 
