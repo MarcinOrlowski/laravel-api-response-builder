@@ -2,8 +2,6 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-
 /**
  * Laravel API Response Builder
  *
