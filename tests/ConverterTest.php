@@ -20,6 +20,46 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ConverterTest extends TestCase
 {
+	public function testConverter_Constructor(): void
+	{
+		// GIVEN incorrect maping configuration
+		Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
+
+		// THEN we expect exception thrown
+		$this->expectException(\RuntimeException::class);
+
+		// WHEN attempt to instantate Converter class
+		new Converter();
+	}
+
+	public function testConverter_GetClassMappingConfigOrThrow(): void
+	{
+		// GIVEN two objects with direct inheritance relation
+		$parent_val = $this->getRandomString('parent');
+		$parent_key = $this->getRandomString('parent_key');
+		$parent = new TestModel($parent_val);
+		$child_val = $this->getRandomString('child');
+		$child = new TestModelChild($child_val);
+
+		// HAVING indirect maping configuration (of parent class)
+		Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+			get_class($parent) => [
+				ResponseBuilder::KEY_KEY    => $parent_key,
+				ResponseBuilder::KEY_METHOD => 'toArray',
+			],
+		]);
+
+		// WHEN we try to pass of child class
+		$converter = new Converter();
+		$result = $converter->convert($child);
+
+		// EXPECT it to be converted as per parent class configuration entry
+		$this->assertIsArray($result);
+		$this->assertCount(1, $result);
+		$this->assertArrayHasKey($parent_key, $result);
+		$this->assertEquals($child_val, $result[ $parent_key ]['val']);
+	}
+
 	/**
 	 * Checks if getClassesMapping would throw exception on invalid configuration data
 	 */

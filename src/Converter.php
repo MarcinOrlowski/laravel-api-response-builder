@@ -60,8 +60,8 @@ class Converter
 		} else {
 			// no exact match, then lets try with `instanceof`
 			foreach ($this->classes as $class_name => $params) {
-				if ($cls instanceof $class_name) {
-					$result = $this->classes[ $cls ];
+				if ($data instanceof $class_name) {
+					$result = $this->classes[ $class_name ];
 					break;
 				}
 			}
