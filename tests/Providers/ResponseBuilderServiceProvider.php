@@ -44,8 +44,4 @@ class ResponseBuilderServiceProvider extends \MarcinOrlowski\ResponseBuilder\Res
 
 		$this->loadTranslationsFrom(__DIR__ . '/../../src/lang', 'response-builder');
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
 }
