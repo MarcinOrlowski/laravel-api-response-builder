@@ -38,6 +38,11 @@ class Converter
 		$this->classes = $classes;
 	}
 
+	public function getClasses(): array
+	{
+		return $this->classes;
+	}
+
 	/**
 	 * Checks if we have "classes" mapping configured for $data object class.
 	 * Returns @true if there's valid config for this class.
