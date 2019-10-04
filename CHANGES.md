@@ -11,6 +11,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources) data class.
    * Added unit test for `ResponseBuilderServiceProvider::mergeConfg()`.
    * Moved data conversion code to separate `Converter` class.
+   * Added `LICENSE.md` file.
 
 * 6.1.2 (2019-10-02)
    * Corrected ServiceProvider used for tests.
