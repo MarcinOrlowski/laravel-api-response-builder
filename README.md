@@ -95,7 +95,7 @@
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel 6.0 compatible (see [legacy support](docs/legacy.md) for support for older versions),
+ * Laravel compatibility: v6.0, v6.2 (see [legacy support](docs/legacy.md) for support for older versions),
  * Supports Laravel [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518),
  * Configurable (with ready-to-use defaults),
  * Localization support,
