@@ -12,6 +12,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Added unit test for `ResponseBuilderServiceProvider::mergeConfg()`.
    * Moved data conversion code to separate `Converter` class.
    * Added `LICENSE.md` file.
+   * Added Laravel 6.2 to Travis tests.
 
 * 6.1.2 (2019-10-02)
    * Corrected ServiceProvider used for tests.
