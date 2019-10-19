@@ -51,28 +51,11 @@ class ConverterBuildInClasses extends TestCase
 	 */
 	public function testConverter_SupportCollection(): void
 	{
-		$data = [
-			1,
-			2,
-			3,
-			4,
-		];
-		$collection = collect($data);
-
-		$converter = new Converter();
-		$cfg = $converter->getClasses();
-
-		// WHEN we try to pass of object of that class
-		$result = $converter->convert($collection);
-
-		// THEN it should be converted automatically as per default configuration
-		$this->assertIsArray($result);
-
-		$key = $cfg[ SupportCollection::class ][ ResponseBuilder::KEY_KEY ];
-		$this->assertArrayHasKey($key, $result);
-		$this->assertIsArray($result[ $key ]);
-		$this->assertCount(count($data), $result[ $key ]);
-		$this->assertEquals($data, $result[ $key ]);
+		$data = [];
+		for ($i=0; $i<10; $i++) {
+			$data[] = $this->getRandomString("item{$i}");
+		}
+		$this->doCollectionTest(collect($data));
 	}
 
 	/**
@@ -82,9 +65,22 @@ class ConverterBuildInClasses extends TestCase
 	{
 		// GIVEN Eloquent collection with content
 		$collection = new EloquentCollection();
-		$model_val = $this->getRandomString('model');
-		$model = new TestModel($model_val);
-		$collection->add($model);
+		$collection->add($this->getRandomString('item1'));
+		$collection->add($this->getRandomString('item2'));
+		$collection->add($this->getRandomString('item3'));
+
+		$this->doCollectionTest($collection);
+	}
+
+	/**
+	 * Do the testing of collection type of object.@param $collection Instance of supported collection object.
+	 *
+	 * @api
+	 *
+	 */
+	protected function doCollectionTest($collection): void
+	{
+		// GIVEN Eloquent collection with content
 
 		// HAVING Converter with default settings
 		$converter = new Converter();
@@ -96,11 +92,14 @@ class ConverterBuildInClasses extends TestCase
 		// THEN it should be converted automatically as per default configuration
 		$this->assertIsArray($result);
 
-		$key = $cfg[ EloquentCollection::class ][ ResponseBuilder::KEY_KEY ];
-		$this->assertArrayHasKey($key, $result);
-		$this->assertIsArray($result[ $key ]);
-		$this->assertCount(count($data), $result[ $key ]);
-		$this->assertEquals($data, $result[ $key ]);
-	}
+		$cfg_key = $cfg[ get_class($collection) ][ ResponseBuilder::KEY_KEY ];
+		$this->assertArrayHasKey($cfg_key, $result);
+		$this->assertIsArray($result[ $cfg_key ]);
+		$this->assertCount(count($collection), $result[ $cfg_key ]);
+		foreach ($collection as $key => $val) {
+			$this->assertArrayHasKey($key, $result[ $cfg_key ]);
+			$this->assertEquals($val, $result[ $cfg_key ][ $key ]);
+		}
 
+	}
 }
