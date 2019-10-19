@@ -54,4 +54,4 @@ after_success:
   # If coverage file is generated then upload it to Codacy (requires CODACY_PROJECT_TOKEN= env var set).
   - if [ -f /tmp/coverage.xml ] ; then vendor/bin/codacycoverage clover /tmp/coverage.xml ; fi
   # Scrunitizer-CI
-  - if [ -f /tmp/coverage.xml ] ; wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar ; php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/coverage.xml ; fi
+  - if [ -f /tmp/coverage.xml ] ; then wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar && php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/coverage.xml ; fi
