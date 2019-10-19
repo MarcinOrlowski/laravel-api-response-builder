@@ -434,39 +434,7 @@ class ResponseBuilder
 		// ensure $data is either @null, array or object of class with configured mapping.
 		$converter = new Converter();
 
-
 		$data = $converter->convert($data);
-
-
-
-//		$data = Converter::convert($data);
-//		if ($data !== null) {
-//			if (!is_array($data) && !is_object($data)) {
-//				throw new \InvalidArgumentException(
-//					sprintf('Invalid payload data. Must be null, array or class with mapping ("%s" given).', gettype($data)));
-//			}
-//
-//			if (Converter::getClassMappingConfig($data) === null) {
-//				throw new \InvalidArgumentException(sprintf('No mapping configured for "%s" class.', get_class($data)));
-//			}
-//
-//			// Preliminary validation passed. Let's walk and convert...
-//			// we can do some auto-conversion on known class types, so check for that first
-//			/** @var array $classes */
-//			$classes = Converter::getClassesMapping();
-//			if (($classes !== null) && (count($classes) > 0)) {
-//				if (is_array($data)) {
-//					Converter::convert($classes, $data);
-//				} elseif (is_object($data)) {
-//					$obj_class_name = get_class($data);
-//					if (array_key_exists($obj_class_name, $classes)) {
-//						$conversion_method = $classes[ $obj_class_name ][ static::KEY_METHOD ];
-//						$data = [$classes[ $obj_class_name ][ static::KEY_KEY ] => $data->$conversion_method()];
-//					}
-//				}
-//			}
-//		}
-
 		if ($data !== null && !is_object($data)) {
 			// ensure we get object in final JSON structure in data node
 			$data = (object)$data;
