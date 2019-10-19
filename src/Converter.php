@@ -145,11 +145,9 @@ class Converter
 				$data[ $key ] = $this->convertArray($val);
 			} elseif (is_object($val)) {
 				$cls = get_class($val);
-				$cfg = $this->getClassMappingConfigOrThrow($val);
 				if (array_key_exists($cls, $this->classes)) {
 					$conversion_method = $this->classes[ $cls ][ ResponseBuilder::KEY_METHOD ];
 					$converted_data = $val->$conversion_method();
-//							$data = [$this->classes[ $cls ][ ResponseBuilder::KEY_KEY ] => $converted_data];
 					$data[ $key ] = $converted_data;
 				}
 			}
