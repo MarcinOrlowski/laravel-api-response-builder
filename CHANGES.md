@@ -13,6 +13,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Moved data conversion code to separate `Converter` class.
    * Added `LICENSE.md` file.
    * Added Laravel 6.2 to Travis tests.
+   * Added unit tests for translation files.
 
 * 6.1.2 (2019-10-02)
    * Corrected ServiceProvider used for tests.
