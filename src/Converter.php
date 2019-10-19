@@ -27,6 +27,9 @@ class Converter
 	 */
 	protected $classes;
 
+	/**
+	 * Converter constructor.
+	 */
 	public function __construct()
 	{
 		$classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES) ?? [];
@@ -38,7 +41,12 @@ class Converter
 		$this->classes = $classes;
 	}
 
-	public function getClasses(): array
+	/**
+	 * Returns local copy of configuration mapping for the classes.
+	 *
+	 * @return array|null
+	 */
+	public function getClasses(): ?array
 	{
 		return $this->classes;
 	}
