@@ -23,11 +23,12 @@ php:
 
 env:
   - LARAVEL_VERSION="6.0"
+  - LARAVEL_VERSION="6.2"
 
-matrix:
-  exclude:
-    - php: 7.1
-      env: LARAVEL_VERSION="6.0"
+#matrix:
+#  exclude:
+#    - php: 7.1
+#      env: LARAVEL_VERSION="6.0"
 
 cache:
   directories:
@@ -35,19 +36,22 @@ cache:
 
 before_script:
   # Some PHP versions does not feature xdebug so we need to disable the coverage
-  - if [ ${TRAVIS_PHP_VERSION} != 7.2 && ${TRAVIS_PHP_VERSION} != 7.3 ]; then phpenv config-rm xdebug.ini ; fi
+  # - if [ ${TRAVIS_PHP_VERSION} != 7.2 && ${TRAVIS_PHP_VERSION} != 7.3 ]; then phpenv config-rm xdebug.ini ; fi
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
   - FLAGS="--prefer-dist"
   - composer install "${FLAGS}"
   # We need to tweak signature so setUp() and tearDown() and strip ": void" otherwise PHP will fail complaining
   # This affects Laravel 5.8+ as they pull recent Orchestra that features method signature changes.
-  - "if [ ${LARAVEL_VERSION} == 6.0 ]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
-  - "if [ ${LARAVEL_VERSION} == 6.0 ]; then sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php ; fi"
+  - "if [[ ${LARAVEL_VERSION} == 6.0 ]]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
+  - "if [[ ${LARAVEL_VERSION} == 6.0 ]]; then sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php ; fi"
+  - "if [[ ${LARAVEL_VERSION} == 6.2 ]]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
+  - "if [[ ${LARAVEL_VERSION} == 6.2 ]]; then sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php ; fi"
 
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
 
 after_success:
-#   IF coverage file is generated then upload it to Codacy
-  - if [ -f /tmp/coverage.xml ] ; then vendor/bin/codacycoverage clover /tmp/coverage.xml ; fi
-
+  # If coverage file is generated then upload it to Codacy (requires CODACY_PROJECT_TOKEN= env var set).
+  - [[ -f /tmp/coverage.xml ]] && then vendor/bin/codacycoverage clover /tmp/coverage.xml
+  # Scrunitizer-CI
+  - [[ -f /tmp/coverage.xml ]] && { wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar && php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/coverage.xml }

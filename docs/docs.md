@@ -323,9 +323,8 @@ errorWithMessage($api_code, $error_message, $http_code=HttpResponse::HTTP_BAD_RE
 
 ## Data Conversion ##
 
- `ResponseBuilder` can save you some work by automatically converting certain objects
- prior returning response array. i.e. you can pass Eloquent's Model or Collection
- object directly and have it converted to array automatically.
+ `ResponseBuilder` can save you some work by automatically converting certain objects prior returning response array. i.e. you can
+ pass Eloquent's Model or Collection object directly and have it converted to array automatically.
 
  For example, passing `Model` object:
 
@@ -371,7 +370,9 @@ return ResponseBuilder::success($flights);
 }
 ```
 
- The result is keyed `item` and `items`, depending on class mapping configuration (by default `Collection` is using `items` no matter we return one or even zero elements) is the given object of and the whole magic is done by calling method configured for given class.
+ The result is keyed `item` and `items`, depending on class mapping configuration (by default `Collection` is using `items` no 
+ matter we return one or even zero elements) is the given object of and the whole magic is done by calling method configured for 
+ given class.
 
  The whole functionality is configurable via `classes` mapping array:
 
@@ -388,13 +389,18 @@ return ResponseBuilder::success($flights);
 ],
 ```
 
- The above confgures two classes (`Model` and `Collection`). Whenver object of that class is spotted, method specified in `method` key would be called on that obhject and data that method returns will be returned in JSON object using key specidied in `key`.
+ The above confgures two classes (`Model` and `Collection`). Whenver object of that class is spotted, method specified in `method` 
+ key would be called on that obhject and data that method returns will be returned in JSON object using key specidied in `key`.
 
  So in above example, if we get `Collection`, then `ResponseBuilder` would call `toArray()` on it, and result data would
  be added in returned JSON in `items` object.
+ 
+ **IMPORTANT:** To check if given object can be auto converted, `ResponseBuilder` checks if we have configuration entry
+ matching **exactly** object class name. If no such mapping is found, then the whole configuration is walked again, but this
+ time we take inheritance into consideration and use `instanceof` to see if we can deal with this object. If not,
+ then exception is thrown. 
 
- When you pass the array it will be walked recursively and the conversion will take place
- on all known elements as well:
+ When you pass the array it will be walked recursively and the conversion will take place on all known elements as well:
 
 ```php
 $data = [
@@ -626,7 +632,7 @@ return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
  reserved range:
 
 ```php
-MarcinOrlowski\ResponseBuilder\ApiCodeBase::OK => 'my_messages.ok',
+MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK() => 'my_messages.ok',
 ```
 
  and from now on, each `success()` will be returning your message instead of built-in one.
@@ -634,7 +640,7 @@ MarcinOrlowski\ResponseBuilder\ApiCodeBase::OK => 'my_messages.ok',
  To override default error message used when given error code has no entry in `map`, add the following:
 
 ```php
-MarcinOrlowski\ResponseBuilder\ApiCodeBase::NO_ERROR_MESSAGE => 'my_messages.default_error_message',
+MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.default_error_message',
 ````
 
  You can use `:api_code` placeholder in the message and it will be substituted actual error code value.

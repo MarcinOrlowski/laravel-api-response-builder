@@ -5,6 +5,7 @@
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=master)
+[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=dev)
 [![Codacy Grade Badge](https://api.codacy.com/project/badge/Grade/44f427e872e2480597bde0242417a2a7)](https://www.codacy.com/app/MarcinOrlowski/laravel-api-response-builder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MarcinOrlowski/laravel-api-response-builder&amp;utm_campaign=Badge_Grade)
 [![Monthly Downloads](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/d/monthly)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![License](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/license)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
@@ -14,15 +15,18 @@
 [![Latest Unstable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/unstable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=dev)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/quality-score.png?b=dev)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=dev)
+[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/coverage.png?b=dev)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=dev)
 
 ## Table of contents ##
 
- * [Introduction](#introduction)
+ * [Intriduction](#introduction)
+ * [Why should I use it?](#benefits)
+ * [Usage examples](#usage-examples)
  * [Features](#features)
  * [Documentation](docs/docs.md)
  * [Requirements](docs/docs.md#requirements)
  * [Installation and Configuration](docs/docs.md#installation-and-configuration)
- * [Bugs reports and pull requests](#contributing)
+ * [Bugs reports and pull requests](CONTRIBUTING.md)
  * [License](#license)
  * [Changelog](CHANGES.md)
 
@@ -32,10 +36,31 @@
 
 ## Introduction ##
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
- nice, normalized and easy to consume REST API responses.
+ `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building  nice, normalized and standarized
+ and easy to consume REST API JSON responses.
 
- Conclude your controller method with simple
+## Benefits ##
+
+ `ResponseBuilder` is written for REST API developers by REST API developer and is based on my long lasting experiencde on both
+ "sides" (API dev and API consumer) of variety of REST APIs. Lightweight, with simple to use public methods, covering multiple 
+ potential use-cases, on-the-fly data conversion, localization support, automatic error message building, support
+ for chainged APIs and (hopefuly) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder` 
+ is desinged with **users of your API** in mind, which helps them easily deal with your API with ease. They get simple, well
+ defined and predictable JSON structure responses with all the fields needed to consume it without any unnecessary a hassle nor 
+ other trickery. 
+ 
+ Android developers can use [ApiResponse](https://github.com/MarcinOrlowski/ApiResponse) library to handle `ResponseBuilder` 
+ responses produced in their mobile applications.   
+ 
+ You are even covered in case of emergency as provided Exception Handler ensures your API keeps talking JSON (and 
+ not HTML) to its clients if case of any unexpected and unhandled exception.
+ 
+ Did I mention, you also get testing traits that would automatically cover your whole `ResponseBuilder` related code with 
+ unit tests with just a few lines of code?
+
+## Usage examples ##
+ 
+ Operation successful? Conclude your controller method with:
 
     return ResponseBuilder::success();
 
@@ -49,7 +74,7 @@
       "data": null
     }
 
- Something went wrong? Just do
+ Something went wrong? Just do:
 
     return ResponseBuilder::error(250);
 
@@ -64,7 +89,7 @@
     }
 
  Nice and easy! And yes, `message` can be easily customized! Also there're **much, much more** you can do with
- rich `ResponseBuilder`'s API. See [library documentation](docs/docs.md) for details and usage examples!
+ rich `ResponseBuilder` API. See [library documentation](docs/docs.md) for details and more examples!
 
 ----
 
@@ -72,7 +97,7 @@
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel 6.0 compatible (see [legacy support](docs/legacy.md) for support for older versions),
+ * Laravel compatibility: v6.0, v6.2 (see [legacy support](docs/legacy.md) for support for older versions),
  * Supports Laravel [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518),
  * Configurable (with ready-to-use defaults),
  * Localization support,
@@ -81,24 +106,6 @@
  * Includes traits to help [unit testing your API code](docs/testing.md),
  * Provides own [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
  * No extra dependencies.
-
-----
-
-## Contributing ##
-
- Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues).
-
- If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/laravel-api-response-builder/issues)
- **before doing any work**. This will help us save your time in case I'd not be accept PR either completely or in proposed form.
- But if all is good and clear then follow common routine:
-
- * fork the project,
- * create new branch,
- * do your changes,
- * add tests covering your changes,
- * ensure **ALL** tests pass,
- * send pull request,
- * glory.
 
 ----
 

@@ -16,36 +16,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 /**
  * Class TestModel to verify auto-conversion feature
  */
-class TestModel
+class TestModelChild extends TestModel
 {
-	/** @var string|null */
-	protected $val;
-
-	/**
-	 * TestModel constructor.
-	 *
-	 * @param string $val
-	 */
-	public function __construct(string $val)
-	{
-		$this->val = $val;
-	}
-
-	/**
-	 * @return string|null
-	 */
-	public function getVal(): ?string
-	{
-		return $this->val;
-	}
-
-	/**
-	 * Converts model to array
-	 */
-	public function toArray(): array
-	{
-		return [
-			'val' => $this->val,
-		];
-	}
 }

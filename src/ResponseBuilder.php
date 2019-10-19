@@ -124,46 +124,6 @@ class ResponseBuilder
 	}
 
 	/**
-	 * Checks if we have "classes" mapping configured for $data object class.
-	 * Returns @true if there's valid config for this class.
-	 *
-	 * @param object $data Object to check mapping for.
-	 *
-	 * @return bool
-	 *
-	 * @throws \InvalidArgumentException if $data is not an object.
-	 */
-	protected static function hasClassesMapping(object $data): bool
-	{
-		return array_key_exists(get_class($data), static::getClassesMapping());
-	}
-
-	/**
-	 * Recursively walks $data array and converts all known objects if found. Note
-	 * $data array is passed by reference so source $data array may be modified.
-	 *
-	 * @param array $classes "classes" config mapping array
-	 * @param array $data    array to recursively convert known elements of
-	 *
-	 * @return void
-	 */
-	protected static function convert(array $classes, array &$data): void
-	{
-		foreach ($data as $data_key => &$data_val) {
-			if (is_array($data_val)) {
-				static::convert($classes, $data_val);
-			} elseif (is_object($data_val)) {
-				$obj_class_name = get_class($data_val);
-				if (array_key_exists($obj_class_name, $classes)) {
-					$conversion_method = $classes[ $obj_class_name ][ static::KEY_METHOD ];
-					$converted = $data_val->$conversion_method();
-					$data[ $data_key ] = $converted;
-				}
-			}
-		}
-	}
-
-	/**
 	 * Returns success
 	 *
 	 * @param object|array|null $data             payload to be returned as 'data' node, @null if none
@@ -472,33 +432,9 @@ class ResponseBuilder
 	                                        array $debug_data = null): array
 	{
 		// ensure $data is either @null, array or object of class with configured mapping.
-		if ($data !== null) {
-			if (!is_array($data) && !is_object($data)) {
-				throw new \InvalidArgumentException(
-					sprintf('Invalid payload data. Must be null, array or class with mapping ("%s" given).', gettype($data)));
-			}
+		$converter = new Converter();
 
-			if (is_object($data) && !static::hasClassesMapping($data)) {
-				throw new \InvalidArgumentException(sprintf('No mapping configured for "%s" class.', get_class($data)));
-			}
-
-			// Preliminary validation passed. Let's walk and convert...
-			// we can do some auto-conversion on known class types, so check for that first
-			/** @var array $classes */
-			$classes = static::getClassesMapping();
-			if (($classes !== null) && (count($classes) > 0)) {
-				if (is_array($data)) {
-					static::convert($classes, $data);
-				} elseif (is_object($data)) {
-					$obj_class_name = get_class($data);
-					if (array_key_exists($obj_class_name, $classes)) {
-						$conversion_method = $classes[ $obj_class_name ][ static::KEY_METHOD ];
-						$data = [$classes[ $obj_class_name ][ static::KEY_KEY ] => $data->$conversion_method()];
-					}
-				}
-			}
-		}
-
+		$data = $converter->convert($data);
 		if ($data !== null && !is_object($data)) {
 			// ensure we get object in final JSON structure in data node
 			$data = (object)$data;

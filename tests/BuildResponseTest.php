@@ -2,8 +2,6 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-
 /**
  * Laravel API Response Builder
  *
@@ -15,23 +13,16 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Illuminate\Support\Facades\Config;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class BuildResponseTest extends TestCase
 {
-	/**
-	 * @var HttpResponse
-	 */
-	protected $response;
-
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
 	 */
 	public function testBuildResponse_ClassAutoConversionSingleElement(): void
 	{
-
 		// GIVEN model object with randomly set member value
 		$model_val = $this->getRandomString('model');
 		$model = new TestModel($model_val);
@@ -140,7 +131,6 @@ class BuildResponseTest extends TestCase
 		];
 	}
 
-
 	/**
 	 * @noinspection PhpDocMissingThrowsInspection
 	 */
@@ -168,33 +158,5 @@ class BuildResponseTest extends TestCase
 		$api_code = $this->max_allowed_code + 1;    // invalid
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callMakeMethod(true, $api_code, 'message');
-	}
-
-	/**
-	 * Checks if getClassesMapping would throw exception on invalid configuration data
-	 */
-	public function testGetClassesMapping_InvalidConfigurationData(): void
-	{
-		Config::set(ResponseBuilder::CONF_KEY_CLASSES, 'invalid');
-
-		$this->expectException(\RuntimeException::class);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callProtectedMethod(ResponseBuilder::class, 'getClassesMapping');
-	}
-
-	/**
-	 * Checks if getClassesMapping would return empty array if there's no "classes" config entry
-	 */
-	public function testGetClassesMapping_NoMappingConfig(): void
-	{
-		// remove any classes config
-		/** @noinspection PhpUndefinedMethodInspection */
-		Config::offsetUnset(ResponseBuilder::CONF_KEY_CLASSES);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$result = $this->callProtectedMethod(ResponseBuilder::class, 'getClassesMapping');
-		$this->assertIsArray($result);
-		$this->assertEmpty($result);
 	}
 }

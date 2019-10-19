@@ -13,9 +13,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * ApiCodes tests trait. Use this trait to test your ApiCodes class.
@@ -138,8 +138,7 @@ trait ApiCodesTests
 	/**
 	 * Checks if all defined Api code constants' values are unique
 	 */
-	public
-	function testIfAllApiValuesAreUnique(): void
+	public function testIfAllApiValuesAreUnique(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -154,8 +153,7 @@ trait ApiCodesTests
 	 *
 	 * TODO: check translations too
 	 */
-	public
-	function testIfAllCodesAreCorrectlyMapped(): void
+	public function testIfAllCodesAreCorrectlyMapped(): void
 	{
 		/** @var BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -170,34 +168,27 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if all keys used in user provided mapping are valid
-	 * and if the mapped values are unique.
-	 *
-	 * If no user mapping is found, this test is skipped.
+	 * Tests if "classes" config entries properly set.
 	 */
-//	public
-//	function testIfCustomMappingUsesUniqueValues(): void
-//	{
-//		$map = Config::get(ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP, null);
-//		if ($map !== null) {
-//			$base_map = BaseApiCodes::getResponseFieldsMap();
-//
-//			foreach ($map as $key => $val) {
-//				// check if reference key are known
-//				if (!array_key_exists($key, $base_map)) {
-//					$this->fail("Unknown reference key in your mapping: '{$key}'");
-//				}
-//
-//				// check mapping value is unique
-//				foreach ($map as $test_key => $test_val) {
-//					if (($test_val === $val) && ($test_key !== $key)) {
-//						$this->fail("Value used for reference key '{$key}' is not unique (used in '{$test_key}'");
-//					}
-//				}
-//			}
-//		} else {
-//			$this->markTestSkipped(sprintf('No "%s" mapping found.', ResponseBuilder::CONF_KEY_RESPONSE_KEY_MAP));
-//		}
-//	}
+	public function testConfig_ClassesMappingEntries(): void
+	{
+		$classes = \Config::get(ResponseBuilder::CONF_KEY_CLASSES) ?? [];
+		if (count($classes) === 0) {
+			// to make PHPUnit not complaining about no assertion.
+			$this->assertTrue(true);
+			return;
+		}
+
+		$mandatory_keys = [
+			ResponseBuilder::KEY_KEY,
+			ResponseBuilder::KEY_METHOD,
+		];
+		foreach ($classes as $class_name => $class_config) {
+			foreach ($mandatory_keys as $key_name) {
+				/** @var TestCase $this */
+				$this->assertArrayHasKey($key_name, $class_config);
+			}
+		}
+	}
 
 } // end of ApiCodesTests trait

@@ -7,6 +7,11 @@
 
 ### v6 ###
 
+#### v6.2 ####
+ * `[Very Low]` Data conversion logic changed slightly. Now it checks if we have configuration entry matching **exactly** the
+  object's class name. If not, then we'd try to find if we have any configuration for its parent class.
+  See [Data Conversion](docs.md#data-conversion) for details.
+
 #### v6.1 ####
  * `[Very Low]` Removed ability to define own names for response keys which reduces code complexity and simplifies the
  library. From now one you need to stick to default names now (`success`, `code`, `message`, `locale`, `data`).
