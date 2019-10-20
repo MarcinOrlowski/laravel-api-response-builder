@@ -161,23 +161,12 @@ class ExceptionHandlerHelper
 		// let's build error error_message
 		$error_message = $exception->getMessage();
 
-		// ensure we won't fail due to exception incorect encoding
-		if (!mb_check_encoding($error_message, 'UTF-8')) {
-			// let's check there's iconv and mb_string available
-			if (function_exists('iconv') && function_exists('mb_detec_encoding')) {
-				$error_message = iconv(mb_detect_encoding($error_message, mb_detect_order(), true), 'UTF-8', $error_message);
-			} else {
-				// lame fallback, in case there's no iconv/mb_string installed
-				$error_message = htmlspecialchars_decode(htmlspecialchars($error_message, ENT_SUBSTITUTE, 'UTF-8'));
-			}
-		}
-
 		// if we do not have any error_message in the hand yet, we need to fall back to built-in string configured
 		// for this particular exception.
 		if ($error_message === '') {
 			$error_message = Lang::get($key, [
-				'api_code'      => $api_code,
-				'message'       => get_class($exception),
+				'api_code' => $api_code,
+				'message'  => get_class($exception),
 			]);
 		}
 

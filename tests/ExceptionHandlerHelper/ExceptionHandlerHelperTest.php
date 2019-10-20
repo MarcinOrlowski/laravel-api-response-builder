@@ -25,8 +25,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class ExceptionHandlerHelperTest extends TestCase
 {
 	/**
-	 * @return void
+	 * Tests behaviour of ExceptionHandler::unauthenticated()
 	 *
+	 * @return void
 	 * @throws \ReflectionException
 	 */
 	public function testUnauthenticated(): void
