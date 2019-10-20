@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
 class AutoConversionTest extends TestCase
 {

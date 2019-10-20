@@ -13,10 +13,11 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Illuminate\Support\Facades\Config;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
+use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelChild;
 
 class ConverterTest extends TestCase
 {
