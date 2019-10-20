@@ -21,7 +21,7 @@ class BuildResponseTest extends TestCase
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
 	 */
-	public function testBuildResponseClassAutoConversionSingleElement(): void
+	public function testClassAutoConversionSingleElement(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_val = $this->getRandomString('model');
@@ -50,7 +50,7 @@ class BuildResponseTest extends TestCase
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion when mapped class is part of bigger data set
 	 */
-	public function testBuildResponseClassAutoConversionAsPartOfDataset(): void
+	public function testClassAutoConversionAsPartOfDataset(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_1_val = $this->getRandomString('model_1');
@@ -111,9 +111,9 @@ class BuildResponseTest extends TestCase
 	 *
 	 * @param mixed $data Test data as yelded by dataProvider
 	 *
-	 * @dataProvider dataProviderTestBuildResponseInvalidDataType
+	 * @dataProvider dataProviderTestInvalidDataType
 	 */
-	public function testBuildResponseInvalidDataType($data): void
+	public function testInvalidDataType($data): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		ResponseBuilder::success($data);
@@ -122,7 +122,7 @@ class BuildResponseTest extends TestCase
 	/**
 	 * Data provider for testBuildResponse_InvalidDataType test
 	 */
-	public function dataProviderTestBuildResponseInvalidDataType(): array
+	public function dataProviderTestInvalidDataType(): array
 	{
 		return [
 			[(object)['no' => 'mapping']],
