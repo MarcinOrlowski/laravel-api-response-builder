@@ -159,7 +159,7 @@ class ExceptionHandlerHelper
 		$key = BaseApiCodes::getCodeMessageKey($api_code) ?? BaseApiCodes::getCodeMessageKey($base_api_code);
 
 		// let's build error error_message
-		$ex_message = trim($exception->getMessage());
+		$ex_message = $exception->getMessage();
 
 		// ensure we won't fail due to exception incorect encoding
 		// FIXME: Is this block really needed?
