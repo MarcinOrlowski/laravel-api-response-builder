@@ -21,6 +21,8 @@ class AutoConversionTest extends TestCase
 {
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
+	 *
+	 * @return void
 	 */
 	public function testClassAutoConversionSingleElement(): void
 	{
@@ -49,7 +51,10 @@ class AutoConversionTest extends TestCase
 	}
 
 	/**
-	 * Tests if buildResponse() would properly handle auto conversion when mapped class is part of bigger data set
+	 * Tests if buildResponse() would properly handle auto conversion when mapped
+	 * class is part of bigger data set.
+	 *
+	 * @return void
 	 */
 	public function testClassAutoConversionAsPartOfDataset(): void
 	{
@@ -112,6 +117,8 @@ class AutoConversionTest extends TestCase
 	 *
 	 * @param mixed $data Test data as yelded by dataProvider
 	 *
+	 * @return void
+	 *
 	 * @dataProvider dataProviderTestInvalidDataType
 	 */
 	public function testInvalidDataType($data): void
@@ -121,7 +128,9 @@ class AutoConversionTest extends TestCase
 	}
 
 	/**
-	 * Data provider for testBuildResponse_InvalidDataType test
+	 * Data provider for testBuildResponse_InvalidDataType test.
+	 *
+	 * @return array
 	 */
 	public function dataProviderTestInvalidDataType(): array
 	{

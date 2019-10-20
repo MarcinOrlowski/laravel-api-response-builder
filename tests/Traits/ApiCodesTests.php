@@ -64,6 +64,8 @@ trait ApiCodesTests
 	/**
 	 * Checks if Api codes range is set right
 	 *
+	 * @return void
+	 *
 	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testMinMaxCode(): void
@@ -79,6 +81,8 @@ trait ApiCodesTests
 
 	/**
 	 * Checks if defined code range is large enough to accomodate built-in codes.
+	 *
+	 * @return void
 	 */
 	public function testCodeRangeIsLargeEnough(): void
 	{
@@ -90,7 +94,9 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if all Api codes defined in ApiCodes class contain mapping entry
+	 * Checks if all Api codes defined in ApiCodes class contain mapping entry.
+	 *
+	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -120,7 +126,9 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if all Api codes are in correct and allowed range,
+	 * Checks if all Api codes are in correct and allowed range.
+	 *
+	 * @return void
 	 */
 	public function testIfAllCodesAreInRange(): void
 	{
@@ -149,7 +157,9 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if all defined Api code constants' values are unique
+	 * Checks if all defined Api code constants' values are unique.
+	 *
+	 * @return void
 	 */
 	public function testIfAllApiValuesAreUnique(): void
 	{
@@ -162,9 +172,9 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if all codes are mapped to existing locale strings
+	 * Checks if all codes are mapped to existing locale strings.
 	 *
-	 * TODO: check translations too
+	 * @return void
 	 */
 	public function testIfAllCodesAreCorrectlyMapped(): void
 	{
@@ -182,6 +192,8 @@ trait ApiCodesTests
 
 	/**
 	 * Tests if "classes" config entries properly set.
+	 *
+	 * @return void
 	 */
 	public function testConfigClassesMappingEntries(): void
 	{

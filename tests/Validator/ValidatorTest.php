@@ -17,18 +17,10 @@ use MarcinOrlowski\ResponseBuilder\Validator;
 
 class ValidatorTest extends TestCase
 {
-
 	/**
 	 * Tests if assertInt() throws exception when feed with invalid type argument.
-	 */
-	public function testAssertInWithString(): void
-	{
-		$this->expectException(\InvalidArgumentException::class);
-		Validator::assertInt(123, 'abc');
-	}
-
-	/**
-	 * Te
+	 *
+	 * @return void
 	 */
 	public function testAssertInt(): void
 	{
@@ -38,6 +30,8 @@ class ValidatorTest extends TestCase
 
 	/**
 	 * Check if assertIntRange() main variable type is ensured to be integer.
+	 *
+	 * @return void
 	 */
 	public function testAssertIntRangeVarType(): void
 	{
@@ -48,6 +42,8 @@ class ValidatorTest extends TestCase
 
 	/**
 	 * Check if assertIntRange() range $min and $max are in right order.
+	 *
+	 * @return void
 	 */
 	public function testAssertIntRangeMinMaxOrder(): void
 	{
@@ -58,6 +54,8 @@ class ValidatorTest extends TestCase
 
 	/**
 	 * Check if assertIntRange() to ensure we check $var is in range nd $max bounds only
+	 *
+	 * @return void
 	 */
 	public function testAssertIntRangeVarInMinMaxRange(): void
 	{

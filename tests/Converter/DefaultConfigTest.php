@@ -24,6 +24,8 @@ class DefaultConfigTest extends TestCase
 {
 	/**
 	 * Tests built-in support for JsonResource class on default
+	 *
+	 * @return void
 	 */
 	public function testJsonResource(): void
 	{
@@ -49,6 +51,8 @@ class DefaultConfigTest extends TestCase
 
 	/**
 	 * Tests built-in support for Support\Collection class on defaults
+	 *
+	 * @return void
 	 */
 	public function testSupportCollection(): void
 	{
@@ -61,6 +65,8 @@ class DefaultConfigTest extends TestCase
 
 	/**
 	 * Tests built-in support for Eloquent's Collection class on defaults
+	 *
+	 * @return void
 	 */
 	public function testEloquentCollection(): void
 	{
@@ -77,6 +83,8 @@ class DefaultConfigTest extends TestCase
 	 * Do the testing of collection type of object.
 	 *
 	 * @param object $collection
+	 *
+	 * @return void
 	 */
 	protected function doCollectionTest($collection): void
 	{

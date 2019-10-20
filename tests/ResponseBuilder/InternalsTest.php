@@ -20,6 +20,8 @@ class InternalsTest extends TestCase
 {
 	/**
 	 * Tests if dist's config detaults matches ResponseBuilder::DEFAULT_ENODING_OPTIONS
+	 *
+	 * @return void
 	 */
 	public function testDefaultEncodingOptionValue(): void
 	{
@@ -29,6 +31,8 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Validates handling of incomplete class mapping configuration by getClassesMapping()
+	 *
+	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -45,6 +49,8 @@ class InternalsTest extends TestCase
 	/**
 	 * Tests if getClassesMapping() would throw an exception with incomplete
 	 * class mapping configuration.
+	 *
+	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -63,6 +69,8 @@ class InternalsTest extends TestCase
 	/**
 	 * Tests getCodeForInternalOffset() out of bounds handling
 	 *
+	 * @return void
+	 *
 	 * @throws \ReflectionException
 	 */
 	public function testGetCodeForInternalOffsetMethodWithOffsetOutOfMaxBounds(): void
@@ -76,7 +84,9 @@ class InternalsTest extends TestCase
 	}
 
 	/**
-	 * Tests getCodeForInternalOffset() out of bounds handling
+	 * Tests getCodeForInternalOffset() out of bounds handling.
+	 *
+	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -92,6 +102,8 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Tests getCodeMessageKey() if given code of configured code range.
+	 *
+	 * @return void
 	 */
 	public function testGetCodeMessageKeyMethodWithCodeOutOfCodeRange(): void
 	{
@@ -101,6 +113,8 @@ class InternalsTest extends TestCase
 
 	/**
 	 * Tests if all mandatory constants are still members of the class.
+	 *
+	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */

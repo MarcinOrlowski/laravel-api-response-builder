@@ -22,6 +22,8 @@ class TranslationTest extends TestCase
 {
 	/**
 	 * Checks if translations are in par with base language
+	 *
+	 * @return void
 	 */
 	public function testTranslationFiles(): void
 	{

@@ -21,6 +21,8 @@ class SuccessTest extends TestCase
 {
 	/**
 	 * Check plain success() invocation
+	 *
+	 * @return void
 	 */
 	public function testSuccess(): void
 	{
@@ -33,6 +35,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests success() behavior with different JSON encoding options used
+	 *
+	 * @return void
 	 */
 	public function testSuccessEncodingOptions(): void
 	{
@@ -73,6 +77,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests success() with custom API code no custom message
+	 *
+	 * @return void
 	 */
 	public function testSuccessApiCodeNoCustomMessage(): void
 	{
@@ -85,6 +91,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests success() with custom API code and no custom message mapping
+	 *
+	 * @return void
 	 */
 	public function testSuccessApiCodeCustomMessage(): void
 	{
@@ -97,6 +105,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests success() with custom API code and custom message
+	 *
+	 * @return void
 	 */
 	public function testSuccessApiCodeCustomMessageLang(): void
 	{
@@ -119,6 +129,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests successWithCode() with custom API code and custom message
+	 *
+	 * @return void
 	 */
 	public function testSuccessWithCodeApiCodeCustomMessageLang(): void
 	{
@@ -141,6 +153,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Checks success() with valid payload types and HTTP code
+	 *
+	 * @return void
 	 */
 	public function testSuccessDataAndHttpCode(): void
 	{
@@ -173,6 +187,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests successWithHttpCode()
+	 *
+	 * @return void
 	 */
 	public function testSuccessHttpCode(): void
 	{
@@ -189,6 +205,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests that passing null as argument to successWithHttpCode() it will fall back to defaults.
+	 *
+	 * @return void
 	 */
 	public function testSuccessWithNullAsHttpCode(): void
 	{
@@ -197,7 +215,9 @@ class SuccessTest extends TestCase
 	}
 
 	/**
-	 * Tests if successXX() with too high http code would throw expected exception
+	 * Tests if successXX() with too high http code would throw expected exception.
+	 *
+	 * @return void
 	 */
 	public function testSuccessWithTooBigHttpCode(): void
 	{
@@ -206,7 +226,9 @@ class SuccessTest extends TestCase
 	}
 
 	/**
-	 * Tests if successXX() with too low http code would throw expected exception
+	 * Tests if successXX() with too low http code would throw expected exception.
+	 *
+	 * @return void
 	 */
 	public function testSuccessWithTooLowHttpCode(): void
 	{

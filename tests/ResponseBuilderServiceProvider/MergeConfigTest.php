@@ -19,7 +19,11 @@ class MergeConfigTest extends TestCase
 {
 
 	/**
-	 * Checks if ServiceProvider's configMerge properly merges multi-dimensional arrays
+	 * Checks if ServiceProvider's configMerge properly merges multi-dimensional arrays.
+	 *
+	 * @return void
+	 *
+	 * @throws \ReflectionException
 	 */
 	public function testMergeConfig(): void
 	{

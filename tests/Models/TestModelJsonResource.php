@@ -16,7 +16,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Request;
 
-
 /**
  * Class TestModel to verify auto-conversion feature
  */
@@ -50,7 +49,7 @@ class TestModelJsonResource extends JsonResource
 	 *
 	 * @return array
 	 */
-	public function toArray($request=null): array
+	public function toArray($request = null): array
 	{
 		return [
 			'val' => $this->val,
