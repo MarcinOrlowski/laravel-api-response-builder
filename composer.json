@@ -50,6 +50,7 @@
     "laravel/framework": "^6.0",
     "phpunit/phpunit": "^8.0",
     "phpunit/php-code-coverage": "^7.0",
-    "codacy/coverage": "^1.0"
+    "codacy/coverage": "^1.0",
+    "friendsofphp/php-cs-fixer": "^2.15"
   }
 }
