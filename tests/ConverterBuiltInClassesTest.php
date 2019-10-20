@@ -24,7 +24,7 @@ class ConverterBuildInClasses extends TestCase
 	/**
 	 * Tests built-in support for JsonResource class on default
 	 */
-	public function testConverter_JsonResource(): void
+	public function testJsonResource(): void
 	{
 		// GIVEN JSONResource class object
 		$obj_val = $this->getRandomString('obj_val');
@@ -49,7 +49,7 @@ class ConverterBuildInClasses extends TestCase
 	/**
 	 * Tests built-in support for Support\Collection class on defaults
 	 */
-	public function testConverter_SupportCollection(): void
+	public function testSupportCollection(): void
 	{
 		$data = [];
 		for ($i=0; $i<10; $i++) {
@@ -61,7 +61,7 @@ class ConverterBuildInClasses extends TestCase
 	/**
 	 * Tests built-in support for Eloquent's Collection class on defaults
 	 */
-	public function testConverter_EloquentCollection(): void
+	public function testEloquentCollection(): void
 	{
 		// GIVEN Eloquent collection with content
 		$collection = new EloquentCollection();

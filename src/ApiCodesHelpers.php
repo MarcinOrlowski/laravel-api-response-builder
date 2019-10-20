@@ -133,6 +133,8 @@ trait ApiCodesHelpers
 	 * @param int $internal_code
 	 *
 	 * @return int
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	protected static function getCodeForInternalOffset(int $internal_code): int
 	{

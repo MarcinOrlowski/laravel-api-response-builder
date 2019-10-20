@@ -21,7 +21,7 @@ class ApiCodeBaseTest extends TestCase
 	/**
 	 * Tests getMinCode() with invalid config
 	 */
-	public function testGetMinCode_MissingConfigKey(): void
+	public function testGetMinCodeMissingConfigKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
@@ -33,7 +33,7 @@ class ApiCodeBaseTest extends TestCase
 	/**
 	 * Tests getMaxCode() with invalid config
 	 */
-	public function testGetMaxCode_MissingConfigKey(): void
+	public function testGetMaxCodeMissingConfigKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
@@ -45,7 +45,7 @@ class ApiCodeBaseTest extends TestCase
 	/**
 	 * Tests getMap() with missing config
 	 */
-	public function testGetMap_MissingConfigKey(): void
+	public function testGetMapMissingConfigKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
@@ -57,7 +57,7 @@ class ApiCodeBaseTest extends TestCase
 	/**
 	 * Tests getMap() with wrong config
 	 */
-	public function testGetMap_WrongConfig(): void
+	public function testGetMapWrongConfig(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
