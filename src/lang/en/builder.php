@@ -25,3 +25,4 @@ return [
 	'validation_exception'     => 'Invalid data',
 
 ];
+

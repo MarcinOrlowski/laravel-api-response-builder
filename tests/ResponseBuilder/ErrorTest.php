@@ -41,7 +41,7 @@ class ErrorTest extends TestCase
 	/**
 	 * Tests error() with various http codes and random payload
 	 */
-	public function testError_WithDataHttpCode(): void
+	public function testErrorWithDataHttpCode(): void
 	{
 		$http_codes = [HttpResponse::HTTP_CONFLICT,
 		               HttpResponse::HTTP_BAD_REQUEST,
@@ -194,7 +194,7 @@ class ErrorTest extends TestCase
 	/**
 	 * Tests error() handling api code with no message mapping
 	 */
-	public function testError_MissingMessageMapping(): void
+	public function testErrorMissingMessageMapping(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -215,7 +215,7 @@ class ErrorTest extends TestCase
 	/**
 	 * Tests buildErrorResponse() fed with not allowed OK api code
 	 */
-	public function testBuildErrorResponse_ApiCodeOK(): void
+	public function testBuildErrorResponseApiCodeOK(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
@@ -233,7 +233,7 @@ class ErrorTest extends TestCase
 	/**
 	 * Tests buildErrorResponse() fed with @null as http_code
 	 */
-	public function testBuildErrorResponse_NullHttpCode(): void
+	public function testBuildErrorResponseNullHttpCode(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -252,7 +252,7 @@ class ErrorTest extends TestCase
 	/**
 	 * Tests buildErrorResponse() fed with http code out of allowed bounds
 	 */
-	public function testBuildErrorResponse_TooLowHttpCode(): void
+	public function testBuildErrorResponseTooLowHttpCode(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 

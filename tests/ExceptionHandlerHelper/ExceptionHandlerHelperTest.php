@@ -26,7 +26,7 @@ class ExceptionHandlerHelperTest extends TestCase
 	/**
 	 * Check exception handler behavior when given different types of exception.
 	 */
-	public function testRender_HttpException(): void
+	public function testRenderMethodWithHttpException(): void
 	{
 		$codes = [
 			ExceptionHandlerHelper::TYPE_HTTP_NOT_FOUND_KEY           => [
@@ -139,7 +139,7 @@ class ExceptionHandlerHelperTest extends TestCase
 	/**
 	 * Tests if optional debug info is properly added to JSON response
 	 */
-	public function testError_DebugTrace(): void
+	public function testErrorMethodWithDebugTrace(): void
 	{
 		/** @noinspection PhpUndefinedClassInspection */
 		\Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);

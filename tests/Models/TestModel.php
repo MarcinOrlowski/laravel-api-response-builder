@@ -41,6 +41,8 @@ class TestModel
 
 	/**
 	 * Converts model to array
+	 *
+	 * @return array
 	 */
 	public function toArray(): array
 	{

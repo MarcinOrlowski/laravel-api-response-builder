@@ -16,7 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
-class ApiCodeBaseTest extends TestCase
+class BaseApiCodesTest extends TestCase
 {
 	/**
 	 * Tests getMinCode() with invalid config

@@ -19,7 +19,7 @@ use Illuminate\Support\Collection as SupportCollection;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
-class ConverterBuildInClasses extends TestCase
+class DefaultConfigTest extends TestCase
 {
 	/**
 	 * Tests built-in support for JsonResource class on default
@@ -52,7 +52,7 @@ class ConverterBuildInClasses extends TestCase
 	public function testSupportCollection(): void
 	{
 		$data = [];
-		for ($i=0; $i<10; $i++) {
+		for ($i = 0; $i < 10; $i++) {
 			$data[] = $this->getRandomString("item{$i}");
 		}
 		$this->doCollectionTest(collect($data));
@@ -73,10 +73,9 @@ class ConverterBuildInClasses extends TestCase
 	}
 
 	/**
-	 * Do the testing of collection type of object.@param $collection Instance of supported collection object.
+	 * Do the testing of collection type of object.
 	 *
-	 * @api
-	 *
+	 * @param object $collection
 	 */
 	protected function doCollectionTest($collection): void
 	{

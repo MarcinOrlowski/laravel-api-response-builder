@@ -16,7 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
-class BuildResponseTest extends TestCase
+class AutoConversionTest extends TestCase
 {
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion

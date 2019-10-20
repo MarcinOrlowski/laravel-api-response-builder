@@ -34,7 +34,7 @@ class SuccessTest extends TestCase
 	/**
 	 * Tests success() behavior with different JSON encoding options used
 	 */
-	public function testSuccess_EncodingOptions(): void
+	public function testSuccessEncodingOptions(): void
 	{
 		$test_string = 'ąćę';
 		$test_string_escaped = $this->escape8($test_string);
@@ -74,7 +74,7 @@ class SuccessTest extends TestCase
 	/**
 	 * Tests success() with custom API code no custom message
 	 */
-	public function testSuccess_ApiCode_NoCustomMessage(): void
+	public function testSuccessApiCodeNoCustomMessage(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, []);
 		$this->response = ResponseBuilder::success(null, $this->random_api_code);
@@ -86,7 +86,7 @@ class SuccessTest extends TestCase
 	/**
 	 * Tests success() with custom API code and no custom message mapping
 	 */
-	public function testSuccess_ApiCode_CustomMessage(): void
+	public function testSuccessApiCodeCustomMessage(): void
 	{
 		$this->response = ResponseBuilder::success(null, $this->random_api_code);
 		$j = $this->getResponseSuccessObject($this->random_api_code);
@@ -98,7 +98,7 @@ class SuccessTest extends TestCase
 	/**
 	 * Tests success() with custom API code and custom message
 	 */
-	public function testSuccess_ApiCode_CustomMessageLang(): void
+	public function testSuccessApiCodeCustomMessageLang(): void
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
@@ -120,7 +120,7 @@ class SuccessTest extends TestCase
 	/**
 	 * Tests successWithCode() with custom API code and custom message
 	 */
-	public function testSuccessWithCode_ApiCode_CustomMessageLang(): void
+	public function testSuccessWithCodeApiCodeCustomMessageLang(): void
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		/** @noinspection PhpUndefinedClassInspection */
@@ -142,7 +142,7 @@ class SuccessTest extends TestCase
 	/**
 	 * Checks success() with valid payload types and HTTP code
 	 */
-	public function testSuccess_DataAndHttpCode(): void
+	public function testSuccessDataAndHttpCode(): void
 	{
 		$payloads = [
 			null,
@@ -208,8 +208,7 @@ class SuccessTest extends TestCase
 	/**
 	 * Tests if successXX() with too low http code would throw expected exception
 	 */
-	public
-	function testSuccessWithTooLowHttpCode(): void
+	public function testSuccessWithTooLowHttpCode(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		ResponseBuilder::successWithHttpCode(0);

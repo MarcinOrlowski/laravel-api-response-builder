@@ -15,7 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider;
 
-class ResponseBuilderServiceProviderTest extends TestCase
+class MergeConfigTest extends TestCase
 {
 
 	/**
@@ -25,7 +25,7 @@ class ResponseBuilderServiceProviderTest extends TestCase
 	{
 		$sp = new ResponseBuilderServiceProvider(null);
 
-		$key2_orig_val = $this->getRandomString('orig');;
+		$key2_orig_val = $this->getRandomString('orig');
 		$key2_new_val = $this->getRandomString('NEW');
 
 		$key1_orig_val = $this->getRandomString('orig');

@@ -24,6 +24,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	/**
 	 * Returns ApiCodes class name. We need that done this way, so you can easily plug-and-play
 	 * out testing trait into your project.
+	 *
+	 * @return string
 	 */
 	public function getApiCodesClassName(): string
 	{

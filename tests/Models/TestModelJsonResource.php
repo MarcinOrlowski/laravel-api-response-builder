@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Request;
 
 
 /**
@@ -44,6 +45,10 @@ class TestModelJsonResource extends JsonResource
 
 	/**
 	 * Converts model to array. Signature must match JsonResource::toArray()
+	 *
+	 * @param Request $request
+	 *
+	 * @return array
 	 */
 	public function toArray($request=null): array
 	{
