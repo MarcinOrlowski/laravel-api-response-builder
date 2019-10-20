@@ -21,7 +21,7 @@ class BuildResponseTest extends TestCase
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
 	 */
-	public function testBuildResponse_ClassAutoConversionSingleElement(): void
+	public function testBuildResponseClassAutoConversionSingleElement(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_val = $this->getRandomString('model');
@@ -50,7 +50,7 @@ class BuildResponseTest extends TestCase
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion when mapped class is part of bigger data set
 	 */
-	public function testBuildResponse_ClassAutoConversionAsPartOfDataset(): void
+	public function testBuildResponseClassAutoConversionAsPartOfDataset(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_1_val = $this->getRandomString('model_1');
@@ -111,9 +111,9 @@ class BuildResponseTest extends TestCase
 	 *
 	 * @param mixed $data Test data as yelded by dataProvider
 	 *
-	 * @dataProvider dataProvider_testBuildResponse_InvalidDataType
+	 * @dataProvider dataProviderTestBuildResponseInvalidDataType
 	 */
-	public function testBuildResponse_InvalidDataType($data): void
+	public function testBuildResponseInvalidDataType($data): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		ResponseBuilder::success($data);
@@ -122,41 +122,12 @@ class BuildResponseTest extends TestCase
 	/**
 	 * Data provider for testBuildResponse_InvalidDataType test
 	 */
-	public function dataProvider_testBuildResponse_InvalidDataType(): array
+	public function dataProviderTestBuildResponseInvalidDataType(): array
 	{
 		return [
 			[(object)['no' => 'mapping']],
 			['invalid'],
 			[666],
 		];
-	}
-
-	/**
-	 * @noinspection PhpDocMissingThrowsInspection
-	 */
-	public function testMake_WrongMessage(): void
-	{
-		$this->expectException(\InvalidArgumentException::class);
-
-		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
-		$api_codes_class_name = $this->getApiCodesClassName();
-
-		$message_or_api_code = [];    // invalid data type
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		/** @noinspection PhpParamsInspection */
-		$this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
-	}
-
-	/**
-	 * @noinspection PhpDocMissingThrowsInspection
-	 */
-	public function testMake_CustomMessageAndCodeOutOfRange(): void
-	{
-		$this->expectException(\InvalidArgumentException::class);
-
-		$api_code = $this->max_allowed_code + 1;    // invalid
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callMakeMethod(true, $api_code, 'message');
 	}
 }
