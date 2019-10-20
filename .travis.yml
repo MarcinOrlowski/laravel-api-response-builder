@@ -42,8 +42,8 @@ before_script:
   # We need to tweak signature of setUp() and tearDown() methods and strip ": void" otherwise PHP will
   # fail complaining. This affects Laravel 5.8+ and 6.x (up to 6.3 for now) as they pull recent Orchestra
   # that features method signature changes.
-  - sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php
-  - sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php
+  - "sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php"
+  - "sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php"
 
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
