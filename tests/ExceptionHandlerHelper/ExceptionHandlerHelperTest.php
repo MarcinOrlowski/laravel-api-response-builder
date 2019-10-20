@@ -27,81 +27,88 @@ class ExceptionHandlerHelperTest extends TestCase
 	 * Check exception handler behavior when given different types of exception.
 	 *
 	 * @return void
+	 *
+	 * @throws \Illuminate\Contracts\Container\BindingResolutionException
 	 */
 	public function testRenderMethodWithHttpException(): void
 	{
 		$codes = [
 			ExceptionHandlerHelper::TYPE_HTTP_NOT_FOUND_KEY           => [
-				'exception_class'           => HttpException::class,
-				'default_http_code'         => HttpResponse::HTTP_NOT_FOUND,
-				'default_response_api_code' => BaseApiCodes::EX_HTTP_NOT_FOUND(),
+				'exception_class'       => HttpException::class,
+				'expected_http_code'    => HttpResponse::HTTP_NOT_FOUND,
+				'expected_api_code'     => BaseApiCodes::EX_HTTP_NOT_FOUND(),
+				'do_message_validation' => true,
+				'has_data_node'         => false,
 			],
 			ExceptionHandlerHelper::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY => [
-				'exception_class'           => HttpException::class,
-				'default_http_code'         => HttpResponse::HTTP_SERVICE_UNAVAILABLE,
-				'default_response_api_code' => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
+				'exception_class'       => HttpException::class,
+				'expected_http_code'    => HttpResponse::HTTP_SERVICE_UNAVAILABLE,
+				'expected_api_code'     => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
+				'do_message_validation' => true,
+				'has_data_node'         => false,
 			],
 			ExceptionHandlerHelper::TYPE_HTTP_EXCEPTION_KEY           => [
-				'exception_class'           => HttpException::class,
-				'default_http_code'         => HttpResponse::HTTP_BAD_REQUEST,
-				'default_response_api_code' => BaseApiCodes::EX_HTTP_EXCEPTION(),
+				'exception_class'       => HttpException::class,
+				'expected_http_code'    => HttpResponse::HTTP_BAD_REQUEST,
+				'expected_api_code'     => BaseApiCodes::EX_HTTP_EXCEPTION(),
+				'do_message_validation' => true,
+				'has_data_node'         => false,
 			],
 			ExceptionHandlerHelper::TYPE_UNCAUGHT_EXCEPTION_KEY       => [
-				'exception_class'           => \RuntimeException::class,
-				'default_http_code'         => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-				'default_response_api_code' => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+				'exception_class'       => \RuntimeException::class,
+				'expected_http_code'    => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+				'expected_api_code'     => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+				'do_message_validation' => true,
+				'has_data_node'         => false,
 			],
 			ExceptionHandlerHelper::TYPE_HTTP_UNAUTHORIZED_KEY        => [
-				'exception_class'           => HttpException::class,
-				'default_http_code'         => HttpResponse::HTTP_UNAUTHORIZED,
-				'default_response_api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+				'exception_class'       => HttpException::class,
+				'expected_http_code'    => HttpResponse::HTTP_UNAUTHORIZED,
+				'expected_api_code'     => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+				'do_message_validation' => true,
+				'has_data_node'         => false,
 			],
 			ExceptionHandlerHelper::TYPE_VALIDATION_EXCEPTION_KEY     => [
-				'exception_class'           => ValidationException::class,
-				'default_http_code'         => HttpResponse::HTTP_BAD_REQUEST,
-				'default_response_api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
-				'validate_message'          => false,
-				'has_data_node'             => true,
+				'exception_class'       => ValidationException::class,
+				'expected_http_code'    => HttpResponse::HTTP_BAD_REQUEST,
+				'expected_api_code'     => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+				'do_message_validation' => false,
+				'has_data_node'         => true,
 			],
 		];
 
 		foreach ($codes as $exception_type => $params) {
 			$this->doTestSingleException($exception_type, $params['exception_class'],
-				$params['default_http_code'], $params['default_response_api_code'],
-				$params['validate_message'] ?? true,
-				$params['has_data_node'] ?? false);
+				$params['expected_http_code'], $params['expected_api_code'],
+				$params['do_message_validation'], $params['has_data_node']);
 		}
 	}
 
 	/**
-	 * Handler exception testing.
+	 * Handles single exception testing.
 	 *
-	 * @param string $exception_type
-	 * @param string $exception_class
-	 * @param int    $default_http_code
-	 * @param int    $default_response_api_code
-	 * @param bool   $validate_message
-	 * @param bool   $has_data_node
+	 * @param string $exception_config_key           ResponseBuilder's config key for this particular exception.
+	 * @param string $exception_class                Name of the class of exception to be constructed.
+	 * @param int    $expected_http_code             Expected response HTTP code
+	 * @param int    $expected_api_code              Expected response API code
+	 * @param bool   $validate_response_message_text Set to @true, to validate returned response message with
+	 *                                               current localization.
+	 * @param bool   $expected_data_node             Set to @true if response is expected to have non null `data` node.
 	 *
 	 * @return void
 	 *
 	 * @throws \Illuminate\Contracts\Container\BindingResolutionException
 	 */
-	protected function doTestSingleException(string $exception_type, string $exception_class,
-	                                         int $default_http_code, int $default_response_api_code,
-	                                         bool $validate_message = true, bool $has_data_node = false): void
+	protected function doTestSingleException(string $exception_config_key, string $exception_class,
+	                                         int $expected_http_code, int $expected_api_code,
+	                                         bool $validate_response_message_text = true,
+	                                         bool $expected_data_node = false): void
 	{
-		$base_config_key = 'response_builder.exception_handler.exception';
-		/** @noinspection PhpUndefinedClassInspection */
-		$response_api_code = \Config::get("{$base_config_key}.{$exception_type}.code", $default_response_api_code);
-		/** @noinspection PhpUndefinedClassInspection */
-		$wanted_http_code = \Config::get("{$base_config_key}.{$exception_type}.wanted_http_code", $default_http_code);
-
-		$key = BaseApiCodes::getCodeMessageKey($response_api_code);
+		$key = BaseApiCodes::getCodeMessageKey($expected_api_code);
 		$expect_data_node_null = true;
 		switch ($exception_class) {
 			case HttpException::class:
-				$exception = new $exception_class($wanted_http_code);
+				$exception = new $exception_class($expected_http_code);
 				break;
 
 			case ValidationException::class:
@@ -114,7 +121,7 @@ class ExceptionHandlerHelperTest extends TestCase
 				break;
 
 			default:
-				$exception = new $exception_class(null, $wanted_http_code);
+				$exception = new $exception_class(null, $expected_http_code);
 				break;
 		}
 
@@ -134,17 +141,17 @@ class ExceptionHandlerHelperTest extends TestCase
 
 		/** @noinspection PhpUndefinedClassInspection */
 		$error_message = \Lang::get($key, [
-			'response_api_code' => $response_api_code,
+			'response_api_code' => $expected_api_code,
 			'message'           => $ex_message,
 			'class'             => get_class($exception),
 		]);
 
-		if ($validate_message) {
+		if ($validate_response_message_text) {
 			$this->assertEquals($error_message, $eh_response_json->message);
 		}
-		$this->assertEquals($wanted_http_code, $eh_response->getStatusCode(),
-			sprintf('Unexpected HTTP code value for "%s".', $exception_type));
-		if ($has_data_node) {
+		$this->assertEquals($expected_http_code, $eh_response->getStatusCode(),
+			sprintf('Unexpected HTTP code value for "%s".', $exception_config_key));
+		if ($expected_data_node) {
 			$data = $eh_response_json->{ResponseBuilder::KEY_DATA};
 			$this->assertNotNull($data);
 			$this->assertObjectHasAttribute(ResponseBuilder::KEY_MESSAGES, $data);
@@ -186,7 +193,8 @@ class ExceptionHandlerHelperTest extends TestCase
 		$exception = new AuthenticationException();
 
 		$obj = new ExceptionHandlerHelper();
-		$eh_response = $this->callProtectedMethod($obj, 'unauthenticated', [null, $exception]);
+		$eh_response = $this->callProtectedMethod($obj, 'unauthenticated', [null,
+		                                                                    $exception]);
 
 		$response = json_decode($eh_response->getContent(), false);
 
