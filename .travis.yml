@@ -24,6 +24,7 @@ php:
 env:
   - LARAVEL_VERSION="6.0"
   - LARAVEL_VERSION="6.2"
+  - LARAVEL_VERSION="6.3"
 
 #matrix:
 #  exclude:
@@ -46,6 +47,8 @@ before_script:
   - "if [[ ${LARAVEL_VERSION} == 6.0 ]]; then sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php ; fi"
   - "if [[ ${LARAVEL_VERSION} == 6.2 ]]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
   - "if [[ ${LARAVEL_VERSION} == 6.2 ]]; then sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php ; fi"
+  - "if [[ ${LARAVEL_VERSION} == 6.3 ]]; then sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php ; fi"
+  - "if [[ ${LARAVEL_VERSION} == 6.3 ]]; then sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php ; fi"
 
 script:
   - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/coverage.xml
@@ -55,4 +58,3 @@ after_success:
   - if [[ -f /tmp/coverage.xml ]]; then vendor/bin/codacycoverage clover /tmp/coverage.xml ; fi
   # Scrunitizer-CI
   - if [[ -f /tmp/coverage.xml ]]; then wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar && php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/coverage.xml ; fi
-

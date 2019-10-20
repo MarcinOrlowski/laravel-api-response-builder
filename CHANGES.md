@@ -7,6 +7,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 ## CHANGE LOG ##
 
 * @dev
+   * Added Laravel 6.3 to Travis-CI unit tests. 
    * Updated dependencies:
      - Updating marcin-orlowski/coding-standard (v1.1.2 => 1.3.0)         
 
@@ -16,7 +17,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Added unit test for `ResponseBuilderServiceProvider::mergeConfg()`.
    * Moved data conversion code to separate `Converter` class.
    * Added `LICENSE.md` file.
-   * Added Laravel 6.2 to Travis tests.
+   * Added Laravel 6.2 to Travis-CI unit tests.
    * Added unit tests for translation files.
 
 * 6.1.2 (2019-10-02)
