@@ -52,7 +52,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 		]);
 	}
 
-	/** *******************************************************************************************
+	/**********************************************************************************************
 	 * Support for multi-dimensional config array. Built-in config merge only supports flat arrays.
 	 *
 	 */

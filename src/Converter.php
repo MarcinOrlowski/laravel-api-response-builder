@@ -29,6 +29,8 @@ class Converter
 
 	/**
 	 * Converter constructor.
+	 *
+	 * @throws \RuntimeException
 	 */
 	public function __construct()
 	{
@@ -54,13 +56,14 @@ class Converter
 	/**
 	 * Checks if we have "classes" mapping configured for $data object class.
 	 * Returns @true if there's valid config for this class.
+	 * Throws \RuntimeException if there's no config "classes" mapping entryfor this object configured.
+	 * Throws \InvalidArgumentException if No data conversion mapping configured for given class.
 	 *
 	 * @param object $data Object to check mapping for.
 	 *
 	 * @return array
 	 *
-	 * @throws \RuntimeException if there's no config "classes" mapping entry
-	 *                           for this object configured.
+	 * @throws \InvalidArgumentException
 	 */
 	protected function getClassMappingConfigOrThrow(object $data): array
 	{
@@ -93,6 +96,8 @@ class Converter
 	 * @param object|array|null $data
 	 *
 	 * @return array|null
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public function convert($data = null): ?array
 	{
@@ -118,6 +123,8 @@ class Converter
 	 * @param array $data array to recursively convert known elements of
 	 *
 	 * @return array
+	 *
+	 * @throws \RuntimeException
 	 */
 	protected function convertArray(array $data): array
 	{

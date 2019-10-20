@@ -115,7 +115,14 @@ trait ApiCodesHelpers
 		return $map[ $api_code ] ?? null;
 	}
 
-	public static function isCodeValid($code): bool
+	/**
+	 * Checks if given API $code can be used in current configuration.
+	 *
+	 * @param int $code API code to validate
+	 *
+	 * @return bool
+	 */
+	public static function isCodeValid(int $code): bool
 	{
 		return ($code === 0) || (($code >= static::getMinCode()) && ($code <= static::getMaxCode()));
 	}

@@ -39,7 +39,7 @@ class ConverterTest extends TestCase
 	 * Checks if object of child class will be properly converted when
 	 * configration mapping exists for its parent class only.
 	 */
-	public function testConverter_GetClassMappingConfigOrThrow(): void
+	public function testConverter_SubclassOfConfiguredClassConversion(): void
 	{
 		// GIVEN two objects with direct inheritance relation
 		$parent_val = $this->getRandomString('parent');

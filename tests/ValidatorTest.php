@@ -17,12 +17,19 @@ use MarcinOrlowski\ResponseBuilder\Validator;
 
 class ValidatorTest extends TestCase
 {
-	public function testAssertString(): void
+
+	/**
+	 * Tests if assertInt() throws exception when feed with invalid type argument.
+	 */
+	public function testAssertInWithString(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		Validator::assertInt(123, 'abc');
 	}
 
+	/**
+	 * Te
+	 */
 	public function testAssertInt(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);

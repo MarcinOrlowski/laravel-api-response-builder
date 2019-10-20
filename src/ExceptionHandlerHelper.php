@@ -160,7 +160,7 @@ class ExceptionHandlerHelper
 		$ex_message = trim($exception->getMessage());
 
 		// ensure we won't fail due to exception incorect encoding
-		// TODO(orlowski): Is this really needed?
+		// FIXME: Is this block really needed?
 		if (!mb_check_encoding($ex_message, 'UTF-8')) {
 			// let's check there's iconv and mb_string available
 			if (function_exists('iconv') && function_exists('mb_detec_encoding')) {
