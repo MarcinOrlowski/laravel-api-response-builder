@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Config;
 class Converter
 {
 	/**
-	 * @var array|null
+	 * @var array
 	 */
 	protected $classes;
 
@@ -44,9 +44,9 @@ class Converter
 	/**
 	 * Returns local copy of configuration mapping for the classes.
 	 *
-	 * @return array|null
+	 * @return array
 	 */
-	public function getClasses(): ?array
+	public function getClasses(): array
 	{
 		return $this->classes;
 	}
