@@ -6,6 +6,10 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * Updated dependencies:
+     - Updating marcin-orlowski/coding-standard (v1.1.2 => 1.3.0)         
+
 * 6.2.0 (2019-10-19)
    * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
    * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources) data class.
