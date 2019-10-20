@@ -90,7 +90,7 @@ class Converter
 	/**
 	 * We need to prepare source data
 	 *
-	 * @param null $data
+	 * @param object|array|null $data
 	 *
 	 * @return array|null
 	 */
