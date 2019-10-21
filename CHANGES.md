@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* 6.2.1 (2019-10-21)
    * Added Laravel 6.3 to Travis-CI unit tests.
    * Splitted tests into separate folders per class tested.
    * ExceptionHandler no longer tries to enforce UTF-8 on exception message. 
