@@ -97,13 +97,13 @@
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel compatibility: v6.x (see [legacy support](docs/legacy.md) for support for older versions),
+ * Laravel compatibility: v6.x (see [legacy support](docs/legacy.md) if you use older Laravel version),
  * Supports Laravel [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518),
  * Configurable (with ready-to-use defaults),
  * Localization support,
  * Automatic object conversion with custom mapping,
  * API chaining/cascading support,
- * Includes traits to help [unit testing your API code](docs/testing.md),
+ * Includes traits to help [unit test your API code](docs/testing.md),
  * Provides own [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
  * No extra dependencies.
 
