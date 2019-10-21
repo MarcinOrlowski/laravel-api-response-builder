@@ -18,13 +18,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection as SupportCollection;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonResource;
 
-class ConverterBuildInClasses extends TestCase
+class DefaultConfigTest extends TestCase
 {
 	/**
 	 * Tests built-in support for JsonResource class on default
+	 *
+	 * @return void
 	 */
-	public function testConverter_JsonResource(): void
+	public function testJsonResource(): void
 	{
 		// GIVEN JSONResource class object
 		$obj_val = $this->getRandomString('obj_val');
@@ -48,11 +51,13 @@ class ConverterBuildInClasses extends TestCase
 
 	/**
 	 * Tests built-in support for Support\Collection class on defaults
+	 *
+	 * @return void
 	 */
-	public function testConverter_SupportCollection(): void
+	public function testSupportCollection(): void
 	{
 		$data = [];
-		for ($i=0; $i<10; $i++) {
+		for ($i = 0; $i < 10; $i++) {
 			$data[] = $this->getRandomString("item{$i}");
 		}
 		$this->doCollectionTest(collect($data));
@@ -60,8 +65,10 @@ class ConverterBuildInClasses extends TestCase
 
 	/**
 	 * Tests built-in support for Eloquent's Collection class on defaults
+	 *
+	 * @return void
 	 */
-	public function testConverter_EloquentCollection(): void
+	public function testEloquentCollection(): void
 	{
 		// GIVEN Eloquent collection with content
 		$collection = new EloquentCollection();
@@ -73,10 +80,11 @@ class ConverterBuildInClasses extends TestCase
 	}
 
 	/**
-	 * Do the testing of collection type of object.@param $collection Instance of supported collection object.
+	 * Do the testing of collection type of object.
 	 *
-	 * @api
+	 * @param object $collection
 	 *
+	 * @return void
 	 */
 	protected function doCollectionTest($collection): void
 	{

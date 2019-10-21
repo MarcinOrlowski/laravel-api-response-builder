@@ -21,6 +21,8 @@ class ErrorTest extends TestCase
 {
 	/**
 	 * Check success()
+	 *
+	 * @return void
 	 */
 	public function testError(): void
 	{
@@ -39,9 +41,11 @@ class ErrorTest extends TestCase
 	}
 
 	/**
-	 * Tests error() with various http codes and random payload
+	 * Tests error() with various http codes and random payload.
+	 *
+	 * @return void
 	 */
-	public function testError_WithDataHttpCode(): void
+	public function testErrorWithDataHttpCode(): void
 	{
 		$http_codes = [HttpResponse::HTTP_CONFLICT,
 		               HttpResponse::HTTP_BAD_REQUEST,
@@ -70,6 +74,8 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithData()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithData(): void
 	{
@@ -83,6 +89,8 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithDataAndHttpCode()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithDataAndHttpCode(): void
 	{
@@ -104,6 +112,8 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithHttpCode()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithHttpCode(): void
 	{
@@ -124,6 +134,8 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithMessageAndData()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithMessageAndData(): void
 	{
@@ -139,6 +151,8 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithMessageAndDataAndDebug()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithMessageAndDataAndDebug(): void
 	{
@@ -170,6 +184,8 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests errorWithMessage()
+	 *
+	 * @return void
 	 */
 	public function testErrorWithMessage(): void
 	{
@@ -184,6 +200,8 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Checks if using errorXXX() with OK() code triggers resistance.
+	 *
+	 * @return void
 	 */
 	public function testErrorWithOkCode(): void
 	{
@@ -192,9 +210,11 @@ class ErrorTest extends TestCase
 	}
 
 	/**
-	 * Tests error() handling api code with no message mapping
+	 * Tests error() handling api code with no message mapping.
+	 *
+	 * @return void
 	 */
-	public function testError_MissingMessageMapping(): void
+	public function testErrorMissingMessageMapping(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -213,9 +233,11 @@ class ErrorTest extends TestCase
 	}
 
 	/**
-	 * Tests buildErrorResponse() fed with not allowed OK api code
+	 * Tests buildErrorResponse() fed with not allowed OK api code.
+	 *
+	 * @return void
 	 */
-	public function testBuildErrorResponse_ApiCodeOK(): void
+	public function testBuildErrorResponseApiCodeOK(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
@@ -232,8 +254,10 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests buildErrorResponse() fed with @null as http_code
+	 *
+	 * @return void
 	 */
-	public function testBuildErrorResponse_NullHttpCode(): void
+	public function testBuildErrorResponseNullHttpCode(): void
 	{
 		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
 		$api_codes_class_name = $this->getApiCodesClassName();
@@ -251,8 +275,10 @@ class ErrorTest extends TestCase
 
 	/**
 	 * Tests buildErrorResponse() fed with http code out of allowed bounds
+	 *
+	 * @return void
 	 */
-	public function testBuildErrorResponse_TooLowHttpCode(): void
+	public function testBuildErrorResponseTooLowHttpCode(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 

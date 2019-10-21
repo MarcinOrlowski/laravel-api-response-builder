@@ -28,6 +28,12 @@ trait ApiCodesTests
 {
 	use TestingHelpers;
 
+	/**
+	 * Returns array of constatnt names that should be ignored during other
+	 * tests.
+	 *
+	 * @return array
+	 */
 	protected function getConstantsToIgnore(): array
 	{
 		return [
@@ -36,7 +42,14 @@ trait ApiCodesTests
 		];
 	}
 
-	protected function getConstantsNowMethods(): array
+	/**
+	 * Returns array of constant names that are now turned into
+	 * regular methods, so these methods will be now called
+	 * by other tests.
+	 *
+	 * @return array
+	 */
+	protected function getConstantsThatAreNowMethods(): array
 	{
 		return ['OK_OFFSET',
 		        'NO_ERROR_MESSAGE_OFFSET',
@@ -50,6 +63,8 @@ trait ApiCodesTests
 
 	/**
 	 * Checks if Api codes range is set right
+	 *
+	 * @return void
 	 *
 	 * @noinspection PhpUnhandledExceptionInspection
 	 */
@@ -66,6 +81,8 @@ trait ApiCodesTests
 
 	/**
 	 * Checks if defined code range is large enough to accomodate built-in codes.
+	 *
+	 * @return void
 	 */
 	public function testCodeRangeIsLargeEnough(): void
 	{
@@ -77,14 +94,16 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if all Api codes defined in ApiCodes class contain mapping entry
+	 * Checks if all Api codes defined in ApiCodes class contain mapping entry.
+	 *
+	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
 	public function testIfAllCodesGotMapping(): void
 	{
 		$const_to_ignore = $this->getConstantsToIgnore();
-		$const_now_method = $this->getConstantsNowMethods();
+		$const_now_method = $this->getConstantsThatAreNowMethods();
 
 		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
@@ -107,12 +126,14 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if all Api codes are in correct and allowed range,
+	 * Checks if all Api codes are in correct and allowed range.
+	 *
+	 * @return void
 	 */
 	public function testIfAllCodesAreInRange(): void
 	{
 		$const_to_ignore = $this->getConstantsToIgnore();
-		$const_now_method = $this->getConstantsNowMethods();
+		$const_now_method = $this->getConstantsThatAreNowMethods();
 
 		/** @var BaseApiCodes $api_codes */
 		$api_codes = $this->getApiCodesClassName();
@@ -136,7 +157,9 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if all defined Api code constants' values are unique
+	 * Checks if all defined Api code constants' values are unique.
+	 *
+	 * @return void
 	 */
 	public function testIfAllApiValuesAreUnique(): void
 	{
@@ -149,9 +172,9 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if all codes are mapped to existing locale strings
+	 * Checks if all codes are mapped to existing locale strings.
 	 *
-	 * TODO: check translations too
+	 * @return void
 	 */
 	public function testIfAllCodesAreCorrectlyMapped(): void
 	{
@@ -169,8 +192,10 @@ trait ApiCodesTests
 
 	/**
 	 * Tests if "classes" config entries properly set.
+	 *
+	 * @return void
 	 */
-	public function testConfig_ClassesMappingEntries(): void
+	public function testConfigClassesMappingEntries(): void
 	{
 		$classes = \Config::get(ResponseBuilder::CONF_KEY_CLASSES) ?? [];
 		if (count($classes) === 0) {

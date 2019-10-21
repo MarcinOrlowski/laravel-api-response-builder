@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
 
 /**
  * Laravel API Response Builder
@@ -41,6 +41,8 @@ class TestModel
 
 	/**
 	 * Converts model to array
+	 *
+	 * @return array
 	 */
 	public function toArray(): array
 	{

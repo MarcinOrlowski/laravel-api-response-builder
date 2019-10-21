@@ -16,15 +16,19 @@ namespace MarcinOrlowski\ResponseBuilder;
 class Validator
 {
 	/**
-	 * @param string $key
-	 * @param mixed  $var
+	 * Checks if given $val is of type integer
+	 *
+	 * @param string $key Name of the key to be used if exception is thrown.
+	 * @param mixed  $val Value to validate.
+	 *
+	 * @return void
 	 *
 	 * @throws \InvalidArgumentException
 	 */
-	public static function assertInt(string $key, $var): void
+	public static function assertInt(string $key, $val): void
 	{
-		if (!is_int($var)) {
-			$msg = sprintf('"%s" must be an integer (%s given)', $key, gettype($var));
+		if (!is_int($val)) {
+			$msg = sprintf('"%s" must be an integer (%s given)', $key, gettype($val));
 			throw new \InvalidArgumentException($msg);
 		}
 	}
@@ -35,7 +39,10 @@ class Validator
 	 * @param int    $min
 	 * @param int    $max
 	 *
+	 * @return void
+	 *
 	 * @throws \InvalidArgumentException
+	 * @throws \RuntimeException
 	 */
 	public static function assertIntRange(string $key, $var, int $min, int $max): void
 	{

@@ -15,13 +15,16 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
-class BuildResponseTest extends TestCase
+class AutoConversionTest extends TestCase
 {
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
+	 *
+	 * @return void
 	 */
-	public function testBuildResponse_ClassAutoConversionSingleElement(): void
+	public function testClassAutoConversionSingleElement(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_val = $this->getRandomString('model');
@@ -48,9 +51,12 @@ class BuildResponseTest extends TestCase
 	}
 
 	/**
-	 * Tests if buildResponse() would properly handle auto conversion when mapped class is part of bigger data set
+	 * Tests if buildResponse() would properly handle auto conversion when mapped
+	 * class is part of bigger data set.
+	 *
+	 * @return void
 	 */
-	public function testBuildResponse_ClassAutoConversionAsPartOfDataset(): void
+	public function testClassAutoConversionAsPartOfDataset(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_1_val = $this->getRandomString('model_1');
@@ -111,52 +117,27 @@ class BuildResponseTest extends TestCase
 	 *
 	 * @param mixed $data Test data as yelded by dataProvider
 	 *
-	 * @dataProvider dataProvider_testBuildResponse_InvalidDataType
+	 * @return void
+	 *
+	 * @dataProvider dataProviderTestInvalidDataType
 	 */
-	public function testBuildResponse_InvalidDataType($data): void
+	public function testInvalidDataType($data): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		ResponseBuilder::success($data);
 	}
 
 	/**
-	 * Data provider for testBuildResponse_InvalidDataType test
+	 * Data provider for testBuildResponse_InvalidDataType test.
+	 *
+	 * @return array
 	 */
-	public function dataProvider_testBuildResponse_InvalidDataType(): array
+	public function dataProviderTestInvalidDataType(): array
 	{
 		return [
 			[(object)['no' => 'mapping']],
 			['invalid'],
 			[666],
 		];
-	}
-
-	/**
-	 * @noinspection PhpDocMissingThrowsInspection
-	 */
-	public function testMake_WrongMessage(): void
-	{
-		$this->expectException(\InvalidArgumentException::class);
-
-		/** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
-		$api_codes_class_name = $this->getApiCodesClassName();
-
-		$message_or_api_code = [];    // invalid data type
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		/** @noinspection PhpParamsInspection */
-		$this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
-	}
-
-	/**
-	 * @noinspection PhpDocMissingThrowsInspection
-	 */
-	public function testMake_CustomMessageAndCodeOutOfRange(): void
-	{
-		$this->expectException(\InvalidArgumentException::class);
-
-		$api_code = $this->max_allowed_code + 1;    // invalid
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callMakeMethod(true, $api_code, 'message');
 	}
 }

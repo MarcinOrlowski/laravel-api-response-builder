@@ -22,8 +22,10 @@ class TranslationTest extends TestCase
 {
 	/**
 	 * Checks if translations are in par with base language
+	 *
+	 * @return void
 	 */
-	public function testConverter_Constructor(): void
+	public function testTranslationFiles(): void
 	{
 		$base_lang = 'en';
 		$supported_langs = ['pl'];
@@ -39,7 +41,7 @@ class TranslationTest extends TestCase
 			// ensure it has all the keys base translation do
 			foreach ($base_translation as $key => $val) {
 				$this->assertArrayHasKey($key, $translation);
-				unset($translation[$key]);
+				unset($translation[ $key ]);
 			}
 			// ensure we have no dangling translation entries left that
 			// are no longer present in base translation.

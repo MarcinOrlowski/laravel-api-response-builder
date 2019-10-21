@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
 
 /**
  * Laravel API Response Builder
@@ -14,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use Illuminate\Support\Facades\Request;
 
 /**
  * Class TestModel to verify auto-conversion feature
@@ -44,8 +44,12 @@ class TestModelJsonResource extends JsonResource
 
 	/**
 	 * Converts model to array. Signature must match JsonResource::toArray()
+	 *
+	 * @param Request $request
+	 *
+	 * @return array
 	 */
-	public function toArray($request=null): array
+	public function toArray($request = null): array
 	{
 		return [
 			'val' => $this->val,

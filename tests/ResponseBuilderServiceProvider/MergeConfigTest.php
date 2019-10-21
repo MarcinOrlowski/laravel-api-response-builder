@@ -15,21 +15,25 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider;
 
-class ResponseBuilderServiceProviderTest extends TestCase
+class MergeConfigTest extends TestCase
 {
-
 	/**
-	 * Checks if ServiceProvider's configMerge properly merges multi-dimensional arrays
+	 * Checks if ServiceProvider's configMerge properly merges multi-dimensional arrays.
+	 *
+	 * @return void
+	 *
+	 * @throws \ReflectionException
 	 */
 	public function testMergeConfig(): void
 	{
-		$sp = new ResponseBuilderServiceProvider(null);
-
-		$key2_orig_val = $this->getRandomString('orig');;
+		$key2_orig_val = $this->getRandomString('orig');
 		$key2_new_val = $this->getRandomString('NEW');
 
 		$key1_orig_val = $this->getRandomString('orig');
 		$key1_new_val = $this->getRandomString('NEW');
+
+		$key3_orig_val = $this->getRandomString('numeric');
+		$key3_new_val = $this->getRandomString('numeric_NEW');
 
 		$original = [
 			'key1' => [
@@ -45,9 +49,9 @@ class ResponseBuilderServiceProviderTest extends TestCase
 			'key2' => $key2_new_val,
 		];
 
+		$sp = new ResponseBuilderServiceProvider(null);
 		$merged = $this->callProtectedMethod($sp, 'mergeConfig', [$original,
 		                                                          $merging]);
-
 		$this->assertCount(2, $merged);
 		$this->assertArrayHasKey('key1', $merged);
 		$this->assertArrayHasKey('key2', $merged);
@@ -62,4 +66,30 @@ class ResponseBuilderServiceProviderTest extends TestCase
 		$this->assertEquals($key2_new_val, $merged['key2']);
 	}
 
+	/**
+	 * Tests if numeric keys are properly handled by config merger.
+	 *
+	 * @return void
+	 * @throws \ReflectionException
+	 */
+	public function testMergeConfigWithNumericKey(): void
+	{
+		$key_orig_val = $this->getRandomString('numeric');
+		$key_new_val = $this->getRandomString('numeric_NEW');
+
+		$original = [
+			100 => ['val' => $key_orig_val],
+		];
+
+		$merging = [
+			100 => ['val' => $key_new_val],
+		];
+
+		$sp = new ResponseBuilderServiceProvider(null);
+		$merged = $this->callProtectedMethod($sp, 'mergeConfig', [$original,
+		                                                          $merging]);
+
+		$this->assertCount(2, $merged);
+
+	}
 }

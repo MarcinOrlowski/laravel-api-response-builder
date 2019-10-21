@@ -13,17 +13,18 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Illuminate\Support\Facades\Config;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
+use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelChild;
 
 class ConverterTest extends TestCase
 {
 	/**
 	 * Checks if Converter's constructor would throw exception when configuration is invalid.
 	 */
-	public function testConverter_Constructor(): void
+	public function testConstructor(): void
 	{
 		// GIVEN incorrect maping configuration
 		Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
@@ -39,7 +40,7 @@ class ConverterTest extends TestCase
 	 * Checks if object of child class will be properly converted when
 	 * configration mapping exists for its parent class only.
 	 */
-	public function testConverter_GetClassMappingConfigOrThrow(): void
+	public function testSubclassOfConfiguredClassConversion(): void
 	{
 		// GIVEN two objects with direct inheritance relation
 		$parent_val = $this->getRandomString('parent');

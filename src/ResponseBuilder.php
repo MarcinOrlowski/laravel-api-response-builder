@@ -56,6 +56,7 @@ class ResponseBuilder
 	public const CONF_KEY_MIN_CODE               = 'response_builder.min_code';
 	public const CONF_KEY_MAX_CODE               = 'response_builder.max_code';
 	public const CONF_KEY_RESPONSE_KEY_MAP       = 'response_builder.map';
+	public const CONF_EXCEPTION_HANDLER_KEY      = 'response_builder.exception_handler';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information

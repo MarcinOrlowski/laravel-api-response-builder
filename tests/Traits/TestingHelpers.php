@@ -328,6 +328,7 @@ trait TestingHelpers
 	 * @return mixed
 	 *
 	 * @throws \ReflectionException
+	 * @throws \RuntimeException
 	 */
 	protected function callProtectedMethod($obj_or_class, string $method_name, array $args = [])
 	{

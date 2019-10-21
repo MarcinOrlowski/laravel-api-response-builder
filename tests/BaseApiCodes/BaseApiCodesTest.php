@@ -16,12 +16,14 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
-class ApiCodeBaseTest extends TestCase
+class BaseApiCodesTest extends TestCase
 {
 	/**
 	 * Tests getMinCode() with invalid config
+	 *
+	 * @return void
 	 */
-	public function testGetMinCode_MissingConfigKey(): void
+	public function testGetMinCodeMissingConfigKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
@@ -32,8 +34,10 @@ class ApiCodeBaseTest extends TestCase
 
 	/**
 	 * Tests getMaxCode() with invalid config
+	 *
+	 * @return void
 	 */
-	public function testGetMaxCode_MissingConfigKey(): void
+	public function testGetMaxCodeMissingConfigKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
@@ -44,8 +48,10 @@ class ApiCodeBaseTest extends TestCase
 
 	/**
 	 * Tests getMap() with missing config
+	 *
+	 * @return void
 	 */
-	public function testGetMap_MissingConfigKey(): void
+	public function testGetMapMissingConfigKey(): void
 	{
 		$this->expectException(\RuntimeException::class);
 
@@ -56,8 +62,10 @@ class ApiCodeBaseTest extends TestCase
 
 	/**
 	 * Tests getMap() with wrong config
+	 *
+	 * @return void
 	 */
-	public function testGetMap_WrongConfig(): void
+	public function testGetMapWrongConfig(): void
 	{
 		$this->expectException(\RuntimeException::class);
 

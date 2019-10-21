@@ -101,24 +101,26 @@ class ExceptionHandlerHelper
 	/**
 	 * Process singe error and produce valid API response
 	 *
-	 * @param Exception $exception         Exception to be processed
-	 * @param string    $exception_type    Category of the exception
-	 * @param integer   $default_api_code  API code to return
-	 * @param integer   $default_http_code HTTP code to return
+	 * @param Exception $exception            Exception to be processed
+	 * @param string    $exception_config_key Category of the exception
+	 * @param integer   $fallback_api_code    API code to return
+	 * @param integer   $fallback_http_code   HTTP code to return
 	 *
 	 * @return HttpResponse
 	 */
-	protected static function error(Exception $exception, $exception_type, $default_api_code,
-	                                $default_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse
+	protected static function error(Exception $exception, $exception_config_key, $fallback_api_code,
+	                                $fallback_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse
 	{
 		// common prefix for config key
-		$base_config = 'response_builder.exception_handler.exception';
+		$base_config_key = sprintf('%s.exception', ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY);
 
-		$api_code = Config::get("{$base_config}.{$exception_type}.code", $default_api_code);
-		$http_code = Config::get("{$base_config}.{$exception_type}.http_code", $default_http_code);
+		// get API and HTTP codes from exception handler config or use fallback values if no such
+		// config fields are set.
+		$api_code = Config::get("{$base_config_key}.{$exception_config_key}.code", $fallback_api_code);
+		$http_code = Config::get("{$base_config_key}.{$exception_config_key}.http_code", $fallback_http_code);
 
 		// check if we now have valid HTTP error code for this case or need to make one up.
-		if ($http_code === 0) {
+		if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
 			// no code, let's try to get the exception status
 			$http_code = ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException)
 				? $exception->getStatusCode()
@@ -127,7 +129,7 @@ class ExceptionHandlerHelper
 
 		// can it be considered valid HTTP error code?
 		if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
-			$http_code = $default_http_code;
+			$http_code = $fallback_http_code;
 		}
 
 		// let's figure out what event we are handling now
@@ -141,7 +143,7 @@ class ExceptionHandlerHelper
 		];
 		$base_api_code = BaseApiCodes::NO_ERROR_MESSAGE();
 		foreach ($known_codes as $item_config_key => $item_api_code) {
-			if ($api_code === Config::get("{$base_config}.{$item_config_key}.code", $item_api_code)) {
+			if ($api_code === Config::get("{$base_config_key}.{$item_config_key}.code", $item_api_code)) {
 				$base_api_code = $api_code;
 				break;
 			}
@@ -149,7 +151,7 @@ class ExceptionHandlerHelper
 
 		/** @var array|null $data Optional payload to return */
 		$data = null;
-		if ($api_code === Config::get("{$base_config}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION())) {
+		if ($api_code === Config::get("{$base_config_key}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION())) {
 			/** @var ValidationException $exception */
 			$data = [ResponseBuilder::KEY_MESSAGES => $exception->validator->errors()->messages()];
 		}
@@ -157,39 +159,14 @@ class ExceptionHandlerHelper
 		$key = BaseApiCodes::getCodeMessageKey($api_code) ?? BaseApiCodes::getCodeMessageKey($base_api_code);
 
 		// let's build error error_message
-		$ex_message = trim($exception->getMessage());
-
-		// ensure we won't fail due to exception incorect encoding
-		// TODO(orlowski): Is this really needed?
-		if (!mb_check_encoding($ex_message, 'UTF-8')) {
-			// let's check there's iconv and mb_string available
-			if (function_exists('iconv') && function_exists('mb_detec_encoding')) {
-				$ex_message = iconv(mb_detect_encoding($ex_message, mb_detect_order(), true), 'UTF-8', $ex_message);
-			} else {
-				// lame fallback, in case there's no iconv/mb_string installed
-				$ex_message = htmlspecialchars_decode(htmlspecialchars($ex_message, ENT_SUBSTITUTE, 'UTF-8'));
-			}
-		}
-
-		/** @var string $error_message final error error_message */
-		$error_message = $ex_message;
-		$ex_message = get_class($exception);
-
-		if ($ex_message === '') {
-			$error_message = Lang::get($key, [
-				'api_code'      => $api_code,
-				'error_message' => $ex_message,
-				'message'       => get_class($exception),
-			]);
-		}
+		$error_message = $exception->getMessage();
 
 		// if we do not have any error_message in the hand yet, we need to fall back to built-in string configured
 		// for this particular exception.
 		if ($error_message === '') {
 			$error_message = Lang::get($key, [
-				'api_code'      => $api_code,
-				'error_message' => $ex_message,
-				'message'       => get_class($exception),
+				'api_code' => $api_code,
+				'message'  => get_class($exception),
 			]);
 		}
 

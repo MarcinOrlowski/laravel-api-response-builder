@@ -6,13 +6,18 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* 6.2.1 (2019-10-21)
+   * Added Laravel 6.3 to Travis-CI unit tests.
+   * Splitted tests into separate folders per class tested.
+   * ExceptionHandler no longer tries to enforce UTF-8 on exception message. 
+
 * 6.2.0 (2019-10-19)
    * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
    * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources) data class.
    * Added unit test for `ResponseBuilderServiceProvider::mergeConfg()`.
    * Moved data conversion code to separate `Converter` class.
    * Added `LICENSE.md` file.
-   * Added Laravel 6.2 to Travis tests.
+   * Added Laravel 6.2 to Travis-CI unit tests.
    * Added unit tests for translation files.
 
 * 6.1.2 (2019-10-02)

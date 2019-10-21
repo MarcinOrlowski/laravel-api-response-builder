@@ -21,6 +21,8 @@ class SuccessTest extends TestCase
 {
 	/**
 	 * Check plain success() invocation
+	 *
+	 * @return void
 	 */
 	public function testSuccess(): void
 	{
@@ -33,8 +35,10 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests success() behavior with different JSON encoding options used
+	 *
+	 * @return void
 	 */
-	public function testSuccess_EncodingOptions(): void
+	public function testSuccessEncodingOptions(): void
 	{
 		$test_string = 'ąćę';
 		$test_string_escaped = $this->escape8($test_string);
@@ -73,8 +77,10 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests success() with custom API code no custom message
+	 *
+	 * @return void
 	 */
-	public function testSuccess_ApiCode_NoCustomMessage(): void
+	public function testSuccessApiCodeNoCustomMessage(): void
 	{
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, []);
 		$this->response = ResponseBuilder::success(null, $this->random_api_code);
@@ -85,8 +91,10 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests success() with custom API code and no custom message mapping
+	 *
+	 * @return void
 	 */
-	public function testSuccess_ApiCode_CustomMessage(): void
+	public function testSuccessApiCodeCustomMessage(): void
 	{
 		$this->response = ResponseBuilder::success(null, $this->random_api_code);
 		$j = $this->getResponseSuccessObject($this->random_api_code);
@@ -97,8 +105,10 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests success() with custom API code and custom message
+	 *
+	 * @return void
 	 */
-	public function testSuccess_ApiCode_CustomMessageLang(): void
+	public function testSuccessApiCodeCustomMessageLang(): void
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		\Config::set(ResponseBuilder::CONF_KEY_MAP, [
@@ -119,8 +129,10 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests successWithCode() with custom API code and custom message
+	 *
+	 * @return void
 	 */
-	public function testSuccessWithCode_ApiCode_CustomMessageLang(): void
+	public function testSuccessWithCodeApiCodeCustomMessageLang(): void
 	{
 		// for simplicity let's reuse existing message that is using placeholder
 		/** @noinspection PhpUndefinedClassInspection */
@@ -141,8 +153,10 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Checks success() with valid payload types and HTTP code
+	 *
+	 * @return void
 	 */
-	public function testSuccess_DataAndHttpCode(): void
+	public function testSuccessDataAndHttpCode(): void
 	{
 		$payloads = [
 			null,
@@ -173,6 +187,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests successWithHttpCode()
+	 *
+	 * @return void
 	 */
 	public function testSuccessHttpCode(): void
 	{
@@ -189,6 +205,8 @@ class SuccessTest extends TestCase
 
 	/**
 	 * Tests that passing null as argument to successWithHttpCode() it will fall back to defaults.
+	 *
+	 * @return void
 	 */
 	public function testSuccessWithNullAsHttpCode(): void
 	{
@@ -197,7 +215,9 @@ class SuccessTest extends TestCase
 	}
 
 	/**
-	 * Tests if successXX() with too high http code would throw expected exception
+	 * Tests if successXX() with too high http code would throw expected exception.
+	 *
+	 * @return void
 	 */
 	public function testSuccessWithTooBigHttpCode(): void
 	{
@@ -206,10 +226,11 @@ class SuccessTest extends TestCase
 	}
 
 	/**
-	 * Tests if successXX() with too low http code would throw expected exception
+	 * Tests if successXX() with too low http code would throw expected exception.
+	 *
+	 * @return void
 	 */
-	public
-	function testSuccessWithTooLowHttpCode(): void
+	public function testSuccessWithTooLowHttpCode(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		ResponseBuilder::successWithHttpCode(0);

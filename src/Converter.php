@@ -23,12 +23,14 @@ use Illuminate\Support\Facades\Config;
 class Converter
 {
 	/**
-	 * @var array|null
+	 * @var array
 	 */
 	protected $classes;
 
 	/**
 	 * Converter constructor.
+	 *
+	 * @throws \RuntimeException
 	 */
 	public function __construct()
 	{
@@ -44,9 +46,9 @@ class Converter
 	/**
 	 * Returns local copy of configuration mapping for the classes.
 	 *
-	 * @return array|null
+	 * @return array
 	 */
-	public function getClasses(): ?array
+	public function getClasses(): array
 	{
 		return $this->classes;
 	}
@@ -54,13 +56,14 @@ class Converter
 	/**
 	 * Checks if we have "classes" mapping configured for $data object class.
 	 * Returns @true if there's valid config for this class.
+	 * Throws \RuntimeException if there's no config "classes" mapping entryfor this object configured.
+	 * Throws \InvalidArgumentException if No data conversion mapping configured for given class.
 	 *
 	 * @param object $data Object to check mapping for.
 	 *
 	 * @return array
 	 *
-	 * @throws \RuntimeException if there's no config "classes" mapping entry
-	 *                           for this object configured.
+	 * @throws \InvalidArgumentException
 	 */
 	protected function getClassMappingConfigOrThrow(object $data): array
 	{
@@ -90,9 +93,11 @@ class Converter
 	/**
 	 * We need to prepare source data
 	 *
-	 * @param null $data
+	 * @param object|array|null $data
 	 *
 	 * @return array|null
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public function convert($data = null): ?array
 	{
@@ -118,6 +123,8 @@ class Converter
 	 * @param array $data array to recursively convert known elements of
 	 *
 	 * @return array
+	 *
+	 * @throws \RuntimeException
 	 */
 	protected function convertArray(array $data): array
 	{
