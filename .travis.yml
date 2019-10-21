@@ -14,8 +14,8 @@
 language: php
 
 php:
-  - 7.2
-  - 7.3
+#  - 7.2
+#  - 7.3
   - 7.4snapshot
   - nightly
 
@@ -35,7 +35,9 @@ cache:
 
 before_script:
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
-  - composer install --prefer-dist
+  # Install PHP dependencies. We skip --prefer-dist on nightly otherwise composer would refuse to work.
+  - if [[ "${PHP_VERSION}" != "nightly" ]]; then composer install --prefer-dist ; fi
+  - if [[ "${PHP_VERSION}" == "nightly" ]]; then composer install ; fi
   # We need to tweak signature of setUp() and tearDown() methods and strip ": void" otherwise PHP will
   # fail complaining. This affects Laravel 5.8+ and 6.x (up to 6.3 for now) as they pull recent Orchestra
   # that features method signature changes.
