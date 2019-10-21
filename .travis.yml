@@ -37,8 +37,7 @@ cache:
 
 before_script:
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
-  - FLAGS="--prefer-dist"
-  - composer install "${FLAGS}"
+  - composer install --prefer-dist
   # We need to tweak signature of setUp() and tearDown() methods and strip ": void" otherwise PHP will
   # fail complaining. This affects Laravel 5.8+ and 6.x (up to 6.3 for now) as they pull recent Orchestra
   # that features method signature changes.
@@ -50,6 +49,6 @@ script:
 
 after_success:
   # If coverage file is generated then upload it to Codacy (requires CODACY_PROJECT_TOKEN= env var set).
-  - if [[ -f /tmp/coverage.xml ]]; then vendor/bin/codacycoverage clover /tmp/coverage.xml ; fi
+  - vendor/bin/codacycoverage clover /tmp/coverage.xml
   # Scrunitizer-CI
-  - if [[ -f /tmp/coverage.xml ]]; then wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar && php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/coverage.xml ; fi
+  - wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar && php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/coverage.xml
