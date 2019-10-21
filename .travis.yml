@@ -13,10 +13,6 @@
 
 language: php
 
-# Enforcing Ubuntu Trusty to keep PHP 5.5 support
-# https://blog.travis-ci.com/2019-04-15-xenial-default-build-environment
-dist: trusty
-
 php:
   - 7.2
   - 7.3
