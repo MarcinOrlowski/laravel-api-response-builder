@@ -17,7 +17,6 @@ php:
   - 7.2
   - 7.3
   - 7.4snapshot
-  - nightly
 
 env:
   - LARAVEL_VERSION="6.0"
@@ -36,9 +35,9 @@ cache:
 before_script:
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
   - composer install --prefer-dist
-  # We need to tweak signature of setUp() and tearDown() methods and strip ": void" otherwise PHP will
-  # fail complaining. This affects Laravel 5.8+ and 6.x (up to 6.3 for now) as they pull recent Orchestra
-  # that features method signature changes.
+  # Need to tweak signature of setUp() and tearDown() methods and strip the ": void" from it, otherwise tests
+  # run will fail due to signature mismatch. This affects Laravel 5.8+ and 6.x as they pull recent Orchestra
+  # version that features methods' signature change.
   - "sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php"
   - "sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php"
 
