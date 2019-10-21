@@ -16,7 +16,7 @@ language: php
 php:
 #  - 7.2
 #  - 7.3
-  - 7.4snapshot
+#  - 7.4snapshot
   - nightly
 
 env:
@@ -36,6 +36,7 @@ cache:
 before_script:
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
   # Install PHP dependencies. We skip --prefer-dist on nightly otherwise composer would refuse to work.
+  - if [[ "${PHP_VERSION}" == "nightly" ]]; then PHP_VERSION=7.4 ; fi
   - if [[ "${PHP_VERSION}" != "nightly" ]]; then composer install --prefer-dist ; fi
   - if [[ "${PHP_VERSION}" == "nightly" ]]; then composer install ; fi
   # We need to tweak signature of setUp() and tearDown() methods and strip ": void" otherwise PHP will
