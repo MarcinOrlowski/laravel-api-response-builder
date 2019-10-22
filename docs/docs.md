@@ -2,8 +2,8 @@
 
 # REST API Response Builder for Laravel #
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
- nice, normalized and easy to consume REST API responses.
+ `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to build
+ nice, normalized and easy to consume REST API JSON responses.
 
 ## Table of contents ##
 
@@ -26,10 +26,10 @@
 ## Response structure ##
 
  Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not
- only when I develop the API itself, but also when I'd try to use it i.e. in mobile applications, therefore response created with
- this package **guarantees** consistent JSON structure.
+ only when I develop the API itself, but also when I'd try to use it i.e. in mobile applications, therefore all responses created
+ by this package **guarantee** consistent JSON structure by design.
  
- Default response will always contains at least the following elements:
+ By default response always contain at least the following elements:
 
 ```json
 {
