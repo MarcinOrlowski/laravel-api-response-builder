@@ -8,7 +8,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  *
  * @package   MarcinOrlowski\ResponseBuilder
  *
- * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2019 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
@@ -56,7 +56,7 @@ class Converter
 	/**
 	 * Checks if we have "classes" mapping configured for $data object class.
 	 * Returns @true if there's valid config for this class.
-	 * Throws \RuntimeException if there's no config "classes" mapping entryfor this object configured.
+	 * Throws \RuntimeException if there's no config "classes" mapping entry for this object configured.
 	 * Throws \InvalidArgumentException if No data conversion mapping configured for given class.
 	 *
 	 * @param object $data Object to check mapping for.

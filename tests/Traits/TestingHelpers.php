@@ -7,7 +7,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  *
  * @package   MarcinOrlowski\ResponseBuilder
  *
- * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2019 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
@@ -42,7 +42,7 @@ trait TestingHelpers
 	protected $error_message_map = [];
 
 	/**
-	 * Localization key assigned to randomly choosen api_code
+	 * Localization key assigned to randomly chosen api_code
 	 *
 	 * @var string
 	 */
@@ -403,7 +403,7 @@ trait TestingHelpers
 	 * UTF8 aware version of ord()
 	 *
 	 * @param string $string UTF8 string to work on
-	 * @param int    $offset start offset. Note, offset will be updated to properly skip multibyte chars!
+	 * @param int    $offset start offset. Note, offset will be updated to properly skip multi-byte chars!
 	 *
 	 * $text = "abcàêß€abc";
 	 * $offset = 0;
@@ -418,20 +418,20 @@ trait TestingHelpers
 		$code = ord(substr($string, $offset, 1));
 		if ($code >= 128) {             //otherwise 0xxxxxxx
 			if ($code < 224) {          //110xxxxx
-				$bytesnumber = 2;
+				$bytes_number = 2;
 			} elseif ($code < 240) {    //1110xxxx
-				$bytesnumber = 3;
+				$bytes_number = 3;
 			} elseif ($code < 248) {    //11110xxx
-				$bytesnumber = 4;
+				$bytes_number = 4;
 			}
 
-			$codetemp = $code - 192 - ($bytesnumber > 2 ? 32 : 0) - ($bytesnumber > 3 ? 16 : 0);
-			for ($i = 2; $i <= $bytesnumber; $i++) {
+			$tmp = $code - 192 - ($bytes_number > 2 ? 32 : 0) - ($bytes_number > 3 ? 16 : 0);
+			for ($i = 2; $i <= $bytes_number; $i++) {
 				$offset++;
 				$code2 = ord(substr($string, $offset, 1)) - 128;        //10xxxxxx
-				$codetemp = $codetemp * 64 + $code2;
+				$tmp = $tmp * 64 + $code2;
 			}
-			$code = $codetemp;
+			$code = $tmp;
 		}
 		$offset++;
 		if ($offset >= strlen($string)) {

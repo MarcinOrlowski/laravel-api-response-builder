@@ -27,7 +27,7 @@
  need to get the value of built in code, use  what's the value You can still have If you need to get the value of
  built-in code you need to use replacement methods. These are named the same way as the constants, so if you want to get code 
  of `ApiCodes::OK` you need to call `ApiCodes::OK()` (or directly, `BaseApiCodes::OK()`). See `BaseApiCodes` class for all
- available public functions. Additionally, first 20 codes (0 to 19 incluside) of your code range is reserved for built-in codes, 
+ available public functions. Additionally, first 20 codes (0 to 19 inclusive) of your code range is reserved for built-in codes, 
  which means that if you define your code range to be `100`-`199` then you cannot use codes `100` to `119` for own purposes.
  The first code you can assign to own API code is `120`. 
  * `[Low]` Removed `exception_handler.use_exception_message_first` feature.
@@ -62,7 +62,7 @@
  * ApiCodeBase's `getErrorCodeConstants()` is now `getApiCodeConstants()`
  * ApiCodeBase's `getMapping()` is now `getCodeMessageKey()`
  * ApiCodeBase's `getBaseMapping()` is now `getReservedCodeMessageKey()`
- * Internal constants for `ExeceptionHandlerHelper` supported exceptions are now prefixed with `EX_` (i.e. `HTTP_NOT_FOUND`
+ * Internal constants for `ExceptionHandlerHelper` supported exceptions are now prefixed with `EX_` (i.e. `HTTP_NOT_FOUND`
  is now `EX_HTTP_NOT_FOUND`)
 
 

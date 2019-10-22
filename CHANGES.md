@@ -6,10 +6,14 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* 6.2.2 (2019-10-22)
+   * Squashed multiple typographic errors in documentation.
+
 * 6.2.1 (2019-10-21)
    * Added Laravel 6.3 to Travis-CI unit tests.
-   * Splitted tests into separate folders per class tested.
-   * ExceptionHandler no longer tries to enforce UTF-8 on exception message. 
+   * Split tests into separate folders per class tested.
+   * ExceptionHandler no longer tries to enforce UTF-8 on exception message.
+   * Added PHP 7.4-snapshot to unit tests. 
 
 * 6.2.0 (2019-10-19)
    * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
@@ -31,9 +35,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Created new library logo (see [artwork/](artwork/) folder).
    * Added more unit tests to improve coverage.
    * Updated documentation.
-   * Worked arround Laravel's config merger wnot working properly with multi-dimensional config arrays.
+   * Worked around Laravel's config merger not working properly with multi-dimensional config arrays.
    * Corrected ApiCodesTests trait failing on some methods.
-   * Included ApiCodesTest trait in base tests to avoid desync in future releases.
+   * Included ApiCodesTest trait in base tests to avoid de-sync in future releases.
    * Removed custom response keys mapping feature.
 
 * v6.0.0 (2019-09-20)
@@ -58,7 +62,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Removed `exception_handler.use_exception_message_first` feature.
    * Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
    * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods.
-   * Removed internal API code constants. Use corresponding methods to get proprt code value.
+   * Removed internal API code constants. Use corresponding methods to get proper code value.
    * Reimplemented Laravel config merger to support multi-dimensional configuration arrays too.
    * Removed `response_key_map` configuration option. 
    * You can now return HTTP codes from 5xx range with all error responses. 
@@ -116,7 +120,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * `[RB-59]` Added option to remap response JSON keys to user provided values
    * `[RB-54]` Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
-   * `[RB-37]` Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defails
+   * `[RB-37]` Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defaults
    * `[RB-47]` Exception Handler now supports `FormRequests` and returns all messages in `ResponseBuilder::KEY_MESSAGES`
    * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled same way `authentication_exception` is
    * `[RB-56]` Added configurable key for debug trace added to returned JSON response (if enabled)

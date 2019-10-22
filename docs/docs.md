@@ -2,8 +2,8 @@
 
 # REST API Response Builder for Laravel #
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
- nice, normalized and easy to consume REST API responses.
+ `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to build
+ nice, normalized and easy to consume REST API JSON responses.
 
 ## Table of contents ##
 
@@ -26,10 +26,10 @@
 ## Response structure ##
 
  Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not
- only when I develop the API itself, but also when I'd try to use it i.e. in mobile applicationsm, therefore response created with
- this package **guarantees** consisten JSON structure.
+ only when I develop the API itself, but also when I'd try to use it i.e. in mobile applications, therefore all responses created
+ by this package **guarantee** consistent JSON structure by design.
  
- Default response will always contains at least the following elements:
+ By default response always contain at least the following elements:
 
 ```json
 {
@@ -49,7 +49,7 @@
   * `message` (**string**) human readable message that is ready to display and explains human readable explanation of the `code` value,
   * `data` (**object**|**array**|**null**) if you return any additional data with your reply, it would end here. If no extra data is needed, that key still be present in the response with `null` value.
 
- **NOTE:** If you need to return other/different elements in the aboive structure (not in your `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for detailed information about how to achieve this.
+ **NOTE:** If you need to return other/different elements in the above structure (not in your `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for detailed information about how to achieve this.
 
 ----
 
@@ -237,7 +237,7 @@ return ResponseBuilder::errorWithMessage(ApiCodeBase::SOMETHING_WENT_WRONG, $msg
  API invocations in the way that in case of problems (and cascading failure) I still would able to tell which one failed first. 
  For example our API client app calls method of publicly exposed API "A". That API "A" internally calls method of completely
  different and separate API "B". Under the hood API "B" delegates some work and talks to API "C". When something go wrong and
- "C"'s metod fail, client shall see "C"'s error code and error message, not the "A"'s. To acheive this each API you chain return
+ "C"'s method fail, client shall see "C"'s error code and error message, not the "A"'s. To achieve this each API you chain return
  unique error codes and the values are unique per whole chain To support that `ResponseBuilder` features code ranges, allowing 
  you to configure `min_code` and `max_code` you want to be allowed to use in given API. `ResponseBuilder` will ensure no values not
  from that range is ever returned, so to make the whole chain "clear", you only need to properly assign non-overlapping ranges to 
@@ -389,8 +389,8 @@ return ResponseBuilder::success($flights);
 ],
 ```
 
- The above confgures two classes (`Model` and `Collection`). Whenver object of that class is spotted, method specified in `method` 
- key would be called on that obhject and data that method returns will be returned in JSON object using key specidied in `key`.
+ The above configures two classes (`Model` and `Collection`). Whenever object of that class is spotted, method specified in `method` 
+ key would be called on that object and data that method returns will be returned in JSON object using key specified in `key`.
 
  So in above example, if we get `Collection`, then `ResponseBuilder` would call `toArray()` on it, and result data would
  be added in returned JSON in `items` object.
@@ -649,5 +649,5 @@ MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.
 
 ## License ##
 
- * Written and copyrighted &copy;2016-2019 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * Written and copyrighted &copy;2016-2019 by Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

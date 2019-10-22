@@ -4,7 +4,7 @@
 #
 # @package   MarcinOrlowski\ResponseBuilder
 #
-# @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
+# @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
 # @copyright 2016-2019 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
@@ -13,13 +13,10 @@
 
 language: php
 
-# Enforcing Ubuntu Trusty to keep PHP 5.5 support
-# https://blog.travis-ci.com/2019-04-15-xenial-default-build-environment
-dist: trusty
-
 php:
   - 7.2
   - 7.3
+  - 7.4snapshot
 
 env:
   - LARAVEL_VERSION="6.0"
@@ -37,11 +34,10 @@ cache:
 
 before_script:
   - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
-  - FLAGS="--prefer-dist"
-  - composer install "${FLAGS}"
-  # We need to tweak signature of setUp() and tearDown() methods and strip ": void" otherwise PHP will
-  # fail complaining. This affects Laravel 5.8+ and 6.x (up to 6.3 for now) as they pull recent Orchestra
-  # that features method signature changes.
+  - composer install --prefer-dist
+  # Need to tweak signature of setUp() and tearDown() methods and strip the ": void" from it, otherwise tests
+  # run will fail due to signature mismatch. This affects Laravel 5.8+ and 6.x as they pull recent Orchestra
+  # version that features methods' signature change.
   - "sed -i 's/): void/)/' vendor/orchestra/testbench-core/src/TestCase.php"
   - "sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php"
 
@@ -50,6 +46,6 @@ script:
 
 after_success:
   # If coverage file is generated then upload it to Codacy (requires CODACY_PROJECT_TOKEN= env var set).
-  - if [[ -f /tmp/coverage.xml ]]; then vendor/bin/codacycoverage clover /tmp/coverage.xml ; fi
-  # Scrunitizer-CI
-  - if [[ -f /tmp/coverage.xml ]]; then wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar && php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/coverage.xml ; fi
+  - vendor/bin/codacycoverage clover /tmp/coverage.xml
+  # Scrutinizer-CI
+  - wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar && php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/coverage.xml
