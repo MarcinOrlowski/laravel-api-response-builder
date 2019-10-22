@@ -6,16 +6,16 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* 6.2.2 (2019-10-22)
-   * Squashed multiple typographic errors in documentation.
+* v6.2.2 (2019-10-22)
+   * Squashed multiple typographic errors in the documentation files.
 
-* 6.2.1 (2019-10-21)
+* v6.2.1 (2019-10-21)
    * Added Laravel 6.3 to Travis-CI unit tests.
    * Split tests into separate folders per class tested.
    * ExceptionHandler no longer tries to enforce UTF-8 on exception message.
    * Added PHP 7.4-snapshot to unit tests. 
 
-* 6.2.0 (2019-10-19)
+* v6.2.0 (2019-10-19)
    * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
    * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources) data class.
    * Added unit test for `ResponseBuilderServiceProvider::mergeConfg()`.
@@ -24,13 +24,13 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Added Laravel 6.2 to Travis-CI unit tests.
    * Added unit tests for translation files.
 
-* 6.1.2 (2019-10-02)
+* v6.1.2 (2019-10-02)
    * Corrected ServiceProvider used for tests.
 
-* 6.1.1 (2019-10-02)
+* v6.1.1 (2019-10-02)
    * Fixed `ResponseBuilderServiceProvider` using unreferenced `Arr` class method (reported by yassir3wad).
    
-* 6.1.0 (2019-09-28)
+* v6.1.0 (2019-09-28)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Created new library logo (see [artwork/](artwork/) folder).
    * Added more unit tests to improve coverage.
