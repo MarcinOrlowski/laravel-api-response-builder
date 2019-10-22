@@ -10,7 +10,7 @@
 [![Monthly Downloads](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/d/monthly)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![License](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/license)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/5c5f4dc1-41d5-49f9-b4ba-6268aa3fea00/big.png)](https://insight.sensiolabs.com/projects/5c5f4dc1-41d5-49f9-b4ba-6268aa3fea00)
+[![SensioLabs Insight](https://insight.sensiolabs.com/projects/5c5f4dc1-41d5-49f9-b4ba-6268aa3fea00/big.png)](https://insight.sensiolabs.com/projects/5c5f4dc1-41d5-49f9-b4ba-6268aa3fea00)
 
 [![Latest Unstable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/unstable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=dev)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
@@ -19,7 +19,7 @@
 
 ## Table of contents ##
 
- * [Intriduction](#introduction)
+ * [Introduction](#introduction)
  * [Why should I use it?](#benefits)
  * [Usage examples](#usage-examples)
  * [Features](#features)
@@ -36,16 +36,16 @@
 
 ## Introduction ##
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building  nice, normalized and standarized
- and easy to consume REST API JSON responses.
+ `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to build nice, normalized and easy to consume REST API 
+ JSON responses.
 
 ## Benefits ##
 
- `ResponseBuilder` is written for REST API developers by REST API developer and is based on my long lasting experiencde on both
+ `ResponseBuilder` is written for REST API developers by REST API developer and is based on my long lasting experience on both
  "sides" (API dev and API consumer) of variety of REST APIs. Lightweight, with simple to use public methods, covering multiple 
  potential use-cases, on-the-fly data conversion, localization support, automatic error message building, support
- for chainged APIs and (hopefuly) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder` 
- is desinged with **users of your API** in mind, which helps them easily deal with your API with ease. They get simple, well
+ for chained APIs and (hopefully) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder` 
+ is designed with **users of your API** in mind, which helps them easily deal with your API with ease. They get simple, well
  defined and predictable JSON structure responses with all the fields needed to consume it without any unnecessary a hassle nor 
  other trickery. 
  

@@ -6,7 +6,7 @@
 
     php artisan vendor:publish
 
- If you are fine with the defaults, this step can safely be ommited. You can also remove published `config/response_builder.php`
+ If you are fine with the defaults, this step can safely be omitted. You can also remove published `config/response_builder.php`
  file if exists.
 
 # Configuration options #
@@ -38,7 +38,7 @@ The entry key is a class name to check passed `data` object against, and configu
 Where `method` is a name of the method to that `ResponseBuilder` should call on the object to obtain array representation of its 
 internal state, while `key` is a string that will be used as the JSON response as key to array representation.
 
-**NOTE:** order or entries matters as matching is done in order of appearance and is done using PHP's `instanceof`. 
+**NOTE:** order or entries matters as matching is done in order of appearance and is done using PHP `instanceof`. 
 So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A` 
 then `B` related configuration must be put first.
 

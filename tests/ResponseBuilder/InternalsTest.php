@@ -7,7 +7,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  *
  * @package   MarcinOrlowski\ResponseBuilder
  *
- * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2019 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
@@ -19,7 +19,7 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 class InternalsTest extends TestCase
 {
 	/**
-	 * Tests if dist's config detaults matches ResponseBuilder::DEFAULT_ENODING_OPTIONS
+	 * Tests if dist's config defaults matches ResponseBuilder::DEFAULT_ENCODING_OPTIONS
 	 *
 	 * @return void
 	 */

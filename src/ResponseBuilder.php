@@ -8,7 +8,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  *
  * @package   MarcinOrlowski\ResponseBuilder
  *
- * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2019 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
@@ -82,7 +82,7 @@ class ResponseBuilder
 
 	/**
 	 * Default JSON encoding options. Must be specified as final value (i.e. 271) and NOT
-	 * exression i.e. `JSON_HEX_TAG|JSON_HEX_APOS|...` as such syntax is not yet supported
+	 * PHP expression i.e. `JSON_HEX_TAG|JSON_HEX_APOS|...` as such syntax is not yet supported
 	 * by PHP.
 	 *
 	 * 271 = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE

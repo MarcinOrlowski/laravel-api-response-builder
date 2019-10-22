@@ -7,7 +7,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  *
  * @package   MarcinOrlowski\ResponseBuilder
  *
- * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2019 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
@@ -29,7 +29,7 @@ trait ApiCodesTests
 	use TestingHelpers;
 
 	/**
-	 * Returns array of constatnt names that should be ignored during other
+	 * Returns array of constant names that should be ignored during other
 	 * tests.
 	 *
 	 * @return array
@@ -80,7 +80,7 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Checks if defined code range is large enough to accomodate built-in codes.
+	 * Checks if defined code range is large enough to accommodate built-in codes.
 	 *
 	 * @return void
 	 */

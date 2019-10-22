@@ -7,7 +7,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  *
  * @package   MarcinOrlowski\ResponseBuilder
  *
- * @author    Marcin Orlowski <mail (#) marcinorlowski (.) com>
+ * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2019 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
@@ -26,19 +26,19 @@ class ConverterTest extends TestCase
 	 */
 	public function testConstructor(): void
 	{
-		// GIVEN incorrect maping configuration
+		// GIVEN incorrect mapping configuration
 		Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
 		// THEN we expect exception thrown
 		$this->expectException(\RuntimeException::class);
 
-		// WHEN attempt to instantate Converter class
+		// WHEN attempt to instantiate Converter class
 		new Converter();
 	}
 
 	/**
 	 * Checks if object of child class will be properly converted when
-	 * configration mapping exists for its parent class only.
+	 * configuration mapping exists for its parent class only.
 	 */
 	public function testSubclassOfConfiguredClassConversion(): void
 	{
@@ -49,7 +49,7 @@ class ConverterTest extends TestCase
 		$child_val = $this->getRandomString('child');
 		$child = new TestModelChild($child_val);
 
-		// HAVING indirect maping configuration (of parent class)
+		// HAVING indirect mapping configuration (of parent class)
 		Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
 			get_class($parent) => [
 				ResponseBuilder::KEY_KEY    => $parent_key,
