@@ -6,8 +6,8 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
-   * 
+* 6.2.2 (2019-10-22)
+   * Squashed multiple typographic errors in documentation.
 
 * 6.2.1 (2019-10-21)
    * Added Laravel 6.3 to Travis-CI unit tests.
