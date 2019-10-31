@@ -416,8 +416,10 @@ class ResponseBuilder
 	}
 
 	/**
-	 * Creates standardised API response array. If you set APP_DEBUG to true, 'code_hex' field will be
-	 * additionally added to reported JSON for easier manual debugging.
+     * Creates standardised API response array. This is final method called in the whole pipeline before we
+     * return final JSON back to client. If you want to manipulate your response, this is the place to do that.
+     * If you set APP_DEBUG to true, 'code_hex' field will be additionally added to reported JSON for easier
+     * manual debugging.
 	 *
 	 * @param boolean           $success    @true if response indicates success, @false otherwise
 	 * @param integer           $api_code   response code
