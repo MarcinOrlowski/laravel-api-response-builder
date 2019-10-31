@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v6.2.3 (2019-10-31)
    * Added Laravel 6.4 to Travis-CI unit tests.
    * Corrected example in "Manipulating Response Object" docs.
 
