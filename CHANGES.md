@@ -8,7 +8,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * @dev
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
-   * Signature of `ResponseBuilder::buildResponse()` changed to allow customization of final `message` entry.
+   * Signature of `ResponseBuilder::buildResponse()` changed to allow customization of final `message` entry (@hawezo).
    * Moved all code that map API code to message to `ResponseBuilder::getMessageForApiCode()`.
    * Added `Validator::assertType()` helper method that validates var against set of allowed types.
    * Added `Validator::assertString()` helper.

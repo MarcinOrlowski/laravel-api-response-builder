@@ -644,6 +644,8 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 }
 ```
 
+Please see current implementation for `getMessageForApiCode()` for details how to correctly obtain localization string key etc.
+
 
 ----
 
