@@ -51,6 +51,7 @@ class ResponseBuilder
 	public const CONF_KEY_DEBUG_EX_TRACE_ENABLED = 'response_builder.debug.exception_handler.trace_enabled';
 	public const CONF_KEY_DEBUG_EX_TRACE_KEY     = 'response_builder.debug.exception_handler.trace_key';
 	public const CONF_KEY_MAP                    = 'response_builder.map';
+	public const CONF_USE_LOCALIZATION_KEY       = 'response_builder.use_localization';
 	public const CONF_KEY_ENCODING_OPTIONS       = 'response_builder.encoding_options';
 	public const CONF_KEY_CLASSES                = 'response_builder.classes';
 	public const CONF_KEY_MIN_CODE               = 'response_builder.min_code';
@@ -406,7 +407,7 @@ class ResponseBuilder
 			}
 
 			$lang_args = $lang_args ?? ['api_code' => $message_or_api_code];
-			$message_or_api_code = \Lang::get($key, $lang_args);
+			$message_or_api_code = Config::get(static::CONF_USE_LOCALIZATION_KEY, true) ? \Lang::get($key, $lang_args) : $key;
 		}
 
 		return Response::json(

@@ -22,10 +22,14 @@ return [
 
 	/*
 	|-----------------------------------------------------------------------------------------------------------
-	| Error code to message mapping
-	|-----------------------------------------------------------------------------------------------------------
-	|
-	*/
+	| Localization settings
+    |-----------------------------------------------------------------------------------------------------------
+    |
+    | The following array maps error codes to message keys. It is used by the package to provide
+    | a comprehensive message based on an error code.
+    |
+    */
+    'use_localization'  => true,
 	'map'               => [
 
 	],
