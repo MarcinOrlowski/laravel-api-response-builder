@@ -544,9 +544,7 @@ class ApiCode {
 ## Manipulating Response Object ##
 
  If you need to return more fields in response object you can simply extend `ResponseBuilder` class
- and override `buildResponse()` method:
-
-    protected static function buildResponse($code, $message, $data = null);
+ and override `buildResponse()` method.
 
  For example, you want to get rid of `locale` field and add server time and timezone to returned
  responses. First, create `MyResponseBuilder.php` file in `app/` folder (both location and class
@@ -561,7 +559,8 @@ namespace App;
 
 class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
-   protected static function buildResponse($code, $message, $data = null)
+   protected static function buildResponse(bool $success, int $api_code, string $message,
+                                           $data = null, array $debug_data = null): array
    {
       // tell ResponseBuilder to do all the heavy lifting first
       $response = parent::buildResponse($code, $message, $data);
