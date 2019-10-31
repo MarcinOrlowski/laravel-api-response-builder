@@ -16,6 +16,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
+/**
+ * Tests ResponseBuilder::make() method
+ */
 class MakeTest extends TestCase
 {
 	/**

@@ -357,7 +357,7 @@ class ResponseBuilder
 	/**
 	 * @param boolean           $success             @true if response indicate success, @false otherwise
 	 * @param integer           $api_code            API code to be returned with the response
-	 * @param string|integer    $message_or_api_code message string or valid API code
+	 * @param string|integer    $message_or_api_code message string or valid API code to get message for
 	 * @param object|array|null $data                optional additional data to be included in response object
 	 * @param integer|null      $http_code           return HTTP code for build Response object
 	 * @param array|null        $lang_args           arguments array passed to Lang::get() for messages with placeholders
@@ -389,50 +389,60 @@ class ResponseBuilder
 			throw new \InvalidArgumentException("API code value ({$api_code}) is out of allowed range {$min}-{$max}");
 		}
 
-		if (!(is_int($message_or_api_code) || is_string($message_or_api_code))) {
-			throw new \InvalidArgumentException(
-				sprintf('Message must be either string or resolvable integer API code (%s given)',
-					gettype($message_or_api_code))
-			);
-		}
-
-		// we got code, not message string, so we need to check if we have the mapping for
-		// this string already configured.
-		if (is_int($message_or_api_code)) {
-			$key = BaseApiCodes::getCodeMessageKey($message_or_api_code);
-			if ($key === null) {
-				// nope, let's get the default one instead
-				$key = BaseApiCodes::getCodeMessageKey($success ? BaseApiCodes::OK() : BaseApiCodes::NO_ERROR_MESSAGE());
-			}
-
-			$lang_args = $lang_args ?? ['api_code' => $message_or_api_code];
-			$message_or_api_code = \Lang::get($key, $lang_args);
-		}
-
 		return Response::json(
-			static::buildResponse($success, $api_code, $message_or_api_code, $data, $debug_data),
-			$http_code, $headers, $encoding_options
-		);
+			static::buildResponse($success, $api_code, $message_or_api_code, $lang_args, $data, $debug_data),
+			$http_code, $headers, $encoding_options);
 	}
 
 	/**
-     * Creates standardised API response array. This is final method called in the whole pipeline before we
-     * return final JSON back to client. If you want to manipulate your response, this is the place to do that.
-     * If you set APP_DEBUG to true, 'code_hex' field will be additionally added to reported JSON for easier
-     * manual debugging.
+	 * If $message_or_api_code is integer value, returns human readable message associated with that code (with
+	 * fallback to built-in default string if no api code mapping is set. If $message_or_api_code is a string,
+	 * returns it unaltered.
 	 *
-	 * @param boolean           $success    @true if response indicates success, @false otherwise
-	 * @param integer           $api_code   response code
-	 * @param string            $message    message to return
-	 * @param object|array|null $data       API response data if any
-	 * @param array|null        $debug_data optional debug data array to be added to returned JSON.
+	 * @param boolean    $success
+	 * @param int        $api_code
+	 * @param array|null $lang_args
+	 *
+	 * @return string
+	 */
+	protected static function getMessageForApiCode(bool $success, int $api_code, array $lang_args = null): string
+	{
+		// We got integer value here not a message string, so we need to check if we have the mapping for
+		// this string already configured.
+		$key = BaseApiCodes::getCodeMessageKey($api_code);
+		if ($key === null) {
+			// nope, let's get the default one instead, based of
+			$fallback_code = $success ? BaseApiCodes::OK() : BaseApiCodes::NO_ERROR_MESSAGE();
+			$key = BaseApiCodes::getCodeMessageKey($fallback_code);
+		}
+
+		if (!array_key_exists('api_code', $lang_args)) {
+			$lang_args['api_code'] = $api_code;
+		}
+
+		return \Lang::get($key, $lang_args);
+	}
+
+	/**
+	 * Creates standardised API response array. This is final method called in the whole pipeline before we
+	 * return final JSON back to client. If you want to manipulate your response, this is the place to do that.
+	 * If you set APP_DEBUG to true, 'code_hex' field will be additionally added to reported JSON for easier
+	 * manual debugging.
+	 *
+	 * @param boolean           $success             @true if response indicates success, @false otherwise
+	 * @param integer           $api_code            API response code.
+	 * @param string|integer    $message_or_api_code Message string or valid API code to get message for.
+	 * @param array|null        $lang_args           arguments array passed to Lang::get() for messages with placeholders
+	 * @param object|array|null $data                API response data if any
+	 * @param array|null        $debug_data          optional debug data array to be added to returned JSON.
 	 *
 	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
 	 */
-	protected static function buildResponse(bool $success, int $api_code, string $message, $data = null,
-	                                        array $debug_data = null): array
+	protected static function buildResponse(bool $success, int $api_code,
+	                                        $message_or_api_code, array $lang_args = null,
+	                                        $data = null, array $debug_data = null): array
 	{
 		// ensure $data is either @null, array or object of class with configured mapping.
 		$converter = new Converter();
@@ -441,6 +451,16 @@ class ResponseBuilder
 		if ($data !== null && !is_object($data)) {
 			// ensure we get object in final JSON structure in data node
 			$data = (object)$data;
+		}
+
+		$lang_args = $lang_args ?? [];
+
+		// get human readable message for API code or use message string (if given instead of API code)
+		$message = $message_or_api_code;
+		if (is_int($message)) {
+			$message = self::getMessageForApiCode($success, $message_or_api_code, $lang_args);
+		} else {
+			Validator::assertString('message', $message);
 		}
 
 		/** @noinspection PhpUndefinedClassInspection */
