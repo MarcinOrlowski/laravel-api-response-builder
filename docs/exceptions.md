@@ -142,9 +142,10 @@ public const VALIDATION_EXCEPTION = ...;
  `ResponseBuilder`'s handler which usually lead to one (or another) handler not being executed
  at all.
 
- For example if your API delegates OAuth2 related tasks to popular [lucadegasperi/oauth2-server-laravel](https://packagist.org/packages/lucadegasperi/oauth2-server-laravel)
- package, then you must **NOT** use its `OAuthExceptionHandlerMiddleware` class and ensure it is not set,
- by inspecting `app/Kernel.php` file and ensuring the following line (if present) is removed or commented out:
+ For example if your API delegates OAuth2 related tasks to popular
+ [lucadegasperi/oauth2-server-laravel](https://packagist.org/packages/lucadegasperi/oauth2-server-laravel) package, then you
+ must **NOT** use its `OAuthExceptionHandlerMiddleware` class and ensure it is not set, by inspecting `app/Kernel.php` file
+ and ensuring the following line (if present) is removed or commented out:
 
 ```php
 // remove or comment out

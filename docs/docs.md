@@ -25,9 +25,9 @@
 
 ## Response structure ##
 
- Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not
- only when I develop the API itself, but also when I'd try to use it i.e. in mobile applications, therefore all responses created
- by this package **guarantee** consistent JSON structure by design.
+ Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life
+ easier not only when I develop the API itself, but also when I'd try to use it i.e. in mobile applications, 
+ therefore all responses created by this package **guarantee** consistent JSON structure by design.
  
  By default response always contain at least the following elements:
 
@@ -45,18 +45,23 @@
 
   * `success` (**boolean**) indicates API method failure or success,
   * `code` (**int**) is your own return code (usually used when returning error message or other failure),
-  * `locale` (**string**) represents locale used for returned error message (obtained automatically via `\App::getLocale()`). This helps processing the response if you support multiple languages,
-  * `message` (**string**) human readable message that is ready to display and explains human readable explanation of the `code` value,
-  * `data` (**object**|**array**|**null**) if you return any additional data with your reply, it would end here. If no extra data is needed, that key still be present in the response with `null` value.
+  * `locale` (**string**) represents locale used for returned error message (obtained automatically via 
+    `\App::getLocale()`). This helps processing the response if you support multiple languages,
+  * `message` (**string**) human readable message that is ready to display and explains human readable explanation 
+    of the `code` value,
+  * `data` (**object**|**array**|**null**) if you return any additional data with your reply, it would end here.
+    If no extra data is needed, that key still be present in the response with `null` value.
 
- **NOTE:** If you need to return other/different elements in the above structure (not in your `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for detailed information about how to achieve this.
+ **NOTE:** If you need to return other/different elements in the above structure (not in your `data`),
+ see [Manipulating Response Object](#manipulating-response-object) chapter for detailed information about how
+ to achieve this.
 
 ----
 
 ## Usage examples ##
 
- The following examples assume `ResponseBuilder` is properly installed and available to your Laravel application. Installation
- steps are described in details in further chapters, if help is needed.
+ The following examples assume `ResponseBuilder` is properly installed and available to your Laravel application.
+ Installation steps are described in details in further chapters, if help is needed.
 
 #### Success ####
 
@@ -438,13 +443,8 @@ $data = [
 
  Minimum requirements:
 
-  * PHP 7.2+
-  * Laravel 6.*
-
- The following PHP extensions are optional but strongly recommended:
-
-   * iconv
-   * mb_string
+  * PHP 7.2+ with [json extension](https://www.php.net/manual/en/book.json.php),
+  * Laravel v6.x (see [legacy](docs/legacy.md) for Laravel 5.x support).
 
 ----
 
@@ -460,8 +460,8 @@ $data = [
 
 #### Setup ####
 
- `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once
- installed with default configuration.
+ `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once 
+ installed.
 
 #### ApiCodes class ####
 

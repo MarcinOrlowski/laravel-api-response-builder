@@ -110,7 +110,7 @@ class Converter
 			$data = [$cfg[ ResponseBuilder::KEY_KEY ] => $data->{$cfg[ ResponseBuilder::KEY_METHOD ]}()];
 		} elseif (!is_array($data)) {
 			throw new \InvalidArgumentException(
-				sprintf('Invalid payload data. Must be null, array or object with mapping ("%s" given).', gettype($data)));
+				sprintf('Payload must be null, array or object with mapping ("%s" given).', gettype($data)));
 		}
 
 		return $this->convertArray($data);

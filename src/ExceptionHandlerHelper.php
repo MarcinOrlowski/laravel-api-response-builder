@@ -93,7 +93,8 @@ class ExceptionHandlerHelper
 	 *
 	 * @return HttpResponse
 	 */
-	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request, AuthenticationException $exception): HttpResponse
+	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
+	                                                                     AuthenticationException $exception): HttpResponse
 	{
 		return static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION());
 	}
@@ -112,12 +113,12 @@ class ExceptionHandlerHelper
 	                                $fallback_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse
 	{
 		// common prefix for config key
-		$base_config_key = sprintf('%s.exception', ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY);
+		$base_key = sprintf('%s.exception', ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY);
 
 		// get API and HTTP codes from exception handler config or use fallback values if no such
 		// config fields are set.
-		$api_code = Config::get("{$base_config_key}.{$exception_config_key}.code", $fallback_api_code);
-		$http_code = Config::get("{$base_config_key}.{$exception_config_key}.http_code", $fallback_http_code);
+		$api_code = Config::get("{$base_key}.{$exception_config_key}.code", $fallback_api_code);
+		$http_code = Config::get("{$base_key}.{$exception_config_key}.http_code", $fallback_http_code);
 
 		// check if we now have valid HTTP error code for this case or need to make one up.
 		if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
@@ -143,7 +144,7 @@ class ExceptionHandlerHelper
 		];
 		$base_api_code = BaseApiCodes::NO_ERROR_MESSAGE();
 		foreach ($known_codes as $item_config_key => $item_api_code) {
-			if ($api_code === Config::get("{$base_config_key}.{$item_config_key}.code", $item_api_code)) {
+			if ($api_code === Config::get("{$base_key}.{$item_config_key}.code", $item_api_code)) {
 				$base_api_code = $api_code;
 				break;
 			}
@@ -151,7 +152,7 @@ class ExceptionHandlerHelper
 
 		/** @var array|null $data Optional payload to return */
 		$data = null;
-		if ($api_code === Config::get("{$base_config_key}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION())) {
+		if ($api_code === Config::get("{$base_key}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION())) {
 			/** @var ValidationException $exception */
 			$data = [ResponseBuilder::KEY_MESSAGES => $exception->validator->errors()->messages()];
 		}
@@ -183,7 +184,8 @@ class ExceptionHandlerHelper
 			];
 		}
 
-		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data, $http_code, null, $trace_data);
+		return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data,
+			$http_code, null, $trace_data);
 	}
 
 }
