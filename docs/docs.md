@@ -546,6 +546,8 @@ class ApiCode {
  If you need to return more fields in response object you can simply extend `ResponseBuilder` class
  and override `buildResponse()` method.
 
+### Custom response structure ###
+
  For example, you want to get rid of `locale` field and add server time and timezone to returned
  responses. First, create `MyResponseBuilder.php` file in `app/` folder (both location and class
  name can be anything you wish, just remember to adjust the namespace too) and override
@@ -559,11 +561,12 @@ namespace App;
 
 class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
-   protected static function buildResponse(bool $success, int $api_code, string $message,
+   protected static function buildResponse(bool $success, int $api_code, 
+                                           $message_or_api_code, array $lang_args = null,
                                            $data = null, array $debug_data = null): array
    {
       // tell ResponseBuilder to do all the heavy lifting first
-      $response = parent::buildResponse($code, $message, $data);
+      $response = parent::buildResponse($success, $api_code, $message_or_api_code, $lang_args, $data, $debug_data);
 
       // then do all the tweaks you need
       $date = new DateTime();
@@ -575,13 +578,14 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
       // finally, return what $response holds
       return $response;
    }
+
 }
 ```
 
  and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`. As all responses are
  always produced with use of `buildResponse()` internally, your **all** responses will be affected
  the same way. For example:
-
+ 
 ```php
 MyResponseBuilder::success();
 ```
@@ -620,6 +624,28 @@ return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
    }
 }
 ```
+
+### Overriding code to message conversion ###
+
+`ResponseBuilder` automatically provides human readable error messages for each API code used but if for any
+reason you want to take control on this, you can now provide own implementation of `ResponseBuilder::getMessageForApiCode()`.
+
+```php
+<?php
+
+namespace App;
+
+class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
+{
+   protected static function getMessageForApiCode(bool $success, int $api_code, array $lang_args = null): string
+   {
+       return "My cool message for code {$api_code}";
+   }
+}
+```
+
+Please see current implementation for `getMessageForApiCode()` for details how to correctly obtain localization string key etc.
+
 
 ----
 

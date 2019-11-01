@@ -7,6 +7,11 @@
 
 ### v6 ###
 
+#### v6.3 ####
+ * `[BREAKING]` This is backward incompatible change in signature of `ResponseBuilder::buildResponse()`, but it only affects
+   you if you extend `ResponseBuilder` and provide own implementation to manipulate response object
+   (see [Manipulating Response Object](docs.md#manipulating-response-object)). If you do not, then you are not affected.    
+
 #### v6.2 ####
  * `[Very Low]` Data conversion logic changed slightly. Now it checks if we have configuration entry matching **exactly** the
   object's class name. If not, then we'd try to find if we have any configuration for its parent class.

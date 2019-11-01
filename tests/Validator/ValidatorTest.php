@@ -18,14 +18,50 @@ use MarcinOrlowski\ResponseBuilder\Validator;
 class ValidatorTest extends TestCase
 {
 	/**
+	 * Tests if assertInt() pass if given valid data.
+	 *
+	 * @return void
+	 */
+	public function testAssertIntCorrectType(): void
+	{
+		Validator::assertInt(__FUNCTION__, 666);
+		// This assert won't be called if exception is thrown
+		$this->assertTrue(true);
+	}
+
+	/**
 	 * Tests if assertInt() throws exception when feed with invalid type argument.
 	 *
 	 * @return void
 	 */
-	public function testAssertInt(): void
+	public function testAssertIntWrongType(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		Validator::assertInt(__FUNCTION__, 'chicken');
+	}
+
+
+	/**
+	 * Tests if assertString() pass with valid data type
+	 *
+	 * @return void
+	 */
+	public function testAssertStringCorrectType(): void
+	{
+		Validator::assertString(__FUNCTION__, 'string');
+		// This assert won't be called if exception is thrown
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * Tests if assertString() throws exception when feed with invalid type argument.
+	 *
+	 * @return void
+	 */
+	public function testAssertStringWrongType(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		Validator::assertString(__FUNCTION__, 666);
 	}
 
 	/**
@@ -64,4 +100,65 @@ class ValidatorTest extends TestCase
 		Validator::assertIntRange(__FUNCTION__, 100, 300, 500);
 	}
 
+	/**
+	 * Tests assertType() helper.
+	 */
+	public function testAssertType(): void
+	{
+		/**
+		 * Test data. Each entry is an array with a following keys:
+		 *   item    : value to be tested or array of values from which one value will be randomly picked for testing.
+		 *   types   : array of allowed `Validator::TYPE_xxx` types
+		 *   expected: @false if test is expected to fail (type of `item` is not in `types`), @true if it should pass.
+		 */
+		$test_data = [
+			[
+				'item'     => false,
+				'types'    => [Validator::TYPE_STRING],
+				'expected' => false,
+			],
+			[
+				'item'     => false,
+				'types'    => [Validator::TYPE_BOOL],
+				'expected' => true,
+			],
+			[
+				'item'     => 'foo',
+				'types'    => [Validator::TYPE_STRING],
+				'expected' => true,
+			],
+			[
+				'item'     => 23,
+				'types'    => [Validator::TYPE_STRING],
+				'expected' => false,
+			],
+			[
+				'item'     => 666,
+				'types'    => [Validator::TYPE_INTEGER],
+				'expected' => true,
+			],
+			[
+				'item'     => 'fail',
+				'types'    => [Validator::TYPE_INTEGER,
+				               Validator::TYPE_BOOL],
+				'expected' => false,
+			],
+
+		];
+
+		foreach ($test_data as $key => $data) {
+			$label = sprintf('test_data[%d]', $key);
+
+			$test_passed = true;
+			try {
+				Validator::assertType($label, $data['item'], $data['types']);
+			} catch (\Exception $ex) {
+				$test_passed = false;
+			}
+
+			$msg = sprintf('Entry #%d: testing if "%s" (%s) is one of these: %s.',
+				$key, $data['item'], gettype($data['item']), implode(', ', $data['types']));
+			$this->assertEquals($test_passed, $data['expected'], $msg);
+		}
+	}
 }
