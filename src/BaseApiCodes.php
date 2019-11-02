@@ -23,49 +23,68 @@ class BaseApiCodes
 
 	/**
 	 * protected code range - lowest code for reserved range.
+	 *
+	 * @var int
 	 */
 	public const RESERVED_MIN_API_CODE_OFFSET = 0;
 
 	/**
 	 * protected code range - highest code for reserved range
+	 *
+	 * @var int
 	 */
 	public const RESERVED_MAX_API_CODE_OFFSET = 19;
 
 	/**
 	 * built-in codes: OK
+	 *
+	 * @var int
 	 */
 	protected const OK_OFFSET = 0;
 	/**
 	 * built-in code for fallback message mapping
+	 *
+	 * @var int
 	 */
 	protected const NO_ERROR_MESSAGE_OFFSET = 1;
 	/**
 	 * built-in error code for HTTP_NOT_FOUND exception
+	 *
+	 * @var int
 	 */
 	protected const EX_HTTP_NOT_FOUND_OFFSET = 10;
 	/**
 	 * built-in error code for HTTP_SERVICE_UNAVAILABLE exception
+	 *
+	 * @var int
 	 */
 	protected const EX_HTTP_SERVICE_UNAVAILABLE_OFFSET = 11;
 	/**
 	 * built-in error code for HTTP_EXCEPTION
+	 *
+	 * @var int
 	 */
 	protected const EX_HTTP_EXCEPTION_OFFSET = 12;
 	/**
 	 * built-in error code for UNCAUGHT_EXCEPTION
+	 *
+	 * @var int
 	 */
 	protected const EX_UNCAUGHT_EXCEPTION_OFFSET = 13;
 
 	/**
 	 * built-in error code for \Illuminate\Auth\AuthenticationException
+	 *
+	 * @var int
 	 */
 	protected const EX_AUTHENTICATION_EXCEPTION_OFFSET = 14;
 
 	/**
 	 * built-in error code for \Illuminate\Auth\AuthenticationException
+	 *
+	 * @var int
 	 */
 	protected const EX_VALIDATION_EXCEPTION_OFFSET = 15;
-
 
 	/**
 	 * Returns base code mapping array
@@ -88,8 +107,6 @@ class BaseApiCodes
 			self::EX_VALIDATION_EXCEPTION()     => 'response-builder::builder.validation_exception',
 		];
 	}
-
-	// ---------------------------------------------
 
 	/**
 	 * Returns API code for internal code OK

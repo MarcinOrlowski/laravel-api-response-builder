@@ -15,9 +15,14 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 class Validator
 {
-	public const TYPE_STRING  = 'string';
+	/** @var string */
+	public const TYPE_STRING = 'string';
+
+	/** @var string */
 	public const TYPE_INTEGER = 'integer';
-	public const TYPE_BOOL    = 'boolean';
+
+	/** @var string */
+	public const TYPE_BOOL = 'boolean';
 
 	/**
 	 * Checks if given $val is of type integer

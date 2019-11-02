@@ -25,7 +25,7 @@ class Converter
 	/**
 	 * @var array
 	 */
-	protected $classes;
+	protected $classes = [];
 
 	/**
 	 * Converter constructor.
