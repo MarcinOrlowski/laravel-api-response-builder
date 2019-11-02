@@ -455,6 +455,7 @@ class ResponseBuilder
 			$key = BaseApiCodes::getCodeMessageKey($fallback_code);
 		}
 
+		$placeholders = $placeholders ?? [];
 		if (!array_key_exists('api_code', $placeholders)) {
 			$placeholders['api_code'] = $api_code;
 		}
@@ -492,8 +493,6 @@ class ResponseBuilder
 			// ensure we get object in final JSON structure in data node
 			$data = (object)$data;
 		}
-
-		$placeholders = $placeholders ?? [];
 
 		// get human readable message for API code or use message string (if given instead of API code)
 		$message = $msg_or_api_code;
