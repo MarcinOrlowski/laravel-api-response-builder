@@ -14,35 +14,35 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-	/**
-	 * @var HttpResponse
-	 */
-	protected $response;
+    /**
+     * @var HttpResponse
+     */
+    protected $response;
 
-	use Traits\TestingHelpers;
+    use Traits\TestingHelpers;
 
-	/**
-	 * Returns ApiCodes class name. We need that done this way, so you can easily plug-and-play
-	 * out testing trait into your project.
-	 *
-	 * @return string
-	 */
-	public function getApiCodesClassName(): string
-	{
-		return \MarcinOrlowski\ResponseBuilder\BaseApiCodes::class;
-	}
+    /**
+     * Returns ApiCodes class name. We need that done this way, so you can easily plug-and-play
+     * out testing trait into your project.
+     *
+     * @return string
+     */
+    public function getApiCodesClassName(): string
+    {
+        return \MarcinOrlowski\ResponseBuilder\BaseApiCodes::class;
+    }
 
-	/**
-	 * [Orchestra] Load service providers we need during the tests
-	 *
-	 * @param \Illuminate\Foundation\Application $app
-	 *
-	 * @return array
-	 */
-	protected function getPackageProviders($app): array
-	{
-		return [
-			\MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider::class,
-		];
-	}
+    /**
+     * [Orchestra] Load service providers we need during the tests
+     *
+     * @param \Illuminate\Foundation\Application $app
+     *
+     * @return array
+     */
+    protected function getPackageProviders($app): array
+    {
+        return [
+            \MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider::class,
+        ];
+    }
 }

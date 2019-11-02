@@ -25,9 +25,9 @@
 
 ## Response structure ##
 
- Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life easier not
- only when I develop the API itself, but also when I'd try to use it i.e. in mobile applications, therefore all responses created
- by this package **guarantee** consistent JSON structure by design.
+ Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life
+ easier not only when I develop the API itself, but also when I'd try to use it i.e. in mobile applications, 
+ therefore all responses created by this package **guarantee** consistent JSON structure by design.
  
  By default response always contain at least the following elements:
 
@@ -45,18 +45,23 @@
 
   * `success` (**boolean**) indicates API method failure or success,
   * `code` (**int**) is your own return code (usually used when returning error message or other failure),
-  * `locale` (**string**) represents locale used for returned error message (obtained automatically via `\App::getLocale()`). This helps processing the response if you support multiple languages,
-  * `message` (**string**) human readable message that is ready to display and explains human readable explanation of the `code` value,
-  * `data` (**object**|**array**|**null**) if you return any additional data with your reply, it would end here. If no extra data is needed, that key still be present in the response with `null` value.
+  * `locale` (**string**) represents locale used for returned error message (obtained automatically via 
+    `\App::getLocale()`). This helps processing the response if you support multiple languages,
+  * `message` (**string**) human readable message that is ready to display and explains human readable explanation 
+    of the `code` value,
+  * `data` (**object**|**array**|**null**) if you return any additional data with your reply, it would end here.
+    If no extra data is needed, that key still be present in the response with `null` value.
 
- **NOTE:** If you need to return other/different elements in the above structure (not in your `data`), see [Manipulating Response Object](#manipulating-response-object) chapter for detailed information about how to achieve this.
+ **NOTE:** If you need to return other/different elements in the above structure (not in your `data`),
+ see [Manipulating Response Object](#manipulating-response-object) chapter for detailed information about how
+ to achieve this.
 
 ----
 
 ## Usage examples ##
 
- The following examples assume `ResponseBuilder` is properly installed and available to your Laravel application. Installation
- steps are described in details in further chapters, if help is needed.
+ The following examples assume `ResponseBuilder` is properly installed and available to your Laravel application.
+ Installation steps are described in details in further chapters, if help is needed.
 
 #### Success ####
 
@@ -438,13 +443,8 @@ $data = [
 
  Minimum requirements:
 
-  * PHP 7.2+
-  * Laravel 6.*
-
- The following PHP extensions are optional but strongly recommended:
-
-   * iconv
-   * mb_string
+  * PHP 7.2+ with [json extension](https://www.php.net/manual/en/book.json.php),
+  * Laravel v6.x (see [legacy](docs/legacy.md) for Laravel 5.x support).
 
 ----
 
@@ -452,7 +452,16 @@ $data = [
 
  To install `ResponseBuilder` all you need to do is to open your shell/cmd and do:
 
-    composer require marcin-orlowski/laravel-api-response-builder
+    composer require marcin-orlowski/laravel-api-response-builder:<VERSION>
+
+ Where `<VERSION>` string consists of `MAJOR` and `MINOR` release numbers. For
+ example if current relase is 6.4.13, you need to invoke:
+
+    composer require marcin-orlowski/laravel-api-response-builder:6.3
+
+ which will add  the dependency at the release 6.3 + all the bugfixing releses
+ (`6.3.*`) but won't automatically pull 6.4 even if available, unless
+ `composer.json` is updated manually.
 
  If you want to use different configuration than `ResponseBuilder` defaults,
  publish and edit configuration file as described in [Configuration file](config.md)
@@ -460,8 +469,8 @@ $data = [
 
 #### Setup ####
 
- `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once
- installed with default configuration.
+ `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once 
+ installed.
 
 #### ApiCodes class ####
 
@@ -546,6 +555,8 @@ class ApiCode {
  If you need to return more fields in response object you can simply extend `ResponseBuilder` class
  and override `buildResponse()` method.
 
+### Custom response structure ###
+
  For example, you want to get rid of `locale` field and add server time and timezone to returned
  responses. First, create `MyResponseBuilder.php` file in `app/` folder (both location and class
  name can be anything you wish, just remember to adjust the namespace too) and override
@@ -559,11 +570,12 @@ namespace App;
 
 class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
-   protected static function buildResponse(bool $success, int $api_code, string $message,
+   protected static function buildResponse(bool $success, int $api_code, 
+                                           $message_or_api_code, array $lang_args = null,
                                            $data = null, array $debug_data = null): array
    {
       // tell ResponseBuilder to do all the heavy lifting first
-      $response = parent::buildResponse($code, $message, $data);
+      $response = parent::buildResponse($success, $api_code, $message_or_api_code, $lang_args, $data, $debug_data);
 
       // then do all the tweaks you need
       $date = new DateTime();
@@ -575,13 +587,14 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
       // finally, return what $response holds
       return $response;
    }
+
 }
 ```
 
  and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`. As all responses are
  always produced with use of `buildResponse()` internally, your **all** responses will be affected
  the same way. For example:
-
+ 
 ```php
 MyResponseBuilder::success();
 ```
@@ -620,6 +633,28 @@ return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
    }
 }
 ```
+
+### Overriding code to message conversion ###
+
+`ResponseBuilder` automatically provides human readable error messages for each API code used but if for any
+reason you want to take control on this, you can now provide own implementation of `ResponseBuilder::getMessageForApiCode()`.
+
+```php
+<?php
+
+namespace App;
+
+class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
+{
+   protected static function getMessageForApiCode(bool $success, int $api_code, array $lang_args = null): string
+   {
+       return "My cool message for code {$api_code}";
+   }
+}
+```
+
+Please see current implementation for `getMessageForApiCode()` for details how to correctly obtain localization string key etc.
+
 
 ----
 

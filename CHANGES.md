@@ -6,6 +6,13 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v6.3.0 (2019-11-02)
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * Signature of `ResponseBuilder::buildResponse()` changed to allow customization of final `message` entry (@hawezo).
+   * Moved all code that produces messages for API codes to `ResponseBuilder::getMessageForApiCode()`.
+   * Added `Validator::assertType()` helper method that validates var against set of allowed types.
+   * Added `Validator::assertString()` helper.
+
 * v6.2.3 (2019-10-31)
    * Added Laravel 6.4 to Travis-CI unit tests.
    * Corrected example in "Manipulating Response Object" docs.

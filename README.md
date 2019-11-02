@@ -4,18 +4,18 @@
 
 [![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=master)
-[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=dev)
-[![Codacy Grade Badge](https://api.codacy.com/project/badge/Grade/44f427e872e2480597bde0242417a2a7)](https://www.codacy.com/app/MarcinOrlowski/laravel-api-response-builder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MarcinOrlowski/laravel-api-response-builder&amp;utm_campaign=Badge_Grade)
+[![Code Quality](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=master)
+[![Codacy Grade Badge](https://api.codacy.com/project/badge/Grade/44f427e872e2480597bde0242417a2a7)](https://www.codacy.com/app/MarcinOrlowski/laravel-api-response-builder)
 [![Monthly Downloads](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/d/monthly)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![License](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/license)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 
 [![SensioLabs Insight](https://insight.sensiolabs.com/projects/5c5f4dc1-41d5-49f9-b4ba-6268aa3fea00/big.png)](https://insight.sensiolabs.com/projects/5c5f4dc1-41d5-49f9-b4ba-6268aa3fea00)
 
-[![Latest Unstable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/unstable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
-[![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=dev)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/quality-score.png?b=dev)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=dev)
-[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/coverage.png?b=dev)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=dev)
+[![Unstable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/unstable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
+[![Unstable Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=dev)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
+[![Ustable Code Quality](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/quality-score.png?b=dev)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=dev)
+[![Unstble Code Coverage](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/coverage.png?b=dev)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=dev)
 
 ## Table of contents ##
 
@@ -30,7 +30,7 @@
  * [License](#license)
  * [Changelog](CHANGES.md)
 
- **Upgrading from previous version? Ensure you read [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
+ **Upgrading from previous version? Check [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
 
 ----
 
@@ -97,15 +97,12 @@
 
  * Easy to use,
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * Laravel compatibility: v6.x (see [legacy support](docs/legacy.md) if you use older Laravel version),
- * Supports Laravel [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518),
- * Configurable (with ready-to-use defaults),
+ * On-the-fly data object conversion,
+ * API chaining support,
  * Localization support,
- * Automatic object conversion with custom mapping,
- * API chaining/cascading support,
- * Includes traits to help [unit test your API code](docs/testing.md),
- * Provides own [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
- * No extra dependencies.
+ * Provides traits to help [unit test your API code](docs/testing.md),
+ * Comes with [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
+ * No additional dependencies.
 
 ----
 
