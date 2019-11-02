@@ -21,27 +21,27 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Providers;
  */
 class ResponseBuilderServiceProvider extends \MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider
 {
-	/**
-	 * Register bindings in the container.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		$this->mergeConfigFrom(
-			__DIR__ . '/../../config/response_builder.php', 'response_builder'
-		);
-	}
+    /**
+     * Register bindings in the container.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/response_builder.php', 'response_builder'
+        );
+    }
 
-	/**
-	 * Sets up package resources
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		parent::boot();
+    /**
+     * Sets up package resources
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        parent::boot();
 
-		$this->loadTranslationsFrom(__DIR__ . '/../../src/lang', 'response-builder');
-	}
+        $this->loadTranslationsFrom(__DIR__ . '/../../src/lang', 'response-builder');
+    }
 }

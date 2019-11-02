@@ -10,19 +10,19 @@
  */
 return [
 
-	'ok'                       => 'OK',
-	'no_error_message'         => 'Error #:api_code',
+    'ok'                       => 'OK',
+    'no_error_message'         => 'Error #:api_code',
 
-	// can be used by Exception Handler (if enabled)
-	'uncaught_exception'       => 'Uncaught exception :message',
-	// we talking API call here, hence we have http_not_found
-	'http_not_found'           => 'Item not found',
-	'http_exception'           => 'HTTP exception :message',
-	'http_service_unavailable' => 'Service maintenance in progress',
+    // can be used by Exception Handler (if enabled)
+    'uncaught_exception'       => 'Uncaught exception :message',
+    // we talking API call here, hence we have http_not_found
+    'http_not_found'           => 'Item not found',
+    'http_exception'           => 'HTTP exception :message',
+    'http_service_unavailable' => 'Service maintenance in progress',
 
-	// Exception Handler (added in 3.3.0)
-	'authentication_exception' => 'Not authorized to access',
-	'validation_exception'     => 'Invalid data',
+    // Exception Handler (added in 3.3.0)
+    'authentication_exception' => 'Not authorized to access',
+    'validation_exception'     => 'Invalid data',
 
 ];
 

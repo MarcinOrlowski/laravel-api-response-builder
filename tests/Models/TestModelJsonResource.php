@@ -21,38 +21,38 @@ use Illuminate\Support\Facades\Request;
  */
 class TestModelJsonResource extends JsonResource
 {
-	/** @var string|null */
-	protected $val;
+    /** @var string|null */
+    protected $val;
 
-	/**
-	 * TestModel constructor.
-	 *
-	 * @param string $val
-	 */
-	public function __construct(string $val)
-	{
-		$this->val = $val;
-	}
+    /**
+     * TestModel constructor.
+     *
+     * @param string $val
+     */
+    public function __construct(string $val)
+    {
+        $this->val = $val;
+    }
 
-	/**
-	 * @return string|null
-	 */
-	public function getVal(): ?string
-	{
-		return $this->val;
-	}
+    /**
+     * @return string|null
+     */
+    public function getVal(): ?string
+    {
+        return $this->val;
+    }
 
-	/**
-	 * Converts model to array. Signature must match JsonResource::toArray()
-	 *
-	 * @param Request $request
-	 *
-	 * @return array
-	 */
-	public function toArray($request = null): array
-	{
-		return [
-			'val' => $this->val,
-		];
-	}
+    /**
+     * Converts model to array. Signature must match JsonResource::toArray()
+     *
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function toArray($request = null): array
+    {
+        return [
+            'val' => $this->val,
+        ];
+    }
 }

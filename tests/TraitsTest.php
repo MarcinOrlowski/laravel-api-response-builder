@@ -6,6 +6,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 class TraitsTest extends TestCase
 {
-	use ApiCodesTests;
+    use ApiCodesTests;
 
 }
