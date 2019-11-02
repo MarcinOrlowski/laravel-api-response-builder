@@ -452,7 +452,16 @@ $data = [
 
  To install `ResponseBuilder` all you need to do is to open your shell/cmd and do:
 
-    composer require marcin-orlowski/laravel-api-response-builder
+    composer require marcin-orlowski/laravel-api-response-builder:<VERSION>
+
+ Where `<VERSION>` string consists of `MAJOR` and `MINOR` release numbers. For
+ example if current relase is 6.4.13, you need to invoke:
+
+    composer require marcin-orlowski/laravel-api-response-builder:6.3
+
+ which will add  the dependency at the release 6.3 + all the bugfixing releses
+ (`6.3.*`) but won't automatically pull 6.4 even if available, unless
+ `composer.json` is updated manually.
 
  If you want to use different configuration than `ResponseBuilder` defaults,
  publish and edit configuration file as described in [Configuration file](config.md)
