@@ -6,10 +6,10 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v6.3.0 (2019-11-02)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Signature of `ResponseBuilder::buildResponse()` changed to allow customization of final `message` entry (@hawezo).
-   * Moved all code that map API code to message to `ResponseBuilder::getMessageForApiCode()`.
+   * Moved all code that produces messages for API codes to `ResponseBuilder::getMessageForApiCode()`.
    * Added `Validator::assertType()` helper method that validates var against set of allowed types.
    * Added `Validator::assertString()` helper.
 
