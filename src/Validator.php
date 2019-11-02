@@ -28,7 +28,7 @@ class Validator
      * Checks if given $val is of type integer
      *
      * @param string $key Name of the key to be used if exception is thrown.
-     * @param mixed  $var Data to validated.
+     * @param mixed  $var Variable to be asserted.
      *
      * @return void
      *
@@ -42,60 +42,60 @@ class Validator
     /**
      * Checks if given $val is of type string
      *
-     * @param string $key Name of the key to be used if exception is thrown.
-     * @param mixed  $var Data to validated.
+     * @param string $name Label or name of the variable to be used in exception message (if thrown).
+     * @param mixed  $var  Variable to be asserted.
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertString(string $key, $var): void
+    public static function assertString(string $name, $var): void
     {
-        self::assertType($key, $var, [self::TYPE_STRING]);
+        self::assertType($name, $var, [self::TYPE_STRING]);
     }
 
     /**
-     * @param string $key Name of the key to be used if exception is thrown.
-     * @param mixed  $var Data to validated.
-     * @param int    $min Min allowed value (inclusive)
-     * @param int    $max Max allowed value (inclusive)
+     * @param string $name Label or name of the variable to be used in exception message (if thrown).
+     * @param mixed  $var  Variable to be asserted.
+     * @param int    $min  Min allowed value (inclusive)
+     * @param int    $max  Max allowed value (inclusive)
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public static function assertIntRange(string $key, $var, int $min, int $max): void
+    public static function assertIntRange(string $name, $var, int $min, int $max): void
     {
-        self::assertInt($key, $var);
+        self::assertInt($name, $var);
 
         if ($min > $max) {
             throw new \RuntimeException(
-                sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.', __FUNCTION__, $key));
+                sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.', __FUNCTION__, $name));
         }
 
         if (($min > $var) || ($var > $max)) {
             throw new \InvalidArgumentException(
-                sprintf('Invalid value of "%s" (%d). Must be between %d-%d inclusive.', $key, $var, $min, $max));
+                sprintf('Invalid value of "%s" (%d). Must be between %d-%d inclusive.', $name, $var, $min, $max));
         }
     }
 
     /**
      * Checks if $item (of name $key) is of type that is include in $allowed_types.
      *
-     * @param string $key
-     * @param mixed  $var
-     * @param array[string]  $allowed_types
+     * @param string $name          Label or name of the variable to be used in exception message (if thrown).
+     * @param mixed  $var           Variable to be asserted.
+     * @param array  $allowed_types Array of allowed types for $var, i.e. [Validator::TYPE_INTEGER]
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertType(string $key, $var, array $allowed_types): void
+    public static function assertType(string $name, $var, array $allowed_types): void
     {
         $type = gettype($var);
         if (!in_array($type, $allowed_types)) {
-            $msg = sprintf('"%s" must be one of allowed types: %s (%s given)', $key, implode(', ', $allowed_types), gettype($var));
+            $msg = sprintf('"%s" must be one of allowed types: %s (%s given)', $name, implode(', ', $allowed_types), gettype($var));
             throw new \InvalidArgumentException($msg);
         }
     }
