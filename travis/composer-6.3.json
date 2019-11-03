@@ -1,22 +1,17 @@
 {
   "name": "marcin-orlowski/laravel-api-response-builder",
-  "require": {
-    "php": ">=7.2"
-  },
   "autoload": {
-    "psr-4": {
-      "MarcinOrlowski\\ResponseBuilder\\": "src"
-    }
-  },
-  "autoload-dev": {
     "psr-4": {
       "MarcinOrlowski\\ResponseBuilder\\": "src",
       "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests"
     }
   },
+  "require": {
+    "php": ">=7.2",
+    "laravel/framework": "^6.3"
+  },
   "require-dev": {
     "orchestra/testbench": "^4.0",
-    "laravel/framework": "^6.3",
     "phpunit/phpunit": "^8.0",
     "phpunit/php-code-coverage": "^7.0",
     "codacy/coverage": "^1.0"
