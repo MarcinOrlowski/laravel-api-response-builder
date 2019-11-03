@@ -47,7 +47,6 @@
   "require-dev": {
     "marcin-orlowski/coding-standard": "^1.3",
     "orchestra/testbench": "^4.0",
-    "laravel/framework": "^6.0",
     "phpunit/phpunit": "^8.0",
     "phpunit/php-code-coverage": "^7.0",
     "codacy/coverage": "^1.0",
