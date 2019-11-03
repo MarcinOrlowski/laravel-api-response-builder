@@ -15,7 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 
 use Exception;
-use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\AuthenticationException as AuthException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
@@ -94,9 +94,9 @@ class ExceptionHandlerHelper
      * @return HttpResponse
      */
     protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
-                                                                         AuthenticationException $exception): HttpResponse
+                                                                         AuthException $exception): HttpResponse
     {
-        return static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION());
+        return static::error($exception, static::TYPE_HTTP_UNAUTHORIZED_KEY, BaseApiCodes::EX_AUTHENTICATION_EXCEPTION());
     }
 
     /**
