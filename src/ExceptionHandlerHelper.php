@@ -32,7 +32,7 @@ class ExceptionHandlerHelper
      */
     public const TYPE_HTTP_NOT_FOUND_KEY           = 'http_not_found';
     public const TYPE_HTTP_SERVICE_UNAVAILABLE_KEY = 'http_service_unavailable';
-    public const TYPE_HTTP_UNAUTHORIZED_KEY        = 'authentication_exception';
+    public const TYPE_HTTP_UNAUTHORIZED_KEY        = 'unauthorized_exception';
     public const TYPE_HTTP_EXCEPTION_KEY           = 'http_exception';
     public const TYPE_VALIDATION_EXCEPTION_KEY     = 'validation_exception';
     public const TYPE_UNCAUGHT_EXCEPTION_KEY       = 'uncaught_exception';
