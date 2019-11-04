@@ -27,7 +27,7 @@ return [
 	|
 	*/
 	'map'               => [
-
+        // YOUR_API_CODE => '<MESSAGE_KEY>',
 	],
 
 	/*
