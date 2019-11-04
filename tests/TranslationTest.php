@@ -49,7 +49,7 @@ class TranslationTest extends TestCase
         $this->assertGreaterThan(0, count($supported_languages));
 
         foreach ($supported_languages as $lang) {
-            // get the translation array for give language
+            // get the translation array for given language
             \App::setLocale($lang);
             $translation = \Lang::get('response-builder::builder');
 
