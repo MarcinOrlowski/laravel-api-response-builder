@@ -27,11 +27,26 @@ class TranslationTest extends TestCase
      */
     public function testTranslationFiles(): void
     {
-        $base_lang = 'en';
-        $supported_languages = ['pl'];
+        // default library language
+        $default_lang = 'en';
 
-        \App::setLocale($base_lang);
-        $base_translation = \Lang::get('response-builder::builder');
+        // Load translation array for default language and then compare all the
+        // other translations with it.
+        \App::setLocale($default_lang);
+        $base_translations = \Lang::get('response-builder::builder');
+
+        // get list of all other directories in library's lang folder.
+        $supported_languages =
+            array_filter(
+                array_filter(array_map(function($entry) {
+                    return basename($entry);
+                }, glob(__DIR__ . '/../src/lang/*', GLOB_ONLYDIR))),
+                function($item) use ($default_lang) {
+                    return $item != $default_lang;
+                }
+            );
+
+        $this->assertGreaterThan(0, count($supported_languages));
 
         foreach ($supported_languages as $lang) {
             // get the translation array for give language
@@ -39,7 +54,8 @@ class TranslationTest extends TestCase
             $translation = \Lang::get('response-builder::builder');
 
             // ensure it has all the keys base translation do
-            foreach ($base_translation as $key => $val) {
+            foreach ($base_translations as $key => $val) {
+                $msg = "Missing localization key for '' language";
                 $this->assertArrayHasKey($key, $translation);
                 unset($translation[ $key ]);
             }
