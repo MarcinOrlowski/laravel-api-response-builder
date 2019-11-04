@@ -102,14 +102,16 @@ class ExceptionHandlerHelper
     /**
      * Process singe error and produce valid API response
      *
-     * @param Exception $exception            Exception to be processed
-     * @param string    $exception_config_key Category of the exception
-     * @param integer   $fallback_api_code    API code to return
-     * @param integer   $fallback_http_code   HTTP code to return
+     * @param Exception $ex                   Exception to be handled.
+     * @param string    $exception_config_key Type of the exception (TYPE_xxx)
+     * @param integer   $fallback_api_code    API code to fall back to in provided api_code is invalid or out
+     *                                        of range or not configured.
+     * @param integer   $fallback_http_code   HTTP code to fallback to if provided http_code is invalid or out
+     *                                        of range or not configured.
      *
      * @return HttpResponse
      */
-    protected static function error(Exception $exception, $exception_config_key, $fallback_api_code,
+    protected static function error(Exception $ex, $exception_config_key, $fallback_api_code,
                                     $fallback_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse
     {
         // common prefix for config key
@@ -123,9 +125,7 @@ class ExceptionHandlerHelper
         // check if we now have valid HTTP error code for this case or need to make one up.
         if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
             // no code, let's try to get the exception status
-            $http_code = ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException)
-                ? $exception->getStatusCode()
-                : $exception->getCode();
+            $http_code = ($ex instanceof HttpException) ? $ex->getStatusCode() : $ex->getCode();
         }
 
         // can it be considered valid HTTP error code?
@@ -153,33 +153,38 @@ class ExceptionHandlerHelper
         /** @var array|null $data Optional payload to return */
         $data = null;
         if ($api_code === Config::get("{$base_key}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION())) {
-            /** @var ValidationException $exception */
-            $data = [ResponseBuilder::KEY_MESSAGES => $exception->validator->errors()->messages()];
+            /** @var ValidationException $ex */
+            $data = [ResponseBuilder::KEY_MESSAGES => $ex->validator->errors()->messages()];
         }
 
         $key = BaseApiCodes::getCodeMessageKey($api_code) ?? BaseApiCodes::getCodeMessageKey($base_api_code);
 
         // let's build error error_message
-        $error_message = $exception->getMessage();
+        $error_message = $ex->getMessage();
 
-        // if we do not have any error_message in the hand yet, we need to fall back to built-in string configured
-        // for this particular exception.
+        // Check if we have dedicated message for this type of code for HttpException and its status code.
+        if (($error_message === '') && ($ex instanceof HttpException)) {
+            $key = sprintf('response-builder::builder.http_%d', $ex->getStatusCode());
+            $error_message = Lang::get($key, ['api_code' => $api_code]);
+        }
+
+        // still nothing? if we do not have any error_message in the hand yet, we need to fall back to
+        // built-in generic message for this type of exception
         if ($error_message === '') {
             $error_message = Lang::get($key, [
                 'api_code' => $api_code,
-                'message'  => get_class($exception),
+                'message'  => get_class($ex),
             ]);
         }
 
-        // if we have trace data debugging enabled, let's gather some debug
-        // info and add to the response.
+        // if we have trace data debugging enabled, let's gather some debug info and add to the response.
         $trace_data = null;
         if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, false)) {
             $trace_data = [
                 Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE) => [
-                    ResponseBuilder::KEY_CLASS => get_class($exception),
-                    ResponseBuilder::KEY_FILE  => $exception->getFile(),
-                    ResponseBuilder::KEY_LINE  => $exception->getLine(),
+                    ResponseBuilder::KEY_CLASS => get_class($ex),
+                    ResponseBuilder::KEY_FILE  => $ex->getFile(),
+                    ResponseBuilder::KEY_LINE  => $ex->getLine(),
                 ],
             ];
         }
@@ -187,5 +192,4 @@ class ExceptionHandlerHelper
         return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data,
             $http_code, null, $trace_data);
     }
-
 }
