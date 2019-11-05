@@ -42,19 +42,22 @@ class ExceptionHandlerHelper
 
         if ($ex instanceof HttpException) {
             // Check if we have any exception configuration for this particular Http status code.
-            $ex_cfg = $cfg['http_exception'][ $ex->getStatusCode() ] ?? null;
+            $ex_cfg = $cfg[ HttpException::class ][ $ex->getStatusCode() ] ?? null;
             if (is_array($ex_cfg)) {
                 $api_code = $ex_cfg['api_code'] ?? BaseApiCodes::EX_UNCAUGHT_EXCEPTION();
                 $http_code = $ex_cfg['http_code'] ?? ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
                 $result = static::error($ex, $api_code, $http_code);
             } else {
                 // No dedicated config entry for this code, let's fall back to default handler
-                $ex_cfg = $cfg['http_exception']['default'];
+                $ex_cfg = $cfg[ HttpException::class ]['default'];
                 $result = static::error($ex, $ex_cfg['api_code'], $ex_cfg['http_code']);
             }
         } elseif ($ex instanceof ValidationException) {
-            $ex_cfg = $cfg['http_exception'][ HttpResponse::HTTP_UNPROCESSABLE_ENTITY ];
-            $result = static::error($ex, $ex_cfg['api_code'], $ex_cfg['http_code']);
+            $http_code = HttpResponse::HTTP_UNPROCESSABLE_ENTITY;
+            $ex_cfg = $cfg[ HttpException::class ][ $http_code ];
+            $api_code = $ex_cfg['api_code'] ?? BaseApiCodes::EX_UNCAUGHT_EXCEPTION();
+            $http_code = $ex_cfg['http_code'] ?? $http_code;
+            $result = static::error($ex, $api_code, $http_code);
         }
 
         if ($result === null) {
@@ -76,9 +79,9 @@ class ExceptionHandlerHelper
     protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
                                                                          AuthException $exception): HttpResponse
     {
-        $cfg = static::getExceptionHandlerConfig();
-        $api_code = $cfg['http_exception'][ HttpResponse::HTTP_UNAUTHORIZED ]['api_code'];
-        $http_code = $cfg['http_exception'][ HttpResponse::HTTP_UNAUTHORIZED ]['http_code'];
+        $cfg = static::getExceptionHandlerConfig(HttpException::class);
+        $api_code = $cfg[ HttpResponse::HTTP_UNAUTHORIZED ]['api_code'];
+        $http_code = $cfg[ HttpResponse::HTTP_UNAUTHORIZED ]['http_code'];
 
         return static::error($exception, $api_code, $http_code);
     }
@@ -157,51 +160,41 @@ class ExceptionHandlerHelper
     protected static function getExceptionHandlerBaseConfig(): array
     {
         return [
-            'http_exception'     => [
-                HttpResponse::HTTP_NOT_FOUND            => [
-                    'api_code'  => BaseApiCodes::EX_HTTP_NOT_FOUND(),
-                    'http_code' => HttpResponse::HTTP_NOT_FOUND,
-                    'msg'       => 'response-builder::builder.http_404',
-                ],
-                HttpResponse::HTTP_SERVICE_UNAVAILABLE  => [
-                    'api_code'  => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
-                    'http_code' => HttpResponse::HTTP_SERVICE_UNAVAILABLE,
-                    'msg'       => 'response-builder::builder.http_http_503',
-                ],
-
+            HttpException::class => [
                 // used by unauthenticated() to obtain api and http code for the exception
                 HttpResponse::HTTP_UNAUTHORIZED         => [
                     'api_code'  => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
                     'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
-                    'msg'       => 'response-builder::builder.http_401',
+                    'msg_key'   => 'response-builder::builder.http_401',
                 ],
 
+                // Required by ValidationException handler
                 HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
                     'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
                     'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-                    'msg'       => 'response-builder::builder.http_422',
+                    'msg_key'   => 'response-builder::builder.http_422',
                 ],
+                // default handler is mandatory
                 'default'                               => [
                     'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
-                    'msg'       => 'response-builder::builder.http_exception',
                     'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+                    'msg_key'   => 'response-builder::builder.http_exception',
                 ],
             ],
-            'default' => [
+            // default handler is mandatory
+            'default'            => [
                 'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
                 'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'msg'       => 'response-builder::builder.uncaught_exception',
+                'msg_key'   => 'response-builder::builder.uncaught_exception',
             ],
-//            'validation_exception' => [
-//                'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
-//                'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-//                'msg'       => 'response-builder::builder.http_422',
-//            ],
         ];
     }
 
-    protected static function getExceptionHandlerConfig(): array
+    protected static function getExceptionHandlerConfig(string $key = null): array
     {
-        return Config::get(ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY, []) + self::getExceptionHandlerBaseConfig();
+        $result = array_merge(Config::get(ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY, []),
+            self::getExceptionHandlerBaseConfig());
+
+        return ($key === null) ? $result : $result[ $key ];
     }
 }
