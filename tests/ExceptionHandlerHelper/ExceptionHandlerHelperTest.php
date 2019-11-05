@@ -72,11 +72,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /*********************************************************************************************/
 
-    public function testRenderMethodWithHttpException(): void
-    {
-
-    }
-
     /**
      * Check exception handler behavior when provided with various exception types.
      *
@@ -84,7 +79,7 @@ class ExceptionHandlerHelperTest extends TestCase
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function testRenderMethodWithHttpExceptionX(): void
+    public function testRenderMethodWithHttpException(): void
     {
         $codes = [
             [
@@ -309,6 +304,40 @@ class ExceptionHandlerHelperTest extends TestCase
         }
     }
 
+    public function testBaseConfigStructure(): void
+    {
+        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerBaseConfig', []);
+        $this->assertIsArray($base_cfg);
+        $this->assertNotEmpty($base_cfg);
+
+        // ensure mandatory keys are present.
+        $keys = ['http_exception',
+                 'default'];
+        foreach ($keys as $key) {
+            $this->assertArrayHasKey($key, $base_cfg);
+        }
+
+        // check http_exception block and validate all required entries and the config content.
+        $http_cfg = $base_cfg['http_exception'];
+        $keys = [HttpResponse::HTTP_UNAUTHORIZED,];
+        foreach ($keys as $key) {
+            $this->assertArrayHasKey($key, $http_cfg);
+            $this->validateSingleConfigItem($http_cfg[$key]);
+        }
+        $this->assertArrayHasKey('default', $http_cfg);
+        $this->validateSingleConfigItem($base_cfg['default']);
+
+        // check default handler config
+        $this->validateSingleConfigItem($base_cfg['default']);
+    }
+
+    public function validateSingleConfigItem(array $cfg): void
+    {
+        $this->assertArrayHasKey('api_code', $cfg);
+        $this->assertArrayHasKey('http_code', $cfg);
+        $this->assertArrayHasKey('msg', $cfg);
+    }
+
     public function testBaseConfigHttpExceptionConfig(): void
     {
         $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerBaseConfig', []);
@@ -325,31 +354,41 @@ class ExceptionHandlerHelperTest extends TestCase
 
         foreach ($http_cfg as $code => $params) {
             if (is_int($code)) {
-                $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $code);
-                $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $code);
-
-                $this->assertArrayHasKey('api_code', $params);
-                $this->assertGreaterThanOrEqual(BaseApiCodes::getMinCode(), $params['api_code']);
-                $this->assertLessThanOrEqual(BaseApiCodes::getMaxCode(), $params['api_code']);
-
-                $this->assertArrayHasKey('http_code', $params);
-                $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
-                $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
-
-                $this->assertArrayHasKey('msg', $params);
-                $str_key = $params['msg'];
-                $this->assertNotEmpty($str_key);
-
-                $this->assertTrue(\Lang::has($str_key));
-                $this->assertNotEmpty(\Lang::has($str_key));
-
+                $this->checkConfig($params, $code);
             } elseif (is_string($code) && $code == 'default') {
-
+                $this->checkConfig($params);
             } else {
                 $this->fail("Code '{$code}' is not allowed in config->exception_handler->http_exception.");
             }
-
         }
+    }
+
+    protected function getBaseconfig(): array
+    {
+        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerBaseConfig', []);
+        $this->assertIsArray($base_cfg);
+        $this->assertNotEmpty($base_cfg);
+    }
+
+    protected function checkConfig(array $params, int $code = null)
+    {
+        if (is_int($code)) {
+            $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $code);
+            $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $code);
+        }
+
+        $this->assertArrayHasKey('api_code', $params);
+        $this->assertGreaterThanOrEqual(BaseApiCodes::getMinCode(), $params['api_code']);
+        $this->assertLessThanOrEqual(BaseApiCodes::getMaxCode(), $params['api_code']);
+
+        $this->assertArrayHasKey('http_code', $params);
+        $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
+        $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
+
+        $this->assertArrayHasKey('msg', $params);
+        $str_key = $params['msg'];
+        $this->assertNotEmpty($str_key);
+        $this->assertNotEmpty(\Lang::get($str_key));
     }
 
     public function testx(): void
