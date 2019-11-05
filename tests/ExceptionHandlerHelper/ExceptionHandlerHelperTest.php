@@ -311,31 +311,26 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertNotEmpty($base_cfg);
 
         // ensure mandatory keys are present.
-        $keys = ['http_exception',
+        $keys = [HttpException::class,
                  'default'];
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $base_cfg);
+            $this->assertGreaterThanOrEqual(1, count($base_cfg[$key]));
         }
 
         // check http_exception block and validate all required entries and the config content.
-        $http_cfg = $base_cfg['http_exception'];
+        $http_cfg = $base_cfg[HttpException::class];
+        $this->assertGreaterThanOrEqual(1, count($http_cfg));
         $keys = [HttpResponse::HTTP_UNAUTHORIZED,];
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $http_cfg);
-            $this->validateSingleConfigItem($http_cfg[$key]);
+            $this->checkConfig($http_cfg[$key]);
         }
         $this->assertArrayHasKey('default', $http_cfg);
-        $this->validateSingleConfigItem($base_cfg['default']);
+        $this->checkConfig($base_cfg['default']);
 
         // check default handler config
-        $this->validateSingleConfigItem($base_cfg['default']);
-    }
-
-    public function validateSingleConfigItem(array $cfg): void
-    {
-        $this->assertArrayHasKey('api_code', $cfg);
-        $this->assertArrayHasKey('http_code', $cfg);
-        $this->assertArrayHasKey('msg', $cfg);
+        $this->checkConfig($base_cfg['default']);
     }
 
     public function testBaseConfigHttpExceptionConfig(): void
@@ -344,8 +339,8 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertIsArray($base_cfg);
         $this->assertNotEmpty($base_cfg);
 
-        $this->assertArrayHasKey('http_exception', $base_cfg);
-        $http_cfg = $base_cfg['http_exception'];
+        $this->assertArrayHasKey(HttpException::class, $base_cfg);
+        $http_cfg = $base_cfg[HttpException::class];
         $this->assertIsArray($http_cfg);
         $this->assertNotEmpty($http_cfg);
 
@@ -385,15 +380,9 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
         $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
 
-        $this->assertArrayHasKey('msg', $params);
-        $str_key = $params['msg'];
+        $this->assertArrayHasKey('msg_key', $params);
+        $str_key = $params['msg_key'];
         $this->assertNotEmpty($str_key);
         $this->assertNotEmpty(\Lang::get($str_key));
     }
-
-    public function testx(): void
-    {
-//        abort(401);
-    }
-
 }
