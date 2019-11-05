@@ -86,7 +86,7 @@ class ConverterTest extends TestCase
      */
     public function testGetClassesMapping_NoMappingConfig(): void
     {
-        // remove any classes config
+        // Remove any classes config
         /** @noinspection PhpUndefinedMethodInspection */
         Config::offsetUnset(ResponseBuilder::CONF_KEY_CLASSES);
 

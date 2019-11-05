@@ -13,7 +13,7 @@ return [
     'ok'                       => 'OK',
     'no_error_message'         => 'Error #:api_code',
 
-    // can be used by Exception Handler (if enabled)
+    // Used by Exception Handler Helper (when used)
     'uncaught_exception'       => 'Uncaught exception: :message',
     'http_exception'           => 'HTTP exception: :message',
 

@@ -77,7 +77,7 @@ return [
          * HTTP Exceptions
          * Use this section to define how you want any Http Exception to be handled.
          * This means that you can define any Http code (i.e. 404 => HttpResponse::HTTP_NOT_FOUND)
-         * and then configure what api_code should be returned back to the user. If Http code
+         * and then configure what api_code should be returned to the user. If Http code
          * is not explicitely configured then `default` handler kicks in, and converts it.
          */
 //        \Symfony\Component\HttpKernel\Exception\HttpException::class => [
