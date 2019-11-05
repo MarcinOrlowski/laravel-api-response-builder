@@ -4,6 +4,12 @@
 
 ### v6 ###
 
+#### v6.4 ####
+ * `[BREAKING]` This is backward incompatible change in ExceptionHandler configuration array structure.
+   but it only affects you if you have custom configuratoin for ExceptionHandlerHelper. If you do not use
+   it or do just use default configuration, then you are not affected. If you are affected, please see
+   [configuration docs](config.md) for more information.
+
 #### v6.3 ####
  * `[BREAKING]` This is backward incompatible change in signature of `ResponseBuilder::buildResponse()`, but it only affects
    you if you extend `ResponseBuilder` and provide own implementation to manipulate response object
