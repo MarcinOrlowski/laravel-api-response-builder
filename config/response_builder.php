@@ -74,38 +74,38 @@ return [
     */
     'exception_handler' => [
         /*
-         * Use http_exception section to define how you want any Http Exception to be handled.
+         * HTTP Exceptions
+         * Use this section to define how you want any Http Exception to be handled.
          * This means that you can define any Http code (i.e. 404 => HttpResponse::HTTP_NOT_FOUND)
          * and then configure what api_code should be returned back to the user. If Http code
-         * is not explicitely configured then `default` entry kicks in, and converts
+         * is not explicitely configured then `default` handler kicks in, and converts it.
          */
-//        'http_exception' => [
-//            HttpResponse::HTTP_NOT_FOUND            => [
-//                'api_code' => \App\ApiCodes::EX_HTTP_NOT_FOUND(),
+//        \Symfony\Component\HttpKernel\Exception\HttpException::class => [
+//            // used by unauthenticated() to obtain api and http code for the exception
+//            HttpResponse::HTTP_UNAUTHORIZED => [
+//                'api_code'  => <YOUR_API_CODE>,
+//                'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
+//                'msg_key'   => 'response-builder::builder.http_401',
 //            ],
-//            HttpResponse::HTTP_SERVICE_UNAVAILABLE  => [
-//                'api_code' => \App\ApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
-//            ],
-//            HttpResponse::HTTP_UNAUTHORIZED         => [
-//                'api_code' => \App\ApiCodes::EX_AUTHENTICATION_EXCEPTION(),
-//            ],
+//
+//            // Required by ValidationException handler
 //            HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-//                'api_code'  => \App\ApiCodes::EX_VALIDATION_EXCEPTION(),
-//                'converter' => \MarcinOrlowski\ResponseBuilder\UnprocessableEntitiyConverter::class,
+//                'api_code'  => <YOUR_API_CODE>,
+//                'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+//                'msg_key'   => 'response-builder::builder.http_422',
 //            ],
-//            // If Http code is not explicitely configured, then it will fall into default bucket.
-//            'default'                               => [
-//                'api_code'  => \App\ApiCodes::HTTP_EXCEPTION(),
+//            // default handler is mandatory
+//            'default' => [
+//                'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
 //                'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//                'msg_key'   => 'response-builder::builder.http_exception',
 //            ],
 //        ],
-//        'default'   => [
-//            'api_code'  => \App\ApiCodes::EX_UNCAUGHT_EXCEPTION(),
+//        // default handler is mandatory
+//        'default' => [
+//            'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
 //            'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-//        ],
-//        'validation_exception' => [
-//            'api_code'  => \App\ApiCodes::EX_VALIDATION_EXCEPTION(),
-//            'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+//            'msg_key'   => 'response-builder::builder.uncaught_exception',
 //        ],
     ],
 
