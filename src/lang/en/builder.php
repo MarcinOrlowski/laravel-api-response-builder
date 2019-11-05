@@ -16,13 +16,13 @@ return [
     // can be used by Exception Handler (if enabled)
     'uncaught_exception'       => 'Uncaught exception: :message',
     // we talking API call here, hence we have http_not_found
-    'http_not_found'           => 'Item not found',
+//    'http_not_found'           => 'Item not found',
     'http_exception'           => 'HTTP exception: :message',
-    'http_service_unavailable' => 'Service maintenance in progress',
+//    'http_service_unavailable' => 'Service maintenance in progress',
 
     // Exception Handler (added in 3.3.0)
-    'authentication_exception' => 'Not authorized to access',
-    'validation_exception'     => 'Invalid data',
+//    'authentication_exception' => 'Not authorized to access',
+//    'validation_exception'     => 'Invalid data',
 
     // Error messages for HttpException caught w/o custom messages
     // https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml

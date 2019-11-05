@@ -16,13 +16,13 @@ return [
     // can be used by Exception Handler (if enabled)
     'uncaught_exception'       => 'Nieprzechwycony wyjątek: :message',
     // we talking API call here, hence we have http_not_found
-    'http_not_found'           => 'Element nie znaleziony',
+//    'http_not_found'           => 'Element nie znaleziony',
     'http_exception'           => 'Wyjątek HTTP: :message',
-    'http_service_unavailable' => 'Trwa przerwa serwisowa',
+//    'http_service_unavailable' => 'Trwa przerwa serwisowa',
 
     // Exception Handler (added in 3.3.0)
-    'authentication_exception' => 'Brak autoryzacji dostępu',
-    'validation_exception'     => 'Nieprawidłowe dane',
+//    'authentication_exception' => 'Brak autoryzacji dostępu',
+//    'validation_exception'     => 'Nieprawidłowe dane',
 
     // Error messages for HttpException caught w/o custom messages
     // https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
