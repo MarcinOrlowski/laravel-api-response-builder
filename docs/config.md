@@ -99,54 +99,50 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
 
 ## exception_handler ##
 
- If you use `ResponseBuilder`'s Exception handler helper, you must map all the exceptions handled to unique api code
- from your currently configured range. That allows API calls chaining with proper error failure handling up to the
- top client code.
+ `ResponseBuilder`'s Exception handler helper is plug-and-play helper that will automatically handle
+ any exception thrown by your code and expose valid JSON response to the client applications. But aside
+ from error handling, some programmers use exceptions to quickly break the flow and return with additional
+ information. In such case you may want to assign separate API code to each of these "special" exceptions
+ and this is where `exception_handler` section comes in.
  
+ Each configuration entry consits of exception class name as a key and parameters array with fields
+ `api_code` and `http_code`. At runtime, exception handler will look for config entry for particualr
+ exception class and if there's one, proper handler, dedicated to that exception class, kicks in
+ and deals with the exception. If no such config exists, handler with label `default` as class name
+ will be used.  
+
+ Example code matching current defaults would look like this:  
 ```php
 'exception_handler' => [
-    'exception' => [
-        'http_not_found' => [
-            'code'      => \App\ApiCodes::HTTP_NOT_FOUND(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
+    \Symfony\Component\HttpKernel\Exception\HttpException::class => [
+        // used by unauthenticated() to obtain api and http code for the exception
+        HttpResponse::HTTP_UNAUTHORIZED => [
+            'api_code'  => <YOUR_API_CODE>,
+            'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
         ],
-        ...
-    ]
-]
-```
 
-
-Default exception handling configuration:
-
-```php
-'exception_handler' => [
-    'exception' => [
-        'http_not_found' => [
-            'code'      => \App\ApiCodes::HTTP_NOT_FOUND(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
+        // Required by ValidationException handler
+        HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
+            'api_code'  => <YOUR_API_CODE>,
+            'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
         ],
-        'http_service_unavailable' => [
-            'code'      => \App\ApiCodes::HTTP_SERVICE_UNAVAILABLE(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
-        ],
-        'http_exception' => [
-            'code'      => \App\ApiCodes::HTTP_EXCEPTION(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
-        ],
-        'uncaught_exception' => [
-            'code'      => \App\ApiCodes::UNCAUGHT_EXCEPTION(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_INTERNAL_SERVER_ERROR,
-        ],
-        'authentication_exception' => [
-            'code'      => \App\ApiCodes::AUTHENTICATION_EXCEPTION(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNAUTHORIZED,
-        ],
-        'validation_exception' => [
-            'code'      => \App\ApiCodes::VALIDATION_EXCEPTION(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNPROCESSABLE_ENTITY,
+        // default handler is mandatory
+        'default' => [
+            'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
+            'http_code' => HttpResponse::HTTP_BAD_REQUEST,
         ],
     ],
+    // This is final exception handler. If ex is not dealt with yet
+    // this is its last stop.
+    'default' => [
+        'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+        'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+    ],
+],
 ```
+
+**NOTE:** For now there's no option to specify custom converted as of yet (but that's next step anywya), so adding own
+classes to the config same way we did for `\Symfony\Component\HttpKernel\Exception\HttpException::class` won't work.
 
 ## map ##
 
