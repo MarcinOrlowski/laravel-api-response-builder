@@ -117,7 +117,7 @@ class ExceptionHandlerHelper
 
         $placeholders = [
             'api_code' => $api_code,
-            'message'  => '',
+            'message'  => ($error_message !== '') ? $error_message : '???',
         ];
 
         // Check if we have dedicated HTTP Code message for this type of HttpException and its status code.
