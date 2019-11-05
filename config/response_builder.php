@@ -85,27 +85,23 @@ return [
 //            HttpResponse::HTTP_UNAUTHORIZED => [
 //                'api_code'  => <YOUR_API_CODE>,
 //                'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
-//                'msg_key'   => 'response-builder::builder.http_401',
 //            ],
 //
 //            // Required by ValidationException handler
 //            HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
 //                'api_code'  => <YOUR_API_CODE>,
 //                'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-//                'msg_key'   => 'response-builder::builder.http_422',
 //            ],
 //            // default handler is mandatory
 //            'default' => [
 //                'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
 //                'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-//                'msg_key'   => 'response-builder::builder.http_exception',
 //            ],
 //        ],
 //        // default handler is mandatory
 //        'default' => [
 //            'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
 //            'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-//            'msg_key'   => 'response-builder::builder.uncaught_exception',
 //        ],
     ],
 

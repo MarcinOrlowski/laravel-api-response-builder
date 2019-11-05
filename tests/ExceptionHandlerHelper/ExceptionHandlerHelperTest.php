@@ -379,10 +379,5 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertArrayHasKey('http_code', $params);
         $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
         $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
-
-        $this->assertArrayHasKey('msg_key', $params);
-        $str_key = $params['msg_key'];
-        $this->assertNotEmpty($str_key);
-        $this->assertNotEmpty(\Lang::get($str_key));
     }
 }

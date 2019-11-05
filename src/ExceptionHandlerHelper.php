@@ -43,15 +43,14 @@ class ExceptionHandlerHelper
         if ($ex instanceof HttpException) {
             // Check if we have any exception configuration for this particular Http status code.
             $ex_cfg = $cfg[ HttpException::class ][ $ex->getStatusCode() ] ?? null;
-            if (is_array($ex_cfg)) {
-                $api_code = $ex_cfg['api_code'] ?? BaseApiCodes::EX_UNCAUGHT_EXCEPTION();
-                $http_code = $ex_cfg['http_code'] ?? ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
-                $result = static::error($ex, $api_code, $http_code);
-            } else {
-                // No dedicated config entry for this code, let's fall back to default handler
+            if ($ex_cfg === null) {
                 $ex_cfg = $cfg[ HttpException::class ]['default'];
-                $result = static::error($ex, $ex_cfg['api_code'], $ex_cfg['http_code']);
             }
+
+            $api_code = $ex_cfg['api_code'] ?? BaseApiCodes::EX_UNCAUGHT_EXCEPTION();
+            $http_code = $ex_cfg['http_code'] ?? ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
+            $msg_key = $ex_cfg['msg_key'] ?? null;
+            $result = static::error($ex, $api_code, $http_code, $msg_key);
         } elseif ($ex instanceof ValidationException) {
             $http_code = HttpResponse::HTTP_UNPROCESSABLE_ENTITY;
             $ex_cfg = $cfg[ HttpException::class ][ $http_code ];
@@ -97,7 +96,7 @@ class ExceptionHandlerHelper
      */
 //    protected static function error(Exception $ex, $exception_config_key): HttpResponse
     protected static function error(Exception $ex,
-                                    int $api_code, int $http_code = null): HttpResponse
+                                    int $api_code, int $http_code = null, string $msg_key = null): HttpResponse
     {
         $ex_http_code = ($ex instanceof HttpException) ? $ex->getStatusCode() : $ex->getCode();
         $http_code = $http_code ?? $ex_http_code;
@@ -165,27 +164,23 @@ class ExceptionHandlerHelper
                 HttpResponse::HTTP_UNAUTHORIZED         => [
                     'api_code'  => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
                     'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
-                    'msg_key'   => 'response-builder::builder.http_401',
                 ],
 
                 // Required by ValidationException handler
                 HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
                     'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
                     'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-                    'msg_key'   => 'response-builder::builder.http_422',
                 ],
                 // default handler is mandatory
                 'default'                               => [
                     'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
                     'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-                    'msg_key'   => 'response-builder::builder.http_exception',
                 ],
             ],
             // default handler is mandatory
             'default'            => [
                 'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
                 'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'msg_key'   => 'response-builder::builder.uncaught_exception',
             ],
         ];
     }
