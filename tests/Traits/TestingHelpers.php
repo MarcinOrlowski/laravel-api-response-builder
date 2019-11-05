@@ -219,8 +219,8 @@ trait TestingHelpers
         /** @noinspection UnNecessaryDoubleQuotesInspection */
         $this->assertNotEquals(trim($json_object->locale), '', "'locale' cannot be empty string");
         $this->assertIsString($json_object->message);
-        /** @noinspection UnNecessaryDoubleQuotesInspection */
-        $this->assertNotEquals(trim($json_object->message), '', "'message' cannot be empty string");
+//        /** @noinspection UnNecessaryDoubleQuotesInspection */
+//        $this->assertNotEquals(trim($json_object->message), '', "'message' cannot be empty string");
         $this->assertTrue(($json_object->data === null) || is_object($json_object->data),
             "Response 'data' must be either object or null");
     }
