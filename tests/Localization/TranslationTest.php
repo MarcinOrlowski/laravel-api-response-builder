@@ -40,7 +40,7 @@ class TranslationTest extends TestCase
             array_filter(
                 array_filter(array_map(function($entry) {
                     return basename($entry);
-                }, glob(__DIR__ . '/../src/lang/*', GLOB_ONLYDIR))),
+                }, glob(__DIR__ . '/../../src/lang/*', GLOB_ONLYDIR))),
                 function($item) use ($default_lang) {
                     return $item != $default_lang;
                 }
