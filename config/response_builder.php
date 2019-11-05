@@ -98,7 +98,8 @@ return [
 //                'http_code' => HttpResponse::HTTP_BAD_REQUEST,
 //            ],
 //        ],
-//        // default handler is mandatory
+//        // This is final exception handler. If ex is not dealt with yet
+//        // this is its last stop.
 //        'default' => [
 //            'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
 //            'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
