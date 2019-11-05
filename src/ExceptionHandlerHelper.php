@@ -94,25 +94,24 @@ class ExceptionHandlerHelper
      *
      * @return HttpResponse
      */
-//    protected static function error(Exception $ex, $exception_config_key): HttpResponse
     protected static function error(Exception $ex,
                                     int $api_code, int $http_code = null, string $msg_key = null): HttpResponse
     {
         $ex_http_code = ($ex instanceof HttpException) ? $ex->getStatusCode() : $ex->getCode();
         $http_code = $http_code ?? $ex_http_code;
 
-        // Check if we now have valid HTTP error code for this case or need to make one up. We cannot
-        // throw any exception if codes are invalid because we are in Exception Handler already.
+        // Check if we now have valid HTTP error code for this case or need to make one up.
+        // We cannot throw any exception if codes are invalid because we are in Exception Handler already.
         if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
-            // not a valid code, let's try to get the exception status
+            // Not a valid code, let's try to get the exception status.
             $http_code = $ex_http_code;
         }
-        // can it be considered valid HTTP error code?
+        // Can it be considered a valid HTTP error code?
         if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
             $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
         }
 
-        // let's build the error message
+        // Let's build the error message.
         $error_message = $ex->getMessage();
 
         $placeholders = [
@@ -125,15 +124,14 @@ class ExceptionHandlerHelper
             $error_message = Lang::get("response-builder::builder.http_{$ex_http_code}", $placeholders);
         }
 
-        // still nothing? if we do not have any error_message in the hand yet, we need to fall back to
-        // built-in generic message for this type of exception
+        // Still got nothing? Fall back to built-in generic message for this type of exception.
         if ($error_message === '') {
             $key = BaseApiCodes::getCodeMessageKey(($ex instanceof HttpException)
                 ? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
             $error_message = Lang::get($key, $placeholders);
         }
 
-        // if we have trace data debugging enabled, let's gather some debug info and add to the response.
+        // If we have trace data debugging enabled, let's gather some debug info and add to the response.
         $trace_data = null;
         if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, false)) {
             $trace_data = [
@@ -145,7 +143,7 @@ class ExceptionHandlerHelper
             ];
         }
 
-        // if this is ValidationException, add all the messages from MessageBag to the data node.
+        // If this is ValidationException, add all the messages from MessageBag to the data node.
         $data = null;
         if ($ex instanceof ValidationException) {
             /** @var ValidationException $ex */
@@ -156,6 +154,11 @@ class ExceptionHandlerHelper
             $http_code, null, $trace_data);
     }
 
+    /**
+     * Returns built-in configration array for ExceptionHandlerHelper
+     *
+     * @return array
+     */
     protected static function getExceptionHandlerBaseConfig(): array
     {
         return [
@@ -185,6 +188,14 @@ class ExceptionHandlerHelper
         ];
     }
 
+    /**
+     * Returns configration array for ExceptionHandlerHelper with user config merged with built-in config.
+     *
+     * @param string|null $key optional configuration node key to have only this portion of the
+     *                         config returned (i.e. `http_exception`).
+     *
+     * @return array
+     */
     protected static function getExceptionHandlerConfig(string $key = null): array
     {
         $result = array_merge(Config::get(ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY, []),
