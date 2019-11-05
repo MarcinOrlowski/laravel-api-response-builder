@@ -99,7 +99,7 @@ return [
 //                'http_code' => HttpResponse::HTTP_BAD_REQUEST,
 //            ],
 //        ],
-//        'uncaught_exception'   => [
+//        'default'   => [
 //            'api_code'  => \App\ApiCodes::EX_UNCAUGHT_EXCEPTION(),
 //            'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 //        ],

@@ -72,6 +72,11 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /*********************************************************************************************/
 
+    public function testRenderMethodWithHttpException(): void
+    {
+
+    }
+
     /**
      * Check exception handler behavior when provided with various exception types.
      *
@@ -79,61 +84,22 @@ class ExceptionHandlerHelperTest extends TestCase
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function testRenderMethodWithHttpException(): void
+    public function testRenderMethodWithHttpExceptionX(): void
     {
-//        $this->markTestIncomplete();
-
         $codes = [
-            // ExceptionHandlerHelper::TYPE_HTTP_NOT_FOUND_KEY
             [
-                'exception_class'       => HttpException::class,
-                'expected_http_code'    => HttpResponse::HTTP_NOT_FOUND,
-                'expected_api_code'     => BaseApiCodes::EX_HTTP_NOT_FOUND(),
-                'do_message_validation' => true,
-                'has_data_node'         => false,
+                'exception_class'       => ValidationException::class,
+                'expected_http_code'    => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+                'expected_api_code'     => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+                'do_message_validation' => false,
+                'has_data'              => true,
             ],
-//            ExceptionHandlerHelper::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY
-            [
-                'exception_class'       => HttpException::class,
-                'expected_http_code'    => HttpResponse::HTTP_SERVICE_UNAVAILABLE,
-                'expected_api_code'     => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
-                'do_message_validation' => true,
-                'has_data_node'         => false,
-            ],
-//            ExceptionHandlerHelper::TYPE_HTTP_EXCEPTION_KEY           => [
-//                'exception_class'       => HttpException::class,
-//                'expected_http_code'    => HttpResponse::HTTP_BAD_REQUEST,
-//                'expected_api_code'     => BaseApiCodes::EX_HTTP_EXCEPTION(),
-//                'do_message_validation' => true,
-//                'has_data_node'         => false,
-//            ],
-//            ExceptionHandlerHelper::TYPE_UNCAUGHT_EXCEPTION_KEY       => [
-//                'exception_class'       => \RuntimeException::class,
-//                'expected_http_code'    => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-//                'expected_api_code'     => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-//                'do_message_validation' => true,
-//                'has_data_node'         => false,
-//            ],
-//            ExceptionHandlerHelper::TYPE_HTTP_UNAUTHORIZED_KEY        => [
-//                'exception_class'       => HttpException::class,
-//                'expected_http_code'    => HttpResponse::HTTP_UNAUTHORIZED,
-//                'expected_api_code'     => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
-//                'do_message_validation' => true,
-//                'has_data_node'         => false,
-//            ],
-//            ExceptionHandlerHelper::TYPE_VALIDATION_EXCEPTION_KEY     => [
-//                'exception_class'       => ValidationException::class,
-//                'expected_http_code'    => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-//                'expected_api_code'     => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
-//                'do_message_validation' => false,
-//                'has_data_node'         => true,
-//            ],
         ];
 
         foreach ($codes as $exception_type => $params) {
             $this->doTestSingleException($exception_type, $params['exception_class'],
                 $params['expected_http_code'], $params['expected_api_code'],
-                $params['do_message_validation'], $params['has_data_node']);
+                $params['do_message_validation'], $params['has_data']);
         }
     }
 
@@ -146,7 +112,7 @@ class ExceptionHandlerHelperTest extends TestCase
      * @param int    $expected_api_code              Expected response API code
      * @param bool   $validate_response_message_text Set to @true, to validate returned response message with
      *                                               current localization.
-     * @param bool   $expected_data_node             Set to @true if response is expected to have non null `data` node.
+     * @param bool   $expect_data                    Set to @true if response is expected to have non null `data` node.
      *
      * @return void
      *
@@ -156,7 +122,7 @@ class ExceptionHandlerHelperTest extends TestCase
                                              string $exception_class,
                                              int $expected_http_code, int $expected_api_code,
                                              bool $validate_response_message_text = true,
-                                             bool $expected_data_node = false): void
+                                             bool $expect_data = false): void
     {
         $key = BaseApiCodes::getCodeMessageKey($expected_api_code);
         $expect_data_node_null = true;
@@ -205,7 +171,7 @@ class ExceptionHandlerHelperTest extends TestCase
         }
         $this->assertEquals($expected_http_code, $eh_response->getStatusCode(),
             sprintf('Unexpected HTTP code value for "%s".', $exception_config_key));
-        if ($expected_data_node) {
+        if ($expect_data) {
             $data = $eh_response_json->{ResponseBuilder::KEY_DATA};
             $this->assertNotNull($data);
             $this->assertObjectHasAttribute(ResponseBuilder::KEY_MESSAGES, $data);
@@ -224,21 +190,16 @@ class ExceptionHandlerHelperTest extends TestCase
      */
     public function testHttpCodeFallbackToExceptionStatusCode(): void
     {
-        $this->markTestSkipped();
-
-        // GIVEN invalid configuration with exception handler's http_code set to
-        // value below min. allowed 400
+        // GIVEN invalid configuration with exception handler's http_code set
+        // to value below min. allowed 400
         $config_http_code = HttpResponse::HTTP_OK;
 
         // AND having HttpException with valid http_code
-        $expected_http_code = \Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST;
+        $expected_http_code = HttpResponse::HTTP_BAD_REQUEST;
         $ex = new HttpException($expected_http_code);
 
-        // AND having invalid fallback http_code, which should not be used.
-        $fallback_http_code = 0;
-
         // THEN we should get valid response with $expected_http_code used.
-        $this->doTestErrorMethodFallbackMechanism($expected_http_code, $ex, $config_http_code, $fallback_http_code);
+        $this->doTestErrorMethodFallbackMechanism($expected_http_code, $ex, $config_http_code);
     }
 
     /**
@@ -251,8 +212,6 @@ class ExceptionHandlerHelperTest extends TestCase
      */
     public function testHttpCodeFallbackToProvidedFallbackValue(): void
     {
-        $this->markTestSkipped();
-
         // http codes below 400 are invalid
         $config_http_code = HttpResponse::HTTP_OK;
         $expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
@@ -272,37 +231,48 @@ class ExceptionHandlerHelperTest extends TestCase
      *
      * @throws \ReflectionException
      */
-//    protected function doTestErrorMethodFallbackMechanism(int $expected_http_code,
-//                                                          HttpException $ex,
-//                                                          int $config_http_code): void
-//    {
-//        // HAVING incorrectly configured exception handler
-//        $cfg = [
-//            'exception' => [
-//                ExceptionHandlerHelper::TYPE_HTTP_NOT_FOUND_KEY => [
-//                    // OK (0) is invalid code for error response.
-//                    'http_code' => $config_http_code,
-//                    'code'      => BaseApiCodes::EX_HTTP_NOT_FOUND(),
-//                ],
-//            ],
-//        ];
-//        Config::set(ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY, $cfg);
-//
-//        $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
-//                $ex,
-//                ExceptionHandlerHelper::TYPE_HTTP_NOT_FOUND_KEY,
-//                BaseApiCodes::EX_HTTP_NOT_FOUND(),
-//                $fallback_http_code,
-//            ]
-//        );
-//
-//        // get response as Json object
-//        $json = json_decode($response->getContent(), false);
-//        $this->assertValidResponse($json);
-//
-//        // Ensure returned response used HTTP code from the exception
-//        $this->assertEquals($expected_http_code, $response->getStatusCode());
-//    }
+    protected function doTestErrorMethodFallbackMechanism(int $expected_http_code,
+                                                          HttpException $ex,
+                                                          int $config_http_code): void
+    {
+        // HAVING incorrectly configured exception handler
+        $cfg = [
+            'exception' => [
+                'http_exception' => [
+                    HttpResponse::HTTP_NOT_FOUND => [
+                        // i.e. OK (0) is invalid code for error response.
+                        'api_code'  => BaseApiCodes::EX_HTTP_NOT_FOUND(),
+                        'http_code' => $config_http_code,
+
+                    ],
+                ],
+            ],
+        ];
+        Config::set(ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY, $cfg);
+
+        $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
+                $ex,
+                BaseApiCodes::EX_HTTP_NOT_FOUND(),
+                $config_http_code,
+            ]
+        );
+
+        // get response as Json object
+        $json = json_decode($response->getContent(), false);
+        $this->assertValidResponse($json);
+
+        // Ensure returned response used HTTP code from the exception
+        $this->assertEquals($expected_http_code, $response->getStatusCode());
+    }
+
+    protected function getTranslationForDefaultLang(): array
+    {
+        // get the translation array for default language
+        $default_lang = 'en';
+        \App::setLocale($default_lang);
+
+        return \Lang::get('response-builder::builder');
+    }
 
     /**
      * Checks if Exception Handler would succefuly provide error message for valid HttpExceptions but without
@@ -313,9 +283,7 @@ class ExceptionHandlerHelperTest extends TestCase
     public function testDefaultExceptionMessages(): void
     {
         // get the translation array for default language
-        $default_lang = 'en';
-        \App::setLocale($default_lang);
-        $translation = \Lang::get('response-builder::builder');
+        $translation = $this->getTranslationForDefaultLang();
 
         for ($code = ResponseBuilder::ERROR_HTTP_CODE_MIN; $code <= ResponseBuilder::ERROR_HTTP_CODE_MAX; $code++) {
             $key = "http_{$code}";
@@ -323,11 +291,9 @@ class ExceptionHandlerHelperTest extends TestCase
             // then we can safely skip the codes not covered by default language.
             if (array_key_exists($key, $translation)) {
                 $ex = new HttpException($code);
-
-                $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
+                $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'render', [
+                        null,
                         $ex,
-                        BaseApiCodes::EX_HTTP_EXCEPTION(),
-                        HttpResponse::HTTP_BAD_REQUEST,
                     ]
                 );
 
@@ -336,12 +302,55 @@ class ExceptionHandlerHelperTest extends TestCase
                 $this->assertValidResponse($json);
 
                 // Ensure returned response used HTTP code from the exception
-                $this->assertEquals($translation[$key], $json->message);
+                $this->assertNotEmpty($json->message);
+                $this->assertEquals($translation[ $key ], $json->message);
 
             }
         }
     }
 
+    public function testBaseConfigHttpExceptionConfig(): void
+    {
+        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerBaseConfig', []);
+        $this->assertIsArray($base_cfg);
+        $this->assertNotEmpty($base_cfg);
+
+        $this->assertArrayHasKey('http_exception', $base_cfg);
+        $http_cfg = $base_cfg['http_exception'];
+        $this->assertIsArray($http_cfg);
+        $this->assertNotEmpty($http_cfg);
+
+        // get the translation array for default language
+        $translation = $this->getTranslationForDefaultLang();
+
+        foreach ($http_cfg as $code => $params) {
+            if (is_int($code)) {
+                $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $code);
+                $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $code);
+
+                $this->assertArrayHasKey('api_code', $params);
+                $this->assertGreaterThanOrEqual(BaseApiCodes::getMinCode(), $params['api_code']);
+                $this->assertLessThanOrEqual(BaseApiCodes::getMaxCode(), $params['api_code']);
+
+                $this->assertArrayHasKey('http_code', $params);
+                $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
+                $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
+
+                $this->assertArrayHasKey('msg', $params);
+                $str_key = $params['msg'];
+                $this->assertNotEmpty($str_key);
+
+                $this->assertTrue(\Lang::has($str_key));
+                $this->assertNotEmpty(\Lang::has($str_key));
+
+            } elseif (is_string($code) && $code == 'default') {
+
+            } else {
+                $this->fail("Code '{$code}' is not allowed in config->exception_handler->http_exception.");
+            }
+
+        }
+    }
 
     public function testx(): void
     {

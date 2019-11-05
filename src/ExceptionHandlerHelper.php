@@ -58,7 +58,7 @@ class ExceptionHandlerHelper
         }
 
         if ($result === null) {
-            $ex_cfg = $cfg['uncaught_exception'];
+            $ex_cfg = $cfg['default'];
             $result = static::error($ex, $ex_cfg['api_code'], $ex_cfg['http_code']);
         }
 
@@ -94,7 +94,7 @@ class ExceptionHandlerHelper
      */
 //    protected static function error(Exception $ex, $exception_config_key): HttpResponse
     protected static function error(Exception $ex,
-                                    int $api_code, int $http_code = null, string $msg = null): HttpResponse
+                                    int $api_code, int $http_code = null): HttpResponse
     {
         $ex_http_code = ($ex instanceof HttpException) ? $ex->getStatusCode() : $ex->getCode();
         $http_code = $http_code ?? $ex_http_code;
@@ -161,38 +161,41 @@ class ExceptionHandlerHelper
                 HttpResponse::HTTP_NOT_FOUND            => [
                     'api_code'  => BaseApiCodes::EX_HTTP_NOT_FOUND(),
                     'http_code' => HttpResponse::HTTP_NOT_FOUND,
-                    'msg'       => 'builder::builder.http_not_found',
+                    'msg'       => 'response-builder::builder.http_404',
                 ],
                 HttpResponse::HTTP_SERVICE_UNAVAILABLE  => [
                     'api_code'  => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
                     'http_code' => HttpResponse::HTTP_SERVICE_UNAVAILABLE,
-                    'msg'       => 'builder::builder.http_service_unavailable',
+                    'msg'       => 'response-builder::builder.http_http_503',
                 ],
+
+                // used by unauthenticated() to obtain api and http code for the exception
                 HttpResponse::HTTP_UNAUTHORIZED         => [
                     'api_code'  => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
                     'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
-                    'msg'       => 'builder::builder.http_401',
+                    'msg'       => 'response-builder::builder.http_401',
                 ],
+
                 HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
                     'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
                     'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-                    'msg'       => 'builder::builder.http_422',
+                    'msg'       => 'response-builder::builder.http_422',
                 ],
                 'default'                               => [
                     'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
-                    'msg'       => 'builder::builder.http_exception',
+                    'msg'       => 'response-builder::builder.http_exception',
                     'http_code' => HttpResponse::HTTP_BAD_REQUEST,
                 ],
             ],
-            'uncaught_exception' => [
+            'default' => [
                 'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
                 'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'msg'       => 'builder::builder.uncaught_exception',
+                'msg'       => 'response-builder::builder.uncaught_exception',
             ],
 //            'validation_exception' => [
 //                'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
 //                'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-//                'msg'       => 'builder::builder.http_422',
+//                'msg'       => 'response-builder::builder.http_422',
 //            ],
         ];
     }
