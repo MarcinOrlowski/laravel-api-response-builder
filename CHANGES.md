@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * Fixed config merging helper causing certain user settings to be lost.
+
 * v6.3.0 (2019-11-02)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Signature of `ResponseBuilder::buildResponse()` changed to allow customization of final `message` entry (@hawezo).
