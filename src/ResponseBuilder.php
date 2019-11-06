@@ -210,8 +210,7 @@ class ResponseBuilder
         $api_code = $api_code ?? BaseApiCodes::OK();
 
         Validator::assertInt('api_code', $api_code);
-        Validator::assertInt('http_code', $http_code);
-        Validator::assertIntRange('http_code', $http_code, 200, 299);
+        Validator::assertOkHttpCode($http_code);
 
         return static::make(true, $api_code, $api_code, $data, $http_code, $placeholders, null, $json_opts);
     }
@@ -393,8 +392,7 @@ class ResponseBuilder
                 "Error response cannot use api_code of value  {$code_ok} which is reserved for OK");
         }
 
-        Validator::assertInt('http_code', $http_code);
-        Validator::assertIntRange('http_code', $http_code, static::ERROR_HTTP_CODE_MIN, static::ERROR_HTTP_CODE_MAX);
+        Validator::assertErrorHttpCode($http_code);
 
         $msg_or_api_code = $message ?? $api_code;
 

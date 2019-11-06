@@ -95,8 +95,32 @@ class Validator
     {
         $type = gettype($var);
         if (!in_array($type, $allowed_types)) {
-            $msg = sprintf('"%s" must be one of allowed types: %s (%s given)', $name, implode(', ', $allowed_types), gettype($var));
+            $msg = sprintf('"%s" must be one of allowed types: %s (%s given)',
+                $name, implode(', ', $allowed_types), gettype($var));
             throw new \InvalidArgumentException($msg);
         }
+    }
+
+    /**
+     * Ensures given $http_code is valid code for error response.
+     *
+     * @param int $http_code
+     */
+    public static function assertErrorHttpCode(int $http_code): void
+    {
+        self::assertInt('http_code', $http_code);
+        self::assertIntRange('http_code', $http_code,
+            ResponseBuilder::ERROR_HTTP_CODE_MIN, ResponseBuilder::ERROR_HTTP_CODE_MAX);
+    }
+
+    /**
+     * Ensures given $http_code is valid for response indicating sucessful operation.
+     *
+     * @param int $http_code
+     */
+    public static function assertOkHttpCode(int $http_code): void
+    {
+        self::assertInt('http_code', $http_code);
+        self::assertIntRange('http_code', $http_code, 200, 299);
     }
 }
