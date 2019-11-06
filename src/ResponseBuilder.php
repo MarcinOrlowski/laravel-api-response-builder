@@ -154,7 +154,12 @@ class ResponseBuilder
     public static function success($data = null, $api_code = null, array $placeholders = null,
                                    int $http_code = null, int $json_opts = null): HttpResponse
     {
-        return static::buildSuccessResponse($data, $api_code, $placeholders, $http_code, $json_opts);
+        return Builder::success($api_code)
+            ->withData($data)
+            ->withPlaceholders($placeholders)
+            ->withHttpCode($http_code)
+            ->withJsonOptions($json_opts)
+            ->build();
     }
 
     /**
@@ -173,7 +178,10 @@ class ResponseBuilder
     public static function successWithCode(int $api_code = null, array $placeholders = null,
                                            int $http_code = null): HttpResponse
     {
-        return static::success(null, $api_code, $placeholders, $http_code);
+        return Builder::success($api_code)
+            ->withPlaceholders($placeholders)
+            ->withHttpCode($http_code)
+            ->build();
     }
 
     /**
@@ -188,35 +196,8 @@ class ResponseBuilder
      */
     public static function successWithHttpCode(int $http_code = null): HttpResponse
     {
-        return static::buildSuccessResponse(null, BaseApiCodes::OK(), [], $http_code);
-    }
-
-    /**
-     * @param object|array|null $data          Array of primitives and supported objects to be returned in 'data' node.
-     *                                         of the JSON response, single supported object or @null if there's no
-     *                                         to be returned.
-     * @param integer|null      $api_code      API code to be returned or @null to use value of BaseApiCodes::OK().
-     * @param array|null        $placeholders  Placeholders passed to Lang::get() for message placeholders
-     *                                         substitution or @null if none.
-     * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
-     *                                         for default DEFAULT_HTTP_CODE_OK.
-     * @param integer|null      $json_opts     See http://php.net/manual/en/function.json-encode.php for supported
-     *                                         options or pass @null to use value from your config (or defaults).
-     *
-     * @return HttpResponse
-     *
-     * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
-     *
-     * @deprecated Please use Builder class.
-     */
-    protected static function buildSuccessResponse($data = null, int $api_code = null, array $placeholders = null,
-                                                   int $http_code = null, int $json_opts = null): HttpResponse
-    {
-        return Builder::success($api_code)
-            ->withData($data)
+        return Builder::success()
             ->withHttpCode($http_code)
-            ->withJsonOptions($json_opts)
-            ->withPlaceholders($placeholders)
             ->build();
     }
 
