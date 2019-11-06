@@ -80,17 +80,14 @@ trait ApiCodesHelpers
      */
     public static function getMap(): array
     {
-        $map = Config::get(ResponseBuilder::CONF_KEY_MAP, null);
-        if ($map === null) {
-            throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', $map));
+        $user_map = Config::get(ResponseBuilder::CONF_KEY_MAP, null);
+        if ($user_map === null) {
+            throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', ResponseBuilder::CONF_KEY_MAP));
         }
-
-        if (!is_array($map)) {
-            throw new \RuntimeException(sprintf('CONFIG: "%s" must be an array', $map));
+        if (!is_array($user_map)) {
+            throw new \RuntimeException(sprintf('CONFIG: "%s" must be an array', ResponseBuilder::CONF_KEY_MAP));
         }
-
-        /** @noinspection AdditionOperationOnArraysInspection */
-        return $map + BaseApiCodes::getBaseMap();
+        return Util::mergeConfig(BaseApiCodes::getBaseMap(), $user_map);
     }
 
     /**
@@ -102,7 +99,7 @@ trait ApiCodesHelpers
      *
      * @throws \InvalidArgumentException If $code is not in allowed range.
      */
-    public static function getCodeMessageKey($api_code): ?string
+    public static function getCodeMessageKey(int $api_code): ?string
     {
         if (!static::isCodeValid($api_code)) {
             $min = static::getMinCode();

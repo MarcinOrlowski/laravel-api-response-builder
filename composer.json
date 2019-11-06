@@ -2,7 +2,7 @@
   "name": "marcin-orlowski/laravel-api-response-builder",
   "description": "Helps building nice, normalized and easy to consume Laravel REST API.",
   "homepage": "https://github.com/MarcinOrlowski/laravel-api-response-builder",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "keywords": [
     "laravel",
     "json",
@@ -33,10 +33,6 @@
       ]
     }
   },
-  "require": {
-    "php": ">=7.2.0",
-    "laravel/framework": "^6.0"
-  },
   "autoload": {
     "classmap": [
       "src/",
@@ -44,10 +40,14 @@
       "tests/Traits/"
     ]
   },
+  "require": {
+    "php": ">=7.2.0",
+    "laravel/framework": "^6.0"
+  },
   "require-dev": {
     "marcin-orlowski/coding-standard": "^1.3",
+    "marcin-orlowski/phpunit-extra-asserts": "^1.0",
     "orchestra/testbench": "^4.0",
-    "laravel/framework": "^6.0",
     "phpunit/phpunit": "^8.0",
     "phpunit/php-code-coverage": "^7.0",
     "codacy/coverage": "^1.0",

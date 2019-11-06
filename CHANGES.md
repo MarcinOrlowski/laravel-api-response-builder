@@ -6,6 +6,11 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* 6.3.1 (2019-11-06)
+   * Fixed config merging helper causing certain user settings to be lost.
+   * No longer exposes exception class name for message-less exceptions. Fixes #107
+   * Added test ensuring that user privided config overshadows built-in params.
+
 * v6.3.0 (2019-11-02)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Signature of `ResponseBuilder::buildResponse()` changed to allow customization of final `message` entry (@hawezo).

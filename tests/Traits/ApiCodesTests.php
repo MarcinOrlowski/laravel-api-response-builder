@@ -103,7 +103,7 @@ trait ApiCodesTests
     public function testIfAllCodesGotMapping(): void
     {
         $const_to_ignore = $this->getConstantsToIgnore();
-        $const_now_method = $this->getConstantsThatAreNowMethods();
+        $consts_methods = $this->getConstantsThatAreNowMethods();
 
         /** @var BaseApiCodes $api_codes */
         $api_codes = $this->getApiCodesClassName();
@@ -116,12 +116,12 @@ trait ApiCodesTests
                 continue;
             }
 
-            if (in_array($name, $const_now_method, true)) {
+            if (in_array($name, $consts_methods, true)) {
                 $name = str_replace('_OFFSET', '', $name);
                 $val = BaseApiCodes::$name();
             }
 
-            $this->assertNotNull($api_codes::getCodeMessageKey($val), "No mapping for {$name}");
+            $this->assertNotNull($api_codes::getCodeMessageKey($val), "No message mapping for {$name} found.");
         }
     }
 
