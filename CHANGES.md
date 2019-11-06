@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * Added `ResponseBuilder::successWithMessage()` method.
+
 * 6.3.1 (2019-11-06)
    * Fixed config merging helper causing certain user settings to be lost.
    * No longer exposes exception class name for message-less exceptions. Fixes #107
