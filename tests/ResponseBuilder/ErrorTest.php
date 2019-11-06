@@ -258,61 +258,61 @@ class ErrorTest extends TestCase
      *
      * @return void
      */
-    public function testBuildErrorResponseApiCodeOK(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
-        $api_codes_class_name = $this->getApiCodesClassName();
-
-        $data = null;
-        $http_code = 404;
-        $api_code = $api_codes_class_name::OK();
-        $lang_args = null;
-
-        $this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
-    }
+//    public function testBuildErrorResponseApiCodeOK(): void
+//    {
+//        $this->expectException(\InvalidArgumentException::class);
+//
+//        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
+//        $api_codes_class_name = $this->getApiCodesClassName();
+//
+//        $data = null;
+//        $http_code = 404;
+//        $api_code = $api_codes_class_name::OK();
+//        $lang_args = null;
+//
+//        $this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
+//    }
 
     /**
      * Tests buildErrorResponse() fed with @null as http_code
      *
      * @return void
      */
-    public function testBuildErrorResponseNullHttpCode(): void
-    {
-        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
-        $api_codes_class_name = $this->getApiCodesClassName();
-
-        $data = null;
-        $http_code = null;
-        $api_code = $api_codes_class_name::NO_ERROR_MESSAGE();
-        $lang_args = null;
-
-        $this->response = $this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
-
-        $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
-        $this->assertEquals($http_code, $this->response->getStatusCode());
-    }
+//    public function testBuildErrorResponseNullHttpCode(): void
+//    {
+//        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
+//        $api_codes_class_name = $this->getApiCodesClassName();
+//
+//        $data = null;
+//        $http_code = null;
+//        $api_code = $api_codes_class_name::NO_ERROR_MESSAGE();
+//        $lang_args = null;
+//
+//        $this->response = $this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
+//
+//        $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
+//        $this->assertEquals($http_code, $this->response->getStatusCode());
+//    }
 
     /**
      * Tests buildErrorResponse() fed with http code out of allowed bounds
      *
      * @return void
      */
-    public function testBuildErrorResponseTooLowHttpCode(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
-        $api_codes_class_name = $this->getApiCodesClassName();
-
-        $data = null;
-        $http_code = 0;
-        $api_code = $api_codes_class_name::NO_ERROR_MESSAGE();
-        $lang_args = null;
-
-        $this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
-    }
+//    public function testBuildErrorResponseTooLowHttpCode(): void
+//    {
+//        $this->expectException(\InvalidArgumentException::class);
+//
+//        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
+//        $api_codes_class_name = $this->getApiCodesClassName();
+//
+//        $data = null;
+//        $http_code = 0;
+//        $api_code = $api_codes_class_name::NO_ERROR_MESSAGE();
+//        $lang_args = null;
+//
+//        $this->callBuildErrorResponse($data, $api_code, $http_code, $lang_args);
+//    }
 
     /**
      * Calls protected method buildErrorResponse()
@@ -326,15 +326,15 @@ class ErrorTest extends TestCase
      *
      * @return mixed
      */
-    protected function callBuildErrorResponse($data, $api_code, $http_code, $lang_args)
-    {
-        $obj = new ResponseBuilder();
-
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return $this->callProtectedMethod($obj, 'buildErrorResponse', [$data,
-                                                                       $api_code,
-                                                                       $http_code,
-                                                                       $lang_args]);
-    }
+//    protected function callBuildErrorResponse($data, $api_code, $http_code, $lang_args)
+//    {
+//        $obj = new ResponseBuilder();
+//
+//        /** @noinspection PhpUnhandledExceptionInspection */
+//        return $this->callProtectedMethod($obj, 'buildErrorResponse', [$data,
+//                                                                       $api_code,
+//                                                                       $http_code,
+//                                                                       $lang_args]);
+//    }
 
 }

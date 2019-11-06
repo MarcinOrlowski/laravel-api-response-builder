@@ -12,6 +12,11 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
      HttpException for each HTTP status code you want. Separate `ExceptionHandler::TYPE_HTTP_NOT_FOUND_KEY`
      and all related stuff, incl. localization key `http_not_found`, configuration is now replace with more
      flexible generic code that provides error messages for all supported HTTP codes from in range `400-599`.
+   * Simplified the API by introducing Builder helper class, utilising Builder pattern. The following methods
+     are now deprecated and its use should be replaced with the Builder class (see ResponseBuilder class
+     source code for copy&paste replacement code). Deprecated methods: `successWithCode()`, `successWithHttpCode()`, 
+     `errorWithData()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()`, `errorWithMessageAndData()`
+     `errorWithMessageAndDataAndDebug()`, `errorWithMessage()`, 
 
 * 6.3.1 (2019-11-06)
    * Fixed config merging helper causing certain user settings to be lost.

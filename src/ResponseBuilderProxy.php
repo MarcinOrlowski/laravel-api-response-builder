@@ -34,19 +34,4 @@ class ResponseBuilderProxy extends ResponseBuilder
     {
         return parent::buildSuccessResponse($data, $api_code, $placeholders, $http_code, $json_opts);
     }
-
-    /**
-     * Proxy method to expose protected buildSuccessResponse()
-     *
-     * @noinspection MoreThanThreeArgumentsInspection
-     */
-    public static function buildErrorResponse($data, int $api_code, int $http_code = null,
-                                              array $placeholders = null, string $message = null,
-                                              array $http_headers = null, int $json_opts = null,
-                                              array $debug_data = null): HttpResponse
-    {
-        return parent::buildErrorResponse($data, $api_code, $http_code, $placeholders,
-            $message, $http_headers, $json_opts, $debug_data);
-    }
-
 }

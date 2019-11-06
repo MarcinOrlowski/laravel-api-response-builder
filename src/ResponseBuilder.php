@@ -167,6 +167,8 @@ class ResponseBuilder
      *                                    for default DEFAULT_HTTP_CODE_OK.
      *
      * @return HttpResponse
+     *
+     * @deprecated Please use Builder class.
      */
     public static function successWithCode(int $api_code = null, array $placeholders = null,
                                            int $http_code = null): HttpResponse
@@ -181,6 +183,8 @@ class ResponseBuilder
      *                                to DEFAULT_HTTP_CODE_OK.
      *
      * @return HttpResponse
+     *
+     * @deprecated Please use Builder class.
      */
     public static function successWithHttpCode(int $http_code = null): HttpResponse
     {
@@ -202,6 +206,8 @@ class ResponseBuilder
      * @return HttpResponse
      *
      * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
+     *
+     * @deprecated Please use Builder class.
      */
     protected static function buildSuccessResponse($data = null, int $api_code = null, array $placeholders = null,
                                                    int $http_code = null, int $json_opts = null): HttpResponse
@@ -232,9 +238,14 @@ class ResponseBuilder
      * @return HttpResponse
      */
     public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null,
-                                 int $encoding_options = null): HttpResponse
+                                 int $json_opts = null): HttpResponse
     {
-        return static::buildErrorResponse($data, $api_code, $http_code, $placeholders, $encoding_options);
+        return Builder::error($api_code)
+            ->withPlaceholders($placeholders)
+            ->withData($data)
+            ->withHttpCode($http_code)
+            ->withJsonOptions($json_opts)
+            ->build();
     }
 
     /**
@@ -248,11 +259,17 @@ class ResponseBuilder
      *                                         options or pass @null to use value from your config (or defaults).
      *
      * @return HttpResponse
+     *
+     * @deprecated Please use Builder class.
      */
     public static function errorWithData(int $api_code, $data, array $placeholders = null,
                                          int $json_opts = null): HttpResponse
     {
-        return static::buildErrorResponse($data, $api_code, null, $placeholders, $json_opts);
+        return Builder::error($api_code)
+            ->withData($data)
+            ->withPlaceholders($placeholders)
+            ->withJsonOptions($json_opts)
+            ->build();
     }
 
     /**
@@ -269,11 +286,18 @@ class ResponseBuilder
      * @return HttpResponse
      *
      * @throws \InvalidArgumentException if http_code is @null
+     *
+     * @deprecated Please use Builder class.
      */
     public static function errorWithDataAndHttpCode(int $api_code, $data, int $http_code, array $placeholders = null,
                                                     int $json_opts = null): HttpResponse
     {
-        return static::buildErrorResponse($data, $api_code, $http_code, $placeholders, $json_opts);
+        return Builder::error($api_code)
+            ->withData($data)
+            ->withHttpCode($http_code)
+            ->withPlaceholders($placeholders)
+            ->withJsonOptions($json_opts)
+            ->build();
     }
 
     /**
@@ -286,10 +310,15 @@ class ResponseBuilder
      * @return HttpResponse
      *
      * @throws \InvalidArgumentException if http_code is @null
+     *
+     * @deprecated Please use Builder class.
      */
     public static function errorWithHttpCode(int $api_code, int $http_code, array $placeholders = null): HttpResponse
     {
-        return static::buildErrorResponse(null, $api_code, $http_code, $placeholders);
+        return Builder::error($api_code)
+            ->withHttpCode($http_code)
+            ->withPlaceholders($placeholders)
+            ->build();
     }
 
     /**
@@ -304,12 +333,18 @@ class ResponseBuilder
      *                                     options or pass @null to use value from your config (or defaults).
      *
      * @return HttpResponse
+     *
+     * @deprecated Please use Builder class.
      */
     public static function errorWithMessageAndData(int $api_code, string $message, $data,
                                                    int $http_code = null, int $json_opts = null): HttpResponse
     {
-        return static::buildErrorResponse($data, $api_code, $http_code, null,
-            $message, null, $json_opts);
+        return Builder::error($api_code)
+            ->withMessage($message)
+            ->withData($data)
+            ->withHttpCode($http_code)
+            ->withJsonOptions($json_opts)
+            ->build();
     }
 
     /**
@@ -325,13 +360,20 @@ class ResponseBuilder
      * @param array|null        $debug_data optional debug data array to be added to returned JSON.
      *
      * @return HttpResponse
+     *
+     * @deprecated Please use Builder class.
      */
     public static function errorWithMessageAndDataAndDebug(int $api_code, string $message, $data,
                                                            int $http_code = null, int $json_opts = null,
                                                            array $debug_data = null): HttpResponse
     {
-        return static::buildErrorResponse($data, $api_code, $http_code, null,
-            $message, null, $json_opts, $debug_data);
+        return Builder::error($api_code)
+            ->withMessage($message)
+            ->withData($data)
+            ->withHttpCode($http_code)
+            ->withJsonOptions($json_opts)
+            ->withDebugData($debug_data)
+            ->build();
     }
 
     /**
@@ -341,50 +383,14 @@ class ResponseBuilder
      *                                for default DEFAULT_HTTP_CODE_ERROR.
      *
      * @return HttpResponse
+     *
+     * @deprecated Please use Builder class.
      */
     public static function errorWithMessage(int $api_code, string $message, int $http_code = null): HttpResponse
     {
-        return static::buildErrorResponse(null, $api_code, $http_code, null, $message);
-    }
-
-    /**
-     * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error message
-     * uses placeholders as well as return data payload
-     *
-     * @param object|array|null $data          Array of primitives and supported objects to be returned in 'data' node
-     *                                         of the JSON response, single supported object or @null if there's no
-     *                                         to be returned.
-     * @param integer           $api_code      Your API code to be returned with the response object.
-     * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
-     *                                         for default DEFAULT_HTTP_CODE_ERROR.
-     * @param array|null        $placeholders  Placeholders passed to Lang::get() for message placeholders
-     *                                         substitution or @null if none.
-     * @param string|null       $message       custom message to be returned as part of error response
-     * @param array|null        $headers       optional HTTP headers to be returned in error response
-     * @param integer|null      $json_opts     See http://php.net/manual/en/function.json-encode.php for supported
-     *                                         options or pass @null to use value from your config (or defaults).
-     * @param array|null        $debug_data    optional debug data array to be added to returned JSON.
-     *
-     * @return HttpResponse
-     *
-     * @throws \InvalidArgumentException Thrown if $code is not correct, outside the range, equals OK code etc.
-     *
-     * @noinspection MoreThanThreeArgumentsInspection
-     */
-    protected static function buildErrorResponse($data, int $api_code, int $http_code = null,
-                                                 array $placeholders = null,
-                                                 string $message = null, array $headers = null,
-                                                 int $json_opts = null,
-                                                 array $debug_data = null): HttpResponse
-    {
         return Builder::error($api_code)
-            ->withData($data)
-            ->withHttpCode($http_code)
-            ->withJsonOptions($json_opts)
             ->withMessage($message)
-            ->withPlaceholders($placeholders)
-            ->withDebugData($debug_data)
-            ->withHttpHeaders($headers)
+            ->withHttpCode($http_code)
             ->build();
     }
 
