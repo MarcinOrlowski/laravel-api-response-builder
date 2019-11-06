@@ -13,6 +13,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
      flexible generic code that provides error messages for all supported HTTP codes from in range `400-599`.
    * Fixed config merging helper causing certain user settings to be lost.
    * No longer exposes exception class name for message-less exceptions. Fixes #107
+   * Added test ensuring that user privided config overshadows built-in params.
 
 * v6.3.0 (2019-11-02)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))

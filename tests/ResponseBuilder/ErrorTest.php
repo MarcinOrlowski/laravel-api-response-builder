@@ -233,6 +233,27 @@ class ErrorTest extends TestCase
     }
 
     /**
+     * Checks if overriding built-in code->msg mapping works as expected.
+     */
+    public function testErrorWithCustomMessageConfigForCode(): void
+    {
+        // The $msg_key pretends to be regular Laravel localized string
+        // key (like `api.my_error`). As the string it points is not available
+        // Laravel will return the key itself,  which is perfectly sufficient
+        // for us to ensure custom config settings are respected.
+        $msg_key = $this->getRandomString('str_key');
+        $api_code = $this->min_allowed_code;
+        \Config::set(ResponseBuilder::CONF_KEY_MAP, [$api_code => $msg_key]);
+
+        // Building error response with that api_code
+        $this->response = ResponseBuilder::error($api_code);
+
+        // Should return a response object with our $msg_key as message.
+        $j = $this->getResponseErrorObject($api_code, ResponseBuilder::DEFAULT_HTTP_CODE_ERROR, $msg_key);
+        $this->assertEquals($msg_key, $j->message);
+    }
+
+    /**
      * Tests buildErrorResponse() fed with not allowed OK api code.
      *
      * @return void
