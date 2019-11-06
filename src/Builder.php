@@ -137,7 +137,7 @@ class Builder
 
     public function withHttpHeaders(array $http_headers = null): self
     {
-        $this->http_headers = $http_headers;
+        $this->http_headers = $http_headers ?? [];
 
         return $this;
     }
@@ -190,7 +190,7 @@ class Builder
      *                                           or DEFAULT_HTTP_CODE_ERROR depending on the $success.
      * @param array|null        $placeholders    Placeholders passed to Lang::get() for message placeholders
      *                                           substitution or @null if none.
-     * @param array|null        $headers         Optional HTTP headers to be returned in the response.
+     * @param array|null        $http_headers    Optional HTTP headers to be returned in the response.
      * @param integer|null      $json_opts       See http://php.net/manual/en/function.json-encode.php for supported
      *                                           options or pass @null to use value from your config (or defaults).
      * @param array|null        $debug_data      Optional debug data array to be added to returned JSON.
@@ -203,10 +203,10 @@ class Builder
      * @noinspection MoreThanThreeArgumentsInspection
      */
     protected function make(bool $success, int $api_code, $msg_or_api_code, $data = null,
-                            int $http_code = null, array $placeholders = null, array $headers = null,
+                            int $http_code = null, array $placeholders = null, array $http_headers = null,
                             int $json_opts = null, array $debug_data = null): HttpResponse
     {
-        $headers = $headers ?? [];
+        $http_headers = $http_headers ?? [];
         $http_code = $http_code ?? ($success ? ResponseBuilder::DEFAULT_HTTP_CODE_OK : ResponseBuilder::DEFAULT_HTTP_CODE_ERROR);
         $json_opts = $json_opts ?? Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 
@@ -219,7 +219,7 @@ class Builder
 
         return Response::json(
             $this->buildResponse($success, $api_code, $msg_or_api_code, $placeholders, $data, $debug_data),
-            $http_code, $headers, $json_opts);
+            $http_code, $http_headers, $json_opts);
     }
 
     /**
