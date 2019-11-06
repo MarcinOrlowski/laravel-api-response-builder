@@ -273,6 +273,9 @@ trait TestingHelpers
                                       array $headers = null, int $encoding_options = null,
                                       array $debug_data = null): HttpResponse
     {
+        $this->markTestIncomplete('Needs to be moved to test Builder implementation now');
+
+
         if (!is_bool($success)) {
             $this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));
         }

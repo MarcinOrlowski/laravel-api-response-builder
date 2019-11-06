@@ -33,7 +33,7 @@ class BuilderTest extends TestCase
         $this->response = $builder->build();
 
         $expected_api_code = BaseApiCodes::OK();
-        $j = $this->getResponseSuccessObject($expected_api_code);
+        $j = $this->getResponseSuccessObject();
 
         $this->assertNull($j->data);
         $this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey($expected_api_code)), $j->message);
