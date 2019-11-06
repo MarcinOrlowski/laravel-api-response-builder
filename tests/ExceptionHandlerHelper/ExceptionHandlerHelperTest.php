@@ -59,7 +59,6 @@ class ExceptionHandlerHelperTest extends TestCase
         $exception = new \RuntimeException();
 
         $j = json_decode(ExceptionHandlerHelper::render(null, $exception)->getContent(), false);
-
         $this->assertValidResponse($j);
         $this->assertNull($j->data);
 
@@ -151,7 +150,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
         $ex_message = trim($exception->getMessage());
         if ($ex_message === '') {
-            $ex_message = get_class($exception);
+            $ex_message = '???';
         }
 
         /** @noinspection PhpUndefinedClassInspection */

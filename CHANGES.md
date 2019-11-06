@@ -8,9 +8,11 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * @dev
    * Reworked `ExceptionHandlerHelper` configuration. Now, you will be able to easily configure every
-     HttpException for each HTTP status code you want. Separate `ExceptionHandler::TYPE_HTTP_NOT_FOUND_KEY` and all related stuff, incl. localization key `http_not_found`,
-     configuration is now replace with more flexible generic code that provides error messages for all supported
-     HTTP codes from in range `400-599`. 
+     HttpException for each HTTP status code you want. Separate `ExceptionHandler::TYPE_HTTP_NOT_FOUND_KEY`
+     and all related stuff, incl. localization key `http_not_found`, configuration is now replace with more
+     flexible generic code that provides error messages for all supported HTTP codes from in range `400-599`.
+   * Fixed config merging helper causing certain user settings to be lost.
+   * No longer exposes exception class name for message-less exceptions. Fixes #107
 
 * v6.3.0 (2019-11-02)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
