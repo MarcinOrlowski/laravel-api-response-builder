@@ -167,7 +167,7 @@ class ExceptionHandlerHelper
         if ($error_message === '') {
             $error_message = Lang::get($key, [
                 'api_code' => $api_code,
-                'message'  => get_class($exception),
+				'message'  => '???',
             ]);
         }
 

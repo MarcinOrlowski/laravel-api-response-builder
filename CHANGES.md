@@ -8,6 +8,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * @dev
    * Fixed config merging helper causing certain user settings to be lost.
+   * No longer exposes exception class name for message-less exceptions. Fixes #107
 
 * v6.3.0 (2019-11-02)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
