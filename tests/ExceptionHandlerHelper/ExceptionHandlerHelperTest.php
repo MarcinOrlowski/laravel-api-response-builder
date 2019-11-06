@@ -147,7 +147,7 @@ class ExceptionHandlerHelperTest extends TestCase
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-//    protected function doTestSingleException(string $exception_config_key,
+    protected function doTestSingleException(string $exception_config_key,
                                              string $exception_class,
                                              int $expected_http_code, int $expected_api_code,
                                              bool $validate_response_message_text = true,
