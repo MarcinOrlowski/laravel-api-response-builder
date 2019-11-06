@@ -2,6 +2,9 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
+
+use MarcinOrlowski\PhpunitExtras\Traits\AdditionalAsserts;
+
 /**
  * Laravel API Response Builder
  *
@@ -20,6 +23,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     protected $response;
 
     use Traits\TestingHelpers;
+    use AdditionalAsserts;
 
     /**
      * Returns ApiCodes class name. We need that done this way, so you can easily plug-and-play
