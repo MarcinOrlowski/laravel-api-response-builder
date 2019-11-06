@@ -24,6 +24,15 @@ class Validator
     /** @var string */
     public const TYPE_BOOL = 'boolean';
 
+    /** @var string */
+    public const TYPE_ARRAY = 'array';
+
+    /** @var string */
+    public const TYPE_OBJECT = 'object';
+
+    /** @var string */
+    public const TYPE_NULL = 'NULL';
+
     /**
      * Checks if given $val is of type integer
      *
