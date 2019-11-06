@@ -2,7 +2,7 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-use \MarcinOrlowski\PhpunitExtraAssets\Traits\ExtraAsserts;
+use \MarcinOrlowski\PhpunitExtraAsserts\Traits\ExtraAsserts;
 
 /**
  * Laravel API Response Builder
