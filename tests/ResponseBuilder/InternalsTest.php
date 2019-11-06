@@ -126,12 +126,12 @@ class InternalsTest extends TestCase
 
             'OK_OFFSET',
             'NO_ERROR_MESSAGE_OFFSET',
-            'EX_HTTP_NOT_FOUND_OFFSET',
-            'EX_HTTP_SERVICE_UNAVAILABLE_OFFSET',
+//            'EX_HTTP_NOT_FOUND_OFFSET',
+//            'EX_HTTP_SERVICE_UNAVAILABLE_OFFSET',
             'EX_HTTP_EXCEPTION_OFFSET',
             'EX_UNCAUGHT_EXCEPTION_OFFSET',
-            'EX_AUTHENTICATION_EXCEPTION_OFFSET',
-            'EX_VALIDATION_EXCEPTION_OFFSET',
+//            'EX_AUTHENTICATION_EXCEPTION_OFFSET',
+//            'EX_VALIDATION_EXCEPTION_OFFSET',
         ];
         /** @noinspection PhpUnhandledExceptionInspection */
         $consts = BaseApiCodes::getApiCodeConstants();

@@ -46,8 +46,8 @@ class SuccessTest extends TestCase
         // source data
         $data = ['test' => $test_string];
 
-        // check if it returns escaped
-        // ensure config is different from what we want
+        // Checks if it gets returned in escaped form.
+        // Ensure config is different from what we want.
         \Config::set('encoding_options', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
 
         $encoding_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
