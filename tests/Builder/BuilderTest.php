@@ -38,4 +38,5 @@ class BuilderTest extends TestCase
         $this->assertNull($j->data);
         $this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey($expected_api_code)), $j->message);
     }
+
 }
