@@ -119,41 +119,11 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
  Each configuration entry consits of exception class name as a key and parameters array with fields
  `api_code` and `http_code`. At runtime, exception handler will look for config entry for particualr
  exception class and if there's one, proper handler, dedicated to that exception class, kicks in
- and deals with the exception. If no such config exists, handler with label `default` as class name
- will be used.  
+ and deals with the exception. If no such config exists, `default` handler will be used.
 
- Example code matching current defaults would look like this:  
-```php
-'exception_handler' => [
-    \Symfony\Component\HttpKernel\Exception\HttpException::class => [
-        // used by unauthenticated() to obtain api and http code for the exception
-        HttpResponse::HTTP_UNAUTHORIZED => [
-            'api_code'  => <YOUR_API_CODE>,
-            'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
-        ],
-
-        // Required by ValidationException handler
-        HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-            'api_code'  => <YOUR_API_CODE>,
-            'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-        ],
-        // default handler is mandatory
-        'default' => [
-            'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
-            'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-        ],
-    ],
-    // This is final exception handler. If ex is not dealt with yet
-    // this is its last stop.
-    'default' => [
-        'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-        'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-    ],
-],
-```
-
-**NOTE:** For now there's no option to specify custom converted as of yet (but that's next step anywya), so adding own
-classes to the config same way we did for `\Symfony\Component\HttpKernel\Exception\HttpException::class` won't work.
+ **NOTE:** For now there's no option to specify custom converted as of yet (but that's next step anywya), 
+ so adding own classes to the config same way we did for 
+ `\Symfony\Component\HttpKernel\Exception\HttpException::class` won't work.
 
 ## map ##
 
