@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v6.3.2 (2019-11-07)
    * Added `ResponseBuilder::successWithMessage()` method.
    * Entries in `classes` config array can now have `pri` (default 0) to enforce order while
      merging config with built-in configuration.
