@@ -5,9 +5,10 @@
  But if all is good and clear then follow common routine:
 
  * fork the project,
- * create new branch,
+ * checkout `dev` branch (NOT `master`!)
+ * create your own branch from there,
  * do your changes,
- * add tests covering your changes,
+ * write unit tests for your changes,
  * ensure **ALL** tests pass,
  * send pull request,
- * glory.
+ * glory :)
