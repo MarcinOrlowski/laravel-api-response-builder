@@ -55,13 +55,15 @@ class TranslationTest extends TestCase
 
             // ensure it has all the keys base translation do
             foreach ($base_translations as $key => $val) {
-                $msg = "Missing localization key for '' language";
-                $this->assertArrayHasKey($key, $translation);
+                $msg = "Missing localization entry '{$key}' in '{$lang}' language file.";
+                $this->assertArrayHasKey($key, $translation, $msg);
                 unset($translation[ $key ]);
             }
             // ensure we have no dangling translation entries left that
             // are no longer present in base translation.
-            $this->assertEmpty($translation);
+            $sep = "\n   ";
+            $msg = "Unwanted entries in '{$lang}' language file:{$sep}" . implode($sep, array_keys($translation));
+            $this->assertEmpty($translation, $msg);
         }
     }
 }
