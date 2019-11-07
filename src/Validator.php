@@ -49,6 +49,21 @@ class Validator
     }
 
     /**
+     * Checks if given $val is of type array
+     *
+     * @param string $key Name of the key to be used if exception is thrown.
+     * @param mixed  $var Variable to be asserted.
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function assertArray(string $key, $var): void
+    {
+        self::assertType($key, $var, [self::TYPE_ARRAY]);
+    }
+
+    /**
      * Checks if given $val is of type string
      *
      * @param string $name Label or name of the variable to be used in exception message (if thrown).
