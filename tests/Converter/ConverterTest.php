@@ -78,7 +78,7 @@ class ConverterTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->callProtectedMethod(ResponseBuilder::class, 'getClassesMapping');
+        $this->callProtectedMethod(Converter::class, 'getClassesMapping');
     }
 
     /**
@@ -91,7 +91,7 @@ class ConverterTest extends TestCase
         Config::offsetUnset(ResponseBuilder::CONF_KEY_CLASSES);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $result = $this->callProtectedMethod(ResponseBuilder::class, 'getClassesMapping');
+        $result = $this->callProtectedMethod(Converter::class, 'getClassesMapping');
         $this->assertIsArray($result);
         $this->assertEmpty($result);
     }
