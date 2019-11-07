@@ -101,7 +101,6 @@ class ResponseBuilder
     public const DEFAULT_ENCODING_OPTIONS = 271;
 
 
-
     /**
      * Returns success
      *
@@ -159,12 +158,18 @@ class ResponseBuilder
      * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
      *                                         for default DEFAULT_HTTP_CODE_OK.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return HttpResponse
+     *
+     * @deprecated Please use Builder class.
      */
     public static function successWithMessage(string $message, $data = null, int $api_code = null,
                                               int $http_code = null): HttpResponse
     {
-        return static::buildSuccessResponse($data, $api_code, [], $http_code, null, $message);
+        return Builder::success($api_code)
+            ->withMessage($message)
+            ->withData($data)
+            ->withHttpCode($http_code)
+            ->build();
     }
 
     /**
