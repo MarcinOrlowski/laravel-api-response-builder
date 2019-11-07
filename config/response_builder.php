@@ -43,18 +43,22 @@ return [
         \Illuminate\Database\Eloquent\Model::class          => [
             'key'    => 'item',
             'method' => 'toArray',
+            'pri'    => 0,
         ],
         \Illuminate\Support\Collection::class               => [
             'key'    => 'items',
             'method' => 'toArray',
+            'pri'    => 0,
         ],
         \Illuminate\Database\Eloquent\Collection::class     => [
             'key'    => 'items',
             'method' => 'toArray',
+            'pri'    => 0,
         ],
         \Illuminate\Http\Resources\Json\JsonResource::class => [
             'key'    => 'item',
             'method' => 'toArray',
+            'pri'    => 0,
         ],
     ],
 
@@ -80,30 +84,30 @@ return [
          * and then configure what api_code should be returned to the user. If Http code
          * is not explicitely configured then `default` handler kicks in, and converts it.
          */
-//        \Symfony\Component\HttpKernel\Exception\HttpException::class => [
-//            // used by unauthenticated() to obtain api and http code for the exception
-//            HttpResponse::HTTP_UNAUTHORIZED => [
-//                'api_code'  => <YOUR_API_CODE>,
-//                'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
-//            ],
-//
-//            // Required by ValidationException handler
-//            HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-//                'api_code'  => <YOUR_API_CODE>,
-//                'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-//            ],
-//            // default handler is mandatory
-//            'default' => [
-//                'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
-//                'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-//            ],
-//        ],
-//        // This is final exception handler. If ex is not dealt with yet
-//        // this is its last stop.
-//        'default' => [
-//            'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-//            'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-//        ],
+        //        \Symfony\Component\HttpKernel\Exception\HttpException::class => [
+        //            // used by unauthenticated() to obtain api and http code for the exception
+        //            HttpResponse::HTTP_UNAUTHORIZED => [
+        //                'api_code'  => <YOUR_API_CODE>,
+        //                'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
+        //            ],
+        //
+        //            // Required by ValidationException handler
+        //            HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
+        //                'api_code'  => <YOUR_API_CODE>,
+        //                'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+        //            ],
+        //            // default handler is mandatory
+        //            'default' => [
+        //                'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
+        //                'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+        //            ],
+        //        ],
+        //        // This is final exception handler. If ex is not dealt with yet
+        //        // this is its last stop.
+        //        'default' => [
+        //            'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+        //            'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+        //        ],
     ],
 
     /*

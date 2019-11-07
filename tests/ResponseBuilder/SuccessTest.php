@@ -198,7 +198,7 @@ class SuccessTest extends TestCase
         ];
         foreach ($http_codes as $http_code) {
             $this->response = ResponseBuilder::successWithHttpCode($http_code);
-            $j = $this->getResponseSuccessObject(0, $http_code);
+            $j = $this->getResponseSuccessObject(null, $http_code);
             $this->assertNull($j->data);
         }
     }

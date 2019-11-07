@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\Builder;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -282,15 +283,15 @@ trait TestingHelpers
 
         /** @noinspection PhpUnhandledExceptionInspection */
         return $this->callProtectedMethod(
-            ResponseBuilder::class, 'make', [$success,
-                                             $api_code_offset,
-                                             $message_or_api_code_offset,
-                                             $data,
-                                             $http_code,
-                                             $lang_args,
-                                             $headers,
-                                             $encoding_options,
-                                             $debug_data]);
+            Builder::success(), 'make', [$success,
+                                         $api_code_offset,
+                                         $message_or_api_code_offset,
+                                         $data,
+                                         $http_code,
+                                         $lang_args,
+                                         $headers,
+                                         $encoding_options,
+                                         $debug_data]);
     }
 
     // -------------------------------
@@ -336,7 +337,9 @@ trait TestingHelpers
         if (is_object($obj_or_class)) {
             $obj = $obj_or_class;
         } elseif (is_string($obj_or_class)) {
-            $obj = new $obj_or_class();
+//            $obj = new $obj_or_class();
+            $obj = $obj_or_class;
+
         } else {
             throw new \RuntimeException('getProtectedMethod() expects object or valid class name argument');
         }
@@ -345,7 +348,7 @@ trait TestingHelpers
         $method = $reflection->getMethod($method_name);
         $method->setAccessible(true);
 
-        return $method->invokeArgs($obj, $args);
+        return $method->invokeArgs(is_object($obj) ? $obj : null, $args);
     }
 
     /**

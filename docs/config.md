@@ -24,14 +24,25 @@
 
 ## classes ##
  
-`Response Builder` can auto-convert to be used as response `data`. Create new entry for each class you want to have supported
-The entry key is a class name to check passed `data` object against, and configuration elements include:
+`Response Builder` can auto-convert to be used as response `data`. The following classes are supported out of the
+box:
+
+ * `\Illuminate\Database\Eloquent\Model`          
+ * `\Illuminate\Support\Collection`               
+ * `\Illuminate\Database\Eloquent\Collection`     
+ * `\Illuminate\Http\Resources\Json\JsonResource` 
+
+Create new entry for each class you want to have supported.
+The entry key is a full class name (including namespace):
 
 ```php
 'classes' => [
     Namespace\Classname::class => [
         'method' => 'toArray',
         'key'    => 'items',
+        
+        // Optional paramters
+        'pri'    => 0,  
         ],
 ],
 ```

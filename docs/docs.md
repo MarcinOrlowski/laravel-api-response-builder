@@ -258,23 +258,52 @@ return ResponseBuilder::errorWithMessage(ApiCodeBase::SOMETHING_WENT_WRONG, $msg
 
 ## Exposed Methods ##
 
- All `ResponseBuilder` methods are **static**, and for simplicity of use, it's recommended to add the following `use` to your code:
+ Starting from version 6.4, `ResponseBuilder` exposes its API via `Builder` class which implements 
+ [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern).. To obtain instance of the Builder, it exposes two
+ static methods: `success()` and `error()` static method with your `api_code` as argument (optional for `success()`),
+ then set all the elements of the response as you need and conclude invocation with `build()`. For example, the following
+ code would success with data and custom HTTP code:
 
-    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+```php
+   return Builder::success()
+          ->withData($data)
+          ->withHttpCode(HttpResponse::HTTP_CREATED)
+          ->build();
+```
 
 
- Methods' arguments:
+ For simplicity of use, it's recommended to add the following `use` to your code:
 
- * `$api_code` (**int**) any integer value you want to be returned in `code`,
- * `$data` (**mixed**|**null**) any data you want to be returned in your response as `data` node,
- * `$http_code` (**int**) valid HTTP return code (see `HttpResponse` class for useful constants),
- * `$lang_args` (**array**) array of arguments passed to `Lang::get()` while building `message`,
- * `$message` (**string**) custom message to be returned as part of error response (avoid, use error code mapping feature).
- * `$encoding_options` (**int**) data-to-json conversion options as [described in documentation of json_encode()](http://php.net/manual/en/function.json-encode.php). Pass `null` for default `ResponseBuilder::DEFAULT_ENCODING_OPTIONS` ([source](https://github.com/MarcinOrlowski/laravel-api-response-builder/blob/master/src/ResponseBuilder.php#L47)). See [configuration](https://github.com/MarcinOrlowski/laravel-api-response-builder/blob/master/config/response_builder.php#L106) (see config's `encoding_options` too)
+    use MarcinOrlowski\ResponseBuilder\Builder;
 
- Most arguments of `success()` and `error()` are optional, with exception for `$api_code`
- for the `error()` and related methods. Helper methods arguments are partially optional - see
- signatures below for details.
+ Exposed static methods:
+ 
+ * `success($api_code)`: Returns Builder instance configured to return success indicating message. 
+   You can ommit `$api_code` to fall back to default code for `OK`).
+ * `error($api_code)`: Returns Builder instance configured to produce error indicating response. `$api_code`
+   must not equal to value indicating `OK` (`ApiCodes::OK()`).
+ 
+ In both cases `api_code` (**int**) is any integer value you want to be returned as `code` in final response.
+ 
+ Parameters setters:
+ 
+ * `withHttpCode($code)`: (**int**) valid HTTP return code (see `HttpResponse` class for useful constants). For 
+   `success()` responses, `$http_code` must be in range from 200 to 299 (inclusive), while for `error()` it must be in 
+   range from 400 to 599 (inclusive) otherwise `\InvalidArgumentException` will be thrown. HTTP codes from 3xx pool 
+   (redirection) are not allowed. Please see [W3 specification](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
+   for more information about all HTTP codes and their meaning.
+ * `withData($data)`: (**object**|**array**|**null**) data you want to be returned in your response in `data` node,
+ * `withJsonOptions($opts)`: (**int**) data-to-json conversion options as
+   [documented](http://php.net/manual/en/function.json-encode.php). Pass `null` for 
+   default `ResponseBuilder::DEFAULT_ENCODING_OPTIONS` ([source](../src/ResponseBuilder.php)). Please see
+   [configuration](../config/response_builder.php) file and config's `encoding_options` too.
+ * `withMessage($message)`: (**string**) custom message to be returned as part of error response 
+   (avoid, use error code mapping feature).
+ * `withPlaceholders($placeholders)`: (**array**) array of placeholders as expected by `Lang::get()` while building
+   response `message` based on localization files (as configured in i.e. `map`) or strings with placeholders.
+ * `withHttpHeaders($headers)`
+ 
+ Once all is arguments are passed, call `build()` to conclude building and have final `HttpResponse` object returned.
 
  **NOTE:** `$data` can be of any type you want (i.e. `string`) however, to enforce constant JSON structure
  of the response, `data` is always an object. If you pass anything else, type casting will be done internally.
@@ -283,55 +312,14 @@ return ResponseBuilder::errorWithMessage(ApiCodeBase::SOMETHING_WENT_WRONG, $msg
  the provided object and result is returned instead. Laravel's `Model` and `Collection` classes are pre-configured
  but you can add additional classes just by creating entry in configuration `classes` mapping.
 
- I recommend you always pass `$data` as an `array` or object with conversion mapping configured, otherwise
- passing other types to `ResponseBuilder` may end up with response JSON featuring oddities like array keys
- keys named `0` or `scalar`.
-
- **IMPORTANT:** If you want to return own value of `$http_code` with the response data, ensure used
- value matches W3C meaning of the code. `ResponseBuilder` will throw `\InvalidArgumentException` if
- you try to call `success()` (and related methods) with `$http_code` not being in range of 200-299.
- The same will happen if you try to call `error()` (and family) with `$http_code` lower than 400.
-
- Other HTTP codes, like redirection (3xx) or (5xx) are not allowed and will throw `\InvalidArgumentException`.
-
- See [W3 specs page](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for more details about
- available HTTP codes and its meaning.
-
-#### Reporting Success ####
-
-```php
-success($data=null, $api_code=null, array $lang_args=[], $http_code=null, $encoding_options=null);
-successWithCode($api_code=null, array $lang_args=[], $http_code=null);
-successWithHttpCode($http_code);
-```
-
- Usage restrictions:
-
- * `$http_code` must be in range from 200 to 299
-
-#### Reporting Error ####
-
-```php
-error($api_code, $lang_args=[], $data=null, $http_code=HttpResponse::HTTP_BAD_REQUEST);
-errorWithData($api_code, $data, array $lang_args=[], $encoding_options=null);
-errorWithDataAndHttpCode($api_code, $data, $http_code, array $lang_args=[], $encoding_options=null);
-errorWithHttpCode($api_code, $http_code, $lang_args=[]);
-errorWithMessage($api_code, $error_message, $http_code=HttpResponse::HTTP_BAD_REQUEST);
-```
-
- Usage restrictions:
-
- * `$api_code` must not be 0 (zero)
- * `$http_code` must not be lower than 400
-
 ----
 
 ## Data Conversion ##
 
  `ResponseBuilder` can save you some work by automatically converting certain objects prior returning response array. i.e. you can
- pass Eloquent's Model or Collection object directly and have it converted to array automatically.
-
- For example, passing `Model` object:
+ pass object of supported classes. For example, having `ResponseBuilder` configured to auto-convet objects of Eloquent's `Model` 
+ class and passing object of that class either directly using `withData()` or as part of bigger structurre) will have it converted
+ to JSON format automatically:
 
 ```php
 $flight = App\Flight::where(...)->first();
@@ -350,14 +338,14 @@ return ResponseBuilder::success($flight);
 }
 ```
 
- Or you have more data, the pass `Collection`:
+ Or you have more data, then pass `Collection`:
 
 ```php
 $flights = App\Flight::where(...)->get();
 return ResponseBuilder::success($flights);
 ```
 
- which would return array of objects as expected:
+ which would return array of objects:
 
 ```json
 {
@@ -375,11 +363,7 @@ return ResponseBuilder::success($flights);
 }
 ```
 
- The result is keyed `item` and `items`, depending on class mapping configuration (by default `Collection` is using `items` no 
- matter we return one or even zero elements) is the given object of and the whole magic is done by calling method configured for 
- given class.
-
- The whole functionality is configurable via `classes` mapping array:
+ The whole functionality is configurable using `classes` array:
 
 ```php
 'classes' => [
@@ -394,16 +378,23 @@ return ResponseBuilder::success($flights);
 ],
 ```
 
- The above configures two classes (`Model` and `Collection`). Whenever object of that class is spotted, method specified in `method` 
- key would be called on that object and data that method returns will be returned in JSON object using key specified in `key`.
+ where parameters mean:
+ 
+ * `key` is any string you want to use as node name that would hold convered data,
+ * `method` is argument-less method **exposed by object being converted** that can be called on that object to obtain 
+   `array` with object's representation.
+ * `pri` is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one 
+   class extending another and you want to support both of them with separate configuration, then you **must** ensure child 
+   class has higher priority than it's parent class.   
 
- So in above example, if we get `Collection`, then `ResponseBuilder` would call `toArray()` on it, and result data would
+ The above configures two classes (`Model` and `Collection`). Whenever object of that class is spotted, method specified in
+ `method` key would be called on that object and data that method returns will be returned in JSON object using key specified
+ in `key`. In above example, if we get `Collection`, then `ResponseBuilder` would call `toArray()` on it, and result data would
  be added in returned JSON in `items` object.
  
- **IMPORTANT:** To check if given object can be auto converted, `ResponseBuilder` checks if we have configuration entry
- matching **exactly** object class name. If no such mapping is found, then the whole configuration is walked again, but this
- time we take inheritance into consideration and use `instanceof` to see if we can deal with this object. If not,
- then exception is thrown. 
+ **IMPORTANT:** For each object in  `ResponseBuilder` checks if we have configuration entry matching **exactly** object class 
+ name. If no such mapping is found, then the whole configuration is walked again, but this time we take inheritance into 
+ consideration and use `instanceof` to see if we can deal with this object. If not, exception is thrown. 
 
  When you pass the array it will be walked recursively and the conversion will take place on all known elements as well:
 
