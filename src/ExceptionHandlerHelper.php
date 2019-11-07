@@ -155,40 +155,6 @@ class ExceptionHandlerHelper
     }
 
     /**
-     * Returns built-in configration array for ExceptionHandlerHelper
-     *
-     * @return array
-     */
-    protected static function getExceptionHandlerBaseConfig(): array
-    {
-        return [
-            HttpException::class => [
-                // used by unauthenticated() to obtain api and http code for the exception
-                HttpResponse::HTTP_UNAUTHORIZED         => [
-                    'api_code'  => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
-                    'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
-                ],
-
-                // Required by ValidationException handler
-                HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-                    'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
-                    'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-                ],
-                // default handler is mandatory
-                'default'                               => [
-                    'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
-                    'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-                ],
-            ],
-            // default handler is mandatory
-            'default'            => [
-                'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-                'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-            ],
-        ];
-    }
-
-    /**
      * Returns configration array for ExceptionHandlerHelper with user config merged with built-in config.
      *
      * @param string|null $key optional configuration node key to have only this portion of the
@@ -198,9 +164,25 @@ class ExceptionHandlerHelper
      */
     protected static function getExceptionHandlerConfig(string $key = null): array
     {
-        $result = array_merge(Config::get(ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY, []),
-            self::getExceptionHandlerBaseConfig());
+        $config = \Config::get(ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY, []);
 
-        return ($key === null) ? $result : $result[ $key ];
+        // handle all api_code_offset keys and insert valid api_code for it.
+        self::calculateApiCodes($config);
+        if (array_key_exists(HttpException::class, $config)) {
+            self::calculateApiCodes($config[ HttpException::class ]);
+        }
+
+        return ($key === null) ? $config : $config[ $key ];
+    }
+
+    protected static function calculateApiCodes(&$array): void
+    {
+        foreach ($array as $key => $params) {
+            if (array_key_exists('api_code_offset', $params)) {
+                $array[$key]['api_code'] = BaseApiCodes::getCodeForInternalOffset($params['api_code_offset']);
+                unset($array[$key]['api_code_offset']);
+            }
+        }
+
     }
 }

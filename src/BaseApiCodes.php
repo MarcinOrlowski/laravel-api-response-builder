@@ -42,51 +42,51 @@ class BaseApiCodes
      *
      * @var int
      */
-    protected const OK_OFFSET = 0;
+    public const OK_OFFSET = 0;
     /**
      * built-in code for fallback message mapping
      *
      * @var int
      */
-    protected const NO_ERROR_MESSAGE_OFFSET = 1;
+    public const NO_ERROR_MESSAGE_OFFSET = 1;
     /**
      * built-in error code for HTTP_NOT_FOUND exception
      *
      * @var int
      */
-    protected const EX_HTTP_NOT_FOUND_OFFSET = 10;
+    public const EX_HTTP_NOT_FOUND_OFFSET = 10;
     /**
      * built-in error code for HTTP_SERVICE_UNAVAILABLE exception
      *
      * @var int
      */
-    protected const EX_HTTP_SERVICE_UNAVAILABLE_OFFSET = 11;
+    public const EX_HTTP_SERVICE_UNAVAILABLE_OFFSET = 11;
     /**
      * built-in error code for HTTP_EXCEPTION
      *
      * @var int
      */
-    protected const EX_HTTP_EXCEPTION_OFFSET = 12;
+    public const EX_HTTP_EXCEPTION_OFFSET = 12;
     /**
      * built-in error code for UNCAUGHT_EXCEPTION
      *
      * @var int
      */
-    protected const EX_UNCAUGHT_EXCEPTION_OFFSET = 13;
+    public const EX_UNCAUGHT_EXCEPTION_OFFSET = 13;
 
     /**
      * built-in error code for \Illuminate\Auth\AuthenticationException
      *
      * @var int
      */
-    protected const EX_AUTHENTICATION_EXCEPTION_OFFSET = 14;
+    public const EX_AUTHENTICATION_EXCEPTION_OFFSET = 14;
 
     /**
      * built-in error code for \Illuminate\Auth\AuthenticationException
      *
      * @var int
      */
-    protected const EX_VALIDATION_EXCEPTION_OFFSET = 15;
+    public const EX_VALIDATION_EXCEPTION_OFFSET = 15;
 
     /**
      * Returns base code mapping array

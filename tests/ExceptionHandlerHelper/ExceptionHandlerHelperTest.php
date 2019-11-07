@@ -305,7 +305,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
     public function testBaseConfigStructure(): void
     {
-        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerBaseConfig', []);
+        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerConfig', []);
         $this->assertIsArray($base_cfg);
         $this->assertNotEmpty($base_cfg);
 
@@ -334,7 +334,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
     public function testBaseConfigHttpExceptionConfig(): void
     {
-        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerBaseConfig', []);
+        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerConfig', []);
         $this->assertIsArray($base_cfg);
         $this->assertNotEmpty($base_cfg);
 

@@ -13,6 +13,7 @@
 
 use \MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use \Symfony\Component\HttpFoundation\Response as HttpResponse;
+use \Symfony\Component\HttpKernel\Exception\HttpException;
 
 return [
     /*
@@ -79,33 +80,52 @@ return [
     'exception_handler' => [
         /*
          * HTTP Exceptions
+         * ---------------
          * Use this section to define how you want any Http Exception to be handled.
          * This means that you can define any Http code (i.e. 404 => HttpResponse::HTTP_NOT_FOUND)
          * and then configure what api_code should be returned to the user. If Http code
          * is not explicitely configured then `default` handler kicks in, and converts it.
+         *
+         * IMPORTANT
+         * ---------
+         * Please note that default entries use `api_code_offset` instead of `api_code`. This is
+         * because we want to use built-in codes for these exceptions but we cannot simply put
+         * `BaseApiCodes::EX_UNCAUGHT_EXCEPTION()` because to return final API code, these
+         * methods needs to know `min_code` and to know the value of it, they will access this
+         * config file, which will cause infinite loop.
+         *
+         * While it's **STRONGLY** recommended to use own API codes for these exceptions
+         * you can safely use built-in codes as you did so far, however in that case instead of
+         * using `api_code` you need to use `api_code_offset` and assign the built-in internal
+         * code offset (consts as `BaseApiCodes::xxx_OFFSET`). This will be recalculated
+         * at runtime.
          */
-        \Symfony\Component\HttpKernel\Exception\HttpException::class => [
+        HttpException::class => [
             // used by unauthenticated() to obtain api and http code for the exception
             HttpResponse::HTTP_UNAUTHORIZED         => [
-                'api_code'  => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
-                'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
+//              'api_code'     => ApiCodes::YOUR_API_CODE,
+                'api_code_offset' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION_OFFSET,
+                'http_code'       => HttpResponse::HTTP_UNAUTHORIZED,
             ],
             // Required by ValidationException handler
             HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-                'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
-                'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+//              'api_code'     => ApiCodes::YOUR_API_CODE,
+                'api_code_offset' => BaseApiCodes::EX_VALIDATION_EXCEPTION_OFFSET,
+                'http_code'       => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
             ],
             // default handler is mandatory
             'default'                               => [
-                'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
-                'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//              'api_code'     => ApiCodes::YOUR_API_CODE,
+                'api_code_offset' => BaseApiCodes::EX_HTTP_EXCEPTION_OFFSET,
+                'http_code'       => HttpResponse::HTTP_BAD_REQUEST,
             ],
-
         ],
         // This is final exception handler. If ex is not dealt with yet this is its last stop.
-        'default'                                                    => [
-            'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-            'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+        // Default handler is mandatory.
+        'default'            => [
+//          'api_code'     => ApiCodes::YOUR_API_CODE,
+            'api_code_offset' => BaseApiCodes::EX_UNCAUGHT_EXCEPTION_OFFSET,
+            'http_code'       => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
         ],
     ],
 
