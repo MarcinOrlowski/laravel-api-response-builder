@@ -8,6 +8,8 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * @dev
    * Added `ResponseBuilder::successWithMessage()` method.
+   * Entries in `classes` config array can now have `pri` (default 0) to enforce order while
+     merging config with built-in configuration. 
 
 * 6.3.1 (2019-11-06)
    * Fixed config merging helper causing certain user settings to be lost.
