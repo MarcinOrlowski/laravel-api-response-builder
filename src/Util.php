@@ -22,8 +22,8 @@ final class Util
      * array with int).
      *
      * @param array $original Array to merge other array into. Usually default values to overwrite.
-     * @param array $merging Array with items to be merged into $original, overriding (primitives) or merging
-     *                       (arrays) entries in destination array.
+     * @param array $merging  Array with items to be merged into $original, overriding (primitives) or merging
+     *                        (arrays) entries in destination array.
      *
      * @return array
      *
@@ -54,4 +54,20 @@ final class Util
         return $array;
     }
 
+    /**
+     * Sorts array by value, assuming value is an array and contains `pri` key with integer (positive/negative)
+     * value which is used for sorting higher -> lower priority.
+     *
+     * @param array &$array
+     */
+    public static function sortArrayByPri(array &$array): void
+    {
+        // we now need to sort 'classes' node by priority
+        uasort($array, function($array_a, $array_b) {
+            $pri_a = $array_a['pri'] ?? 0;
+            $pri_b = $array_b['pri'] ?? 0;
+
+            return $pri_b <=> $pri_a;
+        });
+    }
 }

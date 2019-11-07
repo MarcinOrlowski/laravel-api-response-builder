@@ -84,30 +84,29 @@ return [
          * and then configure what api_code should be returned to the user. If Http code
          * is not explicitely configured then `default` handler kicks in, and converts it.
          */
-        //        \Symfony\Component\HttpKernel\Exception\HttpException::class => [
-        //            // used by unauthenticated() to obtain api and http code for the exception
-        //            HttpResponse::HTTP_UNAUTHORIZED => [
-        //                'api_code'  => <YOUR_API_CODE>,
-        //                'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
-        //            ],
-        //
-        //            // Required by ValidationException handler
-        //            HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-        //                'api_code'  => <YOUR_API_CODE>,
-        //                'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-        //            ],
-        //            // default handler is mandatory
-        //            'default' => [
-        //                'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
-        //                'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-        //            ],
-        //        ],
-        //        // This is final exception handler. If ex is not dealt with yet
-        //        // this is its last stop.
-        //        'default' => [
-        //            'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-        //            'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-        //        ],
+        \Symfony\Component\HttpKernel\Exception\HttpException::class => [
+            // used by unauthenticated() to obtain api and http code for the exception
+            HttpResponse::HTTP_UNAUTHORIZED         => [
+                'api_code'  => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+                'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
+            ],
+            // Required by ValidationException handler
+            HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
+                'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+                'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+            ],
+            // default handler is mandatory
+            'default'                               => [
+                'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
+                'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+            ],
+
+        ],
+        // This is final exception handler. If ex is not dealt with yet this is its last stop.
+        'default'                                                    => [
+            'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+            'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+        ],
     ],
 
     /*

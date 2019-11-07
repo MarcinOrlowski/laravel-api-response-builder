@@ -100,40 +100,7 @@ class ResponseBuilder
      */
     public const DEFAULT_ENCODING_OPTIONS = 271;
 
-    /**
-     * Reads and validates "classes" config mapping
-     *
-     * @return array Classes mapping as specified in configuration or empty array if configuration found
-     *
-     * @throws \RuntimeException if "classes" mapping is technically invalid (i.e. not array etc).
-     */
-    protected static function getClassesMapping(): ?array
-    {
-        $classes = Config::get(self::CONF_KEY_CLASSES);
 
-        if ($classes !== null) {
-            if (!is_array($classes)) {
-                throw new \RuntimeException(
-                    sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
-            }
-
-            $mandatory_keys = [
-                static::KEY_KEY,
-                static::KEY_METHOD,
-            ];
-            foreach ($classes as $class_name => $class_config) {
-                foreach ($mandatory_keys as $key_name) {
-                    if (!array_key_exists($key_name, $class_config)) {
-                        throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' class mapping");
-                    }
-                }
-            }
-        } else {
-            $classes = [];
-        }
-
-        return $classes;
-    }
 
     /**
      * Returns success
@@ -185,10 +152,32 @@ class ResponseBuilder
     }
 
     /**
-     * Returns success with custom HTTP code
+     * @param string            $message       Custom message to be returned as part of the response.
+     * @param object|array|null $data          Array of primitives and supported objects to be returned in 'data' node
+     *                                         of the JSON response, single supported object or @null if there's no
+     *                                         to be returned.
+     * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
+     *                                         for default DEFAULT_HTTP_CODE_OK.
      *
-     * @param integer|null $http_code HTTP return code to be set for this response. If @null is passed, falls back
-     *                                to DEFAULT_HTTP_CODE_OK.
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public static function successWithMessage(string $message, $data = null, int $api_code = null,
+                                              int $http_code = null): HttpResponse
+    {
+        return static::buildSuccessResponse($data, $api_code, [], $http_code, null, $message);
+    }
+
+    /**
+     * @param object|array|null $data          Array of primitives and supported objects to be returned in 'data' node.
+     *                                         of the JSON response, single supported object or @null if there's no
+     *                                         to be returned.
+     * @param integer|null      $api_code      API code to be returned or @null to use value of BaseApiCodes::OK().
+     * @param array|null        $placeholders  Placeholders passed to Lang::get() for message placeholders
+     *                                         substitution or @null if none.
+     * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
+     *                                         for default DEFAULT_HTTP_CODE_OK.
+     * @param integer|null      $json_opts     See http://php.net/manual/en/function.json-encode.php for supported
+     *                                         options or pass @null to use value from your config (or defaults).
      *
      * @return HttpResponse
      *

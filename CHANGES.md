@@ -12,13 +12,22 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
      HttpException for each HTTP status code you want. Separate `ExceptionHandler::TYPE_HTTP_NOT_FOUND_KEY`
      and all related stuff, incl. localization key `http_not_found`, configuration is now replace with more
      flexible generic code that provides error messages for all supported HTTP codes from in range `400-599`.
-   * Simplified the API by introducing Builder helper class, utilising Builder pattern. The following methods
+   * Simplified the API by introducing `Builder` helper class, utilising Builder pattern. The following methods
      are now deprecated and its use should be replaced with the Builder class (see ResponseBuilder class
-     source code for copy&paste replacement code). Deprecated methods: `successWithCode()`, `successWithHttpCode()`, 
-     `errorWithData()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()`, `errorWithMessageAndData()`
-     `errorWithMessageAndDataAndDebug()`, `errorWithMessage()`, 
+     source code for copy&paste replacement code). Former `ResponseBuilder` class is now deprected as
+     whole. If you were using any of the old methods: `success()`, `error()`, `successWithCode()`,
+     `successWithHttpCode()`, `errorWithData()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()`,
+     `errorWithMessageAndData()`, `errorWithMessageAndDataAndDebug()`, `errorWithMessage()` please see
+     the docs for replacement code.
 
-* 6.3.1 (2019-11-06)
+* v6.3.2 (2019-11-07)
+   * Added `ResponseBuilder::successWithMessage()` method.
+   * Entries in `classes` config array can now have `pri` (default 0) to enforce order while
+     merging config with built-in configuration.
+   * Persian translation (Thanks to @FaridAghili).
+   * Added Laravel 6.5 to Travis-CI unit tests.
+
+* v6.3.1 (2019-11-06)
    * Fixed config merging helper causing certain user settings to be lost.
    * No longer exposes exception class name for message-less exceptions. Fixes #107
    * Added test ensuring that user privided config overshadows built-in params.
@@ -263,4 +272,3 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * v1.0.0 (2016-04-11)
    * Initial public release
-

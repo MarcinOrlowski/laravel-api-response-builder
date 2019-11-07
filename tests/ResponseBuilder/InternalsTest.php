@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class InternalsTest extends TestCase
@@ -43,7 +44,7 @@ class InternalsTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->callProtectedMethod(new ResponseBuilder(), 'getClassesMapping');
+        $this->callProtectedMethod(Converter::class, 'getClassesMapping');
     }
 
     /**
@@ -63,7 +64,7 @@ class InternalsTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->callProtectedMethod(new ResponseBuilder(), 'getClassesMapping');
+        $this->callProtectedMethod(Converter::class, 'getClassesMapping');
     }
 
     /**

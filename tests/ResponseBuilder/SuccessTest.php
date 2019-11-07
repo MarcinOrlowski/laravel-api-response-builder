@@ -235,4 +235,16 @@ class SuccessTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         ResponseBuilder::successWithHttpCode(0);
     }
+
+    /**
+     * Tests if successWithMessage() returns our custom message in the response object.
+     */
+    public function testSuccessWithMessage(): void
+    {
+        $msg = $this->getRandomString('msg_');
+        $this->response = ResponseBuilder::successWithMessage($msg);
+        $j = $this->getResponseSuccessObject(BaseApiCodes::OK(), null, $msg);
+        $this->assertNull($j->data);
+    }
+
 }
