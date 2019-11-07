@@ -148,7 +148,7 @@ class Builder
         Validator::assertInt('api_code', $api_code);
 
         $msg_or_api_code = $this->message ?? $api_code;
-        $headers = $this->headers ?? [];
+        $http_headers = $this->http_headers ?? [];
 
         if ($this->success) {
             $api_code = $api_code ?? BaseApiCodes::OK();
@@ -156,8 +156,8 @@ class Builder
 
             Validator::assertOkHttpCode($http_code);
 
-            return $this->make($this->success, $api_code, $msg_or_api_code, $this->data, $http_code,
-                $this->placeholders, $this->http_headers, $this->json_opts);
+            $result = $this->make($this->success, $api_code, $msg_or_api_code, $this->data, $http_code,
+                $this->placeholders, $http_headers, $this->json_opts);
         } else {
             $http_code = $this->http_code ?? ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
 
@@ -172,7 +172,7 @@ class Builder
 
             Validator::assertErrorHttpCode($http_code);
 
-            return $this->make(false, $api_code, $msg_or_api_code, $this->data, $http_code,
+            $result = $this->make(false, $api_code, $msg_or_api_code, $this->data, $http_code,
                 $this->placeholders, $this->http_headers, $this->json_opts, $this->debug_data);
 
         }
