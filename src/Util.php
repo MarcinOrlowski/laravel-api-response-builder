@@ -22,8 +22,8 @@ final class Util
      * array with int).
      *
      * @param array $original Array to merge other array into. Usually default values to overwrite.
-     * @param array $merging Array with items to be merged into $original, overriding (primitives) or merging
-     *                       (arrays) entries in destination array.
+     * @param array $merging  Array with items to be merged into $original, overriding (primitives) or merging
+     *                        (arrays) entries in destination array.
      *
      * @return array
      *

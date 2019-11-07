@@ -62,8 +62,20 @@ class ResponseBuilderServiceProvider extends ServiceProvider
      */
     protected function mergeConfigFrom($path, $key)
     {
+        $defaults = require $path;
         $config = $this->app['config']->get($key, []);
-        $this->app['config']->set($key, Util::mergeConfig(require $path, $config));
+
+        $merged_config = Util::mergeConfig($defaults, $config);
+
+        // we now need to sort 'classes' node by priority
+        uasort($merged_config['classes'], function($array_a, $array_b) {
+            $pri_a = $array_a['pri'] ?? 0;
+            $pri_b = $array_b['pri'] ?? 0;
+
+            return $pri_b <=> $pri_a;
+        });
+
+        $this->app['config']->set($key, $merged_config);
     }
 
 }
