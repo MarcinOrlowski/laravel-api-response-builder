@@ -11,6 +11,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Entries in `classes` config array can now have `pri` (default 0) to enforce order while
      merging config with built-in configuration.
    * Persian translation (Thanks to @FaridAghili).
+   * Added Laravel 6.5 to Travis-CI unit tests.
 
 * v6.3.1 (2019-11-06)
    * Fixed config merging helper causing certain user settings to be lost.
