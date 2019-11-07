@@ -32,6 +32,7 @@ The entry key is a class name to check passed `data` object against, and configu
     Namespace\Classname::class => [
         'method' => 'toArray',
         'key'    => 'items',
+        'pri'    => 0,
         ],
 ],
 ```
