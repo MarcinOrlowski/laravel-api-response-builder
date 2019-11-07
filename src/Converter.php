@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
 
@@ -34,7 +35,7 @@ class Converter
      */
     public function __construct()
     {
-        $classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES) ?? [];
+        $classes = static::getClassesMapping() ?? [];
         if (!is_array($classes)) {
             throw new \RuntimeException(
                 sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
@@ -161,5 +162,40 @@ class Converter
         }
 
         return $data;
+    }
+
+    /**
+     * Reads and validates "classes" config mapping
+     *
+     * @return array Classes mapping as specified in configuration or empty array if configuration found
+     *
+     * @throws \RuntimeException if "classes" mapping is technically invalid (i.e. not array etc).
+     */
+    protected static function getClassesMapping(): ?array
+    {
+        $classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES);
+
+        if ($classes !== null) {
+            if (!is_array($classes)) {
+                throw new \RuntimeException(
+                    sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
+            }
+
+            $mandatory_keys = [
+                ResponseBuilder::KEY_KEY,
+                ResponseBuilder::KEY_METHOD,
+            ];
+            foreach ($classes as $class_name => $class_config) {
+                foreach ($mandatory_keys as $key_name) {
+                    if (!array_key_exists($key_name, $class_config)) {
+                        throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' class mapping");
+                    }
+                }
+            }
+        } else {
+            $classes = [];
+        }
+
+        return $classes;
     }
 }

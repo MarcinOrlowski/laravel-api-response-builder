@@ -6,7 +6,14 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* 6.3.1 (2019-11-06)
+* v6.3.2 (2019-11-07)
+   * Added `ResponseBuilder::successWithMessage()` method.
+   * Entries in `classes` config array can now have `pri` (default 0) to enforce order while
+     merging config with built-in configuration.
+   * Persian translation (Thanks to @FaridAghili).
+   * Added Laravel 6.5 to Travis-CI unit tests.
+
+* v6.3.1 (2019-11-06)
    * Fixed config merging helper causing certain user settings to be lost.
    * No longer exposes exception class name for message-less exceptions. Fixes #107
    * Added test ensuring that user privided config overshadows built-in params.

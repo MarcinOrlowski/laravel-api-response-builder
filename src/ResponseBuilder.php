@@ -100,40 +100,7 @@ class ResponseBuilder
      */
     public const DEFAULT_ENCODING_OPTIONS = 271;
 
-    /**
-     * Reads and validates "classes" config mapping
-     *
-     * @return array Classes mapping as specified in configuration or empty array if configuration found
-     *
-     * @throws \RuntimeException if "classes" mapping is technically invalid (i.e. not array etc).
-     */
-    protected static function getClassesMapping(): ?array
-    {
-        $classes = Config::get(self::CONF_KEY_CLASSES);
 
-        if ($classes !== null) {
-            if (!is_array($classes)) {
-                throw new \RuntimeException(
-                    sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
-            }
-
-            $mandatory_keys = [
-                static::KEY_KEY,
-                static::KEY_METHOD,
-            ];
-            foreach ($classes as $class_name => $class_config) {
-                foreach ($mandatory_keys as $key_name) {
-                    if (!array_key_exists($key_name, $class_config)) {
-                        throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' class mapping");
-                    }
-                }
-            }
-        } else {
-            $classes = [];
-        }
-
-        return $classes;
-    }
 
     /**
      * Returns success
@@ -188,6 +155,22 @@ class ResponseBuilder
     }
 
     /**
+     * @param string            $message       Custom message to be returned as part of the response.
+     * @param object|array|null $data          Array of primitives and supported objects to be returned in 'data' node
+     *                                         of the JSON response, single supported object or @null if there's no
+     *                                         to be returned.
+     * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
+     *                                         for default DEFAULT_HTTP_CODE_OK.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public static function successWithMessage(string $message, $data = null, int $api_code = null,
+                                              int $http_code = null): HttpResponse
+    {
+        return static::buildSuccessResponse($data, $api_code, [], $http_code, null, $message);
+    }
+
+    /**
      * @param object|array|null $data          Array of primitives and supported objects to be returned in 'data' node.
      *                                         of the JSON response, single supported object or @null if there's no
      *                                         to be returned.
@@ -204,16 +187,20 @@ class ResponseBuilder
      * @throws \InvalidArgumentException Thrown when provided arguments are invalid.
      */
     protected static function buildSuccessResponse($data = null, int $api_code = null, array $placeholders = null,
-                                                   int $http_code = null, int $json_opts = null): HttpResponse
+                                                   int $http_code = null, int $json_opts = null,
+                                                   $msg_or_api_code = null): HttpResponse
     {
         $http_code = $http_code ?? static::DEFAULT_HTTP_CODE_OK;
         $api_code = $api_code ?? BaseApiCodes::OK();
+        $msg_or_api_code = $msg_or_api_code ?? $api_code;
 
         Validator::assertInt('api_code', $api_code);
         Validator::assertInt('http_code', $http_code);
         Validator::assertIntRange('http_code', $http_code, 200, 299);
+        Validator::assertType('msg_or_api_code', $msg_or_api_code, [Validator::TYPE_STRING,
+                                                                    Validator::TYPE_INTEGER]);
 
-        return static::make(true, $api_code, $api_code, $data, $http_code, $placeholders, null, $json_opts);
+        return static::make(true, $api_code, $msg_or_api_code, $data, $http_code, $placeholders, null, $json_opts);
     }
 
     /**
