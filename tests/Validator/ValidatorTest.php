@@ -18,7 +18,7 @@ use MarcinOrlowski\ResponseBuilder\Validator;
 class ValidatorTest extends TestCase
 {
     /**
-     * Tests if assertInt() pass if given valid data.
+     * Tests if assertIsInt() pass if given valid data.
      *
      * @return void
      */
@@ -30,7 +30,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests if assertInt() throws exception when feed with invalid type argument.
+     * Tests if assertIsInt() throws exception when feed with invalid type argument.
      *
      * @return void
      */
@@ -40,9 +40,31 @@ class ValidatorTest extends TestCase
         Validator::assertIsInt(__FUNCTION__, 'chicken');
     }
 
+    // -----------------------------------------------------------------------------------------------------------
 
     /**
-     * Tests if assertString() pass with valid data type
+     * Checks behavior of assertIsArray() with valid data
+     */
+    public function testAssertIsArrayWithValidData(): void
+    {
+        Validator::assertIsArray(__FUNCTION__, []);
+        // This assert won't be called if exception is thrown
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Checks behavior of assertIsArray() with invalid data
+     */
+    public function testAssertIsArrayWithInvalidData(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        Validator::assertIsArray(__FUNCTION__, false);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests if assertIsString() pass with valid data type
      *
      * @return void
      */
@@ -54,7 +76,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests if assertString() throws exception when feed with invalid type argument.
+     * Tests if assertIsString() throws exception when feed with invalid type argument.
      *
      * @return void
      */
@@ -62,6 +84,15 @@ class ValidatorTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         Validator::assertIsString(__FUNCTION__, 666);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------
+
+    public function testAssertIsIntRangeWithValidData(): void
+    {
+        Validator::assertIsIntRange(__FUNCTION__, 300, 100, 500);
+        // This assert won't be called if exception is thrown
+        $this->assertTrue(true);
     }
 
     /**
@@ -91,17 +122,19 @@ class ValidatorTest extends TestCase
      *
      * @return void
      */
-    public function testAssertIsIntRangeVarInMinMaxRange(): void
+    public function testAssertIsIntRangeVarInMinMaxRangeWithDataOutOfRange(): void
     {
         // ensure main variable is an integer
         $this->expectException(\InvalidArgumentException::class);
         Validator::assertIsIntRange(__FUNCTION__, 100, 300, 500);
     }
 
+    // -----------------------------------------------------------------------------------------------------------
+
     /**
      * Tests assertType() helper.
      */
-    public function testAssertType(): void
+    public function testAssertTypeWithVariousData(): void
     {
         /**
          * Test data. Each entry is an array with a following keys:
@@ -160,22 +193,4 @@ class ValidatorTest extends TestCase
         }
     }
 
-    /**
-     * Checks behavior of assertIsArray() with valid data
-     */
-    public function testAssertIsArrayWithValidData(): void
-    {
-        Validator::assertIsArray(__FUNCTION__, []);
-        // This assert won't be called if exception is thrown
-        $this->assertTrue(true);
-    }
-
-    /**
-     * Checks behavior of assertIsArray() with invalid data
-     */
-    public function testAssertIsArrayWithInvalidData(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        Validator::assertIsArray(__FUNCTION__, false);
-    }
 }
