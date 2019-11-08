@@ -76,7 +76,7 @@ class Builder
         }
         if ($api_code === $code_ok) {
             throw new \InvalidArgumentException(
-                "Error response cannot use api_code of value  {$code_ok} which is reserved for OK");
+                "Error response cannot use api_code of value {$code_ok} which is reserved for OK");
         }
 
         return new self(false, $api_code);
@@ -160,15 +160,6 @@ class Builder
                 $this->placeholders, $http_headers, $this->json_opts);
         } else {
             $http_code = $this->http_code ?? ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
-
-            $code_ok = BaseApiCodes::OK();
-            if ($api_code !== $code_ok) {
-                Validator::assertIsIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
-            }
-            if ($api_code === $code_ok) {
-                throw new \InvalidArgumentException(
-                    "Error response cannot use api_code of value  {$code_ok} which is reserved for OK");
-            }
 
             Validator::assertErrorHttpCode($http_code);
 

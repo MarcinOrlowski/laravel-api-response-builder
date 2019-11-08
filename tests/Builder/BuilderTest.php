@@ -71,4 +71,14 @@ class BuilderTest extends TestCase
             $this->assertEquals($val, $this->response->headers->get($key));
         }
     }
+
+    /**
+     * Checks if exception is thrown while attempting to build response indicating failure with api_code
+     * indicating success.
+     */
+    public function testErrorWithOkCode(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        Builder::error(BaseApiCodes::OK());
+    }
 }
