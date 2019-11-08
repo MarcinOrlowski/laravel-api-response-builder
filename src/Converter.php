@@ -35,13 +35,7 @@ class Converter
      */
     public function __construct()
     {
-        $classes = static::getClassesMapping() ?? [];
-        if (!is_array($classes)) {
-            throw new \RuntimeException(
-                sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
-        }
-
-        $this->classes = $classes;
+        $this->classes = static::getClassesMapping() ?? [];
     }
 
     /**
@@ -171,7 +165,7 @@ class Converter
      *
      * @throws \RuntimeException if "classes" mapping is technically invalid (i.e. not array etc).
      */
-    protected static function getClassesMapping(): ?array
+    protected static function getClassesMapping(): array
     {
         $classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES);
 
