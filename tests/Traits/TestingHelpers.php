@@ -23,12 +23,10 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 trait TestingHelpers
 {
-
     /**
      * @return string
      */
     abstract public function getApiCodesClassName();
-
 
     /** @var int */
     protected $min_allowed_code;
@@ -55,6 +53,8 @@ trait TestingHelpers
      * @var string
      */
     protected $random_api_code_message;
+
+    // -----------------------------------------------------------------------------------------------------------
 
     /**
      * Sets up testing environment
@@ -93,9 +93,7 @@ trait TestingHelpers
         \Config::set(ResponseBuilder::CONF_KEY_MAP, $this->error_message_map);
     }
 
-
-    // -----------------------------------------------------------
-
+    // -----------------------------------------------------------------------------------------------------------
 
     /**
      * Checks if response object was returned with expected success HTTP
@@ -226,8 +224,7 @@ trait TestingHelpers
             "Response 'data' must be either object or null");
     }
 
-
-// ---------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------
 
     /**
      * Checks if Response's code matches our expectations. If not, shows
@@ -252,7 +249,7 @@ trait TestingHelpers
         }
     }
 
-    //----------------------------
+    // -----------------------------------------------------------------------------------------------------------
 
     /**
      * Calls protected method make()
@@ -294,7 +291,7 @@ trait TestingHelpers
                                          $debug_data]);
     }
 
-    // -------------------------------
+    // -----------------------------------------------------------------------------------------------------------
 
     /**
      * Returns ErrorCode constant name referenced by its value
@@ -319,6 +316,8 @@ trait TestingHelpers
 
         return $name ?? "??? ({$api_code_offset})";
     }
+
+    // -----------------------------------------------------------------------------------------------------------
 
     /**
      * Calls protected method of $object, passing optional array of arguments.
@@ -401,6 +400,7 @@ trait TestingHelpers
         return $prefix . md5(uniqid(mt_rand(), true));
     }
 
+    // -----------------------------------------------------------------------------------------------------------
 
     /**
      * UTF8 aware version of ord()

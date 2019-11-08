@@ -284,9 +284,17 @@ class ConverterTest extends TestCase
         $this->assertEquals($model_5->getVal(), $converted[ $item3_key ][ $item5_key ]['val']);
     }
 
-    protected function assertValidConvertedTestClass(TestModel $obj, $item): void
+    // -----------------------------------------------------------------------------------------------------------
+
+    /**
+     * Helper method that validates converted element with values from
+     * source object.
+     *
+     * @param TestModel $obj  Source object converted.
+     * @param array     $item Result of the conversion.
+     */
+    protected function assertValidConvertedTestClass(TestModel $obj, array $item): void
     {
-        $this->assertIsArray($item);
         $this->assertArrayHasKey('val', $item);
         $this->assertEquals($obj->getVal(), $item['val']);
     }

@@ -79,6 +79,8 @@ class DefaultConfigTest extends TestCase
         $this->doCollectionTest($collection);
     }
 
+    // -----------------------------------------------------------------------------------------------------------
+
     /**
      * Do the testing of collection type of object.
      *
