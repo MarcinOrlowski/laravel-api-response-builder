@@ -137,7 +137,7 @@ trait ApiCodesHelpers
     {
         $min = static::RESERVED_MIN_API_CODE_OFFSET;
         $max = static::RESERVED_MAX_API_CODE_OFFSET;
-        Validator::assertIntRange('internal_code', $internal_code, $min, $max);
+        Validator::assertIsIntRange('internal_code', $internal_code, $min, $max);
 
         return ($internal_code === 0) ? 0 : $internal_code + static::getMinCode();
     }

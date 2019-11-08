@@ -72,7 +72,7 @@ class Builder
     {
         $code_ok = BaseApiCodes::OK();
         if ($api_code !== $code_ok) {
-            Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+            Validator::assertIsIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
         }
         if ($api_code === $code_ok) {
             throw new \InvalidArgumentException(
@@ -84,8 +84,8 @@ class Builder
 
     public function withHttpCode(int $http_code = null): self
     {
-        Validator::assertType('http_code', $http_code, [Validator::TYPE_INTEGER,
-                                                        Validator::TYPE_NULL]);
+        Validator::assertIsType('http_code', $http_code, [Validator::TYPE_INTEGER,
+                                                          Validator::TYPE_NULL]);
         $this->http_code = $http_code;
 
         return $this;
@@ -93,9 +93,9 @@ class Builder
 
     public function withData($data = null): self
     {
-        Validator::assertType('data', $data, [Validator::TYPE_ARRAY,
-                                              Validator::TYPE_OBJECT,
-                                              Validator::TYPE_NULL]);
+        Validator::assertIsType('data', $data, [Validator::TYPE_ARRAY,
+                                                Validator::TYPE_OBJECT,
+                                                Validator::TYPE_NULL]);
         $this->data = $data;
 
         return $this;
@@ -103,8 +103,8 @@ class Builder
 
     public function withJsonOptions(int $json_opts = null): self
     {
-        Validator::assertType('json_opts', $json_opts, [Validator::TYPE_INTEGER,
-                                                        Validator::TYPE_NULL]);
+        Validator::assertIsType('json_opts', $json_opts, [Validator::TYPE_INTEGER,
+                                                          Validator::TYPE_NULL]);
         $this->json_opts = $json_opts;
 
         return $this;
@@ -112,8 +112,8 @@ class Builder
 
     public function withDebugData(array $debug_data = null): self
     {
-        Validator::assertType('$debug_data', $debug_data, [Validator::TYPE_ARRAY,
-                                                           Validator::TYPE_NULL]);
+        Validator::assertIsType('$debug_data', $debug_data, [Validator::TYPE_ARRAY,
+                                                             Validator::TYPE_NULL]);
         $this->debug_data = $debug_data;
 
         return $this;
@@ -121,8 +121,8 @@ class Builder
 
     public function withMessage(string $msg = null): self
     {
-        Validator::assertType('message', $msg, [Validator::TYPE_STRING,
-                                                Validator::TYPE_NULL]);
+        Validator::assertIsType('message', $msg, [Validator::TYPE_STRING,
+                                                  Validator::TYPE_NULL]);
         $this->message = $msg;
 
         return $this;
@@ -163,7 +163,7 @@ class Builder
 
             $code_ok = BaseApiCodes::OK();
             if ($api_code !== $code_ok) {
-                Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+                Validator::assertIsIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
             }
             if ($api_code === $code_ok) {
                 throw new \InvalidArgumentException(
@@ -214,7 +214,7 @@ class Builder
 
         Validator::assertInt('api_code', $api_code);
         if (!BaseApiCodes::isCodeValid($api_code)) {
-            Validator::assertIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+            Validator::assertIsIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
         }
 
         return Response::json(
@@ -257,7 +257,7 @@ class Builder
         if (is_int($msg_or_api_code)) {
             $message = $this->getMessageForApiCode($success, $msg_or_api_code, $placeholders);
         } else {
-            Validator::assertString('message', $msg_or_api_code);
+            Validator::assertIsString('message', $msg_or_api_code);
             $message = $msg_or_api_code;
         }
 

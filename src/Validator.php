@@ -45,7 +45,7 @@ class Validator
      */
     public static function assertInt(string $key, $var): void
     {
-        self::assertType($key, $var, [self::TYPE_INTEGER]);
+        self::assertIsType($key, $var, [self::TYPE_INTEGER]);
     }
 
     /**
@@ -58,9 +58,9 @@ class Validator
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertArray(string $key, $var): void
+    public static function assertIsArray(string $key, $var): void
     {
-        self::assertType($key, $var, [self::TYPE_ARRAY]);
+        self::assertIsType($key, $var, [self::TYPE_ARRAY]);
     }
 
     /**
@@ -73,9 +73,9 @@ class Validator
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertString(string $name, $var): void
+    public static function assertIsString(string $name, $var): void
     {
-        self::assertType($name, $var, [self::TYPE_STRING]);
+        self::assertIsType($name, $var, [self::TYPE_STRING]);
     }
 
     /**
@@ -89,7 +89,7 @@ class Validator
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public static function assertIntRange(string $name, $var, int $min, int $max): void
+    public static function assertIsIntRange(string $name, $var, int $min, int $max): void
     {
         self::assertInt($name, $var);
 
@@ -115,7 +115,7 @@ class Validator
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertType(string $name, $var, array $allowed_types): void
+    public static function assertIsType(string $name, $var, array $allowed_types): void
     {
         $type = gettype($var);
         if (!in_array($type, $allowed_types)) {
@@ -133,7 +133,7 @@ class Validator
     public static function assertErrorHttpCode(int $http_code): void
     {
         self::assertInt('http_code', $http_code);
-        self::assertIntRange('http_code', $http_code,
+        self::assertIsIntRange('http_code', $http_code,
             ResponseBuilder::ERROR_HTTP_CODE_MIN, ResponseBuilder::ERROR_HTTP_CODE_MAX);
     }
 
@@ -145,6 +145,6 @@ class Validator
     public static function assertOkHttpCode(int $http_code): void
     {
         self::assertInt('http_code', $http_code);
-        self::assertIntRange('http_code', $http_code, 200, 299);
+        self::assertIsIntRange('http_code', $http_code, 200, 299);
     }
 }

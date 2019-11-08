@@ -48,7 +48,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertStringCorrectType(): void
     {
-        Validator::assertString(__FUNCTION__, 'string');
+        Validator::assertIsString(__FUNCTION__, 'string');
         // This assert won't be called if exception is thrown
         $this->assertTrue(true);
     }
@@ -61,7 +61,7 @@ class ValidatorTest extends TestCase
     public function testAssertStringWrongType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        Validator::assertString(__FUNCTION__, 666);
+        Validator::assertIsString(__FUNCTION__, 666);
     }
 
     /**
@@ -73,7 +73,7 @@ class ValidatorTest extends TestCase
     {
         // ensure main variable is an integer
         $this->expectException(\InvalidArgumentException::class);
-        Validator::assertIntRange(__FUNCTION__, 'string', 100, 200);
+        Validator::assertIsIntRange(__FUNCTION__, 'string', 100, 200);
     }
 
     /**
@@ -85,7 +85,7 @@ class ValidatorTest extends TestCase
     {
         // ensure main variable is an integer
         $this->expectException(\RuntimeException::class);
-        Validator::assertIntRange(__FUNCTION__, 300, 500, 200);
+        Validator::assertIsIntRange(__FUNCTION__, 300, 500, 200);
     }
 
     /**
@@ -97,7 +97,7 @@ class ValidatorTest extends TestCase
     {
         // ensure main variable is an integer
         $this->expectException(\InvalidArgumentException::class);
-        Validator::assertIntRange(__FUNCTION__, 100, 300, 500);
+        Validator::assertIsIntRange(__FUNCTION__, 100, 300, 500);
     }
 
     /**
@@ -151,7 +151,7 @@ class ValidatorTest extends TestCase
 
             $test_passed = true;
             try {
-                Validator::assertType($label, $data['item'], $data['types']);
+                Validator::assertIsType($label, $data['item'], $data['types']);
             } catch (\Exception $ex) {
                 $test_passed = false;
             }
