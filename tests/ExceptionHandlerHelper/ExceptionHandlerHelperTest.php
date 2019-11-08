@@ -313,7 +313,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $map_cfg = $base_cfg['map'];
 
         $keys = [HttpException::class,
-                 'default'];
+                 'default',];
         $this->assertArrayHasKeys($keys, $map_cfg);
 
         // check http_exception block and validate all required entries and the config content.
@@ -323,7 +323,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $http_cfg);
-            $this->checkConfig($http_cfg[ $key ]);
+            $this->checkConfig($http_cfg[ $key ], null, ($key === 'default'));
         }
         $this->assertArrayHasKey('default', $http_cfg);
         $this->checkConfig($http_cfg['default']);
@@ -344,7 +344,7 @@ class ExceptionHandlerHelperTest extends TestCase
             if (is_int($code)) {
                 $this->checkConfig($params, $code);
             } elseif (is_string($code) && $code == 'default') {
-                $this->checkConfig($params);
+                $this->checkConfig($params, null, true);
             } else {
                 $this->fail("Code '{$code}' is not allowed in config->exception_handler->http_exception.");
             }
@@ -360,33 +360,53 @@ class ExceptionHandlerHelperTest extends TestCase
         return $cfg;
     }
 
-    protected function checkConfig(array $params, int $code = null)
+    protected function checkConfig(array $params, int $code = null, bool $is_default_handler = false): void
     {
         if (is_int($code)) {
             $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $code);
             $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $code);
         }
 
-        // check if mandatory keys are present
-        $mandatory_keys = ['api_code',
-                           'http_code'];
+        if ($is_default_handler) {
+            $mandatory_keys = [
+                'api_code',
+                'http_code',
+            ];
+            $optional_keys = ['pri'];
+        } else {
+            $mandatory_keys = [
+                'api_code',
+            ];
+            $optional_keys = [
+                'http_code',
+                'pri',
+            ];
+        }
+
         $this->assertArrayHasKeys($mandatory_keys, $params);
 
+        $this->assertIsInt($params['api_code']);
         $this->assertGreaterThanOrEqual(BaseApiCodes::getMinCode(), $params['api_code']);
         $this->assertLessThanOrEqual(BaseApiCodes::getMaxCode(), $params['api_code']);
-        $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
-        $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
+
+        if (array_key_exists('http_code', $params)) {
+            $this->assertIsInt($params['http_code']);
+            $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
+            $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
+        }
 
         // check config does not contain any unknown keys
-        $allowed_keys = $mandatory_keys + ['pri'];
         $diff = [];
+        $allowed_keys = array_merge($mandatory_keys, $optional_keys);
         foreach ($params as $key => $val) {
             if (!in_array($key, $allowed_keys)) {
                 $diff[] = $key;
             }
         }
+
         $sep = "\n  ";
-        $msg = "Unknown keys in config for code {$code}:${sep}" . implode($sep, $diff);
+        $code_name = $code ?? '"default"';
+        $msg = "Unsupported keys in config for HTTP Exception, handler for code {$code_name}:${sep}" . implode($sep, $diff);
         $this->assertEmpty($diff, $msg);
     }
 }

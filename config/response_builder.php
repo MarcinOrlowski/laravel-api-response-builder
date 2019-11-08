@@ -70,33 +70,30 @@ return [
             /*
              * HTTP Exceptions
              * ---------------
-             * Use this section to define how you want any Http Exception to be handled.
-             * This means that you can define any Http code (i.e. 404 => HttpResponse::HTTP_NOT_FOUND)
-             * and then configure what api_code should be returned to the user. If Http code
-             * is not explicitely configured then `default` handler kicks in, and converts the exception
-             * as best as it can.
+             * Configure how you want Http Exception to be handled based on its Http status code.
+             * For each code you need to define at least the `api_code` to be returned in final response.
+             * Additionally, you can specify `http_code` to be any valid 400-599 HTTP status code, otherwise
+             * code set in the exception will be used.
              */
 //            HttpException::class => [
 //                // used by unauthenticated() to obtain api and http code for the exception
 //                HttpResponse::HTTP_UNAUTHORIZED         => [
-//                    'api_code'  => ApiCodes::YOUR_API_CODE,
-//                    'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
+//                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNATHORIZED_EXCEPTION,
 //                ],
 //                // Required by ValidationException handler
 //                HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-//                    'api_code'  => ApiCodes::YOUR_API_CODE,
-//                    'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+//                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_VALIDATION_EXCEPTION,
 //                ],
-//                // default handler is mandatory
+//                // default handler is mandatory and MUST have both `api_code` and `http_code` set.
 //                'default'                               => [
-//                    'api_code'  => ApiCodes::YOUR_API_CODE,
+//                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_GENERIC_HTTP_EXCEPTION,
 //                    'http_code' => HttpResponse::HTTP_BAD_REQUEST,
 //                ],
 //            ],
 //            // This is final exception handler. If ex is not dealt with yet this is its last stop.
-//            // Default handler is mandatory.
+//            // default handler is mandatory and MUST have both `api_code` and `http_code` set.
 //            'default'            => [
-//                'api_code'  => ApiCodes::YOUR_API_CODE,
+//                'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNHANDLED_EXCEPTION,
 //                'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 //            ],
 //        ],

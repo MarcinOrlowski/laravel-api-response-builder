@@ -81,7 +81,7 @@ class ExceptionHandlerHelper
         $cfg = static::getExceptionHandlerConfig();
         $cfg = $cfg['map'][ HttpException::class ][ HttpResponse::HTTP_UNAUTHORIZED ];
         $api_code = $cfg['api_code'];
-        $http_code = $cfg['http_code'];
+        $http_code = array_key_exists('http_code', $cfg) ? $cfg['http_code'] : HttpResponse::HTTP_UNAUTHORIZED;
 
         return static::error($exception, $api_code, $http_code);
     }
@@ -163,20 +163,18 @@ class ExceptionHandlerHelper
                     // used by unauthenticated() to obtain api and http code for the exception
                     HttpResponse::HTTP_UNAUTHORIZED         => [
                         'api_code'  => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
-                        'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
                     ],
                     // Required by ValidationException handler
                     HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
                         'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
-                        'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
                     ],
-                    // default handler is mandatory
+                    // default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
                     'default'                               => [
                         'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
                         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
                     ],
                 ],
-                // default handler is mandatory
+                // default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
                 'default'            => [
                     'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
                     'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
