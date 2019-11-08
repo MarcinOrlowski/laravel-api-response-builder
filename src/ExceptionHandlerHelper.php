@@ -38,7 +38,7 @@ class ExceptionHandlerHelper
     public static function render(/** @scrutinizer ignore-unused */ $request, Exception $ex): HttpResponse
     {
         $result = null;
-        $cfg = self::getExceptionHandlerConfig('map');
+        $cfg = static::getExceptionHandlerConfig()['map'];
 
         if ($ex instanceof HttpException) {
             // Check if we have any exception configuration for this particular Http status code.
@@ -78,7 +78,8 @@ class ExceptionHandlerHelper
     protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
                                                                          AuthException $exception): HttpResponse
     {
-        $cfg = static::getExceptionHandlerConfig('map')[ HttpException::class ][ HttpResponse::HTTP_UNAUTHORIZED ];
+        $cfg = static::getExceptionHandlerConfig();
+        $cfg = $cfg['map'][ HttpException::class ][ HttpResponse::HTTP_UNAUTHORIZED ];
         $api_code = $cfg['api_code'];
         $http_code = $cfg['http_code'];
 
@@ -154,6 +155,36 @@ class ExceptionHandlerHelper
             $http_code, null, $trace_data);
     }
 
+    protected static function getExceptionHandlerDefaultConfig(): array
+    {
+        return [
+            'map' => [
+                HttpException::class => [
+                    // used by unauthenticated() to obtain api and http code for the exception
+                    HttpResponse::HTTP_UNAUTHORIZED         => [
+                        'api_code'  => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+                        'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
+                    ],
+                    // Required by ValidationException handler
+                    HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
+                        'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+                        'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+                    ],
+                    // default handler is mandatory
+                    'default'                               => [
+                        'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
+                        'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+                    ],
+                ],
+                // default handler is mandatory
+                'default'            => [
+                    'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+                    'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+                ],
+            ],
+        ];
+    }
+
     /**
      * Returns configration array for ExceptionHandlerHelper with user config merged with built-in config.
      *
@@ -165,17 +196,7 @@ class ExceptionHandlerHelper
     protected static function getExceptionHandlerConfig(string $key = null): array
     {
         $config = \Config::get(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, []);
-        Validator::assertArray(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $config);
-
-        if ($key !== null) {
-            if (array_key_exists($key, $config)) {
-                $config = $config[ $key ];
-            } else {
-                $config = [];
-            }
-        }
-
-        return $config;
+        return Util::mergeConfig(static::getExceptionHandlerDefaultConfig(), $config);
     }
 
 }

@@ -27,7 +27,6 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 {
     protected $config_files = [
         'response_builder.php',
-        'response_builder_exceptions.php',
     ];
 
     /**

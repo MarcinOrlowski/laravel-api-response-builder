@@ -337,7 +337,6 @@ trait TestingHelpers
         if (is_object($obj_or_class)) {
             $obj = $obj_or_class;
         } elseif (is_string($obj_or_class)) {
-//            $obj = new $obj_or_class();
             $obj = $obj_or_class;
 
         } else {

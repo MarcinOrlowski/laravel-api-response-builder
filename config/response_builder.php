@@ -61,6 +61,50 @@ return [
 
     /*
     |-----------------------------------------------------------------------------------------------------------
+    | Exception handler error codes
+    |-----------------------------------------------------------------------------------------------------------
+    |
+    */
+    'exception_handler' => [
+        'map' => [
+            /*
+             * HTTP Exceptions
+             * ---------------
+             * Use this section to define how you want any Http Exception to be handled.
+             * This means that you can define any Http code (i.e. 404 => HttpResponse::HTTP_NOT_FOUND)
+             * and then configure what api_code should be returned to the user. If Http code
+             * is not explicitely configured then `default` handler kicks in, and converts the exception
+             * as best as it can.
+             */
+//            HttpException::class => [
+//                // used by unauthenticated() to obtain api and http code for the exception
+//                HttpResponse::HTTP_UNAUTHORIZED         => [
+//                    'api_code'  => ApiCodes::YOUR_API_CODE,
+//                    'http_code' => HttpResponse::HTTP_UNAUTHORIZED,
+//                ],
+//                // Required by ValidationException handler
+//                HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
+//                    'api_code'  => ApiCodes::YOUR_API_CODE,
+//                    'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+//                ],
+//                // default handler is mandatory
+//                'default'                               => [
+//                    'api_code'  => ApiCodes::YOUR_API_CODE,
+//                    'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//                ],
+//            ],
+//            // This is final exception handler. If ex is not dealt with yet this is its last stop.
+//            // Default handler is mandatory.
+//            'default'            => [
+//                'api_code'  => ApiCodes::YOUR_API_CODE,
+//                'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+//            ],
+//        ],
+        ],
+    ],
+
+    /*
+    |-----------------------------------------------------------------------------------------------------------
     | data-to-json encoding options
     |-----------------------------------------------------------------------------------------------------------
     |
