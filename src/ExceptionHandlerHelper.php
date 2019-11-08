@@ -162,11 +162,11 @@ class ExceptionHandlerHelper
                 HttpException::class => [
                     // used by unauthenticated() to obtain api and http code for the exception
                     HttpResponse::HTTP_UNAUTHORIZED         => [
-                        'api_code'  => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+                        'api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
                     ],
                     // Required by ValidationException handler
                     HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-                        'api_code'  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+                        'api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
                     ],
                     // default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
                     'default'                               => [
@@ -184,17 +184,14 @@ class ExceptionHandlerHelper
     }
 
     /**
-     * Returns configration array for ExceptionHandlerHelper with user config merged with built-in config.
-     *
-     * @param string|null $key optional configuration node key to have only this portion of the
-     *                         config returned (i.e. `http_exception`).
+     * Returns ExceptionHandlerHelper configration array with user configuration merged into built-in defaults.
      *
      * @return array
      */
-    protected static function getExceptionHandlerConfig(string $key = null): array
+    protected static function getExceptionHandlerConfig(): array
     {
-        $config = \Config::get(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, []);
-        return Util::mergeConfig(static::getExceptionHandlerDefaultConfig(), $config);
+        return Util::mergeConfig(static::getExceptionHandlerDefaultConfig(),
+            \Config::get(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, []));
     }
 
 }
