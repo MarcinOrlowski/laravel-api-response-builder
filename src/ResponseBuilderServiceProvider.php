@@ -25,6 +25,11 @@ use Illuminate\Support\ServiceProvider;
 
 class ResponseBuilderServiceProvider extends ServiceProvider
 {
+    protected $config_files = [
+        'response_builder.php',
+        'response_builder_exceptions.php',
+    ];
+
     /**
      * Register bindings in the container.
      *
@@ -32,9 +37,9 @@ class ResponseBuilderServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(
-            __DIR__ . '/../config/response_builder.php', 'response_builder'
-        );
+        foreach ($this->config_files as $file) {
+            $this->mergeConfigFrom(__DIR__ . "/../config/{$file}", ResponseBuilder::CONF_CONFIG);
+        }
     }
 
     /**
@@ -46,10 +51,10 @@ class ResponseBuilderServiceProvider extends ServiceProvider
     {
         $this->loadTranslationsFrom(__DIR__ . '/lang', 'response-builder');
 
-        $source = __DIR__ . '/../config/response_builder.php';
-        $this->publishes([
-            $source => config_path('response_builder.php'),
-        ]);
+        foreach ($this->config_files as $file) {
+            $path = __DIR__ . "/../config/{$file}";
+            $this->publishes([$file => config_path($file)]);
+        }
     }
 
     /**
@@ -66,7 +71,10 @@ class ResponseBuilderServiceProvider extends ServiceProvider
         $config = $this->app['config']->get($key, []);
 
         $merged_config = Util::mergeConfig($defaults, $config);
-        Util::sortArrayByPri($merged_config['classes']);
+
+        if (array_key_exists('classes', $merged_config)) {
+            Util::sortArrayByPri($merged_config['classes']);
+        }
 
         $this->app['config']->set($key, $merged_config);
     }

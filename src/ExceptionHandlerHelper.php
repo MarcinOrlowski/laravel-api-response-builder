@@ -38,7 +38,7 @@ class ExceptionHandlerHelper
     public static function render(/** @scrutinizer ignore-unused */ $request, Exception $ex): HttpResponse
     {
         $result = null;
-        $cfg = self::getExceptionHandlerConfig();
+        $cfg = self::getExceptionHandlerConfig('map');
 
         if ($ex instanceof HttpException) {
             // Check if we have any exception configuration for this particular Http status code.
@@ -78,9 +78,9 @@ class ExceptionHandlerHelper
     protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
                                                                          AuthException $exception): HttpResponse
     {
-        $cfg = static::getExceptionHandlerConfig(HttpException::class);
-        $api_code = $cfg[ HttpResponse::HTTP_UNAUTHORIZED ]['api_code'];
-        $http_code = $cfg[ HttpResponse::HTTP_UNAUTHORIZED ]['http_code'];
+        $cfg = static::getExceptionHandlerConfig('map')[ HttpException::class ][ HttpResponse::HTTP_UNAUTHORIZED ];
+        $api_code = $cfg['api_code'];
+        $http_code = $cfg['http_code'];
 
         return static::error($exception, $api_code, $http_code);
     }
@@ -164,25 +164,18 @@ class ExceptionHandlerHelper
      */
     protected static function getExceptionHandlerConfig(string $key = null): array
     {
-        $config = \Config::get(ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY, []);
+        $config = \Config::get(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, []);
+        Validator::assertArray(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $config);
 
-        // handle all api_code_offset keys and insert valid api_code for it.
-        self::calculateApiCodes($config);
-        if (array_key_exists(HttpException::class, $config)) {
-            self::calculateApiCodes($config[ HttpException::class ]);
-        }
-
-        return ($key === null) ? $config : $config[ $key ];
-    }
-
-    protected static function calculateApiCodes(&$array): void
-    {
-        foreach ($array as $key => $params) {
-            if (array_key_exists('api_code_offset', $params)) {
-                $array[$key]['api_code'] = BaseApiCodes::getCodeForInternalOffset($params['api_code_offset']);
-                unset($array[$key]['api_code_offset']);
+        if ($key !== null) {
+            if (array_key_exists($key, $config)) {
+                $config = $config[ $key ];
+            } else {
+                $config = [];
             }
         }
 
+        return $config;
     }
+
 }

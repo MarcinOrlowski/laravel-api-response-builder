@@ -242,7 +242,7 @@ class ExceptionHandlerHelperTest extends TestCase
                 ],
             ],
         ];
-        Config::set(ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY, $cfg);
+        Config::set(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $cfg);
 
         $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
                 $ex,
@@ -305,43 +305,37 @@ class ExceptionHandlerHelperTest extends TestCase
 
     public function testBaseConfigStructure(): void
     {
-        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerConfig', []);
-        $this->assertIsArray($base_cfg);
-        $this->assertNotEmpty($base_cfg);
+        $base_cfg = $this->getExceptionHandlerConfig();
 
         // ensure mandatory keys are present.
+        $this->assertArrayHasKey('map', $base_cfg);
+
+        $map_cfg = $base_cfg['map'];
+
         $keys = [HttpException::class,
                  'default'];
-        foreach ($keys as $key) {
-            $this->assertArrayHasKey($key, $base_cfg);
-            $this->assertGreaterThanOrEqual(1, count($base_cfg[$key]));
-        }
+        $this->assertArrayHasKeys($keys, $map_cfg);
 
         // check http_exception block and validate all required entries and the config content.
-        $http_cfg = $base_cfg[HttpException::class];
+        $http_cfg = $map_cfg[ HttpException::class ];
         $this->assertGreaterThanOrEqual(1, count($http_cfg));
         $keys = [HttpResponse::HTTP_UNAUTHORIZED,];
+
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $http_cfg);
-            $this->checkConfig($http_cfg[$key]);
+            $this->checkConfig($http_cfg[ $key ]);
         }
         $this->assertArrayHasKey('default', $http_cfg);
-        $this->checkConfig($base_cfg['default']);
+        $this->checkConfig($http_cfg['default']);
 
         // check default handler config
-        $this->checkConfig($base_cfg['default']);
+        $this->checkConfig($map_cfg['default']);
     }
 
     public function testBaseConfigHttpExceptionConfig(): void
     {
-        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerConfig', []);
-        $this->assertIsArray($base_cfg);
-        $this->assertNotEmpty($base_cfg);
-
-        $this->assertArrayHasKey(HttpException::class, $base_cfg);
-        $http_cfg = $base_cfg[HttpException::class];
-        $this->assertIsArray($http_cfg);
-        $this->assertNotEmpty($http_cfg);
+        $cfg = $this->getExceptionHandlerConfig();
+        $http_cfg = $cfg['map'][ HttpException::class ];
 
         // get the translation array for default language
         $translation = $this->getTranslationForDefaultLang();
@@ -357,11 +351,13 @@ class ExceptionHandlerHelperTest extends TestCase
         }
     }
 
-    protected function getBaseconfig(): array
+    protected function getExceptionHandlerConfig(): array
     {
-        $base_cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerBaseConfig', []);
-        $this->assertIsArray($base_cfg);
-        $this->assertNotEmpty($base_cfg);
+        $cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerConfig', []);
+        $this->assertIsArray($cfg);
+        $this->assertNotEmpty($cfg);
+
+        return $cfg;
     }
 
     protected function checkConfig(array $params, int $code = null)
@@ -371,12 +367,26 @@ class ExceptionHandlerHelperTest extends TestCase
             $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $code);
         }
 
-        $this->assertArrayHasKey('api_code', $params);
+        // check if mandatory keys are present
+        $mandatory_keys = ['api_code',
+                           'http_code'];
+        $this->assertArrayHasKeys($mandatory_keys, $params);
+
         $this->assertGreaterThanOrEqual(BaseApiCodes::getMinCode(), $params['api_code']);
         $this->assertLessThanOrEqual(BaseApiCodes::getMaxCode(), $params['api_code']);
-
-        $this->assertArrayHasKey('http_code', $params);
         $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
         $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
+
+        // check config does not contain any unknown keys
+        $allowed_keys = $mandatory_keys + ['pri'];
+        $diff = [];
+        foreach ($params as $key => $val) {
+            if (!in_array($key, $allowed_keys)) {
+                $diff[] = $key;
+            }
+        }
+        $sep = "\n  ";
+        $msg = "Unknown keys in config for code {$code}:${sep}" . implode($sep, $diff);
+        $this->assertEmpty($diff, $msg);
     }
 }
