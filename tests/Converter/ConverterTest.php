@@ -284,6 +284,18 @@ class ConverterTest extends TestCase
         $this->assertEquals($model_5->getVal(), $converted[ $item3_key ][ $item5_key ]['val']);
     }
 
+    /**
+     * Checks if convert() throws exception when fed with invalid type of data.
+     */
+    public function testConvertWithInvalidDataType(): void
+    {
+        // Bool is not a valid type of data to be converted
+        $data = false;
+
+        $this->expectException(\InvalidArgumentException::class);
+        $converted = (new Converter())->convert($data);
+    }
+
     // -----------------------------------------------------------------------------------------------------------
 
     /**
