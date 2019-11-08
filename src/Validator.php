@@ -43,7 +43,7 @@ class Validator
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertInt(string $key, $var): void
+    public static function assertIsInt(string $key, $var): void
     {
         self::assertIsType($key, $var, [self::TYPE_INTEGER]);
     }
@@ -91,7 +91,7 @@ class Validator
      */
     public static function assertIsIntRange(string $name, $var, int $min, int $max): void
     {
-        self::assertInt($name, $var);
+        self::assertIsInt($name, $var);
 
         if ($min > $max) {
             throw new \RuntimeException(
@@ -132,7 +132,7 @@ class Validator
      */
     public static function assertErrorHttpCode(int $http_code): void
     {
-        self::assertInt('http_code', $http_code);
+        self::assertIsInt('http_code', $http_code);
         self::assertIsIntRange('http_code', $http_code,
             ResponseBuilder::ERROR_HTTP_CODE_MIN, ResponseBuilder::ERROR_HTTP_CODE_MAX);
     }
@@ -144,7 +144,7 @@ class Validator
      */
     public static function assertOkHttpCode(int $http_code): void
     {
-        self::assertInt('http_code', $http_code);
+        self::assertIsInt('http_code', $http_code);
         self::assertIsIntRange('http_code', $http_code, 200, 299);
     }
 }

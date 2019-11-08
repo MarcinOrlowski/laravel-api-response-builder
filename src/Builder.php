@@ -145,7 +145,7 @@ class Builder
     public function build(): HttpResponse
     {
         $api_code = $this->api_code;
-        Validator::assertInt('api_code', $api_code);
+        Validator::assertIsInt('api_code', $api_code);
 
         $msg_or_api_code = $this->message ?? $api_code;
         $http_headers = $this->http_headers ?? [];
@@ -201,9 +201,9 @@ class Builder
         $http_code = $http_code ?? ($success ? ResponseBuilder::DEFAULT_HTTP_CODE_OK : ResponseBuilder::DEFAULT_HTTP_CODE_ERROR);
         $json_opts = $json_opts ?? Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
 
-        Validator::assertInt('encoding_options', $json_opts);
+        Validator::assertIsInt('encoding_options', $json_opts);
 
-        Validator::assertInt('api_code', $api_code);
+        Validator::assertIsInt('api_code', $api_code);
         if (!BaseApiCodes::isCodeValid($api_code)) {
             Validator::assertIsIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
         }

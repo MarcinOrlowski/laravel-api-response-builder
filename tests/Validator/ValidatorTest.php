@@ -22,9 +22,9 @@ class ValidatorTest extends TestCase
      *
      * @return void
      */
-    public function testAssertIntCorrectType(): void
+    public function testAssertIsIntCorrectType(): void
     {
-        Validator::assertInt(__FUNCTION__, 666);
+        Validator::assertIsInt(__FUNCTION__, 666);
         // This assert won't be called if exception is thrown
         $this->assertTrue(true);
     }
@@ -34,10 +34,10 @@ class ValidatorTest extends TestCase
      *
      * @return void
      */
-    public function testAssertIntWrongType(): void
+    public function testAssertIsIntWrongType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        Validator::assertInt(__FUNCTION__, 'chicken');
+        Validator::assertIsInt(__FUNCTION__, 'chicken');
     }
 
 
@@ -46,7 +46,7 @@ class ValidatorTest extends TestCase
      *
      * @return void
      */
-    public function testAssertStringCorrectType(): void
+    public function testAssertIsStringCorrectType(): void
     {
         Validator::assertIsString(__FUNCTION__, 'string');
         // This assert won't be called if exception is thrown
@@ -58,7 +58,7 @@ class ValidatorTest extends TestCase
      *
      * @return void
      */
-    public function testAssertStringWrongType(): void
+    public function testAssertIsStringWrongType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         Validator::assertIsString(__FUNCTION__, 666);
@@ -69,9 +69,8 @@ class ValidatorTest extends TestCase
      *
      * @return void
      */
-    public function testAssertIntRangeVarType(): void
+    public function testAssertIsIntRangeVarType(): void
     {
-        // ensure main variable is an integer
         $this->expectException(\InvalidArgumentException::class);
         Validator::assertIsIntRange(__FUNCTION__, 'string', 100, 200);
     }
@@ -81,9 +80,8 @@ class ValidatorTest extends TestCase
      *
      * @return void
      */
-    public function testAssertIntRangeMinMaxOrder(): void
+    public function testAssertIsIntRangeMinMaxOrder(): void
     {
-        // ensure main variable is an integer
         $this->expectException(\RuntimeException::class);
         Validator::assertIsIntRange(__FUNCTION__, 300, 500, 200);
     }
@@ -93,7 +91,7 @@ class ValidatorTest extends TestCase
      *
      * @return void
      */
-    public function testAssertIntRangeVarInMinMaxRange(): void
+    public function testAssertIsIntRangeVarInMinMaxRange(): void
     {
         // ensure main variable is an integer
         $this->expectException(\InvalidArgumentException::class);
@@ -160,5 +158,24 @@ class ValidatorTest extends TestCase
                 $key, $data['item'], gettype($data['item']), implode(', ', $data['types']));
             $this->assertEquals($test_passed, $data['expected'], $msg);
         }
+    }
+
+    /**
+     * Checks behavior of assertIsArray() with valid data
+     */
+    public function testAssertIsArrayWithValidData(): void
+    {
+        Validator::assertIsArray(__FUNCTION__, []);
+        // This assert won't be called if exception is thrown
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Checks behavior of assertIsArray() with invalid data
+     */
+    public function testAssertIsArrayWithInvalidData(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        Validator::assertIsArray(__FUNCTION__, false);
     }
 }
