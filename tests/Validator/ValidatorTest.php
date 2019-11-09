@@ -88,6 +88,31 @@ class ValidatorTest extends TestCase
 
     // -----------------------------------------------------------------------------------------------------------
 
+    /**
+     * Tests if assertIsBool() pass with valid data type
+     *
+     * @return void
+     */
+    public function testAssertIsBoolCorrectType(): void
+    {
+        Validator::assertIsBool(__FUNCTION__, false);
+        // This assert won't be called if exception is thrown
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Tests if assertIsBool() throws exception when feed with invalid type argument.
+     *
+     * @return void
+     */
+    public function testAssertIsBoolWrongType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        Validator::assertIsBool(__FUNCTION__, 666);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------
+
     public function testAssertIsIntRangeWithValidData(): void
     {
         Validator::assertIsIntRange(__FUNCTION__, 300, 100, 500);
