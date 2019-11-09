@@ -337,7 +337,6 @@ trait TestingHelpers
             $obj = $obj_or_class;
         } elseif (is_string($obj_or_class)) {
             $obj = $obj_or_class;
-
         } else {
             throw new \RuntimeException('getProtectedMethod() expects object or valid class name argument');
         }

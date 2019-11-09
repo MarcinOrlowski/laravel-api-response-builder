@@ -51,8 +51,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/lang', 'response-builder');
 
         foreach ($this->config_files as $file) {
-            $path = __DIR__ . "/../config/{$file}";
-            $this->publishes([$file => config_path($file)]);
+            $this->publishes([__DIR__ . "/../config/{$file}" => config_path($file)]);
         }
     }
 
