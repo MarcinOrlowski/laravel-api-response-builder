@@ -66,6 +66,12 @@ return [
     |
     */
     'exception_handler' => [
+        /*
+         * The following options can be used for each entry specified:
+         * `api_code`: (int) mandatory api_code to be used for given exception
+         * `http_code`: (int) optional HTTP code. If not specified, exception's HTTP status code will be used.
+         * `msg_key`: (string) optional localization string key to be used
+         */
         'map' => [
             /*
              * HTTP Exceptions

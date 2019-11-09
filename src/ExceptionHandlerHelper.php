@@ -56,7 +56,8 @@ class ExceptionHandlerHelper
             $ex_cfg = $cfg[ HttpException::class ][ $http_code ];
             $api_code = $ex_cfg['api_code'] ?? BaseApiCodes::EX_UNCAUGHT_EXCEPTION();
             $http_code = $ex_cfg['http_code'] ?? $http_code;
-            $result = static::error($ex, $api_code, $http_code);
+            $msg_key = $ex_cfg['msg_key'] ?? null;
+            $result = static::error($ex, $api_code, $http_code, $msg_key);
         }
 
         if ($result === null) {
@@ -112,30 +113,37 @@ class ExceptionHandlerHelper
             $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
         }
 
-        // Let's build the error message.
+        // No message key, let's get exception message and if there's nothing useful, fallback to built-in one.
         $error_message = $ex->getMessage();
-
         $placeholders = [
             'api_code' => $api_code,
             'message'  => ($error_message !== '') ? $error_message : '???',
         ];
 
-        // Check if we have dedicated HTTP Code message for this type of HttpException and its status code.
-        if (($error_message === '') && ($ex instanceof HttpException)) {
-            $error_message = Lang::get("response-builder::builder.http_{$ex_http_code}", $placeholders);
+        if ($msg_key === null) {
+            // Check if we have dedicated HTTP Code message for this type of HttpException and its status code.
+            if (($error_message === '') && ($ex instanceof HttpException)) {
+                $error_message = Lang::get("response-builder::builder.http_{$ex_http_code}", $placeholders);
+            }
+
+            // Still got nothing? Fall back to built-in generic message for this type of exception.
+            if ($error_message === '') {
+                $key = BaseApiCodes::getCodeMessageKey(($ex instanceof HttpException)
+                    ? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
+                $error_message = Lang::get($key, $placeholders);
+            }
+        } else {
+            // We have msg_key specified, so let's use it and ignore anything else.
+            $error_message = Lang::get($msg_key, $placeholders);
         }
 
-        // Still got nothing? Fall back to built-in generic message for this type of exception.
-        if ($error_message === '') {
-            $key = BaseApiCodes::getCodeMessageKey(($ex instanceof HttpException)
-                ? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
-            $error_message = Lang::get($key, $placeholders);
-        }
+
+
 
         // If we have trace data debugging enabled, let's gather some debug info and add to the response.
-        $trace_data = null;
+        $debug_data = null;
         if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, false)) {
-            $trace_data = [
+            $debug_data = [
                 Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE) => [
                     ResponseBuilder::KEY_CLASS => get_class($ex),
                     ResponseBuilder::KEY_FILE  => $ex->getFile(),
@@ -151,8 +159,12 @@ class ExceptionHandlerHelper
             $data = [ResponseBuilder::KEY_MESSAGES => $ex->validator->errors()->messages()];
         }
 
-        return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data,
-            $http_code, null, $trace_data);
+        return Builder::error($api_code)
+            ->withMessage($error_message)
+            ->withHttpCode($http_code)
+            ->withData($data)
+            ->withDebugData($debug_data)
+            ->build();
     }
 
     protected static function getExceptionHandlerDefaultConfig(): array
