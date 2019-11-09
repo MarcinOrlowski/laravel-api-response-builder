@@ -68,9 +68,16 @@ return [
     'exception_handler' => [
         /*
          * The following options can be used for each entry specified:
-         * `api_code`: (int) mandatory api_code to be used for given exception
-         * `http_code`: (int) optional HTTP code. If not specified, exception's HTTP status code will be used.
-         * `msg_key`: (string) optional localization string key to be used
+         * `api_code`   : (int) mandatory api_code to be used for given exception
+         * `http_code`  : (int) optional HTTP code. If not specified, exception's HTTP status code will be used.
+         * `msg_key`    : (string) optional localization string key (ie. 'app.my_error_string') which will be used
+         *                if exception's message is empty. If `msg_key` is not provided, ExceptionHandler will
+         *                fall back to built-in message.
+         * `msg_enforce`: (boolean) if `true`, then fallback message (either one specified with `msg_key`, or
+         *                built-in one will **always** be used, ignoring exception's message string completely.
+         *                If set to `false` (default) then it will enforce either built-in message (if no
+         *                `msg_key` is set, or message referenced by `msg_key` completely ignoring exception
+         *                message ($ex->getMessage()).
          */
         'map' => [
             /*

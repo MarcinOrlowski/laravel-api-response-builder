@@ -225,7 +225,9 @@ class ExceptionHandlerHelperTest extends TestCase
         // get the translation array for default language
         $translation = $this->getTranslationForDefaultLang();
 
-        for ($code = ResponseBuilder::ERROR_HTTP_CODE_MIN; $code <= ResponseBuilder::ERROR_HTTP_CODE_MAX; $code++) {
+//        for ($code = ResponseBuilder::ERROR_HTTP_CODE_MIN; $code <= ResponseBuilder::ERROR_HTTP_CODE_MAX; $code++) {
+        {
+            $code = 401;
             $key = "http_{$code}";
             // there are some gaps in the codes defined, but as default language  covers all codes supported,
             // then we can safely skip the codes not covered by default language.
@@ -243,8 +245,8 @@ class ExceptionHandlerHelperTest extends TestCase
 
                 // Ensure returned response used HTTP code from the exception
                 $this->assertNotEmpty($json->message);
-                $this->assertEquals($translation[ $key ], $json->message);
-
+                $this->assertEquals($translation[ $key ], $json->message,
+                    "Error message mismatch for HTTP code: {$code}");
             }
         }
     }
@@ -272,13 +274,13 @@ class ExceptionHandlerHelperTest extends TestCase
 
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $http_cfg);
-            $this->checkExceptionHandlerConfigEntry($http_cfg[ $key ], null, ($key === 'default'));
+            $this->checkExceptionHandlerConfigEntryStructure($http_cfg[ $key ], null, ($key === 'default'));
         }
         $this->assertArrayHasKey('default', $http_cfg);
-        $this->checkExceptionHandlerConfigEntry($http_cfg['default']);
+        $this->checkExceptionHandlerConfigEntryStructure($http_cfg['default']);
 
         // check default handler config
-        $this->checkExceptionHandlerConfigEntry($map_cfg['default']);
+        $this->checkExceptionHandlerConfigEntryStructure($map_cfg['default']);
     }
 
     /**
@@ -294,13 +296,100 @@ class ExceptionHandlerHelperTest extends TestCase
 
         foreach ($http_cfg as $code => $params) {
             if (is_int($code)) {
-                $this->checkExceptionHandlerConfigEntry($params, $code);
+                $this->checkExceptionHandlerConfigEntryStructure($params, $code);
             } elseif (is_string($code) && $code == 'default') {
-                $this->checkExceptionHandlerConfigEntry($params, null, true);
+                $this->checkExceptionHandlerConfigEntryStructure($params, null, true);
             } else {
                 $this->fail("Code '{$code}' is not allowed in config->exception_handler->http_exception.");
             }
         }
+    }
+
+    /**
+     * Checks if ExceptionHandler would return exception's message if exists but fall
+     * back to `msg_key` ignoring built-in default string
+     */
+    public function testExceptionMessageOverrideExceptionMessageOnly(): void
+    {
+        // HAVING exception handler configured to use user provided message string
+        $api_code = BaseApiCodes::EX_HTTP_NOT_FOUND();
+        $http_code = HttpResponse::HTTP_SERVICE_UNAVAILABLE;
+        $msg_key = $this->getRandomString('key');
+        $cfg = [
+            'map' => [
+                'default' => [
+                    'api_code'  => $api_code,
+                    'http_code' => $http_code,
+                    'msg_key'   => $msg_key,
+                    'msg_force' => false,
+                ],
+            ],
+        ];
+        Config::set(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $cfg);
+
+        // GIVEN exception with message that should be handled
+        $ex_msg = $this->getRandomString('user_msg');
+        $ex = new \RuntimeException($ex_msg);
+
+        $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'render', [null,
+                                                                                         $ex]);
+        $json = json_decode($response->getContent(), false);
+        $this->assertValidResponse($json);
+
+        // THEN we should see exception message.
+
+        // however thre's no message matching $msg_key, but Lang::get() would return
+        // the key if no string exists, which is sufficient
+        $this->assertEquals($ex_msg, $json->message);
+
+        $this->assertEquals($http_code, $response->getStatusCode());
+        $this->assertEquals($api_code, $json->code);
+    }
+
+
+    /**
+     * Checks if ExceptionHandler would ignore exception's message as well as built-in fallback message
+     * and use the one configured with `msg_key` instead.
+     */
+    public function testExceptionMessageForceOverride(): void
+    {
+        // HAVING exception handler configured to use user provided message string
+        $api_code = BaseApiCodes::EX_HTTP_NOT_FOUND();
+        $http_code = HttpResponse::HTTP_SERVICE_UNAVAILABLE;
+        $msg_key = $this->getRandomString('key');
+        $cfg = [
+            'map' => [
+                'default' => [
+                    'api_code'  => $api_code,
+                    'http_code' => $http_code,
+                    'msg_key'   => $msg_key,
+                    'msg_force' => true,
+                ],
+            ],
+        ];
+        Config::set(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $cfg);
+
+        // GIVEN exception that should be handled
+        $ex = new \RuntimeException('this message should be ignored');
+
+        $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
+                $ex,
+                $api_code,
+                $http_code,
+                $msg_key,
+            ]
+        );
+
+        // get response as Json object
+        $json = json_decode($response->getContent(), false);
+        $this->assertValidResponse($json);
+
+        // however thre's no message matching $msg_key, but Lang::get() would return
+        // the key if no string exists, which is sufficient
+        $this->assertEquals($msg_key, $json->message);
+
+        $this->assertEquals($http_code, $response->getStatusCode());
+        $this->assertEquals($api_code, $json->code);
     }
 
     // -----------------------------------------------------------------------------------------------------------
@@ -321,13 +410,12 @@ class ExceptionHandlerHelperTest extends TestCase
     {
         // HAVING incorrectly configured exception handler
         $cfg = [
-            'exception' => [
-                'http_exception' => [
+            'map' => [
+                HttpException::class => [
                     HttpResponse::HTTP_NOT_FOUND => [
                         // i.e. OK (0) is invalid code for error response.
                         'api_code'  => BaseApiCodes::EX_HTTP_NOT_FOUND(),
                         'http_code' => $config_http_code,
-
                     ],
                 ],
             ],
@@ -338,6 +426,7 @@ class ExceptionHandlerHelperTest extends TestCase
                 $ex,
                 BaseApiCodes::EX_HTTP_NOT_FOUND(),
                 $config_http_code,
+                '',
             ]
         );
 
@@ -383,8 +472,8 @@ class ExceptionHandlerHelperTest extends TestCase
      * @param int|null $code
      * @param bool     $is_default_handler
      */
-    protected function checkExceptionHandlerConfigEntry(array $params, int $code = null,
-                                                        bool $is_default_handler = false): void
+    protected function checkExceptionHandlerConfigEntryStructure(array $params, int $code = null,
+                                                                 bool $is_default_handler = false): void
     {
         if (is_int($code)) {
             $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $code);
@@ -396,7 +485,10 @@ class ExceptionHandlerHelperTest extends TestCase
                 'api_code',
                 'http_code',
             ];
-            $optional_keys = ['pri'];
+            $optional_keys = [
+                'pri',
+                'msg_key',
+                'msg_force'];
         } else {
             $mandatory_keys = [
                 'api_code',
@@ -404,6 +496,8 @@ class ExceptionHandlerHelperTest extends TestCase
             $optional_keys = [
                 'http_code',
                 'pri',
+                'msg_key',
+                'msg_force',
             ];
         }
 
