@@ -75,7 +75,7 @@ class ResponseBuilder
     public const KEY_FILE    = 'file';
     public const KEY_LINE    = 'line';
     public const KEY_KEY     = 'key';
-    public const KEY_METHOD  = 'method';
+    public const KEY_HANDLER = 'handler';
     public const KEY_SUCCESS = 'success';
     public const KEY_CODE    = 'code';
     public const KEY_LOCALE  = 'locale';

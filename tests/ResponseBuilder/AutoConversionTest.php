@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
@@ -35,7 +36,7 @@ class AutoConversionTest extends TestCase
         $classes = [
             $model_class_name => [
                 ResponseBuilder::KEY_KEY    => $this->getRandomString('single_item_key'),
-                ResponseBuilder::KEY_METHOD => 'toArray',
+                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class
             ],
         ];
         Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
@@ -73,7 +74,7 @@ class AutoConversionTest extends TestCase
         $classes = [
             $model_class_name => [
                 ResponseBuilder::KEY_KEY    => 'should-not-be-used',
-                ResponseBuilder::KEY_METHOD => 'toArray',
+                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
         ];
         Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);

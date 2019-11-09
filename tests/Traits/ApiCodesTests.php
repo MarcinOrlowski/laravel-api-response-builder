@@ -207,7 +207,7 @@ trait ApiCodesTests
 
         $mandatory_keys = [
             ResponseBuilder::KEY_KEY,
-            ResponseBuilder::KEY_METHOD,
+            ResponseBuilder::KEY_HANDLER,
         ];
         foreach ($classes as $class_name => $class_config) {
             foreach ($mandatory_keys as $key_name) {
