@@ -19,6 +19,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
      `successWithHttpCode()`, `errorWithData()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()`,
      `errorWithMessageAndData()`, `errorWithMessageAndDataAndDebug()`, `errorWithMessage()` please see
      the docs for replacement code.
+   * Added support for external data converters (config format changed)
+   * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler`
+     needs to be added now, pointing to the class implementing `ConverterContract` acting as delegate worker.
 
 * v6.3.2 (2019-11-07)
    * Added `ResponseBuilder::successWithMessage()` method.
