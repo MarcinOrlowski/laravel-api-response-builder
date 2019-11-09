@@ -41,7 +41,7 @@ class InternalsTest extends TestCase
     {
         \Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod(Converter::class, 'getClassesMapping');

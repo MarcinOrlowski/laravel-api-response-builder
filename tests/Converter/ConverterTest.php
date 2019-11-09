@@ -30,7 +30,7 @@ class ConverterTest extends TestCase
         Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
 
         // THEN we expect exception thrown
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         // WHEN attempt to instantiate Converter class
         new Converter();
@@ -75,7 +75,7 @@ class ConverterTest extends TestCase
     {
         Config::set(ResponseBuilder::CONF_KEY_CLASSES, 'invalid');
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod(Converter::class, 'getClassesMapping');
