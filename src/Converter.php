@@ -14,7 +14,6 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
 
@@ -102,7 +101,8 @@ class Converter
 
         if (is_object($data)) {
             $cfg = $this->getClassMappingConfigOrThrow($data);
-            $data = [$cfg[ ResponseBuilder::KEY_KEY ] => $data->{$cfg[ ResponseBuilder::KEY_METHOD ]}()];
+            $worker = new $cfg[ResponseBuilder::KEY_HANDLER]();
+            $data = [$cfg[ ResponseBuilder::KEY_KEY ] => $worker->convert($data, $cfg)];
         } elseif (!is_array($data)) {
             throw new \InvalidArgumentException(
                 sprintf('Payload must be null, array or object with mapping ("%s" given).', gettype($data)));
@@ -148,8 +148,9 @@ class Converter
             } elseif (is_object($val)) {
                 $cls = get_class($val);
                 if (array_key_exists($cls, $this->classes)) {
-                    $conversion_method = $this->classes[ $cls ][ ResponseBuilder::KEY_METHOD ];
-                    $converted_data = $val->$conversion_method();
+                    $cfg = $this->classes[ $cls ];
+                    $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
+                    $converted_data = $worker->convert($val, $cfg);
                     $data[ $key ] = $converted_data;
                 }
             }
@@ -177,7 +178,7 @@ class Converter
 
             $mandatory_keys = [
                 ResponseBuilder::KEY_KEY,
-                ResponseBuilder::KEY_METHOD,
+                ResponseBuilder::KEY_HANDLER,
             ];
             foreach ($classes as $class_name => $class_config) {
                 foreach ($mandatory_keys as $key_name) {
