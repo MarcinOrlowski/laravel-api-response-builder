@@ -52,7 +52,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 
         foreach ($this->config_files as $file) {
             $path = __DIR__ . "/../config/{$file}";
-            $this->publishes([$file => config_path($file)]);
+            $this->publishes([$path => config_path($file)]);
         }
     }
 
