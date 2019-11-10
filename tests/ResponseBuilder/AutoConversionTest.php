@@ -39,7 +39,7 @@ class AutoConversionTest extends TestCase
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $classes);
 
         // WHEN this object is returned
         $this->response = ResponseBuilder::success($model);
@@ -77,7 +77,7 @@ class AutoConversionTest extends TestCase
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $classes);
 
         // AND having the object as part of bigger data set
         $tmp_base = [];

@@ -197,7 +197,7 @@ trait ApiCodesTests
      */
     public function testConfigClassesMappingEntries(): void
     {
-        $classes = \Config::get(ResponseBuilder::CONF_KEY_CLASSES) ?? [];
+        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER) ?? [];
         if (count($classes) === 0) {
             // to make PHPUnit not complaining about no assertion.
             $this->assertTrue(true);

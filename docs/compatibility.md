@@ -9,6 +9,9 @@
    but it only affects you if you have custom configuratoin for ExceptionHandlerHelper. If you do not use
    it or do just use default configuration, then you are not affected. If you are affected, please see
    [configuration docs](config.md) for more information.
+ * `[BREAKING]` Data mapping's `method` key is gone. Now you need to use `handler` and give name of
+   class that implements `ConverterContract`. 
+ * `[BREAKING]` CONFIG: `classes` key is renamed to `data_conversion`
  * `[Low]` Simplified the API by introducing Builder helper class, utilising Builder pattern, therefore the 
    following methods are now deprecated and its use should be replaced with the Builder class (see
    ResponseBuilder class source code for copy&paste replacement code. Deprecated methods: `successWithCode()`,

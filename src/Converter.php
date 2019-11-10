@@ -69,7 +69,7 @@ class Converter
             $result = $this->classes[ $cls ];
         } else {
             // no exact match, then lets try with `instanceof`
-            foreach (array_keys($this->classes) as $class_name) {
+            foreach (array_keys($this->getClasses()) as $class_name) {
                 if ($data instanceof $class_name) {
                     $result = $this->classes[ $class_name ];
                     break;
@@ -168,7 +168,7 @@ class Converter
      */
     protected static function getClassesMapping(): array
     {
-        $classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES);
+        $classes = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
 
         if ($classes !== null) {
             if (!is_array($classes)) {

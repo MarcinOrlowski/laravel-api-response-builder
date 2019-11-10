@@ -14,7 +14,7 @@
  Available configuration options and its current default values listed in alphabetical order. Please note, that in majority
  of use cases it should be perfectly sufficient to just use defaults and only tune the config when needed.
  
- * [classes](#classes)
+ * [converter](#converter)
  * [debug](#debug)
  * [encoding_options](#encoding_options)
  * [exception_handler](#exception_handler)
@@ -32,26 +32,27 @@ box:
  * `\Illuminate\Database\Eloquent\Collection`     
  * `\Illuminate\Http\Resources\Json\JsonResource` 
 
-Create new entry for each class you want to have supported.
-The entry key is a full class name (including namespace):
+Create new entry for each class you want to have supported. The entry key is a full class name (including namespace):
 
 ```php
-'classes' => [
+'converter' => [
     Namespace\Classname::class => [
-        'method' => 'toArray',
-        'key'    => 'items',
+        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        'key'     => 'items',
         
         // Optional paramters
-        'pri'    => 0,  
+        'pri'    => 0, 
         ],
 ],
 ```
-Where `method` is a name of the method to that `ResponseBuilder` should call on the object to obtain array representation of its 
-internal state, while `key` is a string that will be used as the JSON response as key to array representation.
+The `handler` is full name of the class that implements `ConverterContract`. Object of that class will be instantiated
+and conversion method will be invked. The `key` is a string that will be used as the JSON response as key to array representation.
 
-**NOTE:** order or entries matters as matching is done in order of appearance and is done using PHP `instanceof`. 
+All configuration entries are assigned priority `0` which can be changed using `pri` key (integer). This value is used to
+sort the entries to ensure that matching order is preserved. Entries with higher priority are matched first etc. This is
+very useful when you want to indirect configuration for two classes where additionally second extends first one. 
 So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A` 
-then `B` related configuration must be put first.
+then `B` related configuration must be set with higher priority.
 
 See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
  

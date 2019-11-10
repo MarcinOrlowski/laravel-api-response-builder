@@ -62,7 +62,7 @@ final class Util
      */
     public static function sortArrayByPri(array &$array): void
     {
-        // we now need to sort 'classes' node by priority
+        // we now need to sort 'converter' node by priority
         uasort($array, function($array_a, $array_b) {
             $pri_a = $array_a['pri'] ?? 0;
             $pri_b = $array_b['pri'] ?? 0;

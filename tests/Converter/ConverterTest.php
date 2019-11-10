@@ -28,7 +28,7 @@ class ConverterTest extends TestCase
     public function testConstructor(): void
     {
         // GIVEN incorrect mapping configuration
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, false);
 
         // THEN we expect exception thrown
         $this->expectException(\RuntimeException::class);
@@ -51,7 +51,7 @@ class ConverterTest extends TestCase
         $child = new TestModelChild($child_val);
 
         // HAVING indirect mapping configuration (of parent class)
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
             get_class($parent) => [
                 ResponseBuilder::KEY_KEY     => $parent_key,
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -74,7 +74,7 @@ class ConverterTest extends TestCase
      */
     public function testGetClassesMapping_InvalidConfigurationData(): void
     {
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, 'invalid');
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, 'invalid');
 
         $this->expectException(\RuntimeException::class);
 
@@ -89,7 +89,7 @@ class ConverterTest extends TestCase
     {
         // Remove any classes config
         /** @noinspection PhpUndefinedMethodInspection */
-        Config::offsetUnset(ResponseBuilder::CONF_KEY_CLASSES);
+        Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $result = $this->callProtectedMethod(Converter::class, 'getClassesMapping');
@@ -107,7 +107,7 @@ class ConverterTest extends TestCase
 
         // AND having its class configured for auto conversion
         $fallback_key = $this->getRandomString('fallback_key');
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
             get_class($model) => [
                 ResponseBuilder::KEY_KEY     => $fallback_key,
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -141,7 +141,7 @@ class ConverterTest extends TestCase
         ];
 
         // AND having its class configured for auto conversion
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
             get_class($model_1) => [
                 ResponseBuilder::KEY_KEY     => 'XXX',
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -182,7 +182,7 @@ class ConverterTest extends TestCase
         ];
 
         // AND having its class configured for auto conversion
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
             get_class($model_1) => [
                 ResponseBuilder::KEY_KEY     => 'XXX',
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -221,7 +221,7 @@ class ConverterTest extends TestCase
         ];
 
         // AND having its class configured for auto conversion
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
             get_class($model_1) => [
                 ResponseBuilder::KEY_KEY     => 'XXX',
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -263,7 +263,7 @@ class ConverterTest extends TestCase
         ];
 
         // AND having its class configured for auto conversion
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
             get_class($model_1) => [
                 ResponseBuilder::KEY_KEY     => 'XXX',
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
