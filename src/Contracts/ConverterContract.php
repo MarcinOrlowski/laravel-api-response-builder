@@ -13,8 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Contracts;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-
 interface ConverterContract
 {
-    public function convert($obj, array $config): array;
+    public function convert(\StdClass $obj, array $config): array;
 }

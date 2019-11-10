@@ -36,7 +36,7 @@ return [
     |-----------------------------------------------------------------------------------------------------------
     |
     */
-    'converter'   => [
+    'converter'         => [
         \Illuminate\Database\Eloquent\Model::class          => [
             'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
             'key'     => 'item',
@@ -56,6 +56,11 @@ return [
             'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
             'key'     => 'item',
             'pri'     => 0,
+        ],
+        \JsonSerializable::class                            => [
+            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\JsonSerializableConverter::class,
+            'key'     => 'item',
+            'pri'     => -10,
         ],
     ],
 
@@ -88,28 +93,28 @@ return [
              * Additionally, you can specify `http_code` to be any valid 400-599 HTTP status code, otherwise
              * code set in the exception will be used.
              */
-//            HttpException::class => [
-//                // used by unauthenticated() to obtain api and http code for the exception
-//                HttpResponse::HTTP_UNAUTHORIZED         => [
-//                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNATHORIZED_EXCEPTION,
-//                ],
-//                // Required by ValidationException handler
-//                HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-//                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_VALIDATION_EXCEPTION,
-//                ],
-//                // default handler is mandatory and MUST have both `api_code` and `http_code` set.
-//                'default'                               => [
-//                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_GENERIC_HTTP_EXCEPTION,
-//                    'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-//                ],
-//            ],
-//            // This is final exception handler. If ex is not dealt with yet this is its last stop.
-//            // default handler is mandatory and MUST have both `api_code` and `http_code` set.
-//            'default'            => [
-//                'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNHANDLED_EXCEPTION,
-//                'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-//            ],
-//        ],
+            //            HttpException::class => [
+            //                // used by unauthenticated() to obtain api and http code for the exception
+            //                HttpResponse::HTTP_UNAUTHORIZED         => [
+            //                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNATHORIZED_EXCEPTION,
+            //                ],
+            //                // Required by ValidationException handler
+            //                HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
+            //                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_VALIDATION_EXCEPTION,
+            //                ],
+            //                // default handler is mandatory and MUST have both `api_code` and `http_code` set.
+            //                'default'                               => [
+            //                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_GENERIC_HTTP_EXCEPTION,
+            //                    'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+            //                ],
+            //            ],
+            //            // This is final exception handler. If ex is not dealt with yet this is its last stop.
+            //            // default handler is mandatory and MUST have both `api_code` and `http_code` set.
+            //            'default'            => [
+            //                'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNHANDLED_EXCEPTION,
+            //                'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+            //            ],
+            //        ],
         ],
     ],
 
