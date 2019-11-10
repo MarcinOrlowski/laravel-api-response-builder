@@ -22,6 +22,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Added support for external data converters (config format changed)
    * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler`
      needs to be added now, pointing to the class implementing `ConverterContract` acting as delegate worker.
+   * Data converter can now handle objects implementing `JsonSerializable`.
 
 * v6.3.2 (2019-11-07)
    * Added `ResponseBuilder::successWithMessage()` method.

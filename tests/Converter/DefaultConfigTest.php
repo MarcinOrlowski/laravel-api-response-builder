@@ -19,9 +19,37 @@ use Illuminate\Support\Collection as SupportCollection;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonResource;
+use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonSerializable;
 
 class DefaultConfigTest extends TestCase
 {
+    /**
+     * Tests built-in support for JsonSerializable class on default
+     *
+     * @return void
+     */
+    public function testJsonSerializable(): void
+    {
+        // GIVEN JsonSerializable class object
+        $obj_val = $this->getRandomString('obj_val');
+        $obj = new TestModelJsonSerializable($obj_val);
+
+        $converter = new Converter();
+        $cfg = $converter->getClasses();
+
+        // WHEN we try to pass of object of that class
+        $result = $converter->convert($obj);
+
+        // THEN it should be converted automatically as per configuration
+        $this->assertIsArray($result);
+
+        $key = $cfg[ JsonResource::class ][ ResponseBuilder::KEY_KEY ];
+        $this->assertArrayHasKey($key, $result);
+        $this->assertIsArray($result[ $key ]);
+        $this->assertArrayHasKey('val', $result[ $key ]);
+        $this->assertEquals($result[ $key ]['val'], $obj_val);
+    }
+
     /**
      * Tests built-in support for JsonResource class on default
      *
