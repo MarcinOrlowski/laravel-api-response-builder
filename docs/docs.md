@@ -25,9 +25,8 @@
 
 ## Response structure ##
 
- Predictability, simplicity and no special-case is the key of the `ResponseBuilder` design. I wanted to make my life
- easier not only when I develop the API itself, but also when I'd try to use it i.e. in mobile applications, 
- therefore all responses created by this package **guarantee** consistent JSON structure by design.
+ Predictability, simplicity and no special-case is the key of the `ResponseBuilder` and all responses created by
+ this library **guarantee** consistent JSON structure by design.
  
  By default response always contain at least the following elements:
 
