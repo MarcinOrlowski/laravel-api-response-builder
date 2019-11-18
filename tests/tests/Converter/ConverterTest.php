@@ -156,14 +156,14 @@ class ConverterTest extends TestCase
         $converted = $converter->convert($data);
 
         $this->assertIsArray($converted);
-        $this->assertCount(3, $converted);
         $this->assertCount(count($data), $converted);
         $this->assertArrayNotHasKey($conv_key, $converted);
 
-        $this->assertValidConvertedTestClass($model_1, $converted[0]);
         $this->assertArrayNotHasKey($conv_key, $converted[0]);
-        $this->assertValidConvertedTestClass($model_2, $converted[1]);
+        $this->assertValidConvertedTestClass($model_1, $converted[0]);
         $this->assertArrayNotHasKey($conv_key, $converted[1]);
+        $this->assertValidConvertedTestClass($model_2, $converted[1]);
+        $this->assertIsNotBool($converted[2]);
         $this->assertNull($converted[2]);
     }
 
@@ -352,7 +352,7 @@ class ConverterTest extends TestCase
         $result = $converter->convert($data);
 
         $this->assertIsArray($result);
-        $this->assertCount(2, $result);
+        $this->assertCount(count($data), $result);
         $this->assertArrayHasKey('val', $result[0]);
         $this->assertEquals($model_1->getVal(), $result[0]['val']);
         $this->assertArrayHasKey('val', $result[1]);
