@@ -47,7 +47,8 @@ class TestModel
     public function toArray(): array
     {
         return [
-            'val' => $this->val,
+            'val' =>
+                $this->val,
         ];
     }
 }

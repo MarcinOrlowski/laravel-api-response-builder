@@ -42,12 +42,8 @@ class DefaultConfigTest extends TestCase
 
         // THEN it should be converted automatically as per configuration
         $this->assertIsArray($result);
-
-        $key = $cfg[ JsonResource::class ][ ResponseBuilder::KEY_KEY ];
-        $this->assertArrayHasKey($key, $result);
-        $this->assertIsArray($result[ $key ]);
-        $this->assertArrayHasKey('val', $result[ $key ]);
-        $this->assertEquals($result[ $key ]['val'], $obj_val);
+        $this->assertArrayHasKey('val', $result);
+        $this->assertEquals($result['val'], $obj_val);
     }
 
     /**
@@ -69,12 +65,8 @@ class DefaultConfigTest extends TestCase
 
         // THEN it should be converted automatically as per configuration
         $this->assertIsArray($result);
-
-        $key = $cfg[ JsonResource::class ][ ResponseBuilder::KEY_KEY ];
-        $this->assertArrayHasKey($key, $result);
-        $this->assertIsArray($result[ $key ]);
-        $this->assertArrayHasKey('val', $result[ $key ]);
-        $this->assertEquals($result[ $key ]['val'], $obj_val);
+        $this->assertArrayHasKey('val', $result);
+        $this->assertEquals($result['val'], $obj_val);
     }
 
     /**
@@ -130,13 +122,10 @@ class DefaultConfigTest extends TestCase
         // THEN it should be converted automatically as per default configuration
         $this->assertIsArray($result);
 
-        $cfg_key = $cfg[ get_class($collection) ][ ResponseBuilder::KEY_KEY ];
-        $this->assertArrayHasKey($cfg_key, $result);
-        $this->assertIsArray($result[ $cfg_key ]);
-        $this->assertCount(count($collection), $result[ $cfg_key ]);
+        $this->assertCount(count($collection), $result);
         foreach ($collection as $key => $val) {
-            $this->assertArrayHasKey($key, $result[ $cfg_key ]);
-            $this->assertEquals($val, $result[ $cfg_key ][ $key ]);
+            $this->assertArrayHasKey($key, $result);
+            $this->assertEquals($val, $result[ $key ]);
         }
 
     }

@@ -18,6 +18,9 @@
    `successWithHttpCode()`, `errorWithData()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()`, 
    `errorWithMessageAndData()`, `errorWithMessageAndDataAndDebug()`, `errorWithMessage()`. These methods
    will be removed in next major release. 
+ * `[Mid]` Data converter's `key` config element is now optional and is removed from defaults which means if you need
+   previous behavour, you need to tweak your config and ensure it contains proper `key` element. This change
+   only affects those who use data converting feature **AND** pass objects directly. 
 
 #### v6.3 ####
  * `[BREAKING]` This is backward incompatible change in signature of `ResponseBuilder::buildResponse()`, but it only affects

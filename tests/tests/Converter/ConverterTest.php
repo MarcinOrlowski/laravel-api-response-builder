@@ -118,6 +118,7 @@ class ConverterTest extends TestCase
         $converter = new Converter();
         $converted = $converter->convert($model);
 
+        // THEN we expect returned data to be converted and use KEY_KEY element.
         $this->assertIsArray($converted);
         $this->assertCount(1, $converted);
         $this->assertArrayHasKey($fallback_key, $converted);
@@ -134,6 +135,8 @@ class ConverterTest extends TestCase
         $model_2 = new TestModel($this->getRandomString('model_2'));
         $model_3 = null;
 
+        $conv_key = $this->getRandomString('conv_key');
+
         $data = [
             $model_1,
             $model_2,
@@ -143,7 +146,7 @@ class ConverterTest extends TestCase
         // AND having its class configured for auto conversion
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
             get_class($model_1) => [
-                ResponseBuilder::KEY_KEY     => 'XXX',
+                ResponseBuilder::KEY_KEY     => $conv_key,
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
         ]);
@@ -153,13 +156,16 @@ class ConverterTest extends TestCase
         $converted = $converter->convert($data);
 
         $this->assertIsArray($converted);
+        $this->assertCount(3, $converted);
         $this->assertCount(count($data), $converted);
+        $this->assertArrayNotHasKey($conv_key, $converted);
 
         $this->assertValidConvertedTestClass($model_1, $converted[0]);
+        $this->assertArrayNotHasKey($conv_key, $converted[0]);
         $this->assertValidConvertedTestClass($model_2, $converted[1]);
+        $this->assertArrayNotHasKey($conv_key, $converted[1]);
         $this->assertNull($converted[2]);
     }
-
 
     /**
      * Tests how we convert array of nested arrays of objects
@@ -295,6 +301,62 @@ class ConverterTest extends TestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $converted = (new Converter())->convert($data);
+    }
+
+    /**
+     * Checks if convert returns data merged properly if convert related setings
+     * feature no "key" element.
+     */
+    public function testConvertWithNoKeyInConfig(): void
+    {
+        $model_1 = new TestModel($this->getRandomString('model_1'));
+
+        // AND having its class configured for auto conversion
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+            get_class($model_1) => [
+                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+            ],
+        ]);
+
+        $converter = new Converter();
+        $result = $converter->convert($model_1);
+
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey('val', $result);
+        $this->assertEquals($model_1->getVal(), $result['val']);
+    }
+
+    /**
+     * Checks if convert returns data merged properly if convert related setings
+     * feature no "key" element.
+     */
+    public function testConvertMultipleWithNoKeyInConfig(): void
+    {
+        $model_1 = new TestModel($this->getRandomString('model_1'));
+        $model_2 = new TestModel($this->getRandomString('model_2'));
+
+        $data = [
+            $model_1,
+            $model_2,
+        ];
+
+        // AND having its class configured for auto conversion
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+            get_class($model_1) => [
+                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+            ],
+        ]);
+
+        $converter = new Converter();
+        $result = $converter->convert($data);
+
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
+        $this->assertArrayHasKey('val', $result[0]);
+        $this->assertEquals($model_1->getVal(), $result[0]['val']);
+        $this->assertArrayHasKey('val', $result[1]);
+        $this->assertEquals($model_2->getVal(), $result[1]['val']);
     }
 
     // -----------------------------------------------------------------------------------------------------------

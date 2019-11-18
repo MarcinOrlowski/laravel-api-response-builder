@@ -157,7 +157,7 @@ class ValidatorTest extends TestCase
     // -----------------------------------------------------------------------------------------------------------
 
     /**
-     * Tests assertType() helper.
+     * Tests assertIsType() helper.
      */
     public function testAssertTypeWithVariousData(): void
     {

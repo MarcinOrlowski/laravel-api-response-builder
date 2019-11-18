@@ -191,11 +191,12 @@ trait ApiCodesTests
     }
 
     /**
-     * Tests if "classes" config entries properly set.
+     * Tests if "classes" config entries are properly set and use at least
+     * mandatory configuration elements.
      *
      * @return void
      */
-    public function testConfigClassesMappingEntries(): void
+    public function testConfigClassesMappingEntriesMandatoryKeys(): void
     {
         $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER) ?? [];
         if (count($classes) === 0) {
@@ -206,7 +207,6 @@ trait ApiCodesTests
         }
 
         $mandatory_keys = [
-            ResponseBuilder::KEY_KEY,
             ResponseBuilder::KEY_HANDLER,
         ];
         foreach ($classes as $class_name => $class_config) {
@@ -216,5 +216,34 @@ trait ApiCodesTests
             }
         }
     }
+
+    /**
+     * Tests if "classes" config entries properly set, which means we look for any
+     * unknown/unsupported configuration key.
+     *
+     * @return void
+     */
+    public function testConfigClassesMappingEntriesUnwantedConfigKeys(): void
+    {
+        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER) ?? [];
+        if (count($classes) === 0) {
+            // to make PHPUnit not complaining about no assertion.
+            $this->assertTrue(true);
+            return;
+        }
+
+        $supported_keys = [
+            ResponseBuilder::KEY_KEY,
+            ResponseBuilder::KEY_PRI,
+            ResponseBuilder::KEY_HANDLER,
+        ];
+        foreach ($classes as $class_name => $class_config) {
+            foreach ($class_config as $cfg_key => $cfg_val) {
+                $msg = "Unknown key '{$cfg_key}' in '{$class_name}' data conversion config.";
+                $this->assertContains($cfg_key, $supported_keys, $msg);
+            }
+        }
+    }
+
 
 } // end of ApiCodesTests trait

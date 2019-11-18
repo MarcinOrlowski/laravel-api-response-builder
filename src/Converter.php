@@ -99,16 +99,22 @@ class Converter
             return null;
         }
 
+        Validator::assertIsType('data', $data, [Validator::TYPE_ARRAY,
+                                                Validator::TYPE_OBJECT]);
+
         if (is_object($data)) {
             $cfg = $this->getClassMappingConfigOrThrow($data);
-            $worker = new $cfg[ResponseBuilder::KEY_HANDLER]();
-            $data = [$cfg[ ResponseBuilder::KEY_KEY ] => $worker->convert($data, $cfg)];
-        } elseif (!is_array($data)) {
-            throw new \InvalidArgumentException(
-                sprintf('Payload must be null, array or object with mapping ("%s" given).', gettype($data)));
+            $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
+            if (array_key_exists(ResponseBuilder::KEY_KEY, $cfg)) {
+                $data = [$cfg[ ResponseBuilder::KEY_KEY ] => $worker->convert($data, $cfg)];
+            } else {
+                $data = $worker->convert($data, $cfg);
+            }
+        } else {
+            $data = $this->convertArray($data);
         }
 
-        return $this->convertArray($data);
+        return $data;
     }
 
     /**
@@ -177,7 +183,6 @@ class Converter
             }
 
             $mandatory_keys = [
-                ResponseBuilder::KEY_KEY,
                 ResponseBuilder::KEY_HANDLER,
             ];
             foreach ($classes as $class_name => $class_config) {
