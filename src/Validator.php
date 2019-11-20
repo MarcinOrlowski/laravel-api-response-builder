@@ -134,9 +134,10 @@ class Validator
     {
         $type = gettype($var);
         if (!in_array($type, $allowed_types)) {
-            $msg = sprintf('"%s" must be one of allowed types: %s (%s given)',
-                $name, implode(', ', $allowed_types), gettype($var));
-            throw new \InvalidArgumentException($msg);
+            throw new \InvalidArgumentException(
+                sprintf('"%s" must be one of allowed types: %s (%s given)',
+                    $name, implode(', ', $allowed_types), gettype($var))
+            );
         }
     }
 
@@ -161,5 +162,21 @@ class Validator
     {
         self::assertIsInt('http_code', $http_code);
         self::assertIsIntRange('http_code', $http_code, 200, 299);
+    }
+
+    /**
+     * Ensures $obj is instance of $cls.
+     *
+     * @param string $name
+     * @param object $obj
+     * @param string $cls
+     */
+    public static function assertInstanceOf(string $name, object $obj, string $cls): void
+    {
+        if (!($obj instanceof $cls)) {
+            throw new \InvalidArgumentException(
+                sprintf('"%s" must be instance of "%s".', $name, $cls)
+            );
+        }
     }
 }
