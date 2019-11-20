@@ -13,10 +13,12 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\Convertes\FakeConverter;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelChild;
 
@@ -357,6 +359,36 @@ class ConverterTest extends TestCase
         $this->assertEquals($model_1->getVal(), $result[0]['val']);
         $this->assertArrayHasKey('val', $result[1]);
         $this->assertEquals($model_2->getVal(), $result[1]['val']);
+    }
+
+    /**
+     * Checks if converter config can be completely overriden by the user config.
+     */
+    public function testConvertWithOverridenDefaultConfig(): void
+    {
+        // GIVEN built-in converter config
+        $cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+        $this->assertIsArray($cfg);
+        $this->assertNotEmpty($cfg);
+
+        // HAVING custom converter set to replace built-in settings
+        $cfg[ Collection::class ][ ResponseBuilder::KEY_HANDLER ] = FakeConverter::class;
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $cfg);
+
+        // WHEN converting the data, we expect FakeConverter to be used
+        $data = collect([1,
+                         2,
+                         3]);
+
+        $converter = new Converter();
+        $result = $converter->convert($data);
+
+        $fake = new FakeConverter();
+
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey($fake->key, $result);
+        $this->assertEquals($result[ $fake->key ], $fake->val);
     }
 
     // -----------------------------------------------------------------------------------------------------------
