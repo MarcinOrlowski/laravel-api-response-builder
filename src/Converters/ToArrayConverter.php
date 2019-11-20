@@ -18,7 +18,7 @@ use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 
 class ToArrayConverter implements ConverterContract
 {
-    public function convert($obj, /** @scrutinizer ignore-unused */ array $config): array
+    public function convert($obj, array /** @scrutinizer ignore-unused */ $config): array
     {
         return $obj->toArray();
     }

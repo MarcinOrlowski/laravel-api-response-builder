@@ -236,9 +236,7 @@ class Builder
                                      $data = null, array $debug_data = null): array
     {
         // ensure $data is either @null, array or object of class with configured mapping.
-        $converter = new Converter();
-
-        $data = $converter->convert($data);
+        $data = (new Converter())->convert($data);
         if ($data !== null && !is_object($data)) {
             // ensure we get object in final JSON structure in data node
             $data = (object)$data;

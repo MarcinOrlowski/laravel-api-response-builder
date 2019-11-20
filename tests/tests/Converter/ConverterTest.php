@@ -61,8 +61,7 @@ class ConverterTest extends TestCase
         ]);
 
         // WHEN we try to pass of child class
-        $converter = new Converter();
-        $result = $converter->convert($child);
+        $result = (new Converter())->convert($child);
 
         // EXPECT it to be converted as per parent class configuration entry
         $this->assertIsArray($result);
@@ -117,8 +116,7 @@ class ConverterTest extends TestCase
         ]);
 
         // WHEN this object is returned
-        $converter = new Converter();
-        $converted = $converter->convert($model);
+        $converted = (new Converter())->convert($model);
 
         // THEN we expect returned data to be converted and use KEY_KEY element.
         $this->assertIsArray($converted);
@@ -154,8 +152,7 @@ class ConverterTest extends TestCase
         ]);
 
         // WHEN this object is returned
-        $converter = new Converter();
-        $converted = $converter->convert($data);
+        $converted = (new Converter())->convert($data);
 
         $this->assertIsArray($converted);
         $this->assertCount(count($data), $converted);
@@ -198,8 +195,7 @@ class ConverterTest extends TestCase
         ]);
 
         // WHEN this object is returned
-        $converter = new Converter();
-        $converted = $converter->convert($data);
+        $converted = (new Converter())->convert($data);
 
         $this->assertIsArray($converted);
         $this->assertCount(count($data), $converted);
@@ -239,8 +235,7 @@ class ConverterTest extends TestCase
         // WHEN conversion is attempted, exception should be thrown
         $this->expectException(\RuntimeException::class);
 
-        $converter = new Converter();
-        $converter->convert($data);
+        (new Converter())->convert($data);
     }
 
     /**
@@ -279,8 +274,7 @@ class ConverterTest extends TestCase
         ]);
 
         // WHEN this object is returned
-        $converter = new Converter();
-        $converted = $converter->convert($data);
+        $converted = (new Converter())->convert($data);
 
         $this->assertIsArray($converted);
         $this->assertCount(count($data), $converted);
@@ -320,8 +314,7 @@ class ConverterTest extends TestCase
             ],
         ]);
 
-        $converter = new Converter();
-        $result = $converter->convert($model_1);
+        $result = (new Converter())->convert($model_1);
 
         $this->assertIsArray($result);
         $this->assertCount(1, $result);
@@ -350,8 +343,7 @@ class ConverterTest extends TestCase
             ],
         ]);
 
-        $converter = new Converter();
-        $result = $converter->convert($data);
+        $result = (new Converter())->convert($data);
 
         $this->assertIsArray($result);
         $this->assertCount(count($data), $result);
@@ -380,8 +372,7 @@ class ConverterTest extends TestCase
                          2,
                          3]);
 
-        $converter = new Converter();
-        $result = $converter->convert($data);
+        $result = (new Converter())->convert($data);
 
         $fake = new FakeConverter();
 

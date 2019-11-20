@@ -24,7 +24,7 @@ class JsonSerializableConverter implements ConverterContract
      *
      * @return array
      */
-    public function convert($obj, /** @scrutinizer ignore-unused */ array $config): array
+    public function convert($obj, array /** @scrutinizer ignore-unused */ $config): array
     {
         if (!($obj instanceof \JsonSerializable)) {
             throw new \RuntimeException('Expected instance of JsonSerializable, got ' . get_class($obj));
