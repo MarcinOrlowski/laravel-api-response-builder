@@ -18,6 +18,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection as SupportCollection;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelArrayable;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonResource;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonSerializable;
 
@@ -99,6 +100,15 @@ class DefaultConfigTest extends TestCase
         $this->doCollectionTest($collection);
     }
 
+    public function testArrayable(): void
+    {
+        // GIVEN object implementing Arrayable interface
+        $val = $this->getRandomString('val_1');
+        $obj = new TestModelArrayable($val);
+
+        $this->doCollectionTest([$obj]);
+    }
+
     // -----------------------------------------------------------------------------------------------------------
 
     /**
@@ -111,6 +121,9 @@ class DefaultConfigTest extends TestCase
     protected function doCollectionTest($collection): void
     {
         // GIVEN Eloquent collection with content
+        if ( !is_array($collection) && !$collection instanceof \Countable) {
+            $this->fail('Invalid argument passed to doCollectionTest()');
+        }
 
         // HAVING Converter with default settings
         $converter = new Converter();

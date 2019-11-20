@@ -57,11 +57,23 @@ return [
             // 'key'     => 'item',
             'pri'     => 0,
         ],
+
+        /*
+        |-----------------------------------------------------------------------------------------------------------
+        | Converters for generic classes should use lower priority to allow dedicated converters to be used.
+        |-----------------------------------------------------------------------------------------------------------
+        */
         \JsonSerializable::class                            => [
             'handler' => \MarcinOrlowski\ResponseBuilder\Converters\JsonSerializableConverter::class,
             // 'key'     => 'item',
             'pri'     => -10,
         ],
+        \Illuminate\Contracts\Support\Arrayable::class      => [
+            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ArrayableConverter::class,
+            // 'key'     => 'item',
+            'pri'     => -10,
+        ],
+
     ],
 
     /*

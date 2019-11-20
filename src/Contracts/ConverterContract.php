@@ -24,5 +24,5 @@ interface ConverterContract
      *
      * @return array
      */
-    public function convert(object $obj, array $config): array;
+    public function convert($obj, array $config): array;
 }
