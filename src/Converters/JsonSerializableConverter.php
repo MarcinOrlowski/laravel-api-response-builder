@@ -19,17 +19,16 @@ use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 class JsonSerializableConverter implements ConverterContract
 {
     /**
-     * @param \JsonSerializable $obj
-     * @param array             $config
+     * Returns array representation of the object implementing \JsonSerializable interface.
+     *
+     * @param \JsonSerializable $obj    Object to be converted
+     * @param array             $config Converter config array to be used for this object (based on exact class
+     *                                  name match or inheritance).
      *
      * @return array
      */
-    public function convert($obj, array /** @scrutinizer ignore-unused */ $config): array
+    public function convert(\JsonSerializable $obj, array /** @scrutinizer ignore-unused */ $config): array
     {
-        if (!($obj instanceof \JsonSerializable)) {
-            throw new \RuntimeException('Expected instance of JsonSerializable, got ' . get_class($obj));
-        }
-
         return ['val' => json_decode($obj->jsonSerialize(), true)];
     }
 }
