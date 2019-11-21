@@ -143,10 +143,9 @@
 
 ## Data Conversion ##
 
- `ResponseBuilder` can save you some work by automatically converting certain objects prior returning response array. i.e. you can
- pass object of supported classes. For example, having `ResponseBuilder` configured to auto-convet objects of Eloquent's `Model` 
- class and passing object of that class either directly using `withData()` or as part of bigger structurre) will have it converted
- to JSON format automatically:
+ `ResponseBuilder` can save you some work by automatically converting objects into array representation. For example, having
+ `ResponseBuilder` configured to auto-convet objects of Eloquent's `Model` class and passing object of that class either directly
+ using `withData()` or as part of bigger structurre) will have it converted to JSON format automatically:
 
 ```php
 $flight = App\Flight::where(...)->first();
@@ -190,38 +189,37 @@ return ResponseBuilder::success($flights);
 }
 ```
 
- The whole functionality is configurable using `classes` array:
+ The whole functionality is configurable using `converter` array:
 
 ```php
-'classes' => [
-     Illuminate\Database\Eloquent\Model::class => [
-         'key'    => 'item',
-         'method' => 'toArray',
-     ],
-     Illuminate\Database\Eloquent\Collection::class => [
-         'key'    => 'items',
-         'method' => 'toArray',
-     ],
+'converter' => [
+    \Illuminate\Database\Eloquent\Model::class          => [
+        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        // 'pri'     => 0,
+    ],
+    \Illuminate\Database\Eloquent\Collection::class     => [
+        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        // 'pri'     => 0,
+    ],
 ],
 ```
 
  where parameters mean:
  
- * `key` is any string you want to use as node name that would hold convered data,
- * `method` is argument-less method **exposed by object being converted** that can be called on that object to obtain 
-   `array` with object's representation.
- * `pri` is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one 
+ * `handler` (mandatory) specifies class name that implements `ConverterContract` interface that is capable of doing the
+   conversion of object of given class.
+ * `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one 
    class extending another and you want to support both of them with separate configuration, then you **must** ensure child 
    class has higher priority than it's parent class.   
 
  The above configures two classes (`Model` and `Collection`). Whenever object of that class is spotted, method specified in
- `method` key would be called on that object and data that method returns will be returned in JSON object using key specified
- in `key`. In above example, if we get `Collection`, then `ResponseBuilder` would call `toArray()` on it, and result data would
- be added in returned JSON in `items` object.
+ `method` key would be called on that object and data that method returns will be returned in JSON object.
  
- **IMPORTANT:** For each object in  `ResponseBuilder` checks if we have configuration entry matching **exactly** object class 
+ **IMPORTANT:** For each object `ResponseBuilder` checks if we have configuration entry matching **exactly** object class 
  name. If no such mapping is found, then the whole configuration is walked again, but this time we take inheritance into 
- consideration and use `instanceof` to see if we can deal with this object. If not, exception is thrown. 
+ consideration and use `instanceof` to see if we have a match, therefore you need to pay attention your config specifies
+ lower priority (i.e. `-10`) for all the generic handlers. Doing that ensures any more specific handler will be checked
+ first. If no handler is found for given object, the exception is thrown. 
 
  When you pass the array it will be walked recursively and the conversion will take place on all known elements as well:
 

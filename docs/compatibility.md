@@ -2,41 +2,24 @@
 
 # REST API Response Builder for Laravel #
 
+### v7 ###
+
+ * `[BREAKING]` This is backward incompatible change in `ExceptionHandler` configuration array structure, but it only affects you,
+   if you have custom configuration for `ExceptionHandlerHelper` (See [configuration docs](config.md) for more information).
+   If you do not use it or do just use default configuration, then you are not affected.
+ * `[BREAKING]` Data mapping's `method` key is gone. Now you need to use `handler` and give name of class that
+   implements `ConverterContract`. 
+ * `[BREAKING]` CONFIG: `classes` key is renamed to `converter`.
+ * `[Low]` Simplified the API by introducing Builder helper class, utilising Builder pattern, therefore the following methods are
+   now deprecated and its use should be replaced with the Builder class (see ResponseBuilder class source code for replacements).
+   Deprecated methods: `successWithCode()`, `successWithHttpCode()`, `errorWithData()`, `errorWithDataAndHttpCode()`, 
+   `errorWithHttpCode()`, `errorWithMessageAndData()`, `errorWithMessageAndDataAndDebug()`, `errorWithMessage()`. These methods
+   will be removed in v8. 
+ * `[Low]` Data converter's `key` config element is now gone. This change only affects those who use data converting feature
+   **AND** pass objects directly (i.e. not as part of collection nor array). 
+
+
 ### v6 ###
-
-#### v6.4 ####
- * `[BREAKING]` This is backward incompatible change in ExceptionHandler configuration array structure.
-   but it only affects you if you have custom configuratoin for ExceptionHandlerHelper. If you do not use
-   it or do just use default configuration, then you are not affected. If you are affected, please see
-   [configuration docs](config.md) for more information.
- * `[BREAKING]` Data mapping's `method` key is gone. Now you need to use `handler` and give name of
-   class that implements `ConverterContract`. 
- * `[BREAKING]` CONFIG: `classes` key is renamed to `data_conversion`
- * `[Low]` Simplified the API by introducing Builder helper class, utilising Builder pattern, therefore the 
-   following methods are now deprecated and its use should be replaced with the Builder class (see
-   ResponseBuilder class source code for copy&paste replacement code. Deprecated methods: `successWithCode()`,
-   `successWithHttpCode()`, `errorWithData()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()`, 
-   `errorWithMessageAndData()`, `errorWithMessageAndDataAndDebug()`, `errorWithMessage()`. These methods
-   will be removed in next major release. 
- * `[Mid]` Data converter's `key` config element is now optional and is removed from defaults which means if you need
-   previous behavour, you need to tweak your config and ensure it contains proper `key` element. This change
-   only affects those who use data converting feature **AND** pass objects directly. 
-
-#### v6.3 ####
- * `[BREAKING]` This is backward incompatible change in signature of `ResponseBuilder::buildResponse()`, but it only affects
-   you if you extend `ResponseBuilder` and provide own implementation to manipulate response object
-   (see [Manipulating Response Object](docs.md#manipulating-response-object)). If you do not, then you are not affected.
-
-#### v6.2 ####
- * `[Very Low]` Data conversion logic changed slightly. Now it checks if we have configuration entry matching **exactly** the
-  object's class name. If not, then we'd try to find if we have any configuration for its parent class.
-  See [Data Conversion](docs.md#data-conversion) for details.
-
-#### v6.1 ####
- * `[Very Low]` Removed ability to define own names for response keys which reduces code complexity and simplifies the
- library. From now one you need to stick to default names now (`success`, `code`, `message`, `locale`, `data`).
-
-#### v6.0 ####
 
  * Requires Laravel 6.0+ and PHP 7.2+
  * `[BREAKING]` In previous versions built-in reserved codes were hardcoded and always in range of 1-63 which, in general
@@ -58,7 +41,17 @@
  `EX_HTTP_EXCEPTION()`, `EX_UNCAUGHT_EXCEPTION()`, `EX_AUTHENTICATION_EXCEPTION()` and `EX_VALIDATION_EXCEPTION()` that would
  return valid API code in currently configured range.
  * `[Low]` Removed `response_key_map` configuration option.
+
+ * `[Very Low] (v6.1)` Removed ability to define own names for response keys which reduces code complexity and simplifies the
+ library. From now one you need to stick to default names now (`success`, `code`, `message`, `locale`, `data`).
+ * `[Very Low] (v6.2)` Data conversion logic changed slightly. Now it checks if we have configuration entry matching **exactly** 
+ the object's class name. If not, then we'd try to find if we have any configuration for its parent class.
+ See [Data Conversion](docs.md#data-conversion) for details.
+ * `[BREAKING] (v6.3)` This is backward incompatible change in signature of `ResponseBuilder::buildResponse()`, but it only affects
+ you if you extend `ResponseBuilder` and provide own implementation to manipulate response object
+ (see [Manipulating Response Object](docs.md#manipulating-response-object)). If you do not, then you are not affected.
 			
+
 ### v5 ###
 
  * No public release.
