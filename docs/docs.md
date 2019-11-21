@@ -85,34 +85,59 @@
 
 ## Exposed Methods ##
 
- Starting from version 6.4, `ResponseBuilder` exposes its API via `Builder` class which implements 
- [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern).. To obtain instance of the Builder, it exposes two
- static methods: `success()` and `error()` static method with your `api_code` as argument (optional for `success()`),
- then set all the elements of the response as you need and conclude invocation with `build()`. For example, the following
+ Starting from version 6.4, `ResponseBuilder` uses new API implementation that uses 
+ [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern), which is far more flexible that previous bag of methods.
+ 
+### Helpers ###
+
+ But while Builder is pretty proverful interface, if you need to return just success or error, without too many additional data
+ attached, using it may look like overkill, therefore there are two helper methods (from old API) that serve as shortcuts
+ for reporting success or failure:
+ 
+ * `success($data, $api_code, $placeholders, $http_code, $json_opts)`
+ 
+    Returns success indicating message. You can ommit `$api_code` to fall back to default code for `OK`). All params are
+    optional. Usage example:
+    
+    ```php
+    return ResponseBuilder::success();
+    ```
+    
+  * `public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null, int $json_opts = null)`
+
+    Returns error indicating response. `$api_code` must not equal to value indicating `OK` (`ApiCodes::OK()`), all other params
+    are optional.
+    
+    ```php
+    return ResponseBuilder::error(ApiCodes::SOMETHING_FAILED);
+    ```
+
+### Builder ###
+
+To obtain instance of the Builder, two static methods: `asSuccess()` and `asError()` are now exposed. For example, the following
  code would success with data and custom HTTP code:
 
 ```php
-   return Builder::success()
-          ->withData($data)
-          ->withHttpCode(HttpResponse::HTTP_CREATED)
-          ->build();
+return ResponseBuilder::asSuccess()
+      ->withData($data)
+      ->withHttpCode(HttpResponse::HTTP_CREATED)
+      ->build();
 ```
-
 
  For simplicity of use, it's recommended to add the following `use` to your code:
 
-    use MarcinOrlowski\ResponseBuilder\Builder;
+    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
- Exposed static methods:
+ Builder static methods:
  
- * `success($api_code)`: Returns Builder instance configured to return success indicating message. 
+ * `asSuccess($api_code)`: Returns Builder instance configured to return success indicating message. 
    You can ommit `$api_code` to fall back to default code for `OK`).
- * `error($api_code)`: Returns Builder instance configured to produce error indicating response. `$api_code`
+ * `asError($api_code)`: Returns Builder instance configured to produce error indicating response. `$api_code`
    must not equal to value indicating `OK` (`ApiCodes::OK()`).
  
  In both cases `api_code` (**int**) is any integer value you want to be returned as `code` in final response.
  
- Parameters setters:
+ Parameter setters:
  
  * `withHttpCode($code)`: (**int**) valid HTTP return code (see `HttpResponse` class for useful constants). For 
    `success()` responses, `$http_code` must be in range from 200 to 299 (inclusive), while for `error()` it must be in 
@@ -132,12 +157,12 @@
  
  Once all is arguments are passed, call `build()` to conclude building and have final `HttpResponse` object returned.
 
- **NOTE:** `$data` can be of any type you want (i.e. `string`) however, to enforce constant JSON structure
- of the response, `data` is always an object. If you pass anything else, type casting will be done internally.
- There's no smart logic here, just ordinary `$data = (object)$data;`. The only exception are classes configured
- with "classes" mapping (see configuration details). In such case configured conversion method is called on
- the provided object and result is returned instead. Laravel's `Model` and `Collection` classes are pre-configured
- but you can add additional classes just by creating entry in configuration `classes` mapping.
+ **IMPORTANT:** To enforce constant JSON structure of the response, `data` node is always an JSON object, therefore passing
+ anything but `object` or `array` to `withData()` would trigger internal type casting. There's no smart logic here, just
+ ordinary `$data = (object)$data;`. The only exception are classes configured with "classes" mapping (see configuration
+ details). In such case configured conversion method is called on the provided object and result is returned instead. 
+ Several classes pre-configured but you can add additional classes just by creating entry in configuration `converter` mapping.
+ See [Data Conversion](#data-conversion) for more information.
 
 ----
 
