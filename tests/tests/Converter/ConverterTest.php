@@ -358,7 +358,7 @@ class ConverterTest extends TestCase
         $this->assertNotEmpty($cfg);
 
         // HAVING custom converter set to replace built-in settings
-        $fake = new \MarcinOrlowski\ResponseBuilder\Tests\Converters\FakeConverter();
+        $fake = new FakeConverter();
 
         $cfg[ Collection::class ][ ResponseBuilder::KEY_HANDLER ] = get_class($fake);
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $cfg);
