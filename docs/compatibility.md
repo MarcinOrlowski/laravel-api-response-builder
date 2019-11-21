@@ -4,17 +4,18 @@
 
 ### v7 ###
 
+ * `[BREAKING]` As the library API migrated to Builder type of implementation, all the former API methods are now removed from
+   `ResponseBuilder` class. While it is strongly recommended to switch to new, more flexible API, the old API can still be used
+   with aid of `ResponseBuilderLegacy` class, which wraps old API and uses new API under the hood (see source code of
+   `ResponseBuilderLegacy` how it's done). To use legacy wrapper during transition period, simply add
+   `use MarcinOrlowski\ResponseBuilder\ResponseBuilderLegacy as ResponseBuilder` and you should be all good.      
+   NOTE: `ResponseBuilderLegacy` class will be removed in v8.
  * `[BREAKING]` This is backward incompatible change in `ExceptionHandler` configuration array structure, but it only affects you,
    if you have custom configuration for `ExceptionHandlerHelper` (See [configuration docs](config.md) for more information).
    If you do not use it or do just use default configuration, then you are not affected.
  * `[BREAKING]` Data mapping's `method` key is gone. Now you need to use `handler` and give name of class that
    implements `ConverterContract`. 
  * `[BREAKING]` CONFIG: `classes` key is renamed to `converter`.
- * `[Low]` Simplified the API by introducing Builder helper class, utilising Builder pattern, therefore the following methods are
-   now deprecated and its use should be replaced with the Builder class (see ResponseBuilder class source code for replacements).
-   Deprecated methods: `successWithCode()`, `successWithHttpCode()`, `errorWithData()`, `errorWithDataAndHttpCode()`, 
-   `errorWithHttpCode()`, `errorWithMessageAndData()`, `errorWithMessageAndDataAndDebug()`, `errorWithMessage()`. These methods
-   will be removed in v8. 
  * `[Low]` Data converter's `key` config element is now gone. This change only affects those who use data converting feature
    **AND** pass objects directly (i.e. not as part of collection nor array). 
 
