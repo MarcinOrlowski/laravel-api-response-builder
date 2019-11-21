@@ -152,13 +152,10 @@ class Converter
             if (is_array($val)) {
                 $data[ $key ] = $this->convertArray($val);
             } elseif (is_object($val)) {
-                $cls = get_class($val);
-                if (array_key_exists($cls, $this->classes)) {
-                    $cfg = $this->classes[ $cls ];
-                    $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
-                    $converted_data = $worker->convert($val, $cfg);
-                    $data[ $key ] = $converted_data;
-                }
+                $cfg = $this->getClassMappingConfigOrThrow($val);
+                $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
+                $converted_data = $worker->convert($val, $cfg);
+                $data[ $key ] = $converted_data;
             }
         }
 

@@ -25,7 +25,30 @@ use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonSerializable;
 class DefaultConfigTest extends TestCase
 {
     /**
-     * Tests built-in support for JsonSerializable class on default
+     * Tests converter behavior on default config on object implementing Laravel's Arrayable interface.
+     *
+     * @return void
+     */
+    public function testArrayable(): void
+    {
+        // GIVEN object implementing Arrayable interface
+        $obj_val = $this->getRandomString('val_1');
+        $obj = new TestModelArrayable($obj_val);
+
+        // HAVING converter with default settings
+        $converter = new Converter();
+
+        // WHEN we try to pass of object of that class
+        $result = $converter->convert($obj);
+
+        // THEN it should be converted automatically as per configuration
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('val', $result);
+        $this->assertEquals($result['val'], $obj_val);
+    }
+
+    /**
+     * Tests converter behavior on default config on object implementing JsonSerializable interface.
      *
      * @return void
      */
@@ -35,8 +58,8 @@ class DefaultConfigTest extends TestCase
         $obj_val = $this->getRandomString('obj_val');
         $obj = new TestModelJsonSerializable($obj_val);
 
+        // HAVING converter with default settings
         $converter = new Converter();
-        $cfg = $converter->getClasses();
 
         // WHEN we try to pass of object of that class
         $result = $converter->convert($obj);
@@ -48,7 +71,7 @@ class DefaultConfigTest extends TestCase
     }
 
     /**
-     * Tests built-in support for JsonResource class on default
+     * Tests converter behavior on default config on object extending Laravel's JsonResource class.
      *
      * @return void
      */
@@ -58,8 +81,8 @@ class DefaultConfigTest extends TestCase
         $obj_val = $this->getRandomString('obj_val');
         $obj = new TestModelJsonResource($obj_val);
 
+        // HAVING converter with default settings
         $converter = new Converter();
-        $cfg = $converter->getClasses();
 
         // WHEN we try to pass of object of that class
         $result = $converter->convert($obj);
@@ -71,7 +94,7 @@ class DefaultConfigTest extends TestCase
     }
 
     /**
-     * Tests built-in support for Support\Collection class on defaults
+     * Tests converter behavior on default config on Laravel's Support\Collection.
      *
      * @return void
      */
@@ -81,11 +104,11 @@ class DefaultConfigTest extends TestCase
         for ($i = 0; $i < 10; $i++) {
             $data[] = $this->getRandomString("item{$i}");
         }
-        $this->doCollectionTest(collect($data));
+        $this->doCollectionTests(collect($data));
     }
 
     /**
-     * Tests built-in support for Eloquent's Collection class on defaults
+     * Tests converter behavior on default config on Laravel Eloquent's Collection.
      *
      * @return void
      */
@@ -97,49 +120,32 @@ class DefaultConfigTest extends TestCase
         $collection->add($this->getRandomString('item2'));
         $collection->add($this->getRandomString('item3'));
 
-        $this->doCollectionTest($collection);
-    }
-
-    public function testArrayable(): void
-    {
-        // GIVEN object implementing Arrayable interface
-        $val = $this->getRandomString('val_1');
-        $obj = new TestModelArrayable($val);
-
-        $this->doCollectionTest([$obj]);
+        $this->doCollectionTests($collection);
     }
 
     // -----------------------------------------------------------------------------------------------------------
 
     /**
-     * Do the testing of collection type of object.
+     * Helper method to perform some common tests of built-in support for Laravel's collections.
      *
-     * @param object $collection
+     * @param object|array $data
      *
-     * @return void
+     * @return array
      */
-    protected function doCollectionTest($collection): void
+    protected function doCollectionTests($data): array
     {
-        // GIVEN Eloquent collection with content
-        if ( !is_array($collection) && !$collection instanceof \Countable) {
-            $this->fail('Invalid argument passed to doCollectionTest()');
-        }
-
         // HAVING Converter with default settings
-        $converter = new Converter();
-        $cfg = $converter->getClasses();
-
         // WHEN we try to pass of object of that class
-        $result = $converter->convert($collection);
+        $result = (new Converter())->convert($data);
 
         // THEN it should be converted automatically as per default configuration
         $this->assertIsArray($result);
 
-        $this->assertCount(count($collection), $result);
-        foreach ($collection as $key => $val) {
+        foreach ($data as $key => $val) {
             $this->assertArrayHasKey($key, $result);
             $this->assertEquals($val, $result[ $key ]);
         }
 
+        return $result;
     }
 }

@@ -13,8 +13,9 @@ namespace MarcinOrlowski\ResponseBuilder\Converters;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Contracts\Support\Arrayable;
 use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
-use \Illuminate\Contracts\Support\Arrayable;
+use MarcinOrlowski\ResponseBuilder\Validator;
 
 class ArrayableConverter implements ConverterContract
 {
@@ -29,6 +30,8 @@ class ArrayableConverter implements ConverterContract
      */
     public function convert($obj, array /** @scrutinizer ignore-unused */ $config): array
     {
+        Validator::assertInstanceOf('obj', $obj, Arrayable::class);
+
         return $obj->toArray();
     }
 }

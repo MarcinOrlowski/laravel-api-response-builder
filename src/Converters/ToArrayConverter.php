@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Converters;
  */
 
 use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
+use MarcinOrlowski\ResponseBuilder\Validator;
 
 class ToArrayConverter implements ConverterContract
 {
@@ -27,8 +28,10 @@ class ToArrayConverter implements ConverterContract
      *
      * @return array
      */
-    public function convert(object $obj, array /** @scrutinizer ignore-unused */ $config): array
+    public function convert($obj, array /** @scrutinizer ignore-unused */ $config): array
     {
+        Validator::assertIsObject('obj', $obj);
+
         return $obj->toArray();
     }
 }

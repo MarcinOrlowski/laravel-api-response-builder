@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Converters;
  */
 
 use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
+use MarcinOrlowski\ResponseBuilder\Validator;
 
 class JsonSerializableConverter implements ConverterContract
 {
@@ -27,8 +28,10 @@ class JsonSerializableConverter implements ConverterContract
      *
      * @return array
      */
-    public function convert(\JsonSerializable $obj, array /** @scrutinizer ignore-unused */ $config): array
+    public function convert($obj, array /** @scrutinizer ignore-unused */ $config): array
     {
+        Validator::assertInstanceOf('obj', $obj, \JsonSerializable::class);
+
         return ['val' => json_decode($obj->jsonSerialize(), true)];
     }
 }
