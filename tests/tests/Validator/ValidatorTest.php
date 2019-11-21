@@ -43,6 +43,32 @@ class ValidatorTest extends TestCase
     // -----------------------------------------------------------------------------------------------------------
 
     /**
+     * Tests if assertIsObject() pass if given valid data.
+     *
+     * @return void
+     */
+    public function testAssertIsObjectCorrectType(): void
+    {
+        $obj = new \StdClass();
+        Validator::assertIsObject(__FUNCTION__, $obj);
+        // This assert won't be called if exception is thrown
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Tests if assertIsObject() throws exception when feed with invalid type argument.
+     *
+     * @return void
+     */
+    public function testAssertIsObjectWrongType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        Validator::assertIsObject(__FUNCTION__, 'chicken');
+    }
+
+    // -----------------------------------------------------------------------------------------------------------
+
+    /**
      * Checks behavior of assertIsArray() with valid data
      */
     public function testAssertIsArrayWithValidData(): void
@@ -152,6 +178,29 @@ class ValidatorTest extends TestCase
         // ensure main variable is an integer
         $this->expectException(\InvalidArgumentException::class);
         Validator::assertIsIntRange(__FUNCTION__, 100, 300, 500);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------
+
+    /**
+     * Checks if assertInstanceOf() would throw exception if obj is not instance of given class
+     */
+    public function testAssertInstanceOfInvalidClass(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $obj = new \StdClass();
+        Validator::assertInstanceOf('obj', $obj, \JsonSerializable::class);
+    }
+
+    /**
+     * Checks if assertInstanceOf() would pass if obj is instance of given class
+     */
+    public function testAssertInstanceOfValidClass(): void
+    {
+        $obj = new \StdClass();
+        Validator::assertInstanceOf('obj', $obj, \StdClass::class);
+        // This assert won't be called if exception is thrown
+        $this->assertTrue(true);
     }
 
     // -----------------------------------------------------------------------------------------------------------
