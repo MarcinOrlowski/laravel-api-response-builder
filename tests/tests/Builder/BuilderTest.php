@@ -29,7 +29,7 @@ class BuilderTest extends TestCase
     {
         $expected_api_code = BaseApiCodes::OK();
 
-        $builder = Builder::success($expected_api_code);
+        $builder = Builder::asSuccess($expected_api_code);
         $this->assertInstanceOf(Builder::class, $builder);
         $this->response = $builder->build();
 
@@ -60,7 +60,7 @@ class BuilderTest extends TestCase
             $key4 => $val4,
         ];
 
-        $builder = Builder::success();
+        $builder = Builder::asSuccess();
         $this->assertInstanceOf(Builder::class, $builder);
         $this->response = $builder
             ->withHttpHeaders($headers)
@@ -79,6 +79,6 @@ class BuilderTest extends TestCase
     public function testErrorWithOkCode(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        Builder::error(BaseApiCodes::OK());
+        Builder::asError(BaseApiCodes::OK());
     }
 }

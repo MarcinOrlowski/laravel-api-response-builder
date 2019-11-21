@@ -280,15 +280,15 @@ trait TestingHelpers
 
         /** @noinspection PhpUnhandledExceptionInspection */
         return $this->callProtectedMethod(
-            Builder::success(), 'make', [$success,
-                                         $api_code_offset,
-                                         $message_or_api_code_offset,
-                                         $data,
-                                         $http_code,
-                                         $lang_args,
-                                         $headers,
-                                         $encoding_options,
-                                         $debug_data]);
+            Builder::asSuccess(), 'make', [$success,
+                                           $api_code_offset,
+                                           $message_or_api_code_offset,
+                                           $data,
+                                           $http_code,
+                                           $lang_args,
+                                           $headers,
+                                           $encoding_options,
+                                           $debug_data]);
     }
 
     // -----------------------------------------------------------------------------------------------------------

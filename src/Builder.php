@@ -63,12 +63,12 @@ class Builder
         $this->api_code = $api_code;
     }
 
-    public static function success(int $api_code = null): self
+    public static function asSuccess(int $api_code = null): self
     {
         return new self(true, $api_code ?? BaseApiCodes::OK());
     }
 
-    public static function error(int $api_code): self
+    public static function asError(int $api_code): self
     {
         $code_ok = BaseApiCodes::OK();
         if ($api_code !== $code_ok) {
