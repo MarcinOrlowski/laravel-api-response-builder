@@ -280,7 +280,7 @@ trait TestingHelpers
 
         /** @noinspection PhpUnhandledExceptionInspection */
         return $this->callProtectedMethod(
-            Builder::asSuccess(), 'make', [$success,
+            ResponseBuilder::asSuccess(), 'make', [$success,
                                            $api_code_offset,
                                            $message_or_api_code_offset,
                                            $data,

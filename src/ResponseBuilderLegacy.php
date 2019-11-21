@@ -43,7 +43,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
     public static function success($data = null, $api_code = null, array $placeholders = null,
                                    int $http_code = null, int $json_opts = null): HttpResponse
     {
-        return Builder::asSuccess($api_code)
+        return ResponseBuilder::asSuccess($api_code)
             ->withData($data)
             ->withPlaceholders($placeholders)
             ->withHttpCode($http_code)
@@ -67,7 +67,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
     public static function successWithCode(int $api_code = null, array $placeholders = null,
                                            int $http_code = null): HttpResponse
     {
-        return Builder::asSuccess($api_code)
+        return ResponseBuilder::asSuccess($api_code)
             ->withPlaceholders($placeholders)
             ->withHttpCode($http_code)
             ->build();
@@ -88,7 +88,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
     public static function successWithMessage(string $message, $data = null, int $api_code = null,
                                               int $http_code = null): HttpResponse
     {
-        return Builder::asSuccess($api_code)
+        return ResponseBuilder::asSuccess($api_code)
             ->withMessage($message)
             ->withData($data)
             ->withHttpCode($http_code)
@@ -113,7 +113,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
      */
     public static function successWithHttpCode(int $http_code = null): HttpResponse
     {
-        return Builder::asSuccess()
+        return ResponseBuilder::asSuccess()
             ->withHttpCode($http_code)
             ->build();
     }
@@ -138,7 +138,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
     public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null,
                                  int $json_opts = null): HttpResponse
     {
-        return Builder::asError($api_code)
+        return ResponseBuilder::asError($api_code)
             ->withPlaceholders($placeholders)
             ->withData($data)
             ->withHttpCode($http_code)
@@ -163,7 +163,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
     public static function errorWithData(int $api_code, $data, array $placeholders = null,
                                          int $json_opts = null): HttpResponse
     {
-        return Builder::asError($api_code)
+        return ResponseBuilder::asError($api_code)
             ->withData($data)
             ->withPlaceholders($placeholders)
             ->withJsonOptions($json_opts)
@@ -190,7 +190,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
     public static function errorWithDataAndHttpCode(int $api_code, $data, int $http_code, array $placeholders = null,
                                                     int $json_opts = null): HttpResponse
     {
-        return Builder::asError($api_code)
+        return ResponseBuilder::asError($api_code)
             ->withData($data)
             ->withHttpCode($http_code)
             ->withPlaceholders($placeholders)
@@ -213,7 +213,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
      */
     public static function errorWithHttpCode(int $api_code, int $http_code, array $placeholders = null): HttpResponse
     {
-        return Builder::asError($api_code)
+        return ResponseBuilder::asError($api_code)
             ->withHttpCode($http_code)
             ->withPlaceholders($placeholders)
             ->build();
@@ -237,7 +237,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
     public static function errorWithMessageAndData(int $api_code, string $message, $data,
                                                    int $http_code = null, int $json_opts = null): HttpResponse
     {
-        return Builder::asError($api_code)
+        return ResponseBuilder::asError($api_code)
             ->withMessage($message)
             ->withData($data)
             ->withHttpCode($http_code)
@@ -265,7 +265,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
                                                            int $http_code = null, int $json_opts = null,
                                                            array $debug_data = null): HttpResponse
     {
-        return Builder::asError($api_code)
+        return ResponseBuilder::asError($api_code)
             ->withMessage($message)
             ->withData($data)
             ->withHttpCode($http_code)
@@ -286,7 +286,7 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
      */
     public static function errorWithMessage(int $api_code, string $message, int $http_code = null): HttpResponse
     {
-        return Builder::asError($api_code)
+        return ResponseBuilder::asError($api_code)
             ->withMessage($message)
             ->withHttpCode($http_code)
             ->build();
