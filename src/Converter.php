@@ -105,11 +105,7 @@ class Converter
         if (is_object($data)) {
             $cfg = $this->getClassMappingConfigOrThrow($data);
             $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
-            if (array_key_exists(ResponseBuilder::KEY_KEY, $cfg)) {
-                $data = [$cfg[ ResponseBuilder::KEY_KEY ] => $worker->convert($data, $cfg)];
-            } else {
-                $data = $worker->convert($data, $cfg);
-            }
+            $data = $worker->convert($data, $cfg);
         } else {
             $data = $this->convertArray($data);
         }
