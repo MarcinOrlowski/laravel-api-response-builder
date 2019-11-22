@@ -198,7 +198,7 @@ class ExceptionHandlerHelper
             $data = [ResponseBuilder::KEY_MESSAGES => $ex->validator->errors()->messages()];
         }
 
-        return Builder::error($api_code)
+        return ResponseBuilder::asError($api_code)
             ->withMessage($error_message)
             ->withHttpCode($http_code)
             ->withData($data)
