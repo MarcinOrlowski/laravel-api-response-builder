@@ -8,7 +8,7 @@
 ## Table of contents ##
 
  * [Response structure](#response-structure)
- * [Usage examples](#examples.md)
+ * [Usage examples](examples.md)
  * [Return Codes and Code Ranges](#return-codes)
  * [Exposed Methods](#exposed-methods)
  * [Data Conversion](#data-conversion)
