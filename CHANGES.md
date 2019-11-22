@@ -6,24 +6,17 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v7.0.0 (2019-11-22)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * New, flexible API based on `Builder` pattern (see [docs](docs/compatibility.md) for details).
    * Reworked `ExceptionHandlerHelper` configuration. Now, you will be able to easily configure every
      HttpException for each HTTP status code you want. Separate `ExceptionHandler::TYPE_HTTP_NOT_FOUND_KEY`
      and all related stuff, incl. localization key `http_not_found`, configuration is now replace with more
      flexible generic code that provides error messages for all supported HTTP codes from in range `400-599`.
-   * Simplified the API by introducing `Builder` helper class, utilising Builder pattern. The following methods
-     are now deprecated and its use should be replaced with the Builder class (see ResponseBuilder class
-     source code for copy&paste replacement code). Former `ResponseBuilder` class is now deprected as
-     whole. If you were using any of the old methods: `success()`, `error()`, `successWithCode()`,
-     `successWithHttpCode()`, `errorWithData()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()`,
-     `errorWithMessageAndData()`, `errorWithMessageAndDataAndDebug()`, `errorWithMessage()` please see
-     the docs for replacement code.
-   * Added support for external data converters (config format changed)
-   * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler`
+   * Added support for external data converters (related part of config changed too).
+   * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler`.
      needs to be added now, pointing to the class implementing `ConverterContract` acting as delegate worker.
-   * Data converter now handles objects implementing `JsonSerializable`, `Arrayable` contracts as well.
-   * Data converter's `key` config element is now optional and is removed from defaults.
+   * Data converter now handles objects implementing `JsonSerializable` and `Arrayable` contracts as well.
 
 * v6.3.2 (2019-11-07)
    * Added `ResponseBuilder::successWithMessage()` method.
