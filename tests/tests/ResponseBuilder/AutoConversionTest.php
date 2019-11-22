@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
@@ -32,13 +33,12 @@ class AutoConversionTest extends TestCase
 
         // AND having its class configured for auto conversion
         $model_class_name = get_class($model);
-        $classes = [
+        $cfg = [
             $model_class_name => [
-                ResponseBuilder::KEY_KEY    => $this->getRandomString('single_item_key'),
-                ResponseBuilder::KEY_METHOD => 'toArray',
+                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $cfg);
 
         // WHEN this object is returned
         $this->response = ResponseBuilder::success($model);
@@ -46,8 +46,7 @@ class AutoConversionTest extends TestCase
 
         // THEN returned response object should have it auto converted
         $this->assertNotNull($j->data);
-        $this->assertObjectHasAttribute($classes[ $model_class_name ]['key'], $j->data, 'No single item key element not found');
-        $this->assertEquals($model_val, $j->data->{$classes[ $model_class_name ]['key']}->val);
+        $this->assertEquals($model_val, $j->data->val);
     }
 
     /**
@@ -70,13 +69,13 @@ class AutoConversionTest extends TestCase
 
         // AND having its class configured for auto conversion
         $model_class_name = get_class($model_1);
-        $classes = [
+        $converter = [
             $model_class_name => [
-                ResponseBuilder::KEY_KEY    => 'should-not-be-used',
-                ResponseBuilder::KEY_METHOD => 'toArray',
+                ResponseBuilder::KEY_KEY     => 'should-not-be-used',
+                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_CLASSES, $classes);
+        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $converter);
 
         // AND having the object as part of bigger data set
         $tmp_base = [];
@@ -96,7 +95,7 @@ class AutoConversionTest extends TestCase
         $this->assertNotNull($j->data);
 
         // single key item must not be used
-        $this->assertObjectNotHasAttribute($classes[ $model_class_name ]['key'], $j->data, 'Single item key found but should not');
+        $this->assertObjectNotHasAttribute($converter[ $model_class_name ]['key'], $j->data, 'Single item key found but should not');
         // instead original key must be preserved
         $this->assertObjectHasAttribute($model_1_data_key, $j->data, "Unable to find '{$model_1_data_key}' model 1 key'");
         $this->assertEquals($model_1_val, $j->data->{$model_1_data_key}->val);

@@ -13,10 +13,13 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Request;
+
 /**
  * Class TestModel to verify auto-conversion feature
  */
-class TestModel
+class TestModelArrayable implements Arrayable
 {
     /** @var string|null */
     protected $val;
@@ -40,15 +43,16 @@ class TestModel
     }
 
     /**
-     * Converts model to array
+     * Converts model to array. Signature must match JsonResource::toArray()
+     *
+     * @param Request $request
      *
      * @return array
      */
-    public function toArray(): array
+    public function toArray($request = null): array
     {
         return [
-            'val' =>
-                $this->val,
+            'val' => $this->val,
         ];
     }
 }

@@ -191,13 +191,14 @@ trait ApiCodesTests
     }
 
     /**
-     * Tests if "classes" config entries properly set.
+     * Tests if "classes" config entries are properly set and use at least
+     * mandatory configuration elements.
      *
      * @return void
      */
-    public function testConfigClassesMappingEntries(): void
+    public function testConfigClassesMappingEntriesMandatoryKeys(): void
     {
-        $classes = \Config::get(ResponseBuilder::CONF_KEY_CLASSES) ?? [];
+        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER) ?? [];
         if (count($classes) === 0) {
             // to make PHPUnit not complaining about no assertion.
             $this->assertTrue(true);
@@ -206,8 +207,7 @@ trait ApiCodesTests
         }
 
         $mandatory_keys = [
-            ResponseBuilder::KEY_KEY,
-            ResponseBuilder::KEY_METHOD,
+            ResponseBuilder::KEY_HANDLER,
         ];
         foreach ($classes as $class_name => $class_config) {
             foreach ($mandatory_keys as $key_name) {
@@ -216,5 +216,56 @@ trait ApiCodesTests
             }
         }
     }
+
+    /**
+     * Tests if "classes" config entries properly set, which means we look for any
+     * unknown/unsupported configuration key.
+     *
+     * @return void
+     */
+    public function testConfigClassesMappingEntriesUnwantedConfigKeys(): void
+    {
+        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER) ?? [];
+        if (count($classes) === 0) {
+            // to make PHPUnit not complaining about no assertion.
+            $this->assertTrue(true);
+
+            return;
+        }
+
+        foreach ($classes as $class_name => $class_config) {
+            foreach ($class_config as $cfg_key => $cfg_val) {
+                switch ($cfg_key) {
+                    case ResponseBuilder::KEY_KEY:
+                        $this->assertIsString($cfg_val);
+                        $this->assertNotEmpty(trim($cfg_val));
+                        break;
+                    case ResponseBuilder::KEY_HANDLER:
+                        $this->assertIsString($cfg_val);
+                        $this->assertNotEmpty(trim($cfg_val));
+                        break;
+                    case ResponseBuilder::KEY_PRI:
+                        $this->assertIsInt($cfg_val);
+                        $this->assertIsNumeric($cfg_val);
+                        break;
+                    default:
+                        $this->fail("Unknown key '{$cfg_key}' in '{$class_name}' data conversion config.");
+                }
+            }
+        }
+
+        $supported_keys = [
+            ResponseBuilder::KEY_KEY,
+            ResponseBuilder::KEY_PRI,
+            ResponseBuilder::KEY_HANDLER,
+        ];
+        foreach ($classes as $class_name => $class_config) {
+            foreach ($class_config as $cfg_key => $cfg_val) {
+                $msg = "Unknown key '{$cfg_key}' in '{$class_name}' data conversion config.";
+                $this->assertContains($cfg_key, $supported_keys, $msg);
+            }
+        }
+    }
+
 
 } // end of ApiCodesTests trait

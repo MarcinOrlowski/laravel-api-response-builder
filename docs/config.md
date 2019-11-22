@@ -14,7 +14,7 @@
  Available configuration options and its current default values listed in alphabetical order. Please note, that in majority
  of use cases it should be perfectly sufficient to just use defaults and only tune the config when needed.
  
- * [classes](#classes)
+ * [converter](#converter)
  * [debug](#debug)
  * [encoding_options](#encoding_options)
  * [exception_handler](#exception_handler)
@@ -24,24 +24,35 @@
 
 ## classes ##
  
-`Response Builder` can auto-convert to be used as response `data`. Create new entry for each class you want to have supported
-The entry key is a class name to check passed `data` object against, and configuration elements include:
+`Response Builder` can auto-convert to be used as response `data`. The following classes are supported out of the
+box:
+
+ * `\Illuminate\Database\Eloquent\Model`          
+ * `\Illuminate\Support\Collection`               
+ * `\Illuminate\Database\Eloquent\Collection`     
+ * `\Illuminate\Http\Resources\Json\JsonResource` 
+
+Create new entry for each class you want to have supported. The entry key is a full class name (including namespace):
 
 ```php
-'classes' => [
+'converter' => [
     Namespace\Classname::class => [
-        'method' => 'toArray',
-        'key'    => 'items',
-        'pri'    => 0,
+        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        'key'     => 'items',
+        
+        // Optional paramters
+        'pri'    => 0, 
         ],
 ],
 ```
-Where `method` is a name of the method to that `ResponseBuilder` should call on the object to obtain array representation of its 
-internal state, while `key` is a string that will be used as the JSON response as key to array representation.
+The `handler` is full name of the class that implements `ConverterContract`. Object of that class will be instantiated
+and conversion method will be invked. The `key` is a string that will be used as the JSON response as key to array representation.
 
-**NOTE:** order or entries matters as matching is done in order of appearance and is done using PHP `instanceof`. 
+All configuration entries are assigned priority `0` which can be changed using `pri` key (integer). This value is used to
+sort the entries to ensure that matching order is preserved. Entries with higher priority are matched first etc. This is
+very useful when you want to indirect configuration for two classes where additionally second extends first one. 
 So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A` 
-then `B` related configuration must be put first.
+then `B` related configuration must be set with higher priority.
 
 See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
  
@@ -100,54 +111,20 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
 
 ## exception_handler ##
 
- If you use `ResponseBuilder`'s Exception handler helper, you must map all the exceptions handled to unique api code
- from your currently configured range. That allows API calls chaining with proper error failure handling up to the
- top client code.
+ `ResponseBuilder`'s Exception handler helper is plug-and-play helper that will automatically handle
+ any exception thrown by your code and expose valid JSON response to the client applications. But aside
+ from error handling, some programmers use exceptions to quickly break the flow and return with additional
+ information. In such case you may want to assign separate API code to each of these "special" exceptions
+ and this is where `exception_handler` section comes in.
  
-```php
-'exception_handler' => [
-    'exception' => [
-        'http_not_found' => [
-            'code'      => \App\ApiCodes::HTTP_NOT_FOUND(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
-        ],
-        ...
-    ]
-]
-```
+ Each configuration entry consits of exception class name as a key and parameters array with fields
+ `api_code` and `http_code`. At runtime, exception handler will look for config entry for particualr
+ exception class and if there's one, proper handler, dedicated to that exception class, kicks in
+ and deals with the exception. If no such config exists, `default` handler will be used.
 
-
-Default exception handling configuration:
-
-```php
-'exception_handler' => [
-    'exception' => [
-        'http_not_found' => [
-            'code'      => \App\ApiCodes::HTTP_NOT_FOUND(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
-        ],
-        'http_service_unavailable' => [
-            'code'      => \App\ApiCodes::HTTP_SERVICE_UNAVAILABLE(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
-        ],
-        'http_exception' => [
-            'code'      => \App\ApiCodes::HTTP_EXCEPTION(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_BAD_REQUEST,
-        ],
-        'uncaught_exception' => [
-            'code'      => \App\ApiCodes::UNCAUGHT_EXCEPTION(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_INTERNAL_SERVER_ERROR,
-        ],
-        'authentication_exception' => [
-            'code'      => \App\ApiCodes::AUTHENTICATION_EXCEPTION(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNAUTHORIZED,
-        ],
-        'validation_exception' => [
-            'code'      => \App\ApiCodes::VALIDATION_EXCEPTION(),
-            'http_code' => Symfony\Component\HttpFoundation\Response\::HTTP_UNPROCESSABLE_ENTITY,
-        ],
-    ],
-```
+ **NOTE:** For now there's no option to specify custom converted as of yet (but that's next step anywya), 
+ so adding own classes to the config same way we did for 
+ `\Symfony\Component\HttpKernel\Exception\HttpException::class` won't work.
 
 ## map ##
 

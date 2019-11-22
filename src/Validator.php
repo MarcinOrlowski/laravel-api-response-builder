@@ -24,6 +24,30 @@ class Validator
     /** @var string */
     public const TYPE_BOOL = 'boolean';
 
+    /** @var string */
+    public const TYPE_ARRAY = 'array';
+
+    /** @var string */
+    public const TYPE_OBJECT = 'object';
+
+    /** @var string */
+    public const TYPE_NULL = 'NULL';
+
+    /**
+     * Checks if given $val is of type boolean
+     *
+     * @param string $key Name of the key to be used if exception is thrown.
+     * @param mixed  $var Variable to be asserted.
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function assertIsBool(string $key, $var): void
+    {
+        self::assertIsType($key, $var, [self::TYPE_BOOL]);
+    }
+
     /**
      * Checks if given $val is of type integer
      *
@@ -34,9 +58,39 @@ class Validator
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertInt(string $key, $var): void
+    public static function assertIsInt(string $key, $var): void
     {
-        self::assertType($key, $var, [self::TYPE_INTEGER]);
+        self::assertIsType($key, $var, [self::TYPE_INTEGER]);
+    }
+
+    /**
+     * Checks if given $val is of type array
+     *
+     * @param string $key Name of the key to be used if exception is thrown.
+     * @param mixed  $var Variable to be asserted.
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function assertIsArray(string $key, $var): void
+    {
+        self::assertIsType($key, $var, [self::TYPE_ARRAY]);
+    }
+
+    /**
+     * Checks if given $val is an object
+     *
+     * @param string $key Name of the key to be used if exception is thrown.
+     * @param mixed  $var Variable to be asserted.
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function assertIsObject(string $key, $var): void
+    {
+        self::assertIsType($key, $var, [self::TYPE_OBJECT]);
     }
 
     /**
@@ -49,9 +103,9 @@ class Validator
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertString(string $name, $var): void
+    public static function assertIsString(string $name, $var): void
     {
-        self::assertType($name, $var, [self::TYPE_STRING]);
+        self::assertIsType($name, $var, [self::TYPE_STRING]);
     }
 
     /**
@@ -65,9 +119,9 @@ class Validator
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public static function assertIntRange(string $name, $var, int $min, int $max): void
+    public static function assertIsIntRange(string $name, $var, int $min, int $max): void
     {
-        self::assertInt($name, $var);
+        self::assertIsInt($name, $var);
 
         if ($min > $max) {
             throw new \RuntimeException(
@@ -91,12 +145,53 @@ class Validator
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertType(string $name, $var, array $allowed_types): void
+    public static function assertIsType(string $name, $var, array $allowed_types): void
     {
         $type = gettype($var);
         if (!in_array($type, $allowed_types)) {
-            $msg = sprintf('"%s" must be one of allowed types: %s (%s given)', $name, implode(', ', $allowed_types), gettype($var));
-            throw new \InvalidArgumentException($msg);
+            throw new \InvalidArgumentException(
+                sprintf('"%s" must be one of allowed types: %s (%s given)',
+                    $name, implode(', ', $allowed_types), gettype($var))
+            );
+        }
+    }
+
+    /**
+     * Ensures given $http_code is valid code for error response.
+     *
+     * @param int $http_code
+     */
+    public static function assertErrorHttpCode(int $http_code): void
+    {
+        self::assertIsInt('http_code', $http_code);
+        self::assertIsIntRange('http_code', $http_code,
+            ResponseBuilder::ERROR_HTTP_CODE_MIN, ResponseBuilder::ERROR_HTTP_CODE_MAX);
+    }
+
+    /**
+     * Ensures given $http_code is valid for response indicating sucessful operation.
+     *
+     * @param int $http_code
+     */
+    public static function assertOkHttpCode(int $http_code): void
+    {
+        self::assertIsInt('http_code', $http_code);
+        self::assertIsIntRange('http_code', $http_code, 200, 299);
+    }
+
+    /**
+     * Ensures $obj is instance of $cls.
+     *
+     * @param string $name
+     * @param object $obj
+     * @param string $cls
+     */
+    public static function assertInstanceOf(string $name, object $obj, string $cls): void
+    {
+        if (!($obj instanceof $cls)) {
+            throw new \InvalidArgumentException(
+                sprintf('"%s" must be instance of "%s".', $name, $cls)
+            );
         }
     }
 }

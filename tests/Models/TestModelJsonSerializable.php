@@ -13,42 +13,28 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Request;
+
 /**
  * Class TestModel to verify auto-conversion feature
  */
-class TestModel
+class TestModelJsonSerializable implements \JsonSerializable
 {
-    /** @var string|null */
     protected $val;
 
-    /**
-     * TestModel constructor.
-     *
-     * @param string $val
-     */
-    public function __construct(string $val)
+    public function __construct($val)
     {
         $this->val = $val;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getVal(): ?string
+    public function getVal()
     {
         return $this->val;
     }
 
-    /**
-     * Converts model to array
-     *
-     * @return array
-     */
-    public function toArray(): array
+    public function jsonSerialize(): string
     {
-        return [
-            'val' =>
-                $this->val,
-        ];
+        return json_encode($this->val);
     }
 }

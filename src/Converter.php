@@ -14,7 +14,6 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
 
@@ -35,13 +34,7 @@ class Converter
      */
     public function __construct()
     {
-        $classes = static::getClassesMapping() ?? [];
-        if (!is_array($classes)) {
-            throw new \RuntimeException(
-                sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
-        }
-
-        $this->classes = $classes;
+        $this->classes = static::getClassesMapping() ?? [];
     }
 
     /**
@@ -76,7 +69,7 @@ class Converter
             $result = $this->classes[ $cls ];
         } else {
             // no exact match, then lets try with `instanceof`
-            foreach (array_keys($this->classes) as $class_name) {
+            foreach (array_keys($this->getClasses()) as $class_name) {
                 if ($data instanceof $class_name) {
                     $result = $this->classes[ $class_name ];
                     break;
@@ -106,15 +99,18 @@ class Converter
             return null;
         }
 
+        Validator::assertIsType('data', $data, [Validator::TYPE_ARRAY,
+                                                Validator::TYPE_OBJECT]);
+
         if (is_object($data)) {
             $cfg = $this->getClassMappingConfigOrThrow($data);
-            $data = [$cfg[ ResponseBuilder::KEY_KEY ] => $data->{$cfg[ ResponseBuilder::KEY_METHOD ]}()];
-        } elseif (!is_array($data)) {
-            throw new \InvalidArgumentException(
-                sprintf('Payload must be null, array or object with mapping ("%s" given).', gettype($data)));
+            $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
+            $data = $worker->convert($data, $cfg);
+        } else {
+            $data = $this->convertArray($data);
         }
 
-        return $this->convertArray($data);
+        return $data;
     }
 
     /**
@@ -152,12 +148,10 @@ class Converter
             if (is_array($val)) {
                 $data[ $key ] = $this->convertArray($val);
             } elseif (is_object($val)) {
-                $cls = get_class($val);
-                if (array_key_exists($cls, $this->classes)) {
-                    $conversion_method = $this->classes[ $cls ][ ResponseBuilder::KEY_METHOD ];
-                    $converted_data = $val->$conversion_method();
-                    $data[ $key ] = $converted_data;
-                }
+                $cfg = $this->getClassMappingConfigOrThrow($val);
+                $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
+                $converted_data = $worker->convert($val, $cfg);
+                $data[ $key ] = $converted_data;
             }
         }
 
@@ -171,9 +165,9 @@ class Converter
      *
      * @throws \RuntimeException if "classes" mapping is technically invalid (i.e. not array etc).
      */
-    protected static function getClassesMapping(): ?array
+    protected static function getClassesMapping(): array
     {
-        $classes = Config::get(ResponseBuilder::CONF_KEY_CLASSES);
+        $classes = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
 
         if ($classes !== null) {
             if (!is_array($classes)) {
@@ -182,8 +176,7 @@ class Converter
             }
 
             $mandatory_keys = [
-                ResponseBuilder::KEY_KEY,
-                ResponseBuilder::KEY_METHOD,
+                ResponseBuilder::KEY_HANDLER,
             ];
             foreach ($classes as $class_name => $class_config) {
                 foreach ($mandatory_keys as $key_name) {

@@ -133,14 +133,11 @@ trait ApiCodesHelpers
      *
      * @throws \InvalidArgumentException
      */
-    protected static function getCodeForInternalOffset(int $internal_code): int
+    public static function getCodeForInternalOffset(int $internal_code): int
     {
         $min = static::RESERVED_MIN_API_CODE_OFFSET;
         $max = static::RESERVED_MAX_API_CODE_OFFSET;
-        if (($internal_code < $min) || ($internal_code > $max)) {
-            throw new \InvalidArgumentException(
-                "Invalid internal code ({$internal_code}). Must be between {$min}-{$max} inclusive.");
-        }
+        Validator::assertIsIntRange('internal_code', $internal_code, $min, $max);
 
         return ($internal_code === 0) ? 0 : $internal_code + static::getMinCode();
     }

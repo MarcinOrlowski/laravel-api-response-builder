@@ -39,7 +39,7 @@ class InternalsTest extends TestCase
      */
     public function testGetClassesMappingWithWrongType(): void
     {
-        \Config::set(ResponseBuilder::CONF_KEY_CLASSES, false);
+        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER, false);
 
         $this->expectException(\RuntimeException::class);
 
@@ -57,7 +57,7 @@ class InternalsTest extends TestCase
      */
     public function testGetClassesMappingMethodWithIncompleteMappingConfiguration(): void
     {
-        \Config::set(ResponseBuilder::CONF_KEY_CLASSES, [
+        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
             self::class => [],
         ]);
 
@@ -127,12 +127,12 @@ class InternalsTest extends TestCase
 
             'OK_OFFSET',
             'NO_ERROR_MESSAGE_OFFSET',
-            'EX_HTTP_NOT_FOUND_OFFSET',
-            'EX_HTTP_SERVICE_UNAVAILABLE_OFFSET',
+//            'EX_HTTP_NOT_FOUND_OFFSET',
+//            'EX_HTTP_SERVICE_UNAVAILABLE_OFFSET',
             'EX_HTTP_EXCEPTION_OFFSET',
             'EX_UNCAUGHT_EXCEPTION_OFFSET',
-            'EX_AUTHENTICATION_EXCEPTION_OFFSET',
-            'EX_VALIDATION_EXCEPTION_OFFSET',
+//            'EX_AUTHENTICATION_EXCEPTION_OFFSET',
+//            'EX_VALIDATION_EXCEPTION_OFFSET',
         ];
         /** @noinspection PhpUnhandledExceptionInspection */
         $consts = BaseApiCodes::getApiCodeConstants();

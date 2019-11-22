@@ -13,7 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\Tests\Providers\ResponseBuilderServiceProvider;
+use MarcinOrlowski\ResponseBuilder\Tests\Providers\TestServiceProvider;
 use MarcinOrlowski\ResponseBuilder\Util;
 
 class MergeConfigTest extends TestCase
