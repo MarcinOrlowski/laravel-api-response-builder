@@ -2,6 +2,8 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Providers;
 
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+
 /**
  * Laravel API Response Builder
  *
@@ -14,12 +16,13 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Providers;
  */
 
 /**
- * Class TestResponseBuilderServiceProvider
+ * Class TestServiceProvider
  *
- * We need slightly different paths for the test environment, so we cannot
- * use original ResponseBuilderServiceProvider
+ * We need slightly different paths for the test environment, therefore we cannot
+ * use original ResponseBuilderServiceProvider. Additionally, we do not need support
+ * for config publishing.
  */
-class ResponseBuilderServiceProvider extends \MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider
+class TestServiceProvider extends \MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider
 {
     /**
      * Register bindings in the container.
@@ -28,9 +31,9 @@ class ResponseBuilderServiceProvider extends \MarcinOrlowski\ResponseBuilder\Res
      */
     public function register()
     {
-        $this->mergeConfigFrom(
-            __DIR__ . '/../../config/response_builder.php', 'response_builder'
-        );
+        foreach ($this->config_files as $file) {
+            $this->mergeConfigFrom(__DIR__ . "/../../config/{$file}", ResponseBuilder::CONF_CONFIG);
+        }
     }
 
     /**

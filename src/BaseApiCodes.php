@@ -14,6 +14,8 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
+
 /**
  * BaseApiCodes handling class
  */
@@ -93,18 +95,17 @@ class BaseApiCodes
      */
     protected static function getBaseMap(): array
     {
-        /**
-         * @var array built-in codes mapping
-         */
+        $tpl = 'response-builder::builder.http_%d';
+
         return [
             self::OK()                          => 'response-builder::builder.ok',
             self::NO_ERROR_MESSAGE()            => 'response-builder::builder.no_error_message',
-            self::EX_HTTP_NOT_FOUND()           => 'response-builder::builder.http_not_found',
-            self::EX_HTTP_SERVICE_UNAVAILABLE() => 'response-builder::builder.http_service_unavailable',
             self::EX_HTTP_EXCEPTION()           => 'response-builder::builder.http_exception',
             self::EX_UNCAUGHT_EXCEPTION()       => 'response-builder::builder.uncaught_exception',
-            self::EX_AUTHENTICATION_EXCEPTION() => 'response-builder::builder.authentication_exception',
-            self::EX_VALIDATION_EXCEPTION()     => 'response-builder::builder.validation_exception',
+            self::EX_HTTP_NOT_FOUND()           => sprintf($tpl, HttpResponse::HTTP_NOT_FOUND),
+            self::EX_HTTP_SERVICE_UNAVAILABLE() => sprintf($tpl, HttpResponse::HTTP_SERVICE_UNAVAILABLE),
+            self::EX_AUTHENTICATION_EXCEPTION() => sprintf($tpl, HttpResponse::HTTP_UNAUTHORIZED),
+            self::EX_VALIDATION_EXCEPTION()     => sprintf($tpl, HttpResponse::HTTP_UNPROCESSABLE_ENTITY),
         ];
     }
 
@@ -132,6 +133,8 @@ class BaseApiCodes
      * Returns API code for internal code EX_HTTP_NOT_FOUND
      *
      * @return int valid API code in current range
+     *
+     * @deprecated Configure Exception Handler to use your own API code.
      */
     public static function EX_HTTP_NOT_FOUND(): int
     {
@@ -162,6 +165,8 @@ class BaseApiCodes
      * Returns API code for internal code EX_AUTHENTICATION_EXCEPTION
      *
      * @return int valid API code in current range
+     *
+     * @deprecated Configure Exception Handler to use your own API code.
      */
     public static function EX_AUTHENTICATION_EXCEPTION(): int
     {
@@ -172,6 +177,8 @@ class BaseApiCodes
      * Returns API code for internal code EX_VALIDATION_EXCEPTION
      *
      * @return int valid API code in current range
+     *
+     * @deprecated Configure Exception Handler to use your own API code.
      */
     public static function EX_VALIDATION_EXCEPTION(): int
     {
@@ -182,6 +189,8 @@ class BaseApiCodes
      * Returns API code for internal code EX_HTTP_SERVICE_UNAVAILABLE
      *
      * @return int valid API code in current range
+     *
+     * @deprecated Configure Exception Handler to use your own API code.
      */
     public static function EX_HTTP_SERVICE_UNAVAILABLE(): int
     {

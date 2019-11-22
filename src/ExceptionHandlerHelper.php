@@ -15,7 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 
 use Exception;
-use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\AuthenticationException as AuthException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
@@ -28,61 +28,107 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class ExceptionHandlerHelper
 {
     /**
-     * Exception types
-     */
-    public const TYPE_HTTP_NOT_FOUND_KEY           = 'http_not_found';
-    public const TYPE_HTTP_SERVICE_UNAVAILABLE_KEY = 'http_service_unavailable';
-    public const TYPE_HTTP_UNAUTHORIZED_KEY        = 'authentication_exception';
-    public const TYPE_HTTP_EXCEPTION_KEY           = 'http_exception';
-    public const TYPE_VALIDATION_EXCEPTION_KEY     = 'validation_exception';
-    public const TYPE_UNCAUGHT_EXCEPTION_KEY       = 'uncaught_exception';
-    public const TYPE_AUTHENTICATION_EXCEPTION_KEY = 'authentication_exception';
-
-    /**
      * Render an exception into valid API response.
      *
-     * @param \Illuminate\Http\Request $request   Request object
-     * @param \Exception               $exception Exception
+     * @param \Illuminate\Http\Request $request Request object
+     * @param \Exception               $ex      Exception
      *
      * @return HttpResponse
      */
-    public static function render(/** @scrutinizer ignore-unused */ $request, Exception $exception): HttpResponse
+    public static function render(/** @scrutinizer ignore-unused */ $request, Exception $ex): HttpResponse
     {
         $result = null;
+        $cfg = static::getExceptionHandlerConfig()['map'];
 
-        if ($exception instanceof HttpException) {
-            switch ($exception->getStatusCode()) {
-                case HttpResponse::HTTP_NOT_FOUND:
-                    $result = static::error($exception, static::TYPE_HTTP_NOT_FOUND_KEY,
-                        BaseApiCodes::EX_HTTP_NOT_FOUND(), HttpResponse::HTTP_NOT_FOUND);
-                    break;
-
-                case HttpResponse::HTTP_SERVICE_UNAVAILABLE:
-                    $result = static::error($exception, static::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY,
-                        BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(), HttpResponse::HTTP_SERVICE_UNAVAILABLE);
-                    break;
-
-                case HttpResponse::HTTP_UNAUTHORIZED:
-                    $result = static::error($exception, static::TYPE_HTTP_UNAUTHORIZED_KEY,
-                        BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(), HttpResponse::HTTP_UNAUTHORIZED);
-                    break;
-
-                default:
-                    $result = static::error($exception, static::TYPE_HTTP_EXCEPTION_KEY,
-                        BaseApiCodes::EX_HTTP_EXCEPTION(), HttpResponse::HTTP_BAD_REQUEST);
-                    break;
-            }
-        } elseif ($exception instanceof ValidationException) {
-            $result = static::error($exception, static::TYPE_VALIDATION_EXCEPTION_KEY,
-                BaseApiCodes::EX_VALIDATION_EXCEPTION(), HttpResponse::HTTP_BAD_REQUEST);
+        if ($ex instanceof HttpException) {
+            // Check if we have any exception configuration for this particular Http status code.
+            // This confing entry is guaranted to exist (at least 'default'). Enforced by tests.
+            $http_code = $ex->getStatusCode();
+            $ex_cfg = $cfg[ HttpException::class ][ $http_code ] ?? null;
+            $ex_cfg = $ex_cfg ?? $cfg[ HttpException::class ]['default'];
+            $result = self::processException($ex, $ex_cfg, $http_code);
+        } elseif ($ex instanceof ValidationException) {
+            // This entry is guaranted to exist. Enforced by tests.
+            $http_code = HttpResponse::HTTP_UNPROCESSABLE_ENTITY;
+            $ex_cfg = $cfg[ HttpException::class ][ $http_code ];
+            $result = self::processException($ex, $ex_cfg, $http_code);
         }
 
         if ($result === null) {
-            $result = static::error($exception, static::TYPE_UNCAUGHT_EXCEPTION_KEY,
-                BaseApiCodes::EX_UNCAUGHT_EXCEPTION(), HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
+            // This entry is guaranted to exist. Enforced by tests.
+            $http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR;
+            $ex_cfg = $cfg['default'];
+            $result = self::processException($ex, $ex_cfg, $http_code);
         }
 
         return $result;
+    }
+
+    protected static function processException(\Exception $ex, array $ex_cfg, int $http_code)
+    {
+        $api_code = $ex_cfg['api_code'];
+        $http_code = $ex_cfg['http_code'] ?? $http_code;
+        $msg_key = $ex_cfg['msg_key'] ?? null;
+        $msg_enforce = $ex_cfg['msg_enforce'] ?? false;
+
+        // No message key, let's get exception message and if there's nothing useful, fallback to built-in one.
+        $error_message = $ex->getMessage();
+        $placeholders = [
+            'api_code' => $api_code,
+            'message'  => ($error_message !== '') ? $error_message : '???',
+        ];
+
+        // shall we enforce error message?
+        if ($msg_enforce) {
+            // yes, please.
+            if ($msg_key === null) {
+                // there's no msg_key configured for this exact code, so let's obtain our default message
+                $error_message = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders) : Lang::get($msg_key, $placeholders);
+            }
+        } else {
+            // nothing enforced, handling pipeline: ex_message -> user_defined msg -> http_ex -> default
+            if ($error_message === '') {
+                $error_message = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders) : Lang::get($msg_key, $placeholders);
+            }
+        }
+
+        // Lets' try to build the error response with what we have now
+        $result = static::error($ex, $api_code, $http_code, $error_message);
+
+        if ($result === null) {
+            $ex_cfg = $cfg[ HttpException::class ][ $http_code ];
+            $api_code = $ex_cfg['api_code'] ?? BaseApiCodes::EX_VALIDATION_EXCEPTION();
+            $http_code = $ex_cfg['http_code'] ?? $http_code;
+            $result = static::error($ex, $api_code, $http_code, $error_message);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns error message for given exception. If exception message is empty, then falls back to
+     * `default` handler either for HttpException (if $ex is instance of it), or generic `default`
+     * config.
+     *
+     * @param \Exception $ex
+     * @param int        $http_code
+     * @param array      $placeholders
+     *
+     * @return string
+     */
+    protected static function getErrorMessageForException(\Exception $ex, int $http_code, array $placeholders): string
+    {
+        // exception message is uselss, lets go deeper
+        if ($ex instanceof HttpException) {
+            $error_message = Lang::get("response-builder::builder.http_{$http_code}", $placeholders);
+        } else {
+            // Still got nothing? Fall back to built-in generic message for this type of exception.
+            $key = BaseApiCodes::getCodeMessageKey(($ex instanceof HttpException)
+                ? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
+            $error_message = Lang::get($key, $placeholders);
+        }
+
+        return $error_message;
     }
 
     /**
@@ -94,98 +140,111 @@ class ExceptionHandlerHelper
      * @return HttpResponse
      */
     protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
-                                                                         AuthenticationException $exception): HttpResponse
+                                                                         AuthException $exception): HttpResponse
     {
-        return static::error($exception, 'authentication_exception', BaseApiCodes::EX_AUTHENTICATION_EXCEPTION());
+        // This entry is guaranted to exist. Enforced by tests.
+        $http_code = HttpResponse::HTTP_UNAUTHORIZED;
+        $cfg = static::getExceptionHandlerConfig()['map'][ HttpException::class ][ $http_code ];
+
+        return static::processException($exception, $cfg, $http_code);
     }
 
     /**
-     * Process singe error and produce valid API response
+     * Process single error and produce valid API response.
      *
-     * @param Exception $exception            Exception to be processed
-     * @param string    $exception_config_key Category of the exception
-     * @param integer   $fallback_api_code    API code to return
-     * @param integer   $fallback_http_code   HTTP code to return
+     * @param Exception $ex Exception to be handled.
+     * @param integer   $api_code
+     * @param integer   $http_code
      *
      * @return HttpResponse
      */
-    protected static function error(Exception $exception, $exception_config_key, $fallback_api_code,
-                                    $fallback_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR): HttpResponse
+    protected static function error(Exception $ex,
+                                    int $api_code, int $http_code = null, string $error_message): HttpResponse
     {
-        // common prefix for config key
-        $base_key = sprintf('%s.exception', ResponseBuilder::CONF_EXCEPTION_HANDLER_KEY);
+        $ex_http_code = ($ex instanceof HttpException) ? $ex->getStatusCode() : $ex->getCode();
+        $http_code = $http_code ?? $ex_http_code;
 
-        // get API and HTTP codes from exception handler config or use fallback values if no such
-        // config fields are set.
-        $api_code = Config::get("{$base_key}.{$exception_config_key}.code", $fallback_api_code);
-        $http_code = Config::get("{$base_key}.{$exception_config_key}.http_code", $fallback_http_code);
-
-        // check if we now have valid HTTP error code for this case or need to make one up.
+        // Check if we now have valid HTTP error code for this case or need to make one up.
+        // We cannot throw any exception if codes are invalid because we are in Exception Handler already.
         if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
-            // no code, let's try to get the exception status
-            $http_code = ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException)
-                ? $exception->getStatusCode()
-                : $exception->getCode();
+            // Not a valid code, let's try to get the exception status.
+            $http_code = $ex_http_code;
         }
-
-        // can it be considered valid HTTP error code?
+        // Can it be considered a valid HTTP error code?
         if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
-            $http_code = $fallback_http_code;
+            // We now handle uncaught exception, so we cannot throw another one if there's
+            // something wrong with the configuration, so we try to recover and use built-in
+            // codes instead.
+            // FIXME: We should log this event as (warning or error?)
+            $http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
         }
 
-        // let's figure out what event we are handling now
-        $known_codes = [
-            self::TYPE_HTTP_NOT_FOUND_KEY           => BaseApiCodes::EX_HTTP_NOT_FOUND(),
-            self::TYPE_HTTP_SERVICE_UNAVAILABLE_KEY => BaseApiCodes::EX_HTTP_SERVICE_UNAVAILABLE(),
-            self::TYPE_UNCAUGHT_EXCEPTION_KEY       => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-            self::TYPE_AUTHENTICATION_EXCEPTION_KEY => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
-            self::TYPE_VALIDATION_EXCEPTION_KEY     => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
-            self::TYPE_HTTP_EXCEPTION_KEY           => BaseApiCodes::EX_HTTP_EXCEPTION(),
-        ];
-        $base_api_code = BaseApiCodes::NO_ERROR_MESSAGE();
-        foreach ($known_codes as $item_config_key => $item_api_code) {
-            if ($api_code === Config::get("{$base_key}.{$item_config_key}.code", $item_api_code)) {
-                $base_api_code = $api_code;
-                break;
-            }
-        }
-
-        /** @var array|null $data Optional payload to return */
-        $data = null;
-        if ($api_code === Config::get("{$base_key}.validation_exception.code", BaseApiCodes::EX_VALIDATION_EXCEPTION())) {
-            /** @var ValidationException $exception */
-            $data = [ResponseBuilder::KEY_MESSAGES => $exception->validator->errors()->messages()];
-        }
-
-        $key = BaseApiCodes::getCodeMessageKey($api_code) ?? BaseApiCodes::getCodeMessageKey($base_api_code);
-
-        // let's build error error_message
-        $error_message = $exception->getMessage();
-
-        // if we do not have any error_message in the hand yet, we need to fall back to built-in string configured
-        // for this particular exception.
-        if ($error_message === '') {
-            $error_message = Lang::get($key, [
-                'api_code' => $api_code,
-				'message'  => '???',
-            ]);
-        }
-
-        // if we have trace data debugging enabled, let's gather some debug
-        // info and add to the response.
-        $trace_data = null;
+        // If we have trace data debugging enabled, let's gather some debug info and add to the response.
+        $debug_data = null;
         if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, false)) {
-            $trace_data = [
+            $debug_data = [
                 Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE) => [
-                    ResponseBuilder::KEY_CLASS => get_class($exception),
-                    ResponseBuilder::KEY_FILE  => $exception->getFile(),
-                    ResponseBuilder::KEY_LINE  => $exception->getLine(),
+                    ResponseBuilder::KEY_CLASS => get_class($ex),
+                    ResponseBuilder::KEY_FILE  => $ex->getFile(),
+                    ResponseBuilder::KEY_LINE  => $ex->getLine(),
                 ],
             ];
         }
 
-        return ResponseBuilder::errorWithMessageAndDataAndDebug($api_code, $error_message, $data,
-            $http_code, null, $trace_data);
+        // If this is ValidationException, add all the messages from MessageBag to the data node.
+        $data = null;
+        if ($ex instanceof ValidationException) {
+            /** @var ValidationException $ex */
+            $data = [ResponseBuilder::KEY_MESSAGES => $ex->validator->errors()->messages()];
+        }
+
+        return ResponseBuilder::asError($api_code)
+            ->withMessage($error_message)
+            ->withHttpCode($http_code)
+            ->withData($data)
+            ->withDebugData($debug_data)
+            ->build();
+    }
+
+    protected
+    static function getExceptionHandlerDefaultConfig(): array
+    {
+        return [
+            'map' => [
+                HttpException::class => [
+                    // used by unauthenticated() to obtain api and http code for the exception
+                    HttpResponse::HTTP_UNAUTHORIZED         => [
+                        'api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+                    ],
+                    // Required by ValidationException handler
+                    HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
+                        'api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+                    ],
+                    // default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
+                    'default'                               => [
+                        'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
+                        'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+                    ],
+                ],
+                // default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
+                'default'            => [
+                    'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+                    'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Returns ExceptionHandlerHelper configration array with user configuration merged into built-in defaults.
+     *
+     * @return array
+     */
+    protected
+    static function getExceptionHandlerConfig(): array
+    {
+        return Util::mergeConfig(static::getExceptionHandlerDefaultConfig(),
+            \Config::get(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, []));
     }
 
 }

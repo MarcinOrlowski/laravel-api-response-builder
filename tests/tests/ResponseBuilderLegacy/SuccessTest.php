@@ -1,6 +1,6 @@
 <?php
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Legacy;
 
 /**
  * Laravel API Response Builder
@@ -14,7 +14,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilderLegacy;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class SuccessTest extends TestCase
@@ -26,7 +27,7 @@ class SuccessTest extends TestCase
      */
     public function testSuccess(): void
     {
-        $this->response = ResponseBuilder::success();
+        $this->response = ResponseBuilderLegacy::success();
         $j = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
         $this->assertNull($j->data);
@@ -46,12 +47,12 @@ class SuccessTest extends TestCase
         // source data
         $data = ['test' => $test_string];
 
-        // check if it returns escaped
-        // ensure config is different from what we want
+        // Checks if it gets returned in escaped form.
+        // Ensure config is different from what we want.
         \Config::set('encoding_options', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
 
         $encoding_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
-        $resp = ResponseBuilder::success($data, BaseApiCodes::OK(), null, null, $encoding_options);
+        $resp = ResponseBuilderLegacy::success($data, BaseApiCodes::OK(), null, null, $encoding_options);
 
         $matches = [];
         $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -64,7 +65,7 @@ class SuccessTest extends TestCase
         \Config::set('encoding_options', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 
         $encoding_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE;
-        $resp = ResponseBuilder::success($data, BaseApiCodes::OK(), null, null, $encoding_options);
+        $resp = ResponseBuilderLegacy::success($data, BaseApiCodes::OK(), null, null, $encoding_options);
 
         $matches = [];
         $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -82,8 +83,8 @@ class SuccessTest extends TestCase
      */
     public function testSuccessApiCodeNoCustomMessage(): void
     {
-        \Config::set(ResponseBuilder::CONF_KEY_MAP, []);
-        $this->response = ResponseBuilder::success(null, $this->random_api_code);
+        \Config::set(ResponseBuilderLegacy::CONF_KEY_MAP, []);
+        $this->response = ResponseBuilderLegacy::success(null, $this->random_api_code);
         $j = $this->getResponseSuccessObject($this->random_api_code);
 
         $this->assertNull($j->data);
@@ -96,7 +97,7 @@ class SuccessTest extends TestCase
      */
     public function testSuccessApiCodeCustomMessage(): void
     {
-        $this->response = ResponseBuilder::success(null, $this->random_api_code);
+        $this->response = ResponseBuilderLegacy::success(null, $this->random_api_code);
         $j = $this->getResponseSuccessObject($this->random_api_code);
 
         $this->assertNull($j->data);
@@ -111,7 +112,7 @@ class SuccessTest extends TestCase
     public function testSuccessApiCodeCustomMessageLang(): void
     {
         // for simplicity let's reuse existing message that is using placeholder
-        \Config::set(ResponseBuilder::CONF_KEY_MAP, [
+        \Config::set(ResponseBuilderLegacy::CONF_KEY_MAP, [
             $this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE()),
         ]);
 
@@ -119,7 +120,7 @@ class SuccessTest extends TestCase
             'api_code' => $this->getRandomString('foo'),
         ];
 
-        $this->response = ResponseBuilder::success(null, $this->random_api_code, $lang_args);
+        $this->response = ResponseBuilderLegacy::success(null, $this->random_api_code, $lang_args);
         $expected_message = \Lang::get(BaseApiCodes::getCodeMessageKey($this->random_api_code), $lang_args);
         $j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
 
@@ -136,7 +137,7 @@ class SuccessTest extends TestCase
     {
         // for simplicity let's reuse existing message that is using placeholder
         /** @noinspection PhpUndefinedClassInspection */
-        \Config::set(ResponseBuilder::CONF_KEY_MAP, [
+        \Config::set(ResponseBuilderLegacy::CONF_KEY_MAP, [
             $this->random_api_code => BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE()),
         ]);
 
@@ -144,7 +145,7 @@ class SuccessTest extends TestCase
             'api_code' => $this->getRandomString('foo'),
         ];
 
-        $this->response = ResponseBuilder::successWithCode($this->random_api_code, $lang_args);
+        $this->response = ResponseBuilderLegacy::successWithCode($this->random_api_code, $lang_args);
         $expected_message = \Lang::get(BaseApiCodes::getCodeMessageKey($this->random_api_code), $lang_args);
         $j = $this->getResponseSuccessObject($this->random_api_code, null, $expected_message);
 
@@ -174,7 +175,7 @@ class SuccessTest extends TestCase
         foreach ($payloads as $payload) {
             foreach ($http_codes as $http_code) {
                 foreach ($http_code as $http_code_expect => $http_code_send) {
-                    $this->response = ResponseBuilder::success($payload, null, [], $http_code_send);
+                    $this->response = ResponseBuilderLegacy::success($payload, null, [], $http_code_send);
 
                     $j = $this->getResponseSuccessObject($api_codes_class_name::OK(), $http_code_expect);
 
@@ -197,8 +198,8 @@ class SuccessTest extends TestCase
             HttpResponse::HTTP_OK,
         ];
         foreach ($http_codes as $http_code) {
-            $this->response = ResponseBuilder::successWithHttpCode($http_code);
-            $j = $this->getResponseSuccessObject(0, $http_code);
+            $this->response = ResponseBuilderLegacy::successWithHttpCode($http_code);
+            $j = $this->getResponseSuccessObject(null, $http_code);
             $this->assertNull($j->data);
         }
     }
@@ -210,8 +211,8 @@ class SuccessTest extends TestCase
      */
     public function testSuccessWithNullAsHttpCode(): void
     {
-        $response = ResponseBuilder::successWithHttpCode(null);
-        $this->assertEquals(ResponseBuilder::DEFAULT_HTTP_CODE_OK, $response->getStatusCode());
+        $response = ResponseBuilderLegacy::successWithHttpCode(null);
+        $this->assertEquals(ResponseBuilderLegacy::DEFAULT_HTTP_CODE_OK, $response->getStatusCode());
     }
 
     /**
@@ -222,7 +223,7 @@ class SuccessTest extends TestCase
     public function testSuccessWithTooBigHttpCode(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        ResponseBuilder::successWithHttpCode(666);
+        ResponseBuilderLegacy::successWithHttpCode(666);
     }
 
     /**
@@ -233,7 +234,7 @@ class SuccessTest extends TestCase
     public function testSuccessWithTooLowHttpCode(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        ResponseBuilder::successWithHttpCode(0);
+        ResponseBuilderLegacy::successWithHttpCode(0);
     }
 
     /**
@@ -242,7 +243,7 @@ class SuccessTest extends TestCase
     public function testSuccessWithMessage(): void
     {
         $msg = $this->getRandomString('msg_');
-        $this->response = ResponseBuilder::successWithMessage($msg);
+        $this->response = ResponseBuilderLegacy::successWithMessage($msg);
         $j = $this->getResponseSuccessObject(BaseApiCodes::OK(), null, $msg);
         $this->assertNull($j->data);
     }
