@@ -265,6 +265,8 @@ trait TestingHelpers
      * @return HttpResponse
      *
      * @throws \ReflectionException
+     *
+     * @noinspection PhpTooManyParametersInspection
      */
     protected function callMakeMethod(bool $success, int $api_code_offset, $message_or_api_code_offset,
                                       array $data = null,

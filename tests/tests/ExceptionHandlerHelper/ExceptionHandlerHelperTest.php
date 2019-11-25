@@ -111,6 +111,8 @@ class ExceptionHandlerHelperTest extends TestCase
      * @return void
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @noinspection PhpTooManyParametersInspection
      */
     protected function doTestSingleException(string $exception_config_key,
                                              string $exception_class,

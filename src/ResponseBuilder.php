@@ -232,7 +232,6 @@ class ResponseBuilder extends ResponseBuilderBase
         return $result;
     }
 
-
     /**
      * @param boolean           $success         @true if response reports successful operation, @false otherwise.
      * @param integer           $api_code        Your API code to be returned with the response object.
@@ -252,7 +251,7 @@ class ResponseBuilder extends ResponseBuilderBase
      * @throws \InvalidArgumentException If $api_code is neither a string nor valid integer code.
      * @throws \InvalidArgumentException if $data is an object of class that is not configured in "classes" mapping.
      *
-     * @noinspection MoreThanThreeArgumentsInspection
+     * @noinspection PhpTooManyParametersInspection
      */
     protected function make(bool $success, int $api_code, $msg_or_api_code, $data = null,
                             int $http_code = null, array $placeholders = null, array $http_headers = null,
@@ -291,6 +290,8 @@ class ResponseBuilder extends ResponseBuilderBase
      * @return array response ready to be encoded as json and sent back to client
      *
      * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
+     *
+     * @noinspection PhpTooManyParametersInspection
      */
     protected function buildResponse(bool $success, int $api_code,
                                      $msg_or_api_code, array $placeholders = null,
