@@ -64,6 +64,15 @@ class ExceptionHandlerHelper
         return $result;
     }
 
+    /**
+     * Handles given exception and produces valid HTTP response object.
+     *
+     * @param \Exception $ex         Exception to be handled.
+     * @param array      $ex_cfg     ExceptionHandler's config excerpt related to $ex exception type.
+     * @param int        $http_code  HTTP code to be assigned to produced $ex related response.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     protected static function processException(\Exception $ex, array $ex_cfg, int $http_code)
     {
         $api_code = $ex_cfg['api_code'];
@@ -86,7 +95,7 @@ class ExceptionHandlerHelper
                 $error_message = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders) : Lang::get($msg_key, $placeholders);
             }
         } else {
-            // nothing enforced, handling pipeline: ex_message -> user_defined msg -> http_ex -> default
+            // nothing enforced, handling pipeline: ex_message -> user_defined_msg -> http_ex -> default
             if ($error_message === '') {
                 $error_message = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders) : Lang::get($msg_key, $placeholders);
             }
@@ -96,7 +105,6 @@ class ExceptionHandlerHelper
         $result = static::error($ex, $api_code, $http_code, $error_message);
 
         if ($result === null) {
-            $ex_cfg = $cfg[ HttpException::class ][ $http_code ];
             $api_code = $ex_cfg['api_code'] ?? BaseApiCodes::EX_VALIDATION_EXCEPTION();
             $http_code = $ex_cfg['http_code'] ?? $http_code;
             $result = static::error($ex, $api_code, $http_code, $error_message);
