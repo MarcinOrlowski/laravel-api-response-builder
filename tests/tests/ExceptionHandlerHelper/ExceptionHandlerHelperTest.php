@@ -395,6 +395,55 @@ class ExceptionHandlerHelperTest extends TestCase
     // -----------------------------------------------------------------------------------------------------------
 
     /**
+     * Checks if processException() would properly handle the case when there's no `msg_key` specified in exception
+     * handler config for this particular exception type, yet method is ordered to ignore message provided by
+     * exception and fall back one from config (which in this case means another fallback to built-in settings).
+     */
+    public function testProcessExceptionWithMsgEnforceWithNoFallbackMsgKey(): void
+    {
+        $api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
+        $http_code = mt_rand(ResponseBuilder::ERROR_HTTP_CODE_MIN, ResponseBuilder::ERROR_HTTP_CODE_MAX);
+        do {
+            $fallback_http_code = mt_rand(ResponseBuilder::ERROR_HTTP_CODE_MIN, ResponseBuilder::ERROR_HTTP_CODE_MAX);
+        } while ($fallback_http_code === $http_code);
+
+        $ex_cfg = [
+            'api_code'    => $api_code,
+            'http_code'   => $http_code,
+            'msg_enforce' => true,
+        ];
+
+        $ex_msg = $this->getRandomString('ex');
+        $ex = new \RuntimeException($ex_msg);
+
+        /** @var HttpResponse $response */
+        $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'processException', [
+            $ex,
+            $ex_cfg,
+            $fallback_http_code,
+        ]);
+        $json = json_decode($response->getContent(), false);
+        $this->assertValidResponse($json);
+
+        $msg = $ex->getMessage();
+        $placeholders = [
+            'api_code' => $api_code,
+            'message'  => ($msg !== '') ? $msg : '???',
+        ];
+        $expected_msg_key = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getErrorMessageForException', [
+            $ex,
+            $http_code,
+            $placeholders]);
+        $expected_msg = \Lang::get($expected_msg_key, $placeholders);
+
+        $this->assertEquals($expected_msg, $json->message);
+        $this->assertEquals($http_code, $response->getStatusCode());
+        $this->assertEquals($api_code, $json->code);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------
+
+    /**
      * Performs tests to ensure error() fallback mechanism for HTTP codes works correctly.
      *
      * @param int           $expected_http_code Expected HTTP code to be returned in response.
