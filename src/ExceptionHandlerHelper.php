@@ -46,7 +46,7 @@ class ExceptionHandlerHelper
             $http_code = $ex->getStatusCode();
             $ex_cfg = $cfg[ HttpException::class ][ $http_code ] ?? null;
             $ex_cfg = $ex_cfg ?? $cfg[ HttpException::class ]['default'];
-            $result = self::processException($ex, $ex_cfg, $http_code);
+            $result = self::processException($ex, /** @scrutinizer ignore-type */ $ex_cfg, $http_code);
         } elseif ($ex instanceof ValidationException) {
             // This entry is guaranted to exist. Enforced by tests.
             $http_code = HttpResponse::HTTP_UNPROCESSABLE_ENTITY;
@@ -124,7 +124,8 @@ class ExceptionHandlerHelper
         } else {
             // Still got nothing? Fall back to built-in generic message for this type of exception.
             $key = BaseApiCodes::getCodeMessageKey(($ex instanceof HttpException)
-                ? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
+                ? /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_HTTP_EXCEPTION()
+                : /** @scrutinizer ignore-deprecated */ BaseApiCodes::NO_ERROR_MESSAGE());
             $error_message = Lang::get($key, $placeholders);
         }
 
@@ -218,21 +219,21 @@ class ExceptionHandlerHelper
                 HttpException::class => [
                     // used by unauthenticated() to obtain api and http code for the exception
                     HttpResponse::HTTP_UNAUTHORIZED         => [
-                        'api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+                        'api_code' => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
                     ],
                     // Required by ValidationException handler
                     HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-                        'api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+                        'api_code' => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_VALIDATION_EXCEPTION(),
                     ],
                     // default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
                     'default'                               => [
-                        'api_code'  => BaseApiCodes::EX_HTTP_EXCEPTION(),
+                        'api_code'  => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_HTTP_EXCEPTION(),
                         'http_code' => HttpResponse::HTTP_BAD_REQUEST,
                     ],
                 ],
                 // default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
                 'default'            => [
-                    'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+                    'api_code'  => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
                     'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
                 ],
             ],
