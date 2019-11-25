@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * Disabled Scrutinizer's "false positive" in Builder class.
+
 * v7.0.0 (2019-11-22)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * New, flexible API based on `Builder` pattern (see [docs](docs/compatibility.md) for details).

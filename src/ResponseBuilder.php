@@ -28,8 +28,8 @@ class ResponseBuilder extends ResponseBuilderBase
     /** @var bool */
     protected $success = false;
 
-    /** @var int|null */
-    protected $api_code = null;
+    /** @var int */
+    protected $api_code;
 
     /** @var int|null */
     protected $http_code = null;
@@ -225,9 +225,8 @@ class ResponseBuilder extends ResponseBuilderBase
 
             Validator::assertErrorHttpCode($http_code);
 
-            $result = $this->make(false, $api_code, $msg_or_api_code, $this->data, $http_code,
-                $this->placeholders, $this->http_headers, $this->json_opts, $this->debug_data);
-
+            $result = $this->make(false, $api_code, $msg_or_api_code, $this->data, $http_code, $this->placeholders,
+                $this->http_headers, $this->json_opts, $this->debug_data);
         }
 
         return $result;
