@@ -6,6 +6,11 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v7.0.1 (2019-11-25)
+   * Disabled Scrutinizer's "false positive" in Builder class.
+   * Added more tests to improve overall coverage.
+   * Updated PHPDocs
+
 * v7.0.0 (2019-11-22)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * New, flexible API based on `Builder` pattern (see [docs](docs/compatibility.md) for details).

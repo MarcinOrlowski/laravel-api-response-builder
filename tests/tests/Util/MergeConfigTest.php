@@ -68,4 +68,18 @@ class MergeConfigTest extends TestCase
         $result = Util::mergeConfig($original, $merging);
         $this->assertArraysEquals($result, $expected);
     }
+
+    /**
+     * Checks if config merger would fail when we try to feed it with two config sharing the key
+     * but using data of different type in each configs.
+     */
+    public function testConfigMergeWithIncompatibleElements(): void
+    {
+        $key = $this->getRandomString('key');
+        $original = [$key => false];
+        $merging = [$key => []];
+
+        $this->expectException(\RuntimeException::class);
+        $result = Util::mergeConfig($original, $merging);
+    }
 }

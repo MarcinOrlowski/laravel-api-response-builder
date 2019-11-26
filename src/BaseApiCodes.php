@@ -98,13 +98,21 @@ class BaseApiCodes
         $tpl = 'response-builder::builder.http_%d';
 
         return [
+            /** @scrutinizer ignore-deprecated */
             self::OK()                          => 'response-builder::builder.ok',
+            /** @scrutinizer ignore-deprecated */
             self::NO_ERROR_MESSAGE()            => 'response-builder::builder.no_error_message',
+            /** @scrutinizer ignore-deprecated */
             self::EX_HTTP_EXCEPTION()           => 'response-builder::builder.http_exception',
+            /** @scrutinizer ignore-deprecated */
             self::EX_UNCAUGHT_EXCEPTION()       => 'response-builder::builder.uncaught_exception',
+            /** @scrutinizer ignore-deprecated */
             self::EX_HTTP_NOT_FOUND()           => sprintf($tpl, HttpResponse::HTTP_NOT_FOUND),
+            /** @scrutinizer ignore-deprecated */
             self::EX_HTTP_SERVICE_UNAVAILABLE() => sprintf($tpl, HttpResponse::HTTP_SERVICE_UNAVAILABLE),
+            /** @scrutinizer ignore-deprecated */
             self::EX_AUTHENTICATION_EXCEPTION() => sprintf($tpl, HttpResponse::HTTP_UNAUTHORIZED),
+            /** @scrutinizer ignore-deprecated */
             self::EX_VALIDATION_EXCEPTION()     => sprintf($tpl, HttpResponse::HTTP_UNPROCESSABLE_ENTITY),
         ];
     }
@@ -113,6 +121,8 @@ class BaseApiCodes
      * Returns API code for internal code OK
      *
      * @return int valid API code in current range
+     *
+     * @deprecated Configure Exception Handler to use your own API code. This method will be removed in v8.
      */
     public static function OK(): int
     {
@@ -134,7 +144,7 @@ class BaseApiCodes
      *
      * @return int valid API code in current range
      *
-     * @deprecated Configure Exception Handler to use your own API code.
+     * @deprecated Configure Exception Handler to use your own API code. This method will be removed in v8.
      */
     public static function EX_HTTP_NOT_FOUND(): int
     {
@@ -145,6 +155,8 @@ class BaseApiCodes
      * Returns API code for internal code EX_HTTP_EXCEPTION
      *
      * @return int valid API code in current range
+     *
+     * @deprecated Configure Exception Handler to use your own API code. This method will be removed in v8.
      */
     public static function EX_HTTP_EXCEPTION(): int
     {
@@ -155,6 +167,8 @@ class BaseApiCodes
      * Returns API code for internal code EX_UNCAUGHT_EXCEPTION
      *
      * @return int valid API code in current range
+     *
+     * @deprecated Configure Exception Handler to use your own API code. This method will be removed in v8.
      */
     public static function EX_UNCAUGHT_EXCEPTION(): int
     {
@@ -166,7 +180,7 @@ class BaseApiCodes
      *
      * @return int valid API code in current range
      *
-     * @deprecated Configure Exception Handler to use your own API code.
+     * @deprecated Configure Exception Handler to use your own API code. This method will be removed in v8.
      */
     public static function EX_AUTHENTICATION_EXCEPTION(): int
     {
@@ -178,7 +192,7 @@ class BaseApiCodes
      *
      * @return int valid API code in current range
      *
-     * @deprecated Configure Exception Handler to use your own API code.
+     * @deprecated Configure Exception Handler to use your own API code. This method will be removed in v8.
      */
     public static function EX_VALIDATION_EXCEPTION(): int
     {
@@ -190,7 +204,7 @@ class BaseApiCodes
      *
      * @return int valid API code in current range
      *
-     * @deprecated Configure Exception Handler to use your own API code.
+     * @deprecated Configure Exception Handler to use your own API code. This method will be removed in v8.
      */
     public static function EX_HTTP_SERVICE_UNAVAILABLE(): int
     {

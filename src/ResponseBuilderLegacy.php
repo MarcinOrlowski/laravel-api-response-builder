@@ -260,6 +260,8 @@ class ResponseBuilderLegacy extends ResponseBuilderBase
      * @return HttpResponse
      *
      * @deprecated Please use Builder class.
+     *
+     * @noinspection PhpTooManyParametersInspection
      */
     public static function errorWithMessageAndDataAndDebug(int $api_code, string $message, $data,
                                                            int $http_code = null, int $json_opts = null,

@@ -24,12 +24,11 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 class ResponseBuilder extends ResponseBuilderBase
 {
-
     /** @var bool */
     protected $success = false;
 
-    /** @var int|null */
-    protected $api_code = null;
+    /** @var int */
+    protected $api_code;
 
     /** @var int|null */
     protected $http_code = null;
@@ -123,13 +122,23 @@ class ResponseBuilder extends ResponseBuilderBase
             ->build();
     }
 
-// -----------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------
 
+    /**
+     * @param int|null $api_code
+     *
+     * @return \MarcinOrlowski\ResponseBuilder\ResponseBuilder
+     */
     public static function asSuccess(int $api_code = null): self
     {
         return new self(true, $api_code ?? BaseApiCodes::OK());
     }
 
+    /**
+     * @param int $api_code
+     *
+     * @return \MarcinOrlowski\ResponseBuilder\ResponseBuilder
+     */
     public static function asError(int $api_code): self
     {
         $code_ok = BaseApiCodes::OK();
@@ -144,6 +153,11 @@ class ResponseBuilder extends ResponseBuilderBase
         return new self(false, $api_code);
     }
 
+    /**
+     * @param int|null $http_code
+     *
+     * @return $this
+     */
     public function withHttpCode(int $http_code = null): self
     {
         Validator::assertIsType('http_code', $http_code, [Validator::TYPE_INTEGER,
@@ -153,6 +167,11 @@ class ResponseBuilder extends ResponseBuilderBase
         return $this;
     }
 
+    /**
+     * @param null $data
+     *
+     * @return $this
+     */
     public function withData($data = null): self
     {
         Validator::assertIsType('data', $data, [Validator::TYPE_ARRAY,
@@ -163,6 +182,11 @@ class ResponseBuilder extends ResponseBuilderBase
         return $this;
     }
 
+    /**
+     * @param int|null $json_opts
+     *
+     * @return $this
+     */
     public function withJsonOptions(int $json_opts = null): self
     {
         Validator::assertIsType('json_opts', $json_opts, [Validator::TYPE_INTEGER,
@@ -172,6 +196,11 @@ class ResponseBuilder extends ResponseBuilderBase
         return $this;
     }
 
+    /**
+     * @param array|null $debug_data
+     *
+     * @return $this
+     */
     public function withDebugData(array $debug_data = null): self
     {
         Validator::assertIsType('$debug_data', $debug_data, [Validator::TYPE_ARRAY,
@@ -181,6 +210,11 @@ class ResponseBuilder extends ResponseBuilderBase
         return $this;
     }
 
+    /**
+     * @param string|null $msg
+     *
+     * @return $this
+     */
     public function withMessage(string $msg = null): self
     {
         Validator::assertIsType('message', $msg, [Validator::TYPE_STRING,
@@ -190,6 +224,11 @@ class ResponseBuilder extends ResponseBuilderBase
         return $this;
     }
 
+    /**
+     * @param array|null $placeholders
+     *
+     * @return $this
+     */
     public function withPlaceholders(array $placeholders = null): self
     {
         $this->placeholders = $placeholders;
@@ -197,6 +236,11 @@ class ResponseBuilder extends ResponseBuilderBase
         return $this;
     }
 
+    /**
+     * @param array|null $http_headers
+     *
+     * @return $this
+     */
     public function withHttpHeaders(array $http_headers = null): self
     {
         $this->http_headers = $http_headers ?? [];
@@ -204,6 +248,13 @@ class ResponseBuilder extends ResponseBuilderBase
         return $this;
     }
 
+    /**
+     * Builds and returns final HttpResponse. It's safe to call build() as many times as needed, as no
+     * internal state is changed. It's also safe to alter any parameter set previously and call build()
+     * again to get new response object that includes new changes.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function build(): HttpResponse
     {
         $api_code = $this->api_code;
@@ -225,14 +276,12 @@ class ResponseBuilder extends ResponseBuilderBase
 
             Validator::assertErrorHttpCode($http_code);
 
-            $result = $this->make(false, $api_code, $msg_or_api_code, $this->data, $http_code,
-                $this->placeholders, $this->http_headers, $this->json_opts, $this->debug_data);
-
+            $result = $this->make(false, $api_code, $msg_or_api_code, $this->data, $http_code, $this->placeholders,
+                $this->http_headers, $this->json_opts, $this->debug_data);
         }
 
         return $result;
     }
-
 
     /**
      * @param boolean           $success         @true if response reports successful operation, @false otherwise.
@@ -253,7 +302,7 @@ class ResponseBuilder extends ResponseBuilderBase
      * @throws \InvalidArgumentException If $api_code is neither a string nor valid integer code.
      * @throws \InvalidArgumentException if $data is an object of class that is not configured in "classes" mapping.
      *
-     * @noinspection MoreThanThreeArgumentsInspection
+     * @noinspection PhpTooManyParametersInspection
      */
     protected function make(bool $success, int $api_code, $msg_or_api_code, $data = null,
                             int $http_code = null, array $placeholders = null, array $http_headers = null,
@@ -292,6 +341,8 @@ class ResponseBuilder extends ResponseBuilderBase
      * @return array response ready to be encoded as json and sent back to client
      *
      * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
+     *
+     * @noinspection PhpTooManyParametersInspection
      */
     protected function buildResponse(bool $success, int $api_code,
                                      $msg_or_api_code, array $placeholders = null,
