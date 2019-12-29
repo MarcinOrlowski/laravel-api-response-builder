@@ -16,7 +16,7 @@ language: php
 php:
   - 7.2
   - 7.3
-  - 7.4snapshot
+  - 7.4
 
 env:
   - LARAVEL_VERSION="6.0"
@@ -24,6 +24,9 @@ env:
   - LARAVEL_VERSION="6.3"
   - LARAVEL_VERSION="6.4"
   - LARAVEL_VERSION="6.5"
+  - LARAVEL_VERSION="6.6"
+  - LARAVEL_VERSION="6.7"
+  - LARAVEL_VERSION="6.8"
 
 #matrix:
 #  exclude:
