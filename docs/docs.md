@@ -115,7 +115,7 @@
 ### Builder ###
 
 To obtain instance of the Builder, two static methods: `asSuccess()` and `asError()` are now exposed. For example, the following
- code would success with data and custom HTTP code:
+ code would return response indicating a success, with additional data and custom HTTP code:
 
 ```php
 return ResponseBuilder::asSuccess()
@@ -124,14 +124,17 @@ return ResponseBuilder::asSuccess()
       ->build();
 ```
 
- For simplicity of use, it's recommended to add the following `use` to your code:
+ For simplicity of use, it's recommended to add the following `use` to your code (you can also use
+ [namespace aliasing](https://www.php.net/manual/en/language.namespaces.importing.php)):
 
     use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+
+ If you dislike typing `ResponseBuilder` you can use [namespace aliasing](https://www.php.net/manual/en/language.namespaces.importing.php):
 
  Builder static methods:
  
  * `asSuccess($api_code)`: Returns Builder instance configured to return success indicating message. 
-   You can ommit `$api_code` to fall back to default code for `OK`).
+   You can ommit `$api_code` to fall back to default code for `OK` (`ApiCodes::OK()`).
  * `asError($api_code)`: Returns Builder instance configured to produce error indicating response. `$api_code`
    must not equal to value indicating `OK` (`ApiCodes::OK()`).
  
@@ -298,7 +301,7 @@ $data = [
  Where `<VERSION>` string consists of `MAJOR` and `MINOR` release numbers. For
  example if current relase is 6.4.13, you need to invoke:
 
-    composer require marcin-orlowski/laravel-api-response-builder:6.3
+    composer require marcin-orlowski/laravel-api-response-builder:6.4
 
  which will add  the dependency at the release 6.3 + all the bugfixing releses
  (`6.3.*`) but won't automatically pull 6.4 even if available, unless
