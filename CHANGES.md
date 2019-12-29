@@ -6,6 +6,10 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v7.0.2 (2019-12-29)
+   * Updated Travis config to cover Laravel 6.5, 6.6, 6.7 and 6.8
+   * Updated Travis config to cover PHP 7.4
+
 * v7.0.1 (2019-11-25)
    * Disabled Scrutinizer's "false positive" in Builder class.
    * Added more tests to improve overall coverage.
