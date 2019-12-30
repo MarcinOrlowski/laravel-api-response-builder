@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v7.0.3 (2019-12-30)
+   * Fixed `composer.json` file.
+
 * v7.0.2 (2019-12-29)
    * Updated Travis config to cover Laravel 6.5, 6.6, 6.7 and 6.8
    * Updated Travis config to cover PHP 7.4
