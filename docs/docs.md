@@ -288,7 +288,7 @@ $data = [
  Minimum requirements:
 
   * PHP 7.2+ with [json extension](https://www.php.net/manual/en/book.json.php),
-  * Laravel v6.x (see [legacy](legacy.md) for Laravel 5.x support).
+  * Laravel v6.x or v7.x (see [legacy](docs/legacy.md) for Laravel 5.x support).
 
 ----
 
@@ -527,5 +527,5 @@ MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.
 
 ## License ##
 
- * Written and copyrighted &copy;2016-2019 by Marcin Orlowski <mail (#) marcinOrlowski (.) com>
+ * Written and copyrighted &copy;2016-2020 by Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

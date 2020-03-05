@@ -1,0 +1,21 @@
+{
+  "name": "marcin-orlowski/laravel-api-response-builder",
+  "autoload": {
+    "classmap": [
+      "src/",
+      "tests/",
+      "tests/Traits/"
+    ]
+  },
+  "require": {
+    "php": ">=7.2",
+    "laravel/framework": "^7.0"
+  },
+  "require-dev": {
+    "marcin-orlowski/phpunit-extra-asserts": "^1.0",
+    "orchestra/testbench": "^5.0",
+    "phpunit/phpunit": "^8.0",
+    "phpunit/php-code-coverage": "^7.0",
+    "codacy/coverage": "^1.0"
+  }
+}
