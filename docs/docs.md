@@ -527,5 +527,5 @@ MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.
 
 ## License ##
 
- * Written and copyrighted &copy;2016-2019 by Marcin Orlowski <mail (#) marcinOrlowski (.) com>
+ * Written and copyrighted &copy;2016-2020 by Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
