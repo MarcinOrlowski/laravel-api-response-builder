@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v7.1.0 (2020-03-04)
+   * Added support for Laravel v7
+
 * v7.0.3 (2019-12-30)
    * Fixed `composer.json` file.
 
