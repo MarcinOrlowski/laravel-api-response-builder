@@ -15,22 +15,46 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+
 
 class SuccessTest extends TestCase
 {
-    /**
-     * Check plain success() invocation
-     *
-     * @return void
-     */
-    public function testSuccess(): void
-    {
-        $this->response = ResponseBuilder::success();
-        $j = $this->getResponseSuccessObject(BaseApiCodes::OK());
+	/**
+	 * Check plain success() invocation
+	 *
+	 * @return void
+	 */
+	public function testSuccess(): void
+	{
+		$this->response = ResponseBuilder::success();
+		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
-        $this->assertNull($j->data);
-        $this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
-    }
+		$this->assertNull($j->data);
+		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
+	}
+
+	public function testSuccessWithExplicitNull(): void
+	{
+		$this->response = ResponseBuilder::success(null);
+		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
+
+		$this->assertNull($j->data);
+		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
+	}
+
+	public function testSuccessWithArrayPayload(): void
+	{
+		$payload = [];
+		for ($i = 0; $i < 10; $i++) {
+			$payload[] = $this->getRandomString("item${i}");
+		}
+
+		$this->response = ResponseBuilder::success($payload);
+		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
+
+		$this->assertNotNull($j->data);
+		$this->assertArraysEquals($payload, (array)$j->data);
+		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
+	}
 
 }
