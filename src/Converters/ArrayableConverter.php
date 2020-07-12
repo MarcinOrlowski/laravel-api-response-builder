@@ -28,7 +28,7 @@ class ArrayableConverter implements ConverterContract
      *
      * @return array
      */
-    public function convert($obj, array /** @scrutinizer ignore-unused */ $config): array
+    public function convert($obj, /** @scrutinizer ignore-unused */ array $config): array
     {
         Validator::assertInstanceOf('obj', $obj, Arrayable::class);
 
