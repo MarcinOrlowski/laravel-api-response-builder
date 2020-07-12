@@ -6,6 +6,11 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v7.1.1 (2020-07-11)
+   * Added more tests.
+   * Updated dependencies.
+   * Switched away from deprecated Codacy coverage package.
+
 * v7.1.0 (2020-03-04)
    * Added support for Laravel v7
 
