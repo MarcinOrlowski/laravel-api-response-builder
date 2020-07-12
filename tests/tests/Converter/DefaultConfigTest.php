@@ -54,20 +54,27 @@ class DefaultConfigTest extends TestCase
      */
     public function testJsonSerializable(): void
     {
-        // GIVEN JsonSerializable class object
-        $obj_val = $this->getRandomString('obj_val');
-        $obj = new TestModelJsonSerializable($obj_val);
+    	$values = [
+		    $this->getRandomString('obj_val'),
+		    [$this->getRandomString('obj_a'), $this->getRandomString('obj_b')],
+		    mt_rand(),
+    		];
 
-        // HAVING converter with default settings
-        $converter = new Converter();
+    	foreach ($values as $obj_val) {
+	        // GIVEN JsonSerializable class object
+	        $obj = new TestModelJsonSerializable($obj_val);
 
-        // WHEN we try to pass of object of that class
-        $result = $converter->convert($obj);
+	        // HAVING converter with default settings
+	        $converter = new Converter();
 
-        // THEN it should be converted automatically as per configuration
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('val', $result);
-        $this->assertEquals($result['val'], $obj_val);
+	        // WHEN we try to pass of object of that class
+	        $result = $converter->convert($obj);
+
+	        // THEN it should be converted automatically as per configuration
+	        $this->assertIsArray($result);
+	        $this->assertArrayHasKey('val', $result);
+	        $this->assertEquals($obj_val, $result['val']);
+	    }
     }
 
     /**

@@ -19,19 +19,19 @@ use MarcinOrlowski\ResponseBuilder\Validator;
 
 class JsonSerializableConverter implements ConverterContract
 {
-    /**
-     * Returns array representation of the object implementing \JsonSerializable interface.
-     *
-     * @param \JsonSerializable $obj    Object to be converted
-     * @param array             $config Converter config array to be used for this object (based on exact class
-     *                                  name match or inheritance).
-     *
-     * @return array
-     */
-    public function convert($obj, array /** @scrutinizer ignore-unused */ $config): array
-    {
-        Validator::assertInstanceOf('obj', $obj, \JsonSerializable::class);
+	/**
+	 * Returns array representation of the object implementing \JsonSerializable interface.
+	 *
+	 * @param \JsonSerializable $obj    Object to be converted
+	 * @param array             $config Converter config array to be used for this object (based on exact class
+	 *                                  name match or inheritance).
+	 *
+	 * @return array
+	 */
+	public function convert($obj, /** @scrutinizer ignore-unused */ array $config): array
+	{
+		Validator::assertInstanceOf('obj', $obj, \JsonSerializable::class);
 
-        return ['val' => json_decode($obj->jsonSerialize(), true)];
-    }
+		return ['val' => json_decode(json_encode($obj->jsonSerialize()), true)];
+	}
 }

@@ -33,8 +33,8 @@ class TestModelJsonSerializable implements \JsonSerializable
         return $this->val;
     }
 
-    public function jsonSerialize(): string
+    public function jsonSerialize()
     {
-        return json_encode($this->val);
+        return $this->val;
     }
 }
