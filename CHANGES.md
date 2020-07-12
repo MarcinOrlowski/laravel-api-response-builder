@@ -44,7 +44,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 * v6.3.2 (2019-11-07)
    * Added `ResponseBuilder::successWithMessage()` method.
    * Entries in `classes` config array can now have `pri` (default 0) to enforce order while
-     merging config with built-in configuration.
+     merging config with a built-in configuration.
    * Persian translation (Thanks to @FaridAghili).
    * Added Laravel 6.5 to Travis-CI unit tests.
 
@@ -114,7 +114,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * `ResponseBuilder::errorWithDataAndHttpCode()` accepts now `null` as http code.
    * `ResponseBuilder::errorWithHttpCode()` accepts now `null` as http code.
    * Fixed `ExceptionHandlerHelper` replacing HTTP codes above 499 with 400.
-   * Changed default built-in message for `HTTP_NOT_FOUND` error.
+   * Changed default message for `HTTP_NOT_FOUND` error.
    * `ExceptionHandler` now falls back to `EX_UNCAUGHT_EXCEPTION` for all the cases.
    * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
    * Removed `exception_handler.use_exception_message_first` feature.
