@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v7.1.2 (2020-07-12)
    * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan Fekete) 
 
 * v7.1.1 (2020-07-11)
