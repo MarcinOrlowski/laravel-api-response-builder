@@ -55,15 +55,14 @@ final class Util
     }
 
     /**
-     * Sorts array by value, assuming value is an array and contains `pri` key with integer (positive/negative)
-     * value which is used for sorting higher -> lower priority.
+     * Sorts array (in place) by value, assuming value is an array and contains `pri` key with integer
+     * (positive/negative) value which is used for sorting higher -> lower priority.
      *
      * @param array &$array
      */
     public static function sortArrayByPri(array &$array): void
     {
-        // we now need to sort 'converter' node by priority
-        uasort($array, function($array_a, $array_b) {
+        uasort($array, static function(array $array_a, array $array_b) {
             $pri_a = $array_a['pri'] ?? 0;
             $pri_b = $array_b['pri'] ?? 0;
 
