@@ -80,6 +80,6 @@ class MergeConfigTest extends TestCase
         $merging = [$key => []];
 
         $this->expectException(\RuntimeException::class);
-        $result = Util::mergeConfig($original, $merging);
+        Util::mergeConfig($original, $merging);
     }
 }

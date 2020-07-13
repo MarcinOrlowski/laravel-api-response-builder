@@ -81,9 +81,9 @@ trait TestingHelpers
         // AND corresponding mapped message mapping
         /** @noinspection PhpUnhandledExceptionInspection */
         $map = $this->callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
-        $idx = mt_rand(1, count($map));
+        $idx = \mt_rand(1, count($map));
 
-        $this->random_api_code_message_key = $map[ array_keys($map)[ $idx - 1 ] ];
+        $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
         $this->random_api_code_message = \Lang::get($this->random_api_code_message_key, [
             'api_code' => $this->random_api_code,
         ]);
@@ -157,11 +157,11 @@ trait TestingHelpers
         }
 
         if ($expected_http_code > ResponseBuilder::ERROR_HTTP_CODE_MAX) {
-            $this->fail(sprintf('TEST: Error HTTP code (%d) cannot be above %d',
+            $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be above %d',
                 $expected_http_code, ResponseBuilder::ERROR_HTTP_CODE_MAX));
         }
         if ($expected_http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
-            $this->fail(sprintf('TEST: Error HTTP code (%d) cannot be below %d',
+            $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be below %d',
                 $expected_http_code, ResponseBuilder::ERROR_HTTP_CODE_MIN));
         }
 
@@ -188,7 +188,7 @@ trait TestingHelpers
             "Expected status code {$expected_http_code}, got {$actual}. Response: {$this->response->getContent()}");
 
         // get response as Json object
-        $j = json_decode($this->response->getContent(), false);
+        $j = \json_decode($this->response->getContent(), false);
         $this->assertValidResponse($j, $extra_keys);
 
         $this->assertEquals($expected_api_code, $j->code);
@@ -216,11 +216,11 @@ trait TestingHelpers
         $this->assertIsInt($json_object->code);
         $this->assertIsString($json_object->locale);
         /** @noinspection UnNecessaryDoubleQuotesInspection */
-        $this->assertNotEquals(trim($json_object->locale), '', "'locale' cannot be empty string");
+        $this->assertNotEquals(\trim($json_object->locale), '', "'locale' cannot be empty string");
         $this->assertIsString($json_object->message);
 //        /** @noinspection UnNecessaryDoubleQuotesInspection */
-//        $this->assertNotEquals(trim($json_object->message), '', "'message' cannot be empty string");
-        $this->assertTrue(($json_object->data === null) || is_object($json_object->data),
+//        $this->assertNotEquals(\trim($json_object->message), '', "'message' cannot be empty string");
+        $this->assertTrue(($json_object->data === null) || \is_object($json_object->data),
             "Response 'data' must be either object or null");
     }
 
@@ -240,7 +240,7 @@ trait TestingHelpers
         $response_code = $response_json->code;
 
         if ($response_code !== $expected_code) {
-            $msg = sprintf('Status code mismatch. Expected: %s, found %s. Message: "%s"',
+            $msg = \sprintf('Status code mismatch. Expected: %s, found %s. Message: "%s"',
                 $this->resolveConstantFromCode($expected_code),
                 $this->resolveConstantFromCode($response_code),
                 $response_json->message);
@@ -273,8 +273,8 @@ trait TestingHelpers
                                       array $headers = null, int $encoding_options = null,
                                       array $debug_data = null): HttpResponse
     {
-        if (!is_bool($success)) {
-            $this->fail(sprintf("'success' must be boolean ('%s' given)", gettype($success)));
+        if (!\is_bool($success)) {
+            $this->fail(sprintf("'success' must be boolean ('%s' given)", \gettype($success)));
         }
 
         $http_code = null;
@@ -310,7 +310,7 @@ trait TestingHelpers
         $const = $api_codes_class_name::getApiCodeConstants();
         $name = null;
         foreach ($const as $const_name => $const_value) {
-            if (is_int($const_value) && ($const_value === $api_code_offset)) {
+            if (\is_int($const_value) && ($const_value === $api_code_offset)) {
                 $name = $const_name;
                 break;
             }
@@ -335,9 +335,9 @@ trait TestingHelpers
      */
     protected function callProtectedMethod($obj_or_class, string $method_name, array $args = [])
     {
-        if (is_object($obj_or_class)) {
+        if (\is_object($obj_or_class)) {
             $obj = $obj_or_class;
-        } elseif (is_string($obj_or_class)) {
+        } elseif (\is_string($obj_or_class)) {
             $obj = $obj_or_class;
         } else {
             throw new \RuntimeException('getProtectedMethod() expects object or valid class name argument');
@@ -398,7 +398,7 @@ trait TestingHelpers
             $prefix = "{$prefix}_";
         }
 
-        return $prefix . md5(uniqid(mt_rand(), true));
+        return $prefix . \md5(uniqid(\mt_rand(), true));
     }
 
     // -----------------------------------------------------------------------------------------------------------
@@ -419,7 +419,8 @@ trait TestingHelpers
      */
     protected function ord8(string $string, int &$offset)
     {
-        $code = ord(substr($string, $offset, 1));
+        $code = \ord($string[ $offset ]);
+        $bytes_number = 1;
         if ($code >= 128) {             //otherwise 0xxxxxxx
             if ($code < 224) {          //110xxxxx
                 $bytes_number = 2;
@@ -432,13 +433,13 @@ trait TestingHelpers
             $tmp = $code - 192 - ($bytes_number > 2 ? 32 : 0) - ($bytes_number > 3 ? 16 : 0);
             for ($i = 2; $i <= $bytes_number; $i++) {
                 $offset++;
-                $code2 = ord(substr($string, $offset, 1)) - 128;        //10xxxxxx
+                $code2 = \ord(\substr($string, $offset, 1)) - 128;        //10xxxxxx
                 $tmp = $tmp * 64 + $code2;
             }
             $code = $tmp;
         }
         $offset++;
-        if ($offset >= strlen($string)) {
+        if ($offset >= \strlen($string)) {
             $offset = -1;
         }
 
@@ -459,7 +460,7 @@ trait TestingHelpers
         // escape UTF8 for further comparision
         $offset = 0;
         while ($offset >= 0) {
-            $escaped .= sprintf('\u%04x', $this->ord8($string, $offset));
+            $escaped .= \sprintf('\u%04x', $this->ord8($string, $offset));
         }
 
         return $escaped;

@@ -33,15 +33,15 @@ final class Util
     {
         $array = $original;
         foreach ($merging as $m_key => $m_val) {
-            if (array_key_exists($m_key, $original)) {
-                $orig_type = gettype($original[ $m_key ]);
-                $m_type = gettype($m_val);
+            if (\array_key_exists($m_key, $original)) {
+                $orig_type = \gettype($original[ $m_key ]);
+                $m_type = \gettype($m_val);
                 if ($orig_type !== $m_type) {
                     throw new \RuntimeException(
                         "Incompatible types. Cannot merge {$m_type} into {$orig_type} (key '{$m_key}').");
                 }
 
-                if (is_array($merging[ $m_key ])) {
+                if (\is_array($merging[ $m_key ])) {
                     $array[ $m_key ] = static::mergeConfig($original[ $m_key ], $m_val);
                 } else {
                     $array[ $m_key ] = $m_val;

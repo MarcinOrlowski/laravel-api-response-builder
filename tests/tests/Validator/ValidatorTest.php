@@ -252,7 +252,7 @@ class ValidatorTest extends TestCase
         ];
 
         foreach ($test_data as $key => $data) {
-            $label = sprintf('test_data[%d]', $key);
+            $label = \sprintf('test_data[%d]', $key);
 
             $test_passed = true;
             try {
@@ -261,8 +261,8 @@ class ValidatorTest extends TestCase
                 $test_passed = false;
             }
 
-            $msg = sprintf('Entry #%d: testing if "%s" (%s) is one of these: %s.',
-                $key, $data['item'], gettype($data['item']), implode(', ', $data['types']));
+            $msg = \sprintf('Entry #%d: testing if "%s" (%s) is one of these: %s.',
+                $key, $data['item'], \gettype($data['item']), \implode(', ', $data['types']));
             $this->assertEquals($test_passed, $data['expected'], $msg);
         }
     }
