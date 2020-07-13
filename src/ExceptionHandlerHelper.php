@@ -19,6 +19,7 @@ use Illuminate\Auth\AuthenticationException as AuthException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
+use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -40,24 +41,21 @@ class ExceptionHandlerHelper
 		$result = null;
 
 		$cfg = static::getHandler($ex);
-		if ($cfg !== null) {
+		do {
+			if ($cfg === null) {
+				// Default handler MUST be present by design and always return something useful.
+				$cfg = self::getExceptionHandlerConfig()[ ResponseBuilder::KEY_DEFAULT ];
+			}
+
 			$handler = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
 			$handler_result = $handler->handle($cfg[ ResponseBuilder::KEY_CONFIG ], $ex);
 			if ($handler_result !== null) {
 				$result = self::processException($ex, $handler_result);
+			} else {
+				// Let's fall back to default handler in next round.
+				$cfg = null;
 			}
-		}
-
-		// No handler or handler failed to deal with the exception? this is our stand.
-		if ($result === null) {
-			$ex_cfg_default = [
-				'api_code'  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-				'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-			];
-			$ex_cfg = \array_replace(self::getExceptionHandlerConfig()[ ResponseBuilder::KEY_DEFAULT ], $ex_cfg_default);
-
-			$result = self::processException($ex, $ex_cfg);
-		}
+		} while ($result === null);
 
 		return $result;
 	}
@@ -149,7 +147,7 @@ class ExceptionHandlerHelper
 		$cfg = self::getExceptionHandlerConfig();
 
 		// This config entry is guaranted to exist. Enforced by tests.
-		$cfg = $cfg[ HttpException::class ][ ResponseBuilder::KEY_CONFIG ][HttpResponse::HTTP_UNAUTHORIZED];
+		$cfg = $cfg[ HttpException::class ][ ResponseBuilder::KEY_CONFIG ][ HttpResponse::HTTP_UNAUTHORIZED ];
 
 		return static::processException($exception, $cfg, HttpResponse::HTTP_UNAUTHORIZED);
 	}
@@ -220,21 +218,24 @@ class ExceptionHandlerHelper
 	protected static function getExceptionHandlerConfig(): array
 	{
 		$default_config = [
-			HttpException::class => [
+			HttpException::class         => [
 				'handler' => HttpExceptionHandler::class,
 				'pri'     => -100,
 				'config'  => [
 					// used by unauthenticated() to obtain api and http code for the exception
 					HttpResponse::HTTP_UNAUTHORIZED         => [
-						ResponseBuilder::KEY_API_CODE => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+						ResponseBuilder::KEY_API_CODE => /** @scrutinizer ignore-deprecated */
+							BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
 					],
 					// Required by ValidationException handler
 					HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-						ResponseBuilder::KEY_API_CODE => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+						ResponseBuilder::KEY_API_CODE => /** @scrutinizer ignore-deprecated */
+							BaseApiCodes::EX_VALIDATION_EXCEPTION(),
 					],
 
 					ResponseBuilder::KEY_DEFAULT => [
-						ResponseBuilder::KEY_API_CODE  => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+						ResponseBuilder::KEY_API_CODE  => /** @scrutinizer ignore-deprecated */
+							BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
 						ResponseBuilder::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 					],
 				],
@@ -243,10 +244,11 @@ class ExceptionHandlerHelper
 
 			// default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
 			ResponseBuilder::KEY_DEFAULT => [
-				'handler' => HttpExceptionHandler::class,
+				'handler' => DefaultExceptionHandler::class,
 				'pri'     => -127,
 				'config'  => [
-					ResponseBuilder::KEY_API_CODE  => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+					ResponseBuilder::KEY_API_CODE  => /** @scrutinizer ignore-deprecated */
+						BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
 					ResponseBuilder::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 				],
 			],
