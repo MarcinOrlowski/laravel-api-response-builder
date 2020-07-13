@@ -158,9 +158,9 @@ class ExceptionHandlerHelperTest extends TestCase
 
         /** @noinspection PhpUndefinedClassInspection */
         $error_message = \Lang::get($key, [
-            'response_api_code' => $expected_api_code,
-            'message'           => $ex_message,
-            'class'             => get_class($exception),
+	        'response_api_code' => $expected_api_code,
+	        'message'           => $ex_message,
+	        'class'             => \get_class($exception),
         ]);
 
         if ($validate_response_message_text) {
@@ -234,7 +234,7 @@ class ExceptionHandlerHelperTest extends TestCase
             $key = "http_{$code}";
             // there are some gaps in the codes defined, but as default language  covers all codes supported,
             // then we can safely skip the codes not covered by default language.
-            if (array_key_exists($key, $translation)) {
+            if (\array_key_exists($key, $translation)) {
                 $ex = new HttpException($code);
                 $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'render', [
                         null,
@@ -268,7 +268,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
         // check http_exception block and validate all required entries and the config content.
         $http_cfg = $cfg[ HttpException::class ][ResponseBuilder::KEY_CONFIG];
-        $this->assertGreaterThanOrEqual(1, count($http_cfg));
+        $this->assertGreaterThanOrEqual(1, \count($http_cfg));
         $keys = [HttpResponse::HTTP_UNAUTHORIZED,];
 
         foreach ($keys as $key) {
@@ -294,9 +294,9 @@ class ExceptionHandlerHelperTest extends TestCase
         $translation = $this->getTranslationForDefaultLang();
 
         foreach ($cfg as $code => $params) {
-            if (is_int($code)) {
+            if (\is_int($code)) {
                 $this->checkExceptionHandlerConfigEntryStructure($params, $code);
-            } elseif (is_string($code) && $code == 'default') {
+            } elseif (\is_string($code) && $code == 'default') {
                 $this->checkExceptionHandlerConfigEntryStructure($params, null, true);
             } else {
                 $this->fail("Code '{$code}' is not allowed in config->exception_handler->http_exception.");
@@ -524,7 +524,7 @@ class ExceptionHandlerHelperTest extends TestCase
     protected function checkExceptionHandlerConfigEntryStructure(array $params, int $code = null,
                                                                  bool $is_default_handler = false): void
     {
-        if (is_int($code)) {
+        if (\is_int($code)) {
             $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $code);
             $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $code);
         }
@@ -556,7 +556,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertGreaterThanOrEqual(BaseApiCodes::getMinCode(), $params['api_code']);
         $this->assertLessThanOrEqual(BaseApiCodes::getMaxCode(), $params['api_code']);
 
-        if (array_key_exists('http_code', $params)) {
+        if (\array_key_exists('http_code', $params)) {
             $this->assertIsInt($params['http_code']);
             $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
             $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
@@ -566,7 +566,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $diff = [];
         $allowed_keys = array_merge($mandatory_keys, $optional_keys);
         foreach ($params as $key => $val) {
-            if (!in_array($key, $allowed_keys)) {
+            if (!\in_array($key, $allowed_keys)) {
                 $diff[] = $key;
             }
         }

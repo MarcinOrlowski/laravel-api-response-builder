@@ -46,7 +46,7 @@ class TranslationTest extends TestCase
                 }
             );
 
-        $this->assertGreaterThan(0, count($supported_languages));
+        $this->assertGreaterThan(0, \count($supported_languages));
 
         foreach ($supported_languages as $lang) {
             // get the translation array for given language

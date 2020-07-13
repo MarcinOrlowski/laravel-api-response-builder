@@ -32,7 +32,7 @@ class AutoConversionTest extends TestCase
         $model = new TestModel($model_val);
 
         // AND having its class configured for auto conversion
-        $model_class_name = get_class($model);
+        $model_class_name = \get_class($model);
         $cfg = [
             $model_class_name => [
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -68,7 +68,7 @@ class AutoConversionTest extends TestCase
         $model_2_data_key = 'model-data-key_2';
 
         // AND having its class configured for auto conversion
-        $model_class_name = get_class($model_1);
+        $model_class_name = \get_class($model_1);
         $converter = [
             $model_class_name => [
                 ResponseBuilder::KEY_KEY     => 'should-not-be-used',

@@ -53,7 +53,7 @@ class ConverterTest extends TestCase
 
         // HAVING indirect mapping configuration (of parent class)
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-            get_class($parent) => [
+	        \get_class($parent) => [
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
         ]);
@@ -105,7 +105,7 @@ class ConverterTest extends TestCase
 
         // AND having its class configured for auto conversion
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-            get_class($model) => [
+	        \get_class($model) => [
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
         ]);
@@ -139,7 +139,7 @@ class ConverterTest extends TestCase
 
         // AND having its class configured for auto conversion
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-            get_class($model_1) => [
+	        \get_class($model_1) => [
                 ResponseBuilder::KEY_KEY     => $conv_key,
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
@@ -149,7 +149,7 @@ class ConverterTest extends TestCase
         $converted = (new Converter())->convert($data);
 
         $this->assertIsArray($converted);
-        $this->assertCount(count($data), $converted);
+        $this->assertCount(\count($data), $converted);
         $this->assertArrayNotHasKey($conv_key, $converted);
 
         $this->assertArrayNotHasKey($conv_key, $converted[0]);
@@ -182,7 +182,7 @@ class ConverterTest extends TestCase
 
         // AND having its class configured for auto conversion
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-            get_class($model_1) => [
+	        \get_class($model_1) => [
                 ResponseBuilder::KEY_KEY     => 'XXX',
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
@@ -192,7 +192,7 @@ class ConverterTest extends TestCase
         $converted = (new Converter())->convert($data);
 
         $this->assertIsArray($converted);
-        $this->assertCount(count($data), $converted);
+        $this->assertCount(\count($data), $converted);
 
         foreach ($converted as $row) {
             $this->assertIsArray($row);
@@ -220,7 +220,7 @@ class ConverterTest extends TestCase
 
         // AND having its class configured for auto conversion
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-            get_class($model_1) => [
+	        \get_class($model_1) => [
                 ResponseBuilder::KEY_KEY     => 'XXX',
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
@@ -261,7 +261,7 @@ class ConverterTest extends TestCase
 
         // AND having its class configured for auto conversion
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-            get_class($model_1) => [
+	        \get_class($model_1) => [
                 ResponseBuilder::KEY_KEY     => 'XXX',
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
@@ -271,9 +271,9 @@ class ConverterTest extends TestCase
         $converted = (new Converter())->convert($data);
 
         $this->assertIsArray($converted);
-        $this->assertCount(count($data), $converted);
+        $this->assertCount(\count($data), $converted);
         $this->assertArrayHasKey($item3_key, $converted);
-        $this->assertCount(count($data[ $item3_key ]), $converted[ $item3_key ]);
+        $this->assertCount(\count($data[ $item3_key ]), $converted[ $item3_key ]);
 
         $this->assertEquals($model_1->getVal(), $converted[ $item1_key ]['val']);
         $this->assertEquals($model_2->getVal(), $converted[ $item2_key ]['val']);
@@ -303,7 +303,7 @@ class ConverterTest extends TestCase
 
         // AND having its class configured for auto conversion
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-            get_class($model_1) => [
+	        \get_class($model_1) => [
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
         ]);
@@ -332,7 +332,7 @@ class ConverterTest extends TestCase
 
         // AND having its class configured for auto conversion
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-            get_class($model_1) => [
+	        \get_class($model_1) => [
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
             ],
         ]);
@@ -340,7 +340,7 @@ class ConverterTest extends TestCase
         $result = (new Converter())->convert($data);
 
         $this->assertIsArray($result);
-        $this->assertCount(count($data), $result);
+        $this->assertCount(\count($data), $result);
         $this->assertArrayHasKey('val', $result[0]);
         $this->assertEquals($model_1->getVal(), $result[0]['val']);
         $this->assertArrayHasKey('val', $result[1]);
@@ -360,7 +360,7 @@ class ConverterTest extends TestCase
         // HAVING custom converter set to replace built-in settings
         $fake = new FakeConverter();
 
-        $cfg[ Collection::class ][ ResponseBuilder::KEY_HANDLER ] = get_class($fake);
+        $cfg[ Collection::class ][ ResponseBuilder::KEY_HANDLER ] = \get_class($fake);
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $cfg);
 
         // WHEN converting the data, we expect FakeConverter to be used

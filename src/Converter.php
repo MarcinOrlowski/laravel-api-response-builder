@@ -172,7 +172,7 @@ class Converter
         if ($classes !== null) {
             if (!\is_array($classes)) {
                 throw new \RuntimeException(
-                    \sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
+                    \sprintf('CONFIG: "classes" mapping must be an array (%s given)', \gettype($classes)));
             }
 
             $mandatory_keys = [

@@ -81,7 +81,7 @@ trait TestingHelpers
         // AND corresponding mapped message mapping
         /** @noinspection PhpUnhandledExceptionInspection */
         $map = $this->callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
-        $idx = \mt_rand(1, count($map));
+        $idx = \mt_rand(1, \count($map));
 
         $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
         $this->random_api_code_message = \Lang::get($this->random_api_code_message_key, [
@@ -345,7 +345,7 @@ trait TestingHelpers
         $method = $reflection->getMethod($method_name);
         $method->setAccessible(true);
 
-        return $method->invokeArgs(is_object($obj) ? $obj : null, $args);
+        return $method->invokeArgs(\is_object($obj) ? $obj : null, $args);
     }
 
     /**
