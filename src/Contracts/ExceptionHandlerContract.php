@@ -17,11 +17,13 @@ interface ExceptionHandlerContract
 {
 	/**
 	 * Handles given exception. If for any reason exception cannot be handled, MUST return @null,
-	 * otherwise it returns array with the following keys. ALL KEYS MUST BE PRESENT:
+	 * otherwise it returns array with the following keys. Keys marked "mandatory" MUST be present
+	 * in returned array:
 	 *
-	 *   api_code
-	 *   http_code
-	 *
+	 *   api_code    - (mandatory)
+	 *   http_code   -
+	 *   msg_key     -
+	 *   msg_enforce -
 	 *
 	 * @param array      $config Config array (can be empty) with any keys required by given handle.
 	 * @param \Exception $ex     The exception to handle.

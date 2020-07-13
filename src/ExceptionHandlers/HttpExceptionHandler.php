@@ -15,10 +15,11 @@ namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-final class HttpExceptionHandler extends BaseExceptionHandler
+final class HttpExceptionHandler implements ExceptionHandlerContract
 {
 	public function handle(array $user_config, \Exception $ex): ?array
 	{
@@ -32,7 +33,7 @@ final class HttpExceptionHandler extends BaseExceptionHandler
 				'api_code' => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_VALIDATION_EXCEPTION(),
 			],
 
-			// This key MUST exists. Enforced by unit tests.
+			// Default entry MUST exists. Enforced by unit tests.
 			ResponseBuilder::KEY_DEFAULT            => [
 				'api_code' => BaseApiCodes::EX_HTTP_EXCEPTION(),
 			],

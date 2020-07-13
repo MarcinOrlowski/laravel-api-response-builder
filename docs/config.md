@@ -117,14 +117,12 @@
  information. In such case you may want to assign separate API code to each of these "special" exceptions
  and this is where `exception_handler` section comes in.
  
+ `ResponseBuilder` delegates handling of  
+ 
  Each configuration entry consits of exception class name as a key and parameters array with fields
  `api_code` and `http_code`. At runtime, exception handler will look for config entry for particualr
  exception class and if there's one, proper handler, dedicated to that exception class, kicks in
  and deals with the exception. If no such config exists, `default` handler will be used.
-
- **NOTE:** For now there's no option to specify custom converted as of yet (but that's next step anyway), 
- so adding own classes to the config same way we did for 
- `\Symfony\Component\HttpKernel\Exception\HttpException::class` won't work.
 
 ## map ##
 

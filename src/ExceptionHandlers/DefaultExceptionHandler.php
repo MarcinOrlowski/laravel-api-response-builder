@@ -15,10 +15,11 @@ namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-final class DefaultExceptionHandler extends BaseExceptionHandler
+final class DefaultExceptionHandler implements ExceptionHandlerContract
 {
 	public function handle(array $user_config, \Exception $ex): ?array
 	{

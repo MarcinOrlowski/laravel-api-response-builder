@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -16,10 +17,13 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-final class ValidationExceptionHandler extends BaseExceptionHandler
+final class ValidationExceptionHandler implements ExceptionHandlerContract
 {
 	public function handle(array $user_config, \Exception $ex): ?array
 	{
-		return $this->finalize(BaseApiCodes::EX_VALIDATION_EXCEPTION(), HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
+		return [
+			ResponseBuilder::KEY_API_CODE  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+			ResponseBuilder::KEY_HTTP_CODE => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+		];
 	}
 }
