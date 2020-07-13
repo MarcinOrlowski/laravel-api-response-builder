@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
+use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use MarcinOrlowski\ResponseBuilder\Util;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -316,10 +317,13 @@ class ExceptionHandlerHelperTest extends TestCase
         $msg_key = $this->getRandomString('key');
         $cfg = [
                 ResponseBuilder::KEY_DEFAULT => [
-	                ResponseBuilder::KEY_API_CODE  => $api_code,
-	                ResponseBuilder::KEY_HTTP_CODE => $http_code,
-	                ResponseBuilder::KEY_MSG_KEY   => $msg_key,
-	                ResponseBuilder::KEY_MSG_FORCE => false,
+	                ResponseBuilder::KEY_HANDLER => DefaultExceptionHandler::class,
+	                ResponseBuilder::KEY_CONFIG  => [
+		                ResponseBuilder::KEY_API_CODE  => $api_code,
+		                ResponseBuilder::KEY_HTTP_CODE => $http_code,
+		                ResponseBuilder::KEY_MSG_KEY   => $msg_key,
+		                ResponseBuilder::KEY_MSG_FORCE => false,
+	                ],
             ],
         ];
         Config::set(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $cfg);
