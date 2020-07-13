@@ -176,12 +176,11 @@ trait TestingHelpers
      * @param int         $expected_api_code  expected Api response code offset
      * @param int         $expected_http_code expected HTTP code
      * @param string|null $expected_message   expected message string or @null if default
-     * @param array       $extra_keys         array of additional keys expected in response structure
      *
      * @return mixed
      */
     private function getResponseObjectRaw(int $expected_api_code, int $expected_http_code,
-                                          string $expected_message = null, array $extra_keys = [])
+                                          string $expected_message = null)
     {
         $actual = $this->response->getStatusCode();
         $this->assertEquals($expected_http_code, $actual,
@@ -189,7 +188,6 @@ trait TestingHelpers
 
         // get response as Json object
         $j = \json_decode($this->response->getContent(), false);
-        $this->assertValidResponse($j, $extra_keys);
 
         $this->assertEquals($expected_api_code, $j->code);
 
