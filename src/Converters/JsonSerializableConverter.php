@@ -17,7 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder\Converters;
 use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 use MarcinOrlowski\ResponseBuilder\Validator;
 
-class JsonSerializableConverter implements ConverterContract
+final class JsonSerializableConverter implements ConverterContract
 {
 	/**
 	 * Returns array representation of the object implementing \JsonSerializable interface.

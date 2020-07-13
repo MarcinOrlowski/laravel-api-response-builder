@@ -122,7 +122,7 @@
  exception class and if there's one, proper handler, dedicated to that exception class, kicks in
  and deals with the exception. If no such config exists, `default` handler will be used.
 
- **NOTE:** For now there's no option to specify custom converted as of yet (but that's next step anywya), 
+ **NOTE:** For now there's no option to specify custom converted as of yet (but that's next step anyway), 
  so adding own classes to the config same way we did for 
  `\Symfony\Component\HttpKernel\Exception\HttpException::class` won't work.
 
