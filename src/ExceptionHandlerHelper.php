@@ -163,10 +163,11 @@ class ExceptionHandlerHelper
 	 * @return HttpResponse
 	 */
 	protected static function error(Exception $ex,
-	                                int $api_code, int $http_code = null, string $error_message): HttpResponse
+	                                int $api_code, int $http_code = null, string $error_message = null): HttpResponse
 	{
 		$ex_http_code = ($ex instanceof HttpException) ? $ex->getStatusCode() : $ex->getCode();
 		$http_code = $http_code ?? $ex_http_code;
+		$error_message = $error_message ?? '';
 
 		// Check if we now have valid HTTP error code for this case or need to make one up.
 		// We cannot throw any exception if codes are invalid because we are in Exception Handler already.
