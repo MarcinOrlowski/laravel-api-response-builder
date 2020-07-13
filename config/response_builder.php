@@ -131,11 +131,16 @@ return [
 //		        ],
 	        ],
 //	        // This is final exception handler. If ex is not dealt with yet this is its last stop.
-//	        // default handler is mandatory and MUST have both `api_code` and `http_code` set.
-//	        'default'            => [
-//		        'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNHANDLED_EXCEPTION,
-//		        'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-//	        ],
+	        // default handler is mandatory and MUST have both `api_code` and `http_code` set.
+
+	        'default' => [
+		        'handler' => \MarcinOrlowski\ResponseBuilder\ExceptionHandlers\HttpExceptionHandler::class,
+		        'pri'     => -127,
+		        'config'  => [
+//			        'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNHANDLED_EXCEPTION,
+//			        'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+		        ],
+	        ],
 	    ],
     ],
 
