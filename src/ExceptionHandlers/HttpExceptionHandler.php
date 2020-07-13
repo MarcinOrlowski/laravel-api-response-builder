@@ -26,11 +26,11 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 		$default_config = [
 			// used by unauthenticated() to obtain api and http code for the exception
 			HttpResponse::HTTP_UNAUTHORIZED         => [
-				'api_code' => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+				'api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
 			],
 			// Required by ValidationException handler
 			HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-				'api_code' => /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+				'api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
 			],
 
 			// Default entry MUST exists. Enforced by unit tests.

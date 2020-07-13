@@ -125,8 +125,7 @@ class ExceptionHandlerHelper
 		} else {
 			// Still got nothing? Fall back to built-in generic message for this type of exception.
 			$key = BaseApiCodes::getCodeMessageKey(($ex instanceof HttpException)
-				? /** @scrutinizer ignore-deprecated */ BaseApiCodes::EX_HTTP_EXCEPTION()
-				: /** @scrutinizer ignore-deprecated */ BaseApiCodes::NO_ERROR_MESSAGE());
+				? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
 			$error_message = Lang::get($key, $placeholders);
 		}
 
@@ -225,18 +224,15 @@ class ExceptionHandlerHelper
 				'config'  => [
 					// used by unauthenticated() to obtain api and http code for the exception
 					HttpResponse::HTTP_UNAUTHORIZED         => [
-						ResponseBuilder::KEY_API_CODE => /** @scrutinizer ignore-deprecated */
-							BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+						ResponseBuilder::KEY_API_CODE => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
 					],
 					// Required by ValidationException handler
 					HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-						ResponseBuilder::KEY_API_CODE => /** @scrutinizer ignore-deprecated */
-							BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+						ResponseBuilder::KEY_API_CODE => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
 					],
 
 					ResponseBuilder::KEY_DEFAULT => [
-						ResponseBuilder::KEY_API_CODE  => /** @scrutinizer ignore-deprecated */
-							BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+						ResponseBuilder::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
 						ResponseBuilder::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 					],
 				],
@@ -248,8 +244,7 @@ class ExceptionHandlerHelper
 				'handler' => DefaultExceptionHandler::class,
 				'pri'     => -127,
 				'config'  => [
-					ResponseBuilder::KEY_API_CODE  => /** @scrutinizer ignore-deprecated */
-						BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+					ResponseBuilder::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
 					ResponseBuilder::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 				],
 			],
