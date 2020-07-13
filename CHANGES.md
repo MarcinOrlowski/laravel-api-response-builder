@@ -40,7 +40,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
      and all related stuff, incl. localization key `http_not_found`, configuration is now replace with more
      flexible generic code that provides error messages for all supported HTTP codes from in range `400-599`.
    * Added support for external data converters (related part of config changed too).
-   * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler`.
+   * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler` is used instead.
      needs to be added now, pointing to the class implementing `ConverterContract` acting as delegate worker.
    * Data converter now handles objects implementing `JsonSerializable` and `Arrayable` contracts as well.
 
