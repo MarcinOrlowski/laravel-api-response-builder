@@ -5,7 +5,8 @@
 ### v8 ###
 
  * `[BREAKING]` Due to introduction of exception handlers, `exception_handler` configuration has been changed. 
-    See [configuration docs](config.md) for more information.  
+    See [configuration docs](config.md) for more information.
+ * `[Very Low]` Removed `ResponseBuilderLegacy` class from the package.
 
 ### v7 ###
 
