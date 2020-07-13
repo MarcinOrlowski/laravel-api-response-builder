@@ -8,6 +8,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * dev
    * Improved performance by using calls qualified references.
+   * [RB-132] Reworked exception handler helper to support delegated handlers for better flexibility.
 
 * v7.1.2 (2020-07-12)
    * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan Fekete) 
