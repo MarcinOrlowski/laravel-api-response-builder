@@ -83,51 +83,65 @@ return [
     |
     */
     'exception_handler' => [
-        /*
-         * The following options can be used for each entry specified:
-         * `api_code`   : (int) mandatory api_code to be used for given exception
-         * `http_code`  : (int) optional HTTP code. If not specified, exception's HTTP status code will be used.
-         * `msg_key`    : (string) optional localization string key (ie. 'app.my_error_string') which will be used
-         *                if exception's message is empty. If `msg_key` is not provided, ExceptionHandler will
-         *                fall back to built-in message.
-         * `msg_enforce`: (boolean) if `true`, then fallback message (either one specified with `msg_key`, or
-         *                built-in one will **always** be used, ignoring exception's message string completely.
-         *                If set to `false` (default) then it will enforce either built-in message (if no
-         *                `msg_key` is set, or message referenced by `msg_key` completely ignoring exception
-         *                message ($ex->getMessage()).
-         */
-        'map' => [
-            /*
-             * HTTP Exceptions
-             * ---------------
-             * Configure how you want Http Exception to be handled based on its Http status code.
-             * For each code you need to define at least the `api_code` to be returned in final response.
-             * Additionally, you can specify `http_code` to be any valid 400-599 HTTP status code, otherwise
-             * code set in the exception will be used.
-             */
-//            HttpException::class => [
-//                // used by unauthenticated() to obtain api and http code for the exception
-//                HttpResponse::HTTP_UNAUTHORIZED         => [
-//                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNATHORIZED_EXCEPTION,
-//                ],
-//                // Required by ValidationException handler
-//                HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-//                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_VALIDATION_EXCEPTION,
-//                ],
-//                // default handler is mandatory and MUST have both `api_code` and `http_code` set.
-//                'default'                               => [
-//                    'api_code'  => ApiCodes::YOUR_API_CODE_FOR_GENERIC_HTTP_EXCEPTION,
-//                    'http_code' => HttpResponse::HTTP_BAD_REQUEST,
-//                ],
-//            ],
-//            // This is final exception handler. If ex is not dealt with yet this is its last stop.
-//            // default handler is mandatory and MUST have both `api_code` and `http_code` set.
-//            'default'            => [
-//                'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNHANDLED_EXCEPTION,
-//                'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-//            ],
-//        ],
-        ],
+	    /*
+	     * The following keys are supported for each handler specified.
+	     *   `handler`
+	     *   `pri`
+	     *   `config`
+	     *
+		 * The following keys are supported in "config" entry for each handler specified:
+		 *   `api_code`   : (int) mandatory api_code to be used for given exception
+		 *   `http_code`  : (int) optional HTTP code. If not specified, exception's HTTP status code will be used.
+		 *   `msg_key`    : (string) optional localization string key (ie. 'app.my_error_string') which will be used
+		 *                  if exception's message is empty. If `msg_key` is not provided, ExceptionHandler will
+		 *                  fall back to built-in message, with message key built as "http_XXX" where XXX is
+		 *                  HTTP code used to handle given the exception.
+		 *   `msg_enforce`: (boolean) if `true`, then fallback message (either one specified with `msg_key`, or
+		 *                  built-in one will **always** be used, ignoring exception's message string completely.
+		 *                  If set to `false` (default) then it will enforce either built-in message (if no
+		 *                  `msg_key` is set, or message referenced by `msg_key` completely ignoring exception
+		 *                  message ($ex->getMessage()).
+		 */
+
+    	Illuminate\Validation\ValidationException::class => [
+		    'handler' => \MarcinOrlowski\ResponseBuilder\ExceptionHandlers\ValidationExceptionHandler::class,
+		    'pri'     => -100,
+		    'config' => [
+		    	],
+	    ],
+
+		\Symfony\Component\HttpKernel\Exception\HttpException::class => [
+	        'handler' => \MarcinOrlowski\ResponseBuilder\ExceptionHandlers\HttpExceptionHandler::class,
+	        'pri'     => -100,
+	        'config'  => [
+//		        HttpException::class => [
+//			        // used by unauthenticated() to obtain api and http code for the exception
+//			        HttpResponse::HTTP_UNAUTHORIZED         => [
+//				        'api_code' => ApiCodes::YOUR_API_CODE_FOR_UNATHORIZED_EXCEPTION,
+//			        ],
+//			        // Required by ValidationException handler
+//			        HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
+//				        'api_code' => ApiCodes::YOUR_API_CODE_FOR_VALIDATION_EXCEPTION,
+//			        ],
+//			        // default handler is mandatory and MUST have both `api_code` and `http_code` set.
+//			        'default'                               => [
+//				        'api_code'  => ApiCodes::YOUR_API_CODE_FOR_GENERIC_HTTP_EXCEPTION,
+//				        'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+//			        ],
+//		        ],
+	        ],
+//	        // This is final exception handler. If ex is not dealt with yet this is its last stop.
+	        // default handler is mandatory and MUST have both `api_code` and `http_code` set.
+
+	        'default' => [
+		        'handler' => \MarcinOrlowski\ResponseBuilder\ExceptionHandlers\HttpExceptionHandler::class,
+		        'pri'     => -127,
+		        'config'  => [
+//			        'api_code'  => ApiCodes::YOUR_API_CODE_FOR_UNHANDLED_EXCEPTION,
+//			        'http_code' => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+		        ],
+	        ],
+	    ],
     ],
 
     /*

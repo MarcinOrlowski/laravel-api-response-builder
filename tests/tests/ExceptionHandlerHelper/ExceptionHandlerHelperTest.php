@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
+use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -217,8 +218,8 @@ class ExceptionHandlerHelperTest extends TestCase
     }
 
     /**
-     * Checks if Exception Handler would succefuly provide error message for valid HttpExceptions but without
-     * own message string.
+     * Checks if Exception Handler would successfuly provide error message for valid HttpExceptions that
+     * do not have dedicated error message configured.
      *
      * @throws \ReflectionException
      */
@@ -248,7 +249,7 @@ class ExceptionHandlerHelperTest extends TestCase
                 // Ensure returned response used HTTP code from the exception
                 $this->assertNotEmpty($json->message);
                 $this->assertEquals($translation[ $key ], $json->message,
-                    "Error message mismatch for HTTP code: {$code}");
+                    "error message mismatch for http code: {$code}");
             }
         }
     }
@@ -258,19 +259,15 @@ class ExceptionHandlerHelperTest extends TestCase
      */
     public function testBaseConfigStructure(): void
     {
-        $base_cfg = $this->getExceptionHandlerConfig();
-
-        // ensure mandatory keys are present.
-        $this->assertArrayHasKey('map', $base_cfg);
-
-        $map_cfg = $base_cfg['map'];
-
-        $keys = [HttpException::class,
-                 'default',];
-        $this->assertArrayHasKeys($keys, $map_cfg);
+        $cfg = $this->getExceptionHandlerConfig();
+	    $keys = [
+		    HttpException::class,
+		    ResponseBuilder::KEY_DEFAULT,
+	    ];
+        $this->assertArrayHasKeys($keys, $cfg);
 
         // check http_exception block and validate all required entries and the config content.
-        $http_cfg = $map_cfg[ HttpException::class ];
+        $http_cfg = $cfg[ HttpException::class ][ResponseBuilder::KEY_CONFIG];
         $this->assertGreaterThanOrEqual(1, count($http_cfg));
         $keys = [HttpResponse::HTTP_UNAUTHORIZED,];
 
@@ -278,11 +275,11 @@ class ExceptionHandlerHelperTest extends TestCase
             $this->assertArrayHasKey($key, $http_cfg);
             $this->checkExceptionHandlerConfigEntryStructure($http_cfg[ $key ], null, ($key === 'default'));
         }
-        $this->assertArrayHasKey('default', $http_cfg);
-        $this->checkExceptionHandlerConfigEntryStructure($http_cfg['default']);
+        $this->assertArrayHasKey(ResponseBuilder::KEY_DEFAULT, $http_cfg);
+        $this->checkExceptionHandlerConfigEntryStructure($http_cfg[ResponseBuilder::KEY_DEFAULT]);
 
         // check default handler config
-        $this->checkExceptionHandlerConfigEntryStructure($map_cfg['default']);
+        $this->checkExceptionHandlerConfigEntryStructure($cfg[ResponseBuilder::KEY_DEFAULT][ResponseBuilder::KEY_CONFIG]);
     }
 
     /**
@@ -290,13 +287,13 @@ class ExceptionHandlerHelperTest extends TestCase
      */
     public function testBaseConfigHttpExceptionConfig(): void
     {
-        $cfg = $this->getExceptionHandlerConfig();
-        $http_cfg = $cfg['map'][ HttpException::class ];
+        $http_cfg = $this->getExceptionHandlerConfig();
+        $cfg = $http_cfg[ HttpException::class ][ResponseBuilder::KEY_CONFIG];
 
         // get the translation array for default language
         $translation = $this->getTranslationForDefaultLang();
 
-        foreach ($http_cfg as $code => $params) {
+        foreach ($cfg as $code => $params) {
             if (is_int($code)) {
                 $this->checkExceptionHandlerConfigEntryStructure($params, $code);
             } elseif (is_string($code) && $code == 'default') {
@@ -318,13 +315,14 @@ class ExceptionHandlerHelperTest extends TestCase
         $http_code = HttpResponse::HTTP_SERVICE_UNAVAILABLE;
         $msg_key = $this->getRandomString('key');
         $cfg = [
-            'map' => [
-                'default' => [
-                    'api_code'  => $api_code,
-                    'http_code' => $http_code,
-                    'msg_key'   => $msg_key,
-                    'msg_force' => false,
-                ],
+                ResponseBuilder::KEY_DEFAULT => [
+	                ResponseBuilder::KEY_HANDLER => DefaultExceptionHandler::class,
+	                ResponseBuilder::KEY_CONFIG  => [
+		                ResponseBuilder::KEY_API_CODE  => $api_code,
+		                ResponseBuilder::KEY_HTTP_CODE => $http_code,
+		                ResponseBuilder::KEY_MSG_KEY   => $msg_key,
+		                ResponseBuilder::KEY_MSG_FORCE => false,
+	                ],
             ],
         ];
         Config::set(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $cfg);

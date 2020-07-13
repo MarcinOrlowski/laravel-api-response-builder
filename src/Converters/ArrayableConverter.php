@@ -17,7 +17,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 use MarcinOrlowski\ResponseBuilder\Validator;
 
-class ArrayableConverter implements ConverterContract
+final class ArrayableConverter implements ConverterContract
 {
     /**
      * Returns array representation of the object implementing Arrayable interface

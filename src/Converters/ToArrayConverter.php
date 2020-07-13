@@ -17,7 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder\Converters;
 use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 use MarcinOrlowski\ResponseBuilder\Validator;
 
-class ToArrayConverter implements ConverterContract
+final class ToArrayConverter implements ConverterContract
 {
     /**
      * Returns array representation of the object.
