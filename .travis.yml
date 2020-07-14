@@ -39,7 +39,7 @@ cache:
     - ${HOME}/.composer/cache/files
 
 before_script:
-  - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
+  - cp -f "travis/composer-laravel-${LARAVEL_VERSION}.json" composer.json
   - composer install --prefer-dist
   # Need to tweak signature of setUp() and tearDown() methods and strip the ": void" from it, otherwise tests
   # run will fail due to signature mismatch. This affects Laravel 5.8+ and 6.x as they pull recent Orchestra
