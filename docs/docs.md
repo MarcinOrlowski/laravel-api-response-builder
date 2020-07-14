@@ -124,12 +124,17 @@ return ResponseBuilder::asSuccess()
       ->build();
 ```
 
- For simplicity of use, it's recommended to add the following `use` to your code (you can also use
- [namespace aliasing](https://www.php.net/manual/en/language.namespaces.importing.php)):
+ For simplicity of use, it's recommended to add the following `use` to your code:
 
     use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
  If you dislike typing `ResponseBuilder` you can use [namespace aliasing](https://www.php.net/manual/en/language.namespaces.importing.php):
+ 
+    use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+    
+ Then use short form in your code:
+ 
+    return RB::success(); 
 
  Builder static methods:
  
@@ -232,7 +237,7 @@ return ResponseBuilder::success($flights);
 ],
 ```
 
- where parameters mean:
+ Meaning of parameters:
  
  * `handler` (mandatory) specifies class name that implements `ConverterContract` interface that is capable of doing the
    conversion of object of given class.
@@ -480,8 +485,8 @@ return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
 
 ### Overriding code to message conversion ###
 
-`ResponseBuilder` automatically provides human readable error messages for each API code used but if for any
-reason you want to take control on this, you can now provide own implementation of `ResponseBuilder::getMessageForApiCode()`.
+ `ResponseBuilder` automatically provides human readable error messages for each API code used but if for any
+ reason you want to take control on this, you can now provide own implementation of `ResponseBuilder::getMessageForApiCode()`.
 
 ```php
 <?php
@@ -497,8 +502,7 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 }
 ```
 
-Please see current implementation for `getMessageForApiCode()` for details how to correctly obtain localization string key etc.
-
+ Please see current implementation for `getMessageForApiCode()` for details how to correctly obtain localization string key etc.
 
 ----
 

@@ -64,17 +64,19 @@ class Converter
         $result = null;
 
         // check for exact class name match...
-        $cls = get_class($data);
-        if (array_key_exists($cls, $this->classes)) {
-            $result = $this->classes[ $cls ];
-        } else {
-            // no exact match, then lets try with `instanceof`
-            foreach (array_keys($this->getClasses()) as $class_name) {
-                if ($data instanceof $class_name) {
-                    $result = $this->classes[ $class_name ];
-                    break;
-                }
-            }
+        $cls = \get_class($data);
+        if (\is_string($cls)) {
+	        if (\array_key_exists($cls, $this->classes)) {
+		        $result = $this->classes[ $cls ];
+	        } else {
+		        // no exact match, then lets try with `instanceof`
+		        foreach (\array_keys($this->getClasses()) as $class_name) {
+			        if ($data instanceof $class_name) {
+				        $result = $this->classes[ $class_name ];
+				        break;
+			        }
+		        }
+	        }
         }
 
         if ($result === null) {
@@ -102,7 +104,7 @@ class Converter
         Validator::assertIsType('data', $data, [Validator::TYPE_ARRAY,
                                                 Validator::TYPE_OBJECT]);
 
-        if (is_object($data)) {
+        if (\is_object($data)) {
             $cfg = $this->getClassMappingConfigOrThrow($data);
             $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
             $data = $worker->convert($data, $cfg);
@@ -131,7 +133,7 @@ class Converter
         $string_keys_cnt = 0;
         $int_keys_cnt = 0;
         foreach ($data as $key => $val) {
-            if (is_int($key)) {
+            if (\is_int($key)) {
                 $int_keys_cnt++;
             } else {
                 $string_keys_cnt++;
@@ -145,9 +147,9 @@ class Converter
         }
 
         foreach ($data as $key => $val) {
-            if (is_array($val)) {
+            if (\is_array($val)) {
                 $data[ $key ] = $this->convertArray($val);
-            } elseif (is_object($val)) {
+            } elseif (\is_object($val)) {
                 $cfg = $this->getClassMappingConfigOrThrow($val);
                 $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
                 $converted_data = $worker->convert($val, $cfg);
@@ -170,9 +172,9 @@ class Converter
         $classes = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
 
         if ($classes !== null) {
-            if (!is_array($classes)) {
+            if (!\is_array($classes)) {
                 throw new \RuntimeException(
-                    sprintf('CONFIG: "classes" mapping must be an array (%s given)', gettype($classes)));
+                    \sprintf('CONFIG: "classes" mapping must be an array (%s given)', \gettype($classes)));
             }
 
             $mandatory_keys = [
@@ -180,7 +182,7 @@ class Converter
             ];
             foreach ($classes as $class_name => $class_config) {
                 foreach ($mandatory_keys as $key_name) {
-                    if (!array_key_exists($key_name, $class_config)) {
+                    if (!\array_key_exists($key_name, $class_config)) {
                         throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' class mapping");
                     }
                 }

@@ -6,6 +6,15 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v8.0.0 (2020-07-14)
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * Improved performance by using calls qualified references.
+   * [RB-132] Reworked exception handler helper to support delegated handlers for better flexibility.
+   * Reverted depreciation of `BaseApiCodes` reserved range codes.
+   * Sealed built-in data converter classes.
+   * Removed `ResponseBuilderLegacy` class from the package.
+   * Added German localization.
+
 * v7.1.2 (2020-07-12)
    * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan Fekete) 
 
@@ -37,14 +46,14 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
      and all related stuff, incl. localization key `http_not_found`, configuration is now replace with more
      flexible generic code that provides error messages for all supported HTTP codes from in range `400-599`.
    * Added support for external data converters (related part of config changed too).
-   * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler`.
+   * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler` is used instead.
      needs to be added now, pointing to the class implementing `ConverterContract` acting as delegate worker.
    * Data converter now handles objects implementing `JsonSerializable` and `Arrayable` contracts as well.
 
 * v6.3.2 (2019-11-07)
    * Added `ResponseBuilder::successWithMessage()` method.
    * Entries in `classes` config array can now have `pri` (default 0) to enforce order while
-     merging config with built-in configuration.
+     merging config with a built-in configuration.
    * Persian translation (Thanks to @FaridAghili).
    * Added Laravel 6.5 to Travis-CI unit tests.
 
@@ -114,7 +123,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * `ResponseBuilder::errorWithDataAndHttpCode()` accepts now `null` as http code.
    * `ResponseBuilder::errorWithHttpCode()` accepts now `null` as http code.
    * Fixed `ExceptionHandlerHelper` replacing HTTP codes above 499 with 400.
-   * Changed default built-in message for `HTTP_NOT_FOUND` error.
+   * Changed default message for `HTTP_NOT_FOUND` error.
    * `ExceptionHandler` now falls back to `EX_UNCAUGHT_EXCEPTION` for all the cases.
    * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
    * Removed `exception_handler.use_exception_message_first` feature.

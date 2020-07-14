@@ -33,15 +33,15 @@ final class Util
     {
         $array = $original;
         foreach ($merging as $m_key => $m_val) {
-            if (array_key_exists($m_key, $original)) {
-                $orig_type = gettype($original[ $m_key ]);
-                $m_type = gettype($m_val);
+            if (\array_key_exists($m_key, $original)) {
+                $orig_type = \gettype($original[ $m_key ]);
+                $m_type = \gettype($m_val);
                 if ($orig_type !== $m_type) {
                     throw new \RuntimeException(
                         "Incompatible types. Cannot merge {$m_type} into {$orig_type} (key '{$m_key}').");
                 }
 
-                if (is_array($merging[ $m_key ])) {
+                if (\is_array($merging[ $m_key ])) {
                     $array[ $m_key ] = static::mergeConfig($original[ $m_key ], $m_val);
                 } else {
                     $array[ $m_key ] = $m_val;
@@ -55,19 +55,40 @@ final class Util
     }
 
     /**
-     * Sorts array by value, assuming value is an array and contains `pri` key with integer (positive/negative)
-     * value which is used for sorting higher -> lower priority.
+     * Sorts array (in place) by value, assuming value is an array and contains `pri` key with integer
+     * (positive/negative) value which is used for sorting higher -> lower priority.
      *
      * @param array &$array
      */
     public static function sortArrayByPri(array &$array): void
     {
-        // we now need to sort 'converter' node by priority
-        uasort($array, function($array_a, $array_b) {
+        uasort($array, static function(array $array_a, array $array_b) {
             $pri_a = $array_a['pri'] ?? 0;
             $pri_b = $array_b['pri'] ?? 0;
 
             return $pri_b <=> $pri_a;
         });
     }
+
+	/**
+	 * Prints content of given array in compacted form.
+	 *
+	 * @param array $array
+	 * @param int   $indent
+	 */
+	public static function printArray(array $array, int $indent = 0): void
+	{
+		$i = '  ' . substr('                        ', 0, $indent * 2);
+
+		foreach ($array as $k => $v) {
+			if (\is_array($v)) {
+				echo "{$i}{$k}:\n";
+				self::printArray($v, $indent + 1);
+			} else {
+				echo "{$i}{$k}: {$v}\n";
+			}
+		}
+	}
+
+
 }

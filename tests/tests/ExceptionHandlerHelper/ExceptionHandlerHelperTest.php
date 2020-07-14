@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
+use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -157,9 +158,9 @@ class ExceptionHandlerHelperTest extends TestCase
 
         /** @noinspection PhpUndefinedClassInspection */
         $error_message = \Lang::get($key, [
-            'response_api_code' => $expected_api_code,
-            'message'           => $ex_message,
-            'class'             => get_class($exception),
+	        'response_api_code' => $expected_api_code,
+	        'message'           => $ex_message,
+	        'class'             => \get_class($exception),
         ]);
 
         if ($validate_response_message_text) {
@@ -217,8 +218,8 @@ class ExceptionHandlerHelperTest extends TestCase
     }
 
     /**
-     * Checks if Exception Handler would succefuly provide error message for valid HttpExceptions but without
-     * own message string.
+     * Checks if Exception Handler would successfuly provide error message for valid HttpExceptions that
+     * do not have dedicated error message configured.
      *
      * @throws \ReflectionException
      */
@@ -233,7 +234,7 @@ class ExceptionHandlerHelperTest extends TestCase
             $key = "http_{$code}";
             // there are some gaps in the codes defined, but as default language  covers all codes supported,
             // then we can safely skip the codes not covered by default language.
-            if (array_key_exists($key, $translation)) {
+            if (\array_key_exists($key, $translation)) {
                 $ex = new HttpException($code);
                 $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'render', [
                         null,
@@ -248,7 +249,7 @@ class ExceptionHandlerHelperTest extends TestCase
                 // Ensure returned response used HTTP code from the exception
                 $this->assertNotEmpty($json->message);
                 $this->assertEquals($translation[ $key ], $json->message,
-                    "Error message mismatch for HTTP code: {$code}");
+                    "error message mismatch for http code: {$code}");
             }
         }
     }
@@ -258,31 +259,27 @@ class ExceptionHandlerHelperTest extends TestCase
      */
     public function testBaseConfigStructure(): void
     {
-        $base_cfg = $this->getExceptionHandlerConfig();
-
-        // ensure mandatory keys are present.
-        $this->assertArrayHasKey('map', $base_cfg);
-
-        $map_cfg = $base_cfg['map'];
-
-        $keys = [HttpException::class,
-                 'default',];
-        $this->assertArrayHasKeys($keys, $map_cfg);
+        $cfg = $this->getExceptionHandlerConfig();
+	    $keys = [
+		    HttpException::class,
+		    ResponseBuilder::KEY_DEFAULT,
+	    ];
+        $this->assertArrayHasKeys($keys, $cfg);
 
         // check http_exception block and validate all required entries and the config content.
-        $http_cfg = $map_cfg[ HttpException::class ];
-        $this->assertGreaterThanOrEqual(1, count($http_cfg));
+        $http_cfg = $cfg[ HttpException::class ][ResponseBuilder::KEY_CONFIG];
+        $this->assertGreaterThanOrEqual(1, \count($http_cfg));
         $keys = [HttpResponse::HTTP_UNAUTHORIZED,];
 
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $http_cfg);
             $this->checkExceptionHandlerConfigEntryStructure($http_cfg[ $key ], null, ($key === 'default'));
         }
-        $this->assertArrayHasKey('default', $http_cfg);
-        $this->checkExceptionHandlerConfigEntryStructure($http_cfg['default']);
+        $this->assertArrayHasKey(ResponseBuilder::KEY_DEFAULT, $http_cfg);
+        $this->checkExceptionHandlerConfigEntryStructure($http_cfg[ResponseBuilder::KEY_DEFAULT]);
 
         // check default handler config
-        $this->checkExceptionHandlerConfigEntryStructure($map_cfg['default']);
+        $this->checkExceptionHandlerConfigEntryStructure($cfg[ResponseBuilder::KEY_DEFAULT][ResponseBuilder::KEY_CONFIG]);
     }
 
     /**
@@ -290,16 +287,13 @@ class ExceptionHandlerHelperTest extends TestCase
      */
     public function testBaseConfigHttpExceptionConfig(): void
     {
-        $cfg = $this->getExceptionHandlerConfig();
-        $http_cfg = $cfg['map'][ HttpException::class ];
+        $http_cfg = $this->getExceptionHandlerConfig();
+        $cfg = $http_cfg[ HttpException::class ][ResponseBuilder::KEY_CONFIG];
 
-        // get the translation array for default language
-        $translation = $this->getTranslationForDefaultLang();
-
-        foreach ($http_cfg as $code => $params) {
-            if (is_int($code)) {
+        foreach ($cfg as $code => $params) {
+            if (\is_int($code)) {
                 $this->checkExceptionHandlerConfigEntryStructure($params, $code);
-            } elseif (is_string($code) && $code == 'default') {
+            } elseif (\is_string($code) && $code == 'default') {
                 $this->checkExceptionHandlerConfigEntryStructure($params, null, true);
             } else {
                 $this->fail("Code '{$code}' is not allowed in config->exception_handler->http_exception.");
@@ -318,13 +312,14 @@ class ExceptionHandlerHelperTest extends TestCase
         $http_code = HttpResponse::HTTP_SERVICE_UNAVAILABLE;
         $msg_key = $this->getRandomString('key');
         $cfg = [
-            'map' => [
-                'default' => [
-                    'api_code'  => $api_code,
-                    'http_code' => $http_code,
-                    'msg_key'   => $msg_key,
-                    'msg_force' => false,
-                ],
+                ResponseBuilder::KEY_DEFAULT => [
+	                ResponseBuilder::KEY_HANDLER => DefaultExceptionHandler::class,
+	                ResponseBuilder::KEY_CONFIG  => [
+		                ResponseBuilder::KEY_API_CODE  => $api_code,
+		                ResponseBuilder::KEY_HTTP_CODE => $http_code,
+		                ResponseBuilder::KEY_MSG_KEY   => $msg_key,
+		                ResponseBuilder::KEY_MSG_FORCE => false,
+	                ],
             ],
         ];
         Config::set(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $cfg);
@@ -523,10 +518,10 @@ class ExceptionHandlerHelperTest extends TestCase
      * @param int|null $code
      * @param bool     $is_default_handler
      */
-    protected function checkExceptionHandlerConfigEntryStructure(array $params, int $code = null,
+    protected function checkExceptionHandlerConfigEntryStructure(array $params, ?int $code = null,
                                                                  bool $is_default_handler = false): void
     {
-        if (is_int($code)) {
+        if (\is_int($code)) {
             $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $code);
             $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $code);
         }
@@ -558,7 +553,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertGreaterThanOrEqual(BaseApiCodes::getMinCode(), $params['api_code']);
         $this->assertLessThanOrEqual(BaseApiCodes::getMaxCode(), $params['api_code']);
 
-        if (array_key_exists('http_code', $params)) {
+        if (\array_key_exists('http_code', $params)) {
             $this->assertIsInt($params['http_code']);
             $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
             $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
@@ -568,7 +563,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $diff = [];
         $allowed_keys = array_merge($mandatory_keys, $optional_keys);
         foreach ($params as $key => $val) {
-            if (!in_array($key, $allowed_keys)) {
+            if (!\in_array($key, $allowed_keys)) {
                 $diff[] = $key;
             }
         }

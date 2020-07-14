@@ -2,6 +2,13 @@
 
 # REST API Response Builder for Laravel #
 
+### v8 ###
+
+ * `[BREAKING]` Due to introduction of exception handlers, `ExceptionHandler` configuration has been changed. 
+    See [configuration docs](config.md) for more information.
+ * `[Very Low]` Removed `ResponseBuilderLegacy` class from the package.
+
+
 ### v7 ###
 
  * `[BREAKING]` As the library API migrated to Builder type of implementation, all the former API methods are now removed from

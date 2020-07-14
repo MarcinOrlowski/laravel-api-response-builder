@@ -125,12 +125,12 @@ class Validator
 
         if ($min > $max) {
             throw new \RuntimeException(
-                sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.', __FUNCTION__, $name));
+                \sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.', __FUNCTION__, $name));
         }
 
         if (($min > $var) || ($var > $max)) {
             throw new \InvalidArgumentException(
-                sprintf('Invalid value of "%s" (%d). Must be between %d-%d inclusive.', $name, $var, $min, $max));
+                \sprintf('Invalid value of "%s" (%d). Must be between %d-%d inclusive.', $name, $var, $min, $max));
         }
     }
 
@@ -147,11 +147,11 @@ class Validator
      */
     public static function assertIsType(string $name, $var, array $allowed_types): void
     {
-        $type = gettype($var);
-        if (!in_array($type, $allowed_types)) {
+        $type = \gettype($var);
+        if (!\in_array($type, $allowed_types)) {
             throw new \InvalidArgumentException(
-                sprintf('"%s" must be one of allowed types: %s (%s given)',
-                    $name, implode(', ', $allowed_types), gettype($var))
+                \sprintf('"%s" must be one of allowed types: %s (%s given)',
+                    $name, implode(', ', $allowed_types), \gettype($var))
             );
         }
     }
@@ -190,7 +190,7 @@ class Validator
     {
         if (!($obj instanceof $cls)) {
             throw new \InvalidArgumentException(
-                sprintf('"%s" must be instance of "%s".', $name, $cls)
+                \sprintf('"%s" must be instance of "%s".', $name, $cls)
             );
         }
     }

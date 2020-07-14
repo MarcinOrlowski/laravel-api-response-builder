@@ -32,7 +32,7 @@ class AutoConversionTest extends TestCase
         $model = new TestModel($model_val);
 
         // AND having its class configured for auto conversion
-        $model_class_name = get_class($model);
+        $model_class_name = \get_class($model);
         $cfg = [
             $model_class_name => [
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -68,7 +68,7 @@ class AutoConversionTest extends TestCase
         $model_2_data_key = 'model-data-key_2';
 
         // AND having its class configured for auto conversion
-        $model_class_name = get_class($model_1);
+        $model_class_name = \get_class($model_1);
         $converter = [
             $model_class_name => [
                 ResponseBuilder::KEY_KEY     => 'should-not-be-used',
@@ -95,7 +95,8 @@ class AutoConversionTest extends TestCase
         $this->assertNotNull($j->data);
 
         // single key item must not be used
-        $this->assertObjectNotHasAttribute($converter[ $model_class_name ]['key'], $j->data, 'Single item key found but should not');
+	    /** @noinspection OffsetOperationsInspection */
+	    $this->assertObjectNotHasAttribute($converter[ $model_class_name ]['key'], $j->data, 'Single item key found but should not');
         // instead original key must be preserved
         $this->assertObjectHasAttribute($model_1_data_key, $j->data, "Unable to find '{$model_1_data_key}' model 1 key'");
         $this->assertEquals($model_1_val, $j->data->{$model_1_data_key}->val);

@@ -24,15 +24,15 @@
 
 ## classes ##
  
-`Response Builder` can auto-convert to be used as response `data`. The following classes are supported out of the
-box:
+ `Response Builder` can auto-convert to be used as response `data`. The following classes are supported out of the
+ box:
 
  * `\Illuminate\Database\Eloquent\Model`          
  * `\Illuminate\Support\Collection`               
  * `\Illuminate\Database\Eloquent\Collection`     
  * `\Illuminate\Http\Resources\Json\JsonResource` 
 
-Create new entry for each class you want to have supported. The entry key is a full class name (including namespace):
+ Create new entry for each class you want to have supported. The entry key is a full class name (including namespace):
 
 ```php
 'converter' => [
@@ -41,20 +41,20 @@ Create new entry for each class you want to have supported. The entry key is a f
         'key'     => 'items',
         
         // Optional paramters
-        'pri'    => 0, 
-        ],
+        'pri'    => 0,
+    ],
 ],
 ```
-The `handler` is full name of the class that implements `ConverterContract`. Object of that class will be instantiated
-and conversion method will be invked. The `key` is a string that will be used as the JSON response as key to array representation.
+ The `handler` is full name of the class that implements `ConverterContract`. Object of that class will be instantiated
+ and conversion method will be invked. The `key` is a string that will be used as the JSON response as key to array representation.
 
-All configuration entries are assigned priority `0` which can be changed using `pri` key (integer). This value is used to
-sort the entries to ensure that matching order is preserved. Entries with higher priority are matched first etc. This is
-very useful when you want to indirect configuration for two classes where additionally second extends first one. 
-So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A` 
-then `B` related configuration must be set with higher priority.
+ All configuration entries are assigned priority `0` which can be changed using `pri` key (integer). This value is used to
+ sort the entries to ensure that matching order is preserved. Entries with higher priority are matched first etc. This is
+ very useful when you want to indirect configuration for two classes where additionally second extends first one. 
+ So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A` 
+ then `B` related configuration must be set with higher priority.
 
-See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
+ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
  
 ## debug ##
 
@@ -117,20 +117,42 @@ See [Data Conversion](docs.md#data-conversion) docs for closer details wih examp
  information. In such case you may want to assign separate API code to each of these "special" exceptions
  and this is where `exception_handler` section comes in.
  
- Each configuration entry consits of exception class name as a key and parameters array with fields
- `api_code` and `http_code`. At runtime, exception handler will look for config entry for particualr
- exception class and if there's one, proper handler, dedicated to that exception class, kicks in
- and deals with the exception. If no such config exists, `default` handler will be used.
-
- **NOTE:** For now there's no option to specify custom converted as of yet (but that's next step anywya), 
- so adding own classes to the config same way we did for 
- `\Symfony\Component\HttpKernel\Exception\HttpException::class` won't work.
+ `ResponseBuilder` delegates handling of exceptions to dedicated handlers which lets you add your own
+ when needed. Each configuration entry consits of name of the handler, its priority (which is useful if you
+ deal with inherited exception classes) and optional configuration (depending on the handler):
+ 
+```php
+'exception_handler' => [
+    \Symfony\Component\HttpKernel\Exception\HttpException::class => [
+        'handler' => \MarcinOrlowski\ResponseBuilder\ExceptionHandlers\HttpExceptionHandler::class,
+        'pri'     => -100,
+        'config'  => [
+            HttpException::class => [
+                // used by unauthenticated() to obtain api and http code for the exception
+                HttpResponse::HTTP_UNAUTHORIZED => [
+                    'api_code' => ApiCodes::YOUR_API_CODE_FOR_UNATHORIZED_EXCEPTION,
+                ],
+                // default handler is mandatory and MUST have both `api_code` and `http_code` set.
+                'default' => [
+                'api_code'  => ApiCodes::YOUR_API_CODE_FOR_GENERIC_HTTP_EXCEPTION,
+                    'http_code' => HttpResponse::HTTP_BAD_REQUEST,
+                ],
+            ],
+        ],
+    ],
+],
+```
+  
+  
+ At runtime, exception handler will look for config entry for particualr exception class and use dedicated handler if found. If
+ no exact match exists, it will try to match the handler using `instanceof` and eventually faill back to default handler
+ as specified in (mandatory) `default` config node. 
 
 ## map ##
 
-`ResponseBuilder` can automatically use text error message associated with error code and return in the
-response, once its configured to know which string to use for which code. `ResponseBuilder` uses standard
-Laravel's `Lang` facade to process strings.
+ `ResponseBuilder` can automatically use text error message associated with error code and return in the
+ response, once its configured to know which string to use for which code. `ResponseBuilder` uses standard
+ Laravel's `Lang` facade to process strings.
 
 ```php
 'map' => [
@@ -139,7 +161,7 @@ Laravel's `Lang` facade to process strings.
 ],
 ```
 	
-See [Exception Handling with Response Builder](docs/exceptions.md) if you want to provide own messages for built-in codes.
+ See [Exception Handling with Response Builder](docs/exceptions.md) if you want to provide own messages for built-in codes.
 
 ## min_code ##
 

@@ -48,6 +48,7 @@ return [
     'http_429'                 => 'Too Many Requests',
     'http_431'                 => 'Request Header Fields Too Large',
     'http_451'                 => 'Unavailable For Legal Reasons',
+
     'http_500'                 => 'Internal Server Error',
     'http_501'                 => 'Not Implemented',
     'http_502'                 => 'Bad Gateway',

@@ -107,17 +107,16 @@ trait ApiCodesTests
 
         /** @var BaseApiCodes $api_codes */
         $api_codes = $this->getApiCodesClassName();
-        /** @var array $codes */
         $codes = $api_codes::getApiCodeConstants();
 
         foreach ($codes as $name => $val) {
-            if (in_array($name, $const_to_ignore, true)) {
+            if (\in_array($name, $const_to_ignore, true)) {
                 $this->assertTrue(true);
                 continue;
             }
 
-            if (in_array($name, $consts_methods, true)) {
-                $name = str_replace('_OFFSET', '', $name);
+            if (\in_array($name, $consts_methods, true)) {
+                $name = \str_replace('_OFFSET', '', $name);
                 $val = BaseApiCodes::$name();
             }
 
@@ -137,19 +136,18 @@ trait ApiCodesTests
 
         /** @var BaseApiCodes $api_codes */
         $api_codes = $this->getApiCodesClassName();
-        /** @var array $codes */
         $codes = $api_codes::getApiCodeConstants();
         foreach ($codes as $name => $val) {
-            if (in_array($name, $const_to_ignore, true)) {
+            if (\in_array($name, $const_to_ignore, true)) {
                 $this->assertTrue(true);
                 continue;
             }
 
-            if (in_array($name, $const_now_method, true)) {
-                $name = str_replace('_OFFSET', '', $name);
+            if (\in_array($name, $const_now_method, true)) {
+                $name = \str_replace('_OFFSET', '', $name);
                 $val = BaseApiCodes::$name();
             }
-            $msg = sprintf("Value of '{$name}' ({$val}) is out of allowed range %d-%d",
+            $msg = \sprintf("Value of '{$name}' ({$val}) is out of allowed range %d-%d",
                 $api_codes::getMinCode(), $api_codes::getMaxCode());
 
             $this->assertTrue($api_codes::isCodeValid($val), $msg);
@@ -165,7 +163,7 @@ trait ApiCodesTests
     {
         /** @var BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
-        $items = array_count_values($api_codes_class_name::getMap());
+        $items = \array_count_values($api_codes_class_name::getMap());
         foreach ($items as $code => $count) {
             $this->assertLessThanOrEqual($count, 1, sprintf("Value of  '{$code}' is not unique. Used {$count} times."));
         }
@@ -180,12 +178,11 @@ trait ApiCodesTests
     {
         /** @var BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
-        /** @var array $map */
         $map = $api_codes_class_name::getMap();
         foreach ($map as $code => $mapping) {
             $str = \Lang::get($mapping);
             $this->assertNotEquals($mapping, $str,
-                sprintf('No lang entry for: %s referenced by %s', $mapping, $this->resolveConstantFromCode($code))
+                \sprintf('No lang entry for: %s referenced by %s', $mapping, $this->resolveConstantFromCode($code))
             );
         }
     }
@@ -199,7 +196,7 @@ trait ApiCodesTests
     public function testConfigClassesMappingEntriesMandatoryKeys(): void
     {
         $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER) ?? [];
-        if (count($classes) === 0) {
+        if (\count($classes) === 0) {
             // to make PHPUnit not complaining about no assertion.
             $this->assertTrue(true);
 
@@ -226,7 +223,7 @@ trait ApiCodesTests
     public function testConfigClassesMappingEntriesUnwantedConfigKeys(): void
     {
         $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER) ?? [];
-        if (count($classes) === 0) {
+        if (\count($classes) === 0) {
             // to make PHPUnit not complaining about no assertion.
             $this->assertTrue(true);
 
@@ -237,10 +234,7 @@ trait ApiCodesTests
             foreach ($class_config as $cfg_key => $cfg_val) {
                 switch ($cfg_key) {
                     case ResponseBuilder::KEY_KEY:
-                        $this->assertIsString($cfg_val);
-                        $this->assertNotEmpty(trim($cfg_val));
-                        break;
-                    case ResponseBuilder::KEY_HANDLER:
+	                case ResponseBuilder::KEY_HANDLER:
                         $this->assertIsString($cfg_val);
                         $this->assertNotEmpty(trim($cfg_val));
                         break;

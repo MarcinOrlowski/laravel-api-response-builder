@@ -16,7 +16,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class BuilderTest extends TestCase
 {

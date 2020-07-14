@@ -63,7 +63,6 @@ trait ApiCodesHelpers
      * Returns array of error code constants defined in this class. Used mainly for debugging/tests
      *
      * @return array
-     * @throws \ReflectionException
      */
     public static function getApiCodeConstants(): array
     {
@@ -84,7 +83,7 @@ trait ApiCodesHelpers
         if ($user_map === null) {
             throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', ResponseBuilder::CONF_KEY_MAP));
         }
-        if (!is_array($user_map)) {
+        if (!\is_array($user_map)) {
             throw new \RuntimeException(sprintf('CONFIG: "%s" must be an array', ResponseBuilder::CONF_KEY_MAP));
         }
         return Util::mergeConfig(BaseApiCodes::getBaseMap(), $user_map);

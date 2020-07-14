@@ -13,7 +13,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\Tests\Providers\TestServiceProvider;
 use MarcinOrlowski\ResponseBuilder\Util;
 
 class MergeConfigTest extends TestCase
@@ -80,6 +79,6 @@ class MergeConfigTest extends TestCase
         $merging = [$key => []];
 
         $this->expectException(\RuntimeException::class);
-        $result = Util::mergeConfig($original, $merging);
+        Util::mergeConfig($original, $merging);
     }
 }

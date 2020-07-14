@@ -27,7 +27,7 @@
 
  Next, we need to create `PHPUnit` tests to validate `TestableApiCodes`, however you will not have
  to write any single tests yourself as there's another useful trait that will do the heavy lifting
- for you and the only thing it needs for work is the name of codes class to be tested. 
+ for you, and the only thing it needs for work is the name of codes class to be tested. 
   
  Create `ApiCodesTest.php` file in `tests` folder with the following content:
  
