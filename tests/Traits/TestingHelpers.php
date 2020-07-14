@@ -26,7 +26,7 @@ trait TestingHelpers
     /**
      * @return string
      */
-    abstract public function getApiCodesClassName();
+    abstract public function getApiCodesClassName(): string;
 
     /** @var int */
     protected $min_allowed_code;
