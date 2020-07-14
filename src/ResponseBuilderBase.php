@@ -81,8 +81,7 @@ abstract class ResponseBuilderBase
 	public const KEY_DEFAULT   = 'default';
 	public const KEY_API_CODE  = 'api_code';
 	public const KEY_HTTP_CODE = 'http_code';
-	/** @deprecated Use KEY_MESSAGE? */
-	public const KEY_MSG_KEY = 'msg_key';
+	public const KEY_MSG_KEY   = 'msg_key';
 	public const KEY_MSG_FORCE = 'msg_force';
 
 	/**

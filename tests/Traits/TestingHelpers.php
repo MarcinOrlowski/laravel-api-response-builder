@@ -110,7 +110,7 @@ trait TestingHelpers
      */
     public function getResponseSuccessObject(int $expected_api_code_offset = null,
                                              int $expected_http_code = null,
-                                             string $expected_message = null): \StdClass
+                                             string $expected_message = null): \stdClass
     {
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes */
@@ -148,7 +148,7 @@ trait TestingHelpers
      */
     public function getResponseErrorObject(int $expected_api_code_offset = null,
                                            int $expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
-                                           string $message = null): \StdClass
+                                           string $message = null): \stdClass
     {
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes_class_name */
@@ -207,7 +207,7 @@ trait TestingHelpers
      *
      * @return void
      */
-    public function assertValidResponse(\StdClass $json_object): void
+    public function assertValidResponse(\stdClass $json_object): void
     {
         $this->assertIsObject($json_object);
         $this->assertIsBool($json_object->{ResponseBuilder::KEY_SUCCESS});
@@ -233,7 +233,7 @@ trait TestingHelpers
      *
      * @return void
      */
-    public function assertResponseStatusCode(int $expected_code, \StdClass $response_json): void
+    public function assertResponseStatusCode(int $expected_code, \stdClass $response_json): void
     {
         $response_code = $response_json->code;
 
@@ -304,7 +304,6 @@ trait TestingHelpers
     {
         /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
-        /** @var array $const */
         $const = $api_codes_class_name::getApiCodeConstants();
         $name = null;
         foreach ($const as $const_name => $const_value) {

@@ -49,7 +49,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsObjectCorrectType(): void
     {
-        $obj = new \StdClass();
+        $obj = new \stdClass();
         Validator::assertIsObject(__FUNCTION__, $obj);
         // This assert won't be called if exception is thrown
         $this->assertTrue(true);
@@ -188,7 +188,7 @@ class ValidatorTest extends TestCase
     public function testAssertInstanceOfInvalidClass(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $obj = new \StdClass();
+        $obj = new \stdClass();
         Validator::assertInstanceOf('obj', $obj, \JsonSerializable::class);
     }
 
@@ -197,8 +197,8 @@ class ValidatorTest extends TestCase
      */
     public function testAssertInstanceOfValidClass(): void
     {
-        $obj = new \StdClass();
-        Validator::assertInstanceOf('obj', $obj, \StdClass::class);
+        $obj = new \stdClass();
+        Validator::assertInstanceOf('obj', $obj, \stdClass::class);
         // This assert won't be called if exception is thrown
         $this->assertTrue(true);
     }

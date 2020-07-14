@@ -44,6 +44,8 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 		$http_code = $ex->getStatusCode();
 		$result = $config[ $http_code ] ?? null;
 
+		// If we do not have dedicated entry fort this particular http_code,
+		// fall back to default value.
 		if ($result === null) {
 			$result = $config[ ResponseBuilder::KEY_DEFAULT ];
 		}

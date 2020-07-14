@@ -107,7 +107,6 @@ trait ApiCodesTests
 
         /** @var BaseApiCodes $api_codes */
         $api_codes = $this->getApiCodesClassName();
-        /** @var array $codes */
         $codes = $api_codes::getApiCodeConstants();
 
         foreach ($codes as $name => $val) {
@@ -137,7 +136,6 @@ trait ApiCodesTests
 
         /** @var BaseApiCodes $api_codes */
         $api_codes = $this->getApiCodesClassName();
-        /** @var array $codes */
         $codes = $api_codes::getApiCodeConstants();
         foreach ($codes as $name => $val) {
             if (\in_array($name, $const_to_ignore, true)) {
@@ -180,7 +178,6 @@ trait ApiCodesTests
     {
         /** @var BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
-        /** @var array $map */
         $map = $api_codes_class_name::getMap();
         foreach ($map as $code => $mapping) {
             $str = \Lang::get($mapping);
