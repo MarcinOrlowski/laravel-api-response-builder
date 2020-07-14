@@ -103,10 +103,12 @@ return [
 		 *                  message ($ex->getMessage()).
 		 */
 
-    	Illuminate\Validation\ValidationException::class => [
+    	\Illuminate\Validation\ValidationException::class => [
 		    'handler' => \MarcinOrlowski\ResponseBuilder\ExceptionHandlers\ValidationExceptionHandler::class,
 		    'pri'     => -100,
 		    'config' => [
+//		        'api_code'  => ApiCodes::YOUR_API_CODE_FOR_VALIDATION_EXCEPTION,
+//		        'http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
 		    	],
 	    ],
 
