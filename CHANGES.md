@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* dev
+* v8.0.0 (2020-07-14)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Improved performance by using calls qualified references.
    * [RB-132] Reworked exception handler helper to support delegated handlers for better flexibility.
