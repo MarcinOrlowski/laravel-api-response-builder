@@ -13,6 +13,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Reverted depreciation of `BaseApiCodes` reserved range codes.
    * Sealed built-in data converter classes.
    * Removed `ResponseBuilderLegacy` class from the package.
+   * Added German localization.
 
 * v7.1.2 (2020-07-12)
    * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan Fekete) 
