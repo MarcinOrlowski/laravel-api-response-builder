@@ -51,7 +51,7 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 		if (!\array_key_exists(ResponseBuilder::KEY_HTTP_CODE, $result)) {
 			$result[ ResponseBuilder::KEY_HTTP_CODE ] = $http_code;
 		}
-		if (\array_key_exists(ResponseBuilder::KEY_MSG_KEY, $result)) {
+		if (!\array_key_exists(ResponseBuilder::KEY_MSG_KEY, $result)) {
 			$result[ ResponseBuilder::KEY_MSG_KEY ] = \sprintf('response-builder::builder.http_%d', $http_code);
 		}
 		return $result;
