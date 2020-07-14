@@ -65,16 +65,18 @@ class Converter
 
         // check for exact class name match...
         $cls = \get_class($data);
-        if (\array_key_exists($cls, $this->classes)) {
-            $result = $this->classes[ $cls ];
-        } else {
-            // no exact match, then lets try with `instanceof`
-            foreach (\array_keys($this->getClasses()) as $class_name) {
-                if ($data instanceof $class_name) {
-                    $result = $this->classes[ $class_name ];
-                    break;
-                }
-            }
+        if (\is_string($cls)) {
+	        if (\array_key_exists($cls, $this->classes)) {
+		        $result = $this->classes[ $cls ];
+	        } else {
+		        // no exact match, then lets try with `instanceof`
+		        foreach (\array_keys($this->getClasses()) as $class_name) {
+			        if ($data instanceof $class_name) {
+				        $result = $this->classes[ $class_name ];
+				        break;
+			        }
+		        }
+	        }
         }
 
         if ($result === null) {
