@@ -290,7 +290,7 @@ class ConverterTest extends TestCase
         $data = false;
 
         $this->expectException(\InvalidArgumentException::class);
-        $converted = (new Converter())->convert($data);
+        (new Converter())->convert($data);
     }
 
     /**

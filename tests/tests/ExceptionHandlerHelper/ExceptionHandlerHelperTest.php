@@ -290,9 +290,6 @@ class ExceptionHandlerHelperTest extends TestCase
         $http_cfg = $this->getExceptionHandlerConfig();
         $cfg = $http_cfg[ HttpException::class ][ResponseBuilder::KEY_CONFIG];
 
-        // get the translation array for default language
-        $translation = $this->getTranslationForDefaultLang();
-
         foreach ($cfg as $code => $params) {
             if (\is_int($code)) {
                 $this->checkExceptionHandlerConfigEntryStructure($params, $code);
@@ -521,7 +518,7 @@ class ExceptionHandlerHelperTest extends TestCase
      * @param int|null $code
      * @param bool     $is_default_handler
      */
-    protected function checkExceptionHandlerConfigEntryStructure(array $params, int $code = null,
+    protected function checkExceptionHandlerConfigEntryStructure(array $params, ?int $code = null,
                                                                  bool $is_default_handler = false): void
     {
         if (\is_int($code)) {
