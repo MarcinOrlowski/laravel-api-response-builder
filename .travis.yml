@@ -28,11 +28,12 @@ env:
   - LARAVEL_VERSION="6.7"
   - LARAVEL_VERSION="6.8"
   - LARAVEL_VERSION="7.0"
+  - LARAVEL_VERSION="8.0"
 
-#matrix:
-#  exclude:
-#    - php: 7.1
-#      env: LARAVEL_VERSION="6.0"
+matrix:
+  exclude:
+    - php: 7.2
+      env: LARAVEL_VERSION="8.0"
 
 cache:
   directories:
