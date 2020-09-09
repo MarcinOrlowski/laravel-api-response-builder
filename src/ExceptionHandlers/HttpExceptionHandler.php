@@ -50,12 +50,11 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 			$result = $config[ ResponseBuilder::KEY_DEFAULT ];
 		}
 
-		if (!\array_key_exists(ResponseBuilder::KEY_HTTP_CODE, $result)) {
-			$result[ ResponseBuilder::KEY_HTTP_CODE ] = $http_code;
-		}
-		if (!\array_key_exists(ResponseBuilder::KEY_MSG_KEY, $result)) {
-			$result[ ResponseBuilder::KEY_MSG_KEY ] = \sprintf('response-builder::builder.http_%d', $http_code);
-		}
-		return $result;
+		// Some defaults to fall back to if not set in user config.
+		$fallback = [
+			ResponseBuilder::KEY_HTTP_CODE => $http_code,
+			ResponseBuilder::KEY_MSG_KEY   => \sprintf('response-builder::builder.http_%d', $http_code),
+		];
+		return \array_replace($fallback, $result);
 	}
 }

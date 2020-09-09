@@ -70,25 +70,4 @@ final class Util
         });
     }
 
-	/**
-	 * Prints content of given array in compacted form.
-	 *
-	 * @param array $array
-	 * @param int   $indent
-	 */
-	public static function printArray(array $array, int $indent = 0): void
-	{
-		$i = '  ' . substr('                        ', 0, $indent * 2);
-
-		foreach ($array as $k => $v) {
-			if (\is_array($v)) {
-				echo "{$i}{$k}:\n";
-				self::printArray($v, $indent + 1);
-			} else {
-				echo "{$i}{$k}: {$v}\n";
-			}
-		}
-	}
-
-
 }

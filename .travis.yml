@@ -28,18 +28,19 @@ env:
   - LARAVEL_VERSION="6.7"
   - LARAVEL_VERSION="6.8"
   - LARAVEL_VERSION="7.0"
+  - LARAVEL_VERSION="8.0"
 
-#matrix:
-#  exclude:
-#    - php: 7.1
-#      env: LARAVEL_VERSION="6.0"
+matrix:
+  exclude:
+    - php: 7.2
+      env: LARAVEL_VERSION="8.0"
 
 cache:
   directories:
     - ${HOME}/.composer/cache/files
 
 before_script:
-  - cp -f "travis/composer-${LARAVEL_VERSION}.json" composer.json
+  - cp -f "travis/composer-laravel-${LARAVEL_VERSION}.json" composer.json
   - composer install --prefer-dist
   # Need to tweak signature of setUp() and tearDown() methods and strip the ": void" from it, otherwise tests
   # run will fail due to signature mismatch. This affects Laravel 5.8+ and 6.x as they pull recent Orchestra
@@ -54,4 +55,4 @@ after_success:
   # If coverage file is generated then upload it to Codacy (requires CODACY_PROJECT_TOKEN= env var set).
   - bash <(wget -q -O - https://coverage.codacy.com/get.sh) report -l PHP -r /tmp/clover.xml
   # Scrutinizer-CI
-  - wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar && php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/coverage.xml
+  - wget --output-document=/tmp/ocular.phar https://scrutinizer-ci.com/ocular.phar && php /tmp/ocular.phar code-coverage:upload --format=php-clover /tmp/clover.xml

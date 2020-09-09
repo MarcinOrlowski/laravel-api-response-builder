@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v8.0.1 (2020-09-09)
+   * Updated Travis config to make tests run against Laravel 8.0
+
 * v8.0.0 (2020-07-14)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Improved performance by using calls qualified references.
