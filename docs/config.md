@@ -56,6 +56,9 @@
 
  See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
  
+ **NOTE:** in case of data conversion problems add `RB_CONVERTER_DEBUG=true` entry to your `.env` file (also see [debug](#debug)
+ for related config options) then peek Laravel log to see what converter was used for each type of data and why it was choosen.
+ 
 ## debug ##
 
 ```php
@@ -66,6 +69,13 @@
            'trace_key' => 'trace',
            'trace_enabled' => env('APP_DEBUG', false),
     ],
+
+    // Controls debugging features of payload converter class.
+    'converter' => [
+        // Set to true to figure out what converter is used for given data payload and why.
+        'debug_enabled' => env('RB_CONVERTER_DEBUG', false),
+    ],
+
 ],
 ```
 

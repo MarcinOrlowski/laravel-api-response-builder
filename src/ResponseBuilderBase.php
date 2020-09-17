@@ -54,6 +54,7 @@ abstract class ResponseBuilderBase
 	public const CONF_KEY_DEBUG_DEBUG_KEY        = self::CONF_CONFIG . '.debug.debug_key';
 	public const CONF_KEY_DEBUG_EX_TRACE_ENABLED = self::CONF_CONFIG . '.debug.exception_handler.trace_enabled';
 	public const CONF_KEY_DEBUG_EX_TRACE_KEY     = self::CONF_CONFIG . '.debug.exception_handler.trace_key';
+	public const CONF_KEY_CONVERTER_DEBUG_KEY    = self::CONF_CONFIG . '.debug.converter.debug_enabled';
 	public const CONF_KEY_MAP                    = self::CONF_CONFIG . '.map';
 	public const CONF_KEY_ENCODING_OPTIONS       = self::CONF_CONFIG . '.encoding_options';
 	public const CONF_KEY_CONVERTER              = self::CONF_CONFIG . '.converter';

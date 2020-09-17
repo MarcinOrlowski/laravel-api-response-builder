@@ -166,6 +166,12 @@ return [
             'trace_key'     => 'trace',
             'trace_enabled' => env('APP_DEBUG', false),
         ],
+
+        // Controls debugging features of payload converter class.
+        'converter' => [
+        	// Set to true to figure out what converter is used for given data payload and why.
+        	'debug_enabled' => env('RB_CONVERTER_DEBUG', false),
+        ],
     ],
 
 ];
