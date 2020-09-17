@@ -22,7 +22,7 @@
  * [min_code](#min_code)
  * [max_code](#max_code)
 
-## classes ##
+## converter ##
  
  `Response Builder` can auto-convert to be used as response `data`. The following classes are supported out of the
  box:
