@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 
 
@@ -27,6 +28,9 @@ class Converter
      */
     protected $classes = [];
 
+    /** @var bool */
+    protected $debug_enabled = false;
+
     /**
      * Converter constructor.
      *
@@ -35,6 +39,8 @@ class Converter
     public function __construct()
     {
         $this->classes = static::getClassesMapping() ?? [];
+
+	    $this->debug_enabled = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_DEBUG_KEY, false);
     }
 
     /**
@@ -62,17 +68,20 @@ class Converter
     protected function getClassMappingConfigOrThrow(object $data): array
     {
         $result = null;
+        $debug_result = '';
 
         // check for exact class name match...
         $cls = \get_class($data);
         if (\is_string($cls)) {
 	        if (\array_key_exists($cls, $this->classes)) {
 		        $result = $this->classes[ $cls ];
+		        $debug_result = 'exact config match';
 	        } else {
 		        // no exact match, then lets try with `instanceof`
 		        foreach (\array_keys($this->getClasses()) as $class_name) {
 			        if ($data instanceof $class_name) {
 				        $result = $this->classes[ $class_name ];
+				        $debug_result = "subclass of {$class_name}";
 				        break;
 			        }
 		        }
@@ -83,7 +92,11 @@ class Converter
             throw new \InvalidArgumentException(sprintf('No data conversion mapping configured for "%s" class.', $cls));
         }
 
-        return $result;
+        if ($this->debug_enabled) {
+			Log::debug(__CLASS__ . ": Converting {$cls} using {$result['handler']} because: {$debug_result}.");
+        }
+
+	    return $result;
     }
 
     /**
