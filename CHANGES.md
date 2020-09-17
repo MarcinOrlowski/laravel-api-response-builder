@@ -6,8 +6,12 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v8.0.2 (2020-09-17)
+   * Added logging (`.env` controllable) for payload Converter to help debugging inproper data conversion.
+
 * v8.0.1 (2020-09-09)
-   * Updated Travis config to make tests run against Laravel 8.0
+   * Updated Travis config to make tests run against Laravel 8.0.
+   * Removed `Util::printArray()` helper.
 
 * v8.0.0 (2020-07-14)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
