@@ -13,11 +13,15 @@
  If you cannot upgrade for any reason, you can still use legacy `ResponseBuilder` v4, which supports Laravel 5.1+ and 
  PHP 5.1 and up:
  
-     composer require marcin-orlowski/laravel-api-response-builder "^4.0" 
+```bash
+composer require marcin-orlowski/laravel-api-response-builder "^4.0" 
+```
   
  Alternativel add dependency manually, by editing `composer.json` manually and add following line to `require` section:
 
+```json
     "require": {
        "marcin-orlowski/laravel-api-response-builder": "^4.0",
       ...
     }
+```

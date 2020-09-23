@@ -15,7 +15,9 @@
 
  To make it works, edit `app/Exceptions/Handler.php` file, and add
 
-    use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
+```php
+use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
+```
 
  Next, modify handler's `render()` method body to ensure it calls calls our `ExceptionHandlerHelper`'s.
  Default handler as of Laravel 5.2 has been significantly simplified and by default it looks like this:
