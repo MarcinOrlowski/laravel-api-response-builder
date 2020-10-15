@@ -86,7 +86,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	public static function success($data = null, $api_code = null, array $placeholders = null,
 	                               int $http_code = null, int $json_opts = null): HttpResponse
 	{
-		return ResponseBuilder::asSuccess($api_code)
+		return static::asSuccess($api_code)
 			->withData($data)
 			->withPlaceholders($placeholders)
 			->withHttpCode($http_code)
@@ -114,7 +114,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null,
 	                             int $json_opts = null): HttpResponse
 	{
-		return ResponseBuilder::asError($api_code)
+		return static::asError($api_code)
 			->withPlaceholders($placeholders)
 			->withData($data)
 			->withHttpCode($http_code)
@@ -131,7 +131,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public static function asSuccess(int $api_code = null): self
 	{
-		return new self(true, $api_code ?? BaseApiCodes::OK());
+		return new static(true, $api_code ?? BaseApiCodes::OK());
 	}
 
 	/**
@@ -150,7 +150,7 @@ class ResponseBuilder extends ResponseBuilderBase
 				"Error response cannot use api_code of value {$code_ok} which is reserved for OK");
 		}
 
-		return new self(false, $api_code);
+		return new static(false, $api_code);
 	}
 
 	/**

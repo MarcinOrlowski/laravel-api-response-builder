@@ -6,6 +6,10 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* v8.1.1 (2020-10-15)
+   * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from
+     being invoked, thus making response object structure manipulation ineffective (reported by krek95)
+
 * v8.1.0 (2020-09-17)
    * Added logging (`.env` controllable) for payload Converter to help debugging inproper data conversion.
 
@@ -23,7 +27,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Added German localization.
 
 * v7.1.2 (2020-07-12)
-   * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan Fekete) 
+   * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan Fekete)
 
 * v7.1.1 (2020-07-11)
    * Added more tests.
@@ -87,7 +91,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Added Laravel 6.3 to Travis-CI unit tests.
    * Split tests into separate folders per class tested.
    * ExceptionHandler no longer tries to enforce UTF-8 on exception message.
-   * Added PHP 7.4-snapshot to unit tests. 
+   * Added PHP 7.4-snapshot to unit tests.
 
 * v6.2.0 (2019-10-19)
    * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
@@ -103,7 +107,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * v6.1.1 (2019-10-02)
    * Fixed `ResponseBuilderServiceProvider` using unreferenced `Arr` class method (reported by yassir3wad).
-   
+
 * v6.1.0 (2019-09-28)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * Created new library logo (see [artwork/](artwork/) folder).
@@ -138,8 +142,8 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods.
    * Removed internal API code constants. Use corresponding methods to get proper code value.
    * Reimplemented Laravel config merger to support multi-dimensional configuration arrays too.
-   * Removed `response_key_map` configuration option. 
-   * You can now return HTTP codes from 5xx range with all error responses. 
+   * Removed `response_key_map` configuration option.
+   * You can now return HTTP codes from 5xx range with all error responses.
 
 * v5.0.0
    * Skipped to catch up with Laravel version numeration.
@@ -155,7 +159,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Added PHP 7.3 to testing setup
    * Added Laravel 5.7 and Laravel 5.8 to testing setup
    * Corrected test env setup for Laravel 5.5, 5.6
-   * Removed tests on HHVM from Travis config  
+   * Removed tests on HHVM from Travis config
 
 * v4.1.6 (2018-07-20)
    * Documentation updated
