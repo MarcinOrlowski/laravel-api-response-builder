@@ -22,7 +22,7 @@
  * [min_code](#min_code)
  * [max_code](#max_code)
 
-## classes ##
+## converter ##
  
  `Response Builder` can auto-convert to be used as response `data`. The following classes are supported out of the
  box:
@@ -111,11 +111,15 @@
 
  To prevent escaping, add JSON_UNESCAPED_UNICODE:
  
-     JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE
+```php
+JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE
+```
 
  Laravel's default value:
  
-    JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
+```php
+JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
+```
 
  See [json_encode() manual](http://php.net/manual/en/function.json-encode.php) for more details.
 

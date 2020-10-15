@@ -54,7 +54,6 @@ class AppCodesTest extends TestCase
 
  And that's it. From now on, you have your `ApiCodes` covered with tests too.
 
-
 ## Testing other code using ResponseBuilder ##
 
  If you want to test other code that uses response builder, then there provided traits can also be 

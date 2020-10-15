@@ -126,15 +126,21 @@ return ResponseBuilder::asSuccess()
 
  For simplicity of use, it's recommended to add the following `use` to your code:
 
-    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+```php
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+```
 
  If you dislike typing `ResponseBuilder` you can use [namespace aliasing](https://www.php.net/manual/en/language.namespaces.importing.php):
  
-    use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+```php
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+```
     
  Then use short form in your code:
  
-    return RB::success(); 
+```php
+return RB::success(); 
+```
 
  Builder static methods:
  
@@ -301,12 +307,16 @@ $data = [
 
  To install `ResponseBuilder` all you need to do is to open your shell/cmd and do:
 
-    composer require marcin-orlowski/laravel-api-response-builder:<VERSION>
+```bash
+composer require marcin-orlowski/laravel-api-response-builder:<VERSION>
+```
 
  Where `<VERSION>` string consists of `MAJOR` and `MINOR` release numbers. For
  example if current relase is 6.4.13, you need to invoke:
 
-    composer require marcin-orlowski/laravel-api-response-builder:6.4
+```bash
+composer require marcin-orlowski/laravel-api-response-builder:6.4
+```
 
  which will add  the dependency at the release 6.3 + all the bugfixing releses
  (`6.3.*`) but won't automatically pull 6.4 even if available, unless
@@ -363,7 +373,9 @@ class ApiCode {
  (default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array empty in
  your config, however you **MUST** have `map` key present nonetheless:
 
-    'map' => [],
+```php
+'map' => [],
+```
 
  Also, read [Overriding built-in messages](#overriding-built-in-messages) to see how to override built-in
  messages.

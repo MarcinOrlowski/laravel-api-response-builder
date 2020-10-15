@@ -24,22 +24,30 @@
  The library is namespaced, so to simplify the use cases, it's recommended to add propr `use` at the beginning
  of your controller to "import" `Builder` class:
  
-    use MarcinOrlowski\ResponseBuilder\Builder;
+```php
+use MarcinOrlowski\ResponseBuilder\Builder;
+```
  
  if you are going to also use simplified helper functions like `success()`, then also import `ResponseBuilder`
  class:
- 
-    use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+
+```php
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+```
 
  **HINT:** want to type less? Use aliases. I.e. to use `RB` instead of lenghty `ResponseBuilder` name:
  
-    use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB; 
+```php
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB; 
+```
 
 #### Success ####
 
  To report response indicating i.e. operation success, simply your Controller method with:
 
-    return ResponseBuilder::success();
+```php
+return ResponseBuilder::success();
+```
 
  which will produce and return the following JSON object:
  
@@ -150,7 +158,7 @@ return ResponseBuilder::success($returned_array);
  error code to `error()` to tell the client what the error it is:
 
 ```php
-    return ResponseBuilder::error(<CODE>);
+return ResponseBuilder::error(<CODE>);
 ```
 
  To make your life easier (and your code [automatically testable](testing.md)) you should put all error codes you use
@@ -161,7 +169,7 @@ return ResponseBuilder::success($returned_array);
  Example usage:
 
 ```php
-    return ResponseBuilder::error(ApiCode::SOMETHING_WENT_WRONG);
+return ResponseBuilder::error(ApiCode::SOMETHING_WENT_WRONG);
 ```
  
  which would produce the following JSON response:
@@ -184,7 +192,9 @@ return ResponseBuilder::success($returned_array);
  As `ResponseBuilder` uses Laravel's `Lang` package for localisation, you can use the same features with your messages as you use
  across the whole application, including message placeholders:
 
-    return ResponseBuilder::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $login]);
+```php
+return ResponseBuilder::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $login]);
+```
 
  and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be correctly replaced with content of
  your `$login` variable.

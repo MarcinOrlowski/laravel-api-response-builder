@@ -62,31 +62,39 @@
  
  Operation successful? Conclude your controller method with:
 
-    return ResponseBuilder::success();
+```php
+return ResponseBuilder::success();
+```
 
  and your client will get nice JSON like
 
-    {
-      "success": true,
-      "code": 0,
-      "locale": "en",
-      "message": "OK",
-      "data": null
-    }
+```json
+{
+  "success": true,
+  "code": 0,
+  "locale": "en",
+  "message": "OK",
+  "data": null
+}
+```
 
  Something went wrong? Just type:
 
-    return ResponseBuilder::error(250);
+```php
+return ResponseBuilder::error(250);
+```
 
  The following JSON response will then be returned:
 
-    {
-       "success": false,
-       "code": 250,
-       "locale": "en",
-       "message": "Your error message for code 250",
-       "data": null
-    }
+```json
+{
+   "success": false,
+   "code": 250,
+   "locale": "en",
+   "message": "Your error message for code 250",
+   "data": null
+}
+```
 
  Nice and easy! And yes, `message` can be easily customized! Also there're **much, much more** you can do with
  rich `ResponseBuilder` API. See [library documentation](docs/docs.md) for details and more examples!
