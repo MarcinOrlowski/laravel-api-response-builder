@@ -45,26 +45,6 @@ class Converter
 	    $this->debug_enabled = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_DEBUG_KEY, false);
     }
 
-    /**
-     * Returns local copy of configuration mapping for data classes.
-     *
-     * @return array
-     */
-    public function getClasses(): array
-    {
-        return $this->classes;
-    }
-
-	/**
-	 * Returns local copy of configuration mapping for primitives.
-	 *
-	 * @return array
-	 */
-	public function getPrimitives(): array
-    {
-    	return $this->primitives;
-    }
-
 	/**
 	 * Returns "converter/primitives" entry for given primitive object or throws exception if no config found.
 	 * Throws \RuntimeException if there's no config "classes" mapping entry for this object configured.
@@ -117,7 +97,7 @@ class Converter
 		        $debug_result = 'exact config match';
 	        } else {
 		        // no exact match, then lets try with `instanceof`
-		        foreach (\array_keys($this->getClasses()) as $class_name) {
+		        foreach (\array_keys($this->classes) as $class_name) {
 			        if ($data instanceof $class_name) {
 				        $result = $this->classes[ $class_name ];
 				        $debug_result = "subclass of {$class_name}";
@@ -137,40 +117,6 @@ class Converter
 
 	    return $result;
     }
-
-	/**
-	 * Checks if we have "classes" mapping configured given class name.
-	 * Returns @true if there's valid config for this class.
-	 * Throws \RuntimeException if there's no config "classes" mapping entry for this object configured.
-	 * Throws \InvalidArgumentException if No data conversion mapping configured for given class.
-	 *
-	 * @param string $cls Name of the class to check mapping for.
-	 *
-	 * @return array
-	 *
-	 * @throws \InvalidArgumentException
-	 */
-	protected function getClassMappingConfigOrThrowByName(string $cls): array
-	{
-		$result = null;
-		$debug_result = '';
-
-		// check for exact class name match...
-		if (\array_key_exists($cls, $this->classes)) {
-			$result = $this->classes[ $cls ];
-			$debug_result = 'exact config match';
-		}
-
-		if ($result === null) {
-			throw new \InvalidArgumentException(sprintf('No data conversion mapping configured for "%s" class.', $cls));
-		}
-
-		if ($this->debug_enabled) {
-			Log::debug(__CLASS__ . ": Converting {$cls} using {$result[ResponseBuilder::KEY_HANDLER]} because: {$debug_result}.");
-		}
-
-		return $result;
-	}
 
     /**
      * Main entry for data conversion
