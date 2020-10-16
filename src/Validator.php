@@ -20,122 +20,122 @@ class Validator
     /**
      * Checks if given $val is of type boolean
      *
-     * @param string $key Name of the key to be used if exception is thrown.
-     * @param mixed  $var Variable to be asserted.
+     * @param string $var_name Name of the key to be used if exception is thrown.
+     * @param mixed  $value    Variable to be asserted.
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertIsBool(string $key, $var): void
+    public static function assertIsBool(string $var_name, $value): void
     {
-        self::assertIsType($key, $var, [Type::BOOLEAN]);
+        self::assertIsType($var_name, $value, [Type::BOOLEAN]);
     }
 
     /**
      * Checks if given $val is of type integer
      *
-     * @param string $key Name of the key to be used if exception is thrown.
-     * @param mixed  $var Variable to be asserted.
+     * @param string $key   Name of the key to be used if exception is thrown.
+     * @param mixed  $value Variable to be asserted.
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertIsInt(string $key, $var): void
+    public static function assertIsInt(string $key, $value): void
     {
-        self::assertIsType($key, $var, [Type::INTEGER]);
+        self::assertIsType($key, $value, [Type::INTEGER]);
     }
 
     /**
      * Checks if given $val is of type array
      *
-     * @param string $key Name of the key to be used if exception is thrown.
-     * @param mixed  $var Variable to be asserted.
+     * @param string $var_name Name of the key to be used if exception is thrown.
+     * @param mixed  $value    Variable to be asserted.
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertIsArray(string $key, $var): void
+    public static function assertIsArray(string $var_name, $value): void
     {
-        self::assertIsType($key, $var, [Type::ARRAY]);
+        self::assertIsType($var_name, $value, [Type::ARRAY]);
     }
 
     /**
      * Checks if given $val is an object
      *
-     * @param string $key Name of the key to be used if exception is thrown.
-     * @param mixed  $var Variable to be asserted.
+     * @param string $var_name Name of the key to be used if exception is thrown.
+     * @param mixed  $value    Variable to be asserted.
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertIsObject(string $key, $var): void
+    public static function assertIsObject(string $var_name, $value): void
     {
-        self::assertIsType($key, $var, [Type::OBJECT]);
+        self::assertIsType($var_name, $value, [Type::OBJECT]);
     }
 
     /**
      * Checks if given $val is of type string
      *
-     * @param string $name Label or name of the variable to be used in exception message (if thrown).
-     * @param mixed  $var  Variable to be asserted.
+     * @param string $name  Label or name of the variable to be used in exception message (if thrown).
+     * @param mixed  $value Variable to be asserted.
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertIsString(string $name, $var): void
+    public static function assertIsString(string $name, $value): void
     {
-        self::assertIsType($name, $var, [Type::STRING]);
+        self::assertIsType($name, $value, [Type::STRING]);
     }
 
     /**
-     * @param string $name Label or name of the variable to be used in exception message (if thrown).
-     * @param mixed  $var  Variable to be asserted.
-     * @param int    $min  Min allowed value (inclusive)
-     * @param int    $max  Max allowed value (inclusive)
+     * @param string $var_name Label or name of the variable to be used in exception message (if thrown).
+     * @param mixed  $value    Variable to be asserted.
+     * @param int    $min      Min allowed value (inclusive)
+     * @param int    $max      Max allowed value (inclusive)
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public static function assertIsIntRange(string $name, $var, int $min, int $max): void
+    public static function assertIsIntRange(string $var_name, $value, int $min, int $max): void
     {
-        self::assertIsInt($name, $var);
+        self::assertIsInt($var_name, $value);
 
         if ($min > $max) {
             throw new \RuntimeException(
-                \sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.', __FUNCTION__, $name));
+                \sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.', __FUNCTION__, $var_name));
         }
 
-        if (($min > $var) || ($var > $max)) {
+        if (($min > $value) || ($value > $max)) {
             throw new \InvalidArgumentException(
-                \sprintf('Invalid value of "%s" (%d). Must be between %d-%d inclusive.', $name, $var, $min, $max));
+                \sprintf('Invalid value of "%s" (%d). Must be between %d-%d inclusive.', $var_name, $value, $min, $max));
         }
     }
 
     /**
      * Checks if $item (of name $key) is of type that is include in $allowed_types.
      *
-     * @param string $name          Label or name of the variable to be used in exception message (if thrown).
-     * @param mixed  $var           Variable to be asserted.
+     * @param string $var_name      Label or name of the variable to be used in exception message (if thrown).
+     * @param mixed  $value         Variable to be asserted.
      * @param array  $allowed_types Array of allowed types for $var, i.e. [Type::INTEGER]
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function assertIsType(string $name, $var, array $allowed_types): void
+    public static function assertIsType(string $var_name, $value, array $allowed_types): void
     {
-        $type = \gettype($var);
+        $type = \gettype($value);
         if (!\in_array($type, $allowed_types, true)) {
             throw new \InvalidArgumentException(
                 \sprintf('"%s" must be one of allowed types: %s (%s given)',
-                    $name, implode(', ', $allowed_types), \gettype($var))
+                    $var_name, implode(', ', $allowed_types), \gettype($value))
             );
         }
     }
@@ -166,15 +166,15 @@ class Validator
     /**
      * Ensures $obj (that is value coming from variable, which name is passed in $label) is instance of $cls class.
      *
-     * @param string $label Name of variable that the $obj value is coming from. Used for exception message.
-     * @param object $obj   Object to check instance of
-     * @param string $cls   Target class we want to check $obj agains.
+     * @param string $var_name Name of variable that the $obj value is coming from. Used for exception message.
+     * @param object $obj      Object to check instance of
+     * @param string $cls      Target class we want to check $obj agains.
      */
-    public static function assertInstanceOf(string $label, object $obj, string $cls): void
+    public static function assertInstanceOf(string $var_name, object $obj, string $cls): void
     {
         if (!($obj instanceof $cls)) {
             throw new \InvalidArgumentException(
-                \sprintf('"%s" must be instance of "%s".', $label, $cls)
+                \sprintf('"%s" must be instance of "%s".', $var_name, $cls)
             );
         }
     }
