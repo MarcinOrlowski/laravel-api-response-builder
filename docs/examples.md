@@ -89,12 +89,11 @@ return ResponseBuilder::success($data);
  for more details. Attempt to pass unsupported data type (i.e. literals) will throw the exception.
 
  **IMPORTANT:** `data` node is **always** an JSON Object. This is **enforced** by the library design, therefore if you need to
- return your data array as array and just its elements as shown in above example, it will be wrap it in another array:
+ return your data array as array and just its elements as shown in above example, it will be wrapped into additional array:
 
 ```php
 // this is CORRECT
 $returned_array = [1,2,3];
-$data = ['my_array' => $returned_array];
 return ResponseBuilder::success($data);
 ```
 
@@ -104,50 +103,27 @@ return ResponseBuilder::success($data);
 {
    ...
    "data": {
-      "my_array": [1, 2, 3]
+      "items": [1, 2, 3]
    }
 }
 ```
 
- **IMPORTANT:** do NOT wrap the payload into array without giving it the key would, due to conversion to JSON object:
+ **IMPORTANT:** If provided array has at least one non numeric index, then wrapping will not occur:
 
 ```php
 // this is WRONG
-$returned_array = [1,2,3];
+$returned_array = ['foo' => 1, 'bar' => 2];
 return ResponseBuilder::success($returned_array);
 ```
 
-would give you wrong `data` structure:
+would give you `data` structure:
 
 ```json
 {
   ...
   "data": {
-     "0": 1,
-     "1": 2,
-     "2": 3
-  }
-}
-```
-
- which most likely is not what your client expects. Note that you must also not use this as side effect, because created
- keys are based on array internals:
-
-```php
-// this is WRONG
-$returned_array = [1,2,3];
-unset($returned_array[1]);
-return ResponseBuilder::success($returned_array);
-```
-
- would give non-sequential keys:
-
-```json
-{
-  ...
-  "data": {
-     "0": 1,
-     "2": 3
+     "foo": 1,
+     "bar": 2
   }
 }
 ```

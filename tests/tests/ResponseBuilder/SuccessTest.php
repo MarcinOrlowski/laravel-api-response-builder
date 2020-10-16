@@ -13,7 +13,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
@@ -55,7 +54,13 @@ class SuccessTest extends TestCase
 		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
 		$this->assertNotNull($j->data);
-		$this->assertArraysEquals($payload, (array)$j->data);
+		$data = (array)$j->data;
+
+		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
+
+		$this->assertCount(1, $data);
+		$this->assertArraysEquals($payload, (array)$j->data->{$key});
 		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
 	}
 

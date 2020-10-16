@@ -100,6 +100,40 @@ class Converter
     }
 
 	/**
+	 * Checks if we have "classes" mapping configured given class name.
+	 * Returns @true if there's valid config for this class.
+	 * Throws \RuntimeException if there's no config "classes" mapping entry for this object configured.
+	 * Throws \InvalidArgumentException if No data conversion mapping configured for given class.
+	 *
+	 * @param string $cls Name of the class to check mapping for.
+	 *
+	 * @return array
+	 *
+	 * @throws \InvalidArgumentException
+	 */
+	protected function getClassMappingConfigOrThrowByName(string $cls): array
+	{
+		$result = null;
+		$debug_result = '';
+
+		// check for exact class name match...
+		if (\array_key_exists($cls, $this->classes)) {
+			$result = $this->classes[ $cls ];
+			$debug_result = 'exact config match';
+		}
+
+		if ($result === null) {
+			throw new \InvalidArgumentException(sprintf('No data conversion mapping configured for "%s" class.', $cls));
+		}
+
+		if ($this->debug_enabled) {
+			Log::debug(__CLASS__ . ": Converting {$cls} using {$result[ResponseBuilder::KEY_HANDLER]} because: {$debug_result}.");
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Facade to data converting feature.
 	 *
 	 * NOTE: the `$data` payload passed to this method must be a complete payload to be returned
@@ -151,15 +185,40 @@ class Converter
         Validator::assertIsType('data', $data, [Validator::TYPE_ARRAY,
                                                 Validator::TYPE_OBJECT]);
 
-        if (\is_object($data)) {
-            $cfg = $this->getClassMappingConfigOrThrow($data);
+	    if (\is_object($data)) {
+		    $cfg = $this->getClassMappingConfigOrThrow($data);
             $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
-	        $data = [$cfg[ResponseBuilder::KEY_KEY] => $worker->convert($data, $cfg)];
+		    $data = [$cfg[ ResponseBuilder::KEY_KEY ] => $worker->convert($data, $cfg)];
         } else {
-            $data = $this->convertArray($data);
+		    $cls = \Illuminate\Contracts\Support\Arrayable::class;
+		    if (\array_key_exists($cls, $this->classes)) {
+			    $result = $this->classes[ $cls ];
+			    $key = $this->classes[ $cls ][ ResponseBuilder::KEY_KEY ];
+			    $debug_result = 'exact config match';
+		    } else {
+			    $key = ResponseBuilder::KEY_ITEMS;
+			    $debug_result = 'arrayable hardcoded defaults';
+		    }
+
+	    	if ($this->hasNonNumericKeys($data)){
+			    $data = $this->convertArray($data);
+		    } else {
+			    $data = [$key => $this->convertArray($data)];
+		    }
         }
 
         return $data;
+    }
+
+    protected function hasNonNumericKeys(array $data): bool
+    {
+	    foreach ($data as $key => $val) {
+	    	if (!\is_int($key)) {
+	    		return true;
+		    }
+    	}
+
+	    return false;
     }
 
     /**

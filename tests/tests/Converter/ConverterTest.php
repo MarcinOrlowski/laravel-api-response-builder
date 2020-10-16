@@ -136,7 +136,7 @@ class ConverterTest extends TestCase
 		$model_2 = new TestModel($this->getRandomString('model_2'));
 		$model_3 = null;
 
-		$conv_key = $this->getRandomString('conv_key');
+		$model_key = $this->getRandomString('conv_key');
 
 		$data = [
 			$model_1,
@@ -147,7 +147,7 @@ class ConverterTest extends TestCase
 		// AND having its class configured for auto conversion
 		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
 			\get_class($model_1) => [
-				ResponseBuilder::KEY_KEY     => $conv_key,
+				ResponseBuilder::KEY_KEY     => $model_key,
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
 			],
 		]);
@@ -155,13 +155,21 @@ class ConverterTest extends TestCase
 		// WHEN this object is returned
 		$converted = (new Converter())->convert($data);
 
-		$this->assertIsArray($converted);
-		$this->assertCount(\count($data), $converted);
-		$this->assertArrayNotHasKey($conv_key, $converted);
+		// FIXME Illuminate\Contracts\Support\Arrayable seems to be mandatory now in config, which
+		// is bad. we need to have some way to handle array as direct payload with empty config
+		// ** MULTIPLE OCCURENCES - search for \Arrayable::class in tests
+		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
 
-		$this->assertArrayNotHasKey($conv_key, $converted[0]);
+		$this->assertIsArray($converted);
+		$this->assertCount(1, $converted);
+		$this->assertArrayHasKey($key, $converted);
+		$converted = $converted[$key];
+		$this->assertCount(\count($data), $converted);
+
+		$this->assertCount(\count($data), $converted);
+
 		$this->assertValidConvertedTestClass($model_1, $converted[0]);
-		$this->assertArrayNotHasKey($conv_key, $converted[1]);
 		$this->assertValidConvertedTestClass($model_2, $converted[1]);
 		$this->assertIsNotBool($converted[2]);
 		$this->assertNull($converted[2]);
@@ -187,9 +195,11 @@ class ConverterTest extends TestCase
 			],
 		];
 		// AND having its class configured for auto conversion
+		$model_key = $this->getRandomString();
+		$model_class = \get_class($model_1);
 		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-			\get_class($model_1) => [
-				ResponseBuilder::KEY_KEY     => 'XXX',
+			$model_class => [
+				ResponseBuilder::KEY_KEY     => $model_key,
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
 			],
 		]);
@@ -197,7 +207,16 @@ class ConverterTest extends TestCase
 		// WHEN this object is returned
 		$converted = (new Converter())->convert($data);
 
+		// FIXME Illuminate\Contracts\Support\Arrayable seems to be mandatory now in config, which
+		// is bad. we need to have some way to handle array as direct payload with empty config
+		// ** MULTIPLE OCCURENCES - search for \Arrayable::class in tests
+		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
+
 		$this->assertIsArray($converted);
+		$this->assertCount(1, $converted);
+		$this->assertArrayHasKey($key, $converted);
+		$converted = $converted[$key];
 		$this->assertCount(\count($data), $converted);
 
 		foreach ($converted as $row) {
@@ -239,7 +258,7 @@ class ConverterTest extends TestCase
 	}
 
 	/**
-	 * Tests if exception is thrown for invalid mixed-key array
+	 * Tests handling of mix of objects and keyed arrays of objeccts
 	 */
 	public function testConvert_ArrayNestedWithKeyedItems(): void
 	{
@@ -340,17 +359,27 @@ class ConverterTest extends TestCase
 		];
 
 		// AND having its class configured for auto conversion
-		$key = $this->getRandomString();
+		$model_key = $this->getRandomString();
+		$model_class = \get_class($model_1);
 		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
-			\get_class($model_1) => [
+			$model_class => [
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
-				ResponseBuilder::KEY_KEY => $key,
+				ResponseBuilder::KEY_KEY => $model_key,
 			],
 		]);
 
+		// FIXME Illuminate\Contracts\Support\Arrayable seems to be mandatory now in config, which
+		// is bad. we need to have some way to handle array as direct payload with empty config
+		// ** MULTIPLE OCCURENCES - search for \Arrayable::class in tests
+		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
+
 		$result = (new Converter())->convert($data);
 		$this->assertIsArray($result);
+		$this->assertCount(1, $result);
+		$result = $result[$key];
 		$this->assertCount(\count($data), $result);
+
 		$this->assertArrayHasKey('val', $result[0]);
 		$this->assertEquals($model_1->getVal(), $result[0]['val']);
 		$this->assertArrayHasKey('val', $result[1]);
