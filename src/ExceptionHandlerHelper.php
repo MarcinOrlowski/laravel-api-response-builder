@@ -90,11 +90,9 @@ class ExceptionHandlerHelper
 		// shall we enforce error message?
 		if ($msg_enforce) {
 			// yes, please.
-			if ($msg_key === null) {
-				// there's no msg_key configured for this exact code, so let's obtain our default message
-				$msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
-					: Lang::get($msg_key, $placeholders);
-			}
+			// there's no msg_key configured for this exact code, so let's obtain our default message
+			$msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
+				: Lang::get($msg_key, $placeholders);
 		} else {
 			// nothing enforced, handling pipeline: ex_message -> user_defined_msg -> http_ex -> default
 			if ($msg === '') {
