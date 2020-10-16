@@ -15,7 +15,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelArrayable;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonResource;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonSerializable;
@@ -40,7 +42,12 @@ class DefaultConfigTest extends TestCase
         $result = $converter->convert($obj);
 
         // THEN it should be converted automatically as per configuration
-        $this->assertIsArray($result);
+	    $cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+	    $key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
+
+	    $this->assertIsArray($result);
+	    $this->assertArrayHasKey($key, $result);
+	    $result = $result[$key];
         $this->assertArrayHasKey('val', $result);
         $this->assertEquals($result['val'], $obj_val);
     }
@@ -69,7 +76,12 @@ class DefaultConfigTest extends TestCase
 	        $result = $converter->convert($obj);
 
 	        // THEN it should be converted automatically as per configuration
+		    $cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+		    $key = $cfg[ \JsonSerializable::class ][ ResponseBuilder::KEY_KEY ];
+
 	        $this->assertIsArray($result);
+		    $this->assertArrayHasKey($key, $result);
+		    $result = $result[$key];
 	        $this->assertArrayHasKey('val', $result);
 	        $this->assertEquals($obj_val, $result['val']);
 	    }
@@ -93,7 +105,12 @@ class DefaultConfigTest extends TestCase
         $result = $converter->convert($obj);
 
         // THEN it should be converted automatically as per configuration
+	    $cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+	    $key = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ][ ResponseBuilder::KEY_KEY ];
+
         $this->assertIsArray($result);
+	    $this->assertArrayHasKey($key, $result);
+	    $result = $result[$key];
         $this->assertArrayHasKey('val', $result);
         $this->assertEquals($result['val'], $obj_val);
     }
@@ -133,20 +150,25 @@ class DefaultConfigTest extends TestCase
     /**
      * Helper method to perform some common tests of built-in support for Laravel's collections.
      *
-     * @param object|array $data
+     * @param object|array $collection
      *
      * @return array
      */
-    protected function doCollectionTests($data): array
+    protected function doCollectionTests($collection): array
     {
         // HAVING Converter with default settings
         // WHEN we try to pass of object of that class
-        $result = (new Converter())->convert($data);
+        $result = (new Converter())->convert($collection);
 
         // THEN it should be converted automatically as per default configuration
-        $this->assertIsArray($result);
+	    $cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+	    $key = $cfg[ get_class($collection) ][ ResponseBuilder::KEY_KEY ];
 
-        foreach ($data as $key => $val) {
+	    $this->assertIsArray($result);
+	    $this->assertArrayHasKey($key, $result);
+	    $result = $result[$key];
+
+        foreach ($collection as $key => $val) {
             $this->assertArrayHasKey($key, $result);
             $this->assertEquals($val, $result[ $key ]);
         }

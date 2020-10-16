@@ -13,6 +13,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 

@@ -72,6 +72,7 @@ abstract class ResponseBuilderBase
 	public const KEY_LINE      = 'line';
 	public const KEY_KEY       = 'key';
 	public const KEY_PRI       = 'pri';
+	public const KEY_ITEMS     = 'items';
 	public const KEY_HANDLER   = 'handler';
 	public const KEY_SUCCESS   = 'success';
 	public const KEY_CODE      = 'code';

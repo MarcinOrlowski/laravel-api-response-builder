@@ -93,10 +93,44 @@ class Converter
         }
 
         if ($this->debug_enabled) {
-			Log::debug(__CLASS__ . ": Converting {$cls} using {$result['handler']} because: {$debug_result}.");
+			Log::debug(__CLASS__ . ": Converting {$cls} using {$result[ResponseBuilder::KEY_HANDLER]} because: {$debug_result}.");
         }
 
 	    return $result;
+    }
+
+	/**
+	 * Facade to data converting feature.
+	 *
+	 * NOTE: the `$data` payload passed to this method must be a complete payload to be returned
+	 * in response `data` node. We need that to apply some "smart" behaviors while converting
+	 * data to arrays to be returned.
+	 *
+	 * @param object|array|null $whole_payload
+	 *
+	 * @return array|null
+	 */
+	public function convertPayload($whole_payload = null): ?array
+	{
+		if ($whole_payload === null) {
+			return null;
+		}
+
+		Validator::assertIsType('data', $whole_payload, [Validator::TYPE_ARRAY,
+		                                                 Validator::TYPE_OBJECT]);
+
+		$key = null;
+		if (\is_object($data)) {
+			$cfg = $this->getClassMappingConfigOrThrow($data);
+			$worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
+
+		}
+
+		if ($key !== null) {
+			return [$key => $data];
+		} else {
+			return $data;
+		}
     }
 
     /**
@@ -120,7 +154,7 @@ class Converter
         if (\is_object($data)) {
             $cfg = $this->getClassMappingConfigOrThrow($data);
             $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
-            $data = $worker->convert($data, $cfg);
+	        $data = [$cfg[ResponseBuilder::KEY_KEY] => $worker->convert($data, $cfg)];
         } else {
             $data = $this->convertArray($data);
         }
@@ -192,6 +226,7 @@ class Converter
 
             $mandatory_keys = [
                 ResponseBuilder::KEY_HANDLER,
+                ResponseBuilder::KEY_KEY,
             ];
             foreach ($classes as $class_name => $class_config) {
                 foreach ($mandatory_keys as $key_name) {

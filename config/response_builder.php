@@ -39,22 +39,22 @@ return [
     'converter'         => [
         \Illuminate\Database\Eloquent\Model::class          => [
             'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            // 'key'     => 'item',
+            'key'     => 'item',
             'pri'     => 0,
         ],
         \Illuminate\Support\Collection::class               => [
             'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            // 'key'     => 'item',
+            'key'     => 'items',
             'pri'     => 0,
         ],
         \Illuminate\Database\Eloquent\Collection::class     => [
             'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            // 'key'     => 'item',
+            'key'     => 'items',
             'pri'     => 0,
         ],
         \Illuminate\Http\Resources\Json\JsonResource::class => [
             'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            // 'key'     => 'item',
+            'key'     => 'item',
             'pri'     => 0,
         ],
 
@@ -65,12 +65,12 @@ return [
         */
         \JsonSerializable::class                            => [
             'handler' => \MarcinOrlowski\ResponseBuilder\Converters\JsonSerializableConverter::class,
-            // 'key'     => 'item',
+             'key'     => 'item',
             'pri'     => -10,
         ],
         \Illuminate\Contracts\Support\Arrayable::class      => [
             'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ArrayableConverter::class,
-            // 'key'     => 'item',
+            'key'     => 'items',
             'pri'     => -10,
         ],
 

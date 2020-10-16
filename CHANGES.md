@@ -6,6 +6,9 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
+* @dev
+   * **BACKWARD INCOMPATIBLE CHANGES** [RB-156] Added logic to deal with directly returned objects or arrays.
+
 * v8.1.1 (2020-10-15)
    * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from
      being invoked, thus making response object structure manipulation ineffective (reported by krek95)

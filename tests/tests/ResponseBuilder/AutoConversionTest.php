@@ -33,9 +33,11 @@ class AutoConversionTest extends TestCase
 
         // AND having its class configured for auto conversion
         $model_class_name = \get_class($model);
+        $key = $this->getRandomString();
         $cfg = [
             $model_class_name => [
                 ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+                ResponseBuilder::KEY_KEY => $key,
             ],
         ];
         Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $cfg);
@@ -46,7 +48,8 @@ class AutoConversionTest extends TestCase
 
         // THEN returned response object should have it auto converted
         $this->assertNotNull($j->data);
-        $this->assertEquals($model_val, $j->data->val);
+        $this->assertObjectHasAttribute($key, $j->data);
+        $this->assertEquals($model_val, $j->data->{$key}->val);
     }
 
     /**
