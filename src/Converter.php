@@ -319,26 +319,30 @@ class Converter
 	 */
 	protected static function getPrimitivesMapping(): array
 	{
-		$classes = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
+		$primitives = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
 
-		if (!\is_array($classes)) {
+		if (!\is_array($primitives)) {
 			throw new \RuntimeException(
-				\sprintf('CONFIG: "%s" mapping must be an array (%s given)', CONF_KEY_CONVERTER_PRIMITIVES, \gettype($classes)));
+				\sprintf('CONFIG: "%s" mapping must be an array (%s given)', ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES, \gettype($primitives)));
 		}
 
-		if (!empty($classes)) {
+		if (!empty($primitives)) {
 			$mandatory_keys = [
 				ResponseBuilder::KEY_KEY,
 			];
-			foreach ($classes as $class_name => $class_config) {
+
+			foreach ($primitives as $type => $config) {
+				if (!\is_array($config)) {
+					throw new \InvalidArgumentException(sprintf("CONFIG: Config for '{$type}' primitive must be an array (%s given).", \gettype($config)));
+				}
 				foreach ($mandatory_keys as $key_name) {
-					if (!\array_key_exists($key_name, $class_config)) {
-						throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' primitive mapping");
+					if (!\array_key_exists($key_name, $config)) {
+						throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$type}' primitive mapping");
 					}
 				}
 			}
 		}
 
-		return $classes;
+		return $primitives;
 	}
 }

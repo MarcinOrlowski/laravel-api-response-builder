@@ -71,6 +71,8 @@ class ConverterTest extends TestCase
 		$this->assertEquals($child_val, $result['val']);
 	}
 
+	// -----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Checks if getClassesMapping would throw exception on invalid configuration data
 	 */
@@ -99,6 +101,38 @@ class ConverterTest extends TestCase
 		$this->assertEmpty($result);
 	}
 
+	// -----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Checks if getPrimitivesMapping would throw exception on invalid configuration data
+	 */
+	public function testGetPrimitivesMapping_InvalidConfigurationData(): void
+	{
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES, 'invalid');
+
+		$this->expectException(\RuntimeException::class);
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod(Converter::class, 'getPrimitivesMapping');
+	}
+
+	/**
+	 * Checks if getPrimitivesMapping would return empty array if there's no "primitives" config entry
+	 */
+	public function testGetPrimitivesMapping_NoMappingConfig(): void
+	{
+		// Remove any classes config
+		/** @noinspection PhpUndefinedMethodInspection */
+		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$result = $this->callProtectedMethod(Converter::class, 'getPrimitivesMapping');
+		$this->assertIsArray($result);
+		$this->assertEmpty($result);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Checks how we convert directly passed object
 	 */
@@ -126,6 +160,9 @@ class ConverterTest extends TestCase
 		$this->assertEquals($model_val, $converted[$key]['val']);
 	}
 
+	/**
+	 * Checks if passing boolean as direct payload works as expected.
+	 */
 	public function testConvert_DirectBool(): void
 	{
 		// GIVEN primitive value
@@ -133,13 +170,19 @@ class ConverterTest extends TestCase
 		$this->doDirectPrimitiveTest($value);
 	}
 
+	/**
+	 * Checks if passing double as direct payload works as expected.
+	 */
 	public function testConvert_DirectDouble(): void
 	{
 		// GIVEN primitive value
-		$value = ((double)mt_rand(0, 100000)/mt_rand(0, 1000));
+		$value = ((double)mt_rand(0, 100000)/mt_rand(0, 1000)) + 0.1;
 		$this->doDirectPrimitiveTest($value);
 	}
 
+	/**
+	 * Checks if passing integer as direct payload works as expected.
+	 */
 	public function testConvert_DirectInteger(): void
 	{
 		// GIVEN primitive value
@@ -147,6 +190,9 @@ class ConverterTest extends TestCase
 		$this->doDirectPrimitiveTest($value);
 	}
 
+	/**
+	 * Checks if passing string as direct payload works as expected.
+	 */
 	public function testConvert_DirectString(): void
 	{
 		// GIVEN primitive value
@@ -172,7 +218,21 @@ class ConverterTest extends TestCase
 		$key = $cfg[ ResponseBuilder::KEY_KEY ];
 		$this->assertArrayHasKey($key, $converted);
 		$this->assertEquals($value, $converted[ $key ]);
+	}
 
+	/**
+	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when there's no config for given primitive type.
+	 */
+	public function testgetPrimitiveMappingConfigOrThrow_NoConfig(): void
+	{
+		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES . '.' . ResponseBuilder::PRIMITIVE_BOOLEAN);
+
+		// we need boolean
+		$value = false;
+
+		// getPrimitiveMapping is called by consructor.
+		$this->expectException(\InvalidArgumentException::class);
+		new Converter();
 	}
 
 	/**

@@ -64,10 +64,10 @@ abstract class ResponseBuilderBase
 	public const CONF_KEY_MAX_CODE               = self::CONF_CONFIG . '.max_code';
 	public const CONF_KEY_EXCEPTION_HANDLER      = self::CONF_CONFIG . '.exception_handler';
 
-	public const PRIMITIVE_ARRAY  = 'array';
-	public const PRIMITIVE_BOOL   = 'bool';
-	public const PRIMITIVE_DOUBLE = 'double';
-	public const PRIMITIVE_INT    = 'int';
+	public const PRIMITIVE_ARRAY   = 'array';
+	public const PRIMITIVE_BOOLEAN = 'boolean';
+	public const PRIMITIVE_DOUBLE  = 'double';
+	public const PRIMITIVE_INT     = 'int';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information
