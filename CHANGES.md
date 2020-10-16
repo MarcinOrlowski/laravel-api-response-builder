@@ -6,7 +6,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 ## CHANGE LOG ##
 
-* @dev
+* v9.0.0 (2020-10-16)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * [RB-156] Added logic to deal with directly returned objects or arrays.
    * Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
