@@ -30,7 +30,7 @@ class ConverterTest extends TestCase
 	public function testConstructor(): void
 	{
 		// GIVEN incorrect mapping configuration
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, false);
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, false);
 
 		// THEN we expect exception thrown
 		$this->expectException(\RuntimeException::class);
@@ -53,7 +53,7 @@ class ConverterTest extends TestCase
 
 		// HAVING indirect mapping configuration (of parent class)
 		$key = $this->getRandomString('key');
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, [
 			\get_class($parent) => [
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
 				ResponseBuilder::KEY_KEY => $key,
@@ -76,7 +76,7 @@ class ConverterTest extends TestCase
 	 */
 	public function testGetClassesMapping_InvalidConfigurationData(): void
 	{
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, 'invalid');
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, 'invalid');
 
 		$this->expectException(\RuntimeException::class);
 
@@ -91,7 +91,7 @@ class ConverterTest extends TestCase
 	{
 		// Remove any classes config
 		/** @noinspection PhpUndefinedMethodInspection */
-		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER);
+		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER_MAP);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = $this->callProtectedMethod(Converter::class, 'getClassesMapping');
@@ -109,7 +109,7 @@ class ConverterTest extends TestCase
 
 		// AND having its class configured for auto conversion
 		$key = $this->getRandomString('key');
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, [
 			\get_class($model) => [
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
 				ResponseBuilder::KEY_KEY => $key,
@@ -124,6 +124,55 @@ class ConverterTest extends TestCase
 		$this->assertArrayHasKey($key, $converted);
 		$this->assertCount(1, $converted[$key]);
 		$this->assertEquals($model_val, $converted[$key]['val']);
+	}
+
+	public function testConvert_DirectBool(): void
+	{
+		// GIVEN primitive value
+		$value = mt_rand(0, 1) ? false : true;
+		$this->doDirectPrimitiveTest($value);
+	}
+
+	public function testConvert_DirectDouble(): void
+	{
+		// GIVEN primitive value
+		$value = ((double)mt_rand(0, 100000)/mt_rand(0, 1000));
+		$this->doDirectPrimitiveTest($value);
+	}
+
+	public function testConvert_DirectInteger(): void
+	{
+		// GIVEN primitive value
+		$value = mt_rand(0, 10000);
+		$this->doDirectPrimitiveTest($value);
+	}
+
+	public function testConvert_DirectString(): void
+	{
+		// GIVEN primitive value
+		$value = $this->getRandomString();
+		$this->doDirectPrimitiveTest($value);
+	}
+
+	protected function doDirectPrimitiveTest($value): void
+	{
+		// GIVEN primitive value $value
+
+		// WHEN passing it as direct payaload
+		$converter = new Converter();
+		$converted = $converter->convert($value);
+
+		// THEN we expect returned data to be keyed as per primitive's configuration.
+		$this->assertIsArray($converted);
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
+		$this->assertIsArray($cfg);
+		$this->assertNotEmpty($cfg);
+		$key = $cfg[ ResponseBuilder::KEY_KEY ];
+		$this->assertArrayHasKey($key, $converted);
+		$this->assertEquals($value, $converted[ $key ]);
+
 	}
 
 	/**
@@ -145,7 +194,7 @@ class ConverterTest extends TestCase
 		];
 
 		// AND having its class configured for auto conversion
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, [
 			\get_class($model_1) => [
 				ResponseBuilder::KEY_KEY     => $model_key,
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -155,11 +204,9 @@ class ConverterTest extends TestCase
 		// WHEN this object is returned
 		$converted = (new Converter())->convert($data);
 
-		// FIXME Illuminate\Contracts\Support\Arrayable seems to be mandatory now in config, which
-		// is bad. we need to have some way to handle array as direct payload with empty config
-		// ** MULTIPLE OCCURENCES - search for \Arrayable::class in tests
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
-		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
+		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+		$this->assertNotEmpty($cfg);
+		$key = $cfg[ ResponseBuilder::PRIMITIVE_ARRAY ][ ResponseBuilder::KEY_KEY ];
 
 		$this->assertIsArray($converted);
 		$this->assertCount(1, $converted);
@@ -197,7 +244,7 @@ class ConverterTest extends TestCase
 		// AND having its class configured for auto conversion
 		$model_key = $this->getRandomString();
 		$model_class = \get_class($model_1);
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, [
 			$model_class => [
 				ResponseBuilder::KEY_KEY     => $model_key,
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -207,11 +254,9 @@ class ConverterTest extends TestCase
 		// WHEN this object is returned
 		$converted = (new Converter())->convert($data);
 
-		// FIXME Illuminate\Contracts\Support\Arrayable seems to be mandatory now in config, which
-		// is bad. we need to have some way to handle array as direct payload with empty config
-		// ** MULTIPLE OCCURENCES - search for \Arrayable::class in tests
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
-		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
+		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+		$this->assertNotEmpty($cfg);
+		$key = $cfg[ ResponseBuilder::PRIMITIVE_ARRAY ][ ResponseBuilder::KEY_KEY ];
 
 		$this->assertIsArray($converted);
 		$this->assertCount(1, $converted);
@@ -244,7 +289,7 @@ class ConverterTest extends TestCase
 		];
 
 		// AND having its class configured for auto conversion
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, [
 			\get_class($model_1) => [
 				ResponseBuilder::KEY_KEY     => 'XXX',
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -285,7 +330,7 @@ class ConverterTest extends TestCase
 		];
 
 		// AND having its class configured for auto conversion
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, [
 			\get_class($model_1) => [
 				ResponseBuilder::KEY_KEY     => 'XXX',
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
@@ -307,18 +352,6 @@ class ConverterTest extends TestCase
 	}
 
 	/**
-	 * Checks if convert() throws exception when fed with invalid type of data.
-	 */
-	public function testConvertWithInvalidDataType(): void
-	{
-		// Bool is not a valid type of data to be converted
-		$data = false;
-
-		$this->expectException(\InvalidArgumentException::class);
-		(new Converter())->convert($data);
-	}
-
-	/**
 	 * Checks if convert returns data merged properly if convert related setings
 	 * feature no "key" element.
 	 */
@@ -328,7 +361,7 @@ class ConverterTest extends TestCase
 
 		// AND having its class configured for auto conversion
 		$key = $this->getRandomString('key');
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, [
 			\get_class($model_1) => [
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
 				ResponseBuilder::KEY_KEY => $key,
@@ -361,18 +394,16 @@ class ConverterTest extends TestCase
 		// AND having its class configured for auto conversion
 		$model_key = $this->getRandomString();
 		$model_class = \get_class($model_1);
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, [
 			$model_class => [
 				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
 				ResponseBuilder::KEY_KEY => $model_key,
 			],
 		]);
 
-		// FIXME Illuminate\Contracts\Support\Arrayable seems to be mandatory now in config, which
-		// is bad. we need to have some way to handle array as direct payload with empty config
-		// ** MULTIPLE OCCURENCES - search for \Arrayable::class in tests
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
-		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
+		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+		$this->assertNotEmpty($cfg);
+		$key = $cfg[ ResponseBuilder::PRIMITIVE_ARRAY ][ ResponseBuilder::KEY_KEY ];
 
 		$result = (new Converter())->convert($data);
 		$this->assertIsArray($result);
@@ -392,7 +423,7 @@ class ConverterTest extends TestCase
 	public function testConvertWithOverridenDefaultConfig(): void
 	{
 		// GIVEN built-in converter config
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
+		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_MAP);
 		$this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
 
@@ -402,7 +433,7 @@ class ConverterTest extends TestCase
 		$key = $this->getRandomString();
 		$cfg[ Collection::class ][ ResponseBuilder::KEY_HANDLER ] = \get_class($fake);
 		$cfg[ Collection::class ][ ResponseBuilder::KEY_KEY ] = $key;
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $cfg);
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, $cfg);
 
 		// WHEN converting the data, we expect FakeConverter to be used
 		$data = collect([1,

@@ -195,7 +195,7 @@ trait ApiCodesTests
      */
     public function testConfigClassesMappingEntriesMandatoryKeys(): void
     {
-        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER) ?? [];
+        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER_MAP) ?? [];
         if (\count($classes) === 0) {
             // to make PHPUnit not complaining about no assertion.
             $this->assertTrue(true);
@@ -222,7 +222,7 @@ trait ApiCodesTests
      */
     public function testConfigClassesMappingEntriesUnwantedConfigKeys(): void
     {
-        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER) ?? [];
+        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER_MAP, []);
         if (\count($classes) === 0) {
             // to make PHPUnit not complaining about no assertion.
             $this->assertTrue(true);

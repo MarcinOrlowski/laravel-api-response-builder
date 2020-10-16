@@ -56,8 +56,9 @@ class SuccessTest extends TestCase
 		$this->assertNotNull($j->data);
 		$data = (array)$j->data;
 
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER);
-		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
+		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+		$this->assertNotEmpty($cfg);
+		$key = $cfg[ ResponseBuilder::PRIMITIVE_ARRAY ][ ResponseBuilder::KEY_KEY ];
 
 		$this->assertCount(1, $data);
 		$this->assertArraysEquals($payload, (array)$j->data->{$key});

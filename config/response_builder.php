@@ -37,41 +37,63 @@ return [
     |
     */
     'converter'         => [
-        \Illuminate\Database\Eloquent\Model::class          => [
-            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            'key'     => 'item',
-            'pri'     => 0,
-        ],
-        \Illuminate\Support\Collection::class               => [
-            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            'key'     => 'items',
-            'pri'     => 0,
-        ],
-        \Illuminate\Database\Eloquent\Collection::class     => [
-            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            'key'     => 'items',
-            'pri'     => 0,
-        ],
-        \Illuminate\Http\Resources\Json\JsonResource::class => [
-            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            'key'     => 'item',
-            'pri'     => 0,
-        ],
+	    'primitives' => [
+		    /* Configuration for primitives used when such data is passed directly as payload (i.e. `success(15)`;) */
+		    'array'   => [
+			    'key' => 'values',
+		    ],
+		    'boolean' => [
+			    'key' => 'value',
+		    ],
+		    'double'  => [
+			    'key' => 'value',
+		    ],
+		    'integer' => [
+			    'key' => 'value',
+		    ],
+		    'string'  => [
+			    'key' => 'value',
+		    ],
+	    ],
 
-        /*
-        |-----------------------------------------------------------------------------------------------------------
-        | Generic converters should have lower pri to allow dedicated ones to kick in first when class matches
-        |-----------------------------------------------------------------------------------------------------------
-        */
-        \JsonSerializable::class                            => [
-            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\JsonSerializableConverter::class,
-             'key'     => 'item',
-            'pri'     => -10,
-        ],
-        \Illuminate\Contracts\Support\Arrayable::class      => [
-            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ArrayableConverter::class,
-            'key'     => 'items',
-            'pri'     => -10,
+	    /* Object converters configuration for supported classes */
+    	'map' => [
+	        \Illuminate\Database\Eloquent\Model::class          => [
+	            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+	            'key'     => 'item',
+	            'pri'     => 0,
+	        ],
+	        \Illuminate\Support\Collection::class               => [
+	            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+	            'key'     => 'items',
+	            'pri'     => 0,
+	        ],
+	        \Illuminate\Database\Eloquent\Collection::class     => [
+	            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+	            'key'     => 'items',
+	            'pri'     => 0,
+	        ],
+	        \Illuminate\Http\Resources\Json\JsonResource::class => [
+	            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+	            'key'     => 'item',
+	            'pri'     => 0,
+	        ],
+
+	        /*
+	        |-----------------------------------------------------------------------------------------------------------
+	        | Generic converters should have lower pri to allow dedicated ones to kick in first when class matches
+	        |-----------------------------------------------------------------------------------------------------------
+	        */
+	        \JsonSerializable::class                            => [
+	            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\JsonSerializableConverter::class,
+	             'key'     => 'item',
+	            'pri'     => -10,
+	        ],
+	        \Illuminate\Contracts\Support\Arrayable::class      => [
+	            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ArrayableConverter::class,
+	            'key'     => 'items',
+	            'pri'     => -10,
+	        ],
         ],
 
     ],

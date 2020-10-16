@@ -58,9 +58,16 @@ abstract class ResponseBuilderBase
 	public const CONF_KEY_MAP                    = self::CONF_CONFIG . '.map';
 	public const CONF_KEY_ENCODING_OPTIONS       = self::CONF_CONFIG . '.encoding_options';
 	public const CONF_KEY_CONVERTER              = self::CONF_CONFIG . '.converter';
+	public const CONF_KEY_CONVERTER_MAP          = self::CONF_KEY_CONVERTER . '.map';
+	public const CONF_KEY_CONVERTER_PRIMITIVES   = self::CONF_KEY_CONVERTER . '.primitives';
 	public const CONF_KEY_MIN_CODE               = self::CONF_CONFIG . '.min_code';
 	public const CONF_KEY_MAX_CODE               = self::CONF_CONFIG . '.max_code';
 	public const CONF_KEY_EXCEPTION_HANDLER      = self::CONF_CONFIG . '.exception_handler';
+
+	public const PRIMITIVE_ARRAY  = 'array';
+	public const PRIMITIVE_BOOL   = 'bool';
+	public const PRIMITIVE_DOUBLE = 'double';
+	public const PRIMITIVE_INT    = 'int';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information
@@ -72,7 +79,6 @@ abstract class ResponseBuilderBase
 	public const KEY_LINE      = 'line';
 	public const KEY_KEY       = 'key';
 	public const KEY_PRI       = 'pri';
-	public const KEY_ITEMS     = 'items';
 	public const KEY_HANDLER   = 'handler';
 	public const KEY_SUCCESS   = 'success';
 	public const KEY_CODE      = 'code';
