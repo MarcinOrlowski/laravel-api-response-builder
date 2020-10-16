@@ -84,8 +84,8 @@ class DefaultConfigTest extends TestCase
 	        $this->assertIsArray($result);
 		    $this->assertArrayHasKey($key, $result);
 		    $result = $result[$key];
-	        $this->assertArrayHasKey('val', $result);
-	        $this->assertEquals($obj_val, $result['val']);
+	        $this->assertArrayHasKey($key, $result);
+	        $this->assertEquals($obj_val, $result[$key]);
 	    }
     }
 

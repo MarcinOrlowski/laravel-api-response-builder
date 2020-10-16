@@ -11,6 +11,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * [RB-156] Added logic to deal with directly returned objects or arrays.
    * Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
      `double`, `integer` and `string` types, configurable via new `converter/primitives`.
+   * Removed hadrcoded `val` key used by `JsonSerializable` converter.
 
 * v8.1.1 (2020-10-15)
    * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from

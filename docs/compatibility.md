@@ -11,6 +11,7 @@
    other types were not allowed previously anyway.
  * `[BREAKING]` Class mappings of `converter` are now moved to `classes` sub-array of `converter` config.
  * `[BREAKING]` The `key` item for each converter confugured in `converter/map` is mandatory for each converter defined.
+ * `[BREAKING]` The `JsonSerializable` are no longer using hardcoded `val` key when converted, but proper `key` from its config.
  * `[NEW]` The `primitives` config array added to `converter`. See [docs](config.md) for more information.
 
 
