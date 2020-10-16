@@ -30,7 +30,10 @@ class Validator
     /** @var string */
     public const TYPE_OBJECT = 'object';
 
-    /** @var string */
+	/** @var string */
+	public const TYPE_DOUBLE = 'double';
+
+	/** @var string */
     public const TYPE_NULL = 'NULL';
 
     /**
@@ -148,7 +151,7 @@ class Validator
     public static function assertIsType(string $name, $var, array $allowed_types): void
     {
         $type = \gettype($var);
-        if (!\in_array($type, $allowed_types)) {
+        if (!\in_array($type, $allowed_types, true)) {
             throw new \InvalidArgumentException(
                 \sprintf('"%s" must be one of allowed types: %s (%s given)',
                     $name, implode(', ', $allowed_types), \gettype($var))
