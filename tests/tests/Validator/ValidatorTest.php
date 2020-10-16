@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\Type;
 use MarcinOrlowski\ResponseBuilder\Validator;
 
 class ValidatorTest extends TestCase
@@ -213,40 +214,40 @@ class ValidatorTest extends TestCase
         /**
          * Test data. Each entry is an array with a following keys:
          *   item    : value to be tested or array of values from which one value will be randomly picked for testing.
-         *   types   : array of allowed `Validator::TYPE_xxx` types
+         *   types   : array of allowed `Type::xxx` types
          *   expected: @false if test is expected to fail (type of `item` is not in `types`), @true if it should pass.
          */
         $test_data = [
             [
                 'item'     => false,
-                'types'    => [Validator::TYPE_STRING],
+                'types'    => [Type::STRING],
                 'expected' => false,
             ],
             [
-                'item'     => false,
-                'types'    => [Validator::TYPE_BOOL],
-                'expected' => true,
+	            'item'     => false,
+	            'types'    => [Type::BOOLEAN],
+	            'expected' => true,
             ],
             [
                 'item'     => 'foo',
-                'types'    => [Validator::TYPE_STRING],
+                'types'    => [Type::STRING],
                 'expected' => true,
             ],
             [
                 'item'     => 23,
-                'types'    => [Validator::TYPE_STRING],
+                'types'    => [Type::STRING],
                 'expected' => false,
             ],
             [
                 'item'     => 666,
-                'types'    => [Validator::TYPE_INTEGER],
+                'types'    => [Type::INTEGER],
                 'expected' => true,
             ],
             [
-                'item'     => 'fail',
-                'types'    => [Validator::TYPE_INTEGER,
-                               Validator::TYPE_BOOL],
-                'expected' => false,
+	            'item'     => 'fail',
+	            'types'    => [Type::INTEGER,
+                               Type::BOOLEAN],
+	            'expected' => false,
             ],
 
         ];

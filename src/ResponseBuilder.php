@@ -160,8 +160,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public function withHttpCode(int $http_code = null): self
 	{
-		Validator::assertIsType('http_code', $http_code, [Validator::TYPE_INTEGER,
-		                                                  Validator::TYPE_NULL]);
+		Validator::assertIsType('http_code', $http_code, [Type::INTEGER,
+		                                                  Type::NULL]);
 		$this->http_code = $http_code;
 
 		return $this;
@@ -174,9 +174,9 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public function withData($data = null): self
 	{
-		Validator::assertIsType('data', $data, [Validator::TYPE_ARRAY,
-		                                        Validator::TYPE_OBJECT,
-		                                        Validator::TYPE_NULL]);
+		Validator::assertIsType('data', $data, [Type::ARRAY,
+		                                        Type::OBJECT,
+		                                        Type::NULL]);
 		$this->data = $data;
 
 		return $this;
@@ -189,8 +189,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public function withJsonOptions(int $json_opts = null): self
 	{
-		Validator::assertIsType('json_opts', $json_opts, [Validator::TYPE_INTEGER,
-		                                                  Validator::TYPE_NULL]);
+		Validator::assertIsType('json_opts', $json_opts, [Type::INTEGER,
+		                                                  Type::NULL]);
 		$this->json_opts = $json_opts;
 
 		return $this;
@@ -203,8 +203,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public function withDebugData(array $debug_data = null): self
 	{
-		Validator::assertIsType('$debug_data', $debug_data, [Validator::TYPE_ARRAY,
-		                                                     Validator::TYPE_NULL]);
+		Validator::assertIsType('$debug_data', $debug_data, [Type::ARRAY,
+		                                                     Type::NULL]);
 		$this->debug_data = $debug_data;
 
 		return $this;
@@ -217,8 +217,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public function withMessage(string $msg = null): self
 	{
-		Validator::assertIsType('message', $msg, [Validator::TYPE_STRING,
-		                                          Validator::TYPE_NULL]);
+		Validator::assertIsType('message', $msg, [Type::STRING,
+		                                          Type::NULL]);
 		$this->message = $msg;
 
 		return $this;

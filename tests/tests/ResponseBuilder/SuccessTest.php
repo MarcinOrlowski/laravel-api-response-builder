@@ -16,6 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Type;
 
 
 class SuccessTest extends TestCase
@@ -58,7 +59,7 @@ class SuccessTest extends TestCase
 
 		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
-		$key = $cfg[ ResponseBuilder::PRIMITIVE_ARRAY ][ ResponseBuilder::KEY_KEY ];
+		$key = $cfg[ Type::ARRAY ][ ResponseBuilder::KEY_KEY ];
 
 		$this->assertCount(1, $data);
 		$this->assertArraysEquals($payload, (array)$j->data->{$key});

@@ -136,12 +136,12 @@ class Converter
         $result = null;
 
 	    Validator::assertIsType('data', $data, [
-		    Validator::TYPE_ARRAY,
-		    Validator::TYPE_BOOL,
-		    Validator::TYPE_DOUBLE,
-		    Validator::TYPE_INTEGER,
-		    Validator::TYPE_STRING,
-		    Validator::TYPE_OBJECT,
+		    Type::ARRAY,
+		    Type::BOOLEAN,
+		    Type::DOUBLE,
+		    Type::INTEGER,
+		    Type::STRING,
+		    Type::OBJECT,
 	    ]);
 
 	    if ($result === null && \is_object($data)) {

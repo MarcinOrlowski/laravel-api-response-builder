@@ -142,7 +142,7 @@ class Validator
      *
      * @param string $name          Label or name of the variable to be used in exception message (if thrown).
      * @param mixed  $var           Variable to be asserted.
-     * @param array  $allowed_types Array of allowed types for $var, i.e. [Validator::TYPE_INTEGER]
+     * @param array  $allowed_types Array of allowed types for $var, i.e. [Type::INTEGER]
      *
      * @return void
      *

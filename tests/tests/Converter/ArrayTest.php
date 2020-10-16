@@ -20,6 +20,7 @@ use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use MarcinOrlowski\ResponseBuilder\Tests\Converters\FakeConverter;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
+use MarcinOrlowski\ResponseBuilder\Type;
 
 class ArrayTest extends TestCase
 {
@@ -55,7 +56,7 @@ class ArrayTest extends TestCase
 
 		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
-		$key = $cfg[ ResponseBuilder::PRIMITIVE_ARRAY ][ ResponseBuilder::KEY_KEY ];
+		$key = $cfg[ Type::ARRAY ][ ResponseBuilder::KEY_KEY ];
 
 		$this->assertIsArray($converted);
 		$this->assertCount(1, $converted);
@@ -105,7 +106,7 @@ class ArrayTest extends TestCase
 
 		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
-		$key = $cfg[ ResponseBuilder::PRIMITIVE_ARRAY ][ ResponseBuilder::KEY_KEY ];
+		$key = $cfg[ Type::ARRAY ][ ResponseBuilder::KEY_KEY ];
 
 		$this->assertIsArray($converted);
 		$this->assertCount(1, $converted);
@@ -252,7 +253,7 @@ class ArrayTest extends TestCase
 
 		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
-		$key = $cfg[ ResponseBuilder::PRIMITIVE_ARRAY ][ ResponseBuilder::KEY_KEY ];
+		$key = $cfg[ Type::ARRAY ][ ResponseBuilder::KEY_KEY ];
 
 		$result = (new Converter())->convert($data);
 		$this->assertIsArray($result);

@@ -19,6 +19,7 @@ use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
+use MarcinOrlowski\ResponseBuilder\Type;
 
 class PrimitivesTest extends TestCase
 {
@@ -55,7 +56,7 @@ class PrimitivesTest extends TestCase
 	 */
 	public function testGetPrimitiveMappingConfigOrThrow_NoConfig(): void
 	{
-		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES . '.' . ResponseBuilder::PRIMITIVE_BOOLEAN);
+		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN);
 
 		// getPrimitiveMapping is called by constructor.
 		$this->expectException(\InvalidArgumentException::class);
@@ -67,7 +68,7 @@ class PrimitivesTest extends TestCase
 	 */
 	public function testGetPrimitiveMappingConfigOrThrow_ConfigInvalidType(): void
 	{
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES . '.' . ResponseBuilder::PRIMITIVE_BOOLEAN, []);
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN, []);
 
 		// getPrimitiveMapping is called by constructor.
 		$this->expectException(\RuntimeException::class);
