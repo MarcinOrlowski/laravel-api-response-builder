@@ -26,7 +26,6 @@
  * [Documentation](docs/docs.md)
  * [Requirements](docs/docs.md#requirements)
  * [Installation and Configuration](docs/docs.md#installation-and-configuration)
- * [Bugs reports and pull requests](CONTRIBUTING.md)
  * [License](#license)
  * [Changelog](CHANGES.md)
 
