@@ -164,17 +164,17 @@ class Validator
     }
 
     /**
-     * Ensures $obj is instance of $cls.
+     * Ensures $obj (that is value coming from variable, which name is passed in $label) is instance of $cls class.
      *
-     * @param string $name
-     * @param object $obj
-     * @param string $cls
+     * @param string $label Name of variable that the $obj value is coming from. Used for exception message.
+     * @param object $obj   Object to check instance of
+     * @param string $cls   Target class we want to check $obj agains.
      */
-    public static function assertInstanceOf(string $name, object $obj, string $cls): void
+    public static function assertInstanceOf(string $label, object $obj, string $cls): void
     {
         if (!($obj instanceof $cls)) {
             throw new \InvalidArgumentException(
-                \sprintf('"%s" must be instance of "%s".', $name, $cls)
+                \sprintf('"%s" must be instance of "%s".', $label, $cls)
             );
         }
     }
