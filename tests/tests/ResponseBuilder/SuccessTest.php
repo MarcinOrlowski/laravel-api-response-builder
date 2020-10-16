@@ -15,7 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Type;
 
 
@@ -28,7 +28,7 @@ class SuccessTest extends TestCase
 	 */
 	public function testSuccess(): void
 	{
-		$this->response = ResponseBuilder::success();
+		$this->response = RB::success();
 		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
 		$this->assertNull($j->data);
@@ -37,7 +37,7 @@ class SuccessTest extends TestCase
 
 	public function testSuccessWithExplicitNull(): void
 	{
-		$this->response = ResponseBuilder::success(null);
+		$this->response = RB::success(null);
 		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
 		$this->assertNull($j->data);
@@ -51,15 +51,15 @@ class SuccessTest extends TestCase
 			$payload[] = $this->getRandomString("item${i}");
 		}
 
-		$this->response = ResponseBuilder::success($payload);
+		$this->response = RB::success($payload);
 		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
 		$this->assertNotNull($j->data);
 		$data = (array)$j->data;
 
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
-		$key = $cfg[ Type::ARRAY ][ ResponseBuilder::KEY_KEY ];
+		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
 		$this->assertCount(1, $data);
 		$this->assertArraysEquals($payload, (array)$j->data->{$key});

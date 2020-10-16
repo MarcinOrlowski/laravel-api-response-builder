@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelChild;
 
@@ -29,7 +29,7 @@ class ConverterTest extends TestCase
 	public function testConstructor(): void
 	{
 		// GIVEN incorrect mapping configuration
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, false);
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, false);
 
 		// THEN we expect exception thrown
 		$this->expectException(\RuntimeException::class);
@@ -52,10 +52,10 @@ class ConverterTest extends TestCase
 
 		// HAVING indirect mapping configuration (of parent class)
 		$key = $this->getRandomString('key');
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			\get_class($parent) => [
-				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
-				ResponseBuilder::KEY_KEY => $key,
+				RB::KEY_HANDLER => ToArrayConverter::class,
+				RB::KEY_KEY => $key,
 			],
 		]);
 
@@ -77,7 +77,7 @@ class ConverterTest extends TestCase
 	 */
 	public function testGetClassesMapping_InvalidConfigurationData(): void
 	{
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, 'invalid');
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, 'invalid');
 
 		$this->expectException(\RuntimeException::class);
 
@@ -92,7 +92,7 @@ class ConverterTest extends TestCase
 	{
 		// Remove any classes config
 		/** @noinspection PhpUndefinedMethodInspection */
-		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES);
+		Config::offsetUnset(RB::CONF_KEY_CONVERTER_CLASSES);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = $this->callProtectedMethod(Converter::class, 'getClassesMapping');

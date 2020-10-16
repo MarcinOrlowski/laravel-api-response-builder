@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Converters\FakeConverter;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Type;
@@ -44,19 +44,19 @@ class ArrayTest extends TestCase
 		];
 
 		// AND having its class configured for auto conversion
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			\get_class($model_1) => [
-				ResponseBuilder::KEY_KEY     => $model_key,
-				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+				RB::KEY_KEY     => $model_key,
+				RB::KEY_HANDLER => ToArrayConverter::class,
 			],
 		]);
 
 		// WHEN this object is returned
 		$converted = (new Converter())->convert($data);
 
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
-		$key = $cfg[ Type::ARRAY ][ ResponseBuilder::KEY_KEY ];
+		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
 		$this->assertIsArray($converted);
 		$this->assertCount(1, $converted);
@@ -94,19 +94,19 @@ class ArrayTest extends TestCase
 		// AND having its class configured for auto conversion
 		$model_key = $this->getRandomString();
 		$model_class = \get_class($model_1);
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			$model_class => [
-				ResponseBuilder::KEY_KEY     => $model_key,
-				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+				RB::KEY_KEY     => $model_key,
+				RB::KEY_HANDLER => ToArrayConverter::class,
 			],
 		]);
 
 		// WHEN this object is returned
 		$converted = (new Converter())->convert($data);
 
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
-		$key = $cfg[ Type::ARRAY ][ ResponseBuilder::KEY_KEY ];
+		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
 		$this->assertIsArray($converted);
 		$this->assertCount(1, $converted);
@@ -139,10 +139,10 @@ class ArrayTest extends TestCase
 		];
 
 		// AND having its class configured for auto conversion
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			\get_class($model_1) => [
-				ResponseBuilder::KEY_KEY     => 'XXX',
-				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+				RB::KEY_KEY     => 'XXX',
+				RB::KEY_HANDLER => ToArrayConverter::class,
 			],
 		]);
 
@@ -180,10 +180,10 @@ class ArrayTest extends TestCase
 		];
 
 		// AND having its class configured for auto conversion
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			\get_class($model_1) => [
-				ResponseBuilder::KEY_KEY     => 'XXX',
-				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+				RB::KEY_KEY     => 'XXX',
+				RB::KEY_HANDLER => ToArrayConverter::class,
 			],
 		]);
 
@@ -211,10 +211,10 @@ class ArrayTest extends TestCase
 
 		// AND having its class configured for auto conversion
 		$key = $this->getRandomString('key');
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			\get_class($model_1) => [
-				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
-				ResponseBuilder::KEY_KEY => $key,
+				RB::KEY_HANDLER => ToArrayConverter::class,
+				RB::KEY_KEY => $key,
 			],
 		]);
 
@@ -244,16 +244,16 @@ class ArrayTest extends TestCase
 		// AND having its class configured for auto conversion
 		$model_key = $this->getRandomString();
 		$model_class = \get_class($model_1);
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			$model_class => [
-				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
-				ResponseBuilder::KEY_KEY => $model_key,
+				RB::KEY_HANDLER => ToArrayConverter::class,
+				RB::KEY_KEY => $model_key,
 			],
 		]);
 
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
-		$key = $cfg[ Type::ARRAY ][ ResponseBuilder::KEY_KEY ];
+		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
 		$result = (new Converter())->convert($data);
 		$this->assertIsArray($result);
@@ -273,7 +273,7 @@ class ArrayTest extends TestCase
 	public function testConvertWithOverridenDefaultConfig(): void
 	{
 		// GIVEN built-in converter config
-		$cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES);
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
 		$this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
 
@@ -281,9 +281,9 @@ class ArrayTest extends TestCase
 		$fake = new FakeConverter();
 
 		$key = $this->getRandomString();
-		$cfg[ Collection::class ][ ResponseBuilder::KEY_HANDLER ] = \get_class($fake);
-		$cfg[ Collection::class ][ ResponseBuilder::KEY_KEY ] = $key;
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, $cfg);
+		$cfg[ Collection::class ][ RB::KEY_HANDLER ] = \get_class($fake);
+		$cfg[ Collection::class ][ RB::KEY_KEY ] = $key;
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
 		// WHEN converting the data, we expect FakeConverter to be used
 		$data = collect([1,

@@ -15,19 +15,19 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Converter;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 class InternalsTest extends TestCase
 {
     /**
-     * Tests if dist's config defaults matches ResponseBuilder::DEFAULT_ENCODING_OPTIONS
+     * Tests if dist's config defaults matches RB::DEFAULT_ENCODING_OPTIONS
      *
      * @return void
      */
     public function testDefaultEncodingOptionValue(): void
     {
-        $config_defaults = \Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS);
-        $this->assertEquals($config_defaults, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+        $config_defaults = \Config::get(RB::CONF_KEY_ENCODING_OPTIONS);
+        $this->assertEquals($config_defaults, RB::DEFAULT_ENCODING_OPTIONS);
     }
 
     /**
@@ -39,7 +39,7 @@ class InternalsTest extends TestCase
      */
     public function testGetClassesMappingWithWrongType(): void
     {
-        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, false);
+        \Config::set(RB::CONF_KEY_CONVERTER_CLASSES, false);
 
         $this->expectException(\RuntimeException::class);
 
@@ -57,7 +57,7 @@ class InternalsTest extends TestCase
      */
     public function testGetClassesMappingMethodWithIncompleteMappingConfiguration(): void
     {
-        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
+        \Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
             self::class => [],
         ]);
 

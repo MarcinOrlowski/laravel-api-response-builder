@@ -22,6 +22,7 @@ use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 /**
  * Class ExceptionHandlerHelper
@@ -44,11 +45,11 @@ class ExceptionHandlerHelper
 		do {
 			if ($cfg === null) {
 				// Default handler MUST be present by design and always return something useful.
-				$cfg = self::getExceptionHandlerConfig()[ ResponseBuilder::KEY_DEFAULT ];
+				$cfg = self::getExceptionHandlerConfig()[ RB::KEY_DEFAULT ];
 			}
 
-			$handler = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
-			$handler_result = $handler->handle($cfg[ ResponseBuilder::KEY_CONFIG ], $ex);
+			$handler = new $cfg[ RB::KEY_HANDLER ]();
+			$handler_result = $handler->handle($cfg[ RB::KEY_CONFIG ], $ex);
 			if ($handler_result !== null) {
 				$result = self::processException($ex, $handler_result);
 			} else {
@@ -146,7 +147,7 @@ class ExceptionHandlerHelper
 		$cfg = self::getExceptionHandlerConfig();
 
 		// This config entry is guaranted to exist. Enforced by tests.
-		$cfg = $cfg[ HttpException::class ][ ResponseBuilder::KEY_CONFIG ][ HttpResponse::HTTP_UNAUTHORIZED ];
+		$cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ][ HttpResponse::HTTP_UNAUTHORIZED ];
 
 		return static::processException($exception, $cfg, HttpResponse::HTTP_UNAUTHORIZED);
 	}
@@ -170,27 +171,27 @@ class ExceptionHandlerHelper
 
 		// Check if we now have valid HTTP error code for this case or need to make one up.
 		// We cannot throw any exception if codes are invalid because we are in Exception Handler already.
-		if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
+		if ($http_code < RB::ERROR_HTTP_CODE_MIN) {
 			// Not a valid code, let's try to get the exception status.
 			$http_code = $ex_http_code;
 		}
 		// Can it be considered a valid HTTP error code?
-		if ($http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
+		if ($http_code < RB::ERROR_HTTP_CODE_MIN) {
 			// We now handle uncaught exception, so we cannot throw another one if there's
 			// something wrong with the configuration, so we try to recover and use built-in
 			// codes instead.
 			// FIXME: We should log this event as (warning or error?)
-			$http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
+			$http_code = RB::DEFAULT_HTTP_CODE_ERROR;
 		}
 
 		// If we have trace data debugging enabled, let's gather some debug info and add to the response.
 		$debug_data = null;
-		if (Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, false)) {
+		if (Config::get(RB::CONF_KEY_DEBUG_EX_TRACE_ENABLED, false)) {
 			$debug_data = [
-				Config::get(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_KEY, ResponseBuilder::KEY_TRACE) => [
-					ResponseBuilder::KEY_CLASS => \get_class($ex),
-					ResponseBuilder::KEY_FILE  => $ex->getFile(),
-					ResponseBuilder::KEY_LINE  => $ex->getLine(),
+				Config::get(RB::CONF_KEY_DEBUG_EX_TRACE_KEY, RB::KEY_TRACE) => [
+					RB::KEY_CLASS => \get_class($ex),
+					RB::KEY_FILE  => $ex->getFile(),
+					RB::KEY_LINE  => $ex->getLine(),
 				],
 			];
 		}
@@ -199,10 +200,10 @@ class ExceptionHandlerHelper
 		$data = null;
 		if ($ex instanceof ValidationException) {
 			/** @var ValidationException $ex */
-			$data = [ResponseBuilder::KEY_MESSAGES => $ex->validator->errors()->messages()];
+			$data = [RB::KEY_MESSAGES => $ex->validator->errors()->messages()];
 		}
 
-		return ResponseBuilder::asError($api_code)
+		return RB::asError($api_code)
 			->withMessage($error_message)
 			->withHttpCode($http_code)
 			->withData($data)
@@ -224,34 +225,34 @@ class ExceptionHandlerHelper
 				'config'  => [
 					// used by unauthenticated() to obtain api and http code for the exception
 					HttpResponse::HTTP_UNAUTHORIZED         => [
-						ResponseBuilder::KEY_API_CODE => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+						RB::KEY_API_CODE => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
 					],
 					// Required by ValidationException handler
 					HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-						ResponseBuilder::KEY_API_CODE => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+						RB::KEY_API_CODE => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
 					],
 
-					ResponseBuilder::KEY_DEFAULT => [
-						ResponseBuilder::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-						ResponseBuilder::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+					RB::KEY_DEFAULT => [
+						RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+						RB::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 					],
 				],
 				// default config is built into handler.
 			],
 
 			// default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
-			ResponseBuilder::KEY_DEFAULT => [
+			RB::KEY_DEFAULT => [
 				'handler' => DefaultExceptionHandler::class,
 				'pri'     => -127,
 				'config'  => [
-					ResponseBuilder::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-					ResponseBuilder::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+					RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+					RB::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 				],
 			],
 		];
 
 		$cfg = Util::mergeConfig($default_config,
-			\Config::get(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, []));
+			\Config::get(RB::CONF_KEY_EXCEPTION_HANDLER, []));
 		Util::sortArrayByPri($cfg);
 
 		return $cfg;

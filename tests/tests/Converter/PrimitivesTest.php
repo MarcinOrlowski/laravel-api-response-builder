@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Type;
 
@@ -28,7 +28,7 @@ class PrimitivesTest extends TestCase
 	 */
 	public function testGetPrimitivesMapping_InvalidConfigurationData(): void
 	{
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES, 'invalid');
+		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES, 'invalid');
 
 		$this->expectException(\RuntimeException::class);
 
@@ -43,7 +43,7 @@ class PrimitivesTest extends TestCase
 	{
 		// Remove any classes config
 		/** @noinspection PhpUndefinedMethodInspection */
-		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES);
+		Config::offsetUnset(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = $this->callProtectedMethod(Converter::class, 'getPrimitivesMapping');
@@ -56,7 +56,7 @@ class PrimitivesTest extends TestCase
 	 */
 	public function testGetPrimitiveMappingConfigOrThrow_NoConfig(): void
 	{
-		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN);
+		Config::offsetUnset(RB::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN);
 
 		// getPrimitiveMapping is called by constructor.
 		$this->expectException(\InvalidArgumentException::class);
@@ -68,7 +68,7 @@ class PrimitivesTest extends TestCase
 	 */
 	public function testGetPrimitiveMappingConfigOrThrow_ConfigInvalidType(): void
 	{
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN, []);
+		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN, []);
 
 		// getPrimitiveMapping is called by constructor.
 		$this->expectException(\RuntimeException::class);
@@ -87,10 +87,10 @@ class PrimitivesTest extends TestCase
 
 		// AND having its class configured for auto conversion
 		$key = $this->getRandomString('key');
-		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
+		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			\get_class($model) => [
-				ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
-				ResponseBuilder::KEY_KEY     => $key,
+				RB::KEY_HANDLER => ToArrayConverter::class,
+				RB::KEY_KEY     => $key,
 			],
 		]);
 
@@ -166,7 +166,7 @@ class PrimitivesTest extends TestCase
 		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
 		$this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
-		$key = $cfg[ ResponseBuilder::KEY_KEY ];
+		$key = $cfg[ RB::KEY_KEY ];
 		$this->assertArrayHasKey($key, $converted);
 		$this->assertEquals($value, $converted[ $key ]);
 	}

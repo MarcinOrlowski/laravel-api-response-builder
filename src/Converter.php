@@ -16,7 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
-
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 /**
  * Data converter
@@ -42,7 +42,7 @@ class Converter
         $this->classes = static::getClassesMapping() ?? [];
         $this->primitives = static::getPrimitivesMapping() ?? [];
 
-	    $this->debug_enabled = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_DEBUG_KEY, false);
+	    $this->debug_enabled = Config::get(RB::CONF_KEY_CONVERTER_DEBUG_KEY, false);
     }
 
 	/**
@@ -67,7 +67,7 @@ class Converter
 	    }
 
 	    if ($this->debug_enabled) {
-		    Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node '{$result[ResponseBuilder::KEY_KEY]}'.");
+		    Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node '{$result[RB::KEY_KEY]}'.");
 	    }
 
 	    return $result;
@@ -112,7 +112,7 @@ class Converter
         }
 
         if ($this->debug_enabled) {
-			Log::debug(__CLASS__ . ": Converting {$cls} using {$result[ResponseBuilder::KEY_HANDLER]} because: {$debug_result}.");
+			Log::debug(__CLASS__ . ": Converting {$cls} using {$result[RB::KEY_HANDLER]} because: {$debug_result}.");
         }
 
 	    return $result;
@@ -146,8 +146,8 @@ class Converter
 
 	    if ($result === null && \is_object($data)) {
 		    $cfg = $this->getClassMappingConfigOrThrow($data);
-		    $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
-		    $result = [$cfg[ ResponseBuilder::KEY_KEY ] => $worker->convert($data, $cfg)];
+		    $worker = new $cfg[ RB::KEY_HANDLER ]();
+		    $result = [$cfg[ RB::KEY_KEY ] => $worker->convert($data, $cfg)];
 	    }
 
 	    if ($result === null && \is_array($data)) {
@@ -156,12 +156,12 @@ class Converter
 	        if ($this->hasNonNumericKeys($data)){
 		        $result = $this->convertArray($data);
 	        } else {
-		        $result = [$cfg[ ResponseBuilder::KEY_KEY ] => $this->convertArray($data)];
+		        $result = [$cfg[ RB::KEY_KEY ] => $this->convertArray($data)];
 	        }
         }
 
 	    if ( \is_bool($data) || \is_float($data) || \is_int($data) || \is_string($data)) {
-		    $result = [$this->getPrimitiveMappingConfigOrThrow($data)[ ResponseBuilder::KEY_KEY ] => $data];
+		    $result = [$this->getPrimitiveMappingConfigOrThrow($data)[ RB::KEY_KEY ] => $data];
 	    }
 
 	    return $result;
@@ -221,7 +221,7 @@ class Converter
                 $data[ $key ] = $this->convertArray($val);
             } elseif (\is_object($val)) {
                 $cfg = $this->getClassMappingConfigOrThrow($val);
-                $worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
+                $worker = new $cfg[ RB::KEY_HANDLER ]();
                 $converted_data = $worker->convert($val, $cfg);
                 $data[ $key ] = $converted_data;
             }
@@ -239,17 +239,17 @@ class Converter
      */
     protected static function getClassesMapping(): array
     {
-        $classes = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES) ?? [];
+        $classes = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
 
 	    if (!\is_array($classes)) {
 		    throw new \RuntimeException(
-			    \sprintf('CONFIG: "%s" mapping must be an array (%s given)', ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, \gettype($classes)));
+			    \sprintf('CONFIG: "%s" mapping must be an array (%s given)', RB::CONF_KEY_CONVERTER_CLASSES, \gettype($classes)));
 	    }
 
 	    if (!empty($classes)) {
 		    $mandatory_keys = [
-			    ResponseBuilder::KEY_HANDLER,
-			    ResponseBuilder::KEY_KEY,
+			    RB::KEY_HANDLER,
+			    RB::KEY_KEY,
 		    ];
 		    foreach ($classes as $class_name => $class_config) {
 			    if (!\is_array($class_config)) {
@@ -275,16 +275,16 @@ class Converter
 	 */
 	protected static function getPrimitivesMapping(): array
 	{
-		$primitives = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
+		$primitives = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
 
 		if (!\is_array($primitives)) {
 			throw new \RuntimeException(
-				\sprintf('CONFIG: "%s" mapping must be an array (%s given)', ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES, \gettype($primitives)));
+				\sprintf('CONFIG: "%s" mapping must be an array (%s given)', RB::CONF_KEY_CONVERTER_PRIMITIVES, \gettype($primitives)));
 		}
 
 		if (!empty($primitives)) {
 			$mandatory_keys = [
-				ResponseBuilder::KEY_KEY,
+				RB::KEY_KEY,
 			];
 
 			foreach ($primitives as $type => $config) {

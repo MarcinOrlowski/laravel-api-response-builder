@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelArrayable;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonResource;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonSerializable;
@@ -42,9 +42,9 @@ class DefaultConfigTest extends TestCase
         $result = $converter->convert($obj);
 
         // THEN it should be converted automatically as per configuration
-	    $cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES);
+	    $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
 	    $this->assertNotEmpty($cfg);
-	    $key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ ResponseBuilder::KEY_KEY ];
+	    $key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ RB::KEY_KEY ];
 
 	    $this->assertIsArray($result);
 	    $this->assertArrayHasKey($key, $result);
@@ -77,9 +77,9 @@ class DefaultConfigTest extends TestCase
 	        $result = $converter->convert($obj);
 
 	        // THEN it should be converted automatically as per configuration
-		    $cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES);
+		    $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
 		    $this->assertNotEmpty($cfg);
-		    $key = $cfg[ \JsonSerializable::class ][ ResponseBuilder::KEY_KEY ];
+		    $key = $cfg[ \JsonSerializable::class ][ RB::KEY_KEY ];
 
 	        $this->assertIsArray($result);
 		    $this->assertArrayHasKey($key, $result);
@@ -107,9 +107,9 @@ class DefaultConfigTest extends TestCase
         $result = $converter->convert($obj);
 
         // THEN it should be converted automatically as per configuration
-	    $cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES);
+	    $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
 	    $this->assertNotEmpty($cfg);
-	    $key = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ][ ResponseBuilder::KEY_KEY ];
+	    $key = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ][ RB::KEY_KEY ];
 
         $this->assertIsArray($result);
 	    $this->assertArrayHasKey($key, $result);
@@ -164,8 +164,8 @@ class DefaultConfigTest extends TestCase
         $result = (new Converter())->convert($collection);
 
         // THEN it should be converted automatically as per default configuration
-	    $cfg = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES);
-	    $key = $cfg[ \get_class($collection) ][ ResponseBuilder::KEY_KEY ];
+	    $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+	    $key = $cfg[ \get_class($collection) ][ RB::KEY_KEY ];
 
 	    $this->assertIsArray($result);
 	    $this->assertArrayHasKey($key, $result);

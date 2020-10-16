@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Illuminate\Support\Facades\Config;
 
 /**
@@ -30,7 +31,7 @@ trait ApiCodesHelpers
      */
     public static function getMinCode(): int
     {
-        $key = ResponseBuilder::CONF_KEY_MIN_CODE;
+        $key = RB::CONF_KEY_MIN_CODE;
         $min_code = Config::get($key, null);
 
         if ($min_code === null) {
@@ -49,7 +50,7 @@ trait ApiCodesHelpers
      */
     public static function getMaxCode(): int
     {
-        $key = ResponseBuilder::CONF_KEY_MAX_CODE;
+        $key = RB::CONF_KEY_MAX_CODE;
         $max_code = Config::get($key, null);
 
         if ($max_code === null) {
@@ -79,12 +80,12 @@ trait ApiCodesHelpers
      */
     public static function getMap(): array
     {
-        $user_map = Config::get(ResponseBuilder::CONF_KEY_MAP, null);
+        $user_map = Config::get(RB::CONF_KEY_MAP, null);
         if ($user_map === null) {
-            throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', ResponseBuilder::CONF_KEY_MAP));
+            throw new \RuntimeException(sprintf('CONFIG: Missing "%s" key', RB::CONF_KEY_MAP));
         }
         if (!\is_array($user_map)) {
-            throw new \RuntimeException(sprintf('CONFIG: "%s" must be an array', ResponseBuilder::CONF_KEY_MAP));
+            throw new \RuntimeException(sprintf('CONFIG: "%s" must be an array', RB::CONF_KEY_MAP));
         }
         return Util::mergeConfig(BaseApiCodes::getBaseMap(), $user_map);
     }

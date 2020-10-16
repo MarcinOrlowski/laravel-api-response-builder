@@ -13,7 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 class ErrorTest extends TestCase
 {
@@ -28,7 +28,7 @@ class ErrorTest extends TestCase
         $api_code = $this->random_api_code;
 
         // WHEN we report error
-        $this->response = ResponseBuilder::error($api_code);
+        $this->response = RB::error($api_code);
 
         // THEN returned message contains given error code and mapped message
         $j = $this->getResponseErrorObject($api_code);

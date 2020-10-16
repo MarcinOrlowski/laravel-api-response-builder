@@ -17,6 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 
 /**
@@ -265,14 +266,14 @@ class ResponseBuilder extends ResponseBuilderBase
 
 		if ($this->success) {
 			$api_code = $api_code ?? BaseApiCodes::OK();
-			$http_code = $this->http_code ?? ResponseBuilder::DEFAULT_HTTP_CODE_OK;
+			$http_code = $this->http_code ?? RB::DEFAULT_HTTP_CODE_OK;
 
 			Validator::assertOkHttpCode($http_code);
 
 			$result = $this->make($this->success, $api_code, $msg_or_api_code, $this->data, $http_code,
 				$this->placeholders, $http_headers, $this->json_opts);
 		} else {
-			$http_code = $this->http_code ?? ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
+			$http_code = $this->http_code ?? RB::DEFAULT_HTTP_CODE_ERROR;
 
 			Validator::assertErrorHttpCode($http_code);
 
@@ -309,8 +310,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	                        int $json_opts = null, array $debug_data = null): HttpResponse
 	{
 		$http_headers = $http_headers ?? [];
-		$http_code = $http_code ?? ($success ? ResponseBuilder::DEFAULT_HTTP_CODE_OK : ResponseBuilder::DEFAULT_HTTP_CODE_ERROR);
-		$json_opts = $json_opts ?? Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+		$http_code = $http_code ?? ($success ? RB::DEFAULT_HTTP_CODE_OK : RB::DEFAULT_HTTP_CODE_ERROR);
+		$json_opts = $json_opts ?? Config::get(RB::CONF_KEY_ENCODING_OPTIONS, RB::DEFAULT_ENCODING_OPTIONS);
 
 		Validator::assertIsInt('encoding_options', $json_opts);
 
@@ -365,15 +366,15 @@ class ResponseBuilder extends ResponseBuilderBase
 
 		/** @noinspection PhpUndefinedClassInspection */
 		$response = [
-			ResponseBuilder::KEY_SUCCESS => $success,
-			ResponseBuilder::KEY_CODE    => $api_code,
-			ResponseBuilder::KEY_LOCALE  => \App::getLocale(),
-			ResponseBuilder::KEY_MESSAGE => $message,
-			ResponseBuilder::KEY_DATA    => $data,
+			RB::KEY_SUCCESS => $success,
+			RB::KEY_CODE    => $api_code,
+			RB::KEY_LOCALE  => \App::getLocale(),
+			RB::KEY_MESSAGE => $message,
+			RB::KEY_DATA    => $data,
 		];
 
 		if ($debug_data !== null) {
-			$debug_key = Config::get(ResponseBuilder::CONF_KEY_DEBUG_DEBUG_KEY, ResponseBuilder::KEY_DEBUG);
+			$debug_key = Config::get(RB::CONF_KEY_DEBUG_DEBUG_KEY, RB::KEY_DEBUG);
 			$response[ $debug_key ] = $debug_data;
 		}
 

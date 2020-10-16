@@ -15,7 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
 class AutoConversionTest extends TestCase
@@ -36,14 +36,14 @@ class AutoConversionTest extends TestCase
         $key = $this->getRandomString();
         $cfg = [
             $model_class_name => [
-                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
-                ResponseBuilder::KEY_KEY => $key,
+                RB::KEY_HANDLER => ToArrayConverter::class,
+                RB::KEY_KEY => $key,
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, $cfg);
+        Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
         // WHEN this object is returned
-        $this->response = ResponseBuilder::success($model);
+        $this->response = RB::success($model);
         $j = $this->getResponseSuccessObject();
 
         // THEN returned response object should have it auto converted
@@ -74,11 +74,11 @@ class AutoConversionTest extends TestCase
         $model_class_name = \get_class($model_1);
         $converter = [
             $model_class_name => [
-                ResponseBuilder::KEY_KEY     => 'should-not-be-used',
-                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+                RB::KEY_KEY     => 'should-not-be-used',
+                RB::KEY_HANDLER => ToArrayConverter::class,
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, $converter);
+        Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $converter);
 
         // AND having the object as part of bigger data set
         $tmp_base = [];
@@ -91,7 +91,7 @@ class AutoConversionTest extends TestCase
         $data['nested'][ $model_2_data_key ] = $model_2;
 
         // WHEN this object is returned
-        $this->response = ResponseBuilder::success($data);
+        $this->response = RB::success($data);
         $j = $this->getResponseSuccessObject();
 
         // THEN returned response object should have it auto converted properly
@@ -127,7 +127,7 @@ class AutoConversionTest extends TestCase
     public function testInvalidDataType($data): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        ResponseBuilder::success($data);
+        RB::success($data);
     }
 
     /**

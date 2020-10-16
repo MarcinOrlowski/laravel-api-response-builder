@@ -37,7 +37,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
     public function register()
     {
         foreach ($this->config_files as $file) {
-            $this->mergeConfigFrom(__DIR__ . "/../config/{$file}", ResponseBuilder::CONF_CONFIG);
+            $this->mergeConfigFrom(__DIR__ . "/../config/{$file}", RB::CONF_CONFIG);
         }
     }
 

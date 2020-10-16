@@ -25,20 +25,7 @@
  of your controller to "import" `Builder` class:
 
 ```php
-use MarcinOrlowski\ResponseBuilder\Builder;
-```
-
- if you are going to also use simplified helper functions like `success()`, then also import `ResponseBuilder`
- class:
-
-```php
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-```
-
- **HINT:** want to type less? Use aliases. I.e. to use `RB` instead of lenghty `ResponseBuilder` name:
-
-```php
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB; 
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 ```
 
 #### Success ####
@@ -46,7 +33,7 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
  To report response indicating i.e. operation success, simply your Controller method with:
 
 ```php
-return ResponseBuilder::success();
+return RB::success();
 ```
 
  which will produce and return the following JSON object:
@@ -65,7 +52,7 @@ return ResponseBuilder::success();
 
 ```php
 $data = [ 'foo' => 'bar' ];
-return ResponseBuilder::success($data);
+return RB::success($data);
 ```
 
  which would return:
@@ -94,7 +81,7 @@ return ResponseBuilder::success($data);
 ```php
 // this is CORRECT
 $returned_array = [1,2,3];
-return ResponseBuilder::success($data);
+return RB::success($data);
 ```
 
  which would give:
@@ -113,7 +100,7 @@ return ResponseBuilder::success($data);
 ```php
 // this is WRONG
 $returned_array = ['foo' => 1, 'bar' => 2];
-return ResponseBuilder::success($returned_array);
+return RB::success($returned_array);
 ```
 
 would give you `data` structure:
@@ -134,7 +121,7 @@ would give you `data` structure:
  error code to `error()` to tell the client what the error it is:
 
 ```php
-return ResponseBuilder::error(<CODE>);
+return RB::error(<CODE>);
 ```
 
  To make your life easier (and your code [automatically testable](testing.md)) you should put all error codes you use
@@ -145,7 +132,7 @@ return ResponseBuilder::error(<CODE>);
  Example usage:
 
 ```php
-return ResponseBuilder::error(ApiCode::SOMETHING_WENT_WRONG);
+return RB::error(ApiCode::SOMETHING_WENT_WRONG);
 ```
 
  which would produce the following JSON response:
@@ -169,7 +156,7 @@ return ResponseBuilder::error(ApiCode::SOMETHING_WENT_WRONG);
  across the whole application, including message placeholders:
 
 ```php
-return ResponseBuilder::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $login]);
+return RB::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $login]);
 ```
 
  and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be correctly replaced with content of
@@ -183,5 +170,5 @@ return ResponseBuilder::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $lo
 
 ```php
 $msg = Lang::get('message.something_wrong', ['login' => $login]);
-return ResponseBuilder::errorWithMessage(ApiCodeBase::SOMETHING_WENT_WRONG, $msg);
+return RB::errorWithMessage(ApiCodeBase::SOMETHING_WENT_WRONG, $msg);
 ```

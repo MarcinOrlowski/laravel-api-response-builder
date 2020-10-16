@@ -100,7 +100,7 @@
     optional. Usage example:
 
     ```php
-    return ResponseBuilder::success();
+    return RB::success();
     ```
 
   * `public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null, int $json_opts = null)`
@@ -109,7 +109,7 @@
     are optional.
 
     ```php
-    return ResponseBuilder::error(ApiCodes::SOMETHING_FAILED);
+    return RB::error(ApiCodes::SOMETHING_FAILED);
     ```
 
 ### Builder ###
@@ -118,7 +118,7 @@ To obtain instance of the Builder, two static methods: `asSuccess()` and `asErro
  code would return response indicating a success, with additional data and custom HTTP code:
 
 ```php
-return ResponseBuilder::asSuccess()
+return RB::asSuccess()
       ->withData($data)
       ->withHttpCode(HttpResponse::HTTP_CREATED)
       ->build();
@@ -127,7 +127,7 @@ return ResponseBuilder::asSuccess()
  For simplicity of use, it's recommended to add the following `use` to your code:
 
 ```php
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 ```
 
  If you dislike typing `ResponseBuilder` you can use [namespace aliasing](https://www.php.net/manual/en/language.namespaces.importing.php):
@@ -161,7 +161,7 @@ return RB::success();
  * `withData($data)`: (**object**|**array**|**null**) data you want to be returned in your response in `data` node,
  * `withJsonOptions($opts)`: (**int**) data-to-json conversion options as
    [documented](http://php.net/manual/en/function.json-encode.php). Pass `null` for
-   default `ResponseBuilder::DEFAULT_ENCODING_OPTIONS` ([source](../src/ResponseBuilder.php)). Please see
+   default `RB::DEFAULT_ENCODING_OPTIONS` ([source](../src/ResponseBuilder.php)). Please see
    [configuration](../config/response_builder.php) file and config's `encoding_options` too.
  * `withMessage($message)`: (**string**) custom message to be returned as part of error response
    (avoid, use error code mapping feature).
@@ -188,7 +188,7 @@ return RB::success();
 
 ```php
 $flight = App\Flight::where(...)->first();
-return ResponseBuilder::success($flight);
+return RB::success($flight);
 ```
 
  will return:
@@ -207,7 +207,7 @@ return ResponseBuilder::success($flight);
 
 ```php
 $flights = App\Flight::where(...)->get();
-return ResponseBuilder::success($flights);
+return RB::success($flights);
 ```
 
  which would return array of objects:
@@ -461,7 +461,7 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
  the same way. For example:
 
 ```php
-MyResponseBuilder::success();
+MyRB::success();
 ```
 
  which should then return your desired JSON structure:
@@ -481,7 +481,7 @@ MyResponseBuilder::success();
 
 ```php
 $data = [ 'foo'=>'bar ];
-return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
+return MyRB::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
 ```
 
  would produce:
@@ -502,7 +502,7 @@ return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
 ### Overriding code to message conversion ###
 
  `ResponseBuilder` automatically provides human readable error messages for each API code used but if for any
- reason you want to take control on this, you can now provide own implementation of `ResponseBuilder::getMessageForApiCode()`.
+ reason you want to take control on this, you can now provide own implementation of `RB::getMessageForApiCode()`.
 
 ```php
 <?php

@@ -14,7 +14,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class DummyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {

@@ -14,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
@@ -195,7 +195,7 @@ trait ApiCodesTests
      */
     public function testConfigClassesMappingEntriesMandatoryKeys(): void
     {
-        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES) ?? [];
+        $classes = \Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
         if (\count($classes) === 0) {
             // to make PHPUnit not complaining about no assertion.
             $this->assertTrue(true);
@@ -204,7 +204,7 @@ trait ApiCodesTests
         }
 
         $mandatory_keys = [
-            ResponseBuilder::KEY_HANDLER,
+            RB::KEY_HANDLER,
         ];
         foreach ($classes as $class_name => $class_config) {
             foreach ($mandatory_keys as $key_name) {
@@ -222,7 +222,7 @@ trait ApiCodesTests
      */
     public function testConfigClassesMappingEntriesUnwantedConfigKeys(): void
     {
-        $classes = \Config::get(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, []);
+        $classes = \Config::get(RB::CONF_KEY_CONVERTER_CLASSES, []);
         if (\count($classes) === 0) {
             // to make PHPUnit not complaining about no assertion.
             $this->assertTrue(true);
@@ -233,12 +233,12 @@ trait ApiCodesTests
         foreach ($classes as $class_name => $class_config) {
             foreach ($class_config as $cfg_key => $cfg_val) {
                 switch ($cfg_key) {
-                    case ResponseBuilder::KEY_KEY:
-	                case ResponseBuilder::KEY_HANDLER:
+                    case RB::KEY_KEY:
+	                case RB::KEY_HANDLER:
                         $this->assertIsString($cfg_val);
                         $this->assertNotEmpty(trim($cfg_val));
                         break;
-                    case ResponseBuilder::KEY_PRI:
+                    case RB::KEY_PRI:
                         $this->assertIsInt($cfg_val);
                         $this->assertIsNumeric($cfg_val);
                         break;
@@ -249,9 +249,9 @@ trait ApiCodesTests
         }
 
         $supported_keys = [
-            ResponseBuilder::KEY_KEY,
-            ResponseBuilder::KEY_PRI,
-            ResponseBuilder::KEY_HANDLER,
+            RB::KEY_KEY,
+            RB::KEY_PRI,
+            RB::KEY_HANDLER,
         ];
         foreach ($classes as $class_name => $class_config) {
             foreach ($class_config as $cfg_key => $cfg_val) {

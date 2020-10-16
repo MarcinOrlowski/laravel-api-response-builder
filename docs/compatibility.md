@@ -54,7 +54,7 @@
    which means that if you define your code range to be `100`-`199` then you cannot use codes `100` to `119` for own purposes.
    The first code you can assign to own API code is `120`.
  * `[Low]` Removed `exception_handler.use_exception_message_first` feature.
- * `[Low]` Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
+ * `[Low]` Removed `RB::DEFAULT_API_CODE_OK` constant.
  * `[Low]` Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods from `ApiCodesHelpers` trait.
  * `[Low]` All `ResponseBuilder` internal code constants are removed. If you need to get the valid API code for internal codes,
    use `BaseApiCodes` class' methods: `OK()`, `NO_ERROR_MESSAGE()`, `EX_HTTP_NOT_FOUND()`, `EX_HTTP_SERVICE_UNAVAILABLE()`,
@@ -67,7 +67,7 @@
  * `[Very Low] (v6.2)` Data conversion logic changed slightly. Now it checks if we have configuration entry matching **exactly**
    the object's class name. If not, then we'd try to find if we have any configuration for its parent class.
    See [Data Conversion](docs.md#data-conversion) for details.
- * `[BREAKING] (v6.3)` This is backward incompatible change in signature of `ResponseBuilder::buildResponse()`, but it only affects
+ * `[BREAKING] (v6.3)` This is backward incompatible change in signature of `RB::buildResponse()`, but it only affects
    you if you extend `ResponseBuilder` and provide own implementation to manipulate response object
    (see [Manipulating Response Object](docs.md#manipulating-response-object)). If you do not, then you are not affected.
 

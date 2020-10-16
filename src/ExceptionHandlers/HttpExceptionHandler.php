@@ -16,7 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 final class HttpExceptionHandler implements ExceptionHandlerContract
@@ -34,7 +34,7 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 			],
 
 			// Default entry MUST exists. Enforced by unit tests.
-			ResponseBuilder::KEY_DEFAULT            => [
+			RB::KEY_DEFAULT            => [
 				'api_code' => BaseApiCodes::EX_HTTP_EXCEPTION(),
 			],
 		];
@@ -47,13 +47,13 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 		// If we do not have dedicated entry fort this particular http_code,
 		// fall back to default value.
 		if ($result === null) {
-			$result = $config[ ResponseBuilder::KEY_DEFAULT ];
+			$result = $config[ RB::KEY_DEFAULT ];
 		}
 
 		// Some defaults to fall back to if not set in user config.
 		$fallback = [
-			ResponseBuilder::KEY_HTTP_CODE => $http_code,
-			ResponseBuilder::KEY_MSG_KEY   => \sprintf('response-builder::builder.http_%d', $http_code),
+			RB::KEY_HTTP_CODE => $http_code,
+			RB::KEY_MSG_KEY   => \sprintf('response-builder::builder.http_%d', $http_code),
 		];
 		return \array_replace($fallback, $result);
 	}

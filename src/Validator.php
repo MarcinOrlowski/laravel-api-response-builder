@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
 
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+
 /**
  * Laravel API Response Builder
  *
@@ -168,7 +170,7 @@ class Validator
     {
         self::assertIsInt('http_code', $http_code);
         self::assertIsIntRange('http_code', $http_code,
-            ResponseBuilder::ERROR_HTTP_CODE_MIN, ResponseBuilder::ERROR_HTTP_CODE_MAX);
+            RB::ERROR_HTTP_CODE_MIN, RB::ERROR_HTTP_CODE_MAX);
     }
 
     /**
