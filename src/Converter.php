@@ -299,6 +299,9 @@ class Converter
 			    ResponseBuilder::KEY_KEY,
 		    ];
 		    foreach ($classes as $class_name => $class_config) {
+			    if (!\is_array($class_config)) {
+				    throw new \InvalidArgumentException(sprintf("CONFIG: Config for '{$class_name}' class must be an array (%s given).", \gettype($class_config)));
+			    }
 			    foreach ($mandatory_keys as $key_name) {
 				    if (!\array_key_exists($key_name, $class_config)) {
 					    throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' class mapping");

@@ -221,17 +221,26 @@ class ConverterTest extends TestCase
 	}
 
 	/**
-	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when there's no config for given primitive type.
+	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when config for given primitive type is of invalid type.
 	 */
 	public function testgetPrimitiveMappingConfigOrThrow_NoConfig(): void
 	{
 		Config::offsetUnset(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES . '.' . ResponseBuilder::PRIMITIVE_BOOLEAN);
 
-		// we need boolean
-		$value = false;
-
-		// getPrimitiveMapping is called by consructor.
+		// getPrimitiveMapping is called by constructor.
 		$this->expectException(\InvalidArgumentException::class);
+		new Converter();
+	}
+
+	/**
+	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when config for given primitive type lacks mandatory keys
+	 */
+	public function testgetPrimitiveMappingConfigOrThrow_ConfigInvalidType(): void
+	{
+		Config::set(ResponseBuilder::CONF_KEY_CONVERTER_PRIMITIVES . '.' . ResponseBuilder::PRIMITIVE_BOOLEAN, []);
+
+		// getPrimitiveMapping is called by constructor.
+		$this->expectException(\RuntimeException::class);
 		new Converter();
 	}
 
