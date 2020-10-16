@@ -70,4 +70,22 @@ final class Util
         });
     }
 
+	/**
+	 * Checks if given array uses custom (non numeric) keys.
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public static function isArrayWithNonNumericKeys(array $data): bool
+	{
+		foreach (\array_keys($data) as $key) {
+			if (!\is_int($key)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }

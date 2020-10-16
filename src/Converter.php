@@ -153,10 +153,9 @@ class Converter
 	    if ($result === null && \is_array($data)) {
 	        $cfg = $this->getPrimitiveMappingConfigOrThrow($data);
 
-	        if ($this->hasNonNumericKeys($data)){
-		        $result = $this->convertArray($data);
-	        } else {
-		        $result = [$cfg[ RB::KEY_KEY ] => $this->convertArray($data)];
+		    $result = $this->convertArray($data);
+	        if (!Util::isArrayWithNonNumericKeys($data)){
+		        $result = [$cfg[ RB::KEY_KEY ] => $result];
 	        }
         }
 
@@ -165,24 +164,6 @@ class Converter
 	    }
 
 	    return $result;
-    }
-
-	/**
-	 * Checks if given array uses custom (non numeric) keys.
-	 *
-	 * @param array $data
-	 *
-	 * @return bool
-	 */
-    protected function hasNonNumericKeys(array $data): bool
-    {
-	    foreach (\array_keys($data) as $key) {
-	    	if (!\is_int($key)) {
-	    		return true;
-		    }
-    	}
-
-	    return false;
     }
 
     /**
