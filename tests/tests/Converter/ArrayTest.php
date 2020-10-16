@@ -75,7 +75,7 @@ class ArrayTest extends TestCase
 	/**
 	 * Tests how we convert array of nested arrays of objects
 	 */
-	public function testConvert_ArrayOfArraysOfObjects(): void
+	public function testConvertArrayOfArraysOfObjects(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_1 = new TestModel($this->getRandomString('model_1'));
@@ -124,7 +124,7 @@ class ArrayTest extends TestCase
 	/**
 	 * Tests if exception is thrown for invalid mixed-key array
 	 */
-	public function testConvert_ArrayOfKeyAndKeylessItems(): void
+	public function testConvertArrayOfKeyAndKeylessItems(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_1 = new TestModel($this->getRandomString('model_1'));
@@ -155,7 +155,7 @@ class ArrayTest extends TestCase
 	/**
 	 * Tests handling of mix of objects and keyed arrays of objeccts
 	 */
-	public function testConvert_ArrayNestedWithKeyedItems(): void
+	public function testConvertArrayNestedWithKeyedItems(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_1 = new TestModel($this->getRandomString('model_1'));
