@@ -78,7 +78,33 @@ return RB::success();
 }
 ```
 
- Something went wrong? Just type:
+ Need to additionally return extra payload with the response? Pass it as
+ argument to `success()`:
+
+```php
+$flight = App\Flight::where(...)->get();
+return RB::success($flight); 
+```
+
+ and your client will get that data in `data` node of your response:
+
+```json
+{
+   "items": [
+      {
+         "airline": "lot",
+         "flight_number": "lo123",
+         ...
+      },{
+         "airline": "american",
+         "flight_number": "am456",
+         ...
+      }
+   ]
+}
+```
+
+ Something went wrong and you want to tell the clinet about that? Just do:
 
 ```php
 return RB::error(250);

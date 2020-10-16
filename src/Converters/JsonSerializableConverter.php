@@ -29,7 +29,7 @@ final class JsonSerializableConverter implements ConverterContract
 	 *
 	 * @return array
 	 */
-	public function convert($obj, /** @scrutinizer ignore-unused */ array $config): array
+	public function convert(object $obj, /** @scrutinizer ignore-unused */ array $config): array
 	{
 		Validator::assertInstanceOf('obj', $obj, \JsonSerializable::class);
 
