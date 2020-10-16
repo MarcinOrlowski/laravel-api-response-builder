@@ -9,9 +9,9 @@
  * `[BREAKING]` Due to introduction of primitives support as direct payload, the content of `data` object in the response may differ
    from what previous versions returned in case of passing primitives directly, mainly `array`s, i.e. `success(['a', 'b']);`, as
    other types were not allowed previously anyway.
- * `[BREAKING]` Class mappings of `converter` are now moved to `map` sub array of `converter` config.
+ * `[BREAKING]` Class mappings of `converter` are now moved to `classes` sub-array of `converter` config.
  * `[BREAKING]` The `key` item for each converter confugured in `converter/map` is mandatory for each converter defined.
- * `[NEW]` The `primitives` config array added to `converter`. See docs/sample config for more information.
+ * `[NEW]` The `primitives` config array added to `converter`. See [docs](config.md) for more information.
 
 
 ### v8 ###

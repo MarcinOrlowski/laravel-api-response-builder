@@ -286,11 +286,11 @@ class Converter
      */
     protected static function getClassesMapping(): array
     {
-        $classes = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_MAP) ?? [];
+        $classes = Config::get(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES) ?? [];
 
 	    if (!\is_array($classes)) {
 		    throw new \RuntimeException(
-			    \sprintf('CONFIG: "%s" mapping must be an array (%s given)', ResponseBuilder::CONF_KEY_CONVERTER_MAP, \gettype($classes)));
+			    \sprintf('CONFIG: "%s" mapping must be an array (%s given)', ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, \gettype($classes)));
 	    }
 
 	    if (!empty($classes)) {

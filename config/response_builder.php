@@ -57,7 +57,7 @@ return [
 	    ],
 
 	    /* Object converters configuration for supported classes */
-    	'map' => [
+    	'classes' => [
 	        \Illuminate\Database\Eloquent\Model::class          => [
 	            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
 	            'key'     => 'item',

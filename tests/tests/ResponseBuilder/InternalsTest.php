@@ -39,7 +39,7 @@ class InternalsTest extends TestCase
      */
     public function testGetClassesMappingWithWrongType(): void
     {
-        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, false);
+        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, false);
 
         $this->expectException(\RuntimeException::class);
 
@@ -57,7 +57,7 @@ class InternalsTest extends TestCase
      */
     public function testGetClassesMappingMethodWithIncompleteMappingConfiguration(): void
     {
-        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER_MAP, [
+        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER_CLASSES, [
             self::class => [],
         ]);
 
