@@ -50,19 +50,19 @@ abstract class ResponseBuilderBase
 	/**
 	 * Configuration keys
 	 */
-	public const CONF_CONFIG                     = 'response_builder';
-	public const CONF_KEY_DEBUG_DEBUG_KEY        = self::CONF_CONFIG . '.debug.debug_key';
-	public const CONF_KEY_DEBUG_EX_TRACE_ENABLED = self::CONF_CONFIG . '.debug.exception_handler.trace_enabled';
-	public const CONF_KEY_DEBUG_EX_TRACE_KEY     = self::CONF_CONFIG . '.debug.exception_handler.trace_key';
-	public const CONF_KEY_CONVERTER_DEBUG_KEY    = self::CONF_CONFIG . '.debug.converter.debug_enabled';
-	public const CONF_KEY_MAP                    = self::CONF_CONFIG . '.map';
-	public const CONF_KEY_ENCODING_OPTIONS       = self::CONF_CONFIG . '.encoding_options';
-	public const CONF_KEY_CONVERTER              = self::CONF_CONFIG . '.converter';
-	public const CONF_KEY_CONVERTER_CLASSES      = self::CONF_KEY_CONVERTER . '.classes';
-	public const CONF_KEY_CONVERTER_PRIMITIVES   = self::CONF_KEY_CONVERTER . '.primitives';
-	public const CONF_KEY_MIN_CODE               = self::CONF_CONFIG . '.min_code';
-	public const CONF_KEY_MAX_CODE               = self::CONF_CONFIG . '.max_code';
-	public const CONF_KEY_EXCEPTION_HANDLER      = self::CONF_CONFIG . '.exception_handler';
+	public const CONF_CONFIG                            = 'response_builder';
+	public const CONF_KEY_DEBUG_DEBUG_KEY               = self::CONF_CONFIG . '.debug.debug_key';
+	public const CONF_KEY_DEBUG_EX_TRACE_ENABLED        = self::CONF_CONFIG . '.debug.exception_handler.trace_enabled';
+	public const CONF_KEY_DEBUG_EX_TRACE_KEY            = self::CONF_CONFIG . '.debug.exception_handler.trace_key';
+	public const CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED = self::CONF_CONFIG . '.debug.converter.debug_enabled';
+	public const CONF_KEY_MAP                           = self::CONF_CONFIG . '.map';
+	public const CONF_KEY_ENCODING_OPTIONS              = self::CONF_CONFIG . '.encoding_options';
+	public const CONF_KEY_CONVERTER                     = self::CONF_CONFIG . '.converter';
+	public const CONF_KEY_CONVERTER_CLASSES             = self::CONF_KEY_CONVERTER . '.classes';
+	public const CONF_KEY_CONVERTER_PRIMITIVES          = self::CONF_KEY_CONVERTER . '.primitives';
+	public const CONF_KEY_MIN_CODE                      = self::CONF_CONFIG . '.min_code';
+	public const CONF_KEY_MAX_CODE                      = self::CONF_CONFIG . '.max_code';
+	public const CONF_KEY_EXCEPTION_HANDLER             = self::CONF_CONFIG . '.exception_handler';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information

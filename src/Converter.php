@@ -42,7 +42,7 @@ class Converter
         $this->classes = static::getClassesMapping() ?? [];
         $this->primitives = static::getPrimitivesMapping() ?? [];
 
-	    $this->debug_enabled = Config::get(RB::CONF_KEY_CONVERTER_DEBUG_KEY, false);
+	    $this->debug_enabled = Config::get(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, false);
     }
 
 	/**
