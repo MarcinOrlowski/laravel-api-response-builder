@@ -172,40 +172,6 @@ class Converter
 		return $result;
 	}
 
-	/**
-	 * Facade to data converting feature.
-	 *
-	 * NOTE: the `$data` payload passed to this method must be a complete payload to be returned
-	 * in response `data` node. We need that to apply some "smart" behaviors while converting
-	 * data to arrays to be returned.
-	 *
-	 * @param object|array|null $whole_payload
-	 *
-	 * @return array|null
-	 */
-	public function convertPayload($whole_payload = null): ?array
-	{
-		if ($whole_payload === null) {
-			return null;
-		}
-
-		Validator::assertIsType('data', $whole_payload, [Validator::TYPE_ARRAY,
-		                                                 Validator::TYPE_OBJECT]);
-
-		$key = null;
-		if (\is_object($data)) {
-			$cfg = $this->getClassMappingConfigOrThrow($data);
-			$worker = new $cfg[ ResponseBuilder::KEY_HANDLER ]();
-
-		}
-
-		if ($key !== null) {
-			return [$key => $data];
-		} else {
-			return $data;
-		}
-    }
-
     /**
      * Main entry for data conversion
      *
