@@ -13,8 +13,10 @@
 
  Available configuration options and its current default values listed in alphabetical order. Please note, that in majority
  of use cases it should be perfectly sufficient to just use defaults and only tune the config when needed.
- 
+
  * [converter](#converter)
+   * [classes](#classes)
+   * [primitives](#primitives)
  * [debug](#debug)
  * [encoding_options](#encoding_options)
  * [exception_handler](#exception_handler)
@@ -23,42 +25,88 @@
  * [max_code](#max_code)
 
 ## converter ##
- 
- `Response Builder` can auto-convert to be used as response `data`. The following classes are supported out of the
- box:
 
- * `\Illuminate\Database\Eloquent\Model`          
- * `\Illuminate\Support\Collection`               
- * `\Illuminate\Database\Eloquent\Collection`     
- * `\Illuminate\Http\Resources\Json\JsonResource` 
+ `Response Builder` can auto-convert data to be used as response `data`. It supports both primitives and objects of
+ any classes that have corresponding converter configured.
+
+### classes ###
+
+ The following classes are supported out of the box (unless you wipe default config):
+
+ * `\Illuminate\Database\Eloquent\Model`
+ * `\Illuminate\Support\Collection`
+ * `\Illuminate\Database\Eloquent\Collection`
+ * `\Illuminate\Http\Resources\Json\JsonResource`
 
  Create new entry for each class you want to have supported. The entry key is a full class name (including namespace):
 
 ```php
 'converter' => [
-    Namespace\Classname::class => [
-        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-        'key'     => 'items',
+	'classes' => [
+        Namespace\Classname::class => [
+            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+            'key'     => 'items',
         
-        // Optional paramters
-        'pri'    => 0,
+            // Optional paramters
+            'pri'    => 0,
+        ],
     ],
 ],
 ```
- The `handler` is full name of the class that implements `ConverterContract`. Object of that class will be instantiated
- and conversion method will be invked. The `key` is a string that will be used as the JSON response as key to array representation.
+ The `handler` is a full name of the class that implements `ConverterContract`. Object of that class will be instantiated
+ and conversion method will be invked with object given as argument. The `key` is a string that will be used as the JSON
+ response as key to array representation when object of that class is passed as direct payload (i.e. `success($object);`).
+ Note, that `key` is not used otherwise, so if you have i.e. array of objects, they will be properly converted without
+ `key` used.
 
  All configuration entries are assigned priority `0` which can be changed using `pri` key (integer). This value is used to
  sort the entries to ensure that matching order is preserved. Entries with higher priority are matched first etc. This is
- very useful when you want to indirect configuration for two classes where additionally second extends first one. 
- So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A` 
+ very useful when you want to indirect configuration for two classes where additionally second extends first one.
+ So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A`
  then `B` related configuration must be set with higher priority.
 
  See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
- 
+
  **NOTE:** in case of data conversion problems add `RB_CONVERTER_DEBUG=true` entry to your `.env` file (also see [debug](#debug)
  for related config options) then peek Laravel log to see what converter was used for each type of data and why it was choosen.
- 
+
+### primitives ###
+
+ Starting from v9, `ResponseBuilder` suppors passing primitives as direct payload, removing the need of wrapping it in separate
+ container (like array or object). The following primitives are supported:
+
+ * `array`
+ * `boolean`
+ * `double`
+ * `integer`
+ * `string`
+
+ For each of these types there's configuration entry in `primitives` node of `converter` config, consisting of `key` entry.
+ The value of `key` is an arbitrary string, that will be used when given primivite will be passed as direct payload. For example,
+ pre v9 would require
+
+    RB::success(['my_key' => 12.25]);
+
+while with v9+ if can be simplified:
+
+    RB::success(12.25);
+
+and both would produce the same
+
+```json
+{
+  "success": true,
+  "code": 0,
+  "locale": "en",
+  "message": "OK",
+  "data": {
+      "my_key": 12.25
+  }
+}
+```
+
+assuming string`my_key` is the value of `key` entry for primitive type `double`.
+
 ## debug ##
 
 ```php
@@ -110,13 +158,13 @@
  and theoretically transparent) might not be desired.
 
  To prevent escaping, add JSON_UNESCAPED_UNICODE:
- 
+
 ```php
 JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE
 ```
 
  Laravel's default value:
- 
+
 ```php
 JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 ```
@@ -130,11 +178,11 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
  from error handling, some programmers use exceptions to quickly break the flow and return with additional
  information. In such case you may want to assign separate API code to each of these "special" exceptions
  and this is where `exception_handler` section comes in.
- 
+
  `ResponseBuilder` delegates handling of exceptions to dedicated handlers which lets you add your own
  when needed. Each configuration entry consits of name of the handler, its priority (which is useful if you
  deal with inherited exception classes) and optional configuration (depending on the handler):
- 
+
 ```php
 'exception_handler' => [
     \Symfony\Component\HttpKernel\Exception\HttpException::class => [
@@ -156,11 +204,11 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
     ],
 ],
 ```
-  
-  
+
+
  At runtime, exception handler will look for config entry for particualr exception class and use dedicated handler if found. If
  no exact match exists, it will try to match the handler using `instanceof` and eventually faill back to default handler
- as specified in (mandatory) `default` config node. 
+ as specified in (mandatory) `default` config node.
 
 ## map ##
 
@@ -174,7 +222,7 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 	...
 ],
 ```
-	
+
  See [Exception Handling with Response Builder](docs/exceptions.md) if you want to provide own messages for built-in codes.
 
 ## min_code ##
