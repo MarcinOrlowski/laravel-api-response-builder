@@ -17,27 +17,6 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
  */
 class Validator
 {
-    /** @var string */
-    public const TYPE_STRING = 'string';
-
-    /** @var string */
-    public const TYPE_INTEGER = 'integer';
-
-    /** @var string */
-    public const TYPE_BOOL = 'boolean';
-
-    /** @var string */
-    public const TYPE_ARRAY = 'array';
-
-    /** @var string */
-    public const TYPE_OBJECT = 'object';
-
-	/** @var string */
-	public const TYPE_DOUBLE = 'double';
-
-	/** @var string */
-    public const TYPE_NULL = 'NULL';
-
     /**
      * Checks if given $val is of type boolean
      *
@@ -50,7 +29,7 @@ class Validator
      */
     public static function assertIsBool(string $key, $var): void
     {
-        self::assertIsType($key, $var, [self::TYPE_BOOL]);
+        self::assertIsType($key, $var, [Type::BOOLEAN]);
     }
 
     /**
@@ -65,7 +44,7 @@ class Validator
      */
     public static function assertIsInt(string $key, $var): void
     {
-        self::assertIsType($key, $var, [self::TYPE_INTEGER]);
+        self::assertIsType($key, $var, [Type::INTEGER]);
     }
 
     /**
@@ -80,7 +59,7 @@ class Validator
      */
     public static function assertIsArray(string $key, $var): void
     {
-        self::assertIsType($key, $var, [self::TYPE_ARRAY]);
+        self::assertIsType($key, $var, [Type::ARRAY]);
     }
 
     /**
@@ -95,7 +74,7 @@ class Validator
      */
     public static function assertIsObject(string $key, $var): void
     {
-        self::assertIsType($key, $var, [self::TYPE_OBJECT]);
+        self::assertIsType($key, $var, [Type::OBJECT]);
     }
 
     /**
@@ -110,7 +89,7 @@ class Validator
      */
     public static function assertIsString(string $name, $var): void
     {
-        self::assertIsType($name, $var, [self::TYPE_STRING]);
+        self::assertIsType($name, $var, [Type::STRING]);
     }
 
     /**
