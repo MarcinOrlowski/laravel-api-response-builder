@@ -221,9 +221,16 @@ class Converter
 	    return $result;
     }
 
+	/**
+	 * Checks if given array uses custom (non numeric) keys.
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
     protected function hasNonNumericKeys(array $data): bool
     {
-	    foreach ($data as $key => $val) {
+	    foreach (\array_keys($data) as $key) {
 	    	if (!\is_int($key)) {
 	    		return true;
 		    }
