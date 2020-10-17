@@ -89,17 +89,24 @@ return RB::success($flight);
 
 ```json
 {
-   "items": [
-      {
-         "airline": "lot",
-         "flight_number": "lo123",
-         ...
-      },{
-         "airline": "american",
-         "flight_number": "am456",
-         ...
-      }
-   ]
+  "success": true,
+  "code": 0,
+  "locale": "en",
+  "message": "OK",
+  "data": {
+     "items": [
+        {
+          "airline": "lot",
+          "flight_number": "lo123",
+          ...
+       },
+       {
+          "airline": "american",
+          "flight_number": "am456",
+          ...
+       }
+    ]
+  }
 }
 ```
 
