@@ -228,7 +228,7 @@ class Converter
 
 	    if (!\is_array($classes)) {
 		    throw new \RuntimeException(
-			    \sprintf('CONFIG: "%s" mapping must be an array (%s given)', RB::CONF_KEY_CONVERTER_CLASSES, \gettype($classes)));
+			    \sprintf('CONFIG: "%s" mapping must be an array (%s found)', RB::CONF_KEY_CONVERTER_CLASSES, \gettype($classes)));
 	    }
 
 	    if (!empty($classes)) {
@@ -238,11 +238,11 @@ class Converter
 		    ];
 		    foreach ($classes as $class_name => $class_config) {
 			    if (!\is_array($class_config)) {
-				    throw new \InvalidArgumentException(sprintf("CONFIG: Config for '{$class_name}' class must be an array (%s given).", \gettype($class_config)));
+				    throw new \InvalidArgumentException(sprintf("CONFIG: Config for '{$class_name}' class must be an array (%s found).", \gettype($class_config)));
 			    }
 			    foreach ($mandatory_keys as $key_name) {
 				    if (!\array_key_exists($key_name, $class_config)) {
-					    throw new \RuntimeException("CONFIG: Missing '{$key_name}' in '{$class_name}' class mapping config.");
+					    throw new \RuntimeException("CONFIG: Missing '{$key_name}' entry in '{$class_name}' class mapping config.");
 				    }
 			    }
 		    }
@@ -264,7 +264,7 @@ class Converter
 
 		if (!\is_array($primitives)) {
 			throw new \RuntimeException(
-				\sprintf('CONFIG: "%s" mapping must be an array (%s given)', RB::CONF_KEY_CONVERTER_PRIMITIVES, \gettype($primitives)));
+				\sprintf('CONFIG: "%s" mapping must be an array (%s found)', RB::CONF_KEY_CONVERTER_PRIMITIVES, \gettype($primitives)));
 		}
 
 		if (!empty($primitives)) {
@@ -274,11 +274,11 @@ class Converter
 
 			foreach ($primitives as $type => $config) {
 				if (!\is_array($config)) {
-					throw new \InvalidArgumentException(sprintf("CONFIG: Config for '{$type}' primitive must be an array (%s given).", \gettype($config)));
+					throw new \InvalidArgumentException(sprintf("CONFIG: Config for '{$type}' primitive must be an array (%s found).", \gettype($config)));
 				}
 				foreach ($mandatory_keys as $key_name) {
 					if (!\array_key_exists($key_name, $config)) {
-						throw new \RuntimeException("CONFIG: Missing '{$key_name}' in '{$type}' primitive mapping config.");
+						throw new \RuntimeException("CONFIG: Missing '{$key_name}' entry in '{$type}' primitive mapping config.");
 					}
 				}
 			}
