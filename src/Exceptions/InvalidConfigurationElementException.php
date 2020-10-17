@@ -13,7 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-final class InvalidConfigurationElementException extends \Exception
+final class InvalidConfigurationElementException extends ConfigurationException
 {
 
 }

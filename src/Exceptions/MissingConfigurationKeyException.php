@@ -13,10 +13,10 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-final class MissingConfigurationKeyException extends \Exception
+final class MissingConfigurationKeyException extends ConfigurationException
 {
 	public function __construct($var_name)
 	{
-		parent::__construct(sprintf('Missing "%s" key', $var_name));
+		parent::__construct(sprintf('Missing "%s" key.', $var_name));
 	}
 }

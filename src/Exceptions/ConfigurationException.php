@@ -13,6 +13,6 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-final class ConfigurationNotFoundException extends ConfigurationException
+abstract class ConfigurationException extends \Exception
 {
 }

@@ -222,10 +222,10 @@ class ArrayTest extends TestCase
 		$this->assertArrayHasKey($item3_key, $converted);
 		$this->assertCount(\count($data[ $item3_key ]), $converted[ $item3_key ]);
 
-		$this->assertEquals($model_1->getVal(), $converted[ $item1_key ]['val']);
-		$this->assertEquals($model_2->getVal(), $converted[ $item2_key ]['val']);
-		$this->assertEquals($model_4->getVal(), $converted[ $item3_key ][ $item4_key ]['val']);
-		$this->assertEquals($model_5->getVal(), $converted[ $item3_key ][ $item5_key ]['val']);
+		$this->assertEquals($model_1->getVal(), $converted[ $item1_key ][ TestModel::FIELD_NAME ]);
+		$this->assertEquals($model_2->getVal(), $converted[ $item2_key ][ TestModel::FIELD_NAME ]);
+		$this->assertEquals($model_4->getVal(), $converted[ $item3_key ][ $item4_key ][ TestModel::FIELD_NAME ]);
+		$this->assertEquals($model_5->getVal(), $converted[ $item3_key ][ $item5_key ][ TestModel::FIELD_NAME ]);
 	}
 
 	/**
