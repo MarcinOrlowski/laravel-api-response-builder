@@ -13,10 +13,10 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelChild;
@@ -32,7 +32,7 @@ class ConverterTest extends TestCase
 		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, false);
 
 		// THEN we expect exception thrown
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(Ex\InvalidConfigurationException::class);
 
 		// WHEN attempt to instantiate Converter class
 		new Converter();
@@ -79,7 +79,7 @@ class ConverterTest extends TestCase
 	{
 		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, 'invalid');
 
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(Ex\InvalidConfigurationException::class);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod(Converter::class, 'getClassesMapping');

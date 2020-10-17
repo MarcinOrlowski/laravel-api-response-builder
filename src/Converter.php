@@ -16,6 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 /**
@@ -23,27 +24,25 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
  */
 class Converter
 {
-    /** @var array */
-    protected $classes = [];
+	/** @var array */
+	protected $classes = [];
 
-    /** @var array */
-    protected $primitives = [];
+	/** @var array */
+	protected $primitives = [];
 
-    /** @var bool */
-    protected $debug_enabled = false;
+	/** @var bool */
+	protected $debug_enabled = false;
 
-    /**
-     * Converter constructor.
-     *
-     * @throws \RuntimeException
-     */
-    public function __construct()
-    {
-        $this->classes = static::getClassesMapping() ?? [];
-        $this->primitives = static::getPrimitivesMapping() ?? [];
+	/**
+	 * Converter constructor.
+	 */
+	public function __construct()
+	{
+		$this->classes = static::getClassesMapping() ?? [];
+		$this->primitives = static::getPrimitivesMapping() ?? [];
 
-	    $this->debug_enabled = Config::get(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, false);
-    }
+		$this->debug_enabled = Config::get(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, false);
+	}
 
 	/**
 	 * Returns "converter/primitives" entry for given primitive object or throws exception if no config found.
@@ -54,217 +53,223 @@ class Converter
 	 *
 	 * @return array
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidConfigurationElementException
+	 * @throws Ex\ConfigurationNotFoundException
 	 */
-    protected function getPrimitiveMappingConfigOrThrow($data): array
-    {
-	    $result = null;
+	protected function getPrimitiveMappingConfigOrThrow($data): array
+	{
+		$result = null;
 
-	    $type = \gettype($data);
-	    $result = $this->primitives[ $type ] ?? null;
-	    if (!\is_array($result) && !empty($result)) {
-		    throw new \RuntimeException(sprintf('No data conversion mapping config for "%s" primitive.', $type));
-	    }
+		$type = \gettype($data);
+		$result = $this->primitives[ $type ] ?? null;
+		if (!\is_array($result) && !empty($result)) {
+			throw new Ex\InvalidConfigurationElementException(
+				sprintf('Invalid conversion mapping config for "%s" primitive.', $type));
+		}
 
-	    if ($result === null) {
-		    throw new \RuntimeException(sprintf('No data conversion mapping configured for "%s" primitive.', $type));
-	    }
+		if ($result === null) {
+			throw new Ex\ConfigurationNotFoundException(
+				sprintf('No data conversion mapping configured for "%s" primitive.', $type));
+		}
 
-	    if ($this->debug_enabled) {
-		    Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node '{$result[RB::KEY_KEY]}'.");
-	    }
+		if ($this->debug_enabled) {
+			Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node '{$result[RB::KEY_KEY]}'.");
+		}
 
-	    return $result;
-    }
+		return $result;
+	}
 
-    /**
-     * Returns "converter/map" mapping configured for given $data object class or throws exception if not found.
-     * Throws \RuntimeException if there's no config "classes" mapping entry for this object configured.
-     * Throws \InvalidArgumentException if No data conversion mapping configured for given class.
-     *
-     * @param object $data Object to get config for.
-     *
-     * @return array
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function getClassMappingConfigOrThrow(object $data): array
-    {
-        $result = null;
-        $debug_result = '';
+	/**
+	 * Returns "converter/map" mapping configured for given $data object class or throws exception if not found.
+	 *
+	 * @param object $data Object to get config for.
+	 *
+	 * @return array
+	 *
+	 * @throws Ex\ConfigurationNotFoundException
+	 */
+	protected function getClassMappingConfigOrThrow(object $data): array
+	{
+		$result = null;
+		$debug_result = '';
 
-        // check for exact class name match...
-        $cls = \get_class($data);
-        if (\is_string($cls)) {
-	        if (\array_key_exists($cls, $this->classes)) {
-		        $result = $this->classes[ $cls ];
-		        $debug_result = 'exact config match';
-	        } else {
-		        // no exact match, then lets try with `instanceof`
-		        foreach (\array_keys($this->classes) as $class_name) {
-			        if ($data instanceof $class_name) {
-				        $result = $this->classes[ $class_name ];
-				        $debug_result = "subclass of {$class_name}";
-				        break;
-			        }
-		        }
-	        }
-        }
+		// check for exact class name match...
+		$cls = \get_class($data);
+		if (\is_string($cls)) {
+			if (\array_key_exists($cls, $this->classes)) {
+				$result = $this->classes[ $cls ];
+				$debug_result = 'exact config match';
+			} else {
+				// no exact match, then lets try with `instanceof`
+				foreach (\array_keys($this->classes) as $class_name) {
+					if ($data instanceof $class_name) {
+						$result = $this->classes[ $class_name ];
+						$debug_result = "subclass of {$class_name}";
+						break;
+					}
+				}
+			}
+		}
 
-        if ($result === null) {
-            throw new \RuntimeException(sprintf('No data conversion mapping configured for "%s" class.', $cls));
-        }
+		if ($result === null) {
+			throw new Ex\ConfigurationNotFoundException(
+				sprintf('No data conversion mapping configured for "%s" class.', $cls));
+		}
 
-        if ($this->debug_enabled) {
+		if ($this->debug_enabled) {
 			Log::debug(__CLASS__ . ": Converting {$cls} using {$result[RB::KEY_HANDLER]} because: {$debug_result}.");
-        }
+		}
 
-	    return $result;
-    }
+		return $result;
+	}
 
-    /**
-     * Main entry for data conversion
-     *
-     * @param object|array|null $data
-     *
-     * @return mixed|null
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function convert($data = null): ?array
-    {
-        if ($data === null) {
-            return null;
-        }
+	/**
+	 * Main entry for data conversion
+	 *
+	 * @param object|array|null $data
+	 *
+	 * @return mixed|null
+	 */
+	public function convert($data = null): ?array
+	{
+		if ($data === null) {
+			return null;
+		}
 
-        $result = null;
+		$result = null;
 
-	    Validator::assertIsType('data', $data, [
-		    Type::ARRAY,
-		    Type::BOOLEAN,
-		    Type::DOUBLE,
-		    Type::INTEGER,
-		    Type::OBJECT,
-		    Type::STRING,
-	    ]);
+		Validator::assertIsType('data', $data, [
+			Type::ARRAY,
+			Type::BOOLEAN,
+			Type::DOUBLE,
+			Type::INTEGER,
+			Type::OBJECT,
+			Type::STRING,
+		]);
 
-	    if ($result === null && \is_object($data)) {
-		    $cfg = $this->getClassMappingConfigOrThrow($data);
-		    $worker = new $cfg[ RB::KEY_HANDLER ]();
-		    $result = [$cfg[ RB::KEY_KEY ] => $worker->convert($data, $cfg)];
-	    }
+		if ($result === null && \is_object($data)) {
+			$cfg = $this->getClassMappingConfigOrThrow($data);
+			$worker = new $cfg[ RB::KEY_HANDLER ]();
+			$result = [$cfg[ RB::KEY_KEY ] => $worker->convert($data, $cfg)];
+		}
 
-	    if ($result === null && \is_array($data)) {
-	        $cfg = $this->getPrimitiveMappingConfigOrThrow($data);
+		if ($result === null && \is_array($data)) {
+			$cfg = $this->getPrimitiveMappingConfigOrThrow($data);
 
-		    $result = $this->convertArray($data);
-	        if (!Util::isArrayWithNonNumericKeys($data)){
-		        $result = [$cfg[ RB::KEY_KEY ] => $result];
-	        }
-        }
+			$result = $this->convertArray($data);
+			if (!Util::isArrayWithNonNumericKeys($data)) {
+				$result = [$cfg[ RB::KEY_KEY ] => $result];
+			}
+		}
 
-	    if ( \is_bool($data) || \is_float($data) || \is_int($data) || \is_string($data)) {
-		    $result = [$this->getPrimitiveMappingConfigOrThrow($data)[ RB::KEY_KEY ] => $data];
-	    }
+		if (\is_bool($data) || \is_float($data) || \is_int($data) || \is_string($data)) {
+			$result = [$this->getPrimitiveMappingConfigOrThrow($data)[ RB::KEY_KEY ] => $data];
+		}
 
-	    return $result;
-    }
+		return $result;
+	}
 
-    /**
-     * Recursively walks $data array and converts all known objects if found. Note
-     * $data array is passed by reference so source $data array may be modified.
-     *
-     * @param array $data array to recursively convert known elements of
-     *
-     * @return array
-     *
-     * @throws \RuntimeException
-     */
-    protected function convertArray(array $data): array
-    {
-        // This is to ensure that we either have array with user provided keys i.e. ['foo'=>'bar'], which will then
-        // be turned into JSON object or array without user specified keys (['bar']) which we would return as JSON
-        // array. But you can't mix these two as the final JSON would not produce predictable results.
-        $string_keys_cnt = 0;
-        $int_keys_cnt = 0;
-        foreach ($data as $key => $val) {
-            if (\is_int($key)) {
-                $int_keys_cnt++;
-            } else {
-                $string_keys_cnt++;
-            }
+	/**
+	 * Recursively walks $data array and converts all known objects if found. Note
+	 * $data array is passed by reference so source $data array may be modified.
+	 *
+	 * @param array $data array to recursively convert known elements of
+	 *
+	 * @return array
+	 *
+	 * @throws \RuntimeException
+	 */
+	protected function convertArray(array $data): array
+	{
+		// This is to ensure that we either have array with user provided keys i.e. ['foo'=>'bar'], which will then
+		// be turned into JSON object or array without user specified keys (['bar']) which we would return as JSON
+		// array. But you can't mix these two as the final JSON would not produce predictable results.
+		$string_keys_cnt = 0;
+		$int_keys_cnt = 0;
+		foreach ($data as $key => $val) {
+			if (\is_int($key)) {
+				$int_keys_cnt++;
+			} else {
+				$string_keys_cnt++;
+			}
 
-            if (($string_keys_cnt > 0) && ($int_keys_cnt > 0)) {
-                throw new \RuntimeException(
-                    'Invalid data array. Either set own keys for all the items or do not specify any keys at all. ' .
-                    'Arrays with mixed keys are not supported by design.');
-            }
-        }
+			if (($string_keys_cnt > 0) && ($int_keys_cnt > 0)) {
+				throw new \RuntimeException(
+					'Invalid data array. Either set own keys for all the items or do not specify any keys at all. ' .
+					'Arrays with mixed keys are not supported by design.');
+			}
+		}
 
-        foreach ($data as $key => $val) {
-            if (\is_array($val)) {
-                $data[ $key ] = $this->convertArray($val);
-            } elseif (\is_object($val)) {
-                $cfg = $this->getClassMappingConfigOrThrow($val);
-                $worker = new $cfg[ RB::KEY_HANDLER ]();
-                $converted_data = $worker->convert($val, $cfg);
-                $data[ $key ] = $converted_data;
-            }
-        }
+		foreach ($data as $key => $val) {
+			if (\is_array($val)) {
+				$data[ $key ] = $this->convertArray($val);
+			} elseif (\is_object($val)) {
+				$cfg = $this->getClassMappingConfigOrThrow($val);
+				$worker = new $cfg[ RB::KEY_HANDLER ]();
+				$converted_data = $worker->convert($val, $cfg);
+				$data[ $key ] = $converted_data;
+			}
+		}
 
-        return $data;
-    }
+		return $data;
+	}
 
-    /**
-     * Reads and validates "converter/map" config mapping
-     *
-     * @return array Classes mapping as specified in configuration or empty array if configuration found
-     *
-     * @throws \RuntimeException if config mapping is technically invalid (i.e. not array etc).
-     */
-    protected static function getClassesMapping(): array
-    {
-        $classes = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
+	/**
+	 * Reads and validates "converter/map" config mapping
+	 *
+	 * @return array Classes mapping as specified in configuration or empty array if configuration found
+	 *
+	 * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
+	 * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
+	 * @throws Ex\IncompleteConfigurationException if config for specific class is incomplete (misses some mandatory fields etc).
+	 */
+	protected static function getClassesMapping(): array
+	{
+		$classes = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
 
-	    if (!\is_array($classes)) {
-		    throw new \RuntimeException(
-			    \sprintf('CONFIG: "%s" mapping must be an array (%s found)', RB::CONF_KEY_CONVERTER_CLASSES, \gettype($classes)));
-	    }
+		if (!\is_array($classes)) {
+			throw new Ex\InvalidConfigurationException(
+				\sprintf('"%s" must be an array (%s found)', RB::CONF_KEY_CONVERTER_CLASSES, \gettype($classes)));
+		}
 
-	    if (!empty($classes)) {
-		    $mandatory_keys = [
-			    RB::KEY_HANDLER,
-			    RB::KEY_KEY,
-		    ];
-		    foreach ($classes as $class_name => $class_config) {
-			    if (!\is_array($class_config)) {
-				    throw new \InvalidArgumentException(sprintf("CONFIG: Config for '{$class_name}' class must be an array (%s found).", \gettype($class_config)));
-			    }
-			    foreach ($mandatory_keys as $key_name) {
-				    if (!\array_key_exists($key_name, $class_config)) {
-					    throw new \RuntimeException("CONFIG: Missing '{$key_name}' entry in '{$class_name}' class mapping config.");
-				    }
-			    }
-		    }
-	    }
+		if (!empty($classes)) {
+			$mandatory_keys = [
+				RB::KEY_HANDLER,
+				RB::KEY_KEY,
+			];
+			foreach ($classes as $class_name => $class_config) {
+				if (!\is_array($class_config)) {
+					throw new Ex\InvalidConfigurationElementException(
+						sprintf("Config for '{$class_name}' class must be an array (%s found).", \gettype($class_config)));
+				}
+				foreach ($mandatory_keys as $key_name) {
+					if (!\array_key_exists($key_name, $class_config)) {
+						throw new Ex\IncompleteConfigurationException(
+							"Missing '{$key_name}' entry in '{$class_name}' class mapping config.");
+					}
+				}
+			}
+		}
 
-        return $classes;
-    }
+		return $classes;
+	}
 
 	/**
 	 * Reads and validates "converter/primitives" config mapping
 	 *
 	 * @return array Primitives mapping config as specified in configuration or empty array if configuration found
 	 *
-	 * @throws \RuntimeException if config mapping is technically invalid (i.e. not array etc).
-	 */
+	 * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
+	 * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
+	 * @throws Ex\IncompleteConfigurationException if config for specific class is incomplete (misses some mandatory fields etc).
+ */
 	protected static function getPrimitivesMapping(): array
 	{
 		$primitives = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
 
 		if (!\is_array($primitives)) {
-			throw new \RuntimeException(
-				\sprintf('CONFIG: "%s" mapping must be an array (%s found)', RB::CONF_KEY_CONVERTER_PRIMITIVES, \gettype($primitives)));
+			throw new Ex\InvalidConfigurationException(
+				\sprintf('"%s" mapping must be an array (%s found)', RB::CONF_KEY_CONVERTER_PRIMITIVES, \gettype($primitives)));
 		}
 
 		if (!empty($primitives)) {
@@ -274,11 +279,13 @@ class Converter
 
 			foreach ($primitives as $type => $config) {
 				if (!\is_array($config)) {
-					throw new \InvalidArgumentException(sprintf("CONFIG: Config for '{$type}' primitive must be an array (%s found).", \gettype($config)));
+					throw new Ex\InvalidConfigurationElementException(
+						sprintf("Config for '{$type}' primitive must be an array (%s found).", \gettype($config)));
 				}
 				foreach ($mandatory_keys as $key_name) {
 					if (!\array_key_exists($key_name, $config)) {
-						throw new \RuntimeException("CONFIG: Missing '{$key_name}' entry in '{$type}' primitive mapping config.");
+						throw new Ex\IncompleteConfigurationException(
+							"Missing '{$key_name}' entry in '{$type}' primitive mapping config.");
 					}
 				}
 			}

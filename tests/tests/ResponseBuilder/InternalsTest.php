@@ -16,6 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 class InternalsTest extends TestCase
 {
@@ -41,7 +42,7 @@ class InternalsTest extends TestCase
     {
         \Config::set(RB::CONF_KEY_CONVERTER_CLASSES, false);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\InvalidConfigurationException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod(Converter::class, 'getClassesMapping');
@@ -61,7 +62,7 @@ class InternalsTest extends TestCase
             self::class => [],
         ]);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\IncompleteConfigurationException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod(Converter::class, 'getClassesMapping');

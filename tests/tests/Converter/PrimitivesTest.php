@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Type;
@@ -30,7 +31,7 @@ class PrimitivesTest extends TestCase
 	{
 		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES, 'invalid');
 
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(Ex\InvalidConfigurationException::class);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod(Converter::class, 'getPrimitivesMapping');
@@ -59,7 +60,7 @@ class PrimitivesTest extends TestCase
 		Config::offsetUnset(RB::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN);
 
 		// getPrimitiveMapping is called by constructor.
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(Ex\InvalidConfigurationElementException::class);
 		new Converter();
 	}
 
@@ -70,8 +71,8 @@ class PrimitivesTest extends TestCase
 	{
 		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN, []);
 
-		// getPrimitiveMapping is called by constructor.
-		$this->expectException(\RuntimeException::class);
+		// getPrimitiveMapping() is called by constructor.
+		$this->expectException(Ex\IncompleteConfigurationException::class);
 		new Converter();
 	}
 
@@ -82,7 +83,7 @@ class PrimitivesTest extends TestCase
 		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES, $cfg);
 
 		// getPrimitiveMapping is called by constructor.
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(Ex\ConfigurationNotFoundException::class);
 		$converter = new Converter();
 		$converter->convert(false);
 
