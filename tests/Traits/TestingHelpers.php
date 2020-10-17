@@ -272,7 +272,7 @@ trait TestingHelpers
                                       array $debug_data = null): HttpResponse
     {
         if (!\is_bool($success)) {
-            $this->fail(sprintf("'success' must be boolean ('%s' given)", \gettype($success)));
+            $this->fail(sprintf('"success" must be of type boolean ("%s" found)', \gettype($success)));
         }
 
         $http_code = null;
