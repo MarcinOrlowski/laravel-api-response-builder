@@ -2,17 +2,19 @@
 
 # REST API Response Builder for Laravel #
 
-See [compatibility docs](docs/compatibility.md) for details about backward compatibility!
+This library follows [Semantic versioning](https://semver.org).  
+See [compatibility docs](docs/compatibility.md) for details about backward compatibility
+before doing major upgrade!
 
 ## CHANGE LOG ##
 
-* v9.0.0 (2020-10-19)
+* v9.0.0 (2020-10-17)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * [RB-156] Added logic to deal with directly returned objects or arrays.
-   * Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
+   * [RB-158] Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
      `double`, `integer` and `string` types, configurable via new `converter/primitives`.
    * Removed hadrcoded `val` key used by `JsonSerializable` converter.
-   * In case of errors own exceptions are now thrown for most cases, giving better error report.
+   * Introduced own exceptions for better error reporting. See [src/Exceptions](src/Exceptions) for more info.
 
 * v8.1.1 (2020-10-15)
    * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from
