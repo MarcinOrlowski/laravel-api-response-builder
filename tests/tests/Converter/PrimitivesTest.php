@@ -54,7 +54,7 @@ class PrimitivesTest extends TestCase
 	/**
 	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when config for given primitive type is of invalid type.
 	 */
-	public function testGetPrimitiveMappingConfigOrThrow_NoConfig(): void
+	public function testGetPrimitiveMappingConfigOrThrow_NoConfigKeys(): void
 	{
 		Config::offsetUnset(RB::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN);
 
@@ -73,6 +73,19 @@ class PrimitivesTest extends TestCase
 		// getPrimitiveMapping is called by constructor.
 		$this->expectException(\RuntimeException::class);
 		new Converter();
+	}
+
+	public function testGetPrimitiveMappingConfigOrThrow_NoConfig(): void
+	{
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
+		unset($cfg[Type::BOOLEAN]);
+		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES, $cfg);
+
+		// getPrimitiveMapping is called by constructor.
+		$this->expectException(\RuntimeException::class);
+		$converter = new Converter();
+		$converter->convert(false);
+
 	}
 
 	// -----------------------------------------------------------------------------------------------------------

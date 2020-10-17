@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
@@ -116,31 +117,47 @@ class AutoConversionTest extends TestCase
     }
 
     /**
-     * Checks if buildResponse() would throw InvalidArgument exception on unsupported payload type
-     *
-     * @param mixed $data Test data as provided by dataProvider
+     * Checks if buildResponse() would accept support payload types
      *
      * @return void
      *
-     * @dataProvider dataProviderTestInvalidDataType
+     * @dataProvider provider_TestSuccessWithPrimitive
      */
-    public function testInvalidDataType($data): void
+    public function testSuccessWithPrimitive($value): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        RB::success($data);
+    	$value = (bool)mt_rand(0, 1);
+        $this->response = RB::success($value);
+	    $j = $this->getResponseSuccessObject();
+
+	    // THEN returned response object should have it auto converted
+	    $data = $j->data;
+	    $this->assertNotNull($data);
+
+	    /** @noinspection PhpUnhandledExceptionInspection */
+	    $converter = new Converter();
+	    $cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
+	    $this->assertIsArray($cfg);
+	    $this->assertNotEmpty($cfg);
+	    $key = $cfg[ RB::KEY_KEY ];
+	    $this->assertObjectHasAttribute($key, $data);
+	    $this->assertEquals($value, $data->{$key});
+
     }
 
-    /**
-     * Data provider for testBuildResponse_InvalidDataType test.
-     *
-     * @return array
-     */
-    public function dataProviderTestInvalidDataType(): array
-    {
-        return [
-            [(object)['no' => 'mapping']],
-            ['invalid'],
-            [666],
-        ];
+	public function provider_TestSuccessWithPrimitive(): array
+	{
+		return [
+			// array
+			[[$this->getRandomString() => $this->getRandomString()]],
+			// boolean
+			[(bool)mt_rand(0, 1)],
+			// integer
+			[mt_rand(0, 10000)],
+			// double
+			[((double)mt_rand(0, 10000)) / mt_rand(0, 100)],
+			// string
+			[$this->getRandomString()],
+		];
     }
+
 }

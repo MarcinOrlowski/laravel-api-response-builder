@@ -175,9 +175,14 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public function withData($data = null): self
 	{
-		Validator::assertIsType('data', $data, [Type::ARRAY,
-		                                        Type::OBJECT,
-		                                        Type::NULL]);
+		Validator::assertIsType('data', $data, [
+			Type::BOOLEAN,
+			Type::ARRAY,
+			Type::STRING,
+			Type::INTEGER,
+			Type::OBJECT,
+			Type::NULL,
+		]);
 		$this->data = $data;
 
 		return $this;

@@ -62,8 +62,12 @@ class Converter
 
 	    $type = \gettype($data);
 	    $result = $this->primitives[ $type ] ?? null;
+	    if (!\is_array($result) && !empty($result)) {
+		    throw new \RuntimeException(sprintf('No data conversion mapping config for "%s" primitive.', $type));
+	    }
+
 	    if ($result === null) {
-		    throw new \InvalidArgumentException(sprintf('No data conversion mapping configured for "%s" primitive.', $type));
+		    throw new \RuntimeException(sprintf('No data conversion mapping configured for "%s" primitive.', $type));
 	    }
 
 	    if ($this->debug_enabled) {
@@ -108,7 +112,7 @@ class Converter
         }
 
         if ($result === null) {
-            throw new \InvalidArgumentException(sprintf('No data conversion mapping configured for "%s" class.', $cls));
+            throw new \RuntimeException(sprintf('No data conversion mapping configured for "%s" class.', $cls));
         }
 
         if ($this->debug_enabled) {
@@ -238,7 +242,7 @@ class Converter
 			    }
 			    foreach ($mandatory_keys as $key_name) {
 				    if (!\array_key_exists($key_name, $class_config)) {
-					    throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$class_name}' class mapping");
+					    throw new \RuntimeException("CONFIG: Missing '{$key_name}' in '{$class_name}' class mapping config.");
 				    }
 			    }
 		    }
@@ -274,7 +278,7 @@ class Converter
 				}
 				foreach ($mandatory_keys as $key_name) {
 					if (!\array_key_exists($key_name, $config)) {
-						throw new \RuntimeException("CONFIG: Missing '{$key_name}' for '{$type}' primitive mapping");
+						throw new \RuntimeException("CONFIG: Missing '{$key_name}' in '{$type}' primitive mapping config.");
 					}
 				}
 			}
