@@ -40,7 +40,7 @@ final class Util
                 $orig_type = \gettype($original[ $m_key ]);
                 $m_type = \gettype($m_val);
                 if ($orig_type !== $m_type) {
-                    throw new \RuntimeException(
+                    throw new Ex\IncompatibleTypeException(
                         "Incompatible types. Cannot merge {$m_type} into {$orig_type} (key '{$m_key}').");
                 }
 
