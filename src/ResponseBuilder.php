@@ -147,8 +147,8 @@ class ResponseBuilder extends ResponseBuilderBase
 			Validator::assertIsIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 		}
 		if ($api_code === $code_ok) {
-			throw new \InvalidArgumentException(
-				"Error response cannot use api_code of value {$code_ok} which is reserved for OK");
+			throw new \OutOfBoundsException(
+				"Error response cannot use api_code of value {$code_ok} which is reserved for OK.");
 		}
 
 		return new static(false, $api_code);
@@ -161,8 +161,9 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public function withHttpCode(int $http_code = null): self
 	{
-		Validator::assertIsType('http_code', $http_code, [Type::INTEGER,
-		                                                  Type::NULL]);
+		Validator::assertIsType('http_code', $http_code, [
+			Type::INTEGER,
+			Type::NULL]);
 		$this->http_code = $http_code;
 
 		return $this;
