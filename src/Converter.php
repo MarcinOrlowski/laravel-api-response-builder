@@ -176,29 +176,10 @@ class Converter
 	 * @param array $data array to recursively convert known elements of
 	 *
 	 * @return array
-	 *
-	 * @throws \RuntimeException
 	 */
 	protected function convertArray(array $data): array
 	{
-		// This is to ensure that we either have array with user provided keys i.e. ['foo'=>'bar'], which will then
-		// be turned into JSON object or array without user specified keys (['bar']) which we would return as JSON
-		// array. But you can't mix these two as the final JSON would not produce predictable results.
-		$string_keys_cnt = 0;
-		$int_keys_cnt = 0;
-		foreach ($data as $key => $val) {
-			if (\is_int($key)) {
-				$int_keys_cnt++;
-			} else {
-				$string_keys_cnt++;
-			}
-
-			if (($string_keys_cnt > 0) && ($int_keys_cnt > 0)) {
-				throw new \RuntimeException(
-					'Invalid data array. Either set own keys for all the items or do not specify any keys at all. ' .
-					'Arrays with mixed keys are not supported by design.');
-			}
-		}
+		Validator::assertArrayHasNoMixedKeys($data);
 
 		foreach ($data as $key => $val) {
 			if (\is_array($val)) {
@@ -262,7 +243,7 @@ class Converter
 	 * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
 	 * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
 	 * @throws Ex\IncompleteConfigurationException if config for specific class is incomplete (misses some mandatory fields etc).
- */
+	 */
 	protected static function getPrimitivesMapping(): array
 	{
 		$primitives = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];

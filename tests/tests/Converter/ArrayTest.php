@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Converters\FakeConverter;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
@@ -61,7 +62,7 @@ class ArrayTest extends TestCase
 		$this->assertIsArray($converted);
 		$this->assertCount(1, $converted);
 		$this->assertArrayHasKey($key, $converted);
-		$converted = $converted[$key];
+		$converted = $converted[ $key ];
 		$this->assertCount(\count($data), $converted);
 
 		$this->assertCount(\count($data), $converted);
@@ -111,7 +112,7 @@ class ArrayTest extends TestCase
 		$this->assertIsArray($converted);
 		$this->assertCount(1, $converted);
 		$this->assertArrayHasKey($key, $converted);
-		$converted = $converted[$key];
+		$converted = $converted[ $key ];
 		$this->assertCount(\count($data), $converted);
 
 		foreach ($converted as $row) {
@@ -123,33 +124,59 @@ class ArrayTest extends TestCase
 
 	/**
 	 * Tests if exception is thrown for invalid mixed-key array
+	 *
+	 * @param array $data
+	 *
+	 * @dataProvider ConvertArrayOfKeyAndKeylessItemsProvider
 	 */
-	public function testConvertArrayOfKeyAndKeylessItems(): void
+	public function testConvertArrayOfKeyAndKeylessItems(array $data): void
 	{
-		// GIVEN model object with randomly set member value
-		$model_1 = new TestModel($this->getRandomString('model_1'));
-		$model_1_key = $this->getRandomString('model_1_key');
-		$model_2 = new TestModel($this->getRandomString('model_2'));
-
+		// GIVEN $data array with mixed keys (int/string and string/int order)
 		// Either all items have user provided keys, or none.
 		// Mixed arrays are not supported by design.
-		$data = [
-			$model_1_key => $model_1,
-			$model_2,
-		];
 
 		// AND having its class configured for auto conversion
 		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
-			\get_class($model_1) => [
+			TestModel::class => [
 				RB::KEY_KEY     => 'XXX',
 				RB::KEY_HANDLER => ToArrayConverter::class,
 			],
 		]);
 
 		// WHEN conversion is attempted, exception should be thrown
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(Ex\ArrayWithMixedKeysException::class);
 
 		(new Converter())->convert($data);
+	}
+
+	/**
+	 * Data provider for testConvertArrayOfKeyAndKeylessItems
+	 */
+	public function ConvertArrayOfKeyAndKeylessItemsProvider(): array
+	{
+		// GIVEN model object with randomly set member value
+		$model_1 = new TestModel($this->getRandomString('model_1'));
+		$model_1_key = $this->getRandomString('model_1_key');
+		$model_2 = new TestModel($this->getRandomString('model_2'));
+
+		// string/int order
+		$data1 = [
+			$model_1_key => $model_1,
+			$model_2,
+		];
+
+		// int/string order
+		$data2 = [
+			$model_2,
+			$model_1_key => $model_1,
+		];
+
+		return [
+			[$data1],
+			[$data2],
+		];
+
+
 	}
 
 	/**
@@ -214,7 +241,7 @@ class ArrayTest extends TestCase
 		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			\get_class($model_1) => [
 				RB::KEY_HANDLER => ToArrayConverter::class,
-				RB::KEY_KEY => $key,
+				RB::KEY_KEY     => $key,
 			],
 		]);
 
@@ -222,9 +249,9 @@ class ArrayTest extends TestCase
 
 		$this->assertIsArray($result);
 		$this->assertArrayHasKey($key, $result);
-		$this->assertCount(1, $result[$key]);
-		$this->assertArrayHasKey('val', $result[$key]);
-		$this->assertEquals($model_1->getVal(), $result[$key]['val']);
+		$this->assertCount(1, $result[ $key ]);
+		$this->assertArrayHasKey('val', $result[ $key ]);
+		$this->assertEquals($model_1->getVal(), $result[ $key ]['val']);
 	}
 
 	/**
@@ -247,7 +274,7 @@ class ArrayTest extends TestCase
 		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
 			$model_class => [
 				RB::KEY_HANDLER => ToArrayConverter::class,
-				RB::KEY_KEY => $model_key,
+				RB::KEY_KEY     => $model_key,
 			],
 		]);
 
@@ -258,7 +285,7 @@ class ArrayTest extends TestCase
 		$result = (new Converter())->convert($data);
 		$this->assertIsArray($result);
 		$this->assertCount(1, $result);
-		$result = $result[$key];
+		$result = $result[ $key ];
 		$this->assertCount(\count($data), $result);
 
 		$this->assertArrayHasKey('val', $result[0]);
@@ -294,7 +321,7 @@ class ArrayTest extends TestCase
 
 		$this->assertIsArray($result);
 		$this->assertArrayHasKey($key, $result);
-		$result = $result[$key];
+		$result = $result[ $key ];
 		$this->assertCount(1, $result);
 		$this->assertArrayHasKey($fake->key, $result);
 		$this->assertEquals($result[ $fake->key ], $fake->val);

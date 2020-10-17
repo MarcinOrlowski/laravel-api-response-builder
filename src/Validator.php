@@ -188,27 +188,22 @@ class Validator
 	 *
 	 * @throws Ex\ArrayWithMixedKeysException
 	 */
-	public static function assertArrayNoMixedKeys(array $data): void
+	public static function assertArrayHasNoMixedKeys(array $data): void
 	{
 		$string_keys_cnt = 0;
 		$int_keys_cnt = 0;
-		foreach ($data as $key => $val) {
+		foreach (\array_keys($data) as $key) {
 			if (\is_int($key)) {
-				$int_keys_cnt++;
 				if ($string_keys_cnt > 0) {
-					break;
+					throw new Ex\ArrayWithMixedKeysException();
 				}
+				$int_keys_cnt++;
 			} else {
-				$string_keys_cnt++;
 				if ($int_keys_cnt > 0) {
-					break;
+					throw new Ex\ArrayWithMixedKeysException();
 				}
-			}
-
-			if (($string_keys_cnt > 0) && ($int_keys_cnt > 0)) {
-				throw new Ex\ArrayWithMixedKeysException();
+				$string_keys_cnt++;
 			}
 		}
-
 	}
 }
