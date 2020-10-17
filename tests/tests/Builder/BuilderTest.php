@@ -77,7 +77,7 @@ class BuilderTest extends TestCase
      */
     public function testErrorWithOkCode(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
         RB::asError(BaseApiCodes::OK());
     }
 }
