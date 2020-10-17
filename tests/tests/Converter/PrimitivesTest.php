@@ -115,7 +115,7 @@ class PrimitivesTest extends TestCase
 		$this->assertIsArray($converted);
 		$this->assertArrayHasKey($key, $converted);
 		$this->assertCount(1, $converted[ $key ]);
-		$this->assertEquals($model_val, $converted[ $key ]['val']);
+		$this->assertEquals($model_val, $converted[ $key ][TestModel::FIELD_NAME]);
 	}
 
 	/**

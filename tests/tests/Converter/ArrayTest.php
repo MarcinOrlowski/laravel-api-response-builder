@@ -250,8 +250,8 @@ class ArrayTest extends TestCase
 		$this->assertIsArray($result);
 		$this->assertArrayHasKey($key, $result);
 		$this->assertCount(1, $result[ $key ]);
-		$this->assertArrayHasKey('val', $result[ $key ]);
-		$this->assertEquals($model_1->getVal(), $result[ $key ]['val']);
+		$this->assertArrayHasKey(TestModel::FIELD_NAME, $result[ $key ]);
+		$this->assertEquals($model_1->getVal(), $result[ $key ][TestModel::FIELD_NAME]);
 	}
 
 	/**
@@ -288,10 +288,10 @@ class ArrayTest extends TestCase
 		$result = $result[ $key ];
 		$this->assertCount(\count($data), $result);
 
-		$this->assertArrayHasKey('val', $result[0]);
-		$this->assertEquals($model_1->getVal(), $result[0]['val']);
-		$this->assertArrayHasKey('val', $result[1]);
-		$this->assertEquals($model_2->getVal(), $result[1]['val']);
+		$this->assertArrayHasKey(TestModel::FIELD_NAME, $result[0]);
+		$this->assertEquals($model_1->getVal(), $result[0][TestModel::FIELD_NAME]);
+		$this->assertArrayHasKey(TestModel::FIELD_NAME, $result[1]);
+		$this->assertEquals($model_2->getVal(), $result[1][TestModel::FIELD_NAME]);
 	}
 
 	/**
@@ -338,7 +338,7 @@ class ArrayTest extends TestCase
 	 */
 	protected function assertValidConvertedTestClass(TestModel $obj, array $item): void
 	{
-		$this->assertArrayHasKey('val', $item);
-		$this->assertEquals($obj->getVal(), $item['val']);
+		$this->assertArrayHasKey(TestModel::FIELD_NAME, $item);
+		$this->assertEquals($obj->getVal(), $item[TestModel::FIELD_NAME]);
 	}
 }

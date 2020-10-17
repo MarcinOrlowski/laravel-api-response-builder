@@ -67,7 +67,7 @@ class ConverterTest extends TestCase
 		$this->assertArrayHasKey($key, $result);
 		$result = $result[$key];
 		$this->assertCount(1, $result);
-		$this->assertEquals($child_val, $result['val']);
+		$this->assertEquals($child_val, $result[TestModel::FIELD_NAME]);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------

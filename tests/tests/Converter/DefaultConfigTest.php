@@ -49,8 +49,8 @@ class DefaultConfigTest extends TestCase
 	    $this->assertIsArray($result);
 	    $this->assertArrayHasKey($key, $result);
 	    $result = $result[$key];
-        $this->assertArrayHasKey('val', $result);
-        $this->assertEquals($result['val'], $obj_val);
+        $this->assertArrayHasKey(TestModelArrayable::FIELD_NAME, $result);
+        $this->assertEquals($result[TestModelArrayable::FIELD_NAME], $obj_val);
     }
 
     /**
@@ -114,8 +114,8 @@ class DefaultConfigTest extends TestCase
         $this->assertIsArray($result);
 	    $this->assertArrayHasKey($key, $result);
 	    $result = $result[$key];
-        $this->assertArrayHasKey('val', $result);
-        $this->assertEquals($result['val'], $obj_val);
+        $this->assertArrayHasKey(TestModelJsonResource::FIELD_NAME, $result);
+        $this->assertEquals($result[TestModelJsonResource::FIELD_NAME], $obj_val);
     }
 
     /**

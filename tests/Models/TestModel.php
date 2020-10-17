@@ -21,6 +21,9 @@ class TestModel
 	/** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
 	public const FIELD_NAME = 'val';
 
+	/** @var string|null */
+	protected $val;
+
 	/**
 	 * TestModel constructor.
 	 *
@@ -28,7 +31,7 @@ class TestModel
 	 */
 	public function __construct(string $val)
 	{
-		$this->{self::FIELD_NAME} = $val;
+		$this->val = $val;
 	}
 
 	/**
@@ -36,7 +39,7 @@ class TestModel
 	 */
 	public function getVal(): ?string
 	{
-		return $this->{self::FIELD_NAME};
+		return $this->val;
 	}
 
 	/**
@@ -47,8 +50,7 @@ class TestModel
 	public function toArray(): array
 	{
 		return [
-			self::FIELD_NAME =>
-				$this->{self::FIELD_NAME},
+			self::FIELD_NAME => $this->val,
 		];
 	}
 }
