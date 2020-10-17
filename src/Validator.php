@@ -134,7 +134,7 @@ class Validator
         $type = \gettype($value);
         if (!\in_array($type, $allowed_types, true)) {
             throw new \InvalidArgumentException(
-                \sprintf('"%s" must be one of allowed types: %s (%s given)',
+                \sprintf('"%s" must be one of allowed types: %s (%s given).',
                     $var_name, implode(', ', $allowed_types), \gettype($value))
             );
         }
