@@ -80,7 +80,7 @@ class InternalsTest extends TestCase
         $obj = new BaseApiCodes();
         $max = $this->getProtectedConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$max + 1]);
     }
@@ -97,7 +97,7 @@ class InternalsTest extends TestCase
         $obj = new BaseApiCodes();
         $min = $this->getProtectedConstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$min - 1]);
     }
@@ -109,7 +109,7 @@ class InternalsTest extends TestCase
      */
     public function testGetCodeMessageKeyMethodWithCodeOutOfCodeRange(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
         BaseApiCodes::getCodeMessageKey(BaseApiCodes::getMaxCode() + 1);
     }
 

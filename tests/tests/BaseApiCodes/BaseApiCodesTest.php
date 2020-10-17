@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 class BaseApiCodesTest extends TestCase
@@ -25,7 +26,7 @@ class BaseApiCodesTest extends TestCase
      */
     public function testGetMinCodeMissingConfigKey(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\MissingConfigurationKeyException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::offsetUnset(RB::CONF_KEY_MIN_CODE);
@@ -39,7 +40,7 @@ class BaseApiCodesTest extends TestCase
      */
     public function testGetMaxCodeMissingConfigKey(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\MissingConfigurationKeyException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::offsetUnset(RB::CONF_KEY_MAX_CODE);
@@ -53,7 +54,7 @@ class BaseApiCodesTest extends TestCase
      */
     public function testGetMapMissingConfigKey(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\MissingConfigurationKeyException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::offsetUnset(RB::CONF_KEY_MAP);
@@ -67,7 +68,7 @@ class BaseApiCodesTest extends TestCase
      */
     public function testGetMapWrongConfig(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::set(RB::CONF_KEY_MAP, false);

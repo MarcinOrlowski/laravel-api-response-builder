@@ -12,7 +12,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
      `double`, `integer` and `string` types, configurable via new `converter/primitives`.
    * Removed hadrcoded `val` key used by `JsonSerializable` converter.
-   * All exceptions thrown are from RB package now, instead of generic ones.
+   * In case of errors own exceptions are now thrown for most cases, giving better error report.
 
 * v8.1.1 (2020-10-15)
    * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from

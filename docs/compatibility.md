@@ -13,7 +13,7 @@
  * `[BREAKING]` The `key` item for each converter confugured in `converter/map` is mandatory for each converter defined.
  * `[BREAKING]` The `JsonSerializable` are no longer using hardcoded `val` key when converted, but proper `key` from its config.
  * `[NEW]` The `primitives` config array added to `converter`. See [docs](config.md) for more information.
- * `[Low]` For better error reporting and handling, `ResponseBuilder` no longer throws generic exceptions but uses own ones instead. See [src/Exceptions](../src/Exceptions) for more info.
+ * `[Low]` For better error reporting and handling, `ResponseBuilder` throws own, more descriptive exceptions in majority of cases. See [src/Exceptions](../src/Exceptions).
 
 
 ### v8 ###

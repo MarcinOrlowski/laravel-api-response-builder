@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 /**
@@ -28,7 +29,7 @@ class MakeTest extends TestCase
      */
     public function testWrongMessage(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
 
         /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
@@ -47,7 +48,7 @@ class MakeTest extends TestCase
      */
     public function testCustomMessageAndCodeOutOfRange(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
 
         $api_code = $this->max_allowed_code + 1;    // invalid
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -63,7 +64,7 @@ class MakeTest extends TestCase
      */
     public function testInvalidEncodingOptions(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::set(RB::CONF_KEY_ENCODING_OPTIONS, []);
@@ -156,7 +157,7 @@ class MakeTest extends TestCase
      */
     public function testApiCodeNotIntNorString(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         /** @noinspection PhpParamsInspection */

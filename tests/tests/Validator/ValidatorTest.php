@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\Type;
 use MarcinOrlowski\ResponseBuilder\Validator;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 class ValidatorTest extends TestCase
 {
@@ -37,7 +38,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsIntWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsInt(__FUNCTION__, 'chicken');
     }
 
@@ -63,7 +64,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsObjectWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsObject(__FUNCTION__, 'chicken');
     }
 
@@ -84,7 +85,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsArrayWithInvalidData(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsArray(__FUNCTION__, false);
     }
 
@@ -109,7 +110,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsStringWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsString(__FUNCTION__, 666);
     }
 
@@ -134,7 +135,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsBoolWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsBool(__FUNCTION__, 666);
     }
 
@@ -154,7 +155,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsIntRangeVarType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsIntRange(__FUNCTION__, 'string', 100, 200);
     }
 
@@ -165,7 +166,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsIntRangeMinMaxOrder(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\InvalidArgumentException::class);
         Validator::assertIsIntRange(__FUNCTION__, 300, 500, 200);
     }
 
@@ -177,7 +178,7 @@ class ValidatorTest extends TestCase
     public function testAssertIsIntRangeVarInMinMaxRangeWithDataOutOfRange(): void
     {
         // ensure main variable is an integer
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
         Validator::assertIsIntRange(__FUNCTION__, 100, 300, 500);
     }
 
@@ -253,11 +254,11 @@ class ValidatorTest extends TestCase
         ];
 
         foreach ($test_data as $key => $data) {
-            $label = \sprintf('test_data[%d]', $key);
+            $var_name = \sprintf('test_data[%d]', $key);
 
             $test_passed = true;
             try {
-                Validator::assertIsType($label, $data['item'], $data['types']);
+                Validator::assertIsType($var_name, $data['item'], $data['types']);
             } catch (\Exception $ex) {
                 $test_passed = false;
             }
