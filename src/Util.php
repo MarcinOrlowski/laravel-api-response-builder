@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
 
+
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
+
 /**
  * Laravel API Response Builder
  *
@@ -37,7 +40,7 @@ final class Util
                 $orig_type = \gettype($original[ $m_key ]);
                 $m_type = \gettype($m_val);
                 if ($orig_type !== $m_type) {
-                    throw new \RuntimeException(
+                    throw new Ex\IncompatibleTypeException(
                         "Incompatible types. Cannot merge {$m_type} into {$orig_type} (key '{$m_key}').");
                 }
 
@@ -69,5 +72,23 @@ final class Util
             return $pri_b <=> $pri_a;
         });
     }
+
+	/**
+	 * Checks if given array uses custom (non numeric) keys.
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public static function isArrayWithNonNumericKeys(array $data): bool
+	{
+		foreach (\array_keys($data) as $key) {
+			if (!\is_int($key)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 }

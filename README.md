@@ -26,7 +26,6 @@
  * [Documentation](docs/docs.md)
  * [Requirements](docs/docs.md#requirements)
  * [Installation and Configuration](docs/docs.md#installation-and-configuration)
- * [Bugs reports and pull requests](CONTRIBUTING.md)
  * [License](#license)
  * [Changelog](CHANGES.md)
 
@@ -36,34 +35,33 @@
 
 ## Introduction ##
 
- `ResponseBuilder` is a [Laravel](https://laravel.com/) helper designed to build nice, normalized and easy to consume REST API 
+ `ResponseBuilder` is a [Laravel](https://laravel.com/) helper designed to build nice, normalized and easy to consume REST API
  JSON responses.
 
 ## Benefits ##
 
- `ResponseBuilder` is written for REST API developers by REST API developer and is based on my long lasting experience on both
- "sides" (API dev and API consumer) of variety of REST APIs. Lightweight, with simple to use public methods, covering multiple 
- potential use-cases, on-the-fly data conversion, localization support, automatic error message building, support
- for chained APIs and (hopefully) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder` 
- is designed with **users of your API** in mind, which helps them easily deal with your API with ease. They get simple, well
- defined and predictable JSON structure responses with all the fields needed to consume it without any unnecessary a hassle nor 
- other trickery. 
- 
- Android developers can use [ApiResponse](https://github.com/MarcinOrlowski/ApiResponse) library to handle `ResponseBuilder` 
- responses produced in their mobile applications.   
- 
- You are even covered in a case of emergency as provided Exception Handler ensures your API keeps talking JSON (and 
- not HTML) to its clients if case of any unexpected and unhandled exception.
- 
- Did I mention, you also get testing traits that would automatically cover your whole `ResponseBuilder` related code with 
- unit tests with just a few lines of code?
+ `ResponseBuilder` is written for REST API developers by REST API developer and is based on my long-lasting experience on both
+ "sides" as API dev and API consumer, of variety of REST APIs. It's lightweight, extensively tested, simple to use yet
+ flexible and powerful, withon-the-fly data conversion, localization support, automatic error message building, support
+ for chained APIs and (hopefully) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder`
+ is designed with **users of your API** in mind, to make dealing with your API a breeze. Simple JSON response, with well-defined
+ and predictable structure, easy to consume without a hassle nor trickery.
+
+ As a bonus, Android developers can use [ApiResponse](https://github.com/MarcinOrlowski/ApiResponse) library in their apps
+ to handle `ResponseBuilder` responses.
+
+ You are even covered in a case of emergency, as provided Exception Handler helper, ensures your API keeps talking JSON (and
+ not HTML) to its clients even in case of unexpected and unhandled exception.
+
+ Did I mention, you would also get free testing traits that automatically unit test your whole `ResponseBuilder` related code
+ and configuration with just a few lines of code?
 
 ## Usage examples ##
- 
+
  Operation successful? Conclude your controller method with:
 
 ```php
-return ResponseBuilder::success();
+return RB::success();
 ```
 
  and your client will get nice JSON like
@@ -78,10 +76,43 @@ return ResponseBuilder::success();
 }
 ```
 
- Something went wrong? Just type:
+ Need to additionally return extra payload with the response? Pass it as
+ argument to `success()`:
 
 ```php
-return ResponseBuilder::error(250);
+$flight = App\Flight::where(...)->get();
+return RB::success($flight); 
+```
+
+ and your client will get that data in `data` node of your response:
+
+```json
+{
+  "success": true,
+  "code": 0,
+  "locale": "en",
+  "message": "OK",
+  "data": {
+     "items": [
+        {
+          "airline": "lot",
+          "flight_number": "lo123",
+          ...
+       },
+       {
+          "airline": "american",
+          "flight_number": "am456",
+          ...
+       }
+    ]
+  }
+}
+```
+
+ Something went wrong and you want to tell the clinet about that? Just do:
+
+```php
+return RB::error(250);
 ```
 
  The following JSON response will then be returned:

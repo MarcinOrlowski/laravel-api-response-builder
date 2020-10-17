@@ -15,19 +15,20 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Converter;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 class InternalsTest extends TestCase
 {
     /**
-     * Tests if dist's config defaults matches ResponseBuilder::DEFAULT_ENCODING_OPTIONS
+     * Tests if dist's config defaults matches RB::DEFAULT_ENCODING_OPTIONS
      *
      * @return void
      */
     public function testDefaultEncodingOptionValue(): void
     {
-        $config_defaults = \Config::get(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS);
-        $this->assertEquals($config_defaults, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+        $config_defaults = \Config::get(RB::CONF_KEY_ENCODING_OPTIONS);
+        $this->assertEquals($config_defaults, RB::DEFAULT_ENCODING_OPTIONS);
     }
 
     /**
@@ -39,9 +40,9 @@ class InternalsTest extends TestCase
      */
     public function testGetClassesMappingWithWrongType(): void
     {
-        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER, false);
+        \Config::set(RB::CONF_KEY_CONVERTER_CLASSES, false);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\InvalidConfigurationException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod(Converter::class, 'getClassesMapping');
@@ -57,11 +58,11 @@ class InternalsTest extends TestCase
      */
     public function testGetClassesMappingMethodWithIncompleteMappingConfiguration(): void
     {
-        \Config::set(ResponseBuilder::CONF_KEY_CONVERTER, [
+        \Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
             self::class => [],
         ]);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\IncompleteConfigurationException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod(Converter::class, 'getClassesMapping');
@@ -79,7 +80,7 @@ class InternalsTest extends TestCase
         $obj = new BaseApiCodes();
         $max = $this->getProtectedConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$max + 1]);
     }
@@ -96,7 +97,7 @@ class InternalsTest extends TestCase
         $obj = new BaseApiCodes();
         $min = $this->getProtectedConstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$min - 1]);
     }
@@ -108,7 +109,7 @@ class InternalsTest extends TestCase
      */
     public function testGetCodeMessageKeyMethodWithCodeOutOfCodeRange(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
         BaseApiCodes::getCodeMessageKey(BaseApiCodes::getMaxCode() + 1);
     }
 

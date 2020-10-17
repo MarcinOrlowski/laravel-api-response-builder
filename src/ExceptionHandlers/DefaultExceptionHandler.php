@@ -16,7 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 final class DefaultExceptionHandler implements ExceptionHandlerContract
@@ -24,8 +24,8 @@ final class DefaultExceptionHandler implements ExceptionHandlerContract
 	public function handle(array $user_config, \Exception $ex): ?array
 	{
 		$defaults = [
-			ResponseBuilder::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-			ResponseBuilder::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+			RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+			RB::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 		];
 
 		return \array_replace($defaults, $user_config);

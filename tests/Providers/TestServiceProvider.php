@@ -2,7 +2,7 @@
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Providers;
 
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 /**
  * Laravel API Response Builder
@@ -32,7 +32,7 @@ class TestServiceProvider extends \MarcinOrlowski\ResponseBuilder\ResponseBuilde
     public function register()
     {
         foreach ($this->config_files as $file) {
-            $this->mergeConfigFrom(__DIR__ . "/../../config/{$file}", ResponseBuilder::CONF_CONFIG);
+            $this->mergeConfigFrom(__DIR__ . "/../../config/{$file}", RB::CONF_CONFIG);
         }
     }
 

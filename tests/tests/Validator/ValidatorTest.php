@@ -13,7 +13,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\Type;
 use MarcinOrlowski\ResponseBuilder\Validator;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 class ValidatorTest extends TestCase
 {
@@ -36,7 +38,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsIntWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsInt(__FUNCTION__, 'chicken');
     }
 
@@ -62,7 +64,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsObjectWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsObject(__FUNCTION__, 'chicken');
     }
 
@@ -83,7 +85,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsArrayWithInvalidData(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsArray(__FUNCTION__, false);
     }
 
@@ -108,7 +110,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsStringWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsString(__FUNCTION__, 666);
     }
 
@@ -133,7 +135,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsBoolWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsBool(__FUNCTION__, 666);
     }
 
@@ -153,7 +155,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsIntRangeVarType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
         Validator::assertIsIntRange(__FUNCTION__, 'string', 100, 200);
     }
 
@@ -164,7 +166,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsIntRangeMinMaxOrder(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\InvalidArgumentException::class);
         Validator::assertIsIntRange(__FUNCTION__, 300, 500, 200);
     }
 
@@ -176,7 +178,7 @@ class ValidatorTest extends TestCase
     public function testAssertIsIntRangeVarInMinMaxRangeWithDataOutOfRange(): void
     {
         // ensure main variable is an integer
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
         Validator::assertIsIntRange(__FUNCTION__, 100, 300, 500);
     }
 
@@ -213,50 +215,50 @@ class ValidatorTest extends TestCase
         /**
          * Test data. Each entry is an array with a following keys:
          *   item    : value to be tested or array of values from which one value will be randomly picked for testing.
-         *   types   : array of allowed `Validator::TYPE_xxx` types
+         *   types   : array of allowed `Type::xxx` types
          *   expected: @false if test is expected to fail (type of `item` is not in `types`), @true if it should pass.
          */
         $test_data = [
             [
                 'item'     => false,
-                'types'    => [Validator::TYPE_STRING],
+                'types'    => [Type::STRING],
                 'expected' => false,
             ],
             [
-                'item'     => false,
-                'types'    => [Validator::TYPE_BOOL],
-                'expected' => true,
+	            'item'     => false,
+	            'types'    => [Type::BOOLEAN],
+	            'expected' => true,
             ],
             [
                 'item'     => 'foo',
-                'types'    => [Validator::TYPE_STRING],
+                'types'    => [Type::STRING],
                 'expected' => true,
             ],
             [
                 'item'     => 23,
-                'types'    => [Validator::TYPE_STRING],
+                'types'    => [Type::STRING],
                 'expected' => false,
             ],
             [
                 'item'     => 666,
-                'types'    => [Validator::TYPE_INTEGER],
+                'types'    => [Type::INTEGER],
                 'expected' => true,
             ],
             [
-                'item'     => 'fail',
-                'types'    => [Validator::TYPE_INTEGER,
-                               Validator::TYPE_BOOL],
-                'expected' => false,
+	            'item'     => 'fail',
+	            'types'    => [Type::INTEGER,
+                               Type::BOOLEAN],
+	            'expected' => false,
             ],
 
         ];
 
         foreach ($test_data as $key => $data) {
-            $label = \sprintf('test_data[%d]', $key);
+            $var_name = \sprintf('test_data[%d]', $key);
 
             $test_passed = true;
             try {
-                Validator::assertIsType($label, $data['item'], $data['types']);
+                Validator::assertIsType($var_name, $data['item'], $data['types']);
             } catch (\Exception $ex) {
                 $test_passed = false;
             }

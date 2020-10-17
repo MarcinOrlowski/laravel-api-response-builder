@@ -14,8 +14,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
 class AutoConversionTest extends TestCase
@@ -33,20 +34,23 @@ class AutoConversionTest extends TestCase
 
         // AND having its class configured for auto conversion
         $model_class_name = \get_class($model);
+        $key = $this->getRandomString();
         $cfg = [
             $model_class_name => [
-                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+                RB::KEY_HANDLER => ToArrayConverter::class,
+                RB::KEY_KEY => $key,
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $cfg);
+        Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
         // WHEN this object is returned
-        $this->response = ResponseBuilder::success($model);
+        $this->response = RB::success($model);
         $j = $this->getResponseSuccessObject();
 
         // THEN returned response object should have it auto converted
         $this->assertNotNull($j->data);
-        $this->assertEquals($model_val, $j->data->val);
+        $this->assertObjectHasAttribute($key, $j->data);
+        $this->assertEquals($model_val, $j->data->{$key}->val);
     }
 
     /**
@@ -71,11 +75,11 @@ class AutoConversionTest extends TestCase
         $model_class_name = \get_class($model_1);
         $converter = [
             $model_class_name => [
-                ResponseBuilder::KEY_KEY     => 'should-not-be-used',
-                ResponseBuilder::KEY_HANDLER => ToArrayConverter::class,
+                RB::KEY_KEY     => 'should-not-be-used',
+                RB::KEY_HANDLER => ToArrayConverter::class,
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_CONVERTER, $converter);
+        Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $converter);
 
         // AND having the object as part of bigger data set
         $tmp_base = [];
@@ -88,7 +92,7 @@ class AutoConversionTest extends TestCase
         $data['nested'][ $model_2_data_key ] = $model_2;
 
         // WHEN this object is returned
-        $this->response = ResponseBuilder::success($data);
+        $this->response = RB::success($data);
         $j = $this->getResponseSuccessObject();
 
         // THEN returned response object should have it auto converted properly
@@ -113,31 +117,47 @@ class AutoConversionTest extends TestCase
     }
 
     /**
-     * Checks if buildResponse() would throw InvalidArgument exception on unsupported payload type
-     *
-     * @param mixed $data Test data as provided by dataProvider
+     * Checks if buildResponse() would accept support payload types
      *
      * @return void
      *
-     * @dataProvider dataProviderTestInvalidDataType
+     * @dataProvider provider_TestSuccessWithPrimitive
      */
-    public function testInvalidDataType($data): void
+    public function testSuccessWithPrimitive($value): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        ResponseBuilder::success($data);
+    	$value = (bool)mt_rand(0, 1);
+        $this->response = RB::success($value);
+	    $j = $this->getResponseSuccessObject();
+
+	    // THEN returned response object should have it auto converted
+	    $data = $j->data;
+	    $this->assertNotNull($data);
+
+	    /** @noinspection PhpUnhandledExceptionInspection */
+	    $converter = new Converter();
+	    $cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
+	    $this->assertIsArray($cfg);
+	    $this->assertNotEmpty($cfg);
+	    $key = $cfg[ RB::KEY_KEY ];
+	    $this->assertObjectHasAttribute($key, $data);
+	    $this->assertEquals($value, $data->{$key});
+
     }
 
-    /**
-     * Data provider for testBuildResponse_InvalidDataType test.
-     *
-     * @return array
-     */
-    public function dataProviderTestInvalidDataType(): array
-    {
-        return [
-            [(object)['no' => 'mapping']],
-            ['invalid'],
-            [666],
-        ];
+	public function provider_TestSuccessWithPrimitive(): array
+	{
+		return [
+			// array
+			[[$this->getRandomString() => $this->getRandomString()]],
+			// boolean
+			[(bool)mt_rand(0, 1)],
+			// integer
+			[mt_rand(0, 10000)],
+			// double
+			[((double)mt_rand(0, 10000)) / mt_rand(0, 100)],
+			// string
+			[$this->getRandomString()],
+		];
     }
+
 }

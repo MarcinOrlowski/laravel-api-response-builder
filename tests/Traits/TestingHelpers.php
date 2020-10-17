@@ -15,7 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -90,7 +90,7 @@ trait TestingHelpers
         $this->error_message_map = [
             $this->random_api_code => $this->random_api_code_message_key,
         ];
-        \Config::set(ResponseBuilder::CONF_KEY_MAP, $this->error_message_map);
+        \Config::set(RB::CONF_KEY_MAP, $this->error_message_map);
     }
 
     // -----------------------------------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ trait TestingHelpers
             $expected_api_code_offset = $this->getProtectedConstant($api_codes, 'OK_OFFSET');
         }
 
-        $expected_http_code = $expected_http_code ?? ResponseBuilder::DEFAULT_HTTP_CODE_OK;
+        $expected_http_code = $expected_http_code ?? RB::DEFAULT_HTTP_CODE_OK;
         if (($expected_http_code < 200) || ($expected_http_code > 299)) {
             $this->fail("TEST: Success HTTP code ($expected_http_code) in not in range: 200-299.");
         }
@@ -131,7 +131,7 @@ trait TestingHelpers
         }
 
         $j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $expected_message);
-        $this->assertEquals(true, $j->{ResponseBuilder::KEY_SUCCESS});
+        $this->assertEquals(true, $j->{RB::KEY_SUCCESS});
 
         return $j;
     }
@@ -147,7 +147,7 @@ trait TestingHelpers
      * @return \StdClass response object built from JSON
      */
     public function getResponseErrorObject(int $expected_api_code_offset = null,
-                                           int $expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR,
+                                           int $expected_http_code = RB::DEFAULT_HTTP_CODE_ERROR,
                                            string $message = null): \stdClass
     {
         if ($expected_api_code_offset === null) {
@@ -156,13 +156,13 @@ trait TestingHelpers
             $expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE();
         }
 
-        if ($expected_http_code > ResponseBuilder::ERROR_HTTP_CODE_MAX) {
+        if ($expected_http_code > RB::ERROR_HTTP_CODE_MAX) {
             $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be above %d',
-                $expected_http_code, ResponseBuilder::ERROR_HTTP_CODE_MAX));
+                $expected_http_code, RB::ERROR_HTTP_CODE_MAX));
         }
-        if ($expected_http_code < ResponseBuilder::ERROR_HTTP_CODE_MIN) {
+        if ($expected_http_code < RB::ERROR_HTTP_CODE_MIN) {
             $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be below %d',
-                $expected_http_code, ResponseBuilder::ERROR_HTTP_CODE_MIN));
+                $expected_http_code, RB::ERROR_HTTP_CODE_MIN));
         }
 
         $j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message);
@@ -210,7 +210,7 @@ trait TestingHelpers
     public function assertValidResponse(\stdClass $json_object): void
     {
         $this->assertIsObject($json_object);
-        $this->assertIsBool($json_object->{ResponseBuilder::KEY_SUCCESS});
+        $this->assertIsBool($json_object->{RB::KEY_SUCCESS});
         $this->assertIsInt($json_object->code);
         $this->assertIsString($json_object->locale);
         /** @noinspection UnNecessaryDoubleQuotesInspection */
@@ -272,7 +272,7 @@ trait TestingHelpers
                                       array $debug_data = null): HttpResponse
     {
         if (!\is_bool($success)) {
-            $this->fail(sprintf("'success' must be boolean ('%s' given)", \gettype($success)));
+            $this->fail(sprintf('"success" must be of type boolean ("%s" found)', \gettype($success)));
         }
 
         $http_code = null;
@@ -280,7 +280,7 @@ trait TestingHelpers
 
         /** @noinspection PhpUnhandledExceptionInspection */
         return $this->callProtectedMethod(
-            ResponseBuilder::asSuccess(), 'make', [$success,
+            RB::asSuccess(), 'make', [$success,
                                            $api_code_offset,
                                            $message_or_api_code_offset,
                                            $data,

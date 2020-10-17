@@ -21,38 +21,41 @@ use Illuminate\Support\Facades\Request;
  */
 class TestModelArrayable implements Arrayable
 {
-    /** @var string|null */
-    protected $val;
+	/** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
+	public const FIELD_NAME = 'val';
 
-    /**
-     * TestModel constructor.
-     *
-     * @param string $val
-     */
-    public function __construct(string $val)
-    {
-        $this->val = $val;
-    }
+	/** @var string|null */
+	protected $val;
 
-    /**
-     * @return string|null
-     */
-    public function getVal(): ?string
-    {
-        return $this->val;
-    }
+	/**
+	 * TestModel constructor.
+	 *
+	 * @param string $val
+	 */
+	public function __construct(string $val)
+	{
+		$this->val = $val;
+	}
 
-    /**
-     * Converts model to array. Signature must match JsonResource::toArray()
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    public function toArray($request = null): array
-    {
-        return [
-            'val' => $this->val,
-        ];
-    }
+	/**
+	 * @return string|null
+	 */
+	public function getVal(): ?string
+	{
+		return $this->val;
+	}
+
+	/**
+	 * Converts model to array. Signature must match JsonResource::toArray()
+	 *
+	 * @param Request $request
+	 *
+	 * @return array
+	 */
+	public function toArray($request = null): array
+	{
+		return [
+			self::FIELD_NAME => $this->val,
+		];
+	}
 }

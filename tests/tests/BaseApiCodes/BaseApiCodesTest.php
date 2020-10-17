@@ -14,7 +14,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 class BaseApiCodesTest extends TestCase
 {
@@ -25,10 +26,10 @@ class BaseApiCodesTest extends TestCase
      */
     public function testGetMinCodeMissingConfigKey(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\MissingConfigurationKeyException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
-        \Config::offsetUnset(ResponseBuilder::CONF_KEY_MIN_CODE);
+        \Config::offsetUnset(RB::CONF_KEY_MIN_CODE);
         BaseApiCodes::getMinCode();
     }
 
@@ -39,10 +40,10 @@ class BaseApiCodesTest extends TestCase
      */
     public function testGetMaxCodeMissingConfigKey(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\MissingConfigurationKeyException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
-        \Config::offsetUnset(ResponseBuilder::CONF_KEY_MAX_CODE);
+        \Config::offsetUnset(RB::CONF_KEY_MAX_CODE);
         BaseApiCodes::getMaxCode();
     }
 
@@ -53,10 +54,10 @@ class BaseApiCodesTest extends TestCase
      */
     public function testGetMapMissingConfigKey(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\MissingConfigurationKeyException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
-        \Config::offsetUnset(ResponseBuilder::CONF_KEY_MAP);
+        \Config::offsetUnset(RB::CONF_KEY_MAP);
         BaseApiCodes::getMap();
     }
 
@@ -67,10 +68,10 @@ class BaseApiCodesTest extends TestCase
      */
     public function testGetMapWrongConfig(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
-        \Config::set(ResponseBuilder::CONF_KEY_MAP, false);
+        \Config::set(RB::CONF_KEY_MAP, false);
         BaseApiCodes::getMap();
     }
 }

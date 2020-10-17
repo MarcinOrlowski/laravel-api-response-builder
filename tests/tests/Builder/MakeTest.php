@@ -14,10 +14,11 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 /**
- * Tests ResponseBuilder::make() method
+ * Tests RB::make() method
  */
 class MakeTest extends TestCase
 {
@@ -28,7 +29,7 @@ class MakeTest extends TestCase
      */
     public function testWrongMessage(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
 
         /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
@@ -47,7 +48,7 @@ class MakeTest extends TestCase
      */
     public function testCustomMessageAndCodeOutOfRange(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
 
         $api_code = $this->max_allowed_code + 1;    // invalid
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -63,10 +64,10 @@ class MakeTest extends TestCase
      */
     public function testInvalidEncodingOptions(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(Ex\InvalidTypeException::class);
 
         /** @noinspection PhpUndefinedClassInspection */
-        \Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, []);
+        \Config::set(RB::CONF_KEY_ENCODING_OPTIONS, []);
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK());
     }
@@ -97,7 +98,7 @@ class MakeTest extends TestCase
         // check if it returns the same when defaults enforced explicitly
         /** @noinspection PhpUnhandledExceptionInspection */
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data,
-            null, ResponseBuilder::DEFAULT_ENCODING_OPTIONS);
+            null, RB::DEFAULT_ENCODING_OPTIONS);
 
         $matches = [];
         $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
@@ -123,7 +124,7 @@ class MakeTest extends TestCase
 
         // check if it returns escaped
         /** @noinspection PhpUndefinedClassInspection */
-        \Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+        \Config::set(RB::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
         /** @noinspection PhpUnhandledExceptionInspection */
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
@@ -133,7 +134,7 @@ class MakeTest extends TestCase
         $this->assertEquals($test_string_escaped, $result_escaped);
 
         // check if it returns unescaped
-        \Config::set(ResponseBuilder::CONF_KEY_ENCODING_OPTIONS,
+        \Config::set(RB::CONF_KEY_ENCODING_OPTIONS,
             JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
         /** @noinspection PhpUnhandledExceptionInspection */
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
@@ -156,7 +157,7 @@ class MakeTest extends TestCase
      */
     public function testApiCodeNotIntNorString(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+	    $this->expectException(Ex\InvalidTypeException::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         /** @noinspection PhpParamsInspection */

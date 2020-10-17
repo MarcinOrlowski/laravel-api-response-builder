@@ -19,7 +19,7 @@ use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -43,8 +43,8 @@ class ExceptionHandlerHelperTest extends TestCase
 
         $this->assertValidResponse($response);
         $this->assertNull($response->data);
-        $this->assertEquals(BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(), $response->{ResponseBuilder::KEY_CODE});
-        $this->assertEquals($exception->getMessage(), $response->{ResponseBuilder::KEY_MESSAGE});
+        $this->assertEquals(BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(), $response->{RB::KEY_CODE});
+        $this->assertEquals($exception->getMessage(), $response->{RB::KEY_MESSAGE});
     }
 
     /**
@@ -55,7 +55,7 @@ class ExceptionHandlerHelperTest extends TestCase
     public function testErrorMethodWithDebugTrace(): void
     {
         /** @noinspection PhpUndefinedClassInspection */
-        \Config::set(ResponseBuilder::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
+        \Config::set(RB::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
 
         $exception = new \RuntimeException();
 
@@ -63,7 +63,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertValidResponse($j);
         $this->assertNull($j->data);
 
-        $key = ResponseBuilder::KEY_DEBUG;
+        $key = RB::KEY_DEBUG;
         $this->assertObjectHasAttribute($key, $j, sprintf("No '{key}' element in response structure found"));
 
         // Note that we do not check what debug node contains. It's on purpose as whatever ends up there
@@ -169,10 +169,10 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertEquals($expected_http_code, $eh_response->getStatusCode(),
             sprintf('Unexpected HTTP code value for "%s".', $exception_config_key));
         if ($expect_data) {
-            $data = $eh_response_json->{ResponseBuilder::KEY_DATA};
+            $data = $eh_response_json->{RB::KEY_DATA};
             $this->assertNotNull($data);
-            $this->assertObjectHasAttribute(ResponseBuilder::KEY_MESSAGES, $data);
-            $this->assertIsObject($data->{ResponseBuilder::KEY_MESSAGES});
+            $this->assertObjectHasAttribute(RB::KEY_MESSAGES, $data);
+            $this->assertIsObject($data->{RB::KEY_MESSAGES});
         }
     }
 
@@ -211,7 +211,7 @@ class ExceptionHandlerHelperTest extends TestCase
     {
         // http codes below 400 are invalid
         $config_http_code = HttpResponse::HTTP_OK;
-        $expected_http_code = ResponseBuilder::DEFAULT_HTTP_CODE_ERROR;
+        $expected_http_code = RB::DEFAULT_HTTP_CODE_ERROR;
 
         $ex = new HttpException(HttpResponse::HTTP_OK);
         $this->doTestErrorMethodFallbackMechanism($expected_http_code, $ex, $config_http_code);
@@ -228,7 +228,7 @@ class ExceptionHandlerHelperTest extends TestCase
         // get the translation array for default language
         $translation = $this->getTranslationForDefaultLang();
 
-//        for ($code = ResponseBuilder::ERROR_HTTP_CODE_MIN; $code <= ResponseBuilder::ERROR_HTTP_CODE_MAX; $code++) {
+//        for ($code = RB::ERROR_HTTP_CODE_MIN; $code <= RB::ERROR_HTTP_CODE_MAX; $code++) {
         {
             $code = 401;
             $key = "http_{$code}";
@@ -262,12 +262,12 @@ class ExceptionHandlerHelperTest extends TestCase
         $cfg = $this->getExceptionHandlerConfig();
 	    $keys = [
 		    HttpException::class,
-		    ResponseBuilder::KEY_DEFAULT,
+		    RB::KEY_DEFAULT,
 	    ];
         $this->assertArrayHasKeys($keys, $cfg);
 
         // check http_exception block and validate all required entries and the config content.
-        $http_cfg = $cfg[ HttpException::class ][ResponseBuilder::KEY_CONFIG];
+        $http_cfg = $cfg[ HttpException::class ][RB::KEY_CONFIG];
         $this->assertGreaterThanOrEqual(1, \count($http_cfg));
         $keys = [HttpResponse::HTTP_UNAUTHORIZED,];
 
@@ -275,11 +275,11 @@ class ExceptionHandlerHelperTest extends TestCase
             $this->assertArrayHasKey($key, $http_cfg);
             $this->checkExceptionHandlerConfigEntryStructure($http_cfg[ $key ], null, ($key === 'default'));
         }
-        $this->assertArrayHasKey(ResponseBuilder::KEY_DEFAULT, $http_cfg);
-        $this->checkExceptionHandlerConfigEntryStructure($http_cfg[ResponseBuilder::KEY_DEFAULT]);
+        $this->assertArrayHasKey(RB::KEY_DEFAULT, $http_cfg);
+        $this->checkExceptionHandlerConfigEntryStructure($http_cfg[RB::KEY_DEFAULT]);
 
         // check default handler config
-        $this->checkExceptionHandlerConfigEntryStructure($cfg[ResponseBuilder::KEY_DEFAULT][ResponseBuilder::KEY_CONFIG]);
+        $this->checkExceptionHandlerConfigEntryStructure($cfg[RB::KEY_DEFAULT][RB::KEY_CONFIG]);
     }
 
     /**
@@ -288,7 +288,7 @@ class ExceptionHandlerHelperTest extends TestCase
     public function testBaseConfigHttpExceptionConfig(): void
     {
         $http_cfg = $this->getExceptionHandlerConfig();
-        $cfg = $http_cfg[ HttpException::class ][ResponseBuilder::KEY_CONFIG];
+        $cfg = $http_cfg[ HttpException::class ][RB::KEY_CONFIG];
 
         foreach ($cfg as $code => $params) {
             if (\is_int($code)) {
@@ -312,17 +312,17 @@ class ExceptionHandlerHelperTest extends TestCase
         $http_code = HttpResponse::HTTP_SERVICE_UNAVAILABLE;
         $msg_key = $this->getRandomString('key');
         $cfg = [
-                ResponseBuilder::KEY_DEFAULT => [
-	                ResponseBuilder::KEY_HANDLER => DefaultExceptionHandler::class,
-	                ResponseBuilder::KEY_CONFIG  => [
-		                ResponseBuilder::KEY_API_CODE  => $api_code,
-		                ResponseBuilder::KEY_HTTP_CODE => $http_code,
-		                ResponseBuilder::KEY_MSG_KEY   => $msg_key,
-		                ResponseBuilder::KEY_MSG_FORCE => false,
+                RB::KEY_DEFAULT => [
+	                RB::KEY_HANDLER => DefaultExceptionHandler::class,
+	                RB::KEY_CONFIG  => [
+		                RB::KEY_API_CODE  => $api_code,
+		                RB::KEY_HTTP_CODE => $http_code,
+		                RB::KEY_MSG_KEY   => $msg_key,
+		                RB::KEY_MSG_FORCE => false,
 	                ],
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $cfg);
+        Config::set(RB::CONF_KEY_EXCEPTION_HANDLER, $cfg);
 
         // GIVEN exception with message that should be handled
         $ex_msg = $this->getRandomString('user_msg');
@@ -364,7 +364,7 @@ class ExceptionHandlerHelperTest extends TestCase
                 ],
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $cfg);
+        Config::set(RB::CONF_KEY_EXCEPTION_HANDLER, $cfg);
 
         // GIVEN exception that should be handled
         $ex = new \RuntimeException('this message should be ignored');
@@ -399,9 +399,9 @@ class ExceptionHandlerHelperTest extends TestCase
     public function testProcessExceptionWithMsgEnforceWithNoFallbackMsgKey(): void
     {
         $api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
-        $http_code = mt_rand(ResponseBuilder::ERROR_HTTP_CODE_MIN, ResponseBuilder::ERROR_HTTP_CODE_MAX);
+        $http_code = mt_rand(RB::ERROR_HTTP_CODE_MIN, RB::ERROR_HTTP_CODE_MAX);
         do {
-            $fallback_http_code = mt_rand(ResponseBuilder::ERROR_HTTP_CODE_MIN, ResponseBuilder::ERROR_HTTP_CODE_MAX);
+            $fallback_http_code = mt_rand(RB::ERROR_HTTP_CODE_MIN, RB::ERROR_HTTP_CODE_MAX);
         } while ($fallback_http_code === $http_code);
 
         $ex_cfg = [
@@ -466,7 +466,7 @@ class ExceptionHandlerHelperTest extends TestCase
                 ],
             ],
         ];
-        Config::set(ResponseBuilder::CONF_KEY_EXCEPTION_HANDLER, $cfg);
+        Config::set(RB::CONF_KEY_EXCEPTION_HANDLER, $cfg);
 
         $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
                 $ex,
@@ -522,8 +522,8 @@ class ExceptionHandlerHelperTest extends TestCase
                                                                  bool $is_default_handler = false): void
     {
         if (\is_int($code)) {
-            $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $code);
-            $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $code);
+            $this->assertGreaterThanOrEqual(RB::ERROR_HTTP_CODE_MIN, $code);
+            $this->assertLessThanOrEqual(RB::ERROR_HTTP_CODE_MAX, $code);
         }
 
         if ($is_default_handler) {
@@ -555,8 +555,8 @@ class ExceptionHandlerHelperTest extends TestCase
 
         if (\array_key_exists('http_code', $params)) {
             $this->assertIsInt($params['http_code']);
-            $this->assertGreaterThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MIN, $params['http_code']);
-            $this->assertLessThanOrEqual(ResponseBuilder::ERROR_HTTP_CODE_MAX, $params['http_code']);
+            $this->assertGreaterThanOrEqual(RB::ERROR_HTTP_CODE_MIN, $params['http_code']);
+            $this->assertLessThanOrEqual(RB::ERROR_HTTP_CODE_MAX, $params['http_code']);
         }
 
         // check config does not contain any unknown keys

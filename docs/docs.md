@@ -27,7 +27,7 @@
 
  Predictability, simplicity and no special-case is the key of the `ResponseBuilder` and all responses created by
  this library **guarantee** consistent JSON structure by design.
- 
+
  By default response always contain at least the following elements:
 
 ```json
@@ -44,9 +44,9 @@
 
   * `success` (**boolean**) indicates API method failure or success,
   * `code` (**int**) is your own return code (usually used when returning error message or other failure),
-  * `locale` (**string**) represents locale used for returned error message (obtained automatically via 
+  * `locale` (**string**) represents locale used for returned error message (obtained automatically via
     `\App::getLocale()`). This helps processing the response if you support multiple languages,
-  * `message` (**string**) human readable message that is ready to display and explains human readable explanation 
+  * `message` (**string**) human readable message that is ready to display and explains human readable explanation
     of the `code` value,
   * `data` (**object**|**array**|**null**) if you return any additional data with your reply, it would end here.
     If no extra data is needed, that key still be present in the response with `null` value.
@@ -66,16 +66,16 @@
 #### Code Ranges ####
 
  In one of my projects we had multiple APIs chained together (so one API called another, remote API). I wanted to be able to chain
- API invocations in the way that in case of problems (and cascading failure) I still would able to tell which one failed first. 
+ API invocations in the way that in case of problems (and cascading failure) I still would able to tell which one failed first.
  For example our API client app calls method of publicly exposed API "A". That API "A" internally calls method of completely
  different and separate API "B". Under the hood API "B" delegates some work and talks to API "C". When something go wrong and
  "C"'s method fail, client shall see "C"'s error code and error message, not the "A"'s. To achieve this each API you chain return
- unique error codes and the values are unique per whole chain To support that `ResponseBuilder` features code ranges, allowing 
+ unique error codes and the values are unique per whole chain To support that `ResponseBuilder` features code ranges, allowing
  you to configure `min_code` and `max_code` you want to be allowed to use in given API. `ResponseBuilder` will ensure no values not
- from that range is ever returned, so to make the whole chain "clear", you only need to properly assign non-overlapping ranges to 
+ from that range is ever returned, so to make the whole chain "clear", you only need to properly assign non-overlapping ranges to
  your APIs and `ResponseBuilder` do the rest. Any attempt to violate code range ends up with exception thrown.
 
- **IMPORTANT:** first `20` codes in your range (from `0` to `19` inclusive) are reserved for `ResponseBuilder` internals and 
+ **IMPORTANT:** first `20` codes in your range (from `0` to `19` inclusive) are reserved for `ResponseBuilder` internals and
  must not be used directly nor assigned to your codes.
 
  **NOTE:** code ranges cannot be turned off, but if you do not need it or you just have one API or need no chaining, then just
@@ -85,31 +85,31 @@
 
 ## Exposed Methods ##
 
- Starting from version 6.4, `ResponseBuilder` uses new API implementation that uses 
+ Starting from version 6.4, `ResponseBuilder` uses new API implementation that uses
  [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern), which is far more flexible that previous bag of methods.
- 
+
 ### Helpers ###
 
  But while Builder is pretty proverful interface, if you need to return just success or error, without too many additional data
  attached, using it may look like overkill, therefore there are two helper methods (from old API) that serve as shortcuts
  for reporting success or failure:
- 
+
  * `success($data, $api_code, $placeholders, $http_code, $json_opts)`
- 
+
     Returns success indicating message. You can ommit `$api_code` to fall back to default code for `OK`). All params are
     optional. Usage example:
-    
+
     ```php
-    return ResponseBuilder::success();
+    return RB::success();
     ```
-    
+
   * `public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null, int $json_opts = null)`
 
     Returns error indicating response. `$api_code` must not equal to value indicating `OK` (`ApiCodes::OK()`), all other params
     are optional.
-    
+
     ```php
-    return ResponseBuilder::error(ApiCodes::SOMETHING_FAILED);
+    return RB::error(ApiCodes::SOMETHING_FAILED);
     ```
 
 ### Builder ###
@@ -118,7 +118,7 @@ To obtain instance of the Builder, two static methods: `asSuccess()` and `asErro
  code would return response indicating a success, with additional data and custom HTTP code:
 
 ```php
-return ResponseBuilder::asSuccess()
+return RB::asSuccess()
       ->withData($data)
       ->withHttpCode(HttpResponse::HTTP_CREATED)
       ->build();
@@ -127,54 +127,54 @@ return ResponseBuilder::asSuccess()
  For simplicity of use, it's recommended to add the following `use` to your code:
 
 ```php
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 ```
 
  If you dislike typing `ResponseBuilder` you can use [namespace aliasing](https://www.php.net/manual/en/language.namespaces.importing.php):
- 
+
 ```php
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 ```
-    
+
  Then use short form in your code:
- 
+
 ```php
-return RB::success(); 
+return RB::success();
 ```
 
  Builder static methods:
- 
- * `asSuccess($api_code)`: Returns Builder instance configured to return success indicating message. 
+
+ * `asSuccess($api_code)`: Returns Builder instance configured to return success indicating message.
    You can ommit `$api_code` to fall back to default code for `OK` (`ApiCodes::OK()`).
  * `asError($api_code)`: Returns Builder instance configured to produce error indicating response. `$api_code`
    must not equal to value indicating `OK` (`ApiCodes::OK()`).
- 
+
  In both cases `api_code` (**int**) is any integer value you want to be returned as `code` in final response.
- 
+
  Parameter setters:
- 
- * `withHttpCode($code)`: (**int**) valid HTTP return code (see `HttpResponse` class for useful constants). For 
-   `success()` responses, `$http_code` must be in range from 200 to 299 (inclusive), while for `error()` it must be in 
-   range from 400 to 599 (inclusive) otherwise `\InvalidArgumentException` will be thrown. HTTP codes from 3xx pool 
+
+ * `withHttpCode($code)`: (**int**) valid HTTP return code (see `HttpResponse` class for useful constants). For
+   `success()` responses, `$http_code` must be in range from 200 to 299 (inclusive), while for `error()` it must be in
+   range from 400 to 599 (inclusive) otherwise `\InvalidArgumentException` will be thrown. HTTP codes from 3xx pool
    (redirection) are not allowed. Please see [W3 specification](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
    for more information about all HTTP codes and their meaning.
  * `withData($data)`: (**object**|**array**|**null**) data you want to be returned in your response in `data` node,
  * `withJsonOptions($opts)`: (**int**) data-to-json conversion options as
-   [documented](http://php.net/manual/en/function.json-encode.php). Pass `null` for 
-   default `ResponseBuilder::DEFAULT_ENCODING_OPTIONS` ([source](../src/ResponseBuilder.php)). Please see
+   [documented](http://php.net/manual/en/function.json-encode.php). Pass `null` for
+   default `RB::DEFAULT_ENCODING_OPTIONS` ([source](../src/ResponseBuilder.php)). Please see
    [configuration](../config/response_builder.php) file and config's `encoding_options` too.
- * `withMessage($message)`: (**string**) custom message to be returned as part of error response 
+ * `withMessage($message)`: (**string**) custom message to be returned as part of error response
    (avoid, use error code mapping feature).
  * `withPlaceholders($placeholders)`: (**array**) array of placeholders as expected by `Lang::get()` while building
    response `message` based on localization files (as configured in i.e. `map`) or strings with placeholders.
  * `withHttpHeaders($headers)`
- 
+
  Once all is arguments are passed, call `build()` to conclude building and have final `HttpResponse` object returned.
 
  **IMPORTANT:** To enforce constant JSON structure of the response, `data` node is always an JSON object, therefore passing
  anything but `object` or `array` to `withData()` would trigger internal type casting. There's no smart logic here, just
  ordinary `$data = (object)$data;`. The only exception are classes configured with "classes" mapping (see configuration
- details). In such case configured conversion method is called on the provided object and result is returned instead. 
+ details). In such case configured conversion method is called on the provided object and result is returned instead.
  Several classes pre-configured but you can add additional classes just by creating entry in configuration `converter` mapping.
  See [Data Conversion](#data-conversion) for more information.
 
@@ -188,7 +188,7 @@ return RB::success();
 
 ```php
 $flight = App\Flight::where(...)->first();
-return ResponseBuilder::success($flight);
+return RB::success($flight);
 ```
 
  will return:
@@ -207,7 +207,7 @@ return ResponseBuilder::success($flight);
 
 ```php
 $flights = App\Flight::where(...)->get();
-return ResponseBuilder::success($flights);
+return RB::success($flights);
 ```
 
  which would return array of objects:
@@ -234,31 +234,35 @@ return ResponseBuilder::success($flights);
 'converter' => [
     \Illuminate\Database\Eloquent\Model::class          => [
         'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        'key'     => 'items',
         // 'pri'     => 0,
     ],
     \Illuminate\Database\Eloquent\Collection::class     => [
         'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        'key'     => 'items',
         // 'pri'     => 0,
     ],
 ],
 ```
 
  Meaning of parameters:
- 
+
  * `handler` (mandatory) specifies class name that implements `ConverterContract` interface that is capable of doing the
    conversion of object of given class.
- * `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one 
-   class extending another and you want to support both of them with separate configuration, then you **must** ensure child 
-   class has higher priority than it's parent class.   
+ * `key` (mandatory) is a string, used by some converters when dealing with object of given class being returned directly
+   as response payload (i.e. `success($collection)`).
+ * `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one
+   class extending another and you want to support both of them with separate configuration, then you **must** ensure child
+   class has higher priority than it's parent class.
 
  The above configures two classes (`Model` and `Collection`). Whenever object of that class is spotted, method specified in
  `method` key would be called on that object and data that method returns will be returned in JSON object.
- 
- **IMPORTANT:** For each object `ResponseBuilder` checks if we have configuration entry matching **exactly** object class 
- name. If no such mapping is found, then the whole configuration is walked again, but this time we take inheritance into 
+
+ **IMPORTANT:** For each object `ResponseBuilder` checks if we have configuration entry matching **exactly** object class
+ name. If no such mapping is found, then the whole configuration is walked again, but this time we take inheritance into
  consideration and use `instanceof` to see if we have a match, therefore you need to pay attention your config specifies
  lower priority (i.e. `-10`) for all the generic handlers. Doing that ensures any more specific handler will be checked
- first. If no handler is found for given object, the exception is thrown. 
+ first. If no handler is found for given object, the exception is thrown.
 
  When you pass the array it will be walked recursively and the conversion will take place on all known elements as well:
 
@@ -328,7 +332,7 @@ composer require marcin-orlowski/laravel-api-response-builder:6.4
 
 #### Setup ####
 
- `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once 
+ `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once
  installed.
 
 #### ApiCodes class ####
@@ -455,9 +459,9 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
  and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`. As all responses are
  always produced with use of `buildResponse()` internally, your **all** responses will be affected
  the same way. For example:
- 
+
 ```php
-MyResponseBuilder::success();
+MyRB::success();
 ```
 
  which should then return your desired JSON structure:
@@ -477,7 +481,7 @@ MyResponseBuilder::success();
 
 ```php
 $data = [ 'foo'=>'bar ];
-return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
+return MyRB::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
 ```
 
  would produce:
@@ -498,7 +502,7 @@ return MyResponseBuilder::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
 ### Overriding code to message conversion ###
 
  `ResponseBuilder` automatically provides human readable error messages for each API code used but if for any
- reason you want to take control on this, you can now provide own implementation of `ResponseBuilder::getMessageForApiCode()`.
+ reason you want to take control on this, you can now provide own implementation of `RB::getMessageForApiCode()`.
 
 ```php
 <?php

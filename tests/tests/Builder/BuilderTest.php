@@ -15,7 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 class BuilderTest extends TestCase
 {
@@ -28,8 +28,8 @@ class BuilderTest extends TestCase
     {
         $expected_api_code = BaseApiCodes::OK();
 
-        $builder = ResponseBuilder::asSuccess($expected_api_code);
-        $this->assertInstanceOf(ResponseBuilder::class, $builder);
+        $builder = RB::asSuccess($expected_api_code);
+        $this->assertInstanceOf(RB::class, $builder);
         $this->response = $builder->build();
 
         $j = $this->getResponseSuccessObject();
@@ -59,8 +59,8 @@ class BuilderTest extends TestCase
             $key4 => $val4,
         ];
 
-        $builder = ResponseBuilder::asSuccess();
-        $this->assertInstanceOf(ResponseBuilder::class, $builder);
+        $builder = RB::asSuccess();
+        $this->assertInstanceOf(RB::class, $builder);
         $this->response = $builder
             ->withHttpHeaders($headers)
             ->build();
@@ -77,7 +77,7 @@ class BuilderTest extends TestCase
      */
     public function testErrorWithOkCode(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        ResponseBuilder::asError(BaseApiCodes::OK());
+        $this->expectException(\OutOfBoundsException::class);
+        RB::asError(BaseApiCodes::OK());
     }
 }

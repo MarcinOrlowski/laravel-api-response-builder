@@ -5,7 +5,7 @@ namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -23,8 +23,8 @@ final class ValidationExceptionHandler implements ExceptionHandlerContract
 	public function handle(array $user_config, \Exception $ex): ?array
 	{
 		return [
-			ResponseBuilder::KEY_API_CODE  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
-			ResponseBuilder::KEY_HTTP_CODE => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+			RB::KEY_API_CODE  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+			RB::KEY_HTTP_CODE => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
 		];
 	}
 }

@@ -2,9 +2,19 @@
 
 # REST API Response Builder for Laravel #
 
-See [compatibility docs](docs/compatibility.md) for details about backward compatibility!
+This library follows [Semantic versioning](https://semver.org).  
+See [compatibility docs](docs/compatibility.md) for details about backward compatibility
+before doing major upgrade!
 
 ## CHANGE LOG ##
+
+* v9.0.0 (2020-10-17)
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * [RB-156] Added logic to deal with directly returned objects or arrays.
+   * [RB-158] Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
+     `double`, `integer` and `string` types, configurable via new `converter/primitives`.
+   * Removed hadrcoded `val` key used by `JsonSerializable` converter.
+   * Introduced own exceptions for better error reporting. See [src/Exceptions](src/Exceptions) for more info.
 
 * v8.1.1 (2020-10-15)
    * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from
@@ -62,7 +72,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Data converter now handles objects implementing `JsonSerializable` and `Arrayable` contracts as well.
 
 * v6.3.2 (2019-11-07)
-   * Added `ResponseBuilder::successWithMessage()` method.
+   * Added `RB::successWithMessage()` method.
    * Entries in `classes` config array can now have `pri` (default 0) to enforce order while
      merging config with a built-in configuration.
    * Persian translation (Thanks to @FaridAghili).
@@ -75,8 +85,8 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * v6.3.0 (2019-11-02)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
-   * Signature of `ResponseBuilder::buildResponse()` changed to allow customization of final `message` entry (@hawezo).
-   * Moved all code that produces messages for API codes to `ResponseBuilder::getMessageForApiCode()`.
+   * Signature of `RB::buildResponse()` changed to allow customization of final `message` entry (@hawezo).
+   * Moved all code that produces messages for API codes to `RB::getMessageForApiCode()`.
    * Added `Validator::assertType()` helper method that validates var against set of allowed types.
    * Added `Validator::assertString()` helper.
 
@@ -125,20 +135,20 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * Reserved codes reduced to 19 (from former 63).
    * Added type hints to all method arguments and return values
    * `ExceptionHandler` responses use exception specific HTTP code.
-   * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing data properly.
+   * Fixed `RB::errorWithMessageAndData()` not passing data properly.
    * Fixed exception message thrown by `ApiCodesHelpers::getMaxCode()`.
    * Corrected test cases list in `testSuccess_DataAndHttpCode()`.
    * Fixed error code fallback in `testRender_HttpException()` test.
    * Fixed `testError_DebugTrace()` not containing any asserts.
    * Reformatted code to not exceed 132 columns, for better on-line readability.
-   * `ResponseBuilder::errorWithDataAndHttpCode()` accepts now `null` as http code.
-   * `ResponseBuilder::errorWithHttpCode()` accepts now `null` as http code.
+   * `RB::errorWithDataAndHttpCode()` accepts now `null` as http code.
+   * `RB::errorWithHttpCode()` accepts now `null` as http code.
    * Fixed `ExceptionHandlerHelper` replacing HTTP codes above 499 with 400.
    * Changed default message for `HTTP_NOT_FOUND` error.
    * `ExceptionHandler` now falls back to `EX_UNCAUGHT_EXCEPTION` for all the cases.
    * Simplified `ExceptionHandlerHelperTest::testRender_HttpException()` test.
    * Removed `exception_handler.use_exception_message_first` feature.
-   * Removed `ResponseBuilder::DEFAULT_API_CODE_OK` constant.
+   * Removed `RB::DEFAULT_API_CODE_OK` constant.
    * Removed `getReservedMinCode()`, `getReservedMinCode()`, `getReservedMessageKey()` methods.
    * Removed internal API code constants. Use corresponding methods to get proper code value.
    * Reimplemented Laravel config merger to support multi-dimensional configuration arrays too.
@@ -150,7 +160,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
 
 * v4.1.9 (2019-08-08)
    * Fixed `ApiCodesHelpers::getMaxCode()` exception message
-   * Fixed `ResponseBuilder::errorWithMessageAndData()` not passing args properly
+   * Fixed `RB::errorWithMessageAndData()` not passing args properly
 
 * v4.1.8 (2019-08-07)
    * Added Laravel 6 to testing setup
@@ -199,7 +209,7 @@ See [compatibility docs](docs/compatibility.md) for details about backward compa
    * `[RB-59]` Added option to remap response JSON keys to user provided values
    * `[RB-54]` Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
    * `[RB-37]` Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defaults
-   * `[RB-47]` Exception Handler now supports `FormRequests` and returns all messages in `ResponseBuilder::KEY_MESSAGES`
+   * `[RB-47]` Exception Handler now supports `FormRequests` and returns all messages in `RB::KEY_MESSAGES`
    * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled same way `authentication_exception` is
    * `[RB-56]` Added configurable key for debug trace added to returned JSON response (if enabled)
    * Added traits to help testing your config and ApiCodes with ease. See `Unit Testing your ApiCodes` docs for details

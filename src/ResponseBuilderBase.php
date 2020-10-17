@@ -50,39 +50,74 @@ abstract class ResponseBuilderBase
 	/**
 	 * Configuration keys
 	 */
-	public const CONF_CONFIG                     = 'response_builder';
-	public const CONF_KEY_DEBUG_DEBUG_KEY        = self::CONF_CONFIG . '.debug.debug_key';
-	public const CONF_KEY_DEBUG_EX_TRACE_ENABLED = self::CONF_CONFIG . '.debug.exception_handler.trace_enabled';
-	public const CONF_KEY_DEBUG_EX_TRACE_KEY     = self::CONF_CONFIG . '.debug.exception_handler.trace_key';
-	public const CONF_KEY_CONVERTER_DEBUG_KEY    = self::CONF_CONFIG . '.debug.converter.debug_enabled';
-	public const CONF_KEY_MAP                    = self::CONF_CONFIG . '.map';
-	public const CONF_KEY_ENCODING_OPTIONS       = self::CONF_CONFIG . '.encoding_options';
-	public const CONF_KEY_CONVERTER              = self::CONF_CONFIG . '.converter';
-	public const CONF_KEY_MIN_CODE               = self::CONF_CONFIG . '.min_code';
-	public const CONF_KEY_MAX_CODE               = self::CONF_CONFIG . '.max_code';
-	public const CONF_KEY_EXCEPTION_HANDLER      = self::CONF_CONFIG . '.exception_handler';
+
+	/** @var string */
+	public const CONF_CONFIG                            = 'response_builder';
+	/** @var string */
+	public const CONF_KEY_DEBUG_DEBUG_KEY               = self::CONF_CONFIG . '.debug.debug_key';
+	/** @var string */
+	public const CONF_KEY_DEBUG_EX_TRACE_ENABLED        = self::CONF_CONFIG . '.debug.exception_handler.trace_enabled';
+	/** @var string */
+	public const CONF_KEY_DEBUG_EX_TRACE_KEY            = self::CONF_CONFIG . '.debug.exception_handler.trace_key';
+	/** @var string */
+	public const CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED = self::CONF_CONFIG . '.debug.converter.debug_enabled';
+	/** @var string */
+	public const CONF_KEY_MAP                           = self::CONF_CONFIG . '.map';
+	/** @var string */
+	public const CONF_KEY_ENCODING_OPTIONS              = self::CONF_CONFIG . '.encoding_options';
+	/** @var string */
+	public const CONF_KEY_CONVERTER                     = self::CONF_CONFIG . '.converter';
+	/** @var string */
+	public const CONF_KEY_CONVERTER_CLASSES             = self::CONF_KEY_CONVERTER . '.classes';
+	/** @var string */
+	public const CONF_KEY_CONVERTER_PRIMITIVES          = self::CONF_KEY_CONVERTER . '.primitives';
+	/** @var string */
+	public const CONF_KEY_MIN_CODE                      = self::CONF_CONFIG . '.min_code';
+	/** @var string */
+	public const CONF_KEY_MAX_CODE                      = self::CONF_CONFIG . '.max_code';
+	/** @var string */
+	public const CONF_KEY_EXCEPTION_HANDLER             = self::CONF_CONFIG . '.exception_handler';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information
 	 */
+	/** @var string */
 	public const KEY_DEBUG     = 'debug';
+	/** @var string */
 	public const KEY_TRACE     = 'trace';
+	/** @var string */
 	public const KEY_CLASS     = 'class';
+	/** @var string */
 	public const KEY_FILE      = 'file';
+	/** @var string */
 	public const KEY_LINE      = 'line';
+	/** @var string */
 	public const KEY_KEY       = 'key';
+	/** @var string */
 	public const KEY_PRI       = 'pri';
+	/** @var string */
 	public const KEY_HANDLER   = 'handler';
+	/** @var string */
 	public const KEY_SUCCESS   = 'success';
+	/** @var string */
 	public const KEY_CODE      = 'code';
+	/** @var string */
 	public const KEY_LOCALE    = 'locale';
+	/** @var string */
 	public const KEY_MESSAGE   = 'message';
+	/** @var string */
 	public const KEY_DATA      = 'data';
+	/** @var string */
 	public const KEY_CONFIG    = 'config';
+	/** @var string */
 	public const KEY_DEFAULT   = 'default';
+	/** @var string */
 	public const KEY_API_CODE  = 'api_code';
+	/** @var string */
 	public const KEY_HTTP_CODE = 'http_code';
+	/** @var string */
 	public const KEY_MSG_KEY   = 'msg_key';
+	/** @var string */
 	public const KEY_MSG_FORCE = 'msg_force';
 
 	/**
@@ -91,16 +126,13 @@ abstract class ResponseBuilderBase
 	 *
 	 * @var string
 	 */
+	/** @var string */
 	public const KEY_MESSAGES = 'messages';
 
 	/**
-	 * Default JSON encoding options. Must be specified as final value (i.e. 271) and NOT
-	 * PHP expression i.e. `JSON_HEX_TAG|JSON_HEX_APOS|...` as such syntax is not yet supported
-	 * by PHP.
-	 *
-	 * 271 = JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE
+	 * Default JSON encoding options.
 	 *
 	 * @var int
 	 */
-	public const DEFAULT_ENCODING_OPTIONS = 271;
+	public const DEFAULT_ENCODING_OPTIONS = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE;
 }
