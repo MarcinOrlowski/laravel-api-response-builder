@@ -40,20 +40,17 @@
 
 ## Benefits ##
 
- `ResponseBuilder` is written for REST API developers by REST API developer and is based on my long-lasting experience on both
- "sides" as API dev and API consumer, of variety of REST APIs. It's lightweight, extensively tested, simple to use yet
- flexible and powerful, withon-the-fly data conversion, localization support, automatic error message building, support
- for chained APIs and (hopefully) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder`
- is designed with **users of your API** in mind, to make dealing with your API a breeze. Simple JSON response, with well-defined
- and predictable structure, easy to consume without a hassle nor trickery.
-
- As a bonus, Android developers can use [ApiResponse](https://github.com/MarcinOrlowski/ApiResponse) library in their apps
- to handle `ResponseBuilder` responses.
+ `ResponseBuilder` is written for REST API developers by REST API developer and is based on long-lasting experience on both
+ "sides" of API. It's lightweight, extensively tested, simple to use yet flexible and powerful, with support for on-the-fly
+ data conversion, localization, automatic message building, chained APIs and (hopefully) exhaustive documentation.
+ But that's not all! The JSON structure produced by `ResponseBuilder` is designed with **users of your API** in mind,
+ to make dealing with your API a breeze. Simple JSON response, with well-defined and predictable structure, easy to
+ consume without any hassle or trickery.
 
  You are even covered in a case of emergency, as provided Exception Handler helper, ensures your API keeps talking JSON (and
- not HTML) to its clients even in case of unexpected and unhandled exception.
+ not HTML) to its clients even in case of unexpected.
 
- Did I mention, you would also get free testing traits that automatically unit test your whole `ResponseBuilder` related code
+ Did I mention, you would also get testing traits that automatically unit test your whole `ResponseBuilder` related code
  and configuration with just a few lines of code?
 
 ## Usage examples ##
