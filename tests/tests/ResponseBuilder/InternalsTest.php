@@ -68,7 +68,27 @@ class InternalsTest extends TestCase
         $this->callProtectedMethod(Converter::class, 'getClassesMapping');
     }
 
-    /**
+	/**
+	 * Tests if getClassesMapping() would throw an exception if class mapping configuration
+	 * is not an array
+	 *
+	 * @return void
+	 *
+	 * @throws \ReflectionException
+	 */
+	public function testGetClassesMappingMethodWithIncorrectMappingConfiguration(): void
+	{
+		\Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
+			self::class => 123,
+		]);
+
+		$this->expectException(Ex\InvalidConfigurationElementException::class);
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$this->callProtectedMethod(Converter::class, 'getClassesMapping');
+	}
+
+	/**
      * Tests getCodeForInternalOffset() out of bounds handling
      *
      * @return void
