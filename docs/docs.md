@@ -114,7 +114,7 @@
 
 ### Builder ###
 
-To obtain instance of the Builder, two static methods: `asSuccess()` and `asError()` are now exposed. For example, the following
+ There are two static methods that return instance of the Builder: `asSuccess()` and `asError()`. For example, the following
  code would return response indicating a success, with additional data and custom HTTP code:
 
 ```php
@@ -124,19 +124,8 @@ return RB::asSuccess()
       ->build();
 ```
 
- For simplicity of use, it's recommended to add the following `use` to your code:
-
-```php
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-```
-
- If you dislike typing `ResponseBuilder` you can use [namespace aliasing](https://www.php.net/manual/en/language.namespaces.importing.php):
-
-```php
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-```
-
- Then use short form in your code:
+ Naturally, if you just need to return success without any payload, just call `success()` as you would have in previous
+ versions:
 
 ```php
 return RB::success();
@@ -169,7 +158,7 @@ return RB::success();
    response `message` based on localization files (as configured in i.e. `map`) or strings with placeholders.
  * `withHttpHeaders($headers)`
 
- Once all is arguments are passed, call `build()` to conclude building and have final `HttpResponse` object returned.
+ Once all the arguments are passed, call `build()` to have final `HttpResponse` object returned.
 
  **IMPORTANT:** To enforce constant JSON structure of the response, `data` node is always an JSON object, therefore passing
  anything but `object` or `array` to `withData()` would trigger internal type casting. There's no smart logic here, just

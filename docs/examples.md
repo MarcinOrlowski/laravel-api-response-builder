@@ -7,6 +7,7 @@
 
 ## Table of contents ##
 
+
  * [Usage examples](#usage-examples)
    * [Use clause](#use-clause)
    * [Success](#success)
@@ -17,20 +18,15 @@
 ## Usage examples ##
 
  The following examples assume `ResponseBuilder` is properly installed and available to your Laravel application.
- Installation steps are described in details in further chapters, if help is needed.
+ See [Installation and Configuration](docs.md#installation-and-configuration) for more details.
 
 ### Use clause ###
 
- The library is namespaced, so to simplify the use cases, it's recommended to add propr `use` at the beginning
- of your controller to "import" `Builder` class:
-
-```php
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-```
+ Basic, and mosts common usage examples.
 
 #### Success ####
 
- To report response indicating i.e. operation success, simply your Controller method with:
+ To create response indicating operation success, simply conclude your Controller method with:
 
 ```php
 return RB::success();
@@ -48,14 +44,15 @@ return RB::success();
 }
 ```
 
- If you would like to return some data with it (which pretty much always the case :), pass it to `success()` as argument:
+ If you would like to return some data in your response, which is pretty much always the case for success type of responses:), pass  
+ your payload as `success()`'s argument:
 
 ```php
 $data = [ 'foo' => 'bar' ];
 return RB::success($data);
 ```
 
- which would return:
+ This which would produce:
 
 ```json
 {
@@ -69,17 +66,12 @@ return RB::success($data);
 }
 ```
 
- **NOTE:** As all the data in the response structure must be represented in JSON, `ResponseBuilder` only accepts certain types of
- data - you can either pass an `array` or object of any class that can be converted to valid JSON (i.e. Eloquent's Model or
- Collection). Data conversion goes on-the-fly, if you need any additional classes supported than said Model or Collection (which
- are pre-configured), you need to instruct `ResponseBuilder` how to deal with it. See [Data Conversion](#data-conversion) chapter
- for more details. Attempt to pass unsupported data type (i.e. literals) will throw the exception.
+ **NOTE:** As all the data in the response structure must strictly follow response structure and end up in form os valid JSON data.
+ `ResponseBuilder` deals with all the primitives and most commonly used classes, using on-the-fly data conversion. You can easily
+ add own converters if none of built-in handles your data or fits your needs.See [Data Conversion](#data-conversion) chapter details.
 
- **IMPORTANT:** `data` node is **always** an JSON Object. This is **enforced** by the library design, therefore if you need to
- return your data array as array and just its elements as shown in above example, it will be wrapped into additional array:
 
 ```php
-// this is CORRECT
 $returned_array = [1,2,3];
 return RB::success($data);
 ```
@@ -92,26 +84,6 @@ return RB::success($data);
    "data": {
       "items": [1, 2, 3]
    }
-}
-```
-
- **IMPORTANT:** If provided array has at least one non numeric index, then wrapping will not occur:
-
-```php
-// this is WRONG
-$returned_array = ['foo' => 1, 'bar' => 2];
-return RB::success($returned_array);
-```
-
-would give you `data` structure:
-
-```json
-{
-  ...
-  "data": {
-     "foo": 1,
-     "bar": 2
-  }
 }
 ```
 
