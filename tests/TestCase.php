@@ -34,7 +34,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 		// redirect all debug logs to stderr
 		// Enable by
 		//   Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, true);
-		$app['config']->set('logging.default', 'stderr');
+		// use 'stderr' channer to see the log output (if needed).
+		$app['config']->set('logging.default', 'null');
 	}
 
 	/**
