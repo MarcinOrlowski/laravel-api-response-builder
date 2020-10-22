@@ -62,10 +62,6 @@ class Converter
 
 		$type = \gettype($data);
 		$result = $this->primitives[ $type ] ?? null;
-		if (!\is_array($result) && !empty($result)) {
-			throw new Ex\InvalidConfigurationElementException(
-				sprintf('Invalid conversion mapping config for "%s" primitive.', $type));
-		}
 
 		if ($result === null) {
 			throw new Ex\ConfigurationNotFoundException(
