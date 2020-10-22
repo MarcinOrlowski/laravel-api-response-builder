@@ -121,13 +121,12 @@ class PrimitivesTest extends TestCase
 
 	/**
 	 * Checks if passing boolean as direct payload works as expected.
-	 * Also includes logging (for coverage)
 	 */
 	public function testDirectBool(): void
 	{
 		// GIVEN primitive value
 		$value = \mt_rand(0, 1) ? false : true;
-		$this->doDirectPrimitiveTest($value, true);
+		$this->doDirectPrimitiveTest($value);
 	}
 
 	/**
@@ -167,12 +166,8 @@ class PrimitivesTest extends TestCase
 	 *
 	 * @throws \ReflectionException
 	 */
-	protected function doDirectPrimitiveTest($value, $enable_logging = false): void
+	protected function doDirectPrimitiveTest($value): void
 	{
-		if ($enable_logging) {
-			Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, true);
-		}
-
 		// GIVEN primitive value $value
 
 		// WHEN passing it as direct payaload

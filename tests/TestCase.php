@@ -12,6 +12,10 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
 	/**
@@ -33,7 +37,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	{
 		// redirect all debug logs to stderr
 		// Enable by
-		//   Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, true);
+		Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, true);
+
 		// use 'stderr' channer to see the log output (if needed).
 		$app['config']->set('logging.default', 'null');
 	}
