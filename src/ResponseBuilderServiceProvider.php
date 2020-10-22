@@ -22,6 +22,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 
 use Illuminate\Support\ServiceProvider;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 class ResponseBuilderServiceProvider extends ServiceProvider
 {
