@@ -170,7 +170,6 @@ class PrimitivesTest extends TestCase
 	protected function doDirectPrimitiveTest($value, $enable_logging = false): void
 	{
 		if ($enable_logging) {
-			$old_config = Config::get(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, false);
 			Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, true);
 		}
 
@@ -190,10 +189,6 @@ class PrimitivesTest extends TestCase
 		$key = $cfg[ RB::KEY_KEY ];
 		$this->assertArrayHasKey($key, $converted);
 		$this->assertEquals($value, $converted[ $key ]);
-
-		if ($enable_logging) {
-			Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, $old_config);
-		}
 	}
 
 }

@@ -296,9 +296,13 @@ class ArrayTest extends TestCase
 
 	/**
 	 * Checks if converter config can be completely overriden by the user config.
+	 *
+ 	 * Also includes logging for coverage for getClassMappingConfigOrThrow()
 	 */
 	public function testConvertWithOverridenDefaultConfig(): void
 	{
+		Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, true);
+
 		// GIVEN built-in converter config
 		$cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
 		$this->assertIsArray($cfg);
