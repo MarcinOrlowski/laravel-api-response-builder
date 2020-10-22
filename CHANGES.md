@@ -8,6 +8,10 @@ before doing major upgrade!
 
 ## CHANGE LOG ##
 
+* @dev
+   * Fixed failing `ServiceProvider` (reported by Efriandika Pratama).
+   * Corrected documentation and usage examples.
+
 * v9.0.0 (2020-10-17)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
    * [RB-156] Added logic to deal with directly returned objects or arrays.
