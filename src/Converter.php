@@ -53,7 +53,6 @@ class Converter
 	 *
 	 * @return array
 	 *
-	 * @throws Ex\InvalidConfigurationElementException
 	 * @throws Ex\ConfigurationNotFoundException
 	 */
 	protected function getPrimitiveMappingConfigOrThrow($data): array
@@ -69,7 +68,7 @@ class Converter
 		}
 
 		if ($this->debug_enabled) {
-			Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node '{$result[RB::KEY_KEY]}'.");
+			Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node with key '{$result[RB::KEY_KEY]}'.");
 		}
 
 		return $result;

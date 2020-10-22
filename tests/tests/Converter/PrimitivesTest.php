@@ -53,7 +53,8 @@ class PrimitivesTest extends TestCase
 	}
 
 	/**
-	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when config for given primitive type is of invalid type.
+	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when config for given
+	 * primitive type is of invalid type.
 	 */
 	public function testGetPrimitiveMappingConfigOrThrow_NoConfigKeys(): void
 	{
@@ -79,7 +80,7 @@ class PrimitivesTest extends TestCase
 	public function testGetPrimitiveMappingConfigOrThrow_NoConfig(): void
 	{
 		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
-		unset($cfg[Type::BOOLEAN]);
+		unset($cfg[ Type::BOOLEAN ]);
 		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES, $cfg);
 
 		// getPrimitiveMapping is called by constructor.
@@ -115,17 +116,18 @@ class PrimitivesTest extends TestCase
 		$this->assertIsArray($converted);
 		$this->assertArrayHasKey($key, $converted);
 		$this->assertCount(1, $converted[ $key ]);
-		$this->assertEquals($model_val, $converted[ $key ][TestModel::FIELD_NAME]);
+		$this->assertEquals($model_val, $converted[ $key ][ TestModel::FIELD_NAME ]);
 	}
 
 	/**
 	 * Checks if passing boolean as direct payload works as expected.
+	 * Also includes logging (for coverage)
 	 */
 	public function testDirectBool(): void
 	{
 		// GIVEN primitive value
 		$value = mt_rand(0, 1) ? false : true;
-		$this->doDirectPrimitiveTest($value);
+		$this->doDirectPrimitiveTest($value, true);
 	}
 
 	/**
@@ -165,8 +167,13 @@ class PrimitivesTest extends TestCase
 	 *
 	 * @throws \ReflectionException
 	 */
-	protected function doDirectPrimitiveTest($value): void
+	protected function doDirectPrimitiveTest($value, $enable_logging = false): void
 	{
+		if ($enable_logging) {
+			$old_config = Config::get(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, false);
+			Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, true);
+		}
+
 		// GIVEN primitive value $value
 
 		// WHEN passing it as direct payaload
@@ -177,12 +184,16 @@ class PrimitivesTest extends TestCase
 		$this->assertIsArray($converted);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
+		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [$value]);
 		$this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
 		$key = $cfg[ RB::KEY_KEY ];
 		$this->assertArrayHasKey($key, $converted);
 		$this->assertEquals($value, $converted[ $key ]);
+
+		if ($enable_logging) {
+			Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, $old_config);
+		}
 	}
 
 }

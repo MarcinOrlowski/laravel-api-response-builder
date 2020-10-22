@@ -22,12 +22,19 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	use Traits\TestingHelpers;
 	use \MarcinOrlowski\PhpunitExtraAsserts\Traits\ExtraAsserts;
 
+	/**
+	 * Define environment setup.
+	 *
+	 * @param \Illuminate\Foundation\Application $app
+	 *
+	 * @return void
+	 */
 	public function getEnvironmentSetUp($app)
 	{
 		// redirect all debug logs to stderr
 		// Enable by
-		//   Config::set(RB::CONF_KEY_CONVERTER_DEBUG_KEY, true);
-	    $app['config']->set('logging.default', 'stderr');
+		//   Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, true);
+		$app['config']->set('logging.default', 'stderr');
 	}
 
 	/**

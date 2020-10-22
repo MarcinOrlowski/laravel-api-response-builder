@@ -9,7 +9,8 @@ before doing major upgrade!
 ## CHANGE LOG ##
 
 * @dev
-   * Corrected tests to use correct ServiceProvider.
+   * Corrected tests to use regular ServiceProvider.
+   * Corrected primitive converter tests.
 
 * v9.0.1 (2020-10-22)
    * Fixed auto-discovery failing due to broken `ServiceProvider` (reported by Efriandika Pratama).
