@@ -8,7 +8,7 @@ before doing major upgrade!
 
 ## CHANGE LOG ##
 
-* @dev
+* v9.0.1 (2020-10-22)
    * Fixed failing `ServiceProvider` (reported by Efriandika Pratama).
    * Corrected documentation and usage examples.
 
