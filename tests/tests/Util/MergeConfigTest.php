@@ -66,7 +66,7 @@ class MergeConfigTest extends TestCase
 		];
 
 		$result = Util::mergeConfig($original, $merging);
-		$this->assertArraysEquals($result, $expected);
+		$this->assertArrayEquals($result, $expected);
 	}
 
 	/**

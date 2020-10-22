@@ -62,7 +62,7 @@ class SuccessTest extends TestCase
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
 		$this->assertCount(1, $data);
-		$this->assertArraysEquals($payload, (array)$j->data->{$key});
+		$this->assertArrayEquals($payload, (array)$j->data->{$key});
 		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
 	}
 
