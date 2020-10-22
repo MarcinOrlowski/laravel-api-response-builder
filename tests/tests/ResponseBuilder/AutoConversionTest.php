@@ -125,7 +125,7 @@ class AutoConversionTest extends TestCase
      */
     public function testSuccessWithPrimitive($value): void
     {
-    	$value = (bool)mt_rand(0, 1);
+    	$value = (bool)\mt_rand(0, 1);
         $this->response = RB::success($value);
 	    $j = $this->getResponseSuccessObject();
 
@@ -150,11 +150,11 @@ class AutoConversionTest extends TestCase
 			// array
 			[[$this->getRandomString() => $this->getRandomString()]],
 			// boolean
-			[(bool)mt_rand(0, 1)],
+			[(bool)\mt_rand(0, 1)],
 			// integer
 			[mt_rand(0, 10000)],
 			// double
-			[((double)mt_rand(0, 10000)) / mt_rand(0, 100)],
+			[((double)mt_rand(0, 10000)) / mt_rand(1, 100)],
 			// string
 			[$this->getRandomString()],
 		];

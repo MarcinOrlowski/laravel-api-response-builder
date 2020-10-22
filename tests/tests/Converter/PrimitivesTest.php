@@ -126,7 +126,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectBool(): void
 	{
 		// GIVEN primitive value
-		$value = mt_rand(0, 1) ? false : true;
+		$value = \mt_rand(0, 1) ? false : true;
 		$this->doDirectPrimitiveTest($value, true);
 	}
 
@@ -136,7 +136,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectDouble(): void
 	{
 		// GIVEN primitive value
-		$value = ((double)mt_rand(0, 100000) / mt_rand(0, 1000)) + 0.1;
+		$value = ((double)\mt_rand(0, 100000) / \mt_rand(1, 1000)) + 0.1;
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -146,7 +146,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectInteger(): void
 	{
 		// GIVEN primitive value
-		$value = mt_rand(0, 10000);
+		$value = \mt_rand(0, 10000);
 		$this->doDirectPrimitiveTest($value);
 	}
 
