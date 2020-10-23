@@ -71,7 +71,7 @@
    See [Data Conversion](conversion.md) for details.
  * `[BREAKING] (v6.3)` This is backward incompatible change in signature of `RB::buildResponse()`, but it only affects
    you if you extend `ResponseBuilder` and provide own implementation to manipulate response object
-   (see [Manipulating Response Object](docs.md#manipulating-response-object)). If you do not, then you are not affected.
+   (see [Manipulating Response Object](response.md)). If you do not, then you are not affected.
 
 
 ### v5 ###
