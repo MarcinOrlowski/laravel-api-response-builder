@@ -5,8 +5,8 @@
 ## Table of contents ##
 
  * [Usage examples](#usage-examples)
- * [Documentation](docs.md)
- * [Requirements](docs.md#requirements)
+ * [Detailed documentation](docs.md)
+ * [Requirements](installation.md#requirements)
  * [Installation and Configuration](docs.md#installation-and-configuration)
 
  **Upgrading from previous version? Check [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
