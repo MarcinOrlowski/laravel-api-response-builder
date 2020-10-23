@@ -68,7 +68,7 @@
    library. From now one you need to stick to default names now (`success`, `code`, `message`, `locale`, `data`).
  * `[Very Low] (v6.2)` Data conversion logic changed slightly. Now it checks if we have configuration entry matching **exactly**
    the object's class name. If not, then we'd try to find if we have any configuration for its parent class.
-   See [Data Conversion](docs.md#data-conversion) for details.
+   See [Data Conversion](conversion.md) for details.
  * `[BREAKING] (v6.3)` This is backward incompatible change in signature of `RB::buildResponse()`, but it only affects
    you if you extend `ResponseBuilder` and provide own implementation to manipulate response object
    (see [Manipulating Response Object](docs.md#manipulating-response-object)). If you do not, then you are not affected.

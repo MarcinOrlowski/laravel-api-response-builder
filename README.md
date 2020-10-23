@@ -46,11 +46,11 @@
 
 ## Features ##
 
- * [Easy to use](docs/README.md#usage-examples)
+ * [Easy to use](docs/README.md#usage-examples),
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
  * On-the-fly data object conversion,
  * API chaining support,
- * Localization support,
+ * [Localization support](docs/docs.md#messages-and-localization),
  * Provides traits to help [unit test your API code](docs/testing.md),
  * Comes with [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
  * No additional dependencies.

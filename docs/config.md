@@ -65,7 +65,7 @@
  So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A`
  then `B` related configuration must be set with higher priority.
 
- See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
+ See [Data Conversion](conversion.md) docs for closer details wih examples.
 
  **NOTE:** in case of data conversion problems add `RB_CONVERTER_DEBUG=true` entry to your `.env` file (also see [debug](#debug)
  for related config options) then peek Laravel log to see what converter was used for each type of data and why it was choosen.

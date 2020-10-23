@@ -68,7 +68,7 @@ return RB::success($data);
 
  **NOTE:** As all the data in the response structure must strictly follow response structure and end up in form os valid JSON data.
  `ResponseBuilder` deals with all the primitives and most commonly used classes, using on-the-fly data conversion. You can easily
- add own converters if none of built-in handles your data or fits your needs.See [Data Conversion](#data-conversion) chapter details.
+ add own converters if none of built-in handles your data or fits your needs. See [Data Conversion](conversion.md) for more details.
 
 
 ```php
