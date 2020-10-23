@@ -7,7 +7,7 @@
  * [Usage examples](#usage-examples)
  * [Detailed documentation](docs.md)
  * [Requirements](installation.md#requirements)
- * [Installation and Configuration](docs.md#installation-and-configuration)
+ * [Installation and Configuration](installation.md)
 
  **Upgrading from previous version? Check [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
 

@@ -13,7 +13,7 @@
  * [Exposed Methods](#exposed-methods)
  * [Data Conversion](conversion.md)
  * [Requirements](installation.md#requirements)
- * [Installation and Configuration](#installation-and-configuration)
+ * [Installation and Configuration](installation.md)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
  * [Manipulating Response Object](#manipulating-response-object)
  * [Overriding built-in messages](#overriding-built-in-messages)
@@ -186,43 +186,6 @@ class ApiCode {
 }
 ```
 
-
-#### ResponseBuilder Configuration ####
-
- Package configuration can be found in `config/response_builder.php` file and
- each of its element is heavily documented in the file, so please take a moment
- and read it.
-
- Supported configuration keys (all keys **MUST** be present in config file):
-
- * `min_code` (int) lowest allowed code for assigned code range (inclusive)
- * `max_code` (int) highest allowed code for assigned code range (inclusive)
- * `map` (array) maps error codes to localization string keys.
-
- Code to message mapping example:
-
-```php
-'map' => [
-    ApiCode::SOMETHING_WENT_WRONG => 'api.something_went_wrong',
-],
-```
-
- If given error code is not present in `map`, `ResponseBuilder` will provide fallback message automatically
- (default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array empty in
- your config, however you **MUST** have `map` key present nonetheless:
-
-```php
-'map' => [],
-```
-
- Also, read [Overriding built-in messages](#overriding-built-in-messages) to see how to override built-in
- messages.
-
- **NOTE:** Config file may grow in future so if you are not using defaults, then on package upgrades
- check CHANGES.md to see if there're new configuration options. If so, and you already have config
- published, then you need to look into dist config file in `vendor/marcin-orlowski/laravel-api-response-builder/config/`
- folder and grab new version of config file.
-
 ----
 
 ## Messages and Localization ##
@@ -377,9 +340,3 @@ MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.
 
  You can use `:api_code` placeholder in the message and it will be substituted actual error code value.
 
-----
-
-## License ##
-
- * Written and copyrighted &copy;2016-2020 by Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
