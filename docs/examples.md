@@ -7,7 +7,6 @@
 
 ## Table of contents ##
 
-
  * [Usage examples](#usage-examples)
    * [Use clause](#use-clause)
    * [Success](#success)
@@ -18,7 +17,7 @@
 ## Usage examples ##
 
  The following examples assume `ResponseBuilder` is properly installed and available to your Laravel application.
- See [Installation and Configuration](docs.md#installation-and-configuration) for more details.
+ See [Installation and Configuration](installation.md) for more details.
 
 ### Use clause ###
 
