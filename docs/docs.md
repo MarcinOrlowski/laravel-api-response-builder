@@ -6,10 +6,15 @@
 
  * [Structure of JSON response](#response-structure)
  * [Return Codes and Code Ranges](#return-codes)
+   * [Code ranges](#code-ranges)
+   * [ApiCodes class](#apicodes-class)
+ * [Messages and Localization](#messages-and-localization)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
  * [Overriding built-in messages](#overriding-built-in-messages)
  
-## Response structure ##
+---
+ 
+# Response structure #
 
  Predictability, simplicity and no special-case is the key of the `ResponseBuilder` and all responses created by
  this library **guarantee** consistent JSON structure by design.
@@ -41,13 +46,13 @@
  see [Manipulating Response Object](response.md) chapter for detailed information about how
  to achieve this.
 
-## Return Codes ##
+# Return Codes #
 
  All return codes are integers however the meaning of the code is fully up to you. The only exception
  is `0` (zero) which **ALWAYS** means **success** and you cannot use `0` with `error()` methods (but
  you can have other codes for success than `0` if needed).
 
-#### Code Ranges ####
+## Code Ranges ##
 
  In one of my projects we had multiple APIs chained together (so one API called another, remote API). I wanted to be able to chain
  API invocations in the way that in case of problems (and cascading failure) I still would able to tell which one failed first.
@@ -66,7 +71,7 @@
  set `max_code` in your configuration file to some very high value if needed or defaults do not fit.
 
 
-#### ApiCodes class ####
+## ApiCodes class ##
 
  To keep your source readable and clear, it's strongly recommended to create separate class
  `ApiCode.php` (i.e. in `app/`) and keep all codes there as `public const`. This way you protect
@@ -83,7 +88,7 @@ class ApiCode {
 }
 ```
 
-## Messages and Localization ##
+# Messages and Localization #
 
  `ResponseBuilder` is designed with localization in mind so default approach is you just set it up
  once and most things should happen automatically, which also includes creating human readable error messages.
@@ -93,7 +98,7 @@ class ApiCode {
  methods). `ResponseBuilder` utilised standard Laravel's `Lang` class to deal with messages, so all
  localization features are supported.
 
-## Handling Exceptions API way ##
+# Handling Exceptions API way #
 
  Properly designed REST API should never hit consumer with anything but JSON. While it looks like easy task,
  there's always chance for unexpected issue to occur. So we need to expect unexpected and be prepared when
@@ -124,7 +129,7 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 
  Please see current implementation for `getMessageForApiCode()` for details how to correctly obtain localization string key etc.
 
-## Overriding built-in messages ##
+# Overriding built-in messages #
 
  At the moment `ResponseBuilder` provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
  one is used for success code `0` and another provides fallback message for codes without custom mapping. If for

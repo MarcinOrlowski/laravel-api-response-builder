@@ -10,6 +10,8 @@
 
  Legacy support should is most likely here and if anything is not working, fixing it is pretty trivial with use of recent
  code base, as long as your PHP is v7.2 or better.
+ 
+---
 
 ## Legacy versions ##
 

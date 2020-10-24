@@ -13,6 +13,8 @@
      * [Possible Exception Handler conflicts](#possible-exception-handler-conflicts)
      * [ApiCodes](#apicodes)
 
+---
+
 # Exception Handling with Response Builder #
 
  Properly designed REST API should never hit consumer with anything but JSON. While it looks like easy task, 

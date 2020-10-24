@@ -16,6 +16,8 @@
      * [min_code](#min_code)
      * [max_code](#max_code)
 
+---
+
 # Configuration file #
 
  Package configuration can be found in `config/response_builder.php` file and

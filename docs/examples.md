@@ -8,7 +8,7 @@
    * [Success](#success)
    * [Errors](#errors)
 
-----
+---
 
 # Usage examples #
 

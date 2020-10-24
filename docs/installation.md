@@ -8,6 +8,8 @@
    * [Package installation](#installation)
    * [Setup](#setup)
 
+---
+
 ## Installation ##
 
  To install `ResponseBuilder` all you need to do is to open your shell/cmd and do:

@@ -9,10 +9,17 @@
      * [Builder methods](#builder-methods)
    * [Helpers](#helpers)
 
-## Builder ##
+---
 
- There are two static methods that return instance of the Builder: `asSuccess()` and `asError()`. For example,
- the following code would return response indicating a success, with additional data and custom HTTP code:
+## Exposed Methods ##
+
+ Starting from version 6.4, `ResponseBuilder` uses new API implementation that uses
+ [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern), which is far more flexible that previous bag of methods.
+
+### Builder ###
+
+ There are two static methods that return instance of the Builder: `asSuccess()` and `asError()`. For example, the following
+ code would return response indicating a success, with additional data and custom HTTP code:
 
 ```php
 return RB::asSuccess()
@@ -63,7 +70,6 @@ return RB::success();
  details). In such case configured conversion method is called on the provided object and result is returned instead.
  Several classes pre-configured but you can add additional classes just by creating entry in configuration `converter` mapping.
  See [Data Conversion](conversion.md) for more information.
-
 
 ## Helpers ##
 
