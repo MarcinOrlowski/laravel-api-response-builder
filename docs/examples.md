@@ -1,29 +1,21 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
-# REST API Response Builder for Laravel #
+# Usage examples #
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to build
- nice, normalized and easy to consume REST API JSON responses.
-
-## Table of contents ##
+[« Documentation table of contents](README.md)
 
  * [Usage examples](#usage-examples)
-   * [Use clause](#use-clause)
    * [Success](#success)
    * [Errors](#errors)
 
 ----
 
-## Usage examples ##
+# Usage examples #
 
  The following examples assume `ResponseBuilder` is properly installed and available to your Laravel application.
  See [Installation and Configuration](installation.md) for more details.
 
-### Use clause ###
-
- Basic, and mosts common usage examples.
-
-#### Success ####
+## Success ##
 
  To create response indicating operation success, simply conclude your Controller method with:
 
@@ -43,7 +35,7 @@ return RB::success();
 }
 ```
 
- If you would like to return some data in your response, which is pretty much always the case for success type of responses:), pass  
+ If you would like to return some data in your response, which is pretty much always the case for success type of responses:), pass
  your payload as `success()`'s argument:
 
 ```php
@@ -65,10 +57,8 @@ return RB::success($data);
 }
 ```
 
- **NOTE:** As all the data in the response structure must strictly follow response structure and end up in form os valid JSON data.
- `ResponseBuilder` deals with all the primitives and most commonly used classes, using on-the-fly data conversion. You can easily
- add own converters if none of built-in handles your data or fits your needs. See [Data Conversion](conversion.md) for more details.
-
+ As you noticed, arrays with keys are mapped to JSON objects. But if your array has only numeric
+ keys, it will be treated specially:
 
 ```php
 $returned_array = [1,2,3];
@@ -86,7 +76,52 @@ return RB::success($data);
 }
 ```
 
-#### Errors ####
+ **NOTE:** passign key array with mixed keys i.e. `['foo'=>'bar', 'no-explicit-key']` is currently not supported and will
+ throw runtime exception. This is because `ResponseBuilder` is unable to figure out how it should convert that array. For
+ such cases either drop the keys (i.e. `RB::success(\array_values($data));`) or ensure all entries have non-numeric keys.
+
+ As all the data in the response structure must strictly follow response structure and end up in form os valid JSON data.
+ `ResponseBuilder` deals with all the primitives and most commonly used classes, using on-the-fly data conversion, with most
+ commonly used covered by built-in configuration.
+
+ Need to additionally return some models the response? Simply pass it as argument to `success()` and it will be automatically
+ converted by `ResponseBuilder`:
+
+```php
+$flight = App\Flight::where(...)->get();
+return RB::success($flight);
+```
+
+ and your client will get that data in `data` node of your response:
+
+```json
+{
+  "success": true,
+  "code": 0,
+  "locale": "en",
+  "message": "OK",
+  "data": {
+     "items": [
+        {
+          "airline": "lot",
+          "flight_number": "lo123",
+          ...
+       },
+       {
+          "airline": "american",
+          "flight_number": "am456",
+          ...
+       }
+    ]
+  }
+}
+```
+
+ You can easily add own converters if none of built-in handles your data or fits your needs!
+ See [Data Conversion](conversion.md) for more details.
+
+
+## Errors ##
 
  Returning error responses is also simple, however in such case you are required to need to additionally pass at least your own
  error code to `error()` to tell the client what the error it is:
@@ -105,8 +140,7 @@ return RB::error(<CODE>);
 ```php
 return RB::error(ApiCode::SOMETHING_WENT_WRONG);
 ```
-
- which would produce the following JSON response:
+ Assuming `ApiCode::SOMETHING_WENT_WRONG` constants' value is `250`, you will get the following JSON response:
 
 ```json
 {

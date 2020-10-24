@@ -1,16 +1,19 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
-# REST API Response Builder for Laravel #
+# Response object #
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to build
- nice, normalized and easy to consume REST API JSON responses.
+[« Documentation table of contents](README.md)
+
+ * [Response object](response.md)
+   * [Manipulating Response Object](#manipulating-response-object)
+   * [Custom response structure](#custom-response-structure)
 
 ## Manipulating Response Object ##
 
  If you need to return more fields in response object you can simply extend `ResponseBuilder` class
  and override `buildResponse()` method.
 
-### Custom response structure ###
+## Custom response structure ##
 
  For example, you want to get rid of `locale` field and add server time and timezone to returned
  responses. First, create `MyResponseBuilder.php` file in `app/` folder (both location and class

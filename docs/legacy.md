@@ -2,8 +2,16 @@
 
 # Legacy support #
 
- **TL;TR;** legacy support should is most likely here and if anything is not working, fixing it is pretty trivial with use of recent
+[« Documentation table of contents](README.md)
+
+ * [Legacy support](legacy.md)
+   * [Legacy versions](#legacy-versions)
+   * [Developer's notes](#developers-notes)
+
+ Legacy support should is most likely here and if anything is not working, fixing it is pretty trivial with use of recent
  code base, as long as your PHP is v7.2 or better.
+
+## Legacy versions ##
 
  Starting from version 6.0, `ResponseBuilder` requires [Laravel](https://laravel.com/) v6 or newer which automatically means it
  also requires PHP 7.2+, same as Laravel.
@@ -29,7 +37,7 @@ composer require marcin-orlowski/laravel-api-response-builder "^4.0"
     }
 ```
 
-# Technical notes for legacy users #
+## Developer's notes ##
 
  `ResponseBuilder` does not really depend on Laravel features that much if ever. The only thing that matters is PHP version used
  because of PHP syntax `ResponseBuilder` code uses. So if you are using some old Larave setup but at the same time you use recent
