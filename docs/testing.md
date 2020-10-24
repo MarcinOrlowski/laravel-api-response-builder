@@ -1,10 +1,11 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
-# REST API Response Builder for Laravel #
+# Testing #
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to simplify building
- nice, normalized and easy to consume REST API responses.
-
+ * [Testing](testing.md)
+   * [Unit testing your ApiCodes](#unit-testing-your-apicodes)
+   * [Testing other code using ResponseBuilder](#testing-other-code-using-responsebuilder)
+   
 ## Unit testing your ApiCodes ##
 
  `ResponseBuilder` ships with traits that you can use to ensure your ApiCodes class and its values
