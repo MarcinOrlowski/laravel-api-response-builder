@@ -62,6 +62,8 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 * @param string $path
 	 * @param string $key
 	 *
+	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\IncompleteConfigurationException
+	 *
 	 * @return void
 	 */
 	protected function mergeConfigFrom($path, $key)
