@@ -1,15 +1,22 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
 # Configuration file #
+
+ Package configuration can be found in `config/response_builder.php` file and
+ each of its element is heavily documented in the file, so please take a moment
+ and read it.
+
  If you want to change `ResponseBuilder` default configuration you need to use config file. Use package provided configuration
  template and publish `response_builder.php` configuration template file to your `config/` folder:
 
-    php artisan vendor:publish
+```bash
+php artisan vendor:publish
+```
 
  If you are fine with the defaults, this step can safely be omitted. You can also remove published `config/response_builder.php`
  file if exists.
 
-# Configuration options #
+## Configuration options ##
 
  Available configuration options and its current default values listed in alphabetical order. Please note, that in majority
  of use cases it should be perfectly sufficient to just use defaults and only tune the config when needed.
@@ -24,12 +31,12 @@
  * [min_code](#min_code)
  * [max_code](#max_code)
 
-## converter ##
+### converter ###
 
  `Response Builder` can auto-convert data to be used as response `data`. It supports both primitives and objects of
  any classes that have corresponding converter configured.
 
-### classes ###
+#### classes ####
 
  The following classes are supported out of the box (unless you wipe default config):
 
@@ -70,7 +77,7 @@
  **NOTE:** in case of data conversion problems add `RB_CONVERTER_DEBUG=true` entry to your `.env` file (also see [debug](#debug)
  for related config options) then peek Laravel log to see what converter was used for each type of data and why it was choosen.
 
-### primitives ###
+#### primitives ####
 
  Starting from v9, `ResponseBuilder` suppors passing primitives as direct payload, removing the need of wrapping it in separate
  container (like array or object). The following primitives are supported:
@@ -107,7 +114,7 @@ and both would produce the same
 
 assuming string`my_key` is the value of `key` entry for primitive type `double`.
 
-## debug ##
+### debug ###
 
 ```php
 'debug' => [
@@ -151,7 +158,7 @@ assuming string`my_key` is the value of `key` entry for primitive type `double`.
     }
 }
 ```
-## encoding_options ##
+### encoding_options ###
 
  This option controls data JSON encoding. Since v3.1, encoding was relying on framework's defaults, however this
  caused valid UTF-8 characters (i.e. accents) to be returned escaped, which, while technically correct,
@@ -171,7 +178,7 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 
  See [json_encode() manual](http://php.net/manual/en/function.json-encode.php) for more details.
 
-## exception_handler ##
+### exception_handler ###
 
  `ResponseBuilder`'s Exception handler helper is plug-and-play helper that will automatically handle
  any exception thrown by your code and expose valid JSON response to the client applications. But aside
@@ -210,7 +217,7 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
  no exact match exists, it will try to match the handler using `instanceof` and eventually faill back to default handler
  as specified in (mandatory) `default` config node.
 
-## map ##
+### map ###
 
  `ResponseBuilder` can automatically use text error message associated with error code and return in the
  response, once its configured to know which string to use for which code. `ResponseBuilder` uses standard
@@ -223,9 +230,25 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 ],
 ```
 
- See [Exception Handling with Response Builder](docs/exceptions.md) if you want to provide own messages for built-in codes.
+ If given error code is not present in `map`, `ResponseBuilder` will provide fallback message automatically
+ (default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array empty in
+ your config, however you **MUST** have `map` key present nonetheless:
 
-## min_code ##
+```php
+'map' => [],
+```
+
+ Also, read [Overriding built-in messages](#overriding-built-in-messages) to see how to override built-in
+ messages.
+
+ **NOTE:** Config file may grow in future so if you are not using defaults, then on package upgrades
+ check CHANGES.md to see if there're new configuration options. If so, and you already have config
+ published, then you need to look into dist config file in `vendor/marcin-orlowski/laravel-api-response-builder/config/`
+ folder and grab new version of config file.
+
+ See [Exception Handling with Response Builder](exceptions.md) if you want to provide own messages for built-in codes.
+
+### min_code ###
 
  This option defines lowest allowed (inclusive) code that can be used.
 
@@ -235,7 +258,7 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 'min_code' => 100,
 ```
 
-## max_code ##
+### max_code ###
 
  Min api code in assigned for this module (inclusive)
  This option defines highest allowed (inclusive) code that can be used.
@@ -243,3 +266,4 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 ```php
 'max_code' => 1024,
 ```
+
