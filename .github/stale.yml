@@ -1,7 +1,7 @@
 # Number of days of inactivity before an issue becomes stale
 daysUntilStale: 21
 # Number of days of inactivity before a stale issue is closed
-daysUntilClose: 1
+daysUntilClose: 7
 # Issues with these labels will never be considered stale
 exemptLabels:
   - pinned
@@ -9,10 +9,11 @@ exemptLabels:
 # Label to use when marking an issue as stale
 staleLabel: wontfix
 # Comment to post when marking an issue as stale. Set to `false` to disable
-markComment: false
+markComment: >
+  This issue has been automatically marked as stale because it has not had
+  recent activity and will be closed soon as such.
 # Comment to post when closing a stale issue. Set to `false` to disable
 closeComment: >
-  This issue has been automatically closed as stale because it has not had
-  recent activity. Feel free to still comment and even reopen the ticket
-  if the problem is not solved or you think we could go better. Thank you
-  for your contributions.
+  This stale issue has been automatically closed. Feel free to still comment
+  and even reopen the ticket if the problem is not solved or you think we
+  could go better. Thank you for your contributions.
