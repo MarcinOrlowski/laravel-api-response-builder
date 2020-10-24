@@ -70,8 +70,8 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 
         $merged_config = Util::mergeConfig($defaults, $config);
 
-        if (\array_key_exists('converter', $merged_config)) {
-            Util::sortArrayByPri($merged_config['converter']);
+        if (isset($merged_config['converter']['classes'])) {
+            Util::sortArrayByPri($merged_config['converter']['classes']);
         }
 
         $this->app['config']->set($key, $merged_config);
