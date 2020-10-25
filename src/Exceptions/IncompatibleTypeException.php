@@ -15,4 +15,5 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 class IncompatibleTypeException extends \Exception
 {
+	// empty
 }

@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
 
-use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-
 /**
  * Laravel API Response Builder
  *
@@ -16,7 +13,14 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class Validator
+
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+
+/**
+ * Data validator helper
+ */
+final class Validator
 {
 	/**
 	 * Checks if given $val is of type boolean

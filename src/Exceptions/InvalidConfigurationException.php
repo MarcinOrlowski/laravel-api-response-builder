@@ -15,5 +15,5 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 final class InvalidConfigurationException extends ConfigurationException
 {
-
+	// empty
 }

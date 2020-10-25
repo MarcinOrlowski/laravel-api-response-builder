@@ -15,4 +15,5 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 final class NotArrayException extends InvalidTypeException
 {
+	// empty
 }

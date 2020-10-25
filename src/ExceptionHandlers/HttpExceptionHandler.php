@@ -19,6 +19,9 @@ use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
+/**
+ * Handles HttpException
+ */
 final class HttpExceptionHandler implements ExceptionHandlerContract
 {
 	public function handle(array $user_config, \Exception $ex): ?array
