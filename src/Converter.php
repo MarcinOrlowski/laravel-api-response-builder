@@ -225,10 +225,7 @@ class Converter
 							"Missing '{$key_name}' entry in '{$class_name}' class mapping config.");
 					}
 
-                    if (!\in_array(\gettype($class_config[$key_name]), $allowed_types)) {
-                        throw new Ex\InvalidConfigurationElementException(
-                            sprintf("Config '%s' for '{$class_name}' must be these types: %s.", RB::KEY_KEY, \implode(', ', $allowed_types)));
-                    }
+                    Validator::assertIsType(RB::KEY_KEY, $class_config[$key_name], $allowed_types);
 				}
 			}
 		}
