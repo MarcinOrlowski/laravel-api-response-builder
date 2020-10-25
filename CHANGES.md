@@ -8,18 +8,21 @@ before doing major upgrade!
 
 ## CHANGE LOG ##
 
+* @dev
+   * `Validator` type related exceptions must now implement `InvalidTypeExceptionContract`.
+
 * v9.0.2 (2020-10-24)
    * Corrected tests to use regular ServiceProvider.
    * Corrected primitive converter tests.
-   * Presence of configuration "converter/classes" array is now mandatory (reported by Raja)
-   * Extensive documentation overhaul
+   * Presence of configuration "converter/classes" array is now mandatory (reported by Raja).
+   * Extensive documentation overhaul.
 
 * v9.0.1 (2020-10-22)
    * Fixed auto-discovery failing due to broken `ServiceProvider` (reported by Efriandika Pratama).
    * Corrected documentation and usage examples.
 
 * v9.0.0 (2020-10-17)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md)).
    * [RB-156] Added logic to deal with directly returned objects or arrays.
    * [RB-158] Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
      `double`, `integer` and `string` types, configurable via new `converter/primitives`.
@@ -28,7 +31,7 @@ before doing major upgrade!
 
 * v8.1.1 (2020-10-15)
    * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from
-     being invoked, thus making response object structure manipulation ineffective (reported by krek95)
+     being invoked, thus making response object structure manipulation ineffective (reported by krek95).
 
 * v8.1.0 (2020-09-17)
    * Added logging (`.env` controllable) for payload Converter to help debugging inproper data conversion.
@@ -38,7 +41,7 @@ before doing major upgrade!
    * Removed `Util::printArray()` helper.
 
 * v8.0.0 (2020-07-14)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md)).
    * Improved performance by using calls qualified references.
    * [RB-132] Reworked exception handler helper to support delegated handlers for better flexibility.
    * Reverted depreciation of `BaseApiCodes` reserved range codes.
@@ -47,7 +50,7 @@ before doing major upgrade!
    * Added German localization.
 
 * v7.1.2 (2020-07-12)
-   * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan Fekete)
+   * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan Fekete).
 
 * v7.1.1 (2020-07-11)
    * Added more tests.
@@ -55,22 +58,22 @@ before doing major upgrade!
    * Switched away from deprecated Codacy coverage package.
 
 * v7.1.0 (2020-03-04)
-   * Added support for Laravel v7
+   * Added support for Laravel v7.
 
 * v7.0.3 (2019-12-30)
    * Fixed `composer.json` file.
 
 * v7.0.2 (2019-12-29)
-   * Updated Travis config to cover Laravel 6.5, 6.6, 6.7 and 6.8
-   * Updated Travis config to cover PHP 7.4
+   * Updated Travis config to cover Laravel 6.5, 6.6, 6.7 and 6.8.
+   * Updated Travis config to cover PHP 7.4.
 
 * v7.0.1 (2019-11-25)
    * Disabled Scrutinizer's "false positive" in Builder class.
    * Added more tests to improve overall coverage.
-   * Updated PHPDocs
+   * Updated PHPDocs.
 
 * v7.0.0 (2019-11-22)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md)).
    * New, flexible API based on `Builder` pattern (see [docs](docs/compatibility.md) for details).
    * Reworked `ExceptionHandlerHelper` configuration. Now, you will be able to easily configure every
      HttpException for each HTTP status code you want. Separate `ExceptionHandler::TYPE_HTTP_NOT_FOUND_KEY`
