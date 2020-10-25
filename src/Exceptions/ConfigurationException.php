@@ -15,4 +15,5 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 abstract class ConfigurationException extends \Exception
 {
+	// empty
 }

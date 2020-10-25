@@ -13,6 +13,10 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+/**
+ * Data type constants
+ */
 final class Type
 {
 	/** @var string */

@@ -1,11 +1,4 @@
 <?php
-/**
- * Disable return type hint inspection as we do not have it specified in that
- * class for a purpose. The base class is also not having return type hints.
- *
- * @noinspection RAeturnTypeCanBeDeclaredInspection
- */
-
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
@@ -21,9 +14,21 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+/**
+ * Disable return type hint inspection as we do not have it specified in that
+ * class for a purpose. The base class is also not having return type hints.
+ *
+ * @noinspection RAeturnTypeCanBeDeclaredInspection
+ */
+
 use Illuminate\Support\ServiceProvider;
 use MarcinOrlowski\ResponseBuilder\Exceptions\IncompleteConfigurationException;
 
+/**
+ * Laravel's service provider for ResponseBuilder
+ *
+ * @package MarcinOrlowski\ResponseBuilder
+ */
 class ResponseBuilderServiceProvider extends ServiceProvider
 {
 	protected $config_files = [
