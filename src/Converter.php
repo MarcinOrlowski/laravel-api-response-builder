@@ -146,8 +146,8 @@ class Converter
 			$cfg = $this->getClassMappingConfigOrThrow($data);
 			$worker = new $cfg[ RB::KEY_HANDLER ]();
 			$result = $worker->convert($data, $cfg);
-			$result = empty($cfg[ RB::KEY_KEY ]) ? $result : [$cfg[ RB::KEY_KEY ] => $result];
-		}
+			$result = is_null($cfg[ RB::KEY_KEY ]) ? $result : [$cfg[ RB::KEY_KEY ] => $result];
+        }
 
 		if ($result === null && \is_array($data)) {
 			$cfg = $this->getPrimitiveMappingConfigOrThrow($data);
@@ -211,19 +211,24 @@ class Converter
 
 		if (!empty($classes)) {
 			$mandatory_keys = [
-				RB::KEY_HANDLER,
-				RB::KEY_KEY,
+				RB::KEY_HANDLER => [TYPE::STRING],
+				RB::KEY_KEY => [TYPE::STRING, TYPE::NULL],
 			];
 			foreach ($classes as $class_name => $class_config) {
 				if (!\is_array($class_config)) {
 					throw new Ex\InvalidConfigurationElementException(
 						sprintf("Config for '{$class_name}' class must be an array (%s found).", \gettype($class_config)));
 				}
-				foreach ($mandatory_keys as $key_name) {
+				foreach ($mandatory_keys as $key_name => $allowed_types) {
 					if (!\array_key_exists($key_name, $class_config)) {
 						throw new Ex\IncompleteConfigurationException(
 							"Missing '{$key_name}' entry in '{$class_name}' class mapping config.");
 					}
+
+                    if (!\in_array(\gettype($class_config[$key_name]), $allowed_types)) {
+                        throw new Ex\InvalidConfigurationElementException(
+                            sprintf("Config '%s' for '{$class_name}' must be these types: %s.", RB::KEY_KEY,  \implode(', ', $allowed_types)));
+                    }
 				}
 			}
 		}

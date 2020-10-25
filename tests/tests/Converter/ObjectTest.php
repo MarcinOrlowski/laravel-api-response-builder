@@ -35,22 +35,59 @@ class ObjectTest extends TestCase
 
         $data = collect([1, 2, 3]);
 
-        $possibleEmptyKeyValues = ['', 0, '0', false, NULL];
+        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+        $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
+        $cfg[ Collection::class ][ RB::KEY_KEY ] = null;
+
+        Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
+
+        $result = (new Converter())->convert($data);
+
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey($fake->key, $result);
+        $this->assertEquals($result[ $fake->key ], $fake->val);
+	}
+
+    /**
+     * Checks if exception is thrown for invalid 'key' type
+     */
+    public function testConvertWithInvalidKeyType(): void
+    {
+        Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
+            Collection::class => [
+                RB::KEY_KEY     => false,
+                RB::KEY_HANDLER => FakeConverter::class,
+            ],
+        ]);
+
+        $this->expectException(Ex\InvalidConfigurationElementException::class);
+
+        ///** @noinspection PhpUnhandledExceptionInspection */
+        $this->callProtectedMethod(Converter::class, 'getClassesMapping');
+    }
+
+    /**
+     * Checks if convert works normal for valid 'key' types
+     */
+    public function testConvertWithValidKeyType(): void
+    {
+        // only string and null is allowed for RB::KEY_KEY
+        $allowedKeys = ['xxx_string', NULL];
+
+        $data = collect([1, 2, 3]);
 
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
         $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
 
-        collect($possibleEmptyKeyValues)->each(function ($emptyKey) use($data, $fake, $cfg) {
-            $cfg[ Collection::class ][ RB::KEY_KEY ] = $emptyKey;
+        collect($allowedKeys)->each(function ($allowedKey) use($data, $cfg) {
+            $cfg[ Collection::class ][ RB::KEY_KEY ] = $allowedKey;
 
             Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
             $result = (new Converter())->convert($data);
 
             $this->assertIsArray($result);
-            $this->assertCount(1, $result);
-            $this->assertArrayHasKey($fake->key, $result);
-            $this->assertEquals($result[ $fake->key ], $fake->val);
         });
-	}
+    }
 }
