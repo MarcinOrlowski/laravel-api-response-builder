@@ -76,7 +76,7 @@ trait TestingHelpers
 
         // generate random api_code
         /** @noinspection RandomApiMigrationInspection */
-        $this->random_api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
+        $this->random_api_code = \mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
         // AND corresponding mapped message mapping
         /** @noinspection PhpUnhandledExceptionInspection */

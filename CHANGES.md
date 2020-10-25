@@ -2,11 +2,17 @@
 
 # REST API Response Builder for Laravel #
 
-This library follows [Semantic versioning](https://semver.org).  
+This library follows [Semantic versioning](https://semver.org).
 See [compatibility docs](docs/compatibility.md) for details about backward compatibility
 before doing major upgrade!
 
 ## CHANGE LOG ##
+
+* v9.0.2 (2020-10-24)
+   * Corrected tests to use regular ServiceProvider.
+   * Corrected primitive converter tests.
+   * Presence of configuration "converter/classes" array is now mandatory (reported by Raja)
+   * Extensive documentation overhaul
 
 * v9.0.1 (2020-10-22)
    * Fixed auto-discovery failing due to broken `ServiceProvider` (reported by Efriandika Pratama).

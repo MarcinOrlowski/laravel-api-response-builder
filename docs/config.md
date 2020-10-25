@@ -1,15 +1,40 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
+# Configuration #
+
+[« Documentation table of contents](README.md)
+
+ * [Configuration file](#configuration-file)
+   * [Configuration options](#configuration-options)
+     * [converter](#converter)
+       * [classes](#classes)
+       * [primitives](#primitives)
+     * [debug](#debug)
+     * [encoding_options](#encoding_options)
+     * [exception_handler](#exception_handler)
+     * [map](#map)
+     * [min_code](#min_code)
+     * [max_code](#max_code)
+
+---
+
 # Configuration file #
+
+ Package configuration can be found in `config/response_builder.php` file and
+ each of its element is heavily documented in the file, so please take a moment
+ and read it.
+
  If you want to change `ResponseBuilder` default configuration you need to use config file. Use package provided configuration
  template and publish `response_builder.php` configuration template file to your `config/` folder:
 
-    php artisan vendor:publish
+```bash
+php artisan vendor:publish
+```
 
  If you are fine with the defaults, this step can safely be omitted. You can also remove published `config/response_builder.php`
  file if exists.
 
-# Configuration options #
+## Configuration options ##
 
  Available configuration options and its current default values listed in alphabetical order. Please note, that in majority
  of use cases it should be perfectly sufficient to just use defaults and only tune the config when needed.
@@ -24,12 +49,12 @@
  * [min_code](#min_code)
  * [max_code](#max_code)
 
-## converter ##
+### converter ###
 
  `Response Builder` can auto-convert data to be used as response `data`. It supports both primitives and objects of
  any classes that have corresponding converter configured.
 
-### classes ###
+#### classes ####
 
  The following classes are supported out of the box (unless you wipe default config):
 
@@ -42,35 +67,85 @@
 
 ```php
 'converter' => [
-	'classes' => [
-        Namespace\Classname::class => [
-            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            'key'     => 'items',
-        
-            // Optional paramters
-            'pri'    => 0,
-        ],
+    \Illuminate\Database\Eloquent\Model::class          => [
+        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        'key'     => 'items',
+        // 'pri'     => 0,
+    ],
+    \Illuminate\Database\Eloquent\Collection::class     => [
+        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        'key'     => 'items',
+        // 'pri'     => 0,
     ],
 ],
 ```
- The `handler` is a full name of the class that implements `ConverterContract`. Object of that class will be instantiated
- and conversion method will be invked with object given as argument. The `key` is a string that will be used as the JSON
- response as key to array representation when object of that class is passed as direct payload (i.e. `success($object);`).
- Note, that `key` is not used otherwise, so if you have i.e. array of objects, they will be properly converted without
- `key` used.
+
+ Meaning of parameters:
+
+ * `handler` (mandatory) specifies a full name of the class implementing `ConverterContract`. Object of that class will be
+   instantiated and conversion method will be invked with object given as argument. The `key` is a string that will be used
+   as the JSON response as key to array representation when object of that class is passed as direct payload
+   (i.e. `success($object);`). Note, that `key` is not used otherwise, so if you have i.e. array of objects, they will be
+   properly converted without `key` used.
+ * `key` (mandatory) is a string, used by some converters when dealing with object of given class being returned directly
+   as response payload (i.e. `success($collection)`).
+ * `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one
+   class extending another and you want to support both of them with separate configuration, then you **must** ensure child
+   class has higher priority than it's parent class.
+
+ The above configures two classes (`Model` and `Collection`). Whenever object of that class is spotted, method specified in
+ `method` key would be called on that object and data that method returns will be returned in JSON object.
 
  All configuration entries are assigned priority `0` which can be changed using `pri` key (integer). This value is used to
  sort the entries to ensure that matching order is preserved. Entries with higher priority are matched first etc. This is
  very useful when you want to indirect configuration for two classes where additionally second extends first one.
  So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A`
  then `B` related configuration must be set with higher priority.
+ 
+ **IMPORTANT:** For each object `ResponseBuilder` checks if we have configuration entry matching **exactly** object class
+ name. If no such mapping is found, then the whole configuration is walked again, but this time we take inheritance into
+ consideration and use `instanceof` to see if we have a match, therefore you need to pay attention your config specifies
+ lower priority (i.e. `-10`) for all the generic handlers. Doing that ensures any more specific handler will be checked
+ first. If no handler is found for given object, the exception is thrown.
 
- See [Data Conversion](docs.md#data-conversion) docs for closer details wih examples.
+ When you pass the array it will be walked recursively and the conversion will take place on all known elements as well:
+
+```php
+$data = [
+   'flight' = App\Flight::where(...)->first(),
+   'planes' = App\Plane::where(...)->get(),
+];
+```
+
+ would produce the following response (contrary to the previous examples, source array keys are preserved):
+
+```json
+{
+   "flight": {
+      "airline": "lot",
+      "flight_number": "lo123",
+      ...
+   },
+   "planes": [
+      {
+         "make": "airbus",
+         "registration": "F-GUGJ",
+         ...
+      },{
+         "make": "boeing",
+         "registration": "VT-ANG",
+         ...
+      }
+   ]
+}
+```
+
+ See [Data Conversion](conversion.md) docs for closer details wih examples.
 
  **NOTE:** in case of data conversion problems add `RB_CONVERTER_DEBUG=true` entry to your `.env` file (also see [debug](#debug)
  for related config options) then peek Laravel log to see what converter was used for each type of data and why it was choosen.
 
-### primitives ###
+#### primitives ####
 
  Starting from v9, `ResponseBuilder` suppors passing primitives as direct payload, removing the need of wrapping it in separate
  container (like array or object). The following primitives are supported:
@@ -107,7 +182,7 @@ and both would produce the same
 
 assuming string`my_key` is the value of `key` entry for primitive type `double`.
 
-## debug ##
+### debug ###
 
 ```php
 'debug' => [
@@ -151,7 +226,7 @@ assuming string`my_key` is the value of `key` entry for primitive type `double`.
     }
 }
 ```
-## encoding_options ##
+### encoding_options ###
 
  This option controls data JSON encoding. Since v3.1, encoding was relying on framework's defaults, however this
  caused valid UTF-8 characters (i.e. accents) to be returned escaped, which, while technically correct,
@@ -171,7 +246,7 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 
  See [json_encode() manual](http://php.net/manual/en/function.json-encode.php) for more details.
 
-## exception_handler ##
+### exception_handler ###
 
  `ResponseBuilder`'s Exception handler helper is plug-and-play helper that will automatically handle
  any exception thrown by your code and expose valid JSON response to the client applications. But aside
@@ -210,7 +285,7 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
  no exact match exists, it will try to match the handler using `instanceof` and eventually faill back to default handler
  as specified in (mandatory) `default` config node.
 
-## map ##
+### map ###
 
  `ResponseBuilder` can automatically use text error message associated with error code and return in the
  response, once its configured to know which string to use for which code. `ResponseBuilder` uses standard
@@ -223,9 +298,25 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 ],
 ```
 
- See [Exception Handling with Response Builder](docs/exceptions.md) if you want to provide own messages for built-in codes.
+ If given error code is not present in `map`, `ResponseBuilder` will provide fallback message automatically
+ (default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array empty in
+ your config, however you **MUST** have `map` key present nonetheless:
 
-## min_code ##
+```php
+'map' => [],
+```
+
+ Also, read [Overriding built-in messages](#overriding-built-in-messages) to see how to override built-in
+ messages.
+
+ **NOTE:** Config file may grow in future so if you are not using defaults, then on package upgrades
+ check CHANGES.md to see if there're new configuration options. If so, and you already have config
+ published, then you need to look into dist config file in `vendor/marcin-orlowski/laravel-api-response-builder/config/`
+ folder and grab new version of config file.
+
+ See [Exception Handling with Response Builder](exceptions.md) if you want to provide own messages for built-in codes.
+
+### min_code ###
 
  This option defines lowest allowed (inclusive) code that can be used.
 
@@ -235,7 +326,7 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 'min_code' => 100,
 ```
 
-## max_code ##
+### max_code ###
 
  Min api code in assigned for this module (inclusive)
  This option defines highest allowed (inclusive) code that can be used.

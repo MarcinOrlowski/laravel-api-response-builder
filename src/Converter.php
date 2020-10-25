@@ -53,7 +53,6 @@ class Converter
 	 *
 	 * @return array
 	 *
-	 * @throws Ex\InvalidConfigurationElementException
 	 * @throws Ex\ConfigurationNotFoundException
 	 */
 	protected function getPrimitiveMappingConfigOrThrow($data): array
@@ -62,10 +61,6 @@ class Converter
 
 		$type = \gettype($data);
 		$result = $this->primitives[ $type ] ?? null;
-		if (!\is_array($result) && !empty($result)) {
-			throw new Ex\InvalidConfigurationElementException(
-				sprintf('Invalid conversion mapping config for "%s" primitive.', $type));
-		}
 
 		if ($result === null) {
 			throw new Ex\ConfigurationNotFoundException(
@@ -73,7 +68,7 @@ class Converter
 		}
 
 		if ($this->debug_enabled) {
-			Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node '{$result[RB::KEY_KEY]}'.");
+			Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node with key '{$result[RB::KEY_KEY]}'.");
 		}
 
 		return $result;

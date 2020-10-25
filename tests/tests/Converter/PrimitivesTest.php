@@ -53,7 +53,8 @@ class PrimitivesTest extends TestCase
 	}
 
 	/**
-	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when config for given primitive type is of invalid type.
+	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when config for given
+	 * primitive type is of invalid type.
 	 */
 	public function testGetPrimitiveMappingConfigOrThrow_NoConfigKeys(): void
 	{
@@ -79,7 +80,7 @@ class PrimitivesTest extends TestCase
 	public function testGetPrimitiveMappingConfigOrThrow_NoConfig(): void
 	{
 		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
-		unset($cfg[Type::BOOLEAN]);
+		unset($cfg[ Type::BOOLEAN ]);
 		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES, $cfg);
 
 		// getPrimitiveMapping is called by constructor.
@@ -115,7 +116,7 @@ class PrimitivesTest extends TestCase
 		$this->assertIsArray($converted);
 		$this->assertArrayHasKey($key, $converted);
 		$this->assertCount(1, $converted[ $key ]);
-		$this->assertEquals($model_val, $converted[ $key ][TestModel::FIELD_NAME]);
+		$this->assertEquals($model_val, $converted[ $key ][ TestModel::FIELD_NAME ]);
 	}
 
 	/**
@@ -124,7 +125,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectBool(): void
 	{
 		// GIVEN primitive value
-		$value = mt_rand(0, 1) ? false : true;
+		$value = \mt_rand(0, 1) ? false : true;
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -134,7 +135,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectDouble(): void
 	{
 		// GIVEN primitive value
-		$value = ((double)mt_rand(0, 100000) / mt_rand(0, 1000)) + 0.1;
+		$value = ((double)\mt_rand(0, 100000) / \mt_rand(1, 1000)) + 0.1;
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -144,7 +145,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectInteger(): void
 	{
 		// GIVEN primitive value
-		$value = mt_rand(0, 10000);
+		$value = \mt_rand(0, 10000);
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -177,7 +178,7 @@ class PrimitivesTest extends TestCase
 		$this->assertIsArray($converted);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
+		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [$value]);
 		$this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
 		$key = $cfg[ RB::KEY_KEY ];
