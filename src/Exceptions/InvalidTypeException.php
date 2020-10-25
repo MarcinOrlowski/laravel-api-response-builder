@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Exceptions;
 
+use MarcinOrlowski\ResponseBuilder\Contracts\InvalidTypeExceptionContract;
+
 /**
  * Laravel API Response Builder
  *
@@ -13,7 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-class InvalidTypeException extends \Exception
+class InvalidTypeException extends \Exception implements InvalidTypeExceptionContract
 {
 	/**
 	 * NotAnTypeBaseException constructor.
