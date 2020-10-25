@@ -1,29 +1,20 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
-# REST API Response Builder for Laravel #
+## Fundamentals ##
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to build
- nice, normalized and easy to consume REST API JSON responses.
+[« Documentation table of contents](README.md)
 
-## Table of contents ##
-
- * [Response structure](#response-structure)
- * [Usage examples](examples.md)
+ * [Structure of JSON response](#response-structure)
  * [Return Codes and Code Ranges](#return-codes)
- * [Exposed Methods](#exposed-methods)
- * [Data Conversion](conversion.md)
- * [Requirements](installation.md#requirements)
- * [Installation and Configuration](installation.md)
+   * [Code ranges](#code-ranges)
+   * [ApiCodes class](#apicodes-class)
+ * [Messages and Localization](#messages-and-localization)
  * [Handling Exceptions API way](#handling-exceptions-api-way)
- * [Manipulating Response Object](response.md)
  * [Overriding built-in messages](#overriding-built-in-messages)
- * [Unit testing your ApiCodes](testing.md)
- * [License](#license)
- * [Notes](#notes)
-
-----
-
-## Response structure ##
+ 
+---
+ 
+# Response structure #
 
  Predictability, simplicity and no special-case is the key of the `ResponseBuilder` and all responses created by
  this library **guarantee** consistent JSON structure by design.
@@ -55,15 +46,13 @@
  see [Manipulating Response Object](response.md) chapter for detailed information about how
  to achieve this.
 
-----
-
-## Return Codes ##
+# Return Codes #
 
  All return codes are integers however the meaning of the code is fully up to you. The only exception
  is `0` (zero) which **ALWAYS** means **success** and you cannot use `0` with `error()` methods (but
  you can have other codes for success than `0` if needed).
 
-#### Code Ranges ####
+## Code Ranges ##
 
  In one of my projects we had multiple APIs chained together (so one API called another, remote API). I wanted to be able to chain
  API invocations in the way that in case of problems (and cascading failure) I still would able to tell which one failed first.
@@ -81,95 +70,8 @@
  **NOTE:** code ranges cannot be turned off, but if you do not need it or you just have one API or need no chaining, then just
  set `max_code` in your configuration file to some very high value if needed or defaults do not fit.
 
-----
 
-## Exposed Methods ##
-
- Starting from version 6.4, `ResponseBuilder` uses new API implementation that uses
- [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern), which is far more flexible that previous bag of methods.
-
-### Helpers ###
-
- But while Builder is pretty proverful interface, if you need to return just success or error, without too many additional data
- attached, using it may look like overkill, therefore there are two helper methods (from old API) that serve as shortcuts
- for reporting success or failure:
-
- * `success($data, $api_code, $placeholders, $http_code, $json_opts)`
-
-    Returns success indicating message. You can ommit `$api_code` to fall back to default code for `OK`). All params are
-    optional. Usage example:
-
-    ```php
-    return RB::success();
-    ```
-
-  * `public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null, int $json_opts = null)`
-
-    Returns error indicating response. `$api_code` must not equal to value indicating `OK` (`ApiCodes::OK()`), all other params
-    are optional.
-
-    ```php
-    return RB::error(ApiCodes::SOMETHING_FAILED);
-    ```
-
-### Builder ###
-
- There are two static methods that return instance of the Builder: `asSuccess()` and `asError()`. For example, the following
- code would return response indicating a success, with additional data and custom HTTP code:
-
-```php
-return RB::asSuccess()
-      ->withData($data)
-      ->withHttpCode(HttpResponse::HTTP_CREATED)
-      ->build();
-```
-
- Naturally, if you just need to return success without any payload, just call `success()` as you would have in previous
- versions:
-
-```php
-return RB::success();
-```
-
- Builder static methods:
-
- * `asSuccess($api_code)`: Returns Builder instance configured to return success indicating message.
-   You can ommit `$api_code` to fall back to default code for `OK` (`ApiCodes::OK()`).
- * `asError($api_code)`: Returns Builder instance configured to produce error indicating response. `$api_code`
-   must not equal to value indicating `OK` (`ApiCodes::OK()`).
-
- In both cases `api_code` (**int**) is any integer value you want to be returned as `code` in final response.
-
- Parameter setters:
-
- * `withHttpCode($code)`: (**int**) valid HTTP return code (see `HttpResponse` class for useful constants). For
-   `success()` responses, `$http_code` must be in range from 200 to 299 (inclusive), while for `error()` it must be in
-   range from 400 to 599 (inclusive) otherwise `\InvalidArgumentException` will be thrown. HTTP codes from 3xx pool
-   (redirection) are not allowed. Please see [W3 specification](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
-   for more information about all HTTP codes and their meaning.
- * `withData($data)`: (**object**|**array**|**null**) data you want to be returned in your response in `data` node,
- * `withJsonOptions($opts)`: (**int**) data-to-json conversion options as
-   [documented](http://php.net/manual/en/function.json-encode.php). Pass `null` for
-   default `RB::DEFAULT_ENCODING_OPTIONS` ([source](../src/ResponseBuilder.php)). Please see
-   [configuration](../config/response_builder.php) file and config's `encoding_options` too.
- * `withMessage($message)`: (**string**) custom message to be returned as part of error response
-   (avoid, use error code mapping feature).
- * `withPlaceholders($placeholders)`: (**array**) array of placeholders as expected by `Lang::get()` while building
-   response `message` based on localization files (as configured in i.e. `map`) or strings with placeholders.
- * `withHttpHeaders($headers)`
-
- Once all the arguments are passed, call `build()` to have final `HttpResponse` object returned.
-
- **IMPORTANT:** To enforce constant JSON structure of the response, `data` node is always an JSON object, therefore passing
- anything but `object` or `array` to `withData()` would trigger internal type casting. There's no smart logic here, just
- ordinary `$data = (object)$data;`. The only exception are classes configured with "classes" mapping (see configuration
- details). In such case configured conversion method is called on the provided object and result is returned instead.
- Several classes pre-configured but you can add additional classes just by creating entry in configuration `converter` mapping.
- See [Data Conversion](conversion.md) for more information.
-
-----
-
-#### ApiCodes class ####
+## ApiCodes class ##
 
  To keep your source readable and clear, it's strongly recommended to create separate class
  `ApiCode.php` (i.e. in `app/`) and keep all codes there as `public const`. This way you protect
@@ -186,9 +88,7 @@ class ApiCode {
 }
 ```
 
-----
-
-## Messages and Localization ##
+# Messages and Localization #
 
  `ResponseBuilder` is designed with localization in mind so default approach is you just set it up
  once and most things should happen automatically, which also includes creating human readable error messages.
@@ -198,9 +98,7 @@ class ApiCode {
  methods). `ResponseBuilder` utilised standard Laravel's `Lang` class to deal with messages, so all
  localization features are supported.
 
-----
-
-## Handling Exceptions API way ##
+# Handling Exceptions API way #
 
  Properly designed REST API should never hit consumer with anything but JSON. While it looks like easy task,
  there's always chance for unexpected issue to occur. So we need to expect unexpected and be prepared when
@@ -209,8 +107,6 @@ class ApiCode {
  one of them, and take care of that in advance with couple of easy steps.
  With Laravel this can be achieved with custom Exception Handler and `ResponseBuilder` comes with ready-to-use
  Handler as well. See [Exception Handling with Response Builder](exceptions.md) for easy setup information.
-
-----
 
 ### Overriding code to message conversion ###
 
@@ -233,9 +129,7 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 
  Please see current implementation for `getMessageForApiCode()` for details how to correctly obtain localization string key etc.
 
-----
-
-## Overriding built-in messages ##
+# Overriding built-in messages #
 
  At the moment `ResponseBuilder` provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
  one is used for success code `0` and another provides fallback message for codes without custom mapping. If for
@@ -255,4 +149,3 @@ MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.
 ````
 
  You can use `:api_code` placeholder in the message and it will be substituted actual error code value.
-

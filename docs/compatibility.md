@@ -1,9 +1,27 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
-# REST API Response Builder for Laravel #
+# Backward compatibility #
 
+ [« Documentation table of contents](README.md)
 
-### v9 ###
+ * [Important incompatibile changes](#incompatibility-notes)
+   * [Changes in v9](#v9)
+   * [Changes in v8](#v8)
+   * [Changes in v7](#v7)
+   * [Changes in v6](#v6)
+   * [Changes in v5](#v5)
+   * [Changes in v4](#v4)
+   * [Changes in v3](#v3)
+   * [Changes in v2](#v2)
+   * [Changes in v1](#v1)
+
+---
+
+# Incompatibility notes #
+
+Backward (in)compatibility notes. Pay attention if you are upgrading. 
+
+## v9 ##
 
  * `[BREAKING]` Due to introduction of primitives support as direct payload, structure of `converter` config entry changed.
  * `[BREAKING]` Due to introduction of primitives support as direct payload, the content of `data` object in the response may differ
@@ -16,14 +34,14 @@
  * `[Low]` For better error reporting and handling, `ResponseBuilder` throws own, more descriptive exceptions in majority of cases. See [src/Exceptions](../src/Exceptions).
 
 
-### v8 ###
+## v8 ##
 
  * `[BREAKING]` Due to introduction of exception handlers, `ExceptionHandler` configuration has been changed.
    See [configuration docs](config.md#exception_handler) for more information.
  * `[Very Low]` Removed `ResponseBuilderLegacy` class from the package.
 
 
-### v7 ###
+## v7 ##
 
  * `[BREAKING]` As the library API migrated to Builder type of implementation, all the former API methods are now removed from
    `ResponseBuilder` class (with exception for `success()` and `error()` methods. While it is strongly recommended to switch
@@ -41,7 +59,7 @@
    feature **AND** pass objects directly (i.e. not as part of collection nor array).
 
 
-### v6 ###
+## v6 ##
 
  * Requires Laravel 6.0+ and PHP 7.2+
  * `[BREAKING]` In previous versions built-in reserved codes were hardcoded and always in range of 1-63 which, in general
@@ -74,18 +92,18 @@
    (see [Manipulating Response Object](response.md)). If you do not, then you are not affected.
 
 
-### v5 ###
+## v5 ##
 
  * No public release.
 
 
-### v4 ###
+## v4 ##
 
  * `ApiCodeBase` class is now `BaseApiCodes`
  * ExceptionHandler's debug trace no longer depends on `APP_DEBUG` value and can be enabled independently
 
 
-### v3 ###
+## v3 ##
 
  * `success()` now accepts (optional) `api_code` too, therefore signature of this method as well as and argument
    order changed. This makes it **partially** incompatible with what have been in v2, however in majority of uses

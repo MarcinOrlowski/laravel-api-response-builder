@@ -1,5 +1,23 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
+# Configuration #
+
+[« Documentation table of contents](README.md)
+
+ * [Configuration file](#configuration-file)
+   * [Configuration options](#configuration-options)
+     * [converter](#converter)
+       * [classes](#classes)
+       * [primitives](#primitives)
+     * [debug](#debug)
+     * [encoding_options](#encoding_options)
+     * [exception_handler](#exception_handler)
+     * [map](#map)
+     * [min_code](#min_code)
+     * [max_code](#max_code)
+
+---
+
 # Configuration file #
 
  Package configuration can be found in `config/response_builder.php` file and
@@ -49,28 +67,78 @@ php artisan vendor:publish
 
 ```php
 'converter' => [
-	'classes' => [
-        Namespace\Classname::class => [
-            'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-            'key'     => 'items',
-        
-            // Optional paramters
-            'pri'    => 0,
-        ],
+    \Illuminate\Database\Eloquent\Model::class          => [
+        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        'key'     => 'items',
+        // 'pri'     => 0,
+    ],
+    \Illuminate\Database\Eloquent\Collection::class     => [
+        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
+        'key'     => 'items',
+        // 'pri'     => 0,
     ],
 ],
 ```
- The `handler` is a full name of the class that implements `ConverterContract`. Object of that class will be instantiated
- and conversion method will be invked with object given as argument. The `key` is a string that will be used as the JSON
- response as key to array representation when object of that class is passed as direct payload (i.e. `success($object);`).
- Note, that `key` is not used otherwise, so if you have i.e. array of objects, they will be properly converted without
- `key` used.
+
+ Meaning of parameters:
+
+ * `handler` (mandatory) specifies a full name of the class implementing `ConverterContract`. Object of that class will be
+   instantiated and conversion method will be invked with object given as argument. The `key` is a string that will be used
+   as the JSON response as key to array representation when object of that class is passed as direct payload
+   (i.e. `success($object);`). Note, that `key` is not used otherwise, so if you have i.e. array of objects, they will be
+   properly converted without `key` used.
+ * `key` (mandatory) is a string, used by some converters when dealing with object of given class being returned directly
+   as response payload (i.e. `success($collection)`).
+ * `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one
+   class extending another and you want to support both of them with separate configuration, then you **must** ensure child
+   class has higher priority than it's parent class.
+
+ The above configures two classes (`Model` and `Collection`). Whenever object of that class is spotted, method specified in
+ `method` key would be called on that object and data that method returns will be returned in JSON object.
 
  All configuration entries are assigned priority `0` which can be changed using `pri` key (integer). This value is used to
  sort the entries to ensure that matching order is preserved. Entries with higher priority are matched first etc. This is
  very useful when you want to indirect configuration for two classes where additionally second extends first one.
  So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A`
  then `B` related configuration must be set with higher priority.
+ 
+ **IMPORTANT:** For each object `ResponseBuilder` checks if we have configuration entry matching **exactly** object class
+ name. If no such mapping is found, then the whole configuration is walked again, but this time we take inheritance into
+ consideration and use `instanceof` to see if we have a match, therefore you need to pay attention your config specifies
+ lower priority (i.e. `-10`) for all the generic handlers. Doing that ensures any more specific handler will be checked
+ first. If no handler is found for given object, the exception is thrown.
+
+ When you pass the array it will be walked recursively and the conversion will take place on all known elements as well:
+
+```php
+$data = [
+   'flight' = App\Flight::where(...)->first(),
+   'planes' = App\Plane::where(...)->get(),
+];
+```
+
+ would produce the following response (contrary to the previous examples, source array keys are preserved):
+
+```json
+{
+   "flight": {
+      "airline": "lot",
+      "flight_number": "lo123",
+      ...
+   },
+   "planes": [
+      {
+         "make": "airbus",
+         "registration": "F-GUGJ",
+         ...
+      },{
+         "make": "boeing",
+         "registration": "VT-ANG",
+         ...
+      }
+   ]
+}
+```
 
  See [Data Conversion](conversion.md) docs for closer details wih examples.
 
@@ -266,4 +334,3 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 ```php
 'max_code' => 1024,
 ```
-

@@ -14,9 +14,9 @@
 
  * [Introduction](#introduction)
  * [Why should I use it?](#benefits)
- * [Usage examples](docs/README.md#usage-examples)
+ * [Usage examples](docs/examples.md#usage-examples)
  * [Features](#features)
- * [Documentation](docs/README.md)
+ * [Extensive documentation](docs/README.md)
  * [License](#license)
  * [Changelog](CHANGES.md)
 

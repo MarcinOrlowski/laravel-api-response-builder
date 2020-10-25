@@ -1,26 +1,14 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
-# REST API Response Builder for Laravel #
+# Installataion #
 
- `ResponseBuilder` is [Laravel](https://laravel.com/)'s helper designed to build
- nice, normalized and easy to consume REST API JSON responses.
+[« Documentation table of contents](README.md)
 
-## Table of contents ##
+ * Installataion
+   * [Package installation](#installation)
+   * [Setup](#setup)
 
- * [System requirements](#requirements)
- * [Package installation](#installation)
- * [Configuration](config.md)
-
-----
-
-## Requirements ##
-
- Minimum requirements:
-
-  * PHP 7.2+ with [json extension](https://www.php.net/manual/en/book.json.php),
-  * Laravel v6.x or v7.x (see [legacy](legacy.md) for Laravel 5.x support).
-
-----
+---
 
 ## Installation ##
 
@@ -51,8 +39,7 @@ composer require marcin-orlowski/laravel-api-response-builder:6.3
  publish and edit configuration file as described in [Configuration file](config.md)
  documentation.
 
-#### Setup ####
+## Setup ##
 
  `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once
  installed.
-

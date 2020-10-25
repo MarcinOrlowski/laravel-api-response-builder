@@ -8,10 +8,11 @@ before doing major upgrade!
 
 ## CHANGE LOG ##
 
-* @dev
+* v9.0.2 (2020-10-24)
    * Corrected tests to use regular ServiceProvider.
    * Corrected primitive converter tests.
    * Presence of configuration "converter/classes" array is now mandatory (reported by Raja)
+   * Extensive documentation overhaul
 
 * v9.0.1 (2020-10-22)
    * Fixed auto-discovery failing due to broken `ServiceProvider` (reported by Efriandika Pratama).

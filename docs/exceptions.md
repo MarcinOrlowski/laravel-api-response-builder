@@ -1,5 +1,20 @@
 ![REST API Response Builder for Laravel](img/logo.png)
 
+# Exception Handling #
+
+[« Documentation table of contents](README.md)
+
+ * [Exception Handling with Response Builder](#exception-handling-with-response-builder)
+   * [Using Exception Handler Helper](#using-exception-handler-helper)
+   * [Error codes](#error-codes)
+   * [HTTP return codes](#http-return-codes)
+   * [Error messages](#error-messages)
+   * [Important notes](#important-notes)
+     * [Possible Exception Handler conflicts](#possible-exception-handler-conflicts)
+     * [ApiCodes](#apicodes)
+
+---
+
 # Exception Handling with Response Builder #
 
  Properly designed REST API should never hit consumer with anything but JSON. While it looks like easy task, 
@@ -137,7 +152,9 @@ public const VALIDATION_EXCEPTION = ...;
  `:api_code` being substituted by actual code assigned to this exception and `:message`
  replaced by exception's `getMessage()` return value.
 
-## Exception Handler conflicts ##
+## Important notes ##
+
+### Possible Exception Handler conflicts ###
 
  Please note that some 3rd party packages may also provide own exception handling helpers and may 
  recommend using said handlers in your application. Unfortunately this will cause conflict with
@@ -154,6 +171,6 @@ public const VALIDATION_EXCEPTION = ...;
 'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware',
 ```
 
-## Notes ##
+### ApiCodes ###
 
  The above assumes you keep your codes in `ApiCodes` class stored in `app/ApiCodes.php` and using `App\` namespace.
