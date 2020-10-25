@@ -129,7 +129,9 @@ final class Validator
 	 * @param string $var_name      Label or name of the variable to be used in exception message (if thrown).
 	 * @param mixed  $value         Variable to be asserted.
 	 * @param array  $allowed_types Array of allowed types for $value, i.e. [Type::INTEGER]
-	 * @param string $ex_class      Name of exception class to thrown when assertion failed.
+	 * @param string $ex_class      Name of exception class (which implements InvalidTypeExceptionContract) to
+	 *                              be used when assertion fails. In that case object of that class will be
+	 *                              instantiated and thrown.
 	 *
 	 * @return void
 	 *
@@ -140,6 +142,7 @@ final class Validator
 	{
 		$type = \gettype($value);
 		if (!\in_array($type, $allowed_types, true)) {
+			// FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
 			throw new $ex_class($var_name, $type, $allowed_types);
 		}
 	}
