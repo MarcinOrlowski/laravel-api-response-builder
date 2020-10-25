@@ -146,7 +146,7 @@ class Converter
 			$cfg = $this->getClassMappingConfigOrThrow($data);
 			$worker = new $cfg[ RB::KEY_HANDLER ]();
 			$result = $worker->convert($data, $cfg);
-			$result = is_null($cfg[ RB::KEY_KEY ]) ? $result : [$cfg[ RB::KEY_KEY ] => $result];
+			$result = $cfg[ RB::KEY_KEY ] === null ? $result : [$cfg[ RB::KEY_KEY ] => $result];
         }
 
 		if ($result === null && \is_array($data)) {
