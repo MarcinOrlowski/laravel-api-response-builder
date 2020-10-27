@@ -8,8 +8,9 @@ before doing major upgrade!
 
 ## CHANGE LOG ##
 
-* @dev
+* v9.0.3 (2020-10-27)
    * `Validator` type related exceptions must now implement `InvalidTypeExceptionContract`.
+   * `converter` config `key` element now accepts `null` to indicate you want no key to be used.
 
 * v9.0.2 (2020-10-24)
    * Corrected tests to use regular ServiceProvider.
