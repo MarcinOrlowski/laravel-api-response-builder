@@ -90,7 +90,7 @@ class Converter
 
 		// check for exact class name match...
 		$cls = \get_class($data);
-		if (\is_string($cls)) {
+		if ($cls !== false) {
 			if (\array_key_exists($cls, $this->classes)) {
 				$result = $this->classes[ $cls ];
 				$debug_result = 'exact config match';
@@ -121,9 +121,9 @@ class Converter
 	/**
 	 * Main entry for data conversion
 	 *
-	 * @param object|array|null $data
+	 * @param mixed|null $data
 	 *
-	 * @return mixed|null
+	 * @return array|null
 	 */
 	public function convert($data = null): ?array
 	{
