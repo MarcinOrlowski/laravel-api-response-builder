@@ -83,12 +83,12 @@ php artisan vendor:publish
  Meaning of parameters:
 
  * `handler` (mandatory) specifies a full name of the class implementing `ConverterContract`. Object of that class will be
-   instantiated and conversion method will be invked with object given as argument. The `key` is a string that will be used
+   instantiated and conversion method will be invoked with object given as argument. The `key` is a string that will be used
    as the JSON response as key to array representation when object of that class is passed as direct payload
    (i.e. `success($object);`). Note, that `key` is not used otherwise, so if you have i.e. array of objects, they will be
    properly converted without `key` used.
- * `key` (mandatory) is a string, used by some converters when dealing with object of given class being returned directly
-   as response payload (i.e. `success($collection)`).
+ * `key` (mandatory) can be a string or `NULL`. A string is useful for some converters when dealing with an object of a given class being returned directly
+   as response payload (i.e. `success($collection)`). Otherwise  `NULL` can be used to tell `ResponseBuilder` to return object directly, which may be useful.
  * `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one
    class extending another and you want to support both of them with separate configuration, then you **must** ensure child
    class has higher priority than it's parent class.
