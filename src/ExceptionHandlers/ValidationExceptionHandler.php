@@ -3,11 +3,6 @@ declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
 
-use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
 /**
  * Laravel API Response Builder
  *
@@ -18,9 +13,18 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
+
+/**
+ * Handles ValidationException
+ */
 final class ValidationExceptionHandler implements ExceptionHandlerContract
 {
-	public function handle(array $user_config, \Exception $ex): ?array
+	public function handle(array $user_config, /** @scrutinizer ignore-unused */ \Exception $ex): ?array
 	{
 		return [
 			RB::KEY_API_CODE  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),

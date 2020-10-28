@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace MarcinOrlowski\ResponseBuilder;
 
 /**
- * Exception handler using ResponseBuilder to return JSON even in such hard tines
+ * Laravel API Response Builder
  *
  * @package   MarcinOrlowski\ResponseBuilder
  *
@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 /**
- * Class ExceptionHandlerHelper
+ * Exception handler using ResponseBuilder to return JSON even in such hard tines
  */
 class ExceptionHandlerHelper
 {

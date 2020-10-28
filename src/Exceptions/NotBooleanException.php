@@ -15,4 +15,5 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 final class NotBooleanException extends InvalidTypeException
 {
+	// empty
 }

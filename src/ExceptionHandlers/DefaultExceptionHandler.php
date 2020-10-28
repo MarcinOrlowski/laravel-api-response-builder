@@ -19,9 +19,12 @@ use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
+/**
+ * Default exception handler. Kicks in if there's no better handler found.
+ */
 final class DefaultExceptionHandler implements ExceptionHandlerContract
 {
-	public function handle(array $user_config, \Exception $ex): ?array
+	public function handle(array $user_config, /** @scrutinizer ignore-unused */ \Exception $ex): ?array
 	{
 		$defaults = [
 			RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),

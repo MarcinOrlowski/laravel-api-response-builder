@@ -16,7 +16,11 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-
+/**
+ * Contains commonly used constants
+ *
+ * @package MarcinOrlowski\ResponseBuilder
+ */
 abstract class ResponseBuilderBase
 {
 	/**

@@ -18,6 +18,11 @@ use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 use MarcinOrlowski\ResponseBuilder\Validator;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
+/**
+ * Converts JsonSerializable to array
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Converters
+ */
 final class JsonSerializableConverter implements ConverterContract
 {
 	/**

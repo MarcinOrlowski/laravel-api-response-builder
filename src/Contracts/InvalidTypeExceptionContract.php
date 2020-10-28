@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Exceptions;
+namespace MarcinOrlowski\ResponseBuilder\Contracts;
 
 /**
  * Laravel API Response Builder
@@ -13,7 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-abstract class ConfigurationException extends \Exception
+interface InvalidTypeExceptionContract
 {
-	// empty
+	public function __construct(string $var_name, string $type, array $allowed_types);
 }

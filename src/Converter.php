@@ -90,7 +90,7 @@ class Converter
 
 		// check for exact class name match...
 		$cls = \get_class($data);
-		if (\is_string($cls)) {
+		if ($cls !== false) {
 			if (\array_key_exists($cls, $this->classes)) {
 				$result = $this->classes[ $cls ];
 				$debug_result = 'exact config match';
@@ -121,9 +121,9 @@ class Converter
 	/**
 	 * Main entry for data conversion
 	 *
-	 * @param object|array|null $data
+	 * @param mixed|null $data
 	 *
-	 * @return mixed|null
+	 * @return array|null
 	 */
 	public function convert($data = null): ?array
 	{
@@ -145,8 +145,9 @@ class Converter
 		if ($result === null && \is_object($data)) {
 			$cfg = $this->getClassMappingConfigOrThrow($data);
 			$worker = new $cfg[ RB::KEY_HANDLER ]();
-			$result = [$cfg[ RB::KEY_KEY ] => $worker->convert($data, $cfg)];
-		}
+			$result = $worker->convert($data, $cfg);
+			$result = $cfg[ RB::KEY_KEY ] === null ? $result : [$cfg[ RB::KEY_KEY ] => $result];
+        }
 
 		if ($result === null && \is_array($data)) {
 			$cfg = $this->getPrimitiveMappingConfigOrThrow($data);
@@ -210,19 +211,21 @@ class Converter
 
 		if (!empty($classes)) {
 			$mandatory_keys = [
-				RB::KEY_HANDLER,
-				RB::KEY_KEY,
+				RB::KEY_HANDLER => [TYPE::STRING],
+				RB::KEY_KEY => [TYPE::STRING, TYPE::NULL],
 			];
 			foreach ($classes as $class_name => $class_config) {
 				if (!\is_array($class_config)) {
 					throw new Ex\InvalidConfigurationElementException(
 						sprintf("Config for '{$class_name}' class must be an array (%s found).", \gettype($class_config)));
 				}
-				foreach ($mandatory_keys as $key_name) {
+				foreach ($mandatory_keys as $key_name => $allowed_types) {
 					if (!\array_key_exists($key_name, $class_config)) {
 						throw new Ex\IncompleteConfigurationException(
 							"Missing '{$key_name}' entry in '{$class_name}' class mapping config.");
 					}
+
+                    Validator::assertIsType(RB::KEY_KEY, $class_config[$key_name], $allowed_types);
 				}
 			}
 		}
