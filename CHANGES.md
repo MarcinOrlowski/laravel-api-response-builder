@@ -11,6 +11,8 @@ before doing major upgrade!
 * @dev
    * [RB-175] `Paginator` and `LengthAwarePaginator` support is now included in default converter 
      configuration (reported by @kcaj-burr) 
+   * Fixed `testConfigClassesMappingEntriesUnwantedConfigKeys()` testing trait not supporting
+     `null` keys in converter config.
 
 * v9.0.3 (2020-10-27)
    * `Validator` type related exceptions must now implement `InvalidTypeExceptionContract`.
