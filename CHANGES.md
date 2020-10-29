@@ -8,7 +8,7 @@ before doing major upgrade!
 
 ## CHANGE LOG ##
 
-* @dev
+* v9.1.0 (2020-10-29)
    * [RB-175] `Paginator` and `LengthAwarePaginator` support is now included in default converter 
      configuration (reported by @kcaj-burr) 
    * Fixed `testConfigClassesMappingEntriesUnwantedConfigKeys()` testing trait not supporting
