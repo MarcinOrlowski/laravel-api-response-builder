@@ -8,6 +8,10 @@ before doing major upgrade!
 
 ## CHANGE LOG ##
 
+* @dev
+   * [RB-175] `Paginator` and `LengthAwarePaginator` support is now included in default converter 
+     configuration (reported by @kcaj-burr) 
+
 * v9.0.3 (2020-10-27)
    * `Validator` type related exceptions must now implement `InvalidTypeExceptionContract`.
    * The `converter` config `key` element now accepts `null` to indicate you want no key to
@@ -33,7 +37,7 @@ before doing major upgrade!
 
 * v8.1.1 (2020-10-15)
    * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from
-     being invoked, thus making response object structure manipulation ineffective (reported by krek95).
+     being invoked, thus making response object structure manipulation ineffective (reported by @krek95).
 
 * v8.1.0 (2020-09-17)
    * Added logging (`.env` controllable) for payload Converter to help debugging inproper data conversion.
