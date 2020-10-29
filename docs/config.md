@@ -67,15 +67,15 @@ php artisan vendor:publish
 
 ```php
 'converter' => [
-    \Illuminate\Database\Eloquent\Model::class          => [
+    \Illuminate\Database\Eloquent\Model::class => [
         'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
         'key'     => 'items',
-        // 'pri'     => 0,
+        'pri'     => 0,
     ],
-    \Illuminate\Database\Eloquent\Collection::class     => [
-        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter::class,
-        'key'     => 'items',
-        // 'pri'     => 0,
+    \Illuminate\Pagination\Paginator::class => [
+        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ArrayableConverter::class,
+        'key'     => null,
+        'pri'     => 0,
     ],
 ],
 ```
