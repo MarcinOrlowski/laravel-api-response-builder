@@ -80,6 +80,23 @@ return [
 	        ],
 
 	        /*
+			|-----------------------------------------------------------------------------------------------------------
+			| Paginators converts to objects already, so we do not array wrapping here, hence setting `key` to null
+			|-----------------------------------------------------------------------------------------------------------
+			*/
+
+	        \Illuminate\Pagination\LengthAwarePaginator::class => [
+		        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ArrayableConverter::class,
+		        'key'     => null,
+		        'pri'     => 0,
+	        ],
+	        \Illuminate\Pagination\Paginator::class => [
+		        'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ArrayableConverter::class,
+		        'key'     => null,
+		        'pri'     => 0,
+	        ],
+
+	        /*
 	        |-----------------------------------------------------------------------------------------------------------
 	        | Generic converters should have lower pri to allow dedicated ones to kick in first when class matches
 	        |-----------------------------------------------------------------------------------------------------------
