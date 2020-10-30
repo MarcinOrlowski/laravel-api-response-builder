@@ -49,7 +49,7 @@ before_script:
   - "sed -i 's/): void/)/' vendor/phpunit/phpunit/src/Framework/TestCase.php"
 
 script:
-  - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover /tmp/clover.xml
+  - vendor/bin/phpunit --configuration tests/phpunit.xml --coverage-clover /tmp/clover.xml
 
 after_success:
   # If coverage file is generated then upload it to Codacy (requires CODACY_PROJECT_TOKEN= env var set).
