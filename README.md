@@ -18,7 +18,7 @@
  * [Features](#features)
  * [Extensive documentation](docs/README.md)
  * [License](#license)
- * [Changelog](CHANGES.md)
+ * [Changelog](docs/CHANGES.md)
 
 ----
 
