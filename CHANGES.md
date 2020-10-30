@@ -2,9 +2,9 @@
 
 # REST API Response Builder for Laravel #
 
-This library follows [Semantic versioning](https://semver.org).
-See [compatibility docs](docs/compatibility.md) for details about backward compatibility
-before doing major upgrade!
+ > ![WARNING](docs/img/warning.png) This library follows [Semantic versioning](https://semver.org).
+ > See [compatibility docs](docs/compatibility.md) for details about backward compatibility
+ > **before** doing major upgrade!
 
 ## CHANGE LOG ##
 

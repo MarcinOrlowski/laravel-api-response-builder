@@ -76,7 +76,7 @@ return RB::success($data);
 }
 ```
 
- > ![WARNING](img/warning.png) Ppassing key array with mixed keys i.e. `['foo'=>'bar', 'no-explicit-key']` is currently not
+ > ![WARNING](img/warning.png) Passing key array with mixed keys i.e. `['foo'=>'bar', 'no-explicit-key']` is currently not
  > supported (and, most likely, never will) and it will result in runtime exception thrown when encountered. This is because
  > `ResponseBuilder` is unable to figure out how it should convert that array. For such cases either drop the keys (i.e.
  > `RB::success(\array_values($data));`) or ensure all entries have non-numeric keys.

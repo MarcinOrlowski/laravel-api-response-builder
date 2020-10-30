@@ -20,8 +20,6 @@
  * [License](#license)
  * [Changelog](CHANGES.md)
 
- **Upgrading from previous version? Check [compatibility docs](docs/compatibility.md) prior altering your `composer.json`!**
-
 ----
 
 ## Introduction ##
