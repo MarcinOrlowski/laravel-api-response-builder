@@ -64,11 +64,11 @@
  from that range is ever returned, so to make the whole chain "clear", you only need to properly assign non-overlapping ranges to
  your APIs and `ResponseBuilder` do the rest. Any attempt to violate code range ends up with exception thrown.
 
- **IMPORTANT:** first `20` codes in your range (from `0` to `19` inclusive) are reserved for `ResponseBuilder` internals and
- must not be used directly nor assigned to your codes.
+ > ![IMPORTANT](img/warning.png) First `20` codes in your range (from `0` to `19` inclusive) are reserved for `ResponseBuilder`
+ > internals and must not be used directly nor assigned to your codes.
 
- **NOTE:** code ranges cannot be turned off, but if you do not need it or you just have one API or need no chaining, then just
- set `max_code` in your configuration file to some very high value if needed or defaults do not fit.
+ > ![NOTE](img/notes.png) Code ranges cannot be turned off, but if you do not need it or you just have one API or need
+ > no chaining, then just set `max_code` in your configuration file to some very high value if needed or defaults do not fit.
 
 
 ## ApiCodes class ##

@@ -58,5 +58,5 @@ composer require marcin-orlowski/laravel-api-response-builder:6.3
 
 # Notes #
 
- **NOTE:** If you are going to use [Exception Handler Helper](exceptions.md), you **MUST** configure it first in
- your config file (esp. `default` handler configuration)!
+ > ![NOTE](img/notes.png) If you are going to use [Exception Handler Helper](exceptions.md), you **MUST** configure it
+ > first in your config file (esp. `default` handler configuration)!

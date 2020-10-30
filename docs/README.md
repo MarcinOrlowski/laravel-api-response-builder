@@ -19,5 +19,6 @@
  * [Unit testing](testing.md)
  * [Important incompatibile changes](compatibility.md)
 
- **Upgrading from previous version? Check [compatibility docs](compatibility.md) prior altering your `composer.json`!**
+ ![WARNING](img/warning.png) **Upgrading from previous version? Check [compatibility docs](compatibility.md) prior
+ altering your `composer.json`!**
 

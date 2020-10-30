@@ -85,11 +85,11 @@
  So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A`
  then `B` related configuration must be set with higher priority.
  
- **IMPORTANT:** For each object `ResponseBuilder` checks if we have configuration entry matching **exactly** object class
- name. If no such mapping is found, then the whole configuration is walked again, but this time we take inheritance into
- consideration and use `instanceof` to see if we have a match, therefore you need to pay attention your config specifies
- lower priority (i.e. `-10`) for all the generic handlers. Doing that ensures any more specific handler will be checked
- first. If no handler is found for given object, the exception is thrown.
+ > ![IMPORTANT](img/warning.png) For each object `ResponseBuilder` checks if we have configuration entry matching **exactly**
+ > object class name. If no such mapping is found, then the whole configuration is walked again, but this time we take inheritance
+ > into consideration and use `instanceof` to see if we have a match, therefore you need to pay attention your config specifies
+ > lower priority (i.e. `-10`) for all the generic handlers. Doing that ensures any more specific handler will be checked
+ > first. If no handler is found for given object, the exception is thrown.
 
  When you pass the array it will be walked recursively and the conversion will take place on all known elements as well:
 
@@ -125,8 +125,9 @@ $data = [
 
  See [Data Conversion](conversion.md) docs for closer details wih examples.
 
- **NOTE:** in case of data conversion problems add `RB_CONVERTER_DEBUG=true` entry to your `.env` file (also see [debug](#debug)
- for related config options) then peek Laravel log to see what converter was used for each type of data and why it was choosen.
+ > ![NOTE](img/notes.png) In case of data conversion problems add `RB_CONVERTER_DEBUG=true` entry to your `.env` file
+ > (also see [debug](#debug) for related config options) then peek Laravel log to see what converter was used for each
+ > type of data and why it was choosen.
 
 #### primitives ####
 
@@ -303,7 +304,8 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 
  This option defines lowest allowed (inclusive) code that can be used.
 
- NOTE ResponseBuilder reserves first 19 codes for its own needs. First code you can use is 20th code in your pool.
+ > ![NOTE](img/warning.png) ResponseBuilder reserves first 19 codes for its own needs. First code you can use is
+ > 20th code in your pool.
 
 ```php
 'min_code' => 100,
@@ -311,8 +313,7 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 
 ### max_code ###
 
- Min api code in assigned for this module (inclusive)
- This option defines highest allowed (inclusive) code that can be used.
+ Min api code in assigned for this module (inclusive). This option defines the highest allowed (inclusive) code that can be used.
 
 ```php
 'max_code' => 1024,
