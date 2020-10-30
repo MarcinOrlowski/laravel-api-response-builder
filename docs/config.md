@@ -20,19 +20,9 @@
 
 # Configuration file #
 
- Package configuration can be found in `config/response_builder.php` file and
- each of its element is heavily documented in the file, so please take a moment
- and read it.
-
- If you want to change `ResponseBuilder` default configuration you need to use config file. Use package provided configuration
- template and publish `response_builder.php` configuration template file to your `config/` folder:
-
-```bash
-php artisan vendor:publish
-```
-
- If you are fine with the defaults, this step can safely be omitted. You can also remove published `config/response_builder.php`
- file if exists.
+ At runtime `ResponseBuilder` looks for `response_builder.php` configuration file in your application
+ `config/` folder and falls back to defaults if no config file is found. Please see [Installation](installation.md)
+ docs for more info how to properly set up config file.
 
 ## Configuration options ##
 
@@ -55,13 +45,6 @@ php artisan vendor:publish
  any classes that have corresponding converter configured.
 
 #### classes ####
-
- The following classes are supported out of the box (unless you wipe default config):
-
- * `\Illuminate\Database\Eloquent\Model`
- * `\Illuminate\Support\Collection`
- * `\Illuminate\Database\Eloquent\Collection`
- * `\Illuminate\Http\Resources\Json\JsonResource`
 
  Create new entry for each class you want to have supported. The entry key is a full class name (including namespace):
 
