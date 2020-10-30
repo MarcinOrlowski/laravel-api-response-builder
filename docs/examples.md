@@ -76,9 +76,10 @@ return RB::success($data);
 }
 ```
 
- **NOTE:** passign key array with mixed keys i.e. `['foo'=>'bar', 'no-explicit-key']` is currently not supported and will
- throw runtime exception. This is because `ResponseBuilder` is unable to figure out how it should convert that array. For
- such cases either drop the keys (i.e. `RB::success(\array_values($data));`) or ensure all entries have non-numeric keys.
+ > ![WARNING](img/warning.png) Passing key array with mixed keys i.e. `['foo'=>'bar', 'no-explicit-key']` is currently not
+ > supported (and, most likely, never will) and it will result in runtime exception thrown when encountered. This is because
+ > `ResponseBuilder` is unable to figure out how it should convert that array. For such cases either drop the keys (i.e.
+ > `RB::success(\array_values($data));`) or ensure all entries have non-numeric keys.
 
  As all the data in the response structure must strictly follow response structure and end up in form os valid JSON data.
  `ResponseBuilder` deals with all the primitives and most commonly used classes, using on-the-fly data conversion, with most

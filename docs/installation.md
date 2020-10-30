@@ -7,6 +7,8 @@
  * Installataion
    * [Package installation](#installation)
    * [Setup](#setup)
+   * [Configuration file](#configuration-file)
+   * [Notes](#notes)
 
 ---
 
@@ -43,3 +45,18 @@ composer require marcin-orlowski/laravel-api-response-builder:6.3
 
  `ResponseBuilder` supports Laravel's auto-discovery feature and it's ready to use once
  installed.
+
+# Configuration file #
+
+ `ResponseBuilder` looks for `config/response_builder.php` [configuration file](../config/response_builder.php).
+ It's advised to publish default config file to application's `config/` directory on instllation
+ and then tweak it as needed: 
+ 
+```bash
+ php artisan vendor:publish
+```
+
+# Notes #
+
+ > ![NOTE](img/notes.png) If you are going to use [Exception Handler Helper](exceptions.md), you **MUST** configure it
+ > first in your config file (esp. `default` handler configuration)!

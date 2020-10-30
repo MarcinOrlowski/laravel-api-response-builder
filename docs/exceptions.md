@@ -25,6 +25,9 @@
  Exception Handler. Unfortunately default implementation is not JSON API friendly, therefore `ResponseBuilder` 
  provides drop-in replacement for Laravel's handler. Once installed, it ensures only JSON response will be 
  returned no matter what happens.
+ 
+ > ![NOTE](img/notes.png) If you are intent to use Exception Handler helper, you **MUST** [configure](config.md) it first in
+ > your config file (esp. `default` handler configuration)!
 
 ## Using Exception Handler Helper ##
 
@@ -61,7 +64,7 @@ public function render($request, Exception $e)
 
  `ExceptionHandlerHelper` can be used out of the box as it requires no extra configuration,
  however it's strongly recommended you at least assign your own api codes for the events it handles,
- so you will know what module in your code thrown the exception. For consistency I recommend
+ so you will know what module in your code thrown the exception. For consistency, I recommend
  doing so even if you have just one module and do not chain APIs.
 
  First edit your `ApiCodes` class (that one which stores **your** API return code constants) and define
@@ -97,8 +100,9 @@ public const VALIDATION_EXCEPTION = ...;
  You can also configure HTTP return code to use with each exception, by using `http_code` key
  for each of exceptions you need.
 
- **NOTE:** you must use valid HTTP error code. Codes outside of range from `400` (`BaseApiCodes::ERROR_HTTP_CODE_MIN`)
- to `599` (`BaseApiCodes::ERROR_HTTP_CODE_MAX`) will be ignored and default value will be used instead.
+ > ![NOTE](img/notes.png) You must use valid HTTP error code. Codes outside of range from `400` 
+ > (`BaseApiCodes::ERROR_HTTP_CODE_MIN`) to `599` (`BaseApiCodes::ERROR_HTTP_CODE_MAX`) will be ignored
+ > and default value will be used instead.
 
  I.e. to alter HTTP code for `http_not_found`:
  

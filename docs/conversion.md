@@ -16,6 +16,15 @@
  `ResponseBuilder` configured to auto-convet objects of Eloquent's `Model` class and passing object of that class either directly
  using `withData()` or as part of bigger structurre) will have it converted to JSON format automatically.
 
+ The following classes are supported out of the box:
+
+ * `\Illuminate\Database\Eloquent\Model`
+ * `\Illuminate\Support\Collection`
+ * `\Illuminate\Database\Eloquent\Collection`
+ * `\Illuminate\Http\Resources\Json\JsonResource`
+ * `\Illuminate\Pagination\LengthAwarePaginator`
+ * `\Illuminate\Pagination\Paginator`
+
 ## Examples ##
 
  Passing single model, like this:

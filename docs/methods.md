@@ -64,12 +64,12 @@ return RB::success();
 
  Once all the arguments are passed, call `build()` to have final `HttpResponse` object returned.
 
- **IMPORTANT:** To enforce constant JSON structure of the response, `data` node is always an JSON object, therefore passing
- anything but `object` or `array` to `withData()` would trigger internal type casting. There's no smart logic here, just
- ordinary `$data = (object)$data;`. The only exception are classes configured with "classes" mapping (see configuration
- details). In such case configured conversion method is called on the provided object and result is returned instead.
- Several classes pre-configured but you can add additional classes just by creating entry in configuration `converter` mapping.
- See [Data Conversion](conversion.md) for more information.
+ > ![IMPORTANT](img/warning.png) To enforce constant JSON structure of the response, `data` node is always an JSON object,
+ > therefore passing anything but `object` or `array` to `withData()` would trigger internal type casting. There's no smart
+ > logic here, just ordinary `$data = (object)$data;`. The only exception are classes configured with "classes" mapping 
+ > (see configuration details). In such case configured conversion method is called on the provided object and result is
+ > returned instead. Several classes pre-configured but you can add additional classes just by creating entry in configuration
+ > `converter` mapping. See [Data Conversion](conversion.md) for more information.
 
 ## Helpers ##
 
