@@ -8,6 +8,7 @@
    * [Package installation](#installation)
    * [Setup](#setup)
    * [Configuration file](#configuration-file)
+   * [Notes](#notes)
 
 ---
 
@@ -54,3 +55,8 @@ composer require marcin-orlowski/laravel-api-response-builder:6.3
 ```bash
  php artisan vendor:publish
 ```
+
+# Notes #
+
+ **NOTE:** If you are going to use [Exception Handler Helper](exceptions.md), you **MUST** configure it first in
+ your config file (esp. `default` handler configuration)!

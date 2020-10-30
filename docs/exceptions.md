@@ -25,6 +25,9 @@
  Exception Handler. Unfortunately default implementation is not JSON API friendly, therefore `ResponseBuilder` 
  provides drop-in replacement for Laravel's handler. Once installed, it ensures only JSON response will be 
  returned no matter what happens.
+ 
+ **NOTE:** If you are intent to use Exception Handler helper, you **MUST** [configure](config.md) it first in
+  your config file (esp. `default` handler configuration)!
 
 ## Using Exception Handler Helper ##
 
