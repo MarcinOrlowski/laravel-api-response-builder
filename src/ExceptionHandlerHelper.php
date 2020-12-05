@@ -33,11 +33,11 @@ class ExceptionHandlerHelper
 	 * Render an exception into valid API response.
 	 *
 	 * @param \Illuminate\Http\Request $request Request object
-	 * @param \Exception               $ex      Exception
+	 * @param \Throwable               $ex      Exception
 	 *
 	 * @return HttpResponse
 	 */
-	public static function render(/** @scrutinizer ignore-unused */ $request, Exception $ex): HttpResponse
+	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
 	{
 		$result = null;
 
