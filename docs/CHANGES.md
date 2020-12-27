@@ -8,6 +8,11 @@
 
 ## CHANGE LOG ##
 
+* v9.2.0 (2020-12-27)
+   * Updated Travis config to run tests on PHP 8 too.
+   * Added Arabic translation (thanks to @mustafa-online)
+   * Added Turkish translation (thanks to @victorioustr)
+
 * v9.1.1 (2020-10-30)
    * Documentation and repository structure cleanup.
 
