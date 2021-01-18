@@ -8,7 +8,7 @@
 
 ## CHANGE LOG ##
 
-* @dev
+* v9.2.1 (2021-01-18)
    * [RB-186] ExceptionHandler now expects `\Throwable` instead of `\Exception`.
 
 * v9.2.0 (2020-12-27)
