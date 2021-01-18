@@ -4,7 +4,7 @@
  * Laravel API Response Builder
  *
  * @author    Muzaffer Ali AKYIL <m.akyil (#) qt (.) net (.) tr>
- * @copyright 2016-2020 Marcin Orlowski
+ * @copyright 2016-2021 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-response-builder
  */
