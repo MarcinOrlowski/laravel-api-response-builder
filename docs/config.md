@@ -66,25 +66,35 @@
  Meaning of parameters:
 
  * `handler` (mandatory) specifies a full name of the class implementing `ConverterContract`. Object of that class will be
-   instantiated and conversion method will be invoked with object given as argument. The `key` is a string that will be used
-   as the JSON response as key to array representation when object of that class is passed as direct payload
-   (i.e. `success($object);`). Note, that `key` is not used otherwise, so if you have i.e. array of objects, they will be
-   properly converted without `key` used.
- * `key` (mandatory) can be a string or `NULL`. A string is useful for some converters when dealing with an object of a given class being returned directly
-   as response payload (i.e. `success($collection)`). Otherwise  `NULL` can be used to tell `ResponseBuilder` to return object directly, which may be useful.
+   instantiated and conversion method invoked with object to convert passed as method argument.
+ * `key` (mandatory) can be a string or `NULL`. When dealing with an object of a given class being returned directly
+   as response payload (i.e. `success($collection)`), the `key` string will be used in returned JSON as converted data
+   key. Passing `NULL` tells `ResponseBuilder` to return object without using the key, which is useful while dealing
+   with i.e. collection of objects as collection will be `key`ed in the response, but objects should be returned as
+   plain JSON array.
+
+
+```json
+   ...
+   "data": {
+       "given-key": {
+            [converted object data]
+       }
+   }
+   ...
+```
+
+
  * `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one
    class extending another and you want to support both of them with separate configuration, then you **must** ensure child
    class has higher priority than it's parent class.
-
- The above configures two classes (`Model` and `Collection`). Whenever object of that class is spotted, method specified in
- `method` key would be called on that object and data that method returns will be returned in JSON object.
 
  All configuration entries are assigned priority `0` which can be changed using `pri` key (integer). This value is used to
  sort the entries to ensure that matching order is preserved. Entries with higher priority are matched first etc. This is
  very useful when you want to indirect configuration for two classes where additionally second extends first one.
  So if you have class `A` and `B` that extends `A` and you want different handling for `B` than you have set for `A`
  then `B` related configuration must be set with higher priority.
- 
+
  > ![IMPORTANT](img/warning.png) For each object `ResponseBuilder` checks if we have configuration entry matching **exactly**
  > object class name. If no such mapping is found, then the whole configuration is walked again, but this time we take inheritance
  > into consideration and use `instanceof` to see if we have a match, therefore you need to pay attention your config specifies
@@ -140,17 +150,17 @@ $data = [
  * `integer`
  * `string`
 
- For each of these types there's configuration entry in `primitives` node of `converter` config, consisting of `key` entry.
- The value of `key` is an arbitrary string, that will be used when given primivite will be passed as direct payload. For example,
- pre v9 would require
+ For each of these types there's configuration entry in `primitives` node of `converter` config. Each entry defined `key`
+ which is an arbitrary string, used for given primitive. The default value for all supported primitives is `value`.
+ For example, pre v9 would require
 
-    RB::success(['my_key' => 12.25]);
+    RB::success(['value' => 12.25]);
 
 while with v9+ if can be simplified:
 
     RB::success(12.25);
 
-and both would produce the same
+and both would yield the same result:
 
 ```json
 {
@@ -159,14 +169,15 @@ and both would produce the same
   "locale": "en",
   "message": "OK",
   "data": {
-      "my_key": 12.25
+      "value": 12.25
   }
 }
 ```
 
-assuming string`my_key` is the value of `key` entry for primitive type `double`.
-
 ### debug ###
+
+ > ![NOTE](img/warning.png) Do not use debug mode on production as it may expose i.e. your filesystem structure
+ > or class names or other internals that should not really be public.
 
 ```php
 'debug' => [
@@ -187,12 +198,8 @@ assuming string`my_key` is the value of `key` entry for primitive type `double`.
 ```
 
 `debug_key` - name of the JSON key trace data should be put under when in `debug` node.
-
-	/**
-	 * When ExceptionHandler kicks in and this is set to @true,
-	 * then returned JSON structure will contain additional debug data
-	 * with information about class name, file name and line number.
-	 */
+When `ExceptionHandler` kicks with debug mode enabled, returned JSON structure would
+contain additional debug data with information about class name, file name and line number:
 
 ```json
 {
@@ -210,6 +217,7 @@ assuming string`my_key` is the value of `key` entry for primitive type `double`.
     }
 }
 ```
+
 ### encoding_options ###
 
  This option controls data JSON encoding. Since v3.1, encoding was relying on framework's defaults, however this
