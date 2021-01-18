@@ -15,6 +15,12 @@
 
 ---
 
+ > ![WARNING](img/warning.png) Use of provided `ExceptionHandler` helper **requires** additional, **manual**
+ > installation steps to be made, otherwise Laravel's built-in handler will be used instead. See the details
+ > documented below.
+
+---
+
 # Exception Handling with Response Builder #
 
  Properly designed REST API should never hit consumer with anything but JSON. While it looks like easy task, 
@@ -41,7 +47,7 @@ use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
  Default handler as of Laravel 5.2 has been significantly simplified and by default it looks like this:
 
 ```php
-public function render($request, Exception $e)
+public function render($request, Throwable $e)
 {
     return parent::render($request, $e);
 }
@@ -50,7 +56,7 @@ public function render($request, Exception $e)
  After your edit it shall look like this:
 
 ```php
-public function render($request, Exception $e)
+public function render($request, Throwable $e)
 {
     return ExceptionHandlerHelper::render($request, $e);
 }

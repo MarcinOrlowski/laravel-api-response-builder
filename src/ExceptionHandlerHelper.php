@@ -14,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Exception;
+use Throwable;
 use Illuminate\Auth\AuthenticationException as AuthException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
@@ -33,11 +33,11 @@ class ExceptionHandlerHelper
 	 * Render an exception into valid API response.
 	 *
 	 * @param \Illuminate\Http\Request $request Request object
-	 * @param \Exception               $ex      Exception
+	 * @param \Throwable               $ex      Throwable to handle
 	 *
 	 * @return HttpResponse
 	 */
-	public static function render(/** @scrutinizer ignore-unused */ $request, Exception $ex): HttpResponse
+	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
 	{
 		$result = null;
 
@@ -62,9 +62,9 @@ class ExceptionHandlerHelper
 	}
 
 	/**
-	 * Handles given exception and produces valid HTTP response object.
+	 * Handles given throwable and produces valid HTTP response object.
 	 *
-	 * @param \Exception $ex                 Exception to be handled.
+	 * @param \Throwable $ex                 Throwable to be handled.
 	 * @param array      $ex_cfg             ExceptionHandler's config excerpt related to $ex exception type.
 	 * @param int        $fallback_http_code HTTP code to be assigned to produced $ex related response in
 	 *                                       case configuration array lacks own `http_code` value. Default
@@ -72,7 +72,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	protected static function processException(\Exception $ex, array $ex_cfg,
+	protected static function processException(\Throwable $ex, array $ex_cfg,
 	                                           int $fallback_http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR)
 	{
 		$api_code = $ex_cfg['api_code'];
@@ -110,13 +110,13 @@ class ExceptionHandlerHelper
 	 * `default` handler either for HttpException (if $ex is instance of it), or generic `default`
 	 * config.
 	 *
-	 * @param \Exception $ex
+	 * @param \Throwable $ex
 	 * @param int        $http_code
 	 * @param array      $placeholders
 	 *
 	 * @return string
 	 */
-	protected static function getErrorMessageForException(\Exception $ex, int $http_code, array $placeholders): string
+	protected static function getErrorMessageForException(\Throwable $ex, int $http_code, array $placeholders): string
 	{
 		// exception message is uselss, lets go deeper
 		if ($ex instanceof HttpException) {
@@ -153,14 +153,14 @@ class ExceptionHandlerHelper
 	/**
 	 * Process single error and produce valid API response.
 	 *
-	 * @param Exception $ex Exception to be handled.
+	 * @param \Throwable $ex Exception to be handled.
 	 * @param integer   $api_code
 	 * @param integer   $http_code
 	 * @param string    $error_message
 	 *
 	 * @return HttpResponse
 	 */
-	protected static function error(Exception $ex,
+	protected static function error(Throwable $ex,
 	                                int $api_code, int $http_code = null, string $error_message = null): HttpResponse
 	{
 		$ex_http_code = ($ex instanceof HttpException) ? $ex->getStatusCode() : $ex->getCode();
@@ -265,7 +265,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @return array|null
 	 */
-	protected static function getHandler(Exception $ex): ?array
+	protected static function getHandler(\Throwable $ex): ?array
 	{
 		$result = null;
 
