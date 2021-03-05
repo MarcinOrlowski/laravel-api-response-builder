@@ -8,8 +8,8 @@
 
 ## CHANGE LOG ##
 
-* @dev
-   * [RB-190] Fixed converting resource and resource collection (reported by @achinkumar121)
+* v9.2.2 (2021-03-05)
+   * [RB-190] Fixed converting resource and resource collection (reported by @achinkumar121).
 
 * v9.2.1 (2021-01-18)
    * [RB-186] ExceptionHandler now expects `\Throwable` instead of `\Exception`.
