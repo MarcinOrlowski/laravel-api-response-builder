@@ -52,7 +52,7 @@ class TestModelJsonResource extends JsonResource
      *
      * @return array
      */
-    public function toArray($request = null): array
+    public function toArray($request): array
     {
         return [
         	self::FIELD_NAME => $this->val,
