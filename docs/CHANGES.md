@@ -2,7 +2,7 @@
 
 # REST API Response Builder for Laravel #
 
- > ![WARNING](docs/img/warning.png) This library follows [Semantic versioning](https://semver.org).
+ > ![WARNING](img/warning.png) This library follows [Semantic versioning](https://semver.org).
  > See [compatibility docs](docs/compatibility.md) for details about backward compatibility
  > **before** doing major upgrade!
 
@@ -12,7 +12,7 @@
    * [RB-190] Fixed converting resource and resource collection (reported by @achinkumar121).
 
 * v9.2.1 (2021-01-18)
-   * [RB-186] ExceptionHandler now expects `\Throwable` instead of `\Exception`.
+   * [RB-186] ExceptionHandler now expects `Throwable` instead of `Exception`.
 
 * v9.2.0 (2020-12-27)
    * Updated Travis config to run tests on PHP 8 too.
