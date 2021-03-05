@@ -2,7 +2,7 @@
 
 # REST API Response Builder for Laravel #
 
-[![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v/stable)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
+[![Latest Stable Version](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/v)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 [![Build Status](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder.svg?branch=master)](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder)
 [![Code Quality](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/MarcinOrlowski/laravel-api-response-builder/?branch=master)

@@ -2,7 +2,7 @@
 
 # REST API Response Builder for Laravel #
 
- > ![WARNING](img/warning.png) This library follows [Semantic versioning](https://semver.org).
+ > ![WARNING](img/warning.png) This library follows [semantic versioning](https://semver.org).
  > See [compatibility docs](docs/compatibility.md) for details about backward compatibility
  > **before** doing major upgrade!
 
