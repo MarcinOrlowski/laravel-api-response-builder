@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 final class DefaultExceptionHandler implements ExceptionHandlerContract
 {
-	public function handle(array $user_config, /** @scrutinizer ignore-unused */ \Exception $ex): ?array
+	public function handle(array $user_config, /** @scrutinizer ignore-unused */ \Throwable $ex): ?array
 	{
 		$defaults = [
 			RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
