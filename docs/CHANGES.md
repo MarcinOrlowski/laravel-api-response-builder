@@ -48,7 +48,7 @@
    * Corrected documentation and usage examples.
 
 * v9.0.0 (2020-10-17)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md)).
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
    * [RB-156] Added logic to deal with directly returned objects or arrays.
    * [RB-158] Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
      `double`, `integer` and `string` types, configurable via new `converter/primitives`.
@@ -67,7 +67,7 @@
    * Removed `Util::printArray()` helper.
 
 * v8.0.0 (2020-07-14)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md)).
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
    * Improved performance by using calls qualified references.
    * [RB-132] Reworked exception handler helper to support delegated handlers for better flexibility.
    * Reverted depreciation of `BaseApiCodes` reserved range codes.
@@ -99,8 +99,8 @@
    * Updated PHPDocs.
 
 * v7.0.0 (2019-11-22)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md)).
-   * New, flexible API based on `Builder` pattern (see [docs](docs/compatibility.md) for details).
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
+   * New, flexible API based on `Builder` pattern (see [docs](compatibility.md) for details).
    * Reworked `ExceptionHandlerHelper` configuration. Now, you will be able to easily configure every `HttpException`
      for each HTTP status code you want. Separate `ExceptionHandler::TYPE_HTTP_NOT_FOUND_KEY` and all related stuff, 
      incl. localization key `http_not_found`, configuration is now replace with more flexible generic code that provides
@@ -122,7 +122,7 @@
    * Added test ensuring that user privided config overshadows built-in params.
 
 * v6.3.0 (2019-11-02)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md))
    * Signature of `RB::buildResponse()` changed to allow customization of final `message` entry (@hawezo).
    * Moved all code that produces messages for API codes to `RB::getMessageForApiCode()`.
    * Added `Validator::assertType()` helper method that validates var against set of allowed types.
@@ -142,7 +142,7 @@
    * Added PHP 7.4-snapshot to unit tests.
 
 * v6.2.0 (2019-10-19)
-   * Changed how auto-converter checks for supported classes (see [Data Conversion](docs/docs.md#data-conversion))
+   * Changed how auto-converter checks for supported classes (see [Data Conversion](docs.md#data-conversion))
    * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources) data class.
    * Added unit test for `ResponseBuilderServiceProvider::mergeConfg()`.
    * Moved data conversion code to separate `Converter` class.
@@ -157,7 +157,7 @@
    * Fixed `ResponseBuilderServiceProvider` using unreferenced `Arr` class method (reported by yassir3wad).
 
 * v6.1.0 (2019-09-28)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md))
    * Created new library logo (see [artwork/](artwork/) folder).
    * Added more unit tests to improve coverage.
    * Updated documentation.
@@ -167,8 +167,8 @@
    * Removed custom response keys mapping feature.
 
 * v6.0.0 (2019-09-20)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md))
-   * Requires Laravel 6.0+ and PHP 7.2+ (see [docs](docs/legacy.md) for legacy support hints).
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md))
+   * Requires Laravel 6.0+ and PHP 7.2+ (see [docs](legacy.md) for legacy support hints).
    * All API codes are now withing defined code range, incl. built-in codes.
    * Reserved codes reduced to 19 (from former 63).
    * Added type hints to all method arguments and return values
