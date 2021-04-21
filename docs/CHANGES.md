@@ -9,7 +9,7 @@
 ## CHANGE LOG ##
 
 * v9.2.3 (2021-04-21)
-  * [RB-191] Changed signature of ExceptionHandlers' `handle()` method to expectc `Throwable`
+  * [RB-194] Changed signature of ExceptionHandlers' `handle()` method to expectc `Throwable`
     instead of `Exception` (reported by @genesiscz).
 
 * v9.2.2 (2021-03-05)
