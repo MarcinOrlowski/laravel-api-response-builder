@@ -240,16 +240,16 @@
        id="g154"
        transform="translate(0,6.3500003)">
       <g
-         id="g171"
-         transform="translate(1.7686259,0.96331329)">
+         id="g101"
+         transform="translate(0,-2.6458334)">
         <g
-           transform="matrix(0.50544539,0,0,0.50544539,122.65914,132.31234)"
+           transform="matrix(0.50544539,0,0,0.50544539,124.42777,133.27565)"
            id="g4800">
           <g
              id="g1083">
             <polygon
                style="fill:#f1333f;fill-opacity:1"
-               points="60.019,218.301 125.592,218.301 125.592,197.897 82.8,197.897 82.8,79.626 60.019,79.626 "
+               points="82.8,197.897 82.8,79.626 60.019,79.626 60.019,218.301 125.592,218.301 125.592,197.897 "
                id="polygon1029" />
             <path
                inkscape:connector-curvature="0"
@@ -270,11 +270,11 @@
                id="rect1035" />
             <polygon
                style="fill:#f1333f;fill-opacity:1"
-               points="266.244,147.23 303.291,147.23 303.291,125.984 244.652,125.984 244.652,218.301 266.244,218.301 "
+               points="244.652,125.984 244.652,218.301 266.244,218.301 266.244,147.23 303.291,147.23 303.291,125.984 "
                id="polygon1037" />
             <polygon
                style="fill:#f1333f;fill-opacity:1"
-               points="462.569,196.678 435.428,125.984 413.558,125.984 449,218.301 476.138,218.301 511.579,125.984 489.709,125.984 "
+               points="413.558,125.984 449,218.301 476.138,218.301 511.579,125.984 489.709,125.984 462.569,196.678 435.428,125.984 "
                id="polygon1039" />
             <path
                inkscape:connector-curvature="0"
@@ -300,7 +300,7 @@
            xml:space="preserve"
            id="text133"
            style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect135);fill:#f1333f;fill-opacity:1;stroke:none;"
-           transform="translate(117.09473,-4.9161728)"><tspan
+           transform="translate(118.86336,-0.24869266)"><tspan
              x="154.52344"
              y="282.84237"><tspan
                style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.5833px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f1333f;fill-opacity:1">Created by Marcin Orlowski</tspan></tspan></text>
