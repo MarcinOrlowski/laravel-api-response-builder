@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 final class HttpExceptionHandler implements ExceptionHandlerContract
 {
-	public function handle(array $user_config, \Exception $ex): ?array
+	public function handle(array $user_config, \Throwable $ex): ?array
 	{
 		$default_config = [
 			// used by unauthenticated() to obtain api and http code for the exception
