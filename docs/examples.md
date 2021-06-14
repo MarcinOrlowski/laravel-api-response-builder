@@ -62,7 +62,7 @@ return RB::success($data);
 
 ```php
 $returned_array = [1,2,3];
-return RB::success($data);
+return RB::success($returned_array);
 ```
 
  which would give:
