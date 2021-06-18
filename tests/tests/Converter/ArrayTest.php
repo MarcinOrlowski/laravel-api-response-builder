@@ -29,7 +29,7 @@ class ArrayTest extends TestCase
 	/**
 	 * Tests how we convert array of objects
 	 */
-	public function testConvert_ArrayOfObjects(): void
+	public function testConvertArrayOfObjects(): void
 	{
 		// GIVEN model object with randomly set member value
 		$model_1 = new TestModel($this->getRandomString('model_1'));

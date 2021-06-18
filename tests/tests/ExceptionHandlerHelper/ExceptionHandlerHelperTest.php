@@ -256,6 +256,8 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /**
      * Tests if Exception Handler's default (built-in) configuration matches structure requrements.
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testBaseConfigStructure(): void
     {
@@ -284,6 +286,8 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /**
      * Validates ExceptionHandler's built-in configuration related to HttpException class.
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testBaseConfigHttpExceptionConfig(): void
     {
@@ -304,6 +308,8 @@ class ExceptionHandlerHelperTest extends TestCase
     /**
      * Checks if ExceptionHandler would return exception's message if exists but fall
      * back to `msg_key` ignoring built-in default string
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testExceptionMessageOverrideExceptionMessageOnly(): void
     {
@@ -347,6 +353,8 @@ class ExceptionHandlerHelperTest extends TestCase
     /**
      * Checks if ExceptionHandler would ignore exception's message as well as built-in fallback message
      * and use the one configured with `msg_key` instead.
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testExceptionMessageForceOverride(): void
     {
@@ -395,6 +403,8 @@ class ExceptionHandlerHelperTest extends TestCase
      * Checks if processException() would properly handle the case when there's no `msg_key` specified in exception
      * handler config for this particular exception type, yet method is ordered to ignore message provided by
      * exception and fall back one from config (which in this case means another fallback to built-in settings).
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testProcessExceptionWithMsgEnforceWithNoFallbackMsgKey(): void
     {
@@ -517,6 +527,8 @@ class ExceptionHandlerHelperTest extends TestCase
      * @param array    $params
      * @param int|null $code
      * @param bool     $is_default_handler
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     protected function checkExceptionHandlerConfigEntryStructure(array $params, ?int $code = null,
                                                                  bool $is_default_handler = false): void

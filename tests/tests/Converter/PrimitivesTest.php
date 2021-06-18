@@ -24,73 +24,6 @@ use MarcinOrlowski\ResponseBuilder\Type;
 
 class PrimitivesTest extends TestCase
 {
-	/**
-	 * Checks if getPrimitivesMapping would throw exception on invalid configuration data
-	 */
-	public function testGetPrimitivesMapping_InvalidConfigurationData(): void
-	{
-		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES, 'invalid');
-
-		$this->expectException(Ex\InvalidConfigurationException::class);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callProtectedMethod(Converter::class, 'getPrimitivesMapping');
-	}
-
-	/**
-	 * Checks if getPrimitivesMapping would return empty array if there's no "primitives" config entry
-	 */
-	public function testGetPrimitivesMapping_NoMappingConfig(): void
-	{
-		// Remove any classes config
-		/** @noinspection PhpUndefinedMethodInspection */
-		Config::offsetUnset(RB::CONF_KEY_CONVERTER_PRIMITIVES);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$result = $this->callProtectedMethod(Converter::class, 'getPrimitivesMapping');
-		$this->assertIsArray($result);
-		$this->assertEmpty($result);
-	}
-
-	/**
-	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when config for given
-	 * primitive type is of invalid type.
-	 */
-	public function testGetPrimitiveMappingConfigOrThrow_NoConfigKeys(): void
-	{
-		Config::offsetUnset(RB::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN);
-
-		// getPrimitiveMapping is called by constructor.
-		$this->expectException(Ex\InvalidConfigurationElementException::class);
-		new Converter();
-	}
-
-	/**
-	 * Checks if getPrimitiveMappingConfigOrThrow() throws exception when config for given primitive type lacks mandatory keys
-	 */
-	public function testGetPrimitiveMappingConfigOrThrow_ConfigInvalidType(): void
-	{
-		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES . '.' . Type::BOOLEAN, []);
-
-		// getPrimitiveMapping() is called by constructor.
-		$this->expectException(Ex\IncompleteConfigurationException::class);
-		new Converter();
-	}
-
-	public function testGetPrimitiveMappingConfigOrThrow_NoConfig(): void
-	{
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
-		unset($cfg[ Type::BOOLEAN ]);
-		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES, $cfg);
-
-		// getPrimitiveMapping is called by constructor.
-		$this->expectException(Ex\ConfigurationNotFoundException::class);
-		$converter = new Converter();
-		$converter->convert(false);
-
-	}
-
-	// -----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Checks how we convert directly passed object
@@ -126,6 +59,7 @@ class PrimitivesTest extends TestCase
 	{
 		// GIVEN primitive value
 		$value = \mt_rand(0, 1);
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -136,6 +70,7 @@ class PrimitivesTest extends TestCase
 	{
 		// GIVEN primitive value
 		$value = ((double)\mt_rand(0, 100000) / \mt_rand(1, 1000)) + 0.1;
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -146,6 +81,7 @@ class PrimitivesTest extends TestCase
 	{
 		// GIVEN primitive value
 		$value = \mt_rand(0, 10000);
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -156,6 +92,7 @@ class PrimitivesTest extends TestCase
 	{
 		// GIVEN primitive value
 		$value = $this->getRandomString();
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
 

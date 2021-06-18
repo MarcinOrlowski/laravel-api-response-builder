@@ -151,6 +151,8 @@ class MakeTest extends TestCase
 	/**
 	 * Checks if RB::CONF_KEY_DATA_ALWAYS_OBJECT correctly resturns NULL payload
 	 * as empty JSON Object
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
     public function testDataAlwaysObjectConfigFlag(): void
     {

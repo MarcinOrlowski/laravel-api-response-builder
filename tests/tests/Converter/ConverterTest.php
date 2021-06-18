@@ -69,35 +69,4 @@ class ConverterTest extends TestCase
 		$this->assertCount(1, $result);
 		$this->assertEquals($child_val, $result[TestModel::FIELD_NAME]);
 	}
-
-	// -----------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Checks if getClassesMapping would throw exception on invalid configuration data
-	 */
-	public function testGetClassesMapping_InvalidConfigurationData(): void
-	{
-		Config::set(RB::CONF_KEY_CONVERTER_CLASSES, 'invalid');
-
-		$this->expectException(Ex\InvalidConfigurationException::class);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$this->callProtectedMethod(Converter::class, 'getClassesMapping');
-	}
-
-	/**
-	 * Checks if getClassesMapping would return empty array if there's no "classes" config entry
-	 */
-	public function testGetClassesMapping_NoMappingConfig(): void
-	{
-		// Remove any classes config
-		/** @noinspection PhpUndefinedMethodInspection */
-		Config::offsetUnset(RB::CONF_KEY_CONVERTER_CLASSES);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$result = $this->callProtectedMethod(Converter::class, 'getClassesMapping');
-		$this->assertIsArray($result);
-		$this->assertEmpty($result);
-	}
-
 }

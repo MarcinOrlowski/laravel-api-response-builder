@@ -107,6 +107,7 @@ trait TestingHelpers
      *
      * @return \StdClass validated response object data (as object, not array)
      *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function getResponseSuccessObject(int $expected_api_code_offset = null,
                                              int $expected_http_code = null,

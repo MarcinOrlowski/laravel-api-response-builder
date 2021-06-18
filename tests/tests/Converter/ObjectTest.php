@@ -63,7 +63,7 @@ class ObjectTest extends TestCase
 
         $this->expectException(Ex\InvalidTypeException::class);
 
-        ///** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod(Converter::class, 'getClassesMapping');
     }
 

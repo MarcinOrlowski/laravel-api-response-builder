@@ -128,6 +128,8 @@ class InternalsTest extends TestCase
 	 * Tests getCodeMessageKey() if given code of configured code range.
 	 *
 	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testGetCodeMessageKeyMethodWithCodeOutOfCodeRange(): void
 	{

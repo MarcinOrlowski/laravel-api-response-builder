@@ -73,6 +73,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 */
 	protected function mergeConfigFrom($path, $key)
 	{
+		/** @noinspection PhpIncludeInspection */
 		$defaults = require $path;
 		$config = $this->app['config']->get($key, []);
 

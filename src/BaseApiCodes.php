@@ -185,6 +185,8 @@ class BaseApiCodes
      * Returns API code for internal code EX_VALIDATION_EXCEPTION
      *
      * @return int valid API code in current range
+     *
+     * @noinspection PhpMethodNamingConventionInspection
      */
     public static function EX_VALIDATION_EXCEPTION(): int
     {

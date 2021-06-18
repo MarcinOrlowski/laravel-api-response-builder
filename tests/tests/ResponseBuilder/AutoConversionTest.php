@@ -122,6 +122,8 @@ class AutoConversionTest extends TestCase
      * @return void
      *
      * @dataProvider provider_TestSuccessWithPrimitive
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testSuccessWithPrimitive($value): void
     {
@@ -133,7 +135,6 @@ class AutoConversionTest extends TestCase
 	    $data = $j->data;
 	    $this->assertNotNull($data);
 
-	    /** @noinspection PhpUnhandledExceptionInspection */
 	    $converter = new Converter();
 	    $cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
 	    $this->assertIsArray($cfg);

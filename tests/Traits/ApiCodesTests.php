@@ -83,6 +83,8 @@ trait ApiCodesTests
 	 * Checks if defined code range is large enough to accommodate built-in codes.
 	 *
 	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testCodeRangeIsLargeEnough(): void
 	{
@@ -128,6 +130,8 @@ trait ApiCodesTests
 	 * Checks if all Api codes are in correct and allowed range.
 	 *
 	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testIfAllCodesAreInRange(): void
 	{
@@ -158,6 +162,8 @@ trait ApiCodesTests
 	 * Checks if all defined Api code constants' values are unique.
 	 *
 	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testIfAllApiValuesAreUnique(): void
 	{
@@ -173,6 +179,8 @@ trait ApiCodesTests
 	 * Checks if all codes are mapped to existing locale strings.
 	 *
 	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testIfAllCodesAreCorrectlyMapped(): void
 	{
