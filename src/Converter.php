@@ -211,8 +211,8 @@ class Converter
 
 		if (!empty($classes)) {
 			$mandatory_keys = [
-				RB::KEY_HANDLER => [TYPE::STRING],
-				RB::KEY_KEY => [TYPE::STRING, TYPE::NULL],
+				RB::KEY_HANDLER => [Type::STRING],
+				RB::KEY_KEY => [Type::STRING, Type::NULL],
 			];
 			foreach ($classes as $class_name => $class_config) {
 				if (!\is_array($class_config)) {

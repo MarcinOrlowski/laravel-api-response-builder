@@ -125,7 +125,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectBool(): void
 	{
 		// GIVEN primitive value
-		$value = \mt_rand(0, 1) ? false : true;
+		$value = \mt_rand(0, 1);
 		$this->doDirectPrimitiveTest($value);
 	}
 

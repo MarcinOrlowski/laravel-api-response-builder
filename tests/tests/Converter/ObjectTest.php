@@ -92,11 +92,11 @@ class ObjectTest extends TestCase
             $this->assertIsArray($result);
             $this->assertCount(1, $result);
 
-            if(gettype($allowedKey) === TYPE::STRING) {
+            if(gettype($allowedKey) === Type::STRING) {
                 $this->assertArrayHasKey($allowedKey, $result);
                 $this->assertArrayHasKey($fake->key, $result[ $allowedKey ]);
                 $this->assertEquals($result[ $allowedKey ][ $fake->key ], $fake->val);
-            } else if(gettype($allowedKey) === TYPE::NULL) {
+            } else if(gettype($allowedKey) === Type::NULL) {
                 $this->assertArrayHasKey($fake->key, $result);
                 $this->assertEquals($result[ $fake->key ], $fake->val);
             }

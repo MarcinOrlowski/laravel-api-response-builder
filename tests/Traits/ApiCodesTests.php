@@ -165,7 +165,7 @@ trait ApiCodesTests
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$items = \array_count_values($api_codes_class_name::getMap());
 		foreach ($items as $code => $count) {
-			$this->assertLessThanOrEqual($count, 1, sprintf("Value of  '{$code}' is not unique. Used {$count} times."));
+			$this->assertLessThanOrEqual($count, 1, "Value of  '{$code}' is not unique. Used {$count} times.");
 		}
 	}
 

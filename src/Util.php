@@ -47,7 +47,7 @@ final class Util
 						"mergeConfig(): Cannot merge '{$m_type}' into '{$orig_type}' for key '{$m_key}'.");
 				}
 
-				if (\is_array($merging[ $m_key ])) {
+				if (\is_array($m_val)) {
 					$array[ $m_key ] = static::mergeConfig($original[ $m_key ], $m_val);
 				} else {
 					$array[ $m_key ] = $m_val;
