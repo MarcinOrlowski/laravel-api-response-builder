@@ -184,3 +184,4 @@ public const VALIDATION_EXCEPTION = ...;
 ### ApiCodes ###
 
  The above assumes you keep your codes in `ApiCodes` class stored in `app/ApiCodes.php` and using `App\` namespace.
+

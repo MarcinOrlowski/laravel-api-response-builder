@@ -94,3 +94,4 @@ return RB::success();
     ```php
     return RB::error(ApiCodes::SOMETHING_FAILED);
     ```
+

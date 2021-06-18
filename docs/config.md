@@ -361,3 +361,4 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 ```php
 'max_code' => 1024,
 ```
+

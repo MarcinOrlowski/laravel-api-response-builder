@@ -178,3 +178,4 @@ return RB::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $login]);
 $msg = Lang::get('message.something_wrong', ['login' => $login]);
 return RB::errorWithMessage(ApiCodeBase::SOMETHING_WENT_WRONG, $msg);
 ```
+

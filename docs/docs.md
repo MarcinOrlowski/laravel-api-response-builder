@@ -149,3 +149,4 @@ MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.
 ````
 
  You can use `:api_code` placeholder in the message and it will be substituted actual error code value.
+

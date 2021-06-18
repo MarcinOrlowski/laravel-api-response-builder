@@ -75,3 +75,4 @@ return RB::success($flights);
 
  The whole functionality is configurable using `converter` array. See [Converter configuration](config.md#converter) for
  more information.
+
