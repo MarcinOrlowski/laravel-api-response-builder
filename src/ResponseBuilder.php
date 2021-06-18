@@ -362,6 +362,10 @@ class ResponseBuilder extends ResponseBuilderBase
 			$data = (object)$data;
 		}
 
+		if ($data === null && Config::get(RB::CONF_KEY_DATA_ALWAYS_OBJECT, false)) {
+			$data = (object)[];
+		}
+
 		// get human readable message for API code or use message string (if given instead of API code)
 		if (\is_int($msg_or_api_code)) {
 			$message = $this->getMessageForApiCode($success, $msg_or_api_code, $placeholders);

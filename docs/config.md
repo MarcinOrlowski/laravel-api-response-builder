@@ -32,6 +32,7 @@
  * [converter](#converter)
    * [classes](#classes)
    * [primitives](#primitives)
+ * [data_always_object](#data_always_object)
  * [debug](#debug)
  * [encoding_options](#encoding_options)
  * [exception_handler](#exception_handler)
@@ -175,6 +176,36 @@ and both would yield the same result:
   "data": {
       "value": 12.25
   }
+}
+```
+
+### data_always_object ###
+
+Added in v9.3.0
+
+By default, when no payload is to be returned (i.e. `RB::success();`), the `data` node of the JSON response would be returned
+with the value of `NULL`:
+
+```json
+{
+  "success": true,
+  "code": 0,
+  "locale": "en",
+  "message": "OK",
+  "data": null
+}
+```
+
+When this option is set to `TRUE`, the `data` will be always valid JSON object, even if no data is to be returned. In such
+case the object will be returned empty:
+
+```json
+{
+  "success": true,
+  "code": 0,
+  "locale": "en",
+  "message": "OK",
+  "data": {}
 }
 ```
 
