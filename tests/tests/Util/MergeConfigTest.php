@@ -20,6 +20,8 @@ class MergeConfigTest extends TestCase
 {
 	/**
 	 * Checks if config merger properly combines two arrays, preserving keys etc.
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testConfigMerge(): void
 	{
@@ -72,6 +74,8 @@ class MergeConfigTest extends TestCase
 	/**
 	 * Checks if config merger would fail when we try to feed it with two config sharing the key
 	 * but using data of different type in each configs.
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testConfigMergeWithIncompatibleElements(): void
 	{

@@ -33,7 +33,7 @@ final class Util
 	 *
 	 * @return array
 	 *
-	 * @throws \RuntimeException
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	public static function mergeConfig(array $original, array $merging): array
 	{
