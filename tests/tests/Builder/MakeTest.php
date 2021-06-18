@@ -148,6 +148,27 @@ class MakeTest extends TestCase
         $this->assertNotEquals($result_escaped, $result_unescaped);
     }
 
+	/**
+	 * Checks if RB::CONF_KEY_DATA_ALWAYS_OBJECT correctly resturns NULL payload
+	 * as empty JSON Object
+	 */
+    public function testDataAlwaysObjectConfigFlag(): void
+    {
+    	// When enabling data_always_object feature
+	    \Config::set(RB::CONF_KEY_DATA_ALWAYS_OBJECT, true);
+
+	    // and passing NULL as data
+	    $data = null;
+	    $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
+
+	    // returned 'data' branch should be empty JSON object
+	    $j = json_decode($resp->getContent());
+	    $this->assertEquals(true, $j->{RB::KEY_SUCCESS});
+	    $this->assertNotNull($j->{RB::KEY_DATA});
+	    $this->assertIsObject($j->{RB::KEY_DATA});
+	    $this->assertEmpty((array)$j->{RB::KEY_DATA});
+    }
+
     /**
      * Checks make() handling invalid type of api_code argument
      *

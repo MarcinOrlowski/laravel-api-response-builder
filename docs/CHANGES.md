@@ -8,6 +8,11 @@
 
 ## CHANGE LOG ##
 
+* v9.3.0 (2021-06-18)
+  * Added `data_always_object` config option, that enforces response `data` node to be returned
+    as empty JSON Object (`{}`) instead of `NULL`.
+  * Updated documentation.
+
 * v9.2.3 (2021-04-21)
   * [RB-194] Changed signature of ExceptionHandlers' `handle()` method to expectc `Throwable`
     instead of `Exception` (reported by @genesiscz).
