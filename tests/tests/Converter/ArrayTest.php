@@ -127,7 +127,7 @@ class ArrayTest extends TestCase
 	 *
 	 * @param array $data
 	 *
-	 * @dataProvider ConvertArrayOfKeyAndKeylessItemsProvider
+	 * @dataProvider convertArrayOfKeyAndKeylessItemsProvider
 	 */
 	public function testConvertArrayOfKeyAndKeylessItems(array $data): void
 	{
@@ -152,7 +152,7 @@ class ArrayTest extends TestCase
 	/**
 	 * Data provider for testConvertArrayOfKeyAndKeylessItems
 	 */
-	public function ConvertArrayOfKeyAndKeylessItemsProvider(): array
+	public function convertArrayOfKeyAndKeylessItemsProvider(): array
 	{
 		// GIVEN model object with randomly set member value
 		$model_1 = new TestModel($this->getRandomString('model_1'));
@@ -175,8 +175,6 @@ class ArrayTest extends TestCase
 			[$data1],
 			[$data2],
 		];
-
-
 	}
 
 	/**

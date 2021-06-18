@@ -35,15 +35,6 @@ class SuccessTest extends TestCase
 		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
 	}
 
-	public function testSuccessWithExplicitNull(): void
-	{
-		$this->response = RB::success(null);
-		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
-
-		$this->assertNull($j->data);
-		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
-	}
-
 	public function testSuccessWithArrayPayload(): void
 	{
 		$payload = [];
