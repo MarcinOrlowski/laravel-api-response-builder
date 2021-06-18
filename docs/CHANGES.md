@@ -8,7 +8,7 @@
 
 ## CHANGE LOG ##
 
-* v9.3.0 (2021-06-18)
+* v9.3.0 (2021-06-19)
   * Added `data_always_object` config option, that enforces response `data` node to be returned
     as empty JSON Object (`{}`) instead of `NULL`.
   * Updated documentation.
