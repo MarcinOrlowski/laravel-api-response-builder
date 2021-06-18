@@ -39,7 +39,7 @@
     `\App::getLocale()`). This helps processing the response if you support multiple languages,
   * `message` (**string**) human readable message that is ready to display and explains human readable explanation
     of the `code` value,
-  * `data` (**object**|**array**|**null**) if you return any additional data with your reply, it would end here.
+  * `data` (**object**|**null**) if you return any additional data with your reply, it would end here.
     If no extra data is needed, that key still be present in the response with `null` value.
 
  **NOTE:** If you need to return other/different elements in the above structure (not in your `data`),

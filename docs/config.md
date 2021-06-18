@@ -57,7 +57,7 @@
     ],
     \Illuminate\Pagination\Paginator::class => [
         'handler' => \MarcinOrlowski\ResponseBuilder\Converters\ArrayableConverter::class,
-        'key'     => null,
+        'key'     => null,  // SPECIAL CASE. READ BELOW!
         'pri'     => 0,
     ],
 ],
@@ -67,12 +67,17 @@
 
  * `handler` (mandatory) specifies a full name of the class implementing `ConverterContract`. Object of that class will be
    instantiated and conversion method invoked with object to convert passed as method argument.
- * `key` (mandatory) can be a string or `NULL`. When dealing with an object of a given class being returned directly
-   as response payload (i.e. `success($collection)`), the `key` string will be used in returned JSON as converted data
-   key. Passing `NULL` tells `ResponseBuilder` to return object without using the key, which is useful while dealing
-   with i.e. collection of objects as collection will be `key`ed in the response, but objects should be returned as
-   plain JSON array.
+ * `key` (mandatory), value can be a string or (in some special cases, `NULL` is also allowed). 
 
+> ![IMPORTANT](img/warning.png) Object conversion works **recursively**! That makes some implications, when you i.e.
+> convert object (say `A`) which when converted still returns other objects  (say 'B`s). In such case once `ResponseBuilder`
+> will also try to convert `B` so final JSON representation contain plain JSON structures. So when converting an object of a
+> given class that is going to be returned directly as response payload (i.e. `RB::success($collection);`), the string given
+> as `key` will be used in returned JSON as converted data key. The only case where you can have key set to `NULL` is when 
+> you are sure you are dealing i.e. collection of objects, so the collection object will be `key`ed in the response (as per
+> its class' configuration), but each element of that collection should be returned as plain JSON array.
+> In other words, you can only have `NULL` key value if your objects are part of other structures. You cannot have it
+> on main objects, because `ResponseBuilder` would not be able to construct valid JSON Object without the key.
 
 ```json
    ...
@@ -83,7 +88,6 @@
    }
    ...
 ```
-
 
  * `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one
    class extending another and you want to support both of them with separate configuration, then you **must** ensure child
