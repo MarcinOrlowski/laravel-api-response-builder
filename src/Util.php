@@ -44,7 +44,7 @@ final class Util
 				$m_type = \gettype($m_val);
 				if ($orig_type !== $m_type) {
 					throw new Ex\IncompatibleTypeException(
-						"Incompatible types. Cannot merge {$m_type} into {$orig_type} (key '{$m_key}').");
+						"mergeConfig(): Cannot merge '{$m_type}' into '{$orig_type}' for key '{$m_key}'.");
 				}
 
 				if (\is_array($merging[ $m_key ])) {
