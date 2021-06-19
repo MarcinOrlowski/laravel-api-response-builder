@@ -47,13 +47,16 @@ class TestModelArrayable implements Arrayable
 	}
 
 	/**
-	 * Converts model to array. Signature must match JsonResource::toArray()
+	 * Converts model to array.
 	 *
 	 * @param Request $request
 	 *
 	 * @return array
 	 *
 	 * @noinspection PhpUnusedParameterInspection
+	 *
+	 * NOTE: No typehint as signature must match JsonResource::toArray()
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function toArray($request = null): array
 	{

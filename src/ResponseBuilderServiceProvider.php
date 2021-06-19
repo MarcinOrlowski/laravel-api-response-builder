@@ -39,6 +39,12 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 * Register bindings in the container.
 	 *
 	 * @return void
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\IncompleteConfigurationException
+	 *
+	 * @noinspection PhpUnused
+	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
 	public function register()
 	{
@@ -52,6 +58,9 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 * Sets up package resources
 	 *
 	 * @return void
+	 *
+	 * @noinspection PhpUnused
+	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
 	public function boot()
 	{
@@ -73,8 +82,9 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 * @throws Ex\IncompleteConfigurationException
 	 * @throws Ex\IncompatibleTypeException
 	 *
-	 * NOTE: not return typehint due to compatibility with Laravel's method signature.
+	 * NOTE: not typehints due to compatibility with Laravel's method signature.
 	 * @noinspection PhpMissingReturnTypeInspection
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	protected function mergeConfigFrom($path, $key)
 	{

@@ -38,6 +38,9 @@ class ExceptionHandlerHelper
 	 * @return HttpResponse
 	 *
 	 * @noinspection PhpUnusedParameterInspection
+	 *
+	 * NOTE: not typehints due to compatibility with Laravel's method signature.
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
 	{
@@ -145,6 +148,10 @@ class ExceptionHandlerHelper
 	 * @return HttpResponse
 	 *
 	 * @noinspection PhpUnusedParameterInspection
+	 * @noinspection PhpUnused
+	 *
+	 * NOTE: not typehints due to compatibility with Laravel's method signature.
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
 	                                                                     AuthException $exception): HttpResponse

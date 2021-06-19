@@ -144,6 +144,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	{
 		$code_ok = BaseApiCodes::OK();
 		if ($api_code !== $code_ok) {
+			/** @noinspection PhpUnhandledExceptionInspection */
 			Validator::assertIsIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 		}
 		if ($api_code === $code_ok) {
@@ -324,6 +325,7 @@ class ResponseBuilder extends ResponseBuilderBase
 
 		Validator::assertIsInt('api_code', $api_code);
 		if (!BaseApiCodes::isCodeValid($api_code)) {
+			/** @noinspection PhpUnhandledExceptionInspection */
 			Validator::assertIsIntRange('api_code', $api_code, BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
 		}
 

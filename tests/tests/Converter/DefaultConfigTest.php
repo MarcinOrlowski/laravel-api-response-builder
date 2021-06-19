@@ -162,6 +162,7 @@ class DefaultConfigTest extends TestCase
 			$data[] = $this->getRandomString("item{$i}");
 		}
 		$total = \count($data);
+		/** @noinspection PhpParamsInspection */
 		$this->doPaginatorSupportTests(
 			new \Illuminate\Pagination\LengthAwarePaginator(collect($data), $total, $total / 2));
 	}
@@ -176,6 +177,7 @@ class DefaultConfigTest extends TestCase
 			$data[] = $this->getRandomString("item{$i}");
 		}
 
+		/** @noinspection PhpParamsInspection */
 		$this->doPaginatorSupportTests(
 			new \Illuminate\Pagination\Paginator(collect($data), \count($data) / 2));
 	}
@@ -185,8 +187,8 @@ class DefaultConfigTest extends TestCase
 	 *
 	 * @param \Illuminate\Pagination\AbstractPaginator $paginator
 	 *
-	 * NOTE: not return typehint due to PHP not matching subclasses properly with hints
-	 * @noinspection PhpMissingReturnTypeInspection
+	 * NOTE: not param typehint due to PHP not matching subclasses hints properly
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	protected function doPaginatorSupportTests($paginator): void
 	{

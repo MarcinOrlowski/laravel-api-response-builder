@@ -37,6 +37,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	 *
 	 * NOTE: not return typehint due to compatibility with TestBench's method signature.
 	 * @noinspection PhpMissingReturnTypeInspection
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function getEnvironmentSetUp($app)
 	{
@@ -45,6 +46,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 		Config::set(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, true);
 
 		// use 'stderr' channer to see the log output (if needed).
+		/** @noinspection OffsetOperationsInspection */
 		$app['config']->set('logging.default', 'null');
 	}
 
@@ -66,7 +68,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	 *
 	 * @return array
 	 *
+	 * NOTE: not return typehint due to compatibility with TestBench's method signature.
 	 * @noinspection PhpUnusedParameterInspection
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	protected function getPackageProviders($app): array
 	{
