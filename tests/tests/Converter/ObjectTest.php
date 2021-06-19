@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-use MarcinOrlowski\ResponseBuilder\Tests\Converters\FakeConverter;
+use MarcinOrlowski\ResponseBuilder\Tests\Converter\Converters\FakeConverter;
 
 /**
  * Class ObjectTest

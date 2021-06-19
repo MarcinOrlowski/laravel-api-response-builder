@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Tests\Converters;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Converter\Converters;
 
 /**
  * Laravel API Response Builder
