@@ -3,4 +3,7 @@ parameters:
   paths:
     - "src/"
     - "tests/"
+parameters:
+  bootstrapFiles:
+    - vendor/autoload.php
 
