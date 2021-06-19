@@ -131,7 +131,6 @@ class AutoConversionTest extends TestCase
 	 */
     public function testSuccessWithPrimitive($value): void
     {
-    	$value = (bool)\mt_rand(0, 1);
         $this->response = RB::success($value);
 	    $j = $this->getResponseSuccessObject();
 
@@ -146,14 +145,11 @@ class AutoConversionTest extends TestCase
 	    $key = $cfg[ RB::KEY_KEY ];
 	    $this->assertObjectHasAttribute($key, $data);
 	    $this->assertEquals($value, $data->{$key});
-
     }
 
 	public function provider_TestSuccessWithPrimitive(): array
 	{
 		return [
-			// array
-			[[$this->getRandomString() => $this->getRandomString()]],
 			// boolean
 			[(bool)\mt_rand(0, 1)],
 			// integer
