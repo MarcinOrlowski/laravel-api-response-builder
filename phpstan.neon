@@ -1,5 +1,14 @@
+includes:
+  - vendor/nunomaduro/larastan/extension.neon
+
 parameters:
   level: 4
+
+  # https://github.com/nunomaduro/larastan
+  ignoreErrors:
+    - '#Unsafe usage of new static#'
+  checkMissingIterableValueType: false
+
   paths:
     - "src/"
     - "tests/"

@@ -50,6 +50,7 @@
     "orchestra/testbench": "^4.0",
     "phpunit/phpunit": "^8.0",
     "phpunit/php-code-coverage": "^7.0",
-    "friendsofphp/php-cs-fixer": "^2.15"
+    "friendsofphp/php-cs-fixer": "^2.15",
+    "nunomaduro/larastan": "^0.7.6"
   }
 }
