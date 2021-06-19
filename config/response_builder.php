@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Laravel API Response Builder - configuration file

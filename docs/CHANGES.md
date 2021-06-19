@@ -11,6 +11,9 @@
 * v9.3.0 (2021-06-19)
   * Added `data_always_object` config option, that enforces response `data` node to be returned
     as empty JSON Object (`{}`) instead of `NULL`.
+  * Updated and corrected PHPDocs (incl. some type hints)
+  * Added missing type hint to `success()`.
+  * Added strict type header to classes.
   * Updated documentation.
 
 * v9.2.3 (2021-04-21)

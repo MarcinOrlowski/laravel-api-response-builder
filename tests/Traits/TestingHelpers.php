@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
@@ -396,7 +397,7 @@ trait TestingHelpers
             $prefix = "{$prefix}_";
         }
 
-        return $prefix . \md5(uniqid(\mt_rand(), true));
+        return $prefix . \md5(uniqid('', true));
     }
 
     // -----------------------------------------------------------------------------------------------------------

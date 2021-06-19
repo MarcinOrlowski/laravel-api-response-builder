@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
@@ -92,7 +93,7 @@ class ExceptionHandlerHelperTest extends TestCase
         ];
 
         foreach ($codes as $exception_type => $params) {
-            $this->doTestSingleException($exception_type, $params['exception_class'],
+            $this->doTestSingleException((string)($exception_type), $params['exception_class'],
                 $params['expected_http_code'], $params['expected_api_code'],
                 $params['do_message_validation'], $params['has_data']);
         }
