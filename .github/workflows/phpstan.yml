@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         php: [7.2, 7.3, 7.4, 8.0]
-  
+
     runs-on: ubuntu-latest
 
     steps:
@@ -18,4 +18,4 @@ jobs:
       - name: Running PHPStan...
         uses: php-actions/phpstan@v3
         with:
-          path: "src/"
+          configuration: phpstan.neon
