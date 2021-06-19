@@ -22,7 +22,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 
 use Illuminate\Support\ServiceProvider;
-use MarcinOrlowski\ResponseBuilder\Exceptions\IncompleteConfigurationException;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * Laravel's service provider for ResponseBuilder
@@ -43,6 +43,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	public function register()
 	{
 		foreach ($this->config_files as $file) {
+			/** @noinspection PhpUnhandledExceptionInspection */
 			$this->mergeConfigFrom(__DIR__ . "/../config/{$file}", ResponseBuilder::CONF_CONFIG);
 		}
 	}
@@ -67,9 +68,10 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 * @param string $path
 	 * @param string $key
 	 *
-	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\IncompleteConfigurationException
-	 *
 	 * @return void
+	 *
+	 * @throws Ex\IncompleteConfigurationException
+	 * @throws Ex\IncompatibleTypeException
 	 *
 	 * NOTE: not return typehint due to compatibility with Laravel's method signature.
 	 * @noinspection PhpMissingReturnTypeInspection
@@ -80,10 +82,11 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 		$defaults = require $path;
 		$config = $this->app['config']->get($key, []);
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$merged_config = Util::mergeConfig($defaults, $config);
 
 		if (!isset($merged_config['converter']['classes'])) {
-			throw new IncompleteConfigurationException(
+			throw new Ex\IncompleteConfigurationException(
 				sprintf('Configuration lacks "%s" array.', ResponseBuilder::CONF_KEY_CONVERTER_CLASSES));
 		}
 
