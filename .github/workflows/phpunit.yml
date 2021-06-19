@@ -7,11 +7,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      uses: php-actions/composer@v6
-      with:
-        version: 2
-        php_version: 8.0
-        dev: yes
-
+      - name: Checkout repository...
+        uses: actions/checkout@v2
+      - name: Install dependencies...
+        uses: php-actions/composer@v6
+        with:
+          version: 2
+          php_version: 8.0
+          dev: yes
+      - name: Run unit tests...
+        uses: php-actions/phpunit@v3
+        with:
+          bootstrap: vendor/autoload.php
+          configuration: test/phpunit.xml
