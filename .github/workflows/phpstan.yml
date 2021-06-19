@@ -4,11 +4,9 @@ on: [push]
 
 jobs:
   build:
-    strategy:
-      # do not stop the workflow if single run failed
-      fail-fast: false
-      matrix:
-        php: [7.2, 7.3, 7.4, 8.0]
+    fail-fast: false
+    matrix:
+      php: [8.0]
 
     runs-on: ubuntu-latest
 
@@ -19,3 +17,4 @@ jobs:
         uses: php-actions/phpstan@v3
         with:
           configuration: phpstan.neon
+          php_version: ${{ matrix.php }}
