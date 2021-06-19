@@ -4,9 +4,10 @@ on: [push]
 
 jobs:
   build:
-    fail-fast: false
-    matrix:
-      php: [8.0]
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.4, 8.0]
 
     runs-on: ubuntu-latest
 
