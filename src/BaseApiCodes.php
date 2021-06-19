@@ -89,12 +89,15 @@ class BaseApiCodes
      */
     protected const EX_VALIDATION_EXCEPTION_OFFSET = 15;
 
-    /**
-     * Returns base code mapping array
-     *
-     * @return array
-     * @noinspection PhpUnhandledExceptionInspection
-     */
+	/**
+	 * Returns base code mapping array
+	 *
+	 * @return array
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 */
     protected static function getBaseMap(): array
     {
         $tpl = 'response-builder::builder.http_%d';

@@ -265,23 +265,24 @@ trait TestingHelpers
 
     // -----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Calls protected method make()
-     *
-     * @param boolean    $success                    @true if response should indicate success, @false otherwise
-     * @param int        $api_code_offset            API code to use with produced response
-     * @param string|int $message_or_api_code_offset Resolvable Api code or message string
-     * @param array|null $data                       Data to return
-     * @param array|null $headers                    HTTP headers to include
-     * @param int|null   $encoding_options           see http://php.net/manual/en/function.json-encode.php
-     * @param array|null $debug_data                 optional data to be included in response JSON
-     *
-     * @return HttpResponse
-     *
-     * @throws \ReflectionException
-     *
-     * @noinspection PhpTooManyParametersInspection
-     */
+	/**
+	 * Calls protected method make()
+	 *
+	 * @param boolean    $success                    @true if response should indicate success, @false otherwise
+	 * @param int        $api_code_offset            API code to use with produced response
+	 * @param string|int $message_or_api_code_offset Resolvable Api code or message string
+	 * @param array|null $data                       Data to return
+	 * @param array|null $headers                    HTTP headers to include
+	 * @param int|null   $encoding_options           see http://php.net/manual/en/function.json-encode.php
+	 * @param array|null $debug_data                 optional data to be included in response JSON
+	 *
+	 * @return HttpResponse
+	 *
+	 * @throws \ReflectionException
+	 * @throws Ex\MissingConfigurationKeyException
+	 *
+	 * @noinspection PhpTooManyParametersInspection
+	 */
     protected function callMakeMethod(bool $success, int $api_code_offset, $message_or_api_code_offset,
                                       array $data = null,
                                       array $headers = null, int $encoding_options = null,

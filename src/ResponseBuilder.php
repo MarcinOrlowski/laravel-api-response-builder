@@ -139,6 +139,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param int|null $api_code
 	 *
 	 * @return \MarcinOrlowski\ResponseBuilder\ResponseBuilder
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public static function asSuccess(int $api_code = null): self
 	{
@@ -150,6 +152,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param int $api_code
 	 *
 	 * @return \MarcinOrlowski\ResponseBuilder\ResponseBuilder
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public static function asError(int $api_code): self
 	{

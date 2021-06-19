@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
 
-use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
-
 /**
  * Laravel API Response Builder
  *

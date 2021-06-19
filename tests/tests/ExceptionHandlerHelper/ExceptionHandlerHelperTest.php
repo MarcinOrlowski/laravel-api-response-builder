@@ -21,7 +21,6 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
-use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;

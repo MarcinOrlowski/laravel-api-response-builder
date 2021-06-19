@@ -18,7 +18,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 class ErrorTest extends TestCase
 {

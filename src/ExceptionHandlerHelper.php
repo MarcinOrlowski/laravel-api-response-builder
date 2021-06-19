@@ -46,6 +46,7 @@ class ExceptionHandlerHelper
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
 	{
@@ -88,6 +89,7 @@ class ExceptionHandlerHelper
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	protected static function processException(\Throwable $ex, array $ex_cfg,
 	                                           int $fallback_http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR)
@@ -170,6 +172,7 @@ class ExceptionHandlerHelper
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
 	                                                                     AuthException $exception): HttpResponse
@@ -255,6 +258,7 @@ class ExceptionHandlerHelper
 	 * @return array
 	 *
 	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	protected static function getExceptionHandlerConfig(): array
 	{
@@ -309,6 +313,7 @@ class ExceptionHandlerHelper
 	 * @return array|null
 	 *
 	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	protected static function getHandler(\Throwable $ex): ?array
 	{
