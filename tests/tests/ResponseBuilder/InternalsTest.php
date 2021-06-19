@@ -180,7 +180,7 @@ class InternalsTest extends TestCase
 		$this->expectException(Ex\ConfigurationNotFoundException::class);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		$cfg = $this->callProtectedMethod($converter, 'getClassMappingConfigOrThrow', [$model]);
+		$this->callProtectedMethod($converter, 'getClassMappingConfigOrThrow', [$model]);
 	}
 
 

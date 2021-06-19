@@ -36,6 +36,8 @@ class ExceptionHandlerHelper
 	 * @param \Throwable               $ex      Throwable to handle
 	 *
 	 * @return HttpResponse
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
 	{
@@ -141,6 +143,8 @@ class ExceptionHandlerHelper
 	 * @param \Illuminate\Auth\AuthenticationException $exception
 	 *
 	 * @return HttpResponse
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
 	                                                                     AuthException $exception): HttpResponse

@@ -70,6 +70,9 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\IncompleteConfigurationException
 	 *
 	 * @return void
+	 *
+	 * NOTE: not return typehint due to compatibility with Laravel's method signature.
+	 * @noinspection PhpMissingReturnTypeInspection
 	 */
 	protected function mergeConfigFrom($path, $key)
 	{

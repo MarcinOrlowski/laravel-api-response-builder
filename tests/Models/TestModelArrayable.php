@@ -52,6 +52,8 @@ class TestModelArrayable implements Arrayable
 	 * @param Request $request
 	 *
 	 * @return array
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function toArray($request = null): array
 	{

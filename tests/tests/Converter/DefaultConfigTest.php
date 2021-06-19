@@ -183,7 +183,10 @@ class DefaultConfigTest extends TestCase
 	/**
 	 * Helper that performs common tests for Paginator support.
 	 *
-	 * @param object $paginator
+	 * @param \Illuminate\Pagination\AbstractPaginator $paginator
+	 *
+	 * NOTE: not return typehint due to PHP not matching subclasses properly with hints
+	 * @noinspection PhpMissingReturnTypeInspection
 	 */
 	protected function doPaginatorSupportTests($paginator): void
 	{

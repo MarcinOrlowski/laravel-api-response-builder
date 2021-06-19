@@ -215,6 +215,7 @@ trait ApiCodesTests
 		$mandatory_keys = [
 			RB::KEY_HANDLER,
 		];
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		foreach ($classes as $class_name => $class_config) {
 			foreach ($mandatory_keys as $key_name) {
 				/** @var TestCase $this */

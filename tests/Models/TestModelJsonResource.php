@@ -52,6 +52,8 @@ class TestModelJsonResource extends JsonResource
      * @param Request $request
      *
      * @return array
+     *
+     * @noinspection PhpUnusedParameterInspection
      */
     public function toArray($request): array
     {

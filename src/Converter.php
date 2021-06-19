@@ -57,8 +57,6 @@ class Converter
 	 */
 	protected function getPrimitiveMappingConfigOrThrow($data): array
 	{
-		$result = null;
-
 		$type = \gettype($data);
 		$result = $this->primitives[ $type ] ?? null;
 

@@ -34,6 +34,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	 * @param \Illuminate\Foundation\Application $app
 	 *
 	 * @return void
+	 *
+	 * NOTE: not return typehint due to compatibility with TestBench's method signature.
+	 * @noinspection PhpMissingReturnTypeInspection
 	 */
 	public function getEnvironmentSetUp($app)
 	{
@@ -62,6 +65,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	 * @param \Illuminate\Foundation\Application $app
 	 *
 	 * @return array
+	 *
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	protected function getPackageProviders($app): array
 	{

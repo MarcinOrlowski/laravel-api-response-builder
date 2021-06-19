@@ -29,7 +29,7 @@ class InvalidTypeExceptionTest extends TestCase
 	public function testX(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
-		$ex = new Ex\InvalidTypeException('foo', Type::STRING, []);
+		new Ex\InvalidTypeException('foo', Type::STRING, []);
 	}
 
 }
