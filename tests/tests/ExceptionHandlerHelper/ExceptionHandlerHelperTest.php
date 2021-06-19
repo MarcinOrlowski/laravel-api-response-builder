@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpDocMissingThrowsInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -18,6 +21,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -26,14 +30,13 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExceptionHandlerHelperTest extends TestCase
 {
-    /**
-     * Tests behaviour of ExceptionHandler::unauthenticated()
-     *
-     * @return void
-     * @throws \ReflectionException
-     *
-     * @noinspection PhpUnhandledExceptionInspection
-     */
+	/**
+	 * Tests behaviour of ExceptionHandler::unauthenticated()
+	 *
+	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
+	 */
     public function testUnauthenticated(): void
     {
         $exception = new AuthenticationException();
@@ -50,11 +53,11 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertEquals($exception->getMessage(), $response->{RB::KEY_MESSAGE});
     }
 
-    /**
-     * Tests if optional debug info is properly added to JSON response
-     *
-     * @return void
-     */
+	/**
+	 * Tests if optional debug info is properly added to JSON response
+	 *
+	 * @return void
+	 */
     public function testErrorMethodWithDebugTrace(): void
     {
         /** @noinspection PhpUndefinedClassInspection */
@@ -76,15 +79,13 @@ class ExceptionHandlerHelperTest extends TestCase
 
     // -----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Check exception handler behavior when provided with various exception types.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     *
-     * @noinspection PhpUnhandledExceptionInspection
-     */
+	/**
+	 * Check exception handler behavior when provided with various exception types.
+	 *
+	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
+	 */
     public function testRenderMethodWithHttpException(): void
     {
         $codes = [
@@ -104,23 +105,21 @@ class ExceptionHandlerHelperTest extends TestCase
         }
     }
 
-    /**
-     * Handles single exception testing.
-     *
-     * @param string $exception_config_key           ResponseBuilder's config key for this particular exception.
-     * @param string $exception_class                Name of the class of exception to be constructed.
-     * @param int    $expected_http_code             Expected response HTTP code
-     * @param int    $expected_api_code              Expected response API code
-     * @param bool   $validate_response_message_text Set to @true, to validate returned response message with
-     *                                               current localization.
-     * @param bool   $expect_data                    Set to @true if response is expected to have non null `data` node.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     *
-     * @noinspection PhpTooManyParametersInspection
-     */
+	/**
+	 * Handles single exception testing.
+	 *
+	 * @param string $exception_config_key           ResponseBuilder's config key for this particular exception.
+	 * @param string $exception_class                Name of the class of exception to be constructed.
+	 * @param int    $expected_http_code             Expected response HTTP code
+	 * @param int    $expected_api_code              Expected response API code
+	 * @param bool   $validate_response_message_text Set to @true, to validate returned response message with
+	 *                                               current localization.
+	 * @param bool   $expect_data                    Set to @true if response is expected to have non null `data` node.
+	 *
+	 * @return void
+	 *
+	 * @noinspection PhpTooManyParametersInspection
+	 */
     protected function doTestSingleException(string $exception_config_key,
                                              string $exception_class,
                                              int $expected_http_code, int $expected_api_code,
@@ -186,13 +185,12 @@ class ExceptionHandlerHelperTest extends TestCase
 
     // -----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Tests if ExceptionHandler's error() method will correctly drop invalid HTTP
-     * found in configuration, and try to obtain code from the exception.
-     *
-     * @return void
-     * @throws \ReflectionException
-     */
+	/**
+	 * Tests if ExceptionHandler's error() method will correctly drop invalid HTTP
+	 * found in configuration, and try to obtain code from the exception.
+	 *
+	 * @return void
+	 */
     public function testHttpCodeFallbackToExceptionStatusCode(): void
     {
         // GIVEN invalid configuration with exception handler's http_code set
@@ -207,14 +205,13 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->doTestErrorMethodFallbackMechanism($expected_http_code, $ex, $config_http_code);
     }
 
-    /**
-     * Checks if error() will fall back to provided HTTP code, given the fact exception
-     * handler configuration uses invalid `http_code` but also Exception's http status
-     * code is set to invalid value. In such case we should fallback to DEFAULT_HTTP_CODE_ERROR.
-     *
-     * @return void
-     * @throws \ReflectionException
-     */
+	/**
+	 * Checks if error() will fall back to provided HTTP code, given the fact exception
+	 * handler configuration uses invalid `http_code` but also Exception's http status
+	 * code is set to invalid value. In such case we should fallback to DEFAULT_HTTP_CODE_ERROR.
+	 *
+	 * @return void
+	 */
     public function testHttpCodeFallbackToProvidedFallbackValue(): void
     {
         // http codes below 400 are invalid
@@ -228,8 +225,6 @@ class ExceptionHandlerHelperTest extends TestCase
     /**
      * Checks if Exception Handler would successfuly provide error message for valid HttpExceptions that
      * do not have dedicated error message configured.
-     *
-     * @throws \ReflectionException
      */
     public function testDefaultExceptionMessages(): void
     {
@@ -458,19 +453,17 @@ class ExceptionHandlerHelperTest extends TestCase
 
     // -----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Performs tests to ensure error() fallback mechanism for HTTP codes works correctly.
-     *
-     * @param int           $expected_http_code Expected HTTP code to be returned in response.
-     * @param HttpException $ex                 Exception to use for testing.
-     * @param int           $config_http_code   HTTP code to set as part for exception handler configuration
-     *
-     * @return void
-     *
-     * @throws \ReflectionException
-     *
-     * @noinspection PhpUnhandledExceptionInspection
-     */
+	/**
+	 * Performs tests to ensure error() fallback mechanism for HTTP codes works correctly.
+	 *
+	 * @param int           $expected_http_code Expected HTTP code to be returned in response.
+	 * @param HttpException $ex                 Exception to use for testing.
+	 * @param int           $config_http_code   HTTP code to set as part for exception handler configuration
+	 *
+	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
+	 */
     protected function doTestErrorMethodFallbackMechanism(int $expected_http_code,
                                                           HttpException $ex, int $config_http_code): void
     {
@@ -520,9 +513,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /**
      * Returns ExceptionHandler's configuration array.
-     *
-     * @return array
-     * @throws \ReflectionException
      */
     protected function getExceptionHandlerConfig(): array
     {
@@ -533,13 +523,13 @@ class ExceptionHandlerHelperTest extends TestCase
         return $cfg;
     }
 
-    /**
-     * @param array    $params
-     * @param int|null $code
-     * @param bool     $is_default_handler
-     *
-     * @noinspection PhpUnhandledExceptionInspection
-     */
+	/**
+	 * @param array    $params
+	 * @param int|null $code
+	 * @param bool     $is_default_handler
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
+	 */
     protected function checkExceptionHandlerConfigEntryStructure(array $params, ?int $code = null,
                                                                  bool $is_default_handler = false): void
     {

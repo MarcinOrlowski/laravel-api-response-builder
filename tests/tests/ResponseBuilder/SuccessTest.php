@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpDocMissingThrowsInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -18,7 +21,6 @@ use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Type;
-
 
 class SuccessTest extends TestCase
 {

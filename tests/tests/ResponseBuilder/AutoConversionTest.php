@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpDocMissingThrowsInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -22,11 +25,11 @@ use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
 class AutoConversionTest extends TestCase
 {
-    /**
-     * Tests if buildResponse() would properly handle auto conversion
-     *
-     * @return void
-     */
+	/**
+	 * Tests if buildResponse() would properly handle auto conversion
+	 *
+	 * @return void
+	 */
     public function testClassAutoConversionSingleElement(): void
     {
         // GIVEN model object with randomly set member value
@@ -55,12 +58,12 @@ class AutoConversionTest extends TestCase
         $this->assertEquals($model_val, $j->data->{$key}->val);
     }
 
-    /**
-     * Tests if buildResponse() would properly handle auto conversion when mapped
-     * class is part of bigger data set.
-     *
-     * @return void
-     */
+	/**
+	 * Tests if buildResponse() would properly handle auto conversion when mapped
+	 * class is part of bigger data set.
+	 *
+	 * @return void
+	 */
     public function testClassAutoConversionAsPartOfDataset(): void
     {
         // GIVEN model object with randomly set member value
@@ -126,8 +129,7 @@ class AutoConversionTest extends TestCase
 	 *
 	 * @return void
 	 *
-	 * @throws \ReflectionException
-	 * @dataProvider provider_TestSuccessWithPrimitive
+   	 * @dataProvider provider_TestSuccessWithPrimitive
 	 *
 	 * @noinspection PhpUnhandledExceptionInspection
 	 */

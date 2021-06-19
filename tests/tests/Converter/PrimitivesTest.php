@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpDocMissingThrowsInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -100,8 +103,6 @@ class PrimitivesTest extends TestCase
 	 * Helper method to perform some common tests for primitive as direct payload.
 	 *
 	 * @param mixed $value
-	 *
-	 * @throws \ReflectionException
 	 */
 	protected function doDirectPrimitiveTest($value): void
 	{

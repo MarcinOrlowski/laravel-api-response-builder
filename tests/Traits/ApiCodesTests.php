@@ -17,6 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * ApiCodes tests trait. Use this trait to test your ApiCodes class.
@@ -68,6 +69,8 @@ trait ApiCodesTests
 	 * @return void
 	 *
 	 * @noinspection PhpUnhandledExceptionInspection
+	 *
+	 * @throws \ReflectionException
 	 */
 	public function testMinMaxCode(): void
 	{
@@ -86,6 +89,8 @@ trait ApiCodesTests
 	 * @return void
 	 *
 	 * @noinspection PhpUnhandledExceptionInspection
+	 *
+	 * @throws \ReflectionException
 	 */
 	public function testCodeRangeIsLargeEnough(): void
 	{
@@ -101,7 +106,8 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 *
-	 * @throws \ReflectionException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public function testIfAllCodesGotMapping(): void
 	{
@@ -134,6 +140,8 @@ trait ApiCodesTests
 	 * @return void
 	 *
 	 * @noinspection PhpUnhandledExceptionInspection
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public function testIfAllCodesAreInRange(): void
 	{
@@ -166,6 +174,9 @@ trait ApiCodesTests
 	 * @return void
 	 *
 	 * @noinspection PhpUnhandledExceptionInspection
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public function testIfAllApiValuesAreUnique(): void
 	{
@@ -183,6 +194,9 @@ trait ApiCodesTests
 	 * @return void
 	 *
 	 * @noinspection PhpUnhandledExceptionInspection
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public function testIfAllCodesAreCorrectlyMapped(): void
 	{

@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpDocMissingThrowsInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -15,14 +18,15 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 class ErrorTest extends TestCase
 {
-    /**
-     * Check success()
-     *
-     * @return void
-     */
+	/**
+	 * Check success()
+	 *
+	 * @return void
+	 */
     public function testError(): void
     {
         // GIVEN random error code

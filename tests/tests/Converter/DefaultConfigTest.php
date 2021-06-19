@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpDocMissingThrowsInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -191,6 +194,7 @@ class DefaultConfigTest extends TestCase
 	 * @param \Illuminate\Pagination\AbstractPaginator $paginator
 	 *
 	 * NOTE: not param typehint due to PHP not matching subclasses hints properly
+	 *
 	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	protected function doPaginatorSupportTests($paginator): void

@@ -16,6 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -57,11 +58,13 @@ trait TestingHelpers
 
     // -----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Sets up testing environment
-     *
-     * @return void
-     */
+	/**
+	 * Sets up testing environment
+	 *
+	 * @return void
+	 *
+	 * @throws \ReflectionException
+	 */
     public function setUp(): void
     {
         parent::setUp();
@@ -96,20 +99,23 @@ trait TestingHelpers
 
     // -----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Checks if response object was returned with expected success HTTP
-     * code (200-299) indicating API method executed successfully
-     *
-     * NOTE: content of `data` node is NOT checked here!
-     *
-     * @param int|null    $expected_api_code_offset expected api code offset or @null for default value
-     * @param int|null    $expected_http_code       HTTP return code to check against or @null for default
-     * @param string|null $expected_message         Expected value of 'message' or @null for default message
-     *
-     * @return \StdClass validated response object data (as object, not array)
-     *
-     * @noinspection PhpUnhandledExceptionInspection
-     */
+	/**
+	 * Checks if response object was returned with expected success HTTP
+	 * code (200-299) indicating API method executed successfully
+	 *
+	 * NOTE: content of `data` node is NOT checked here!
+	 *
+	 * @param int|null    $expected_api_code_offset expected api code offset or @null for default value
+	 * @param int|null    $expected_http_code       HTTP return code to check against or @null for default
+	 * @param string|null $expected_message         Expected value of 'message' or @null for default message
+	 *
+	 * @return \StdClass validated response object data (as object, not array)
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws \ReflectionException
+	 * @noinspection PhpUnhandledExceptionInspection
+	 */
     public function getResponseSuccessObject(int $expected_api_code_offset = null,
                                              int $expected_http_code = null,
                                              string $expected_message = null): \stdClass
@@ -139,15 +145,18 @@ trait TestingHelpers
     }
 
 
-    /**
-     * Retrieves and validates response as expected from errorXXX() methods
-     *
-     * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default value
-     * @param int         $expected_http_code       Expected HTTP code
-     * @param string|null $message                  Expected return message or @null if we automatically mapped message fits
-     *
-     * @return \StdClass response object built from JSON
-     */
+	/**
+	 * Retrieves and validates response as expected from errorXXX() methods
+	 *
+	 * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default value
+	 * @param int         $expected_http_code       Expected HTTP code
+	 * @param string|null $message                  Expected return message or @null if we automatically mapped message fits
+	 *
+	 * @return \StdClass response object built from JSON
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\IncompatibleTypeException
+	 */
     public function getResponseErrorObject(int $expected_api_code_offset = null,
                                            int $expected_http_code = RB::DEFAULT_HTTP_CODE_ERROR,
                                            string $message = null): \stdClass
@@ -175,13 +184,16 @@ trait TestingHelpers
     }
 
 
-    /**
-     * @param int         $expected_api_code  expected Api response code offset
-     * @param int         $expected_http_code expected HTTP code
-     * @param string|null $expected_message   expected message string or @null if default
-     *
-     * @return mixed
-     */
+	/**
+	 * @param int         $expected_api_code  expected Api response code offset
+	 * @param int         $expected_http_code expected HTTP code
+	 * @param string|null $expected_message   expected message string or @null if default
+	 *
+	 * @return mixed
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 */
     private function getResponseObjectRaw(int $expected_api_code, int $expected_http_code,
                                           string $expected_message = null)
     {

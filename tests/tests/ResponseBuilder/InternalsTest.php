@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpDocMissingThrowsInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -38,8 +41,6 @@ class InternalsTest extends TestCase
 	 * Validates handling of incomplete class mapping configuration by getClassesMapping()
 	 *
 	 * @return void
-	 *
-	 * @throws \ReflectionException
 	 */
 	public function testGetClassesMappingWithWrongType(): void
 	{
@@ -56,8 +57,6 @@ class InternalsTest extends TestCase
 	 * class mapping configuration.
 	 *
 	 * @return void
-	 *
-	 * @throws \ReflectionException
 	 */
 	public function testGetClassesMappingMethodWithIncompleteMappingConfiguration(): void
 	{
@@ -76,8 +75,6 @@ class InternalsTest extends TestCase
 	 * is not an array
 	 *
 	 * @return void
-	 *
-	 * @throws \ReflectionException
 	 */
 	public function testGetClassesMappingMethodWithIncorrectMappingConfiguration(): void
 	{
@@ -95,8 +92,6 @@ class InternalsTest extends TestCase
 	 * Tests getCodeForInternalOffset() out of bounds handling
 	 *
 	 * @return void
-	 *
-	 * @throws \ReflectionException
 	 */
 	public function testGetCodeForInternalOffsetMethodWithOffsetOutOfMaxBounds(): void
 	{
@@ -112,8 +107,6 @@ class InternalsTest extends TestCase
 	 * Tests getCodeForInternalOffset() out of bounds handling.
 	 *
 	 * @return void
-	 *
-	 * @throws \ReflectionException
 	 */
 	public function testGetCodeForInternalOffsetMethodWithOffsetOutOfMinBounds(): void
 	{
@@ -142,8 +135,6 @@ class InternalsTest extends TestCase
 	 * Tests if all mandatory constants are still members of the class.
 	 *
 	 * @return void
-	 *
-	 * @throws \ReflectionException
 	 */
 	public function testGetApiCodeConstants(): void
 	{

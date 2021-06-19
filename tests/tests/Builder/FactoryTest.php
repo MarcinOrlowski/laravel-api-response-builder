@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpDocMissingThrowsInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -30,8 +33,8 @@ class FactoryTest extends TestCase
 	 */
 	public function testAsSuccess(): void
 	{
-		$my_response_builder = DummyResponseBuilder::asSuccess();
-		$this->assertEquals(DummyResponseBuilder::class, \get_class($my_response_builder));
+		$dummy_rb = DummyResponseBuilder::asSuccess();
+		$this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
 	}
 
 	/**
@@ -43,7 +46,7 @@ class FactoryTest extends TestCase
 	 */
 	public function testAsError(): void
 	{
-		$my_response_builder = DummyResponseBuilder::asError(BaseApiCodes::NO_ERROR_MESSAGE());
-		$this->assertEquals(DummyResponseBuilder::class, \get_class($my_response_builder));
+		$dummy_rb = DummyResponseBuilder::asError(BaseApiCodes::NO_ERROR_MESSAGE());
+		$this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
 	}
 }

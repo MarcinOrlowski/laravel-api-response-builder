@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpDocMissingThrowsInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -176,8 +179,6 @@ class MakeTest extends TestCase
      * Checks make() handling invalid type of api_code argument
      *
      * @return void
-     *
-     * @throws \ReflectionException
      */
     public function testApiCodeNotIntNorString(): void
     {
