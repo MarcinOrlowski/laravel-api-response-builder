@@ -16,6 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
