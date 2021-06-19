@@ -26,7 +26,7 @@ final class ArrayableConverter implements ConverterContract
 	/**
 	 * Returns array representation of the object implementing Arrayable interface
 	 *
-	 * @param Illuminate\Contracts\Support\Arrayable $obj    Object to be converted
+	 * @param \Illuminate\Contracts\Support\Arrayable $obj    Object to be converted
 	 * @param array                                  $config Converter config array to be used for this object (based on exact class
 	 *                                                       name match or inheritance).
 	 *

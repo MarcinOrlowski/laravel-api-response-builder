@@ -45,6 +45,7 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 
 		$config = \array_replace($default_config, $user_config);
 
+		/** @var \Symfony\Component\HttpKernel\Exception\HttpException $ex */
 		$http_code = $ex->getStatusCode();
 		$result = $config[ $http_code ] ?? null;
 

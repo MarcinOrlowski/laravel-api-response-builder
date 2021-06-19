@@ -36,7 +36,7 @@ class TranslationTest extends TestCase
         // get list of all other directories in library's lang folder.
         $supported_languages =
             array_filter(
-                array_filter(array_map(function($entry) {
+                array_filter(array_map(static function($entry) {
                     return basename($entry);
                 }, glob(__DIR__ . '/../../../src/lang/*', GLOB_ONLYDIR))),
                 function($item) use ($default_lang) {

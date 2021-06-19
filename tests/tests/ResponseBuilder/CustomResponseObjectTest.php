@@ -38,6 +38,7 @@ class CustomResponseObjectTest extends TestCase
 	 */
 	public function testCustomResponse(): void
 	{
+		/** @noinspection DisallowWritingIntoStaticPropertiesInspection */
 		MyResponseBuilder::$fake_response = [];
 		for ($i = 0; $i < 10; $i++) {
 			MyResponseBuilder::$fake_response[ $this->getRandomString() ] = $this->getRandomString();

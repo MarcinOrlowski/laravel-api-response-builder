@@ -18,7 +18,7 @@ final class MissingConfigurationKeyException extends ConfigurationException
 	/**
 	 * MissingConfigurationKeyException constructor.
 	 *
-	 * @param $var_name
+	 * @param string $var_name
 	 */
 	public function __construct($var_name)
 	{

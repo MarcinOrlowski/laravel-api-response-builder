@@ -64,7 +64,7 @@ final class Util
 	 * Sorts array (in place) by value, assuming value is an array and contains `pri` key with integer
 	 * (positive/negative) value which is used for sorting higher -> lower priority.
 	 *
-	 * @param array &$array
+	 * @param array $array
 	 */
 	public static function sortArrayByPri(array &$array): void
 	{

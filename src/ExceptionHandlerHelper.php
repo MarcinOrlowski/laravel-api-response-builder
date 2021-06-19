@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
+use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\HttpExceptionHandler as HttpExceptionHandler;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;

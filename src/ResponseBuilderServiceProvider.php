@@ -18,7 +18,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * Disable return type hint inspection as we do not have it specified in that
  * class for a purpose. The base class is also not having return type hints.
  *
- * @noinspection RAeturnTypeCanBeDeclaredInspection
+ * @noinspection ReturnTypeCanBeDeclaredInspection
  */
 
 use Illuminate\Support\ServiceProvider;
@@ -45,6 +45,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 *
 	 * @noinspection PhpUnused
 	 * @noinspection ReturnTypeCanBeDeclaredInspection
+	 * @noinspection UnknownInspectionInspection
 	 */
 	public function register()
 	{
@@ -61,6 +62,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 *
 	 * @noinspection PhpUnused
 	 * @noinspection ReturnTypeCanBeDeclaredInspection
+	 * @noinspection UnknownInspectionInspection
 	 */
 	public function boot()
 	{
