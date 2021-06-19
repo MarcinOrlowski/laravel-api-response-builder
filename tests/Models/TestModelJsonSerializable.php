@@ -50,7 +50,10 @@ class TestModelJsonSerializable implements \JsonSerializable
     }
 
 	/**
-	 * @return mixed
+	 * @return string
+	 *
+	 * NOTE: no typehints due to compatibility with interface's method signature.
+	 * @noinspection PhpMissingReturnTypeInspection
 	 */
 	public function jsonSerialize()
     {

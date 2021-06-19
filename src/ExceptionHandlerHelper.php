@@ -40,7 +40,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @noinspection PhpUnusedParameterInspection
 	 *
-	 * NOTE: not typehints due to compatibility with Laravel's method signature.
+	 * NOTE: no typehints due to compatibility with Laravel's method signature.
 	 * @noinspection PhpMissingParamTypeInspection
 	 *
 	 * @throws Ex\MissingConfigurationKeyException
