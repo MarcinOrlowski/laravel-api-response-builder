@@ -6,7 +6,7 @@
 
  * [Exposed Methods](methods.md)
    * [Builder](#builder)
-     * [Builder methods](#builder-methods)
+     * [Static builder methods](#builder-static)
    * [Helpers](#helpers)
 
 ---

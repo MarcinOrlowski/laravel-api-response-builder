@@ -44,7 +44,7 @@
 
 ## Features ##
 
- * [Easy to use](docs/README.md#usage-examples),
+ * [Easy to use](docs/examples.md#usage-examples),
  * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
  * [On-the-fly data object conversion](docs/conversion.md),
  * API chaining support,

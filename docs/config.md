@@ -333,7 +333,7 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 'map' => [],
 ```
 
- Also, read [Overriding built-in messages](#overriding-built-in-messages) to see how to override built-in
+ Also, read [Overriding built-in messages](docs.md#overriding-built-in-messages) to see how to override built-in
  messages.
 
  **NOTE:** Config file may grow in future so if you are not using defaults, then on package upgrades

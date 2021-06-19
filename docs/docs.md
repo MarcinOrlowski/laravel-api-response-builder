@@ -131,7 +131,7 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 
 # Overriding built-in messages #
 
- At the moment `ResponseBuilder` provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
+ At the moment `ResponseBuilder` provides few built-in messages (see [src/BaseApiCodes.php](../src/BaseApiCodes.php)):
  one is used for success code `0` and another provides fallback message for codes without custom mapping. If for
  any reason you want to override them, simply map these codes in your `map` config using codes from package
  reserved range:

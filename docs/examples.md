@@ -4,13 +4,13 @@
 
 [« Documentation table of contents](README.md)
 
- * [Usage examples](#usage-examples)
+ * [Usage examples](#examples)
    * [Success](#success)
    * [Errors](#errors)
 
 ---
 
-# Usage examples #
+# Examples #
 
  The following examples assume `ResponseBuilder` is properly installed and available to your Laravel application.
  See [Installation and Configuration](installation.md) for more details.
@@ -133,7 +133,7 @@ return RB::error(<CODE>);
 
  To make your life easier (and your code [automatically testable](testing.md)) you should put all error codes you use
  in separate `ApiCodes` class, as its `public const`s, which would improve code readability and would prevent certain
- types of coding error from happening. Please see [Installation and Configuration](#installation-and-configuration)
+ types of coding error from happening. Please see [Installation and Configuration](installation.md)
  for details.
 
  Example usage:
@@ -156,7 +156,7 @@ return RB::error(ApiCode::SOMETHING_WENT_WRONG);
  Please see the value of `message` element above. `ResponseBuilder` tries to automatically obtain text error message associated
  with the error code used. If there's no message associated, it will fall back to default, generic error "Error #xxx", as shown
  above. Such association needs to be configured in `config/response_builder.php` file, using `map` array, so see
- [ResponseBuilder Configuration](#response-builder-configuration) for more information.
+ [ResponseBuilder Configuration](config.md) for more information.
 
  As `ResponseBuilder` uses Laravel's `Lang` package for localisation, you can use the same features with your messages as you use
  across the whole application, including message placeholders:

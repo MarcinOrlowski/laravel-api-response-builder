@@ -1,4 +1,4 @@
-![REST API Response Builder for Laravel](docs/img/logo.png)
+![REST API Response Builder for Laravel](img/logo.png)
 
 # REST API Response Builder for Laravel #
 
