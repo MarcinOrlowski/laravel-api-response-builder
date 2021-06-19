@@ -34,11 +34,10 @@
     }
   },
   "autoload": {
-    "classmap": [
-      "src/",
-      "tests/",
-      "tests/Traits/"
-    ]
+    "psr-4": {
+      "MarcinOrlowski\\ResponseBuilder\\": "src/",
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests/"
+    }
   },
   "require": {
     "php": ">=7.2.0",
