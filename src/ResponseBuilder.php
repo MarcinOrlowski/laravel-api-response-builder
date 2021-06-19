@@ -183,6 +183,7 @@ class ResponseBuilder extends ResponseBuilderBase
 			Type::NULL,
 			Type::OBJECT,
 			Type::STRING,
+			Type::DOUBLE,
 		]);
 		$this->data = $data;
 
