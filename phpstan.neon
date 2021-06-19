@@ -1,8 +1,11 @@
+includes:
+  - vendor/nunomaduro/larastan/extension.neon
 parameters:
   level: 4
+  # TODO level: max
+  checkMissingIterableValueType: false
   paths:
-    - "src/"
-    - "tests/"
-  bootstrapFiles:
-    - vendor/autoload.php
-
+    - src/
+    - tests/
+  ignoreErrors:
+    - '#^Unsafe usage of new static\(\)\.$#'
