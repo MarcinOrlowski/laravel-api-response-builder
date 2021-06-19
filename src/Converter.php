@@ -122,6 +122,8 @@ class Converter
 	 * @param mixed|null $data
 	 *
 	 * @return array|null
+	 *
+	 * @throws Ex\ConfigurationNotFoundException
 	 */
 	public function convert($data = null): ?array
 	{
@@ -170,6 +172,9 @@ class Converter
 	 * @param array $data array to recursively convert known elements of
 	 *
 	 * @return array
+	 *
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	protected function convertArray(array $data): array
 	{

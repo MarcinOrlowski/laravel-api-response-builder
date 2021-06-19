@@ -77,7 +77,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
-	 * NOTE: not return typehint due to Laravel
+	 * NOTE: no return typehint due to compatibility with Laravel signature.
 	 * @noinspection PhpMissingReturnTypeInspection
 	 */
 	protected static function processException(\Throwable $ex, array $ex_cfg,
@@ -162,7 +162,7 @@ class ExceptionHandlerHelper
 		$cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ][ HttpResponse::HTTP_UNAUTHORIZED ];
 
 		/**
-		 * NOTE: not return typehint due to Laravel
+		 * NOTE: no typehint due to compatibility with Laravel signature.
 		 * @noinspection PhpParamsInspection
 		 */
 		return static::processException($exception, $cfg, HttpResponse::HTTP_UNAUTHORIZED);

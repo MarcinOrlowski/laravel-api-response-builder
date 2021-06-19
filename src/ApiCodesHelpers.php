@@ -78,6 +78,7 @@ trait ApiCodesHelpers
 	 * @return array
 	 *
 	 * @throws Ex\MissingConfigurationKeyException Thrown when builder map is not configured.
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	public static function getMap(): array
 	{
@@ -96,6 +97,9 @@ trait ApiCodesHelpers
 	 * @param integer $api_code Api code to look for mapped message for.
 	 *
 	 * @return string|null
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	public static function getCodeMessageKey(int $api_code): ?string
 	{
@@ -117,6 +121,8 @@ trait ApiCodesHelpers
 	 * @param int $code API code to validate
 	 *
 	 * @return bool
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public static function isCodeValid(int $code): bool
 	{
@@ -131,6 +137,7 @@ trait ApiCodesHelpers
 	 * @return int
 	 *
 	 * @throws \InvalidArgumentException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public static function getCodeForInternalOffset(int $internal_code): int
 	{
