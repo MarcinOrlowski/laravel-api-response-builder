@@ -71,16 +71,16 @@ class ResponseBuilder extends ResponseBuilderBase
 	/**
 	 * Returns success
 	 *
-	 * @param object|array|null $data          Array of primitives and supported objects to be returned in 'data' node
-	 *                                         of the JSON response, single supported object or @null if there's no
-	 *                                         to be returned.
-	 * @param integer|null      $api_code      API code to be returned or @null to use value of BaseApiCodes::OK().
-	 * @param array|null        $placeholders  Placeholders passed to Lang::get() for message placeholders
-	 *                                         substitution or @null if none.
-	 * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
-	 *                                         for default DEFAULT_HTTP_CODE_OK.
-	 * @param integer|null      $json_opts     See http://php.net/manual/en/function.json-encode.php for supported
-	 *                                         options or pass @null to use value from your config (or defaults).
+	 * @param mixed|null   $data          Array of primitives and supported objects to be returned in 'data' node
+	 *                                    of the JSON response, single supported object or @null if there's no
+	 *                                    to be returned.
+	 * @param integer|null $api_code      API code to be returned or @null to use value of BaseApiCodes::OK().
+	 * @param array|null   $placeholders  Placeholders passed to Lang::get() for message placeholders
+	 *                                    substitution or @null if none.
+	 * @param integer|null $http_code     HTTP code to be used for HttpResponse sent or @null
+	 *                                    for default DEFAULT_HTTP_CODE_OK.
+	 * @param integer|null $json_opts     See http://php.net/manual/en/function.json-encode.php for supported
+	 *                                    options or pass @null to use value from your config (or defaults).
 	 *
 	 * @return HttpResponse
 	 */

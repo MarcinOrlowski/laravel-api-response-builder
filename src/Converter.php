@@ -90,7 +90,7 @@ class Converter
 
 		// check for exact class name match...
 		$cls = \get_class($data);
-		if ($cls !== false) {
+		if (\gettype($cls) === 'string') {
 			if (\array_key_exists($cls, $this->classes)) {
 				$result = $this->classes[ $cls ];
 				$debug_result = 'exact config match';

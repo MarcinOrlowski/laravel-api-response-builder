@@ -116,15 +116,18 @@ class AutoConversionTest extends TestCase
         }
     }
 
-    /**
-     * Checks if buildResponse() would accept support payload types
-     *
-     * @return void
-     *
-     * @dataProvider provider_TestSuccessWithPrimitive
-     *
-     * @noinspection PhpUnhandledExceptionInspection
-     */
+	/**
+	 * Checks if buildResponse() would accept support payload types
+	 *
+	 * @param mixed $value Primitive type to be converted and returned in payload.
+	 *
+	 * @return void
+	 *
+	 * @throws \ReflectionException
+	 * @dataProvider provider_TestSuccessWithPrimitive
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
+	 */
     public function testSuccessWithPrimitive($value): void
     {
     	$value = (bool)\mt_rand(0, 1);

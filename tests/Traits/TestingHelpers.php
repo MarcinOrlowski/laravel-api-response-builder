@@ -383,13 +383,13 @@ trait TestingHelpers
         return $reflection->getConstant($name);
     }
 
-    /**
-     * Generates random string, with optional prefix
-     *
-     * @param string $prefix
-     *
-     * @return string
-     */
+	/**
+	 * Generates random string, with optional prefix
+	 *
+	 * @param string|null $prefix
+	 *
+	 * @return string
+	 */
     protected function getRandomString(string $prefix = null): string
     {
         if ($prefix !== null) {

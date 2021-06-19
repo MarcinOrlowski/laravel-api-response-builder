@@ -153,10 +153,10 @@ class ExceptionHandlerHelper
 	/**
 	 * Process single error and produce valid API response.
 	 *
-	 * @param \Throwable $ex Exception to be handled.
-	 * @param integer   $api_code
-	 * @param integer   $http_code
-	 * @param string    $error_message
+	 * @param \Throwable  $ex Exception to be handled.
+	 * @param integer     $api_code
+	 * @param int|null    $http_code
+	 * @param string|null $error_message
 	 *
 	 * @return HttpResponse
 	 */
@@ -197,7 +197,6 @@ class ExceptionHandlerHelper
 		// If this is ValidationException, add all the messages from MessageBag to the data node.
 		$data = null;
 		if ($ex instanceof ValidationException) {
-			/** @var ValidationException $ex */
 			$data = [RB::KEY_MESSAGES => $ex->validator->errors()->messages()];
 		}
 
@@ -261,7 +260,7 @@ class ExceptionHandlerHelper
 	 * Returns name of exception handler class, configured to process specified exception class or @null if no
 	 * exception handler can be determined.
 	 *
-	 * @param string $cls Name of exception class to handle
+	 * @param \Throwable $ex Exception to handle
 	 *
 	 * @return array|null
 	 */

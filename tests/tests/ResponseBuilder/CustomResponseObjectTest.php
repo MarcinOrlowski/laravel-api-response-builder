@@ -16,6 +16,7 @@ class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
 	public static $fake_response = [];
 
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	protected function buildResponse(bool $success, int $api_code,
 	                                 $msg_or_api_code, array $placeholders = null,
 	                                 $data = null, array $debug_data = null): array
