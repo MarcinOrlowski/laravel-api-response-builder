@@ -40,6 +40,7 @@ class CustomResponseObjectTest extends TestCase
 			MyResponseBuilder::$fake_response[ $this->getRandomString() ] = $this->getRandomString();
 		}
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$response = MyResponseBuilder::success();
 		$this->assertArrayEquals(MyResponseBuilder::$fake_response, json_decode($response->getContent(), true));
 	}

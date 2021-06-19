@@ -29,6 +29,7 @@ class ErrorTest extends TestCase
         $api_code = $this->random_api_code;
 
         // WHEN we report error
+	    /** @noinspection PhpUnhandledExceptionInspection */
         $this->response = RB::error($api_code);
 
         // THEN returned message contains given error code and mapped message

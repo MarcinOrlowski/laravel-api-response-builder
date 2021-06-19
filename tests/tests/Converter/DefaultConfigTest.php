@@ -40,6 +40,7 @@ class DefaultConfigTest extends TestCase
 		$converter = new Converter();
 
 		// WHEN we try to pass of object of that class
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = $converter->convert($obj);
 
 		// THEN it should be converted automatically as per configuration
@@ -76,6 +77,7 @@ class DefaultConfigTest extends TestCase
 			$converter = new Converter();
 
 			// WHEN we try to pass of object of that class
+			/** @noinspection PhpUnhandledExceptionInspection */
 			$result = $converter->convert($obj);
 
 			// THEN it should be converted automatically as per configuration
@@ -106,6 +108,7 @@ class DefaultConfigTest extends TestCase
 		$converter = new Converter();
 
 		// WHEN we try to pass of object of that class
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = $converter->convert($obj);
 
 		// THEN it should be converted automatically as per configuration
@@ -192,6 +195,7 @@ class DefaultConfigTest extends TestCase
 	 */
 	protected function doPaginatorSupportTests($paginator): void
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = (new Converter())->convert($paginator);
 		$this->assertIsArray($result);
 		$this->assertArrayHasKeys([
@@ -220,6 +224,7 @@ class DefaultConfigTest extends TestCase
 	{
 		// HAVING Converter with default settings
 		// WHEN we try to pass of object of that class
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = (new Converter())->convert($collection);
 
 		// THEN it should be converted automatically as per default configuration

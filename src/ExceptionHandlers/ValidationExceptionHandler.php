@@ -26,6 +26,7 @@ final class ValidationExceptionHandler implements ExceptionHandlerContract
 {
 	public function handle(array $user_config, /** @scrutinizer ignore-unused */ \Throwable $ex): ?array
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		return [
 			RB::KEY_API_CODE  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
 			RB::KEY_HTTP_CODE => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,

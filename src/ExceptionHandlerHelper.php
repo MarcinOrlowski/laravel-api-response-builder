@@ -23,6 +23,7 @@ use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * Exception handler using ResponseBuilder to return JSON even in such hard tines
@@ -41,6 +42,10 @@ class ExceptionHandlerHelper
 	 *
 	 * NOTE: not typehints due to compatibility with Laravel's method signature.
 	 * @noinspection PhpMissingParamTypeInspection
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
 	{
@@ -79,6 +84,10 @@ class ExceptionHandlerHelper
 	 *
 	 * NOTE: no return typehint due to compatibility with Laravel signature.
 	 * @noinspection PhpMissingReturnTypeInspection
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	protected static function processException(\Throwable $ex, array $ex_cfg,
 	                                           int $fallback_http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR)
@@ -110,6 +119,8 @@ class ExceptionHandlerHelper
 		}
 
 		// Lets' try to build the error response with what we have now
+
+		/** @noinspection PhpUnhandledExceptionInspection */
 		return static::error($ex, $api_code, $http_code, $msg);
 	}
 
@@ -123,6 +134,9 @@ class ExceptionHandlerHelper
 	 * @param array      $placeholders
 	 *
 	 * @return string
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	protected static function getErrorMessageForException(\Throwable $ex, int $http_code, array $placeholders): string
 	{
@@ -152,6 +166,10 @@ class ExceptionHandlerHelper
 	 *
 	 * NOTE: not typehints due to compatibility with Laravel's method signature.
 	 * @noinspection PhpMissingParamTypeInspection
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
 	                                                                     AuthException $exception): HttpResponse
@@ -177,6 +195,11 @@ class ExceptionHandlerHelper
 	 * @param string|null $error_message
 	 *
 	 * @return HttpResponse
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	protected static function error(Throwable $ex,
 	                                int $api_code, int $http_code = null, string $error_message = null): HttpResponse
@@ -230,9 +253,12 @@ class ExceptionHandlerHelper
 	 * Returns ExceptionHandlerHelper configration array with user configuration merged into built-in defaults.
 	 *
 	 * @return array
+	 *
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	protected static function getExceptionHandlerConfig(): array
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$default_config = [
 			HttpException::class         => [
 				'handler' => HttpExceptionHandler::class,
@@ -281,6 +307,8 @@ class ExceptionHandlerHelper
 	 * @param \Throwable $ex Exception to handle
 	 *
 	 * @return array|null
+	 *
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	protected static function getHandler(\Throwable $ex): ?array
 	{

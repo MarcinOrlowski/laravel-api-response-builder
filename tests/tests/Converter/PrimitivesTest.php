@@ -42,6 +42,7 @@ class PrimitivesTest extends TestCase
 		]);
 
 		// WHEN this object is returned
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$converted = (new Converter())->convert($model);
 
 		// THEN we expect returned data to be converted and use KEY_KEY element.
@@ -108,6 +109,7 @@ class PrimitivesTest extends TestCase
 
 		// WHEN passing it as direct payaload
 		$converter = new Converter();
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$converted = $converter->convert($value);
 
 		// THEN we expect returned data to be keyed as per primitive's configuration.

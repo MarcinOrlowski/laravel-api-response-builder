@@ -54,6 +54,7 @@ class ArrayTest extends TestCase
 		]);
 
 		// WHEN this object is returned
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$converted = (new Converter())->convert($data);
 
 		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
@@ -104,6 +105,7 @@ class ArrayTest extends TestCase
 		]);
 
 		// WHEN this object is returned
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$converted = (new Converter())->convert($data);
 
 		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
@@ -147,6 +149,7 @@ class ArrayTest extends TestCase
 		// WHEN conversion is attempted, exception should be thrown
 		$this->expectException(Ex\ArrayWithMixedKeysException::class);
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		(new Converter())->convert($data);
 	}
 
@@ -214,6 +217,7 @@ class ArrayTest extends TestCase
 		]);
 
 		// WHEN this object is returned
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$converted = (new Converter())->convert($data);
 
 		$this->assertIsArray($converted);
@@ -244,6 +248,7 @@ class ArrayTest extends TestCase
 			],
 		]);
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = (new Converter())->convert($model_1);
 
 		$this->assertIsArray($result);
@@ -281,6 +286,7 @@ class ArrayTest extends TestCase
 		$this->assertNotEmpty($cfg);
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = (new Converter())->convert($data);
 		$this->assertIsArray($result);
 		$this->assertCount(1, $result);
@@ -316,6 +322,7 @@ class ArrayTest extends TestCase
 		                 2,
 		                 3]);
 
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = (new Converter())->convert($data);
 
 		$this->assertIsArray($result);

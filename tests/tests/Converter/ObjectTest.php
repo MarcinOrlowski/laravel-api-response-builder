@@ -40,6 +40,7 @@ class ObjectTest extends TestCase
 
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
+		/** @noinspection PhpUnhandledExceptionInspection */
         $result = (new Converter())->convert($data);
 
         $this->assertIsArray($result);
@@ -86,6 +87,7 @@ class ObjectTest extends TestCase
 
             Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
+	        /** @noinspection PhpUnhandledExceptionInspection */
             $result = (new Converter())->convert($data);
 
             $this->assertIsArray($result);

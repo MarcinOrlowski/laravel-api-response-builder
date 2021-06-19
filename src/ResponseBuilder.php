@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * Builds standardized HttpResponse response object
@@ -83,6 +83,11 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *                                    options or pass @null to use value from your config (or defaults).
 	 *
 	 * @return HttpResponse
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	public static function success($data = null, int $api_code = null, array $placeholders = null,
 	                               int $http_code = null, int $json_opts = null): HttpResponse
@@ -111,6 +116,11 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *                                         options or pass @null to use value from your config (or defaults).
 	 *
 	 * @return HttpResponse
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null,
 	                             int $json_opts = null): HttpResponse
@@ -132,6 +142,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public static function asSuccess(int $api_code = null): self
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		return new static(true, $api_code ?? BaseApiCodes::OK());
 	}
 
@@ -142,6 +153,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	 */
 	public static function asError(int $api_code): self
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$code_ok = BaseApiCodes::OK();
 		if ($api_code !== $code_ok) {
 			/** @noinspection PhpUnhandledExceptionInspection */
@@ -263,6 +275,11 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * again to get new response object that includes new changes.
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	public function build(): HttpResponse
 	{
@@ -308,8 +325,11 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *
 	 * @return HttpResponse
 	 *
-	 * @throws \InvalidArgumentException If $api_code is neither a string nor valid integer code.
-	 * @throws \InvalidArgumentException if $data is an object of class that is not configured in "classes" mapping.
+	 * @throws \InvalidArgumentException If $api_code is neither a string nor valid integer code or if $data is an object of class that is not configured in "classes" mapping.
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 *
 	 * @noinspection PhpTooManyParametersInspection
 	 */
@@ -351,6 +371,11 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
+	 *
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 *
 	 * @noinspection PhpTooManyParametersInspection
 	 */
@@ -405,6 +430,9 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *                                 substitution or @null if none.
 	 *
 	 * @return string
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	protected function getMessageForApiCode(bool $success, int $api_code, array $placeholders = null): string
 	{

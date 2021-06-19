@@ -155,7 +155,8 @@ trait TestingHelpers
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes_class_name */
             $api_codes_class_name = $this->getApiCodesClassName();
-            $expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE();
+	        /** @noinspection PhpUnhandledExceptionInspection */
+	        $expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE();
         }
 
         if ($expected_http_code > RB::ERROR_HTTP_CODE_MAX) {
@@ -195,7 +196,8 @@ trait TestingHelpers
 
         /** @var BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
-        $expected_message_string = $expected_message ?? \Lang::get(
+	    /** @noinspection PhpUnhandledExceptionInspection */
+	    $expected_message_string = $expected_message ?? \Lang::get(
                 $api_codes_class_name::getCodeMessageKey($expected_api_code), ['api_code' => $expected_api_code]);
         $this->assertEquals($expected_message_string, $j->message);
 

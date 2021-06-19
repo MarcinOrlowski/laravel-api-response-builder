@@ -85,6 +85,7 @@ class PrimitivesGetPrimitivesMappingTest extends TestCase
 		// getPrimitiveMapping is called by constructor.
 		$this->expectException(Ex\ConfigurationNotFoundException::class);
 		$converter = new Converter();
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$converter->convert(false);
 
 	}

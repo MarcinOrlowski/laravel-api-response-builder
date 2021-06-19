@@ -123,6 +123,7 @@ trait ApiCodesTests
 				$val = BaseApiCodes::$name();
 			}
 
+			/** @noinspection PhpUnhandledExceptionInspection */
 			$this->assertNotNull($api_codes::getCodeMessageKey($val), "No message mapping for {$name} found.");
 		}
 	}

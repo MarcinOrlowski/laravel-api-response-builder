@@ -31,6 +31,8 @@ class ExceptionHandlerHelperTest extends TestCase
      *
      * @return void
      * @throws \ReflectionException
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testUnauthenticated(): void
     {
@@ -60,7 +62,8 @@ class ExceptionHandlerHelperTest extends TestCase
 
         $exception = new \RuntimeException();
 
-        $j = json_decode(ExceptionHandlerHelper::render(null, $exception)->getContent(), false);
+	    /** @noinspection PhpUnhandledExceptionInspection */
+	    $j = json_decode(ExceptionHandlerHelper::render(null, $exception)->getContent(), false);
         $this->assertValidResponse($j);
         $this->assertNull($j->data);
 
@@ -79,6 +82,8 @@ class ExceptionHandlerHelperTest extends TestCase
      * @return void
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testRenderMethodWithHttpException(): void
     {
@@ -122,6 +127,7 @@ class ExceptionHandlerHelperTest extends TestCase
                                              bool $validate_response_message_text = true,
                                              bool $expect_data = false): void
     {
+	    /** @noinspection PhpUnhandledExceptionInspection */
         $key = BaseApiCodes::getCodeMessageKey($expected_api_code);
         $expect_data_node_null = true;
         switch ($exception_class) {
@@ -144,6 +150,7 @@ class ExceptionHandlerHelperTest extends TestCase
         }
 
         // hand the exception to the handler and examine its response JSON
+	    /** @noinspection PhpUnhandledExceptionInspection */
         $eh_response = ExceptionHandlerHelper::render(null, $exception);
         $eh_response_json = json_decode($eh_response->getContent(), false);
 
@@ -461,6 +468,8 @@ class ExceptionHandlerHelperTest extends TestCase
      * @return void
      *
      * @throws \ReflectionException
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     protected function doTestErrorMethodFallbackMechanism(int $expected_http_code,
                                                           HttpException $ex, int $config_http_code): void

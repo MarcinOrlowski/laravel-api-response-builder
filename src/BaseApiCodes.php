@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * BaseApiCodes handling class
@@ -92,6 +93,7 @@ class BaseApiCodes
      * Returns base code mapping array
      *
      * @return array
+     * @noinspection PhpUnhandledExceptionInspection
      */
     protected static function getBaseMap(): array
     {
@@ -115,6 +117,9 @@ class BaseApiCodes
      * @return int valid API code in current range
      *
      * @noinspection PhpMethodNamingConventionInspection
+     *
+     * @throws \InvalidArgumentException
+     * @throws Ex\MissingConfigurationKeyException
      */
     public static function OK(): int
     {
@@ -127,6 +132,9 @@ class BaseApiCodes
      * @return int valid API code in current range
      *
      * @noinspection PhpMethodNamingConventionInspection
+     *
+     * @throws \InvalidArgumentException
+     * @throws Ex\MissingConfigurationKeyException
      */
     public static function NO_ERROR_MESSAGE(): int
     {
@@ -139,6 +147,9 @@ class BaseApiCodes
      * @return int valid API code in current range
      *
      * @noinspection PhpMethodNamingConventionInspection
+     *
+     * @throws \InvalidArgumentException
+     * @throws Ex\MissingConfigurationKeyException
      */
     public static function EX_HTTP_NOT_FOUND(): int
     {
@@ -151,6 +162,9 @@ class BaseApiCodes
      * @return int valid API code in current range
      *
      * @noinspection PhpMethodNamingConventionInspection
+     *
+     * @throws \InvalidArgumentException
+     * @throws Ex\MissingConfigurationKeyException
      */
     public static function EX_HTTP_EXCEPTION(): int
     {
@@ -163,6 +177,9 @@ class BaseApiCodes
      * @return int valid API code in current range
      *
      * @noinspection PhpMethodNamingConventionInspection
+     *
+     * @throws \InvalidArgumentException
+     * @throws Ex\MissingConfigurationKeyException
      */
     public static function EX_UNCAUGHT_EXCEPTION(): int
     {
@@ -175,6 +192,9 @@ class BaseApiCodes
      * @return int valid API code in current range
      *
      * @noinspection PhpMethodNamingConventionInspection
+     *
+     * @throws \InvalidArgumentException
+     * @throws Ex\MissingConfigurationKeyException
      */
     public static function EX_AUTHENTICATION_EXCEPTION(): int
     {
@@ -187,6 +207,9 @@ class BaseApiCodes
      * @return int valid API code in current range
      *
      * @noinspection PhpMethodNamingConventionInspection
+     *
+     * @throws \InvalidArgumentException
+     * @throws Ex\MissingConfigurationKeyException
      */
     public static function EX_VALIDATION_EXCEPTION(): int
     {
@@ -199,6 +222,9 @@ class BaseApiCodes
      * @return int valid API code in current range
      *
      * @noinspection PhpMethodNamingConventionInspection
+     *
+     * @throws \InvalidArgumentException
+     * @throws Ex\MissingConfigurationKeyException
      */
     public static function EX_HTTP_SERVICE_UNAVAILABLE(): int
     {

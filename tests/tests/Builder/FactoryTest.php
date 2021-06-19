@@ -38,6 +38,8 @@ class FactoryTest extends TestCase
 	 * Checks if asError(); properly returns object of extending class
 	 *
 	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testAsError(): void
 	{

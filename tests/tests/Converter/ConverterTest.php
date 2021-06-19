@@ -61,6 +61,7 @@ class ConverterTest extends TestCase
 		]);
 
 		// WHEN we try to pass of child class
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = (new Converter())->convert($child);
 
 		// EXPECT it to be converted as per parent class configuration entry

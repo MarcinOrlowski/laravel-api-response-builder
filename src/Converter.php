@@ -35,6 +35,10 @@ class Converter
 
 	/**
 	 * Converter constructor.
+	 *
+	 * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
+	 * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
+	 * @throws Ex\IncompleteConfigurationException if config for specific class is incomplete (misses some mandatory fields etc).
 	 */
 	public function __construct()
 	{
@@ -124,6 +128,7 @@ class Converter
 	 * @return array|null
 	 *
 	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	public function convert($data = null): ?array
 	{

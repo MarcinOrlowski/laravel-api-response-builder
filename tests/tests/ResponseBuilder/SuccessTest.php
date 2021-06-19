@@ -26,6 +26,8 @@ class SuccessTest extends TestCase
 	 * Check plain success() invocation
 	 *
 	 * @return void
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testSuccess(): void
 	{
@@ -36,6 +38,7 @@ class SuccessTest extends TestCase
 		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
 	}
 
+	/** @noinspection PhpUnhandledExceptionInspection */
 	public function testSuccessWithArrayPayload(): void
 	{
 		$payload = [];
