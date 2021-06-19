@@ -1,0 +1,29 @@
+name: phpstan
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.4, 8.0]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository...
+        uses: actions/checkout@v2
+
+      - name: Installing dependencies...
+        uses: php-actions/composer@v6
+        with:
+          version: 2
+          php_version: ${{ matrix.php }}
+          dev: yes
+
+      - name: Running PHPStan...
+        uses: php-actions/phpstan@v3
+        with:
+          configuration: phpstan.neon
+          php_version: ${{ matrix.php }}
