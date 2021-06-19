@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpUnhandledExceptionInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -17,12 +20,15 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\Util;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
+/**
+ * Class MergeConfigTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class MergeConfigTest extends TestCase
 {
 	/**
 	 * Checks if config merger properly combines two arrays, preserving keys etc.
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testConfigMerge(): void
 	{
@@ -75,8 +81,6 @@ class MergeConfigTest extends TestCase
 	/**
 	 * Checks if config merger would fail when we try to feed it with two config sharing the key
 	 * but using data of different type in each configs.
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testConfigMergeWithIncompatibleElements(): void
 	{

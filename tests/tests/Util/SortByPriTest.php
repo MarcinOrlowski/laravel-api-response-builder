@@ -16,6 +16,11 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\Util;
 
+/**
+ * Class SortByPriTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class SortByPriTest extends TestCase
 {
     /**

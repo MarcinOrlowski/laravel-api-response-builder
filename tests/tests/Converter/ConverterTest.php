@@ -1,6 +1,7 @@
 <?php
 /**
  * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 declare(strict_types=1);
 
@@ -25,6 +26,11 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelChild;
 
+/**
+ * Class ConverterTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class ConverterTest extends TestCase
 {
 	/**
@@ -64,7 +70,6 @@ class ConverterTest extends TestCase
 		]);
 
 		// WHEN we try to pass of child class
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = (new Converter())->convert($child);
 
 		// EXPECT it to be converted as per parent class configuration entry

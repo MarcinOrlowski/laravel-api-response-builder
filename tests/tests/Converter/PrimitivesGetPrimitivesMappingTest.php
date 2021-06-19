@@ -1,6 +1,7 @@
 <?php
 /**
  * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 declare(strict_types=1);
 
@@ -24,6 +25,11 @@ use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Type;
 
+/**
+ * Class PrimitivesGetPrimitivesMappingTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class PrimitivesGetPrimitivesMappingTest extends TestCase
 {
 	/**
@@ -35,7 +41,6 @@ class PrimitivesGetPrimitivesMappingTest extends TestCase
 
 		$this->expectException(Ex\InvalidConfigurationException::class);
 
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod(Converter::class, 'getPrimitivesMapping');
 	}
 
@@ -48,7 +53,6 @@ class PrimitivesGetPrimitivesMappingTest extends TestCase
 		/** @noinspection PhpUndefinedMethodInspection */
 		Config::offsetUnset(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = $this->callProtectedMethod(Converter::class, 'getPrimitivesMapping');
 		$this->assertIsArray($result);
 		$this->assertEmpty($result);
@@ -88,9 +92,7 @@ class PrimitivesGetPrimitivesMappingTest extends TestCase
 		// getPrimitiveMapping is called by constructor.
 		$this->expectException(Ex\ConfigurationNotFoundException::class);
 		$converter = new Converter();
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$converter->convert(false);
-
 	}
 
 }

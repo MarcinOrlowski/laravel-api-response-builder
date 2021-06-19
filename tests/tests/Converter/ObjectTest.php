@@ -1,6 +1,7 @@
 <?php
 /**
  * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 declare(strict_types=1);
 
@@ -23,8 +24,12 @@ use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Converters\FakeConverter;
-use MarcinOrlowski\ResponseBuilder\Type;
 
+/**
+ * Class ObjectTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class ObjectTest extends TestCase
 {
 	/**
@@ -43,7 +48,6 @@ class ObjectTest extends TestCase
 
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
-		/** @noinspection PhpUnhandledExceptionInspection */
         $result = (new Converter())->convert($data);
 
         $this->assertIsArray($result);
@@ -66,7 +70,6 @@ class ObjectTest extends TestCase
 
         $this->expectException(Ex\InvalidTypeException::class);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->callProtectedMethod(Converter::class, 'getClassesMapping');
     }
 
@@ -90,7 +93,6 @@ class ObjectTest extends TestCase
 
             Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
-	        /** @noinspection PhpUnhandledExceptionInspection */
             $result = (new Converter())->convert($data);
 
             $this->assertIsArray($result);

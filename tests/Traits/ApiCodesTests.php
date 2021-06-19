@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpUnhandledExceptionInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
@@ -68,8 +71,6 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 *
-	 * @noinspection PhpUnhandledExceptionInspection
-	 *
 	 * @throws \ReflectionException
 	 */
 	public function testMinMaxCode(): void
@@ -87,8 +88,6 @@ trait ApiCodesTests
 	 * Checks if defined code range is large enough to accommodate built-in codes.
 	 *
 	 * @return void
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -129,7 +128,6 @@ trait ApiCodesTests
 				$val = BaseApiCodes::$name();
 			}
 
-			/** @noinspection PhpUnhandledExceptionInspection */
 			$this->assertNotNull($api_codes::getCodeMessageKey($val), "No message mapping for {$name} found.");
 		}
 	}
@@ -138,8 +136,6 @@ trait ApiCodesTests
 	 * Checks if all Api codes are in correct and allowed range.
 	 *
 	 * @return void
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 */
@@ -173,8 +169,6 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 *
-	 * @noinspection PhpUnhandledExceptionInspection
-	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException
 	 */
@@ -192,8 +186,6 @@ trait ApiCodesTests
 	 * Checks if all codes are mapped to existing locale strings.
 	 *
 	 * @return void
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException

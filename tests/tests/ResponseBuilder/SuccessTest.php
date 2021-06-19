@@ -1,6 +1,7 @@
 <?php
 /**
  * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 declare(strict_types=1);
 
@@ -22,14 +23,17 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Type;
 
+/**
+ * Class SuccessTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class SuccessTest extends TestCase
 {
 	/**
 	 * Check plain success() invocation
 	 *
 	 * @return void
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testSuccess(): void
 	{
@@ -40,7 +44,6 @@ class SuccessTest extends TestCase
 		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
 	}
 
-	/** @noinspection PhpUnhandledExceptionInspection */
 	public function testSuccessWithArrayPayload(): void
 	{
 		$payload = [];

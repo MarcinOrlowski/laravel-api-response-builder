@@ -28,14 +28,17 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * Class ExceptionHandlerHelperTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class ExceptionHandlerHelperTest extends TestCase
 {
 	/**
 	 * Tests behaviour of ExceptionHandler::unauthenticated()
 	 *
 	 * @return void
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
     public function testUnauthenticated(): void
     {
@@ -65,7 +68,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
         $exception = new \RuntimeException();
 
-	    /** @noinspection PhpUnhandledExceptionInspection */
 	    $j = json_decode(ExceptionHandlerHelper::render(null, $exception)->getContent(), false);
         $this->assertValidResponse($j);
         $this->assertNull($j->data);
@@ -83,8 +85,6 @@ class ExceptionHandlerHelperTest extends TestCase
 	 * Check exception handler behavior when provided with various exception types.
 	 *
 	 * @return void
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
     public function testRenderMethodWithHttpException(): void
     {
@@ -126,7 +126,6 @@ class ExceptionHandlerHelperTest extends TestCase
                                              bool $validate_response_message_text = true,
                                              bool $expect_data = false): void
     {
-	    /** @noinspection PhpUnhandledExceptionInspection */
         $key = BaseApiCodes::getCodeMessageKey($expected_api_code);
         $expect_data_node_null = true;
         switch ($exception_class) {
@@ -137,7 +136,6 @@ class ExceptionHandlerHelperTest extends TestCase
             case ValidationException::class:
                 $data = ['title' => ''];
                 $rules = ['title' => 'required|min:10|max:255'];
-                /** @noinspection PhpUnhandledExceptionInspection */
                 $validator = app('validator')->make($data, $rules);
                 $exception = new ValidationException($validator);
                 $expect_data_node_null = false;
@@ -149,7 +147,6 @@ class ExceptionHandlerHelperTest extends TestCase
         }
 
         // hand the exception to the handler and examine its response JSON
-	    /** @noinspection PhpUnhandledExceptionInspection */
         $eh_response = ExceptionHandlerHelper::render(null, $exception);
         $eh_response_json = json_decode($eh_response->getContent(), false);
 
@@ -259,8 +256,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /**
      * Tests if Exception Handler's default (built-in) configuration matches structure requrements.
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testBaseConfigStructure(): void
     {
@@ -289,8 +284,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /**
      * Validates ExceptionHandler's built-in configuration related to HttpException class.
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testBaseConfigHttpExceptionConfig(): void
     {
@@ -311,8 +304,6 @@ class ExceptionHandlerHelperTest extends TestCase
     /**
      * Checks if ExceptionHandler would return exception's message if exists but fall
      * back to `msg_key` ignoring built-in default string
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testExceptionMessageOverrideExceptionMessageOnly(): void
     {
@@ -356,8 +347,6 @@ class ExceptionHandlerHelperTest extends TestCase
     /**
      * Checks if ExceptionHandler would ignore exception's message as well as built-in fallback message
      * and use the one configured with `msg_key` instead.
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testExceptionMessageForceOverride(): void
     {
@@ -406,8 +395,6 @@ class ExceptionHandlerHelperTest extends TestCase
      * Checks if processException() would properly handle the case when there's no `msg_key` specified in exception
      * handler config for this particular exception type, yet method is ordered to ignore message provided by
      * exception and fall back one from config (which in this case means another fallback to built-in settings).
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testProcessExceptionWithMsgEnforceWithNoFallbackMsgKey(): void
     {
@@ -461,8 +448,6 @@ class ExceptionHandlerHelperTest extends TestCase
 	 * @param int           $config_http_code   HTTP code to set as part for exception handler configuration
 	 *
 	 * @return void
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
     protected function doTestErrorMethodFallbackMechanism(int $expected_http_code,
                                                           HttpException $ex, int $config_http_code): void
@@ -528,8 +513,6 @@ class ExceptionHandlerHelperTest extends TestCase
 	 * @param array    $params
 	 * @param int|null $code
 	 * @param bool     $is_default_handler
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
     protected function checkExceptionHandlerConfigEntryStructure(array $params, ?int $code = null,
                                                                  bool $is_default_handler = false): void

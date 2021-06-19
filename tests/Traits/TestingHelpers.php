@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection PhpUnhandledExceptionInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
@@ -73,9 +76,7 @@ trait TestingHelpers
         $class_name = $this->getApiCodesClassName();
 
         $obj = new $class_name();
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->min_allowed_code = $this->callProtectedMethod($obj, 'getMinCode');
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->max_allowed_code = $this->callProtectedMethod($obj, 'getMaxCode');
 
         // generate random api_code
@@ -83,7 +84,6 @@ trait TestingHelpers
         $this->random_api_code = \mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
         // AND corresponding mapped message mapping
-        /** @noinspection PhpUnhandledExceptionInspection */
         $map = $this->callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
         $idx = \random_int(1, \count($map));
 
@@ -114,7 +114,6 @@ trait TestingHelpers
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws \ReflectionException
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
     public function getResponseSuccessObject(int $expected_api_code_offset = null,
                                              int $expected_http_code = null,
@@ -164,7 +163,6 @@ trait TestingHelpers
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes_class_name */
             $api_codes_class_name = $this->getApiCodesClassName();
-	        /** @noinspection PhpUnhandledExceptionInspection */
 	        $expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE();
         }
 
@@ -208,7 +206,6 @@ trait TestingHelpers
 
         /** @var BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
-	    /** @noinspection PhpUnhandledExceptionInspection */
 	    $expected_message_string = $expected_message ?? \Lang::get(
                 $api_codes_class_name::getCodeMessageKey($expected_api_code), ['api_code' => $expected_api_code]);
         $this->assertEquals($expected_message_string, $j->message);
@@ -295,7 +292,6 @@ trait TestingHelpers
         $http_code = null;
         $lang_args = null;
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         return $this->callProtectedMethod(
             RB::asSuccess(), 'make', [$success,
                                            $api_code_offset,

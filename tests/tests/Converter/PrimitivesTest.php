@@ -1,6 +1,7 @@
 <?php
 /**
  * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 declare(strict_types=1);
 
@@ -24,6 +25,11 @@ use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
+/**
+ * Class PrimitivesTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class PrimitivesTest extends TestCase
 {
 
@@ -45,7 +51,6 @@ class PrimitivesTest extends TestCase
 		]);
 
 		// WHEN this object is returned
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$converted = (new Converter())->convert($model);
 
 		// THEN we expect returned data to be converted and use KEY_KEY element.
@@ -62,7 +67,6 @@ class PrimitivesTest extends TestCase
 	{
 		// GIVEN primitive value
 		$value = \random_int(0, 1);
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -73,7 +77,6 @@ class PrimitivesTest extends TestCase
 	{
 		// GIVEN primitive value
 		$value = ((double)\random_int(0, 100000) / \random_int(1, 1000)) + 0.1;
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -84,7 +87,6 @@ class PrimitivesTest extends TestCase
 	{
 		// GIVEN primitive value
 		$value = \random_int(0, 10000);
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -95,7 +97,6 @@ class PrimitivesTest extends TestCase
 	{
 		// GIVEN primitive value
 		$value = $this->getRandomString();
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
 
@@ -110,13 +111,11 @@ class PrimitivesTest extends TestCase
 
 		// WHEN passing it as direct payaload
 		$converter = new Converter();
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$converted = $converter->convert($value);
 
 		// THEN we expect returned data to be keyed as per primitive's configuration.
 		$this->assertIsArray($converted);
 
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [$value]);
 		$this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);

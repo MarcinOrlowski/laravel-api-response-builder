@@ -16,12 +16,25 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converters;
 
 use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 
+/**
+ * Class FakeConverter
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests\Converters
+ */
 class FakeConverter implements ConverterContract
 {
     public $key = 'fake';
     public $val = 'converter';
 
-    public function convert($obj, /** @scrutinizer ignore-unused */ array $config): array
+	/**
+	 * Simulates object conversion.
+	 *
+	 * @param object $obj
+	 * @param array  $config
+	 *
+	 * @return string[]
+	 */
+	public function convert($obj, /** @scrutinizer ignore-unused */ array $config): array
     {
         return [$this->key => $this->val];
     }

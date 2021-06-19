@@ -25,6 +25,11 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
+/**
+ * Class InternalsTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class InternalsTest extends TestCase
 {
 	/**
@@ -48,8 +53,6 @@ class InternalsTest extends TestCase
 		\Config::set(RB::CONF_KEY_CONVERTER_CLASSES, false);
 
 		$this->expectException(Ex\InvalidConfigurationException::class);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod(Converter::class, 'getClassesMapping');
 	}
 
@@ -66,8 +69,6 @@ class InternalsTest extends TestCase
 		]);
 
 		$this->expectException(Ex\IncompleteConfigurationException::class);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod(Converter::class, 'getClassesMapping');
 	}
 
@@ -84,8 +85,6 @@ class InternalsTest extends TestCase
 		]);
 
 		$this->expectException(Ex\InvalidConfigurationElementException::class);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod(Converter::class, 'getClassesMapping');
 	}
 
@@ -100,7 +99,6 @@ class InternalsTest extends TestCase
 		$max = $this->getProtectedConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
 
 		$this->expectException(\OutOfBoundsException::class);
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$max + 1]);
 	}
 
@@ -115,7 +113,6 @@ class InternalsTest extends TestCase
 		$min = $this->getProtectedConstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
 
 		$this->expectException(\OutOfBoundsException::class);
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod($obj, 'getCodeForInternalOffset', [$min - 1]);
 	}
 
@@ -123,8 +120,6 @@ class InternalsTest extends TestCase
 	 * Tests getCodeMessageKey() if given code of configured code range.
 	 *
 	 * @return void
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testGetCodeMessageKeyMethodWithCodeOutOfCodeRange(): void
 	{
@@ -152,7 +147,6 @@ class InternalsTest extends TestCase
 			//            'EX_AUTHENTICATION_EXCEPTION_OFFSET',
 			//            'EX_VALIDATION_EXCEPTION_OFFSET',
 		];
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$consts = BaseApiCodes::getApiCodeConstants();
 
 		foreach ($expected as $key) {
@@ -170,10 +164,7 @@ class InternalsTest extends TestCase
 		$model = new TestModel('');
 
 		$this->expectException(Ex\ConfigurationNotFoundException::class);
-
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod($converter, 'getClassMappingConfigOrThrow', [$model]);
 	}
-
 
 }

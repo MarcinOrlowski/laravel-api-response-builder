@@ -1,6 +1,7 @@
 <?php
 /**
  * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 declare(strict_types=1);
 
@@ -40,7 +41,6 @@ class MakeTest extends TestCase
 
         $message_or_api_code = [];    // invalid data type
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         /** @noinspection PhpParamsInspection */
         $this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
     }
@@ -55,7 +55,6 @@ class MakeTest extends TestCase
         $this->expectException(\OutOfBoundsException::class);
 
         $api_code = $this->max_allowed_code + 1;    // invalid
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->callMakeMethod(true, $api_code, 'message');
     }
 
@@ -72,7 +71,6 @@ class MakeTest extends TestCase
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::set(RB::CONF_KEY_ENCODING_OPTIONS, []);
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK());
     }
 
@@ -91,7 +89,6 @@ class MakeTest extends TestCase
 
         // fallback defaults in action
         \Config::offsetUnset('encoding_options');
-        /** @noinspection PhpUnhandledExceptionInspection */
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
         $matches = [];
@@ -100,7 +97,6 @@ class MakeTest extends TestCase
 
 
         // check if it returns the same when defaults enforced explicitly
-        /** @noinspection PhpUnhandledExceptionInspection */
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data,
             null, RB::DEFAULT_ENCODING_OPTIONS);
 
@@ -129,7 +125,6 @@ class MakeTest extends TestCase
         // check if it returns escaped
         /** @noinspection PhpUndefinedClassInspection */
         \Config::set(RB::CONF_KEY_ENCODING_OPTIONS, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
-        /** @noinspection PhpUnhandledExceptionInspection */
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
         $matches = [];
@@ -140,7 +135,6 @@ class MakeTest extends TestCase
         // check if it returns unescaped
         \Config::set(RB::CONF_KEY_ENCODING_OPTIONS,
             JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
-        /** @noinspection PhpUnhandledExceptionInspection */
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
         $matches = [];
@@ -155,8 +149,6 @@ class MakeTest extends TestCase
 	/**
 	 * Checks if RB::CONF_KEY_DATA_ALWAYS_OBJECT correctly resturns NULL payload
 	 * as empty JSON Object
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
     public function testDataAlwaysObjectConfigFlag(): void
     {
@@ -184,7 +176,6 @@ class MakeTest extends TestCase
     {
 	    $this->expectException(Ex\InvalidTypeException::class);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         /** @noinspection PhpParamsInspection */
         $this->callMakeMethod(true, BaseApiCodes::OK(), []);
     }

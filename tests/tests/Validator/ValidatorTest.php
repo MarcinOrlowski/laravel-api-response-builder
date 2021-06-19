@@ -18,6 +18,11 @@ use MarcinOrlowski\ResponseBuilder\Type;
 use MarcinOrlowski\ResponseBuilder\Validator;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
+/**
+ * Class ValidatorTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class ValidatorTest extends TestCase
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 /**
  * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 declare(strict_types=1);
 
@@ -21,6 +22,16 @@ class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 	public static $fake_response = [];
 
 	/** @noinspection PhpMissingParentCallCommonInspection */
+	/**
+	 * @param bool       $success
+	 * @param int        $api_code
+	 * @param int|string $msg_or_api_code
+	 * @param array|null $placeholders
+	 * @param null       $data
+	 * @param array|null $debug_data
+	 *
+	 * @return array
+	 */
 	protected function buildResponse(bool $success, int $api_code,
 	                                 $msg_or_api_code, array $placeholders = null,
 	                                 $data = null, array $debug_data = null): array
@@ -29,6 +40,11 @@ class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 	}
 }
 
+/**
+ * Class CustomResponseObjectTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class CustomResponseObjectTest extends TestCase
 {
 	/**
@@ -45,7 +61,6 @@ class CustomResponseObjectTest extends TestCase
 			MyResponseBuilder::$fake_response[ $this->getRandomString() ] = $this->getRandomString();
 		}
 
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$response = MyResponseBuilder::success();
 		$this->assertArrayEquals(MyResponseBuilder::$fake_response, json_decode($response->getContent(), true));
 	}

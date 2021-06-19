@@ -1,6 +1,7 @@
 <?php
 /**
  * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 declare(strict_types=1);
 
@@ -22,6 +23,11 @@ use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
+/**
+ * Class ConverterGetClassesMappingTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class ConverterGetClassesMappingTest extends TestCase
 {
 	/**
@@ -33,7 +39,6 @@ class ConverterGetClassesMappingTest extends TestCase
 
 		$this->expectException(Ex\InvalidConfigurationException::class);
 
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->callProtectedMethod(Converter::class, 'getClassesMapping');
 	}
 
@@ -46,7 +51,6 @@ class ConverterGetClassesMappingTest extends TestCase
 		/** @noinspection PhpUndefinedMethodInspection */
 		Config::offsetUnset(RB::CONF_KEY_CONVERTER_CLASSES);
 
-		/** @noinspection PhpUnhandledExceptionInspection */
 		$result = $this->callProtectedMethod(Converter::class, 'getClassesMapping');
 		$this->assertIsArray($result);
 		$this->assertEmpty($result);

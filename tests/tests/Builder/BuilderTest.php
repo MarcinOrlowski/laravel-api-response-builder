@@ -1,6 +1,7 @@
 <?php
 /**
  * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 declare(strict_types=1);
 
@@ -21,14 +22,17 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
+/**
+ * Class BuilderTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class BuilderTest extends TestCase
 {
     /**
      * Check plain success() invocation
      *
      * @return void
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testSuccess(): void
     {
@@ -46,8 +50,6 @@ class BuilderTest extends TestCase
 
     /**
      * Checks if custom headers are properly used in the response.
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testWithHttpHeaders(): void
     {
@@ -82,8 +84,6 @@ class BuilderTest extends TestCase
     /**
      * Checks if exception is thrown while attempting to build response indicating failure with api_code
      * indicating success.
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function testErrorWithOkCode(): void
     {

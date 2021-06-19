@@ -21,6 +21,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 
 /**
+ * Class DummyResponseBuilder
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
  * @noinspection EmptyClassInspection
  */
 class DummyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
@@ -28,6 +31,11 @@ class DummyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuild
 // dummy
 }
 
+/**
+ * Class FactoryTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class FactoryTest extends TestCase
 {
 	/**
@@ -45,8 +53,6 @@ class FactoryTest extends TestCase
 	 * Checks if asError(); properly returns object of extending class
 	 *
 	 * @return void
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function testAsError(): void
 	{

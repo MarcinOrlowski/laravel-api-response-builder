@@ -21,6 +21,11 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
+/**
+ * Class BaseApiCodesTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class BaseApiCodesTest extends TestCase
 {
     /**

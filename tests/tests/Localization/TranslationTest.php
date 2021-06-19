@@ -16,6 +16,11 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use Illuminate\Support\Facades\Config;
 
+/**
+ * Class TranslationTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class TranslationTest extends TestCase
 {
     /**

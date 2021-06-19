@@ -24,6 +24,11 @@ use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 
+/**
+ * Class AutoConversionTest
+ *
+ * @package MarcinOrlowski\ResponseBuilder\Tests
+ */
 class AutoConversionTest extends TestCase
 {
 	/**
@@ -49,7 +54,6 @@ class AutoConversionTest extends TestCase
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
         // WHEN this object is returned
-	    /** @noinspection PhpUnhandledExceptionInspection */
         $this->response = RB::success($model);
         $j = $this->getResponseSuccessObject();
 
@@ -98,7 +102,6 @@ class AutoConversionTest extends TestCase
         $data['nested'][ $model_2_data_key ] = $model_2;
 
         // WHEN this object is returned
-	    /** @noinspection PhpUnhandledExceptionInspection */
         $this->response = RB::success($data);
         $j = $this->getResponseSuccessObject();
 
@@ -131,8 +134,6 @@ class AutoConversionTest extends TestCase
 	 * @return void
 	 *
    	 * @dataProvider provider_TestSuccessWithPrimitive
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
 	 */
     public function testSuccessWithPrimitive($value): void
     {
