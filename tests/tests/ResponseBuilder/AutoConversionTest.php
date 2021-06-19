@@ -156,11 +156,11 @@ class AutoConversionTest extends TestCase
 	{
 		return [
 			// boolean
-			[(bool)\mt_rand(0, 1)],
+			[(bool)\random_int(0, 1)],
 			// integer
-			[mt_rand(0, 10000)],
+			[random_int(0, 10000)],
 			// double
-			[((double)mt_rand(0, 10000)) / mt_rand(1, 100)],
+			[((double)random_int(0, 10000)) / random_int(1, 100)],
 			// string
 			[$this->getRandomString()],
 		];

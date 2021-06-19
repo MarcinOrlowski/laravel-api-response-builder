@@ -61,7 +61,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectBool(): void
 	{
 		// GIVEN primitive value
-		$value = \mt_rand(0, 1);
+		$value = \random_int(0, 1);
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
@@ -72,7 +72,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectDouble(): void
 	{
 		// GIVEN primitive value
-		$value = ((double)\mt_rand(0, 100000) / \mt_rand(1, 1000)) + 0.1;
+		$value = ((double)\random_int(0, 100000) / \random_int(1, 1000)) + 0.1;
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}
@@ -83,7 +83,7 @@ class PrimitivesTest extends TestCase
 	public function testDirectInteger(): void
 	{
 		// GIVEN primitive value
-		$value = \mt_rand(0, 10000);
+		$value = \random_int(0, 10000);
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$this->doDirectPrimitiveTest($value);
 	}

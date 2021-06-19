@@ -411,10 +411,10 @@ class ExceptionHandlerHelperTest extends TestCase
      */
     public function testProcessExceptionWithMsgEnforceWithNoFallbackMsgKey(): void
     {
-        $api_code = mt_rand($this->min_allowed_code, $this->max_allowed_code);
-        $http_code = mt_rand(RB::ERROR_HTTP_CODE_MIN, RB::ERROR_HTTP_CODE_MAX);
+        $api_code = random_int($this->min_allowed_code, $this->max_allowed_code);
+        $http_code = random_int(RB::ERROR_HTTP_CODE_MIN, RB::ERROR_HTTP_CODE_MAX);
         do {
-            $fallback_http_code = mt_rand(RB::ERROR_HTTP_CODE_MIN, RB::ERROR_HTTP_CODE_MAX);
+            $fallback_http_code = random_int(RB::ERROR_HTTP_CODE_MIN, RB::ERROR_HTTP_CODE_MAX);
         } while ($fallback_http_code === $http_code);
 
         $ex_cfg = [

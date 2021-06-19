@@ -164,7 +164,7 @@ class DefaultConfigTest extends TestCase
 	public function testLengthAwarePaginator(): void
 	{
 		$data = [];
-		for ($i = 0; $i < \mt_rand(10, 20); $i++) {
+		for ($i = 0; $i < \random_int(10, 20); $i++) {
 			$data[] = $this->getRandomString("item{$i}");
 		}
 		$total = \count($data);
@@ -179,7 +179,7 @@ class DefaultConfigTest extends TestCase
 	public function testPaginator(): void
 	{
 		$data = [];
-		for ($i = 0; $i < \mt_rand(10, 20); $i++) {
+		for ($i = 0; $i < \random_int(10, 20); $i++) {
 			$data[] = $this->getRandomString("item{$i}");
 		}
 
