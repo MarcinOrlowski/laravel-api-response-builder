@@ -516,7 +516,8 @@ class ExceptionHandlerHelperTest extends TestCase
      */
     protected function getExceptionHandlerConfig(): array
     {
-        $cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerConfig', []);
+	    /** @noinspection ArgumentEqualsDefaultValueInspection */
+	    $cfg = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'getExceptionHandlerConfig', []);
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
 

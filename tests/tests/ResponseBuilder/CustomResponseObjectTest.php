@@ -41,6 +41,7 @@ class CustomResponseObjectTest extends TestCase
 		/** @noinspection DisallowWritingIntoStaticPropertiesInspection */
 		MyResponseBuilder::$fake_response = [];
 		for ($i = 0; $i < 10; $i++) {
+			/** @noinspection AmbiguousMethodsCallsInArrayMappingInspection */
 			MyResponseBuilder::$fake_response[ $this->getRandomString() ] = $this->getRandomString();
 		}
 

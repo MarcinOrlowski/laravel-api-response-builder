@@ -43,6 +43,7 @@ class TestModelJsonSerializable implements \JsonSerializable
 	 *
 	 * NOTE: no return typehint due to compatibility with Laravel signature.
 	 * @noinspection PhpMissingReturnTypeInspection
+	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
     public function getVal()
     {
@@ -54,6 +55,7 @@ class TestModelJsonSerializable implements \JsonSerializable
 	 *
 	 * NOTE: no typehints due to compatibility with interface's method signature.
 	 * @noinspection PhpMissingReturnTypeInspection
+	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
 	public function jsonSerialize()
     {

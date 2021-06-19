@@ -86,11 +86,13 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 	 *
 	 * NOTE: not typehints due to compatibility with Laravel's method signature.
 	 * @noinspection PhpMissingReturnTypeInspection
+ 	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	protected function mergeConfigFrom($path, $key)
 	{
 		/** @noinspection PhpIncludeInspection */
+		/** @noinspection UsingInclusionReturnValueInspection */
 		$defaults = require $path;
 		$config = $this->app['config']->get($key, []);
 

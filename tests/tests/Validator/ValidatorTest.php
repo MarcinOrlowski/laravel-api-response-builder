@@ -260,7 +260,7 @@ class ValidatorTest extends TestCase
             $test_passed = true;
             try {
                 Validator::assertIsType($var_name, $data['item'], $data['types']);
-            } catch (\Exception $ex) {
+            } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $ex) {
                 $test_passed = false;
             }
 

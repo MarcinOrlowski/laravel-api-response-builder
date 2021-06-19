@@ -20,6 +20,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 
+/**
+ * @noinspection EmptyClassInspection
+ */
 class DummyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
 // dummy

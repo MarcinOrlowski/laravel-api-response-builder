@@ -1,4 +1,7 @@
 <?php
+/**
+ * @noinspection EmptyClassInspection
+ */
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Models;

@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
-use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\HttpExceptionHandler as HttpExceptionHandler;
+use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\HttpExceptionHandler;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -86,6 +86,7 @@ class ExceptionHandlerHelper
 	 *
 	 * NOTE: no return typehint due to compatibility with Laravel signature.
 	 * @noinspection PhpMissingReturnTypeInspection
+	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
@@ -166,6 +167,7 @@ class ExceptionHandlerHelper
 	 *
 	 * @noinspection PhpUnusedParameterInspection
 	 * @noinspection PhpUnused
+	 * @noinspection UnknownInspectionInspection
 	 *
 	 * NOTE: not typehints due to compatibility with Laravel's method signature.
 	 * @noinspection PhpMissingParamTypeInspection

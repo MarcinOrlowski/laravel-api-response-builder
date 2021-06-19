@@ -37,6 +37,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	 *
 	 * NOTE: not return typehint due to compatibility with TestBench's method signature.
 	 * @noinspection PhpMissingReturnTypeInspection
+	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function getEnvironmentSetUp($app)
