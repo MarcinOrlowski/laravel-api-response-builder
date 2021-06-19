@@ -84,7 +84,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *
 	 * @return HttpResponse
 	 */
-	public static function success($data = null, $api_code = null, array $placeholders = null,
+	public static function success($data = null, int $api_code = null, array $placeholders = null,
 	                               int $http_code = null, int $json_opts = null): HttpResponse
 	{
 		return static::asSuccess($api_code)
