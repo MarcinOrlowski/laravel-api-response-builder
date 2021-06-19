@@ -22,3 +22,5 @@ jobs:
           configuration: tests/phpunit.xml
       - name: Running PHPStan...
         uses: php-actions/phpstan@v2
+        with:
+          path: "src/"
