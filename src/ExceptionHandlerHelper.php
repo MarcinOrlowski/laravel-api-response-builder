@@ -71,6 +71,9 @@ class ExceptionHandlerHelper
 	 *                                       HttpResponse::HTTP_INTERNAL_SERVER_ERROR
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
+	 *
+	 * NOTE: not return typehint due to Laravel
+	 * @noinspection PhpMissingReturnTypeInspection
 	 */
 	protected static function processException(\Throwable $ex, array $ex_cfg,
 	                                           int $fallback_http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR)
@@ -147,6 +150,10 @@ class ExceptionHandlerHelper
 		// This config entry is guaranted to exist. Enforced by tests.
 		$cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ][ HttpResponse::HTTP_UNAUTHORIZED ];
 
+		/**
+		 * NOTE: not return typehint due to Laravel
+		 * @noinspection PhpParamsInspection
+		 */
 		return static::processException($exception, $cfg, HttpResponse::HTTP_UNAUTHORIZED);
 	}
 
