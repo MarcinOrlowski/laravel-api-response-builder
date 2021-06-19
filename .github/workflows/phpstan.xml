@@ -1,0 +1,21 @@
+name: phpstan
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      # do not stop the workflow if single run failed
+      fail-fast: false
+      matrix:
+        php: [7.2, 7.3, 7.4, 8.0]
+  
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository...
+        uses: actions/checkout@v2
+      - name: Running PHPStan...
+        uses: php-actions/phpstan@v3
+        with:
+          path: "src/"
