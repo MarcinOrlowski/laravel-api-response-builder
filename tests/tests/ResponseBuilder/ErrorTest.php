@@ -1,5 +1,6 @@
 <?php
 /**
+ * @noinspection PhpUnhandledExceptionInspection
  * @noinspection PhpDocMissingThrowsInspection
  */
 declare(strict_types=1);
