@@ -45,7 +45,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsIntWrongType(): void
     {
-	    $this->expectException(Ex\InvalidTypeException::class);
+	    $this->expectException(Ex\NotIntegerException::class);
         Validator::assertIsInt(__FUNCTION__, 'chicken');
     }
 
@@ -71,7 +71,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsObjectWrongType(): void
     {
-	    $this->expectException(Ex\InvalidTypeException::class);
+	    $this->expectException(Ex\NotObjectException::class);
         Validator::assertIsObject(__FUNCTION__, 'chicken');
     }
 
@@ -92,7 +92,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsArrayWithInvalidData(): void
     {
-	    $this->expectException(Ex\InvalidTypeException::class);
+	    $this->expectException(Ex\NotArrayException::class);
         Validator::assertIsArray(__FUNCTION__, false);
     }
 
@@ -117,7 +117,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsStringWrongType(): void
     {
-	    $this->expectException(Ex\InvalidTypeException::class);
+	    $this->expectException(Ex\NotStringException::class);
         Validator::assertIsString(__FUNCTION__, 666);
     }
 
@@ -142,7 +142,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsBoolWrongType(): void
     {
-        $this->expectException(Ex\InvalidTypeException::class);
+        $this->expectException(Ex\NotBooleanException::class);
         Validator::assertIsBool(__FUNCTION__, 666);
     }
 
