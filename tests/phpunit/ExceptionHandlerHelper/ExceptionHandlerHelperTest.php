@@ -69,7 +69,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
         $exception = new \RuntimeException();
 
-	    $j = json_decode(ExceptionHandlerHelper::render(null, $exception)->getContent(), false);
+	    $j = json_decode($this->getResponseContent(ExceptionHandlerHelper::render(null, $exception)), false);
         $this->assertValidResponse($j);
         $this->assertNull($j->data);
 

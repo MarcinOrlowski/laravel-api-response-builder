@@ -93,7 +93,7 @@ class MakeTest extends TestCase
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
         $matches = [];
-        $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+        $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $this->getResponseContent($resp), $matches));
         $result_defaults = $matches[1];
 
 
@@ -102,7 +102,7 @@ class MakeTest extends TestCase
             null, RB::DEFAULT_ENCODING_OPTIONS);
 
         $matches = [];
-        $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+        $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $this->getResponseContent($resp), $matches));
         $result_defaults_enforced = $matches[1];
 
         $this->assertEquals($result_defaults, $result_defaults_enforced);
@@ -129,7 +129,7 @@ class MakeTest extends TestCase
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
         $matches = [];
-        $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+        $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $this->getResponseContent($resp), $matches));
         $result_escaped = $matches[1];
         $this->assertEquals($test_string_escaped, $result_escaped);
 
@@ -139,7 +139,7 @@ class MakeTest extends TestCase
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
         $matches = [];
-        $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $resp->getContent(), $matches));
+        $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $this->getResponseContent($resp), $matches));
         $result_unescaped = $matches[1];
         $this->assertEquals($test_string, $result_unescaped);
 

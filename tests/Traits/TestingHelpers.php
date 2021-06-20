@@ -99,7 +99,7 @@ trait TestingHelpers
 	// -----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * We wrap call to response's getContent() to handle `false` value case.
+	 * We wrap call to response's getContent() to handle case of `false` being return value.
 	 *
 	 * @param \Symfony\Component\HttpFoundation\Response $response
 	 *
@@ -239,8 +239,9 @@ trait TestingHelpers
                                           string $expected_message = null)
     {
         $actual = $this->response->getStatusCode();
+        $contents = $this->getResponseContent($this->response);
         $this->assertEquals($expected_http_code, $actual,
-            "Expected status code {$expected_http_code}, got {$actual}. Response: {$this->response->getContent()}");
+            "Expected status code {$expected_http_code}, got {$actual}. Response: {$contents}");
 
         // get response as Json object
         $j = \json_decode($this->getResponseContent($this->response), false);
