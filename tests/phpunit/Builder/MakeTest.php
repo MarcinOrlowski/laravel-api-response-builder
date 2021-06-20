@@ -161,7 +161,7 @@ class MakeTest extends TestCase
 	    $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
 	    // returned 'data' branch should be empty JSON object
-	    $j = json_decode($this->getResponseContent($resp));
+	    $j = json_decode($this->getResponseContent($resp), false);
 	    $this->assertEquals(true, $j->{RB::KEY_SUCCESS});
 	    $this->assertNotNull($j->{RB::KEY_DATA});
 	    $this->assertIsObject($j->{RB::KEY_DATA});
