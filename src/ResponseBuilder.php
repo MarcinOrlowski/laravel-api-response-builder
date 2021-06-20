@@ -187,7 +187,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	}
 
 	/**
-	 * @param null $data
+	 * @param mixed $data
 	 *
 	 * @return $this
 	 */
@@ -454,6 +454,13 @@ class ResponseBuilder extends ResponseBuilderBase
 			$placeholders['api_code'] = $api_code;
 		}
 
-		return \Lang::get($key, $placeholders);
+		$msg = \Lang::get($key, $placeholders);
+
+		// As Lang::get() is documented to also returning arrays(?)...
+		if (is_array($msg)) {
+			$msg = implode('', $msg);
+		}
+
+		return $msg;
 	}
 }

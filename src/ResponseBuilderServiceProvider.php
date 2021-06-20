@@ -31,6 +31,7 @@ use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
  */
 class ResponseBuilderServiceProvider extends ServiceProvider
 {
+	/** @var string[] */
 	protected $config_files = [
 		'response_builder.php',
 	];

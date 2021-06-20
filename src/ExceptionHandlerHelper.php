@@ -114,16 +114,18 @@ class ExceptionHandlerHelper
 			// there's no msg_key configured for this exact code, so let's obtain our default message
 			$msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
 				: Lang::get($msg_key, $placeholders);
-		} else {
+		} else if ($msg === '') {
 			// nothing enforced, handling pipeline: ex_message -> user_defined_msg -> http_ex -> default
-			if ($msg === '') {
-				$msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
-					: Lang::get($msg_key, $placeholders);
-			}
+			$msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
+				: Lang::get($msg_key, $placeholders);
+		}
+
+		// As Lang::get() is documented to also returning arrays(?)...
+		if (is_array($msg)) {
+			$msg = implode('', $msg);
 		}
 
 		// Lets' try to build the error response with what we have now
-
 		/** @noinspection PhpUnhandledExceptionInspection */
 		return static::error($ex, $api_code, $http_code, $msg);
 	}
@@ -154,6 +156,11 @@ class ExceptionHandlerHelper
 			$key = BaseApiCodes::getCodeMessageKey($ex instanceof $http_ex_cls
 				? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
 			$error_message = Lang::get($key, $placeholders);
+		}
+
+		// As Lang::get() is documented to also returning arrays(?)...
+		if (is_array($error_message)) {
+			$error_message = implode('', $error_message);
 		}
 
 		return $error_message;
