@@ -401,7 +401,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\NotStringException
 	 *
 	 * @noinspection PhpTooManyParametersInspection
 	 */
@@ -424,7 +423,7 @@ class ResponseBuilder extends ResponseBuilderBase
 		if (\is_int($msg_or_api_code)) {
 			$message = $this->getMessageForApiCode($success, $msg_or_api_code, $placeholders);
 		} else {
-			Validator::assertIsString('message', $msg_or_api_code);
+			Validator::assertIsType('message', $msg_or_api_code, [Type::STRING, Type::INTEGER]);
 			$message = $msg_or_api_code;
 		}
 
