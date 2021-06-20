@@ -118,6 +118,7 @@ trait ApiCodesTests
 		$codes = $api_codes::getApiCodeConstants();
 
 		foreach ($codes as $name => $val) {
+			/** @var string $name */
 			if (\in_array($name, $const_to_ignore, true)) {
 				$this->assertTrue(true);
 				continue;
@@ -148,6 +149,7 @@ trait ApiCodesTests
 		$api_codes = $this->getApiCodesClassName();
 		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
+			/** @var string $name */
 			if (\in_array($name, $const_to_ignore, true)) {
 				$this->assertTrue(true);
 				continue;
@@ -196,6 +198,7 @@ trait ApiCodesTests
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$map = $api_codes_class_name::getMap();
 		foreach ($map as $code => $mapping) {
+			/** @var int $code */
 			$str = \Lang::get($mapping);
 			$this->assertNotEquals($mapping, $str,
 				\sprintf('No lang entry for: %s referenced by %s', $mapping, $this->resolveConstantFromCode($code))
