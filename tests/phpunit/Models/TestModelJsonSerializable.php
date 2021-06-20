@@ -28,7 +28,7 @@ class TestModelJsonSerializable implements \JsonSerializable
 	/**
 	 * TestModelJsonSerializable constructor.
 	 *
-	 * @param string $val
+	 * @param mixed $val
 	 *
 	 * NOTE: no argument typehint due to compatibility with interface's signature.
 	 * @noinspection PhpMissingParamTypeInspection
