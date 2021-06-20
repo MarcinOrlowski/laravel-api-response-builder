@@ -8,7 +8,7 @@
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
 
-name: Static Analysis
+name: "Static Analysis"
 
 on: [push]
 
@@ -24,19 +24,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository...
+      - name: "Checkout repository..."
         uses: actions/checkout@v2
 
-      - name: Installing dependencies...
+      - name: "Installing dependencies..."
         uses: php-actions/composer@v6
         with:
           version: 2
           php_version: ${{ matrix.php }}
           dev: yes
 
-      - name: Running PHPStan...
+      - name: "Running PHPStan..."
         uses: php-actions/phpstan@v3
         with:
-          configuration: phpstan.neon
+          configuration: "phpstan.neon"
           php_version: ${{ matrix.php }}
           memory_limit: 16M

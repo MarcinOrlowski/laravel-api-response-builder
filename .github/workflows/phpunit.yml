@@ -8,7 +8,7 @@
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
 
-name: Unit Tests
+name: "Unit Tests"
 
 on: [push]
 
@@ -29,27 +29,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository...
+      - name: "Checkout repository..."
         uses: actions/checkout@v2
-        
-      - name: pwd
-        run: pwd
-        
-      - name: ls
-        run: ls -ld *
 
-      - name: Setup proper composer.json
+      - name: "Setup proper composer.json"
         run: cp -f "travis/composer-laravel-${{ matrix.laravel }}.json" composer.json
 
-      - name: Installing dependencies...
+      - name: "Installing dependencies..."
         uses: php-actions/composer@v6
         with:
           version: 2
           php_version: ${{ matrix.php }}
           dev: yes
 
-      - name: Running unit tests...
+      - name: "Running PHPUnit..."
         uses: php-actions/phpunit@v3
         with:
-          bootstrap: vendor/autoload.php
-          configuration: tests/phpunit.xml
+          bootstrap: "vendor/autoload.php"
+          configuration: "tests/phpunit.xml"
