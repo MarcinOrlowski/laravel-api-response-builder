@@ -88,10 +88,13 @@ trait TestingHelpers
         $idx = \random_int(1, \count($map));
 
         $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
-        $this->random_api_code_message = \Lang::get($this->random_api_code_message_key, [
-            'api_code' => $this->random_api_code,
-        ]);
-        $this->error_message_map = [
+	    $msg = \Lang::get($this->random_api_code_message_key, ['api_code' => $this->random_api_code,]);
+	    if (is_array($msg)) {
+		    $msg = implode('', $msg);
+	    }
+	    $this->random_api_code_message = $msg;
+
+	    $this->error_message_map = [
             $this->random_api_code => $this->random_api_code_message_key,
         ];
         \Config::set(RB::CONF_KEY_MAP, $this->error_message_map);
@@ -134,6 +137,7 @@ trait TestingHelpers
             $key = \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey($expected_api_code_offset);
             $key = $key ?? \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey(
                     \MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK());
+            /** @var string $key */
             $expected_message = \Lang::get($key, ['api_code' => $expected_api_code_offset]);
         }
 
@@ -390,9 +394,11 @@ trait TestingHelpers
      */
     protected function getProtectedConstant($cls, string $name)
     {
-        $reflection = new \ReflectionClass($cls);
+	    if (is_string($cls) && !class_exists($cls)) {
+		    throw new \RuntimeException("Class '{$cls}' does not exists.");
+	    }
 
-        return $reflection->getConstant($name);
+        return (new \ReflectionClass($cls))->getConstant($name);
     }
 
 	/**
