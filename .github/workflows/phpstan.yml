@@ -15,9 +15,11 @@ on: [push]
 jobs:
   build:
     strategy:
+      # do not stop the workflow if single run failed
       fail-fast: false
       matrix:
-        php: [7.4, 8.0]
+        # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
+        php: ["7.4", "8.0"]
 
     runs-on: ubuntu-latest
 
