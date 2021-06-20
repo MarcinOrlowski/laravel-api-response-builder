@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
 
 /**
  * Laravel API Response Builder
@@ -17,6 +17,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
+
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+
 class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
 	public static $fake_response = [];

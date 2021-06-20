@@ -36,7 +36,9 @@
   "autoload": {
     "psr-4": {
       "MarcinOrlowski\\ResponseBuilder\\": "src/",
-      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests/"
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\Models\\": "tests/Models",
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\Traits\\": "tests/Traits",
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests/tests"
     }
   },
   "require": {

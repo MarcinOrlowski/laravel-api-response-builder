@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
 
 /**
  * Laravel API Response Builder
@@ -23,6 +23,7 @@ use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class AutoConversionTest

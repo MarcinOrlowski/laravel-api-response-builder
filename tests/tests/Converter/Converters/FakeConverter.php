@@ -14,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter\Converters;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
+use \MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 
 /**
  * Class FakeConverter

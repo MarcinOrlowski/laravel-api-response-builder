@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
 
 /**
  * Laravel API Response Builder
@@ -21,6 +21,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class BuilderTest

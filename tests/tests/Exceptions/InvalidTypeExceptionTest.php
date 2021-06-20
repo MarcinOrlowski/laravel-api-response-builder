@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Exceptions;
 
 /**
  * Laravel API Response Builder
@@ -16,6 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
 
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\Type;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Tests InvalidTypeException class

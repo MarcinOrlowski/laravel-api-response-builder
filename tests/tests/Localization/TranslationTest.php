@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Localization;
 
 /**
  * Laravel API Response Builder
@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class TranslationTest

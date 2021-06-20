@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 
 /**
  * Laravel API Response Builder
@@ -26,6 +26,7 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelArrayable;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonResource;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonSerializable;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class DefaultConfigTest

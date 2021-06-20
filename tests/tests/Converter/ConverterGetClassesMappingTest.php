@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 
 /**
  * Laravel API Response Builder
@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class ConverterGetClassesMappingTest

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace MarcinOrlowski\ResponseBuilder\Tests;
+namespace MarcinOrlowski\ResponseBuilder\Tests\ExceptionHandlerHelper;
 
 /**
  * Laravel API Response Builder
@@ -27,6 +27,7 @@ use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class ExceptionHandlerHelperTest
