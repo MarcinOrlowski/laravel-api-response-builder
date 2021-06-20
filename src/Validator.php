@@ -83,6 +83,29 @@ final class Validator
 	}
 
 	/**
+	 * Checks if given $cls_cls_or_obj is either an object or name of existing class.
+	 *
+	 * @param string        $var_name
+	 * @param string|object $cls_or_obj
+	 *
+	 * @return void
+	 *
+	 * @throws \InvalidArgumentException
+	 */
+	public static function assertIsObjectOrExistingClass(string $var_name, $cls_or_obj): void
+	{
+		if ((is_string($cls_or_obj) && !class_exists($cls_or_obj))) {
+			throw new \InvalidArgumentException(
+				\sprintf('%s: Class does not exists "%s".', __FUNCTION__, $cls_or_obj)
+			);
+		} else if (!is_object($cls_or_obj)) {
+			throw new \InvalidArgumentException(
+				\sprintf("%s: Argument must be either an object or existing class' name.", __FUNCTION__)
+			);
+		}
+	}
+
+	/**
 	 * Checks if given $val is of type string
 	 *
 	 * @param string $var_name Label or name of the variable to be used in exception message (if thrown).
