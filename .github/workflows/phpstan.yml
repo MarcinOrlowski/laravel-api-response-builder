@@ -8,7 +8,7 @@
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
 
-name: phpstan
+name: Static Analysis
 
 on: [push]
 
