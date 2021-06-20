@@ -14,6 +14,9 @@
   * Fixed floats being rejected as direct primitive payload.
   * Fixed `Converter` unit tests for primitives-as-payload.
   * Fixed `ResponseBuilderProvider` throwing incorrect Exception in case of invalid config file.
+  * Added `Validator::assertIsObjectOrExistingClass()` method.
+  * `Validator::assertIsInt()` throws now `NotIntegerException` as expected.
+  * Corrected `Validator` class tests to check agains specific exceptions thrown, not base class.
   * Improved error handling in `JsonSerializableConverter`
   * Switched Composer's autoload to follow `psr-4` instead of plain `classmap` (thanks to Viktor Szépe).
   * Updated and corrected PHPDocs (incl. some type hints).
