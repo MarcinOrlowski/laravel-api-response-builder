@@ -37,17 +37,17 @@ class ResponseBuilder extends ResponseBuilderBase
 	/** @var mixed */
 	protected $data = null;
 
-	/** @var string */
+	/** @var string|null */
 	protected $message = null;
 
-	/** @var array */
-	protected $placeholders = [];
+	/** @var array|null */
+	protected $placeholders = null;
 
 	/** @var int|null */
 	protected $json_opts = null;
 
-	/** @var array */
-	protected $debug_data = [];
+	/** @var array|null */
+	protected $debug_data = null;
 
 	/** @var array */
 	protected $http_headers = [];
@@ -446,6 +446,8 @@ class ResponseBuilder extends ResponseBuilderBase
 		if ($key === null) {
 			// nope, let's get the default one instead, based of
 			$fallback_code = $success ? BaseApiCodes::OK() : BaseApiCodes::NO_ERROR_MESSAGE();
+			// default messages are expected to be always available
+			/** @var string $key */
 			$key = BaseApiCodes::getCodeMessageKey($fallback_code);
 		}
 

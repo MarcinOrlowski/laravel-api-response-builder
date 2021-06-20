@@ -155,6 +155,8 @@ class ExceptionHandlerHelper
 			/** @var object $ex */
 			$key = BaseApiCodes::getCodeMessageKey($ex instanceof $http_ex_cls
 				? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
+			// Default strings are expected to always be available.
+			/** @var string $key */
 			$error_message = Lang::get($key, $placeholders);
 		}
 
