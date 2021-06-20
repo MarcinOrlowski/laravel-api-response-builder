@@ -45,10 +45,10 @@ class MakeTest extends TestCase
         /** @noinspection PhpParamsInspection */
 
 	    /**
-	     * This is to fool static analysers only. The invalid type is intentional, and
-	     * muting analysers like PHPStan is easier this way.
+	     * This is to fool static analysers only. The invalid type is intentional,
+	     * and muting PHPStan is easier this way.
 	     *
-	     * @var string $message_or_api_code
+	     * @phpstan-var string $message_or_api_code
 	     */
         $this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
     }
