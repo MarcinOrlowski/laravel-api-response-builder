@@ -177,7 +177,7 @@ class DefaultConfigTest extends TestCase
 		$total = \count($data);
 		/** @noinspection PhpParamsInspection */
 		$this->doPaginatorSupportTests(
-			new \Illuminate\Pagination\LengthAwarePaginator(collect($data), $total, $total / 2));
+			new \Illuminate\Pagination\LengthAwarePaginator(collect($data), $total, (int)($total / 2)));
 	}
 
 	/**
@@ -192,7 +192,7 @@ class DefaultConfigTest extends TestCase
 
 		/** @noinspection PhpParamsInspection */
 		$this->doPaginatorSupportTests(
-			new \Illuminate\Pagination\Paginator(collect($data), \count($data) / 2));
+			new \Illuminate\Pagination\Paginator(collect($data), (int)(\count($data) / 2)));
 	}
 
 	/**
