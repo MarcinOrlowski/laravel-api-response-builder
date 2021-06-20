@@ -16,21 +16,24 @@ namespace MarcinOrlowski\ResponseBuilder\Converters;
 
 use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 use MarcinOrlowski\ResponseBuilder\Validator;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * Generic object-to-array array converter.
  */
 final class ToArrayConverter implements ConverterContract
 {
-    /**
-     * Returns array representation of the object.
-     *
-     * @param object $obj    Object to be converted
-     * @param array  $config Converter config array to be used for this object (based on exact class
-     *                       name match or inheritance).
-     *
-     * @return array
-     */
+	/**
+	 * Returns array representation of the object.
+	 *
+	 * @param object $obj    Object to be converted
+	 * @param array  $config Converter config array to be used for this object (based on exact class
+	 *                       name match or inheritance).
+	 *
+	 * @return array
+	 *
+	 * @throws Ex\InvalidTypeException
+	 */
     public function convert(object $obj, /** @scrutinizer ignore-unused */ array $config): array
     {
         Validator::assertIsObject('obj', $obj);

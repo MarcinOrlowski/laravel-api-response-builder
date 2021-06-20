@@ -39,15 +39,16 @@ class ExceptionHandlerHelper
 	 *
 	 * @return HttpResponse
 	 *
-	 * @noinspection PhpUnusedParameterInspection
-	 *
-	 * NOTE: no typehints due to compatibility with Laravel's method signature.
-	 * @noinspection PhpMissingParamTypeInspection
-	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\ArrayWithMixedKeysException
+	 *
+	 * NOTE: no typehints due to compatibility with Laravel's method signature.
+	 * @noinspection PhpMissingParamTypeInspection
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
 	{
@@ -88,6 +89,8 @@ class ExceptionHandlerHelper
 	 * @noinspection PhpMissingReturnTypeInspection
 	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
@@ -143,6 +146,8 @@ class ExceptionHandlerHelper
 	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	protected static function getErrorMessageForException(\Throwable $ex, int $http_code, array $placeholders): string
 	{
@@ -176,17 +181,18 @@ class ExceptionHandlerHelper
 	 *
 	 * @return HttpResponse
 	 *
-	 * @noinspection PhpUnusedParameterInspection
-	 * @noinspection PhpUnused
-	 * @noinspection UnknownInspectionInspection
-	 *
-	 * NOTE: not typehints due to compatibility with Laravel's method signature.
-	 * @noinspection PhpMissingParamTypeInspection
-	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\ArrayWithMixedKeysException
+	 *
+	 * @noinspection PhpUnusedParameterInspection
+	 * @noinspection UnknownInspectionInspection
+	 *
+	 * NOTE: not typehints due to compatibility with Laravel's method signature.
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
 	                                                                     AuthException $exception): HttpResponse
@@ -217,6 +223,8 @@ class ExceptionHandlerHelper
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\ArrayWithMixedKeysException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	protected static function error(Throwable $ex,
 	                                int $api_code, int $http_code = null, string $error_message = null): HttpResponse
@@ -272,7 +280,9 @@ class ExceptionHandlerHelper
 	 * @return array
 	 *
 	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
 	 */
 	protected static function getExceptionHandlerConfig(): array
 	{
@@ -326,7 +336,9 @@ class ExceptionHandlerHelper
 	 * @return array|null
 	 *
 	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
 	 */
 	protected static function getHandler(\Throwable $ex): ?array
 	{

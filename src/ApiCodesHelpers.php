@@ -77,8 +77,11 @@ trait ApiCodesHelpers
 	 *
 	 * @return array
 	 *
-	 * @throws Ex\MissingConfigurationKeyException Thrown when builder map is not configured.
 	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException Thrown when builder map is not configured.
+	 * @throws Ex\NotArrayException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function getMap(): array
 	{
@@ -98,6 +101,8 @@ trait ApiCodesHelpers
 	 *
 	 * @return string|null
 	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\IncompatibleTypeException
 	 */
@@ -136,8 +141,9 @@ trait ApiCodesHelpers
 	 *
 	 * @return int
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function getCodeForInternalOffset(int $internal_code): int
 	{

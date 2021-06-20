@@ -88,6 +88,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\ArrayWithMixedKeysException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function success($data = null, int $api_code = null, array $placeholders = null,
 	                               int $http_code = null, int $json_opts = null): HttpResponse
@@ -117,10 +119,12 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *
 	 * @return HttpResponse
 	 *
+	 * @throws Ex\ArrayWithMixedKeysException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
-	 * @throws Ex\ArrayWithMixedKeysException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null,
 	                             int $json_opts = null): HttpResponse
@@ -140,7 +144,9 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *
 	 * @return \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 	 *
+	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function asSuccess(int $api_code = null): self
 	{
@@ -154,6 +160,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @return \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 	 *
 	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
+	 * @throws Ex\InvalidTypeException
 	 */
 	public static function asError(int $api_code): self
 	{
@@ -175,6 +183,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param int|null $http_code
 	 *
 	 * @return $this
+	 *
+	 * @throws Ex\InvalidTypeException
 	 */
 	public function withHttpCode(int $http_code = null): self
 	{
@@ -190,6 +200,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param mixed $data
 	 *
 	 * @return $this
+	 *
+	 * @throws Ex\InvalidTypeException
 	 */
 	public function withData($data = null): self
 	{
@@ -211,6 +223,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param int|null $json_opts
 	 *
 	 * @return $this
+	 *
+	 * @throws Ex\InvalidTypeException
 	 */
 	public function withJsonOptions(int $json_opts = null): self
 	{
@@ -225,6 +239,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param array|null $debug_data
 	 *
 	 * @return $this
+	 *
+	 * @throws Ex\InvalidTypeException
 	 */
 	public function withDebugData(array $debug_data = null): self
 	{
@@ -239,6 +255,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param string|null $msg
 	 *
 	 * @return $this
+	 *
+	 * @throws Ex\InvalidTypeException
 	 */
 	public function withMessage(string $msg = null): self
 	{
@@ -280,10 +298,12 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
-	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
-	 * @throws Ex\ArrayWithMixedKeysException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
 	 */
 	public function build(): HttpResponse
 	{
@@ -329,11 +349,13 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *
 	 * @return HttpResponse
 	 *
-	 * @throws \InvalidArgumentException If $api_code is neither a string nor valid integer code or if $data is an object of class that is not configured in "classes" mapping.
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
-	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\ArrayWithMixedKeysException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
+	 * @throws Ex\NotStringException
 	 *
 	 * @noinspection PhpTooManyParametersInspection
 	 */
@@ -374,12 +396,12 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *
 	 * @return array response ready to be encoded as json and sent back to client
 	 *
-	 * @throws \RuntimeException in case of missing or invalid "classes" mapping configuration
-	 *
-	 * @throws Ex\ConfigurationNotFoundException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\ArrayWithMixedKeysException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotStringException
 	 *
 	 * @noinspection PhpTooManyParametersInspection
 	 */
@@ -437,6 +459,8 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	protected function getMessageForApiCode(bool $success, int $api_code, array $placeholders = null): string
 	{

@@ -128,7 +128,9 @@ final class Validator
 	 * @return void
 	 *
 	 * @throws \InvalidArgumentException
-	 * @throws \RuntimeException
+	 * @throws \OutOfBoundsException
+	 * @throws Ex\NotIntegerException
+	 * @throws Ex\InvalidTypeException
 	 */
 	public static function assertIsIntRange(string $var_name, $value, int $min, int $max): void
 	{
@@ -191,6 +193,9 @@ final class Validator
 	 * Ensures given $http_code is valid code for error response.
 	 *
 	 * @param int $http_code
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function assertErrorHttpCode(int $http_code): void
 	{
@@ -203,6 +208,9 @@ final class Validator
 	 * Ensures given $http_code is valid for response indicating sucessful operation.
 	 *
 	 * @param int $http_code
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function assertOkHttpCode(int $http_code): void
 	{
@@ -216,6 +224,8 @@ final class Validator
 	 * @param string $var_name Name of variable that the $obj value is coming from. Used for exception message.
 	 * @param object $obj      Object to check instance of
 	 * @param string $cls      Target class we want to check $obj agains.
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public static function assertInstanceOf(string $var_name, object $obj, string $cls): void
 	{
