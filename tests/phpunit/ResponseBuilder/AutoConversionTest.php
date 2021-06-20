@@ -100,6 +100,7 @@ class AutoConversionTest extends TestCase
 
         $data = $tmp_base;
         $data[ $model_1_data_key ] = $model_1;
+        $data['nested'] = [];
         $data['nested'][ $model_2_data_key ] = $model_2;
 
         // WHEN this object is returned
