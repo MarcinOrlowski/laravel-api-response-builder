@@ -30,6 +30,12 @@ jobs:
     steps:
       - name: Checkout repository...
         uses: actions/checkout@v2
+        
+      - name: pwd
+        run: pwd
+        
+      - name: ls
+        run: ls -ld .
 
       - name: Setup proper composer.json
         run: cp -f "travis/composer-laravel-${{ matrix.laravel }}.json" composer.json
