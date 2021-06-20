@@ -30,7 +30,9 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotBooleanException
+	 *
 	 */
 	public static function assertIsBool(string $var_name, $value): void
 	{
@@ -45,11 +47,12 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function assertIsInt(string $var_name, $value): void
 	{
-		self::assertIsType($var_name, $value, [Type::INTEGER], Ex\NotBooleanException::class);
+		self::assertIsType($var_name, $value, [Type::INTEGER], Ex\NotIntegerException::class);
 	}
 
 	/**
@@ -60,7 +63,8 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotArrayException
 	 */
 	public static function assertIsArray(string $var_name, $value): void
 	{
@@ -75,7 +79,8 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotObjectException
 	 */
 	public static function assertIsObject(string $var_name, $value): void
 	{
@@ -90,19 +95,12 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\ClassNotFound
 	 */
 	public static function assertIsObjectOrExistingClass(string $var_name, $cls_or_obj): void
 	{
-		if ((is_string($cls_or_obj) && !class_exists($cls_or_obj))) {
-			throw new \InvalidArgumentException(
-				\sprintf('%s: Class does not exists "%s".', __FUNCTION__, $cls_or_obj)
-			);
-		} else if (!is_object($cls_or_obj)) {
-			throw new \InvalidArgumentException(
-				\sprintf("%s: Argument must be either an object or existing class' name.", __FUNCTION__)
-			);
-		}
+		self::assertIsType($var_name, $cls_or_obj, [Type::EXISTING_CLASS, Type::OBJECT]);
 	}
 
 	/**
@@ -113,7 +111,8 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotStringException
 	 */
 	public static function assertIsString(string $var_name, $value): void
 	{
@@ -147,7 +146,8 @@ final class Validator
 	}
 
 	/**
-	 * Checks if $item (of name $key) is of type that is include in $allowed_types.
+	 * Checks if $item (of name $key) is of type that is include in $allowed_types (there's `OR` connection
+	 * between specified types).
 	 *
 	 * @param string $var_name      Label or name of the variable to be used in exception message (if thrown).
 	 * @param mixed  $value         Variable to be asserted.
@@ -158,15 +158,32 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
 	 */
 	public static function assertIsType(string $var_name, $value, array $allowed_types,
 	                                    string $ex_class = Ex\InvalidTypeException::class): void
 	{
+		// Type::EXISTING_CLASS is artificial type, so we need separate logic to handle it.
+		$tmp = $allowed_types;
+		$idx = array_search(Type::EXISTING_CLASS, $tmp, true);
+		if ($idx !== false) {
+			// Remove the type, so gettype() test loop won't see it.
+			unset($tmp[$idx]);
+			if (is_string($value) && class_exists($value)) {
+				// It's existing class, no need to test further.
+				return;
+			}
+		}
+
 		$type = \gettype($value);
-		if (!\in_array($type, $allowed_types, true)) {
+		if (!empty($tmp)) {
+			if (!\in_array($type, $allowed_types, true)) {
+				// FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
+				throw new $ex_class($var_name, $type, $allowed_types);
+			}
+		} else {
 			// FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
-			throw new $ex_class($var_name, $type, $allowed_types);
+			throw new Ex\ClassNotFound($var_name, $type, $allowed_types);
 		}
 	}
 
