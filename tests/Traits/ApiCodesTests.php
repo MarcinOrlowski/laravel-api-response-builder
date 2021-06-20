@@ -199,7 +199,7 @@ trait ApiCodesTests
 		$map = $api_codes_class_name::getMap();
 		foreach ($map as $code => $mapping) {
 			/** @var int $code */
-			$str = \Lang::get($mapping);
+			$str = $this->langGet($mapping);
 			$this->assertNotEquals($mapping, $str,
 				\sprintf('No lang entry for: %s referenced by %s', $mapping, $this->resolveConstantFromCode($code))
 			);

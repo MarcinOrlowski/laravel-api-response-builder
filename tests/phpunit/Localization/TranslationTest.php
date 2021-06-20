@@ -37,6 +37,7 @@ class TranslationTest extends TestCase
         // Load translation array for default language and then compare all the
         // other translations with it.
         \App::setLocale($default_lang);
+	    // We must NOT call langGet() wrapper as we want whole translation array
         $base_translations = \Lang::get('response-builder::builder');
 
         // get list of all other directories in library's lang folder.
@@ -55,6 +56,7 @@ class TranslationTest extends TestCase
         foreach ($supported_languages as $lang) {
             // get the translation array for given language
             \App::setLocale($lang);
+	        // We must NOT call langGet() wrapper as we want whole translation array
             $translation = \Lang::get('response-builder::builder');
 
             // ensure it has all the keys base translation do

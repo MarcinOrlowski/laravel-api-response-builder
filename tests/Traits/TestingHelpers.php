@@ -87,9 +87,8 @@ trait TestingHelpers
         // AND corresponding mapped message mapping
         $map = $this->callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
         $idx = \random_int(1, \count($map));
-
         $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
-	    $this->random_api_code_message = \Lang::get($this->random_api_code_message_key, ['api_code' => $this->random_api_code,]);
+	    $this->random_api_code_message = $this->langGet($this->random_api_code_message_key, ['api_code' => $this->random_api_code,]);
 
 	    $this->error_message_map = [
             $this->random_api_code => $this->random_api_code_message_key,
@@ -130,15 +129,15 @@ trait TestingHelpers
 	 *
 	 * @return string
 	 */
-//	public function langGet($key, array $replace = null): string
-//	{
-//		$replace = $replace ?? [];
-//		$result = \Lang::get($key, $replace);
-//		if (is_array($result)) {
-//			$result = implode('', $result);
-//		}
-//		return $result;
-//	}
+	public function langGet($key, array $replace = null): string
+	{
+		$replace = $replace ?? [];
+		$result = \Lang::get($key, $replace);
+		if (is_array($result)) {
+			$result = implode('', $result);
+		}
+		return $result;
+	}
 
 	// -----------------------------------------------------------------------------------------------------------
 
@@ -178,7 +177,7 @@ trait TestingHelpers
             $key = $key ?? \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey(
                     \MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK());
             /** @var string $key */
-            $expected_message = \Lang::get($key, ['api_code' => $expected_api_code_offset]);
+            $expected_message = $this->langGet($key, ['api_code' => $expected_api_code_offset]);
         }
 
         $j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $expected_message);
@@ -255,7 +254,7 @@ trait TestingHelpers
 			$key = $api_codes_class_name::getCodeMessageKey($expected_api_code);
 			Validator::assertIsString('key', $key);
 			/** @var string $key */
-			$expected_message_string = \Lang::get($key, ['api_code' => $expected_api_code]);
+			$expected_message_string = $this->langGet($key, ['api_code' => $expected_api_code]);
 		} else {
 			$expected_message_string = $expected_message;
 		}

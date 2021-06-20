@@ -42,7 +42,9 @@ class SuccessTest extends TestCase
 		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
 		$this->assertNull($j->data);
-		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
+		$msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
+		/** @var string $msg_key */
+		$this->assertEquals($this->langGet($msg_key), $j->message);
 	}
 
 	public function testSuccessWithArrayPayload(): void
@@ -64,7 +66,10 @@ class SuccessTest extends TestCase
 
 		$this->assertCount(1, $data);
 		$this->assertArrayEquals($payload, (array)$j->data->{$key});
-		$this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK())), $j->message);
+
+		$msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
+		/** @var string $msg_key */
+		$this->assertEquals($this->langGet($msg_key), $j->message);
 	}
 
 }

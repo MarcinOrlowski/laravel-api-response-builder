@@ -22,6 +22,7 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
+	/** @var array */
 	public static $fake_response = [];
 
 	/** @noinspection PhpMissingParentCallCommonInspection */

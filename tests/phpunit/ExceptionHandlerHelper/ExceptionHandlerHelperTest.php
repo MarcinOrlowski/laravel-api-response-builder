@@ -162,7 +162,8 @@ class ExceptionHandlerHelperTest extends TestCase
         }
 
         /** @noinspection PhpUndefinedClassInspection */
-        $error_message = \Lang::get($key, [
+	    /** @var string $key */
+        $error_message = $this->langGet($key, [
 	        'response_api_code' => $expected_api_code,
 	        'message'           => $ex_message,
 	        'class'             => \get_class($exception),
@@ -432,6 +433,7 @@ class ExceptionHandlerHelperTest extends TestCase
             $ex,
             $http_code,
             $placeholders]);
+        /** @var string $expected_msg_key */
         $expected_msg = \Lang::get($expected_msg_key, $placeholders);
 
         $this->assertEquals($expected_msg, $json->message);

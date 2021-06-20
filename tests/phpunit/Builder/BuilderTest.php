@@ -46,7 +46,9 @@ class BuilderTest extends TestCase
         $j = $this->getResponseSuccessObject();
 
         $this->assertNull($j->data);
-        $this->assertEquals(\Lang::get(BaseApiCodes::getCodeMessageKey($expected_api_code)), $j->message);
+        $msg_key = BaseApiCodes::getCodeMessageKey($expected_api_code);
+        /** @var string $msg_key */
+        $this->assertEquals($this->langGet($msg_key), $j->message);
     }
 
     /**
