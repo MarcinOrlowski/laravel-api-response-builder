@@ -37,7 +37,7 @@
     "psr-4": {
       "MarcinOrlowski\\ResponseBuilder\\": "src/",
       "MarcinOrlowski\\ResponseBuilder\\Tests\\Traits\\": "tests/Traits/",
-      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests/tests"
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests/phpunit"
     }
   },
   "require": {
