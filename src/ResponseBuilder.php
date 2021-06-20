@@ -389,7 +389,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	{
 		// ensure $data is either @null, array or object of class with configured mapping.
 		$data = (new Converter())->convert($data);
-		if ($data !== null && !\is_object($data)) {
+		if ($data !== null) {
 			// ensure we get object in final JSON structure in data node
 			$data = (object)$data;
 		}

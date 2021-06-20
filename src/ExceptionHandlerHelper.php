@@ -149,7 +149,9 @@ class ExceptionHandlerHelper
 			$error_message = Lang::get("response-builder::builder.http_{$http_code}", $placeholders);
 		} else {
 			// Still got nothing? Fall back to built-in generic message for this type of exception.
-			$key = BaseApiCodes::getCodeMessageKey(($ex instanceof HttpException)
+			$http_ex_cls = HttpException::class;
+			/** @var object $ex */
+			$key = BaseApiCodes::getCodeMessageKey($ex instanceof $http_ex_cls
 				? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
 			$error_message = Lang::get($key, $placeholders);
 		}
@@ -306,7 +308,6 @@ class ExceptionHandlerHelper
 		return $cfg;
 	}
 
-
 	/**
 	 * Returns name of exception handler class, configured to process specified exception class or @null if no
 	 * exception handler can be determined.
@@ -333,6 +334,7 @@ class ExceptionHandlerHelper
 				// no exact match, then lets try with `instanceof`
 				// Config entries are already sorted by priority.
 				foreach (\array_keys($cfg) as $class_name) {
+					/** @var string $class_name */
 					if ($ex instanceof $class_name) {
 						$result = $cfg[ $class_name ];
 						break;

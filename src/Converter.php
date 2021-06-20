@@ -99,6 +99,7 @@ class Converter
 			} else {
 				// no exact match, then lets try with `instanceof`
 				foreach (\array_keys($this->classes) as $class_name) {
+					/** @var string $class_name */
 					if ($data instanceof $class_name) {
 						$result = $this->classes[ $class_name ];
 						$debug_result = "subclass of {$class_name}";
