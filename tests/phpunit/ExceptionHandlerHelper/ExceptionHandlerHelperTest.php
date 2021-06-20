@@ -69,7 +69,8 @@ class ExceptionHandlerHelperTest extends TestCase
 
         $exception = new \RuntimeException();
 
-	    $j = json_decode($this->getResponseContent(ExceptionHandlerHelper::render(null, $exception)), false);
+        $dummy_request = new \Illuminate\Http\Request();
+	    $j = json_decode($this->getResponseContent(ExceptionHandlerHelper::render($dummy_request, $exception)), false);
         $this->assertValidResponse($j);
         $this->assertNull($j->data);
 
@@ -148,7 +149,8 @@ class ExceptionHandlerHelperTest extends TestCase
         }
 
         // hand the exception to the handler and examine its response JSON
-        $eh_response = ExceptionHandlerHelper::render(null, $exception);
+	    $dummy_request = new \Illuminate\Http\Request();
+        $eh_response = ExceptionHandlerHelper::render($dummy_request, $exception);
         $eh_response_json = json_decode($this->getResponseContent($eh_response), false);
 
         $this->assertValidResponse($eh_response_json);
@@ -497,7 +499,9 @@ class ExceptionHandlerHelperTest extends TestCase
         \App::setLocale($default_lang);
 
         // We must NOT call langGet() wrapper as we want whole translation array
-        return \Lang::get('response-builder::builder');
+	    /** @var array $msgs */
+	    $msgs = \Lang::get('response-builder::builder');
+        return $msgs;
     }
 
     /**

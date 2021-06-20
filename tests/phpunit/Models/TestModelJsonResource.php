@@ -49,7 +49,7 @@ class TestModelJsonResource extends JsonResource
     /**
      * Converts model to array.
      *
-     * @param Request $request
+     * @param mixed $request
      *
      * @return array
      *

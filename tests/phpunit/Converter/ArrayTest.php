@@ -71,6 +71,7 @@ class ArrayTest extends TestCase
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
 		$this->assertIsArray($converted);
+		/** @var array $converted */
 		$this->assertCount(1, $converted);
 		$this->assertArrayHasKey($key, $converted);
 		$converted = $converted[ $key ];
@@ -121,6 +122,7 @@ class ArrayTest extends TestCase
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
 		$this->assertIsArray($converted);
+		/** @var array $converted */
 		$this->assertCount(1, $converted);
 		$this->assertArrayHasKey($key, $converted);
 		$converted = $converted[ $key ];
@@ -227,9 +229,13 @@ class ArrayTest extends TestCase
 		$converted = (new Converter())->convert($data);
 
 		$this->assertIsArray($converted);
+		/** @var array $converted */
 		$this->assertCount(\count($data), $converted);
 		$this->assertArrayHasKey($item3_key, $converted);
-		$this->assertCount(\count($data[ $item3_key ]), $converted[ $item3_key ]);
+		$nested = $data[ $item3_key ];
+		$this->assertIsArray($nested);
+		/** @var array $nested */
+		$this->assertCount(\count($nested), $converted[ $item3_key ]);
 
 		$this->assertEquals($model_1->getVal(), $converted[ $item1_key ][ TestModel::FIELD_NAME ]);
 		$this->assertEquals($model_2->getVal(), $converted[ $item2_key ][ TestModel::FIELD_NAME ]);
@@ -257,6 +263,7 @@ class ArrayTest extends TestCase
 		$result = (new Converter())->convert($model_1);
 
 		$this->assertIsArray($result);
+		/** @var array $result */
 		$this->assertArrayHasKey($key, $result);
 		$this->assertCount(1, $result[ $key ]);
 		$this->assertArrayHasKey(TestModel::FIELD_NAME, $result[ $key ]);
@@ -293,6 +300,7 @@ class ArrayTest extends TestCase
 
 		$result = (new Converter())->convert($data);
 		$this->assertIsArray($result);
+		/** @var array $result */
 		$this->assertCount(1, $result);
 		$result = $result[ $key ];
 		$this->assertCount(\count($data), $result);
@@ -329,6 +337,7 @@ class ArrayTest extends TestCase
 		$result = (new Converter())->convert($data);
 
 		$this->assertIsArray($result);
+		/** @var array $result */
 		$this->assertArrayHasKey($key, $result);
 		$result = $result[ $key ];
 		$this->assertCount(1, $result);

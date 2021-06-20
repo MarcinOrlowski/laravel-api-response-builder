@@ -23,7 +23,9 @@ use \MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
  */
 class FakeConverter implements ConverterContract
 {
+	/** @var string */
     public $key = 'fake';
+    /** @var string */
     public $val = 'converter';
 
 	/**

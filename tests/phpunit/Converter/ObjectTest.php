@@ -49,6 +49,7 @@ class ObjectTest extends TestCase
 
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
+        /** @var array $result */
         $result = (new Converter())->convert($data);
 
         $this->assertIsArray($result);
@@ -97,6 +98,7 @@ class ObjectTest extends TestCase
             $result = (new Converter())->convert($data);
 
             $this->assertIsArray($result);
+            /** @var array $result */
             $this->assertCount(1, $result);
 
             if(\is_string($allowedKey)) {

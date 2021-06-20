@@ -52,6 +52,7 @@ class PrimitivesTest extends TestCase
 		]);
 
 		// WHEN this object is returned
+		/** @var array $converted */
 		$converted = (new Converter())->convert($model);
 
 		// THEN we expect returned data to be converted and use KEY_KEY element.
@@ -116,6 +117,7 @@ class PrimitivesTest extends TestCase
 
 		// THEN we expect returned data to be keyed as per primitive's configuration.
 		$this->assertIsArray($converted);
+		/** @var array $converted */
 
 		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [$value]);
 		$this->assertIsArray($cfg);

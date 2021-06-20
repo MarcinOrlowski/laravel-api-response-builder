@@ -58,6 +58,7 @@ class DefaultConfigTest extends TestCase
 		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ RB::KEY_KEY ];
 
 		$this->assertIsArray($result);
+		/** @var array $result */
 		$this->assertArrayHasKey($key, $result);
 		$result = $result[ $key ];
 		$this->assertArrayHasKey(TestModelArrayable::FIELD_NAME, $result);
@@ -94,6 +95,7 @@ class DefaultConfigTest extends TestCase
 			$key = $cfg[ \JsonSerializable::class ][ RB::KEY_KEY ];
 
 			$this->assertIsArray($result);
+			/** @var array $result */
 			$this->assertArrayHasKey($key, $result);
 			$result = $result[ $key ];
 			$this->assertArrayHasKey($key, $result);
@@ -124,6 +126,7 @@ class DefaultConfigTest extends TestCase
 		$key = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ][ RB::KEY_KEY ];
 
 		$this->assertIsArray($result);
+		/** @var array $result */
 		$this->assertArrayHasKey($key, $result);
 		$result = $result[ $key ];
 		$this->assertArrayHasKey(TestModelJsonResource::FIELD_NAME, $result);
@@ -205,6 +208,7 @@ class DefaultConfigTest extends TestCase
 	{
 		$result = (new Converter())->convert($paginator);
 		$this->assertIsArray($result);
+		/** @var array $result */
 		$this->assertArrayHasKeys([
 			"current_page",
 			"data",
@@ -238,6 +242,7 @@ class DefaultConfigTest extends TestCase
 		$key = $cfg[ \get_class($collection) ][ RB::KEY_KEY ];
 
 		$this->assertIsArray($result);
+		/** @var array $result */
 		$this->assertArrayHasKey($key, $result);
 		$result = $result[ $key ];
 
