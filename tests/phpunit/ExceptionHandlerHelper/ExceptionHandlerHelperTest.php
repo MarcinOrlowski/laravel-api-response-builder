@@ -277,7 +277,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $http_cfg);
-            $this->checkExceptionHandlerConfigEntryStructure($http_cfg[ $key ], null, ($key === RB::KEY_DEFAULT));
+            $this->checkExceptionHandlerConfigEntryStructure($http_cfg[ $key ], null, ($key == RB::KEY_DEFAULT));
         }
         $this->assertArrayHasKey(RB::KEY_DEFAULT, $http_cfg);
         $this->checkExceptionHandlerConfigEntryStructure($http_cfg[RB::KEY_DEFAULT]);
