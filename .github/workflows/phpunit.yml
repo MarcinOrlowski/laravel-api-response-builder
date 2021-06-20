@@ -18,8 +18,9 @@ jobs:
       # do not stop the workflow if single run failed
       fail-fast: false
       matrix:
-        laravel: [6.0, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 7.0, 8.0]
-        php: [7.2, 7.3, 7.4, 8.0]
+        # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
+        laravel: ["6.0", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "6.8", "7.0", "8.0"]
+        php: ["7.2", "7.3", "7.4", "8.0"]
         exclude:
           # Laravel 8.x requires PHP 7.3+
           - laravel: 8.0
