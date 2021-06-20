@@ -14,6 +14,7 @@
   * Fixed floats being rejected as direct primitive payload.
   * Fixed `Converter` unit tests for primitives-as-payload.
   * Fixed `ResponseBuilderProvider` throwing incorrect Exception in case of invalid config file.
+  * Improved error handling in `JsonSerializableConverter`
   * Switched Composer's autoload to follow `psr-4` instead of plain `classmap` (thanks to Viktor Szépe).
   * Updated and corrected PHPDocs (incl. some type hints).
   * Added missing type hint to `success()`.
