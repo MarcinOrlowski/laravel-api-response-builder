@@ -168,17 +168,4 @@ class MakeTest extends TestCase
 	    $this->assertEmpty((array)$j->{RB::KEY_DATA});
     }
 
-    /**
-     * Checks make() handling invalid type of api_code argument
-     *
-     * @return void
-     */
-    public function testApiCodeNotIntNorString(): void
-    {
-	    $this->expectException(Ex\InvalidTypeException::class);
-
-        /** @noinspection PhpParamsInspection */
-        $this->callMakeMethod(true, BaseApiCodes::OK(), []);
-    }
-
 }
