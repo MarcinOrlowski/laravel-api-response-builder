@@ -19,6 +19,7 @@
   * Corrected `Validator` class tests to check agains specific exceptions thrown, not base class.
   * Improved error handling in `JsonSerializableConverter`
   * Switched Composer's autoload to follow `psr-4` instead of plain `classmap` (thanks to Viktor Szépe).
+  * Added `TestingHelper::getResponseContent()` to make static code analysers happier.
   * Updated and corrected PHPDocs (incl. some type hints).
   * Added missing type hint to `success()`.
   * Added strict type header to classes.

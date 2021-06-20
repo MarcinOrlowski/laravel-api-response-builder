@@ -21,6 +21,7 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use MarcinOrlowski\ResponseBuilder\Validator;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -88,11 +89,7 @@ trait TestingHelpers
         $idx = \random_int(1, \count($map));
 
         $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
-	    $msg = \Lang::get($this->random_api_code_message_key, ['api_code' => $this->random_api_code,]);
-	    if (is_array($msg)) {
-		    $msg = implode('', $msg);
-	    }
-	    $this->random_api_code_message = $msg;
+	    $this->random_api_code_message = \Lang::get($this->random_api_code_message_key, ['api_code' => $this->random_api_code,]);
 
 	    $this->error_message_map = [
             $this->random_api_code => $this->random_api_code_message_key,
@@ -100,7 +97,50 @@ trait TestingHelpers
         \Config::set(RB::CONF_KEY_MAP, $this->error_message_map);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * We wrap call to response's getContent() to handle `false` value case.
+	 *
+	 * @param \Symfony\Component\HttpFoundation\Response $response
+	 *
+	 * @return string
+	 *
+	 * @throws \InvalidArgumentException If response object is not of HttpResponse class.
+	 * @throws \RuntimeException if there's no conent to be returned from the response.
+	 */
+	public function getResponseContent(HttpResponse $response): string
+	{
+		$content = $response->getContent();
+		if ($content === false) {
+			throw new \RuntimeException('Response does not contains any content.');
+		}
+		return $content;
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * As Lang::get() wrapper can also return whole translation array, not only single strings,
+	 * this make static code analysers unhappy as its signature indicates it can return arrays too, which we do not want to happen,
+	 * not handle separately after each invocation, so this wrapper deals with it for us.
+	 *
+	 * @param string     $key     String key as passed to Lang::get()
+	 * @param array|null $replace Optional replacement array as passed to Lang::get()
+	 *
+	 * @return string
+	 */
+//	public function langGet($key, array $replace = null): string
+//	{
+//		$replace = $replace ?? [];
+//		$result = \Lang::get($key, $replace);
+//		if (is_array($result)) {
+//			$result = implode('', $result);
+//		}
+//		return $result;
+//	}
+
+	// -----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Checks if response object was returned with expected success HTTP
@@ -204,15 +244,22 @@ trait TestingHelpers
             "Expected status code {$expected_http_code}, got {$actual}. Response: {$this->response->getContent()}");
 
         // get response as Json object
-        $j = \json_decode($this->response->getContent(), false);
+        $j = \json_decode($this->getResponseContent($this->response), false);
 
         $this->assertEquals($expected_api_code, $j->code);
 
         /** @var BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
-	    $expected_message_string = $expected_message ?? \Lang::get(
-                $api_codes_class_name::getCodeMessageKey($expected_api_code), ['api_code' => $expected_api_code]);
-        $this->assertEquals($expected_message_string, $j->message);
+
+		if ($expected_message === null) {
+			$key = $api_codes_class_name::getCodeMessageKey($expected_api_code);
+			Validator::assertIsString('key', $key);
+			/** @var string $key */
+			$expected_message_string = \Lang::get($key, ['api_code' => $expected_api_code]);
+		} else {
+			$expected_message_string = $expected_message;
+		}
+	    $this->assertEquals($expected_message_string, $j->message);
 
         return $j;
     }
@@ -232,11 +279,9 @@ trait TestingHelpers
         $this->assertIsString($json_object->locale);
         /** @noinspection UnNecessaryDoubleQuotesInspection */
         $this->assertNotEquals(\trim($json_object->locale), '', "'locale' cannot be empty string");
-        $this->assertIsString($json_object->message);
-//        /** @noinspection UnNecessaryDoubleQuotesInspection */
-//        $this->assertNotEquals(\trim($json_object->message), '', "'message' cannot be empty string");
-        $this->assertTrue(($json_object->data === null) || \is_object($json_object->data),
-            "Response 'data' must be either object or null");
+	    $this->assertIsString($json_object->message);
+	    $this->assertTrue(($json_object->data === null) || \is_object($json_object->data),
+		    "Response 'data' must be either object or null");
     }
 
     // -----------------------------------------------------------------------------------------------------------
@@ -338,67 +383,82 @@ trait TestingHelpers
     /**
      * Calls protected method of $object, passing optional array of arguments.
      *
-     * @param object|string $obj_or_class Object to call $method_name on or name of the class.
-     * @param string        $method_name  Name of method to called.
-     * @param array         $args         Optional array of arguments (empty array if no args to pass).
+     * @param object|string $obj_or_cls  Object to call $method_name on or name of the class.
+     * @param string        $method_name Name of method to called.
+     * @param array         $args        Optional array of arguments (empty array if no args to pass).
      *
      * @return mixed
      *
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
-    protected function callProtectedMethod($obj_or_class, string $method_name, array $args = [])
+    protected function callProtectedMethod($obj_or_cls, string $method_name, array $args = [])
     {
-        if (\is_object($obj_or_class)) {
-            $obj = $obj_or_class;
-        } elseif (\is_string($obj_or_class)) {
-            $obj = $obj_or_class;
-        } else {
-            throw new \RuntimeException('getProtectedMethod() expects object or valid class name argument');
-        }
+	    Validator::assertIsObjectOrExistingClass('obj_or_cls', $obj_or_cls);
 
-        $reflection = new \ReflectionClass($obj);
+	    /**
+	     * At this point $obj_or_cls is either object or string but some static analyzers
+	     * got problems figuring that out, so this (partially correct) var declaration is
+	     * to make them believe.
+	     *
+	     * @var object $obj_or_cls
+	     */
+        $reflection = new \ReflectionClass($obj_or_cls);
         $method = $reflection->getMethod($method_name);
         $method->setAccessible(true);
 
-        return $method->invokeArgs(\is_object($obj) ? $obj : null, $args);
+        return $method->invokeArgs(\is_object($obj_or_cls) ? $obj_or_cls : null, $args);
     }
 
     /**
      * Returns value of otherwise non-public member of the class
      *
-     * @param string|object $cls  class name to get member from, or instance of that class
-     * @param string        $name member name to grab (i.e. `max_length`)
+     * @param string|object $obj_or_cls class name to get member from, or instance of that class
+     * @param string        $name       member name to grab (i.e. `max_length`)
      *
      * @return mixed
      *
      * @throws \ReflectionException
      */
-    protected function getProtectedMember($cls, string $name)
+    protected function getProtectedMember($obj_or_cls, string $name)
     {
-        $reflection = new \ReflectionClass($cls);
+	    Validator::assertIsObjectOrExistingClass('obj_or_cls', $obj_or_cls);
+
+	    /**
+	     * At this point $obj_or_cls is either object or string but some static analyzers
+	     * got problems figuring that out, so this (partially correct) var declaration is
+	     * to make them believe.
+	     *
+	     * @var object $obj_or_cls
+	     */
+	    $reflection = new \ReflectionClass($obj_or_cls);
         $property = $reflection->getProperty($name);
         $property->setAccessible(true);
 
-        return $property->getValue($cls);
+        return $property->getValue(is_object($obj_or_cls) ? $obj_or_cls : null);
     }
 
     /**
      * Returns value of otherwise non-public member of the class
      *
-     * @param string|object $cls  class name to get member from, or instance of that class
-     * @param string        $name name of constant to grab (i.e. `FOO`)
+     * @param string|object $obj_or_cls class name to get member from, or instance of that class
+     * @param string        $name       name of constant to grab (i.e. `FOO`)
      *
      * @return mixed
      * @throws \ReflectionException
      */
-    protected function getProtectedConstant($cls, string $name)
+    protected function getProtectedConstant($obj_or_cls, string $name)
     {
-	    if (is_string($cls) && !class_exists($cls)) {
-		    throw new \RuntimeException("Class '{$cls}' does not exists.");
-	    }
+    	Validator::assertIsObjectOrExistingClass('obj_or_cls', $obj_or_cls);
 
-        return (new \ReflectionClass($cls))->getConstant($name);
+	    /**
+	     * At this point $obj_or_cls is either object or string but some static analyzers
+	     * got problems figuring that out, so this (partially correct) var declaration is
+	     * to make them believe.
+	     *
+	     * @var object $obj_or_cls
+	     */
+	    return (new \ReflectionClass($obj_or_cls))->getConstant($name);
     }
 
 	/**

@@ -49,7 +49,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $eh_response = $this->callProtectedMethod($obj, 'unauthenticated', [null,
                                                                             $exception]);
 
-        $response = json_decode($eh_response->getContent(), false);
+        $response = json_decode($this->getResponseContent($eh_response), false);
 
         $this->assertValidResponse($response);
         $this->assertNull($response->data);
@@ -149,7 +149,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
         // hand the exception to the handler and examine its response JSON
         $eh_response = ExceptionHandlerHelper::render(null, $exception);
-        $eh_response_json = json_decode($eh_response->getContent(), false);
+        $eh_response_json = json_decode($this->getResponseContent($eh_response), false);
 
         $this->assertValidResponse($eh_response_json);
         if ($expect_data_node_null) {
@@ -244,7 +244,7 @@ class ExceptionHandlerHelperTest extends TestCase
                 );
 
                 // get response as Json object
-                $json = json_decode($response->getContent(), false);
+                $json = json_decode($this->getResponseContent($response), false);
                 $this->assertValidResponse($json);
 
                 // Ensure returned response used HTTP code from the exception
@@ -331,7 +331,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
         $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'render', [null,
                                                                                          $ex]);
-        $json = json_decode($response->getContent(), false);
+        $json = json_decode($this->getResponseContent($response), false);
         $this->assertValidResponse($json);
 
         // THEN we should see exception message.
@@ -379,7 +379,7 @@ class ExceptionHandlerHelperTest extends TestCase
         );
 
         // get response as Json object
-        $json = json_decode($response->getContent(), false);
+        $json = json_decode($this->getResponseContent($response), false);
         $this->assertValidResponse($json);
 
         // however thre's no message matching $msg_key, but Lang::get() would return
@@ -420,7 +420,7 @@ class ExceptionHandlerHelperTest extends TestCase
             $ex_cfg,
             $fallback_http_code,
         ]);
-        $json = json_decode($response->getContent(), false);
+        $json = json_decode($this->getResponseContent($response), false);
         $this->assertValidResponse($json);
 
         $msg = $ex->getMessage();
@@ -476,7 +476,7 @@ class ExceptionHandlerHelperTest extends TestCase
         );
 
         // get response as Json object
-        $json = json_decode($response->getContent(), false);
+        $json = json_decode($this->getResponseContent($response), false);
         $this->assertValidResponse($json);
 
         // Ensure returned response used HTTP code from the exception
@@ -494,6 +494,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $default_lang = 'en';
         \App::setLocale($default_lang);
 
+        // We must NOT call langGet() wrapper as we want whole translation array
         return \Lang::get('response-builder::builder');
     }
 
