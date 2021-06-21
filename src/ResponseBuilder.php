@@ -479,9 +479,9 @@ class ResponseBuilder extends ResponseBuilderBase
 			$placeholders['api_code'] = $api_code;
 		}
 
+		// As Lang::get() is documented to also returning whole language arrays,
+		// so static analysers will alarm if that case is not taken care of.
 		$msg = \Lang::get($key, $placeholders);
-
-		// As Lang::get() is documented to also returning arrays(?)...
 		if (is_array($msg)) {
 			$msg = implode('', $msg);
 		}
