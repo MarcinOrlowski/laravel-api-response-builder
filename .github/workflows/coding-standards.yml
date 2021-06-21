@@ -39,6 +39,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: "Setup proper composer.json"
+        shell: bash
         run: cp -f ".config/composer-laravel-${{ matrix.laravel }}.json" composer.json
 
       # https://github.com/marketplace/actions/composer-php-actions
@@ -49,5 +50,10 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
-      - name: "Checking coding standards..."
-        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "src/" "tests/"
+      - name: "Checking sources coding standards..."
+        shell: bash
+        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "src/""
+
+      - name: "Checking tests coding standards..."
+        shell: bash
+        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "tests/"

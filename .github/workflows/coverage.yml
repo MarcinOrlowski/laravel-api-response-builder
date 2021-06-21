@@ -39,6 +39,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: "Setup proper composer.json"
+        shell: bash
         run: cp -f ".config/composer-laravel-${{ matrix.laravel }}.json" composer.json
 
       # https://github.com/marketplace/actions/composer-php-actions
