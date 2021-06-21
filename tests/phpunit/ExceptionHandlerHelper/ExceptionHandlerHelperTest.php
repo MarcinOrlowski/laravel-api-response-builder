@@ -232,29 +232,26 @@ class ExceptionHandlerHelperTest extends TestCase
         // get the translation array for default language
         $translation = $this->getTranslationForDefaultLang();
 
-//        for ($code = RB::ERROR_HTTP_CODE_MIN; $code <= RB::ERROR_HTTP_CODE_MAX; $code++) {
-        {
-            $code = 401;
-            $key = "http_{$code}";
-            // there are some gaps in the codes defined, but as default language  covers all codes supported,
-            // then we can safely skip the codes not covered by default language.
-            if (\array_key_exists($key, $translation)) {
-                $ex = new HttpException($code);
-                $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'render', [
-                        null,
-                        $ex,
-                    ]
-                );
+        $code = 401;
+        $key = "http_{$code}";
+        // there are some gaps in the codes defined, but as default language  covers all codes supported,
+        // then we can safely skip the codes not covered by default language.
+        if (\array_key_exists($key, $translation)) {
+            $ex = new HttpException($code);
+            $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'render', [
+                    null,
+                    $ex,
+                ]
+            );
 
-                // get response as Json object
-                $json = json_decode($this->getResponseContent($response), false);
-                $this->assertValidResponse($json);
+            // get response as Json object
+            $json = json_decode($this->getResponseContent($response), false);
+            $this->assertValidResponse($json);
 
-                // Ensure returned response used HTTP code from the exception
-                $this->assertNotEmpty($json->message);
-                $this->assertEquals($translation[ $key ], $json->message,
-                    "error message mismatch for http code: {$code}");
-            }
+            // Ensure returned response used HTTP code from the exception
+            $this->assertNotEmpty($json->message);
+            $this->assertEquals($translation[ $key ], $json->message,
+                "error message mismatch for http code: {$code}");
         }
     }
 

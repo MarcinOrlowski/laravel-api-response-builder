@@ -99,6 +99,7 @@ class BaseApiCodes
 	 * @throws Ex\NotIntegerException
 	 *
 	 * @noinspection PhpUnhandledExceptionInspection
+	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	 */
     protected static function getBaseMap(): array
     {
@@ -126,6 +127,7 @@ class BaseApiCodes
 	 * @throws Ex\NotIntegerException
 	 *
 	 * @noinspection PhpMethodNamingConventionInspection
+	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	 */
     public static function OK(): int
     {
@@ -142,6 +144,7 @@ class BaseApiCodes
 	 * @throws Ex\NotIntegerException
 	 *
 	 * @noinspection PhpMethodNamingConventionInspection
+	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	 */
     public static function NO_ERROR_MESSAGE(): int
     {
@@ -158,6 +161,7 @@ class BaseApiCodes
 	 * @throws Ex\NotIntegerException
 	 *
 	 * @noinspection PhpMethodNamingConventionInspection
+	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	 */
     public static function EX_HTTP_NOT_FOUND(): int
     {
@@ -174,6 +178,7 @@ class BaseApiCodes
 	 * @throws Ex\NotIntegerException
 	 *
 	 * @noinspection PhpMethodNamingConventionInspection
+	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	 */
     public static function EX_HTTP_EXCEPTION(): int
     {
@@ -190,6 +195,7 @@ class BaseApiCodes
 	 * @throws Ex\NotIntegerException
 	 *
 	 * @noinspection PhpMethodNamingConventionInspection
+	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	 */
     public static function EX_UNCAUGHT_EXCEPTION(): int
     {
@@ -206,6 +212,7 @@ class BaseApiCodes
 	 * @throws Ex\NotIntegerException
 	 *
 	 * @noinspection PhpMethodNamingConventionInspection
+	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	 */
     public static function EX_AUTHENTICATION_EXCEPTION(): int
     {
@@ -222,6 +229,7 @@ class BaseApiCodes
 	 * @throws Ex\NotIntegerException
 	 *
 	 * @noinspection PhpMethodNamingConventionInspection
+	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	 */
     public static function EX_VALIDATION_EXCEPTION(): int
     {
@@ -238,6 +246,7 @@ class BaseApiCodes
 	 * @throws Ex\NotIntegerException
 	 *
 	 * @noinspection PhpMethodNamingConventionInspection
+	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 	 */
     public static function EX_HTTP_SERVICE_UNAVAILABLE(): int
     {

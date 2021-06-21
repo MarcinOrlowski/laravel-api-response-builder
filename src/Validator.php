@@ -161,6 +161,7 @@ final class Validator
 	 * @return void
 	 *
 	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\ClassNotFound
 	 */
 	public static function assertIsType(string $var_name, $value, array $allowed_types,
 	                                    string $ex_class = Ex\InvalidTypeException::class): void

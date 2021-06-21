@@ -24,6 +24,17 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 final class ValidationExceptionHandler implements ExceptionHandlerContract
 {
+	/**
+	 * @param array      $user_config
+	 * @param \Throwable $ex
+	 *
+	 * @return array|null
+	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException
+	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\MissingConfigurationKeyException
+	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\NotIntegerException
+	 *
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
+	 */
 	public function handle(array $user_config, /** @scrutinizer ignore-unused */ \Throwable $ex): ?array
 	{
 		/** @noinspection PhpUnhandledExceptionInspection */

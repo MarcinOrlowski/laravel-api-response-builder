@@ -57,6 +57,7 @@ class TestModelJsonResource extends JsonResource
      *
      * NOTE: No typehint as signature must match JsonResource::toArray()
      * @noinspection PhpMissingParamTypeInspection
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
      */
     public function toArray($request): array
     {

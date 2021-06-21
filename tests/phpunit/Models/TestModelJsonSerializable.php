@@ -34,9 +34,9 @@ class TestModelJsonSerializable implements \JsonSerializable
 	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function __construct($val)
-    {
-        $this->val = $val;
-    }
+	{
+		$this->val = $val;
+	}
 
 	/**
 	 * @return string
@@ -58,7 +58,7 @@ class TestModelJsonSerializable implements \JsonSerializable
 	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
 	public function jsonSerialize()
-    {
-        return $this->val;
-    }
+	{
+		return $this->val;
+	}
 }

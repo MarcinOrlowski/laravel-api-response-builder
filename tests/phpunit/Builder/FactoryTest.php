@@ -22,17 +22,6 @@ use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
- * Class DummyResponseBuilder
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
- * @noinspection EmptyClassInspection
- */
-class DummyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
-{
-// dummy
-}
-
-/**
  * Class FactoryTest
  *
  * @package MarcinOrlowski\ResponseBuilder\Tests
