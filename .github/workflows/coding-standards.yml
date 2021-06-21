@@ -49,9 +49,5 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
-      - name: "Checking standards for src/"
-        run: vendor/bin/check-coding-standard -s "src/" -f
-
-      - name: "Checking standards for tests/"
-        run: vendor/bin/check-coding-standard -s "tests/" -f
-
+      - name: "Checking coding standards..."
+        run: vendor/bin/check-coding-standard -s "src/" "tests/" -f
