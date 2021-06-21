@@ -49,7 +49,7 @@ jobs:
           dev: yes
 
       # https://github.com/marketplace/actions/phpunit-php-actions
-      - name: "Running PHPUnit..."
+      - name: "Running PHPUnit with Coverage..."
         uses: php-actions/phpunit@v3
         with:
           bootstrap: "vendor/autoload.php"
@@ -66,4 +66,3 @@ jobs:
           files: /tmp/coverage.xml
           flags: unittests
           fail_ci_if_error: true
-          verbose: true
