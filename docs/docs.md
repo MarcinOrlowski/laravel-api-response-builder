@@ -39,7 +39,7 @@
     `\App::getLocale()`). This helps processing the response if you support multiple languages,
   * `message` (**string**) human readable message that is ready to display and explains human readable explanation
     of the `code` value,
-  * `data` (**object**|**array**|**null**) if you return any additional data with your reply, it would end here.
+  * `data` (**object**|**null**) if you return any additional data with your reply, it would end here.
     If no extra data is needed, that key still be present in the response with `null` value.
 
  **NOTE:** If you need to return other/different elements in the above structure (not in your `data`),
@@ -131,7 +131,7 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 
 # Overriding built-in messages #
 
- At the moment `ResponseBuilder` provides few built-in messages (see [src/ErrorCode.php](src/ErrorCode.php)):
+ At the moment `ResponseBuilder` provides few built-in messages (see [src/BaseApiCodes.php](../src/BaseApiCodes.php)):
  one is used for success code `0` and another provides fallback message for codes without custom mapping. If for
  any reason you want to override them, simply map these codes in your `map` config using codes from package
  reserved range:
@@ -149,3 +149,4 @@ MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.
 ````
 
  You can use `:api_code` placeholder in the message and it will be substituted actual error code value.
+

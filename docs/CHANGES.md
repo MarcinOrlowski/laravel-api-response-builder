@@ -1,12 +1,31 @@
-![REST API Response Builder for Laravel](docs/img/logo.png)
+![REST API Response Builder for Laravel](img/logo.png)
 
 # REST API Response Builder for Laravel #
 
  > ![WARNING](img/warning.png) This library follows [semantic versioning](https://semver.org).
- > See [compatibility docs](docs/compatibility.md) for details about backward compatibility
+ > See [compatibility docs](compatibility.md) for details about backward compatibility
  > **before** doing major upgrade!
 
 ## CHANGE LOG ##
+
+* v9.3.0 (2021-06-21)
+  * Added `data_always_object` config option that, when enabled enforces response `data` node
+    to always be JSON object (for `NULL` it will return empty object `{}`).
+  * Improved code quality (fully pass on PHPStan's strict mode)
+  * Fixed floats being rejected as direct primitive payload.
+  * Fixed `Converter` unit tests for primitives-as-payload.
+  * Fixed `ResponseBuilderProvider` throwing incorrect Exception in case of invalid config file.
+  * Added `Validator::assertIsObjectOrExistingClass()` method.
+  * `Validator::assertIsInt()` throws now `NotIntegerException` as expected.
+  * Corrected `Validator` class tests to check agains specific exceptions thrown, not base class.
+  * Improved error handling in `JsonSerializableConverter`
+  * Switched Composer's autoload to follow `psr-4` instead of plain `classmap` (thanks to Viktor Szépe).
+  * Added `TestingHelpers::getResponseContent()`, `TestingHelpers::langGet()` to satisfy static analyzers.
+  * Updated and corrected PHPDocs (incl. some type hints).
+  * Added missing type hint to `success()`.
+  * Added strict type header to classes.
+  * Removed `dev` block from default `composer.json`. See `.config/README.md` for details.
+  * Updated documentation.
 
 * v9.2.3 (2021-04-21)
   * [RB-194] Changed signature of ExceptionHandlers' `handle()` method to expectc `Throwable`
@@ -53,7 +72,7 @@
    * [RB-158] Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
      `double`, `integer` and `string` types, configurable via new `converter/primitives`.
    * Removed hadrcoded `val` key used by `JsonSerializable` converter.
-   * Introduced own exceptions for better error reporting. See [src/Exceptions](src/Exceptions) for more info.
+   * Introduced own exceptions for better error reporting. See [src/Exceptions](../src/Exceptions) for more info.
 
 * v8.1.1 (2020-10-15)
    * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from
@@ -142,7 +161,7 @@
    * Added PHP 7.4-snapshot to unit tests.
 
 * v6.2.0 (2019-10-19)
-   * Changed how auto-converter checks for supported classes (see [Data Conversion](docs.md#data-conversion))
+   * Changed how auto-converter checks for supported classes (see [Data Conversion](conversion.md))
    * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources) data class.
    * Added unit test for `ResponseBuilderServiceProvider::mergeConfg()`.
    * Moved data conversion code to separate `Converter` class.
@@ -158,7 +177,7 @@
 
 * v6.1.0 (2019-09-28)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md))
-   * Created new library logo (see [artwork/](artwork/) folder).
+   * Created new library logo (see [artwork/](../artwork/) folder).
    * Added more unit tests to improve coverage.
    * Updated documentation.
    * Worked around Laravel's config merger not working properly with multi-dimensional config arrays.
@@ -243,7 +262,7 @@
    * Exception Handler's trace data is now properly placed into `trace` leaf.
 
 * v4.0.0 (2017-04-10)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md)).
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
    * `[RB-59]` Added option to remap response JSON keys to user provided values.
    * `[RB-54]` Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
    * `[RB-37]` Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defaults.
@@ -277,7 +296,7 @@
    * Updated `composer.json` to list `laravel/framework` among requirements.
 
 * v3.0.0 (2017-02-23)
-   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](docs/compatibility.md)).
+   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
    * `[RB-17] `success()` now allows to return API code as well.
    * Corrected default config file containing faulty and unneeded `use` entries.
    * `[RB-20]` Renamed ErrorCode class to ApiCodeBase.
@@ -362,3 +381,4 @@
 
 * v1.0.0 (2016-04-11)
    * Initial public release
+

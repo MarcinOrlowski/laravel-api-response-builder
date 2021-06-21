@@ -48,3 +48,4 @@ composer require marcin-orlowski/laravel-api-response-builder "^4.0"
  however, current implementation relies on Exception Handler code from (IIRC) Laravel 5.5. So that shouldn't be a problem and is
  pretty easy to check. And if you are on even older Laravel, then backporting helpers' code should also be pretty easy. It's just
  no longer supported by me.
+

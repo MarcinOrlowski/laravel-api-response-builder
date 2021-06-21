@@ -1,4 +1,8 @@
 <?php
+/**
+ * @noinspection PhpUnhandledExceptionInspection
+ */
+declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
@@ -15,7 +19,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use MarcinOrlowski\ResponseBuilder\Validator;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -56,11 +62,13 @@ trait TestingHelpers
 
     // -----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Sets up testing environment
-     *
-     * @return void
-     */
+	/**
+	 * Sets up testing environment
+	 *
+	 * @return void
+	 *
+	 * @throws \ReflectionException
+	 */
     public function setUp(): void
     {
         parent::setUp();
@@ -69,9 +77,7 @@ trait TestingHelpers
         $class_name = $this->getApiCodesClassName();
 
         $obj = new $class_name();
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->min_allowed_code = $this->callProtectedMethod($obj, 'getMinCode');
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->max_allowed_code = $this->callProtectedMethod($obj, 'getMaxCode');
 
         // generate random api_code
@@ -79,35 +85,78 @@ trait TestingHelpers
         $this->random_api_code = \mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
         // AND corresponding mapped message mapping
-        /** @noinspection PhpUnhandledExceptionInspection */
         $map = $this->callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
-        $idx = \mt_rand(1, \count($map));
-
+        $idx = \random_int(1, \count($map));
         $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
-        $this->random_api_code_message = \Lang::get($this->random_api_code_message_key, [
-            'api_code' => $this->random_api_code,
-        ]);
-        $this->error_message_map = [
+	    $this->random_api_code_message = $this->langGet($this->random_api_code_message_key, ['api_code' => $this->random_api_code,]);
+
+	    $this->error_message_map = [
             $this->random_api_code => $this->random_api_code_message_key,
         ];
         \Config::set(RB::CONF_KEY_MAP, $this->error_message_map);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Checks if response object was returned with expected success HTTP
-     * code (200-299) indicating API method executed successfully
-     *
-     * NOTE: content of `data` node is NOT checked here!
-     *
-     * @param int|null    $expected_api_code_offset expected api code offset or @null for default value
-     * @param int|null    $expected_http_code       HTTP return code to check against or @null for default
-     * @param string|null $expected_message         Expected value of 'message' or @null for default message
-     *
-     * @return \StdClass validated response object data (as object, not array)
-     *
-     */
+	/**
+	 * We wrap call to response's getContent() to handle case of `false` being return value.
+	 *
+	 * @param \Symfony\Component\HttpFoundation\Response $response
+	 *
+	 * @return string
+	 *
+	 * @throws \InvalidArgumentException If response object is not of HttpResponse class.
+	 * @throws \RuntimeException if there's no conent to be returned from the response.
+	 */
+	public function getResponseContent(HttpResponse $response): string
+	{
+		$content = $response->getContent();
+		if ($content === false) {
+			throw new \RuntimeException('Response does not contains any content.');
+		}
+		return $content;
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * As Lang::get() wrapper can also return whole translation array, not only single strings,
+	 * this make static code analysers unhappy as its signature indicates it can return arrays too, which we do not want to happen,
+	 * not handle separately after each invocation, so this wrapper deals with it for us.
+	 *
+	 * @param string     $key     String key as passed to Lang::get()
+	 * @param array|null $replace Optional replacement array as passed to Lang::get()
+	 *
+	 * @return string
+	 */
+	public function langGet($key, array $replace = null): string
+	{
+		$replace = $replace ?? [];
+		$result = \Lang::get($key, $replace);
+		if (is_array($result)) {
+			$result = implode('', $result);
+		}
+		return $result;
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Checks if response object was returned with expected success HTTP
+	 * code (200-299) indicating API method executed successfully
+	 *
+	 * NOTE: content of `data` node is NOT checked here!
+	 *
+	 * @param int|null    $expected_api_code_offset expected api code offset or @null for default value
+	 * @param int|null    $expected_http_code       HTTP return code to check against or @null for default
+	 * @param string|null $expected_message         Expected value of 'message' or @null for default message
+	 *
+	 * @return \StdClass validated response object data (as object, not array)
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws \ReflectionException
+	 */
     public function getResponseSuccessObject(int $expected_api_code_offset = null,
                                              int $expected_http_code = null,
                                              string $expected_message = null): \stdClass
@@ -127,7 +176,8 @@ trait TestingHelpers
             $key = \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey($expected_api_code_offset);
             $key = $key ?? \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey(
                     \MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK());
-            $expected_message = \Lang::get($key, ['api_code' => $expected_api_code_offset]);
+            /** @var string $key */
+            $expected_message = $this->langGet($key, ['api_code' => $expected_api_code_offset]);
         }
 
         $j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $expected_message);
@@ -137,15 +187,18 @@ trait TestingHelpers
     }
 
 
-    /**
-     * Retrieves and validates response as expected from errorXXX() methods
-     *
-     * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default value
-     * @param int         $expected_http_code       Expected HTTP code
-     * @param string|null $message                  Expected return message or @null if we automatically mapped message fits
-     *
-     * @return \StdClass response object built from JSON
-     */
+	/**
+	 * Retrieves and validates response as expected from errorXXX() methods
+	 *
+	 * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default value
+	 * @param int         $expected_http_code       Expected HTTP code
+	 * @param string|null $message                  Expected return message or @null if we automatically mapped message fits
+	 *
+	 * @return \StdClass response object built from JSON
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\IncompatibleTypeException
+	 */
     public function getResponseErrorObject(int $expected_api_code_offset = null,
                                            int $expected_http_code = RB::DEFAULT_HTTP_CODE_ERROR,
                                            string $message = null): \stdClass
@@ -153,7 +206,7 @@ trait TestingHelpers
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes_class_name */
             $api_codes_class_name = $this->getApiCodesClassName();
-            $expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE();
+	        $expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE();
         }
 
         if ($expected_http_code > RB::ERROR_HTTP_CODE_MAX) {
@@ -172,30 +225,41 @@ trait TestingHelpers
     }
 
 
-    /**
-     * @param int         $expected_api_code  expected Api response code offset
-     * @param int         $expected_http_code expected HTTP code
-     * @param string|null $expected_message   expected message string or @null if default
-     *
-     * @return mixed
-     */
+	/**
+	 * @param int         $expected_api_code  expected Api response code offset
+	 * @param int         $expected_http_code expected HTTP code
+	 * @param string|null $expected_message   expected message string or @null if default
+	 *
+	 * @return mixed
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 */
     private function getResponseObjectRaw(int $expected_api_code, int $expected_http_code,
                                           string $expected_message = null)
     {
         $actual = $this->response->getStatusCode();
+        $contents = $this->getResponseContent($this->response);
         $this->assertEquals($expected_http_code, $actual,
-            "Expected status code {$expected_http_code}, got {$actual}. Response: {$this->response->getContent()}");
+            "Expected status code {$expected_http_code}, got {$actual}. Response: {$contents}");
 
         // get response as Json object
-        $j = \json_decode($this->response->getContent(), false);
+        $j = \json_decode($this->getResponseContent($this->response), false);
 
         $this->assertEquals($expected_api_code, $j->code);
 
         /** @var BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
-        $expected_message_string = $expected_message ?? \Lang::get(
-                $api_codes_class_name::getCodeMessageKey($expected_api_code), ['api_code' => $expected_api_code]);
-        $this->assertEquals($expected_message_string, $j->message);
+
+		if ($expected_message === null) {
+			$key = $api_codes_class_name::getCodeMessageKey($expected_api_code);
+			Validator::assertIsString('key', $key);
+			/** @var string $key */
+			$expected_message_string = $this->langGet($key, ['api_code' => $expected_api_code]);
+		} else {
+			$expected_message_string = $expected_message;
+		}
+	    $this->assertEquals($expected_message_string, $j->message);
 
         return $j;
     }
@@ -215,11 +279,9 @@ trait TestingHelpers
         $this->assertIsString($json_object->locale);
         /** @noinspection UnNecessaryDoubleQuotesInspection */
         $this->assertNotEquals(\trim($json_object->locale), '', "'locale' cannot be empty string");
-        $this->assertIsString($json_object->message);
-//        /** @noinspection UnNecessaryDoubleQuotesInspection */
-//        $this->assertNotEquals(\trim($json_object->message), '', "'message' cannot be empty string");
-        $this->assertTrue(($json_object->data === null) || \is_object($json_object->data),
-            "Response 'data' must be either object or null");
+	    $this->assertIsString($json_object->message);
+	    $this->assertTrue(($json_object->data === null) || \is_object($json_object->data),
+		    "Response 'data' must be either object or null");
     }
 
     // -----------------------------------------------------------------------------------------------------------
@@ -249,23 +311,24 @@ trait TestingHelpers
 
     // -----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Calls protected method make()
-     *
-     * @param boolean    $success                    @true if response should indicate success, @false otherwise
-     * @param int        $api_code_offset            API code to use with produced response
-     * @param string|int $message_or_api_code_offset Resolvable Api code or message string
-     * @param array|null $data                       Data to return
-     * @param array|null $headers                    HTTP headers to include
-     * @param int|null   $encoding_options           see http://php.net/manual/en/function.json-encode.php
-     * @param array|null $debug_data                 optional data to be included in response JSON
-     *
-     * @return HttpResponse
-     *
-     * @throws \ReflectionException
-     *
-     * @noinspection PhpTooManyParametersInspection
-     */
+	/**
+	 * Calls protected method make()
+	 *
+	 * @param boolean    $success                    @true if response should indicate success, @false otherwise
+	 * @param int        $api_code_offset            API code to use with produced response
+	 * @param string|int $message_or_api_code_offset Resolvable Api code or message string
+	 * @param array|null $data                       Data to return
+	 * @param array|null $headers                    HTTP headers to include
+	 * @param int|null   $encoding_options           see http://php.net/manual/en/function.json-encode.php
+	 * @param array|null $debug_data                 optional data to be included in response JSON
+	 *
+	 * @return HttpResponse
+	 *
+	 * @throws \ReflectionException
+	 * @throws Ex\MissingConfigurationKeyException
+	 *
+	 * @noinspection PhpTooManyParametersInspection
+	 */
     protected function callMakeMethod(bool $success, int $api_code_offset, $message_or_api_code_offset,
                                       array $data = null,
                                       array $headers = null, int $encoding_options = null,
@@ -278,7 +341,6 @@ trait TestingHelpers
         $http_code = null;
         $lang_args = null;
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         return $this->callProtectedMethod(
             RB::asSuccess(), 'make', [$success,
                                            $api_code_offset,
@@ -321,81 +383,98 @@ trait TestingHelpers
     /**
      * Calls protected method of $object, passing optional array of arguments.
      *
-     * @param object|string $obj_or_class Object to call $method_name on or name of the class.
-     * @param string        $method_name  Name of method to called.
-     * @param array         $args         Optional array of arguments (empty array if no args to pass).
+     * @param object|string $obj_or_cls  Object to call $method_name on or name of the class.
+     * @param string        $method_name Name of method to called.
+     * @param array         $args        Optional array of arguments (empty array if no args to pass).
      *
      * @return mixed
      *
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
-    protected function callProtectedMethod($obj_or_class, string $method_name, array $args = [])
+    protected function callProtectedMethod($obj_or_cls, string $method_name, array $args = [])
     {
-        if (\is_object($obj_or_class)) {
-            $obj = $obj_or_class;
-        } elseif (\is_string($obj_or_class)) {
-            $obj = $obj_or_class;
-        } else {
-            throw new \RuntimeException('getProtectedMethod() expects object or valid class name argument');
-        }
+	    Validator::assertIsObjectOrExistingClass('obj_or_cls', $obj_or_cls);
 
-        $reflection = new \ReflectionClass($obj);
+	    /**
+	     * At this point $obj_or_cls is either object or string but some static analyzers
+	     * got problems figuring that out, so this (partially correct) var declaration is
+	     * to make them believe.
+	     *
+	     * @var object $obj_or_cls
+	     */
+        $reflection = new \ReflectionClass($obj_or_cls);
         $method = $reflection->getMethod($method_name);
         $method->setAccessible(true);
 
-        return $method->invokeArgs(\is_object($obj) ? $obj : null, $args);
+        return $method->invokeArgs(\is_object($obj_or_cls) ? $obj_or_cls : null, $args);
     }
 
     /**
      * Returns value of otherwise non-public member of the class
      *
-     * @param string|object $cls  class name to get member from, or instance of that class
-     * @param string        $name member name to grab (i.e. `max_length`)
+     * @param string|object $obj_or_cls class name to get member from, or instance of that class
+     * @param string        $name       member name to grab (i.e. `max_length`)
      *
      * @return mixed
      *
      * @throws \ReflectionException
      */
-    protected function getProtectedMember($cls, string $name)
+    protected function getProtectedMember($obj_or_cls, string $name)
     {
-        $reflection = new \ReflectionClass($cls);
+	    Validator::assertIsObjectOrExistingClass('obj_or_cls', $obj_or_cls);
+
+	    /**
+	     * At this point $obj_or_cls is either object or string but some static analyzers
+	     * got problems figuring that out, so this (partially correct) var declaration is
+	     * to make them believe.
+	     *
+	     * @var object $obj_or_cls
+	     */
+	    $reflection = new \ReflectionClass($obj_or_cls);
         $property = $reflection->getProperty($name);
         $property->setAccessible(true);
 
-        return $property->getValue($cls);
+        return $property->getValue(is_object($obj_or_cls) ? $obj_or_cls : null);
     }
 
     /**
      * Returns value of otherwise non-public member of the class
      *
-     * @param string|object $cls  class name to get member from, or instance of that class
-     * @param string        $name name of constant to grab (i.e. `FOO`)
+     * @param string|object $obj_or_cls class name to get member from, or instance of that class
+     * @param string        $name       name of constant to grab (i.e. `FOO`)
      *
      * @return mixed
      * @throws \ReflectionException
      */
-    protected function getProtectedConstant($cls, string $name)
+    protected function getProtectedConstant($obj_or_cls, string $name)
     {
-        $reflection = new \ReflectionClass($cls);
+    	Validator::assertIsObjectOrExistingClass('obj_or_cls', $obj_or_cls);
 
-        return $reflection->getConstant($name);
+	    /**
+	     * At this point $obj_or_cls is either object or string but some static analyzers
+	     * got problems figuring that out, so this (partially correct) var declaration is
+	     * to make them believe.
+	     *
+	     * @var object $obj_or_cls
+	     */
+	    return (new \ReflectionClass($obj_or_cls))->getConstant($name);
     }
 
-    /**
-     * Generates random string, with optional prefix
-     *
-     * @param string $prefix
-     *
-     * @return string
-     */
+	/**
+	 * Generates random string, with optional prefix
+	 *
+	 * @param string|null $prefix
+	 *
+	 * @return string
+	 */
     protected function getRandomString(string $prefix = null): string
     {
         if ($prefix !== null) {
             $prefix = "{$prefix}_";
         }
 
-        return $prefix . \md5(uniqid(\mt_rand(), true));
+        return $prefix . \md5(uniqid('', true));
     }
 
     // -----------------------------------------------------------------------------------------------------------

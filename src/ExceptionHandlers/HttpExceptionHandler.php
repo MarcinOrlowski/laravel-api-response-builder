@@ -26,6 +26,7 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 {
 	public function handle(array $user_config, \Throwable $ex): ?array
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$default_config = [
 			// used by unauthenticated() to obtain api and http code for the exception
 			HttpResponse::HTTP_UNAUTHORIZED         => [
@@ -44,6 +45,7 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 
 		$config = \array_replace($default_config, $user_config);
 
+		/** @var \Symfony\Component\HttpKernel\Exception\HttpException $ex */
 		$http_code = $ex->getStatusCode();
 		$result = $config[ $http_code ] ?? null;
 

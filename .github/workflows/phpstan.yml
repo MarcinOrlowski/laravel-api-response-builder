@@ -1,5 +1,6 @@
+##################################################################################
 #
-# Laravel API Response Builder
+# Laravel API Response Builder Static code analysis Github Action config
 #
 # @package   MarcinOrlowski\ResponseBuilder
 #
@@ -7,34 +8,50 @@
 # @copyright 2016-2021 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+#
+##################################################################################
 
-name: phpstan
+name: "Static Analysis"
 
-on: [push]
+on:
+  push:
+    branches:
+    - "master"
+  pull_request:
+    branches:
+    - "master"
+    - "dev"
 
 jobs:
   build:
     strategy:
+      # do not stop the workflow if single run failed
       fail-fast: false
       matrix:
-        php: [7.4, 8.0]
+        # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
+        laravel: ["8.x"]
+        php: ["7.4", "8.0"]
 
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository...
+      - name: "Checkout repository..."
         uses: actions/checkout@v2
 
-      - name: Installing dependencies...
+      - name: "Setup proper composer.json"
+        run: cp -f ".config/composer-laravel-${{ matrix.laravel }}.json" composer.json
+
+      # https://github.com/marketplace/actions/composer-php-actions
+      - name: "Installing dependencies..."
         uses: php-actions/composer@v6
         with:
           version: 2
-          php_version: ${{ matrix.php }}
+          php_version: "${{ matrix.php }}"
           dev: yes
 
-      - name: Running PHPStan...
+      - name: "Running PHPStan..."
         uses: php-actions/phpstan@v3
         with:
-          configuration: phpstan.neon
-          php_version: ${{ matrix.php }}
+          configuration: "phpstan.neon"
+          php_version: "${{ matrix.php }}"
           memory_limit: 16M

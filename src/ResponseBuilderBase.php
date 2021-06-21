@@ -81,6 +81,8 @@ abstract class ResponseBuilderBase
 	public const CONF_KEY_MAX_CODE                      = self::CONF_CONFIG . '.max_code';
 	/** @var string */
 	public const CONF_KEY_EXCEPTION_HANDLER             = self::CONF_CONFIG . '.exception_handler';
+	/** @var string */
+	public const CONF_KEY_DATA_ALWAYS_OBJECT            = self::CONF_CONFIG . '.data_always_object';
 
 	/**
 	 * Default keys to be used by exception handler while adding debug information

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @noinspection PhpUnhandledExceptionInspection
+ */
+declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 
@@ -16,6 +20,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * ApiCodes tests trait. Use this trait to test your ApiCodes class.
@@ -66,7 +71,7 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 *
-	 * @noinspection PhpUnhandledExceptionInspection
+	 * @throws \ReflectionException
 	 */
 	public function testMinMaxCode(): void
 	{
@@ -83,6 +88,8 @@ trait ApiCodesTests
 	 * Checks if defined code range is large enough to accommodate built-in codes.
 	 *
 	 * @return void
+	 *
+	 * @throws \ReflectionException
 	 */
 	public function testCodeRangeIsLargeEnough(): void
 	{
@@ -98,7 +105,8 @@ trait ApiCodesTests
 	 *
 	 * @return void
 	 *
-	 * @throws \ReflectionException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public function testIfAllCodesGotMapping(): void
 	{
@@ -110,6 +118,7 @@ trait ApiCodesTests
 		$codes = $api_codes::getApiCodeConstants();
 
 		foreach ($codes as $name => $val) {
+			/** @var string $name */
 			if (\in_array($name, $const_to_ignore, true)) {
 				$this->assertTrue(true);
 				continue;
@@ -128,6 +137,8 @@ trait ApiCodesTests
 	 * Checks if all Api codes are in correct and allowed range.
 	 *
 	 * @return void
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public function testIfAllCodesAreInRange(): void
 	{
@@ -138,6 +149,7 @@ trait ApiCodesTests
 		$api_codes = $this->getApiCodesClassName();
 		$codes = $api_codes::getApiCodeConstants();
 		foreach ($codes as $name => $val) {
+			/** @var string $name */
 			if (\in_array($name, $const_to_ignore, true)) {
 				$this->assertTrue(true);
 				continue;
@@ -158,6 +170,9 @@ trait ApiCodesTests
 	 * Checks if all defined Api code constants' values are unique.
 	 *
 	 * @return void
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public function testIfAllApiValuesAreUnique(): void
 	{
@@ -165,7 +180,7 @@ trait ApiCodesTests
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$items = \array_count_values($api_codes_class_name::getMap());
 		foreach ($items as $code => $count) {
-			$this->assertLessThanOrEqual($count, 1, sprintf("Value of  '{$code}' is not unique. Used {$count} times."));
+			$this->assertLessThanOrEqual($count, 1, "Value of  '{$code}' is not unique. Used {$count} times.");
 		}
 	}
 
@@ -173,6 +188,9 @@ trait ApiCodesTests
 	 * Checks if all codes are mapped to existing locale strings.
 	 *
 	 * @return void
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public function testIfAllCodesAreCorrectlyMapped(): void
 	{
@@ -180,7 +198,8 @@ trait ApiCodesTests
 		$api_codes_class_name = $this->getApiCodesClassName();
 		$map = $api_codes_class_name::getMap();
 		foreach ($map as $code => $mapping) {
-			$str = \Lang::get($mapping);
+			/** @var int $code */
+			$str = $this->langGet($mapping);
 			$this->assertNotEquals($mapping, $str,
 				\sprintf('No lang entry for: %s referenced by %s', $mapping, $this->resolveConstantFromCode($code))
 			);
@@ -206,6 +225,7 @@ trait ApiCodesTests
 		$mandatory_keys = [
 			RB::KEY_HANDLER,
 		];
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		foreach ($classes as $class_name => $class_config) {
 			foreach ($mandatory_keys as $key_name) {
 				/** @var TestCase $this */

@@ -20,9 +20,11 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
+use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\HttpExceptionHandler;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * Exception handler using ResponseBuilder to return JSON even in such hard tines
@@ -36,6 +38,17 @@ class ExceptionHandlerHelper
 	 * @param \Throwable               $ex      Throwable to handle
 	 *
 	 * @return HttpResponse
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
+	 *
+	 * NOTE: no typehints due to compatibility with Laravel's method signature.
+	 * @noinspection PhpMissingParamTypeInspection
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
 	{
@@ -71,6 +84,17 @@ class ExceptionHandlerHelper
 	 *                                       HttpResponse::HTTP_INTERNAL_SERVER_ERROR
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
+	 *
+	 * NOTE: no return typehint due to compatibility with Laravel signature.
+	 * @noinspection PhpMissingReturnTypeInspection
+	 * @noinspection ReturnTypeCanBeDeclaredInspection
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	protected static function processException(\Throwable $ex, array $ex_cfg,
 	                                           int $fallback_http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR)
@@ -93,15 +117,19 @@ class ExceptionHandlerHelper
 			// there's no msg_key configured for this exact code, so let's obtain our default message
 			$msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
 				: Lang::get($msg_key, $placeholders);
-		} else {
+		} else if ($msg === '') {
 			// nothing enforced, handling pipeline: ex_message -> user_defined_msg -> http_ex -> default
-			if ($msg === '') {
-				$msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
-					: Lang::get($msg_key, $placeholders);
-			}
+			$msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
+				: Lang::get($msg_key, $placeholders);
+		}
+
+		// As Lang::get() is documented to also returning arrays(?)...
+		if (is_array($msg)) {
+			$msg = implode('', $msg);
 		}
 
 		// Lets' try to build the error response with what we have now
+		/** @noinspection PhpUnhandledExceptionInspection */
 		return static::error($ex, $api_code, $http_code, $msg);
 	}
 
@@ -115,6 +143,11 @@ class ExceptionHandlerHelper
 	 * @param array      $placeholders
 	 *
 	 * @return string
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	protected static function getErrorMessageForException(\Throwable $ex, int $http_code, array $placeholders): string
 	{
@@ -123,9 +156,18 @@ class ExceptionHandlerHelper
 			$error_message = Lang::get("response-builder::builder.http_{$http_code}", $placeholders);
 		} else {
 			// Still got nothing? Fall back to built-in generic message for this type of exception.
-			$key = BaseApiCodes::getCodeMessageKey(($ex instanceof HttpException)
+			$http_ex_cls = HttpException::class;
+			/** @var object $ex */
+			$key = BaseApiCodes::getCodeMessageKey($ex instanceof $http_ex_cls
 				? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
+			// Default strings are expected to always be available.
+			/** @var string $key */
 			$error_message = Lang::get($key, $placeholders);
+		}
+
+		// As Lang::get() is documented to also returning arrays(?)...
+		if (is_array($error_message)) {
+			$error_message = implode('', $error_message);
 		}
 
 		return $error_message;
@@ -138,6 +180,19 @@ class ExceptionHandlerHelper
 	 * @param \Illuminate\Auth\AuthenticationException $exception
 	 *
 	 * @return HttpResponse
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
+	 *
+	 * @noinspection PhpUnusedParameterInspection
+	 * @noinspection UnknownInspectionInspection
+	 *
+	 * NOTE: not typehints due to compatibility with Laravel's method signature.
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
 	                                                                     AuthException $exception): HttpResponse
@@ -147,18 +202,29 @@ class ExceptionHandlerHelper
 		// This config entry is guaranted to exist. Enforced by tests.
 		$cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ][ HttpResponse::HTTP_UNAUTHORIZED ];
 
+		/**
+		 * NOTE: no typehint due to compatibility with Laravel signature.
+		 * @noinspection PhpParamsInspection
+		 */
 		return static::processException($exception, $cfg, HttpResponse::HTTP_UNAUTHORIZED);
 	}
 
 	/**
 	 * Process single error and produce valid API response.
 	 *
-	 * @param \Throwable $ex Exception to be handled.
-	 * @param integer   $api_code
-	 * @param integer   $http_code
-	 * @param string    $error_message
+	 * @param \Throwable  $ex Exception to be handled.
+	 * @param integer     $api_code
+	 * @param int|null    $http_code
+	 * @param string|null $error_message
 	 *
 	 * @return HttpResponse
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\ArrayWithMixedKeysException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	protected static function error(Throwable $ex,
 	                                int $api_code, int $http_code = null, string $error_message = null): HttpResponse
@@ -197,7 +263,6 @@ class ExceptionHandlerHelper
 		// If this is ValidationException, add all the messages from MessageBag to the data node.
 		$data = null;
 		if ($ex instanceof ValidationException) {
-			/** @var ValidationException $ex */
 			$data = [RB::KEY_MESSAGES => $ex->validator->errors()->messages()];
 		}
 
@@ -213,9 +278,15 @@ class ExceptionHandlerHelper
 	 * Returns ExceptionHandlerHelper configration array with user configuration merged into built-in defaults.
 	 *
 	 * @return array
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
 	 */
 	protected static function getExceptionHandlerConfig(): array
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$default_config = [
 			HttpException::class         => [
 				'handler' => HttpExceptionHandler::class,
@@ -256,14 +327,18 @@ class ExceptionHandlerHelper
 		return $cfg;
 	}
 
-
 	/**
 	 * Returns name of exception handler class, configured to process specified exception class or @null if no
 	 * exception handler can be determined.
 	 *
-	 * @param string $cls Name of exception class to handle
+	 * @param \Throwable $ex Exception to handle
 	 *
 	 * @return array|null
+	 *
+	 * @throws Ex\IncompatibleTypeException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
 	 */
 	protected static function getHandler(\Throwable $ex): ?array
 	{
@@ -280,6 +355,7 @@ class ExceptionHandlerHelper
 				// no exact match, then lets try with `instanceof`
 				// Config entries are already sorted by priority.
 				foreach (\array_keys($cfg) as $class_name) {
+					/** @var string $class_name */
 					if ($ex instanceof $class_name) {
 						$result = $cfg[ $class_name ];
 						break;

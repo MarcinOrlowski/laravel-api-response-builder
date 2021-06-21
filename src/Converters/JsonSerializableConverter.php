@@ -28,8 +28,8 @@ final class JsonSerializableConverter implements ConverterContract
 	/**
 	 * Returns array representation of the object implementing \JsonSerializable interface.
 	 *
-	 * @param \JsonSerializable $obj    Object to be converted
-	 * @param array             $config Converter config array to be used for this object (based on exact class
+	 * @param object $obj               Object to be converted
+	 * @param array  $config            Converter config array to be used for this object (based on exact class
 	 *                                  name match or inheritance).
 	 *
 	 * @return array
@@ -38,6 +38,11 @@ final class JsonSerializableConverter implements ConverterContract
 	{
 		Validator::assertInstanceOf('obj', $obj, \JsonSerializable::class);
 
-		return [$config[RB::KEY_KEY] => \json_decode(\json_encode($obj->jsonSerialize()), true)];
+		$encoded = \json_encode($obj->jsonSerialize());
+		if ($encoded === false) {
+			$encoded = '';
+		}
+
+		return [$config[ RB::KEY_KEY ] => \json_decode($encoded, true)];
 	}
 }

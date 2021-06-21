@@ -15,6 +15,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  */
 
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * BaseApiCodes handling class
@@ -88,11 +89,17 @@ class BaseApiCodes
      */
     protected const EX_VALIDATION_EXCEPTION_OFFSET = 15;
 
-    /**
-     * Returns base code mapping array
-     *
-     * @return array
-     */
+	/**
+	 * Returns base code mapping array
+	 *
+	 * @return array
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
+	 *
+	 * @noinspection PhpUnhandledExceptionInspection
+	 */
     protected static function getBaseMap(): array
     {
         $tpl = 'response-builder::builder.http_%d';
@@ -109,81 +116,129 @@ class BaseApiCodes
         ];
     }
 
-    /**
-     * Returns API code for internal code OK
-     *
-     * @return int valid API code in current range
-     */
+	/**
+	 * Returns API code for internal code OK
+	 *
+	 * @return int valid API code in current range
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
+	 *
+	 * @noinspection PhpMethodNamingConventionInspection
+	 */
     public static function OK(): int
     {
         return static::getCodeForInternalOffset(static::OK_OFFSET);
     }
 
-    /**
-     * Returns API code for internal code NO_ERROR_MESSAGE
-     *
-     * @return int valid API code in current range
-     */
+	/**
+	 * Returns API code for internal code NO_ERROR_MESSAGE
+	 *
+	 * @return int valid API code in current range
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
+	 *
+	 * @noinspection PhpMethodNamingConventionInspection
+	 */
     public static function NO_ERROR_MESSAGE(): int
     {
         return static::getCodeForInternalOffset(static::NO_ERROR_MESSAGE_OFFSET);
     }
 
-    /**
-     * Returns API code for internal code EX_HTTP_NOT_FOUND
-     *
-     * @return int valid API code in current range
-     */
+	/**
+	 * Returns API code for internal code EX_HTTP_NOT_FOUND
+	 *
+	 * @return int valid API code in current range
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
+	 *
+	 * @noinspection PhpMethodNamingConventionInspection
+	 */
     public static function EX_HTTP_NOT_FOUND(): int
     {
         return static::getCodeForInternalOffset(static::EX_HTTP_NOT_FOUND_OFFSET);
     }
 
-    /**
-     * Returns API code for internal code EX_HTTP_EXCEPTION
-     *
-     * @return int valid API code in current range
-     */
+	/**
+	 * Returns API code for internal code EX_HTTP_EXCEPTION
+	 *
+	 * @return int valid API code in current range
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
+	 *
+	 * @noinspection PhpMethodNamingConventionInspection
+	 */
     public static function EX_HTTP_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_HTTP_EXCEPTION_OFFSET);
     }
 
-    /**
-     * Returns API code for internal code EX_UNCAUGHT_EXCEPTION
-     *
-     * @return int valid API code in current range
-     */
+	/**
+	 * Returns API code for internal code EX_UNCAUGHT_EXCEPTION
+	 *
+	 * @return int valid API code in current range
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
+	 *
+	 * @noinspection PhpMethodNamingConventionInspection
+	 */
     public static function EX_UNCAUGHT_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_UNCAUGHT_EXCEPTION_OFFSET);
     }
 
-    /**
-     * Returns API code for internal code EX_AUTHENTICATION_EXCEPTION
-     *
-     * @return int valid API code in current range
-     */
+	/**
+	 * Returns API code for internal code EX_AUTHENTICATION_EXCEPTION
+	 *
+	 * @return int valid API code in current range
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
+	 *
+	 * @noinspection PhpMethodNamingConventionInspection
+	 */
     public static function EX_AUTHENTICATION_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_AUTHENTICATION_EXCEPTION_OFFSET);
     }
 
-    /**
-     * Returns API code for internal code EX_VALIDATION_EXCEPTION
-     *
-     * @return int valid API code in current range
-     */
+	/**
+	 * Returns API code for internal code EX_VALIDATION_EXCEPTION
+	 *
+	 * @return int valid API code in current range
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\NotIntegerException
+	 *
+	 * @noinspection PhpMethodNamingConventionInspection
+	 */
     public static function EX_VALIDATION_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_VALIDATION_EXCEPTION_OFFSET);
     }
 
-    /**
-     * Returns API code for internal code EX_HTTP_SERVICE_UNAVAILABLE
-     *
-     * @return int valid API code in current range
-     */
+	/**
+	 * Returns API code for internal code EX_HTTP_SERVICE_UNAVAILABLE
+	 *
+	 * @return int valid API code in current range
+	 *
+	 * @throws Ex\MissingConfigurationKeyException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
+	 *
+	 * @noinspection PhpMethodNamingConventionInspection
+	 */
     public static function EX_HTTP_SERVICE_UNAVAILABLE(): int
     {
         return static::getCodeForInternalOffset(static::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET);

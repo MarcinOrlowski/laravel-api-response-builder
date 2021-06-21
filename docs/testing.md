@@ -87,3 +87,4 @@ class LoginTest extends \Illuminate\Foundation\Testing\TestCase
     }
 }
 ```
+

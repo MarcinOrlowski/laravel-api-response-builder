@@ -1,0 +1,69 @@
+##################################################################################
+#
+# Laravel API Response Builder Unit tests Github Action config
+#
+# @package   MarcinOrlowski\ResponseBuilder
+#
+# @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
+# @copyright 2016-2021 Marcin Orlowski
+# @license   http://www.opensource.org/licenses/mit-license.php MIT
+# @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+#
+##################################################################################
+
+name: "Coverage"
+
+on:
+  push:
+    branches:
+    - "master"
+  pull_request:
+    branches:
+    - "master"
+    - "dev"
+
+jobs:
+  build:
+    strategy:
+      # do not stop the workflow if single run failed
+      fail-fast: false
+      matrix:
+        # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
+        laravel: ["8.x"]
+        php: ["8.0"]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout repository..."
+        uses: actions/checkout@v2
+
+      - name: "Setup proper composer.json"
+        run: cp -f ".config/composer-laravel-${{ matrix.laravel }}.json" composer.json
+
+      # https://github.com/marketplace/actions/composer-php-actions
+      - name: "Installing dependencies..."
+        uses: php-actions/composer@v6
+        with:
+          version: 2
+          php_version: "${{ matrix.php }}"
+          dev: yes
+
+      # https://github.com/marketplace/actions/phpunit-php-actions
+      - name: "Running PHPUnit with Coverage..."
+        uses: php-actions/phpunit@v3
+        with:
+          bootstrap: "vendor/autoload.php"
+          configuration: "tests/phpunit.xml"
+          php_extensions: "xdebug"
+          args: --coverage-clover coverage.xml
+        env:
+          XDEBUG_MODE: coverage
+
+      # https://github.com/marketplace/actions/codecov
+      - name: "Uploading coverage to CodeCov.io..."
+        uses: codecov/codecov-action@v1
+        with:
+          files: coverage.xml
+          flags: unittests
+          fail_ci_if_error: true

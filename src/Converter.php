@@ -35,6 +35,11 @@ class Converter
 
 	/**
 	 * Converter constructor.
+	 *
+	 * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
+	 * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
+	 * @throws Ex\IncompleteConfigurationException if config for specific class is incomplete (misses some mandatory fields etc).
+	 * @throws Ex\InvalidTypeException
 	 */
 	public function __construct()
 	{
@@ -57,8 +62,6 @@ class Converter
 	 */
 	protected function getPrimitiveMappingConfigOrThrow($data): array
 	{
-		$result = null;
-
 		$type = \gettype($data);
 		$result = $this->primitives[ $type ] ?? null;
 
@@ -90,13 +93,14 @@ class Converter
 
 		// check for exact class name match...
 		$cls = \get_class($data);
-		if ($cls !== false) {
+		if (\is_string($cls)) {
 			if (\array_key_exists($cls, $this->classes)) {
 				$result = $this->classes[ $cls ];
 				$debug_result = 'exact config match';
 			} else {
 				// no exact match, then lets try with `instanceof`
 				foreach (\array_keys($this->classes) as $class_name) {
+					/** @var string $class_name */
 					if ($data instanceof $class_name) {
 						$result = $this->classes[ $class_name ];
 						$debug_result = "subclass of {$class_name}";
@@ -124,6 +128,10 @@ class Converter
 	 * @param mixed|null $data
 	 *
 	 * @return array|null
+	 *
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\ArrayWithMixedKeysException
+	 * @throws Ex\InvalidTypeException
 	 */
 	public function convert($data = null): ?array
 	{
@@ -172,6 +180,9 @@ class Converter
 	 * @param array $data array to recursively convert known elements of
 	 *
 	 * @return array
+	 *
+	 * @throws Ex\ConfigurationNotFoundException
+	 * @throws Ex\ArrayWithMixedKeysException
 	 */
 	protected function convertArray(array $data): array
 	{
@@ -199,6 +210,7 @@ class Converter
 	 * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
 	 * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
 	 * @throws Ex\IncompleteConfigurationException if config for specific class is incomplete (misses some mandatory fields etc).
+	 * @throws Ex\InvalidTypeException
 	 */
 	protected static function getClassesMapping(): array
 	{
@@ -211,8 +223,8 @@ class Converter
 
 		if (!empty($classes)) {
 			$mandatory_keys = [
-				RB::KEY_HANDLER => [TYPE::STRING],
-				RB::KEY_KEY => [TYPE::STRING, TYPE::NULL],
+				RB::KEY_HANDLER => [Type::STRING],
+				RB::KEY_KEY => [Type::STRING, Type::NULL],
 			];
 			foreach ($classes as $class_name => $class_config) {
 				if (!\is_array($class_config)) {

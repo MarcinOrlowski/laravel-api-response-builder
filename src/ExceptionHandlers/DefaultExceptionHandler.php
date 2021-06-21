@@ -26,6 +26,7 @@ final class DefaultExceptionHandler implements ExceptionHandlerContract
 {
 	public function handle(array $user_config, /** @scrutinizer ignore-unused */ \Throwable $ex): ?array
 	{
+		/** @noinspection PhpUnhandledExceptionInspection */
 		$defaults = [
 			RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
 			RB::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,

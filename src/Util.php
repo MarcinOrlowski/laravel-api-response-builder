@@ -33,7 +33,7 @@ final class Util
 	 *
 	 * @return array
 	 *
-	 * @throws \RuntimeException
+	 * @throws Ex\IncompatibleTypeException
 	 */
 	public static function mergeConfig(array $original, array $merging): array
 	{
@@ -44,10 +44,11 @@ final class Util
 				$m_type = \gettype($m_val);
 				if ($orig_type !== $m_type) {
 					throw new Ex\IncompatibleTypeException(
-						"Incompatible types. Cannot merge {$m_type} into {$orig_type} (key '{$m_key}').");
+						"mergeConfig(): Cannot merge '{$m_type}' into '{$orig_type}' for key '{$m_key}'.");
 				}
 
-				if (\is_array($merging[ $m_key ])) {
+				if (\is_array($m_val)) {
+					/** @noinspection PhpUnnecessaryStaticReferenceInspection */
 					$array[ $m_key ] = static::mergeConfig($original[ $m_key ], $m_val);
 				} else {
 					$array[ $m_key ] = $m_val;
@@ -64,7 +65,7 @@ final class Util
 	 * Sorts array (in place) by value, assuming value is an array and contains `pri` key with integer
 	 * (positive/negative) value which is used for sorting higher -> lower priority.
 	 *
-	 * @param array &$array
+	 * @param array $array
 	 */
 	public static function sortArrayByPri(array &$array): void
 	{

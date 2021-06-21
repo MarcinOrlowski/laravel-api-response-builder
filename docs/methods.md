@@ -6,7 +6,7 @@
 
  * [Exposed Methods](methods.md)
    * [Builder](#builder)
-     * [Builder methods](#builder-methods)
+     * [Static builder methods](#builder-static)
    * [Helpers](#helpers)
 
 ---
@@ -51,7 +51,7 @@ return RB::success();
    range from 400 to 599 (inclusive) otherwise `\InvalidArgumentException` will be thrown. HTTP codes from 3xx pool
    (redirection) are not allowed. Please see [W3 specification](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
    for more information about all HTTP codes and their meaning.
- * `withData($data)`: (**object**|**array**|**null**) data you want to be returned in your response in `data` node,
+ * `withData($data)`: (**mixed**) data you want to be returned in your response in `data` node,
  * `withJsonOptions($opts)`: (**int**) data-to-json conversion options as
    [documented](http://php.net/manual/en/function.json-encode.php). Pass `null` for
    default `RB::DEFAULT_ENCODING_OPTIONS` ([source](../src/ResponseBuilder.php)). Please see
@@ -94,3 +94,4 @@ return RB::success();
     ```php
     return RB::error(ApiCodes::SOMETHING_FAILED);
     ```
+

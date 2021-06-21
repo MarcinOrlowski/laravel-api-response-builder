@@ -39,4 +39,7 @@ final class Type
 
 	/** @var string */
 	public const NULL = 'NULL';
+
+	/** @var string */
+	public const EXISTING_CLASS = 'existing class';
 }

@@ -30,7 +30,9 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotBooleanException
+	 *
 	 */
 	public static function assertIsBool(string $var_name, $value): void
 	{
@@ -45,11 +47,12 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function assertIsInt(string $var_name, $value): void
 	{
-		self::assertIsType($var_name, $value, [Type::INTEGER], Ex\NotBooleanException::class);
+		self::assertIsType($var_name, $value, [Type::INTEGER], Ex\NotIntegerException::class);
 	}
 
 	/**
@@ -60,7 +63,8 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotArrayException
 	 */
 	public static function assertIsArray(string $var_name, $value): void
 	{
@@ -75,11 +79,28 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotObjectException
 	 */
 	public static function assertIsObject(string $var_name, $value): void
 	{
 		self::assertIsType($var_name, $value, [Type::OBJECT], Ex\NotObjectException::class);
+	}
+
+	/**
+	 * Checks if given $cls_cls_or_obj is either an object or name of existing class.
+	 *
+	 * @param string        $var_name
+	 * @param string|object $cls_or_obj
+	 *
+	 * @return void
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\ClassNotFound
+	 */
+	public static function assertIsObjectOrExistingClass(string $var_name, $cls_or_obj): void
+	{
+		self::assertIsType($var_name, $cls_or_obj, [Type::EXISTING_CLASS, Type::OBJECT]);
 	}
 
 	/**
@@ -90,7 +111,8 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotStringException
 	 */
 	public static function assertIsString(string $var_name, $value): void
 	{
@@ -106,7 +128,9 @@ final class Validator
 	 * @return void
 	 *
 	 * @throws \InvalidArgumentException
-	 * @throws \RuntimeException
+	 * @throws \OutOfBoundsException
+	 * @throws Ex\NotIntegerException
+	 * @throws Ex\InvalidTypeException
 	 */
 	public static function assertIsIntRange(string $var_name, $value, int $min, int $max): void
 	{
@@ -124,7 +148,8 @@ final class Validator
 	}
 
 	/**
-	 * Checks if $item (of name $key) is of type that is include in $allowed_types.
+	 * Checks if $item (of name $key) is of type that is include in $allowed_types (there's `OR` connection
+	 * between specified types).
 	 *
 	 * @param string $var_name      Label or name of the variable to be used in exception message (if thrown).
 	 * @param mixed  $value         Variable to be asserted.
@@ -135,15 +160,32 @@ final class Validator
 	 *
 	 * @return void
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws Ex\InvalidTypeException
 	 */
 	public static function assertIsType(string $var_name, $value, array $allowed_types,
 	                                    string $ex_class = Ex\InvalidTypeException::class): void
 	{
+		// Type::EXISTING_CLASS is artificial type, so we need separate logic to handle it.
+		$tmp = $allowed_types;
+		$idx = array_search(Type::EXISTING_CLASS, $tmp, true);
+		if ($idx !== false) {
+			// Remove the type, so gettype() test loop won't see it.
+			unset($tmp[$idx]);
+			if (is_string($value) && class_exists($value)) {
+				// It's existing class, no need to test further.
+				return;
+			}
+		}
+
 		$type = \gettype($value);
-		if (!\in_array($type, $allowed_types, true)) {
+		if (!empty($tmp)) {
+			if (!\in_array($type, $allowed_types, true)) {
+				// FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
+				throw new $ex_class($var_name, $type, $allowed_types);
+			}
+		} else {
 			// FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
-			throw new $ex_class($var_name, $type, $allowed_types);
+			throw new Ex\ClassNotFound($var_name, $type, $allowed_types);
 		}
 	}
 
@@ -151,6 +193,9 @@ final class Validator
 	 * Ensures given $http_code is valid code for error response.
 	 *
 	 * @param int $http_code
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function assertErrorHttpCode(int $http_code): void
 	{
@@ -163,6 +208,9 @@ final class Validator
 	 * Ensures given $http_code is valid for response indicating sucessful operation.
 	 *
 	 * @param int $http_code
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\NotIntegerException
 	 */
 	public static function assertOkHttpCode(int $http_code): void
 	{
@@ -176,6 +224,8 @@ final class Validator
 	 * @param string $var_name Name of variable that the $obj value is coming from. Used for exception message.
 	 * @param object $obj      Object to check instance of
 	 * @param string $cls      Target class we want to check $obj agains.
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public static function assertInstanceOf(string $var_name, object $obj, string $cls): void
 	{

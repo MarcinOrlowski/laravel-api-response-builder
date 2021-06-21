@@ -7,7 +7,7 @@
 ### Checklist:
 
 * [ ] I have opened the issue ticket that this pull request is part of.
-* [ ] This pull request title contains `(#TICKET-NUMBER)` for reference..
+* [ ] This pull request title contains `(#TICKET-NUMBER)` for reference.
 * [ ] This pull request description contains `Closes #{$ISSUE_NO}` that closes ticket.
 * [ ] This pull request is all my own work - I have not plagiarized.
 * [ ] This contribution is licensed under MIT or compatible license.
