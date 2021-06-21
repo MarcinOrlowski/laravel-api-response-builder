@@ -51,7 +51,7 @@ Development branch:
  talking JSON (and NOT lame HTML) to its clients even in case of unexpected.
 
  Did I mention, you would also get [testing traits](docs/testing.md) that automatically add PHPUnit based unit test to your
- whole `ResponseBuilder` related code and configuration with just a few lines of code?
+ whole `ResponseBuilder` related code and configuration with just a few lines of code **absolutely for free**?
 
 ## Features ##
 
