@@ -50,10 +50,11 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
-      - name: "Checking coding standards for 'src/'..."
+      - name: "Configuring PHP Sniffer..."
         shell: bash
-        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "src/"
+        # setting PHP version to 8.0.0
+        run: vendor/bin/phpcs --config-set php_version 80000
 
-      - name: "Checking coding standards for 'tests/'..."
+      - name: "Checking Coding Standards..."
         shell: bash
-        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "tests/"
+        run: vendor/bin/phpcs
