@@ -10,6 +10,9 @@ declare(strict_types=1);
  * @copyright 2016-2021 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+ *
+ * @noinspection PhpCSValidationInspection
+ * phpcs:disable Squiz.PHP.CommentedOutCode.Found
  */
 
 return [

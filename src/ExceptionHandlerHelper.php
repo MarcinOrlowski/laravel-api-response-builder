@@ -52,7 +52,7 @@ class ExceptionHandlerHelper
 	 * @noinspection PhpUnusedParameterInspection
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed
 	 */
-	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
+	public static function render($request, \Throwable $ex): HttpResponse
 	{
 		$result = null;
 
@@ -197,7 +197,7 @@ class ExceptionHandlerHelper
 	 * @noinspection PhpMissingParamTypeInspection
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed
 	 */
-	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
+	protected function unauthenticated($request,
 	                                                                     AuthException $exception): HttpResponse
 	{
 		$cfg = self::getExceptionHandlerConfig();

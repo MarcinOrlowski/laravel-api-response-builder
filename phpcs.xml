@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+ * Laravel API Response Builder - PHP Code Sniffer config file
+ *
+ * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
+ * @copyright 2016-2021 Marcin Orlowski
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+ *
+ -->
+<ruleset name="Custom Standard" namespace="MyProject\CS\Standard">
+
+    <!-- what to sniff -->
+    <file>src/</file>
+    <file>tests/</file>
+    <file>config/</file>
+
+    <!-- let's make shown paths relative -->
+    <arg name="basepath" value="."/>
+
+    <arg name="report" value="full"/>
+
+    <!-- Include full Sniff name in report (like -s) -->
+    <arg value="s"/>
+
+    <autoload>vendor/autoload.php</autoload>
+
+    <!-- import rules from MarcinOrlowski/coding-standard package -->
+    <rule ref="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/"/>
+
+</ruleset>

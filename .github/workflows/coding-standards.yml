@@ -17,9 +17,6 @@ on:
   push:
     branches:
     - "master"
-  pull_request:
-    branches:
-    - "master"
     - "dev"
 
 jobs:
@@ -50,10 +47,6 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
-      - name: "Checking coding standards for 'src/'..."
+      - name: "Checking Coding Standards..."
         shell: bash
-        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "src/"
-
-      - name: "Checking coding standards for 'tests/'..."
-        shell: bash
-        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "tests/"
+        run: vendor/bin/phpcs
