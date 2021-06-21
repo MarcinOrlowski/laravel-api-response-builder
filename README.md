@@ -42,9 +42,10 @@ Development branch:
  "sides" of API. It's lightweight, with **no** dependencies, extensively tested and simple to use yet flexible and powerful,
  with support for [on-the-fly data conversion](docs/conversion.md), localization support, automatic message building, chained
  APIs and (hopefully) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder` is 
- designed with **users of your API** in mind, so its structure is predictible and well-defined which makes dealing with
- your API using `ResponseBuilder` library a breeze. Simple JSON response, with well-defined and predictable structure, 
- easy to consume without any hassle or trickery. **Your** clients will love it. And will love **you** too :)
+ designed with **users of your API** in mind, so its structure is predictible and [well-defined](docs/docs.md#response-structure)
+ which makes dealing with your API using `ResponseBuilder` library a breeze. Simple JSON response, with well-defined and
+ predictable structure, easy to consume without any hassle or trickery. **Your** clients will love it. And will love
+ **you** too :)
 
  You are also covered in a case of emergency, as provided [ExceptionHandlerhelper](docs/exceptions.md), ensures your API keeps
  talking JSON (and NOT lame HTML) to its clients even in case of unexpected.
