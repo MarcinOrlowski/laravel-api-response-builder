@@ -43,7 +43,7 @@ Development branch:
  with support for [on-the-fly data conversion](docs/conversion.md), [localization support](docs/docs.md#messages-and-localization),
  automatic message building, [chained APIs](docs/docs.md#code-ranges) and (hopefully) [exhaustive documentation](docs/README.md).
  But that's not all! The JSON structure produced by `ResponseBuilder` is designed with **users of your API** in mind, so its
- structure is predictible and [well-defined](docs/docs.md#response-structure which makes dealing with your API using
+ structure is predictible and [well-defined](docs/docs.md#response-structure) which makes dealing with your API using
  `ResponseBuilder` library a breeze. Simple JSON response, with well-defined and predictable structure, easy to consume
  without any hassle or trickery. **Your** clients will love it. And will love **you** too :)
 
