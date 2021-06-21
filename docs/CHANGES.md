@@ -24,6 +24,7 @@
   * Updated and corrected PHPDocs (incl. some type hints).
   * Added missing type hint to `success()`.
   * Added strict type header to classes.
+  * Removed `dev` block from default `composer.json`. See `.config/README.md` for details.
   * Updated documentation.
 
 * v9.2.3 (2021-04-21)
