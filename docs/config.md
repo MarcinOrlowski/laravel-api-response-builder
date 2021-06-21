@@ -1,7 +1,7 @@
-![REST API Response Builder for Laravel](img/logo.png)
+![REST API Response Builder for Laravel](../artwork/laravel-api-response-builder-logo.svg)
 
 # Configuration #
-
+w
 [« Documentation table of contents](README.md)
 
  * [Configuration file](#configuration-file)
