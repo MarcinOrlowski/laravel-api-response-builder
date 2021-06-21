@@ -1,5 +1,6 @@
+##################################################################################
 #
-# Laravel API Response Builder
+# Laravel API Response Builder Unit tests Github Action config
 #
 # @package   MarcinOrlowski\ResponseBuilder
 #
@@ -7,6 +8,8 @@
 # @copyright 2016-2021 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+#
+##################################################################################
 
 name: "Unit Tests"
 
@@ -26,11 +29,11 @@ jobs:
       fail-fast: false
       matrix:
         # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
-        laravel: ["6.0", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "6.8", "7.0", "8.0"]
+        laravel: ["6.x", "7.x", "8.x"]
         php: ["7.2", "7.3", "7.4", "8.0"]
         exclude:
           # Laravel 8.x requires PHP 7.3+
-          - laravel: "8.0"
+          - laravel: "8"
             php: "7.2"
 
     runs-on: ubuntu-latest
@@ -40,7 +43,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: "Setup proper composer.json"
-        run: cp -f "travis/composer-laravel-${{ matrix.laravel }}.json" composer.json
+        run: cp -f ".config/composer-laravel-${{ matrix.laravel }}.json" composer.json
 
       - name: "Installing dependencies..."
         uses: php-actions/composer@v6

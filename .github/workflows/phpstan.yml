@@ -1,5 +1,6 @@
+##################################################################################
 #
-# Laravel API Response Builder
+# Laravel API Response Builder Static code analysis Github Action config
 #
 # @package   MarcinOrlowski\ResponseBuilder
 #
@@ -7,17 +8,19 @@
 # @copyright 2016-2021 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+#
+##################################################################################
 
 name: "Static Analysis"
 
 on:
   push:
     branches:
-    - master
+    - "master"
   pull_request:
     branches:
-    - master
-    - dev
+    - "master"
+    - "dev"
 
 jobs:
   build:
