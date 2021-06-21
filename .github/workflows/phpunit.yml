@@ -52,8 +52,22 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
+      # https://github.com/marketplace/actions/phpunit-php-actions
       - name: "Running PHPUnit..."
         uses: php-actions/phpunit@v3
         with:
           bootstrap: "vendor/autoload.php"
           configuration: "tests/phpunit.xml"
+          php_extensions: "xdebug"
+          args: --coverage-clover=coverage.xml
+        env:
+          XDEBUG_MODE: coverage
+
+      # https://github.com/marketplace/actions/codecov
+      - name: "Uploading coverage to CodeCov.io..."
+        uses: codecov/codecov-action@v1
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          fail_ci_if_error: true
+          verbose: true
