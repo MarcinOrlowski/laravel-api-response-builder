@@ -50,10 +50,10 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
-      - name: "Checking sources coding standards..."
+      - name: "Checking coding standards for 'src/'..."
         shell: bash
-        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "src/""
+        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "src/"
 
-      - name: "Checking tests coding standards..."
+      - name: "Checking coding standards for 'tests/'..."
         shell: bash
         run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "tests/"
