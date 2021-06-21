@@ -262,16 +262,20 @@ trait ApiCodesTests
 								\sprintf("Value for key '{$cfg_key}' in '{$class_name}' must be string or null (%s found)", \gettype($cfg_key)));
 						}
 						break;
+
 					case RB::KEY_HANDLER:
 						$this->assertIsString($cfg_val);
 						$this->assertNotEmpty(trim($cfg_val));
 						break;
+
 					case RB::KEY_PRI:
 						$this->assertIsInt($cfg_val);
 						$this->assertIsNumeric($cfg_val);
 						break;
+
 					default:
 						$this->fail("Unknown key '{$cfg_key}' in '{$class_name}' data conversion config.");
+						break;
 				}
 			}
 		}
@@ -288,6 +292,5 @@ trait ApiCodesTests
 			}
 		}
 	}
-
 
 } // end of ApiCodesTests trait

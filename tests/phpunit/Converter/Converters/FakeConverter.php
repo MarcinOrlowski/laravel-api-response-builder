@@ -24,9 +24,9 @@ use \MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 class FakeConverter implements ConverterContract
 {
 	/** @var string */
-    public $key = 'fake';
-    /** @var string */
-    public $val = 'converter';
+	public $key = 'fake';
+	/** @var string */
+	public $val = 'converter';
 
 	/**
 	 * Simulates object conversion.
@@ -35,9 +35,11 @@ class FakeConverter implements ConverterContract
 	 * @param array  $config
 	 *
 	 * @return string[]
+	 *
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
 	 */
 	public function convert($obj, /** @scrutinizer ignore-unused */ array $config): array
-    {
-        return [$this->key => $this->val];
-    }
+	{
+		return [$this->key => $this->val];
+	}
 }

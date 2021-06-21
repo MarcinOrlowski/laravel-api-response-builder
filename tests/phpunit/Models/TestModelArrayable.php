@@ -57,6 +57,7 @@ class TestModelArrayable implements Arrayable
 	 *
 	 * NOTE: No typehint as signature must match JsonResource::toArray()
 	 * @noinspection PhpMissingParamTypeInspection
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterface
 	 */
 	public function toArray($request = null): array
 	{

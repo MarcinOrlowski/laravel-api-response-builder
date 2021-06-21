@@ -50,4 +50,4 @@ jobs:
           dev: yes
 
       - name: "Checking coding standards..."
-        run: vendor/bin/check-coding-standard -f -s "src/" "tests/"
+        run: vendor/bin/phpcs -s --basepath="$(pwd)" --standard="vendor/marcin-orlowski/coding-standard/coding-standard/MarcinOrlowski/" "src/" "tests/"

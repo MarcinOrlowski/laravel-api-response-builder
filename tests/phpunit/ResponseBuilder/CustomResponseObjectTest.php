@@ -20,30 +20,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
 
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
-class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
-{
-	/** @var array */
-	public static $fake_response = [];
-
-	/** @noinspection PhpMissingParentCallCommonInspection */
-	/**
-	 * @param bool       $success
-	 * @param int        $api_code
-	 * @param int|string $msg_or_api_code
-	 * @param array|null $placeholders
-	 * @param null       $data
-	 * @param array|null $debug_data
-	 *
-	 * @return array
-	 */
-	protected function buildResponse(bool $success, int $api_code,
-	                                 $msg_or_api_code, array $placeholders = null,
-	                                 $data = null, array $debug_data = null): array
-	{
-		return static::$fake_response;
-	}
-}
-
 /**
  * Class CustomResponseObjectTest
  *

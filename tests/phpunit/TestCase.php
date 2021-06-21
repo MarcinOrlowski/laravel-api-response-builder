@@ -77,6 +77,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	 * NOTE: not return typehint due to compatibility with TestBench's method signature.
 	 * @noinspection PhpUnusedParameterInspection
 	 * @noinspection PhpMissingParamTypeInspection
+	 *
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
 	 */
 	protected function getPackageProviders($app): array
 	{
