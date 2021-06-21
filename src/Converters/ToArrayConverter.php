@@ -33,6 +33,8 @@ final class ToArrayConverter implements ConverterContract
 	 * @return array
 	 *
 	 * @throws Ex\InvalidTypeException
+	 *
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
 	 */
     public function convert(object $obj, /** @scrutinizer ignore-unused */ array $config): array
     {

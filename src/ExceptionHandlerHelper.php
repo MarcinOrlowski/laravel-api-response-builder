@@ -48,7 +48,9 @@ class ExceptionHandlerHelper
 	 *
 	 * NOTE: no typehints due to compatibility with Laravel's method signature.
 	 * @noinspection PhpMissingParamTypeInspection
+	 *
 	 * @noinspection PhpUnusedParameterInspection
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed
 	 */
 	public static function render(/** @scrutinizer ignore-unused */ $request, \Throwable $ex): HttpResponse
 	{
@@ -193,6 +195,7 @@ class ExceptionHandlerHelper
 	 *
 	 * NOTE: not typehints due to compatibility with Laravel's method signature.
 	 * @noinspection PhpMissingParamTypeInspection
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed
 	 */
 	protected function unauthenticated(/** @scrutinizer ignore-unused */ $request,
 	                                                                     AuthException $exception): HttpResponse

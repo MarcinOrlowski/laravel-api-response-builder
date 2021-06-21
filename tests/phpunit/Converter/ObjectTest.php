@@ -81,7 +81,7 @@ class ObjectTest extends TestCase
     public function testConvertWithValidKeyType(): void
     {
         // only string and null is allowed for RB::KEY_KEY
-        $allowedKeys = [$this->getRandomString(), NULL];
+        $allowed_keys = [$this->getRandomString(), NULL];
 
         $fake = new FakeConverter();
 
@@ -90,8 +90,8 @@ class ObjectTest extends TestCase
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
         $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
 
-        collect($allowedKeys)->each(function ($allowedKey) use($data, $fake, $cfg) {
-            $cfg[ Collection::class ][ RB::KEY_KEY ] = $allowedKey;
+        collect($allowed_keys)->each(function ($allowed_key) use($data, $fake, $cfg) {
+            $cfg[ Collection::class ][ RB::KEY_KEY ] = $allowed_key;
 
             Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
@@ -101,11 +101,11 @@ class ObjectTest extends TestCase
             /** @var array $result */
             $this->assertCount(1, $result);
 
-            if(\is_string($allowedKey)) {
-                $this->assertArrayHasKey($allowedKey, $result);
-                $this->assertArrayHasKey($fake->key, $result[ $allowedKey ]);
-                $this->assertEquals($result[ $allowedKey ][ $fake->key ], $fake->val);
-            } else if(\is_null($allowedKey)) {
+	        if (\is_string($allowed_key)) {
+		        $this->assertArrayHasKey($allowed_key, $result);
+		        $this->assertArrayHasKey($fake->key, $result[ $allowed_key ]);
+		        $this->assertEquals($result[ $allowed_key ][ $fake->key ], $fake->val);
+	        } else if (\is_null($allowed_key)) {
                 $this->assertArrayHasKey($fake->key, $result);
                 $this->assertEquals($result[ $fake->key ], $fake->val);
             }

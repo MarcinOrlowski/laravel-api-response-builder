@@ -210,15 +210,15 @@ class DefaultConfigTest extends TestCase
 		$this->assertIsArray($result);
 		/** @var array $result */
 		$this->assertArrayHasKeys([
-			"current_page",
-			"data",
-			"first_page_url",
-			"from",
-			"next_page_url",
-			"path",
-			"per_page",
-			"prev_page_url",
-			"to",
+			'current_page',
+			'data',
+			'first_page_url',
+			'from',
+			'next_page_url',
+			'path',
+			'per_page',
+			'prev_page_url',
+			'to',
 		], $result);
 	}
 

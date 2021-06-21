@@ -135,27 +135,27 @@ class AutoConversionTest extends TestCase
 	 *
 	 * @return void
 	 *
-   	 * @dataProvider provider_TestSuccessWithPrimitive
+	 * @dataProvider successWithPrimitiveProvider
 	 */
-    public function testSuccessWithPrimitive($value): void
-    {
-        $this->response = RB::success($value);
-	    $j = $this->getResponseSuccessObject();
+	public function testSuccessWithPrimitive($value): void
+	{
+		$this->response = RB::success($value);
+		$j = $this->getResponseSuccessObject();
 
-	    // THEN returned response object should have it auto converted
-	    $data = $j->data;
-	    $this->assertNotNull($data);
+		// THEN returned response object should have it auto converted
+		$data = $j->data;
+		$this->assertNotNull($data);
 
-	    $converter = new Converter();
-	    $cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
-	    $this->assertIsArray($cfg);
-	    $this->assertNotEmpty($cfg);
-	    $key = $cfg[ RB::KEY_KEY ];
-	    $this->assertObjectHasAttribute($key, $data);
-	    $this->assertEquals($value, $data->{$key});
-    }
+		$converter = new Converter();
+		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
+		$this->assertIsArray($cfg);
+		$this->assertNotEmpty($cfg);
+		$key = $cfg[ RB::KEY_KEY ];
+		$this->assertObjectHasAttribute($key, $data);
+		$this->assertEquals($value, $data->{$key});
+	}
 
-	public function provider_TestSuccessWithPrimitive(): array
+	public function successWithPrimitiveProvider(): array
 	{
 		return [
 			// boolean

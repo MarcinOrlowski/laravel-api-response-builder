@@ -78,10 +78,10 @@ class BuilderTest extends TestCase
             ->withHttpHeaders($headers)
             ->build();
 
-        foreach($headers as $key=>$val) {
-            $this->assertTrue($this->response->headers->has($key));
-            $this->assertEquals($val, $this->response->headers->get($key));
-        }
+	    foreach ($headers as $key => $val) {
+		    $this->assertTrue($this->response->headers->has($key));
+		    $this->assertEquals($val, $this->response->headers->get($key));
+	    }
     }
 
     /**
