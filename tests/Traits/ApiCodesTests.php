@@ -273,9 +273,9 @@ trait ApiCodesTests
 						$this->assertIsNumeric($cfg_val);
 						break;
 
+					// phpcs:disable Squiz.ControlStructures.SwitchDeclaration.DefaultNoBreak
 					default:
 						$this->fail("Unknown key '{$cfg_key}' in '{$class_name}' data conversion config.");
-						break;
 				}
 			}
 		}
