@@ -15,10 +15,6 @@ name: "Coding Standards"
 
 on:
   push:
-    branches:
-    - "master"
-  pull_request:
-    branches:
     - "master"
     - "dev"
 
