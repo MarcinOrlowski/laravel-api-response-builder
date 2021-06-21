@@ -9,9 +9,10 @@
 
 ## CHANGE LOG ##
 
-* v9.3.0 (2021-06-21)
+* v9.3.0 (2021-06-22)
   * Added `data_always_object` config option that, when enabled enforces response `data` node
     to always be JSON object (for `NULL` it will return empty object `{}`).
+  * Updated project logo
   * Updated code style to match standard ruleset.
   * Improved code quality (fully pass on PHPStan's strict mode)
   * Fixed floats being rejected as direct primitive payload.
