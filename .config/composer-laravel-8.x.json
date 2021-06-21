@@ -1,11 +1,11 @@
 {
   "name": "marcin-orlowski/laravel-api-response-builder",
   "autoload": {
-    "classmap": [
-      "src/",
-      "tests/",
-      "tests/Traits/"
-    ]
+    "psr-4": {
+      "MarcinOrlowski\\ResponseBuilder\\": "src/",
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\Traits\\": "tests/Traits/",
+      "MarcinOrlowski\\ResponseBuilder\\Tests\\": "tests/phpunit"
+    }
   },
   "require": {
     "php": ">=7.3",
