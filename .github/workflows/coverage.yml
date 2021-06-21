@@ -29,12 +29,8 @@ jobs:
       fail-fast: false
       matrix:
         # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
-        laravel: ["6.x", "7.x", "8.x"]
-        php: ["7.2", "7.3", "7.4", "8.0"]
-        exclude:
-          # Laravel 8.x requires PHP 7.3+
-          - laravel: "8.x"
-            php: "7.2"
+        laravel: ["8.x"]
+        php: ["8.0"]
 
     runs-on: ubuntu-latest
 
@@ -58,4 +54,16 @@ jobs:
         with:
           bootstrap: "vendor/autoload.php"
           configuration: "tests/phpunit.xml"
+          php_extensions: "xdebug"
+          args: --coverage-clover /tmp/coverage.xml
+        env:
+          XDEBUG_MODE: coverage
 
+      # https://github.com/marketplace/actions/codecov
+      - name: "Uploading coverage to CodeCov.io..."
+        uses: codecov/codecov-action@v1
+        with:
+          files: /tmp/coverage.xml
+          flags: unittests
+          fail_ci_if_error: true
+          verbose: true
