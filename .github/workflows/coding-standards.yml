@@ -47,11 +47,6 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
-      - name: "Configuring PHP Sniffer..."
-        shell: bash
-        # setting PHP version to 8.0.0
-        run: vendor/bin/phpcs --config-set php_version 80000
-
       - name: "Checking Coding Standards..."
         shell: bash
         run: vendor/bin/phpcs
