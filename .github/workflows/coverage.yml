@@ -55,7 +55,7 @@ jobs:
           bootstrap: "vendor/autoload.php"
           configuration: "tests/phpunit.xml"
           php_extensions: "xdebug"
-          args: --coverage-clover /tmp/coverage.xml
+          args: --coverage-clover coverage.xml
         env:
           XDEBUG_MODE: coverage
 
@@ -63,6 +63,6 @@ jobs:
       - name: "Uploading coverage to CodeCov.io..."
         uses: codecov/codecov-action@v1
         with:
-          files: /tmp/coverage.xml
+          files: coverage.xml
           flags: unittests
           fail_ci_if_error: true
