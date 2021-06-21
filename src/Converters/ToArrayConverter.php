@@ -36,7 +36,7 @@ final class ToArrayConverter implements ConverterContract
 	 *
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
 	 */
-    public function convert(object $obj, /** @scrutinizer ignore-unused */ array $config): array
+    public function convert(object $obj, array $config): array
     {
         Validator::assertIsObject('obj', $obj);
 

@@ -38,7 +38,7 @@ class FakeConverter implements ConverterContract
 	 *
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
 	 */
-	public function convert($obj, /** @scrutinizer ignore-unused */ array $config): array
+	public function convert($obj, array $config): array
 	{
 		return [$this->key => $this->val];
 	}

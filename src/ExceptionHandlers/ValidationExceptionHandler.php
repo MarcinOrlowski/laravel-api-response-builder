@@ -35,7 +35,7 @@ final class ValidationExceptionHandler implements ExceptionHandlerContract
 	 *
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
 	 */
-	public function handle(array $user_config, /** @scrutinizer ignore-unused */ \Throwable $ex): ?array
+	public function handle(array $user_config, \Throwable $ex): ?array
 	{
 		/** @noinspection PhpUnhandledExceptionInspection */
 		return [
