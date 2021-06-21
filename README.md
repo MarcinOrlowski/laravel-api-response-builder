@@ -1,4 +1,4 @@
-![REST API Response Builder for Laravel](docs/img/logo.png)
+![REST API Response Builder for Laravel](img/logo.png)
 
 # REST API Response Builder for Laravel #
 
@@ -39,17 +39,18 @@ Development branch:
 ## Benefits ##
 
  `ResponseBuilder` is written for REST API developers by REST API developer and is based on long-lasting experience on both
- "sides" of API. It's lightweight, extensively tested, simple to use yet flexible and powerful, with support for on-the-fly
- data conversion, localization, automatic message building, chained APIs and (hopefully) exhaustive documentation.
- But that's not all! The JSON structure produced by `ResponseBuilder` is designed with **users of your API** in mind,
- to make dealing with your API a breeze. Simple JSON response, with well-defined and predictable structure, easy to
- consume without any hassle or trickery.
+ "sides" of API. It's lightweight, with **no** dependencies, extensively tested and simple to use yet flexible and powerful,
+ with support for [on-the-fly data conversion](docs/conversion.md), localization support, automatic message building, chained
+ APIs and (hopefully) exhaustive documentation. But that's not all! The JSON structure produced by `ResponseBuilder` is 
+ designed with **users of your API** in mind, so its structure is predictible and well-defined which makes dealing with
+ your API using `ResponseBuilder` library a breeze. Simple JSON response, with well-defined and predictable structure, 
+ easy to consume without any hassle or trickery. **Your** clients will love it. And will love **you** too :)
 
- You are even covered in a case of emergency, as provided Exception Handler helper, ensures your API keeps talking JSON (and
- not HTML) to its clients even in case of unexpected.
+ You are also covered in a case of emergency, as provided [ExceptionHandlerhelper](docs/exceptions.md), ensures your API keeps
+ talking JSON (and NOT lame HTML) to its clients even in case of unexpected.
 
- Did I mention, you would also get testing traits that automatically unit test your whole `ResponseBuilder` related code
- and configuration with just a few lines of code?
+ Did I mention, you would also get [testing traits](docs/testing.md) that automatically add PHPUnit based unit test to your
+ whole `ResponseBuilder` related code and configuration with just a few lines of code?
 
 ## Features ##
 
