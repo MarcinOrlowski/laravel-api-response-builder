@@ -41,6 +41,7 @@ jobs:
       - name: "Setup proper composer.json"
         run: cp -f ".config/composer-laravel-${{ matrix.laravel }}.json" composer.json
 
+      # https://github.com/marketplace/actions/composer-php-actions
       - name: "Installing dependencies..."
         uses: php-actions/composer@v6
         with:

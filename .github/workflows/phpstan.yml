@@ -37,6 +37,7 @@ jobs:
       - name: "Checkout repository..."
         uses: actions/checkout@v2
 
+      # https://github.com/marketplace/actions/composer-php-actions
       - name: "Installing dependencies..."
         uses: php-actions/composer@v6
         with:
