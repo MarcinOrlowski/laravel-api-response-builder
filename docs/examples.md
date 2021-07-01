@@ -4,9 +4,9 @@
 
 [« Documentation table of contents](README.md)
 
- * [Usage examples](#examples)
-   * [Success](#success)
-   * [Errors](#errors)
+* [Usage examples](#examples)
+  * [Success](#success)
+  * [Errors](#errors)
 
 ---
 
@@ -141,6 +141,7 @@ return RB::error(<CODE>);
 ```php
 return RB::error(ApiCode::SOMETHING_WENT_WRONG);
 ```
+
  Assuming `ApiCode::SOMETHING_WENT_WRONG` constants' value is `250`, you will get the following JSON response:
 
 ```json

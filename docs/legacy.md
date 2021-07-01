@@ -4,13 +4,13 @@
 
 [« Documentation table of contents](README.md)
 
- * [Legacy support](legacy.md)
-   * [Legacy versions](#legacy-versions)
-   * [Developer's notes](#developers-notes)
+* [Legacy support](legacy.md)
+  * [Legacy versions](#legacy-versions)
+  * [Developer's notes](#developers-notes)
 
  Legacy support should is most likely here and if anything is not working, fixing it is pretty trivial with use of recent
  code base, as long as your PHP is v7.2 or better.
- 
+
 ---
 
 ## Legacy versions ##
