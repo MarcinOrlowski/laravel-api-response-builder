@@ -1,20 +1,20 @@
 ![REST API Response Builder for Laravel](../artwork/laravel-api-response-builder-logo.svg)
 
 # Configuration #
-w
+
 [« Documentation table of contents](README.md)
 
- * [Configuration file](#configuration-file)
-   * [Configuration options](#configuration-options)
-     * [converter](#converter)
-       * [classes](#classes)
-       * [primitives](#primitives)
-     * [debug](#debug)
-     * [encoding_options](#encoding_options)
-     * [exception_handler](#exception_handler)
-     * [map](#map)
-     * [min_code](#min_code)
-     * [max_code](#max_code)
+* [Configuration file](#configuration-file)
+  * [Configuration options](#configuration-options)
+    * [converter](#converter)
+      * [classes](#classes)
+      * [primitives](#primitives)
+    * [debug](#debug)
+    * [encoding_options](#encoding_options)
+    * [exception_handler](#exception_handler)
+    * [map](#map)
+    * [min_code](#min_code)
+    * [max_code](#max_code)
 
 ---
 
@@ -29,16 +29,16 @@ w
  Available configuration options and its current default values listed in alphabetical order. Please note, that in majority
  of use cases it should be perfectly sufficient to just use defaults and only tune the config when needed.
 
- * [converter](#converter)
-   * [classes](#classes)
-   * [primitives](#primitives)
- * [data_always_object](#data_always_object)
- * [debug](#debug)
- * [encoding_options](#encoding_options)
- * [exception_handler](#exception_handler)
- * [map](#map)
- * [min_code](#min_code)
- * [max_code](#max_code)
+* [converter](#converter)
+  * [classes](#classes)
+  * [primitives](#primitives)
+* [data_always_object](#data_always_object)
+* [debug](#debug)
+* [encoding_options](#encoding_options)
+* [exception_handler](#exception_handler)
+* [map](#map)
+* [min_code](#min_code)
+* [max_code](#max_code)
 
 ### converter ###
 
@@ -66,19 +66,19 @@ w
 
  Meaning of parameters:
 
- * `handler` (mandatory) specifies a full name of the class implementing `ConverterContract`. Object of that class will be
-   instantiated and conversion method invoked with object to convert passed as method argument.
- * `key` (mandatory), value can be a string or (in some special cases, `NULL` is also allowed). 
+* `handler` (mandatory) specifies a full name of the class implementing `ConverterContract`. Object of that class will be
+  instantiated and conversion method invoked with object to convert passed as method argument.
+* `key` (mandatory), value can be a string or (in some special cases, `NULL` is also allowed).
 
 > ![IMPORTANT](img/warning.png) Object conversion works **recursively**! That makes some implications, when you i.e.
-> convert object (say `A`) which when converted still returns other objects  (say 'B`s). In such case once `ResponseBuilder`
+> convert object (say `A`) which when converted still returns other objects  (say `B`s). In such case once `ResponseBuilder`
 > will also try to convert `B` so final JSON representation contain plain JSON structures. So when converting an object of a
 > given class that is going to be returned directly as response payload (i.e. `RB::success($collection);`), the string given
-> as `key` will be used in returned JSON as converted data key. The only case where you can have key set to `NULL` is when 
-> you are sure you are dealing i.e. collection of objects, so the collection object will be `key`ed in the response (as per
+> as `key` will be used in returned JSON as converted data key. The only case where you can have key set to `NULL` is when
+> you are sure you are dealing i.e. collection of objects, so the collection object will be `key`-ed in the response (as per
 > its class' configuration), but each element of that collection should be returned as plain JSON array.
 > In other words, you can only have `NULL` key value if your objects are part of other structures. You cannot have it
-> on main objects, because `ResponseBuilder` would not be able to construct valid JSON Object without the key.
+> in main objects, because `ResponseBuilder` would not be able to construct valid JSON Object without the key.
 
 ```json
    ...
@@ -90,9 +90,9 @@ w
    ...
 ```
 
- * `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you got one
-   class extending another and you want to support both of them with separate configuration, then you **must** ensure child
-   class has higher priority than it's parent class.
+* `pri` (optional) is an integer being entry's priority (default `0`). Entries with higher values will be matched first. If you
+  got one class extending another and you want to support both of them with separate configuration, then you **must** ensure
+  child class has higher priority than it's parent class.
 
  All configuration entries are assigned priority `0` which can be changed using `pri` key (integer). This value is used to
  sort the entries to ensure that matching order is preserved. Entries with higher priority are matched first etc. This is
@@ -149,21 +149,25 @@ $data = [
  Starting from v9, `ResponseBuilder` suppors passing primitives as direct payload, removing the need of wrapping it in separate
  container (like array or object). The following primitives are supported:
 
- * `array`
- * `boolean`
- * `double`
- * `integer`
- * `string`
+* `array`
+* `boolean`
+* `double`
+* `integer`
+* `string`
 
  For each of these types there's configuration entry in `primitives` node of `converter` config. Each entry defined `key`
  which is an arbitrary string, used for given primitive. The default value for all supported primitives is `value`.
  For example, pre v9 would require
 
+```php
     RB::success(['value' => 12.25]);
+```
 
 while with v9+ if can be simplified:
 
+```php
     RB::success(12.25);
+```
 
 and both would yield the same result:
 
@@ -320,8 +324,8 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 
 ```php
 'map' => [
-	ApiCode::SOMETHING => 'api.something',
-	...
+    ApiCode::SOMETHING => 'api.something',
+    ...
 ],
 ```
 
@@ -361,4 +365,3 @@ JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT
 ```php
 'max_code' => 1024,
 ```
-

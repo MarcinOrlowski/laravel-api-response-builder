@@ -1,19 +1,20 @@
 ![REST API Response Builder for Laravel](../artwork/laravel-api-response-builder-logo.svg)
 
-## Fundamentals ##
+# Fundamentals #
 
 [« Documentation table of contents](README.md)
 
- * [Structure of JSON response](#response-structure)
- * [Return Codes and Code Ranges](#return-codes)
-   * [Code ranges](#code-ranges)
-   * [ApiCodes class](#apicodes-class)
- * [Messages and Localization](#messages-and-localization)
- * [Handling Exceptions API way](#handling-exceptions-api-way)
- * [Overriding built-in messages](#overriding-built-in-messages)
- 
+* [Structure of JSON response](#response-structure)
+* [Return Codes and Code Ranges](#return-codes)
+  * [Code ranges](#code-ranges)
+  * [ApiCodes class](#apicodes-class)
+* [Messages and Localization](#messages-and-localization)
+* [Handling Exceptions API way](#handling-exceptions-api-way)
+* [Overriding code to message conversion](#overriding-code-to-message-conversion)
+* [Overriding built-in messages](#overriding-built-in-messages)
+
 ---
- 
+
 # Response structure #
 
  Predictability, simplicity and no special-case is the key of the `ResponseBuilder` and all responses created by
@@ -33,14 +34,14 @@
 
  where
 
-  * `success` (**boolean**) indicates API method failure or success,
-  * `code` (**int**) is your own return code (usually used when returning error message or other failure),
-  * `locale` (**string**) represents locale used for returned error message (obtained automatically via
-    `\App::getLocale()`). This helps processing the response if you support multiple languages,
-  * `message` (**string**) human readable message that is ready to display and explains human readable explanation
-    of the `code` value,
-  * `data` (**object**|**null**) if you return any additional data with your reply, it would end here.
-    If no extra data is needed, that key still be present in the response with `null` value.
+* `success` (**boolean**) indicates API method failure or success,
+* `code` (**int**) is your own return code (usually used when returning error message or other failure),
+* `locale` (**string**) represents locale used for returned error message (obtained automatically via
+  `\App::getLocale()`). This helps processing the response if you support multiple languages,
+* `message` (**string**) human readable message that is ready to display and explains human readable explanation
+  of the `code` value,
+* `data` (**object**|**null**) if you return any additional data with your reply, it would end here.
+  If no extra data is needed, that key still be present in the response with `null` value.
 
  **NOTE:** If you need to return other/different elements in the above structure (not in your `data`),
  see [Manipulating Response Object](response.md) chapter for detailed information about how
@@ -66,7 +67,7 @@
 
  > ![IMPORTANT](img/warning.png) First `20` codes in your range (from `0` to `19` inclusive) are reserved for `ResponseBuilder`
  > internals and must not be used directly nor assigned to your codes.
-
+ >
  > ![NOTE](img/notes.png) Code ranges cannot be turned off, but if you do not need it or you just have one API or need
  > no chaining, then just set `max_code` in your configuration file to some very high value if needed or defaults do not fit.
 
@@ -108,7 +109,7 @@ class ApiCode {
  With Laravel this can be achieved with custom Exception Handler and `ResponseBuilder` comes with ready-to-use
  Handler as well. See [Exception Handling with Response Builder](exceptions.md) for easy setup information.
 
-### Overriding code to message conversion ###
+# Overriding code to message conversion #
 
  `ResponseBuilder` automatically provides human readable error messages for each API code used but if for any
  reason you want to take control on this, you can now provide own implementation of `RB::getMessageForApiCode()`.

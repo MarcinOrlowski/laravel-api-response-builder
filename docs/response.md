@@ -4,9 +4,9 @@
 
 [« Documentation table of contents](README.md)
 
- * [Response object](response.md)
-   * [Manipulating Response Object](#manipulating-response-object)
-   * [Custom response structure](#custom-response-structure)
+* [Response object](response.md)
+  * [Manipulating Response Object](#manipulating-response-object)
+  * [Custom response structure](#custom-response-structure)
 
 ## Manipulating Response Object ##
 

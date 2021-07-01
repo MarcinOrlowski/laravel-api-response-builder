@@ -14,20 +14,20 @@ Master branch:
 [![Static Analysis](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpstan.yml/badge.svg?branch=master)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpstan.yml)
 [![Coding Standards](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/coding-standards.yml/badge.svg?branch=master)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/coding-standards.yml)
 
-Development branch: 
+Development branch:
 [![Unit Tests](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpunit.yml/badge.svg?branch=dev)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpunit.yml)
 [![Static Analysis](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpstan.yml/badge.svg?branch=dev)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpstan.yml)
 [![Coding Standards](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/coding-standards.yml/badge.svg?branch=dev)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/coding-standards.yml)
 
 ## Table of contents ##
 
- * [Introduction](#introduction)
- * [Why should I use it?](#benefits)
- * [Usage examples](docs/examples.md#usage-examples)
- * [Features](#features)
- * [Extensive documentation](docs/README.md)
- * [License](#license)
- * [Changelog](docs/CHANGES.md)
+* [Introduction](#introduction)
+* [Why should I use it?](#benefits)
+* [Usage examples](docs/examples.md#usage-examples)
+* [Features](#features)
+* [Extensive documentation](docs/README.md)
+* [License](#license)
+* [Changelog](docs/CHANGES.md)
 
 ----
 
@@ -55,18 +55,17 @@ Development branch:
 
 ## Features ##
 
- * [Easy to use](docs/examples.md#usage-examples),
- * [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
- * [On-the-fly data object conversion](docs/conversion.md),
- * [API chaining support](docs/docs.md#code-ranges),
- * [Localization support](docs/docs.md#messages-and-localization),
- * Provides traits to help [unit test your API code](docs/testing.md),
- * Comes with [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
- * [No additional dependencies](composer.json).
+* [Easy to use](docs/examples.md#usage-examples),
+* [Stable and production ready](https://travis-ci.org/MarcinOrlowski/laravel-api-response-builder),
+* [On-the-fly data object conversion](docs/conversion.md),
+* [API chaining support](docs/docs.md#code-ranges),
+* [Localization support](docs/docs.md#messages-and-localization),
+* Provides traits to help [unit test your API code](docs/testing.md),
+* Comes with [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
+* [No additional dependencies](composer.json).
 
 
 ## License ##
 
- * Written and copyrighted &copy;2016-2021 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
- * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
-
+* Written and copyrighted &copy;2016-2021 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
+* ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

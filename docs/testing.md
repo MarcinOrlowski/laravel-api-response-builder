@@ -4,21 +4,21 @@
 
 [« Documentation table of contents](README.md)
 
- * [Testing](testing.md)
-   * [Unit testing your ApiCodes](#unit-testing-your-apicodes)
-   * [Testing other code using ResponseBuilder](#testing-other-code-using-responsebuilder)
-   
+* [Testing](testing.md)
+  * [Unit testing your ApiCodes](#unit-testing-your-apicodes)
+  * [Testing other code using ResponseBuilder](#testing-other-code-using-responsebuilder)
+  
 ## Unit testing your ApiCodes ##
 
  `ResponseBuilder` ships with traits that you can use to ensure your ApiCodes class and its values
  as well as your app's `ResponseBuilder`'s config file is in good health. The testing trait
  tests will:
 
-  * check if codes range is set correctly,
-  * check if all codes defined in your `ApiCodes` class contain mapping entry in config,
-  * check if all codes are in correct and allowed range,
-  * check if all defined Api code constants' values are unique,
-  * check if all codes are mapped to existing locale strings.
+* check if codes range is set correctly,
+* check if all codes defined in your `ApiCodes` class contain mapping entry in config,
+* check if all codes are in correct and allowed range,
+* check if all defined Api code constants' values are unique,
+* check if all codes are mapped to existing locale strings.
 
  Let's assume you got `ApiCodes` class that holds all your constants. Its file is `app/ApiCodes.php`
  and its namespace is `App`.
