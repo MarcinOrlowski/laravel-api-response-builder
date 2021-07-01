@@ -64,7 +64,6 @@ Development branch:
 * Comes with [exception handler helper](docs/exceptions.md) to ensure your API stays consumable even in case of unexpected,
 * [No additional dependencies](composer.json).
 
-
 ## License ##
 
 * Written and copyrighted &copy;2016-2021 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
