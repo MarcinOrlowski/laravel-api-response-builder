@@ -180,7 +180,7 @@
 
 * v6.1.0 (2019-09-28)
    * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md))
-   * Created new library logo (see [artwork/](../artwork/) folder).
+   * Created new library logo (see `artwork/` folder).
    * Added more unit tests to improve coverage.
    * Updated documentation.
    * Worked around Laravel's config merger not working properly with multi-dimensional config arrays.
