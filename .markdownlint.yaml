@@ -58,7 +58,8 @@ MD011: true
 # MD012/no-multiple-blanks - Multiple consecutive blank lines
 MD012:
   # Consecutive blank lines
-  maximum: 1
+  #maximum: 1
+  maximum: 2  # MOR
 
 # MD013/line-length - Line length
 MD013:
@@ -160,7 +161,7 @@ MD032: true
 # MD033/no-inline-html - Inline HTML
 MD033:
   # Allowed elements
-  allowed_elements: []
+  allowed_elements: ['mail']
 
 # MD034/no-bare-urls - Bare URL used
 MD034: true
@@ -189,7 +190,7 @@ MD040: true
 
 # MD041/first-line-heading/first-line-h1 - First line in a file should be a top-level heading
 MD041: false # MOR
-#MD041: 
+#MD041:
 #  # Heading level
 #  level: 1
 #  # RegExp for matching title in front matter
