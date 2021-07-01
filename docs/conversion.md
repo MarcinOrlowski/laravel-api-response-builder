@@ -4,10 +4,10 @@
 
 [« Documentation table of contents](README.md)
 
- * [On-the-fly data conversion](#on-the-fly-data-conversion)
-   * [Examples](#examples)
-   * [Configuration](#configuration)
-   
+* [On-the-fly data conversion](#on-the-fly-data-conversion)
+  * [Examples](#examples)
+  * [Configuration](#configuration)
+
 ---
 
 # On-the-fly data conversion #
@@ -18,12 +18,12 @@
 
  The following classes are supported out of the box:
 
- * `\Illuminate\Database\Eloquent\Model`
- * `\Illuminate\Support\Collection`
- * `\Illuminate\Database\Eloquent\Collection`
- * `\Illuminate\Http\Resources\Json\JsonResource`
- * `\Illuminate\Pagination\LengthAwarePaginator`
- * `\Illuminate\Pagination\Paginator`
+* `\Illuminate\Database\Eloquent\Model`
+* `\Illuminate\Support\Collection`
+* `\Illuminate\Database\Eloquent\Collection`
+* `\Illuminate\Http\Resources\Json\JsonResource`
+* `\Illuminate\Pagination\LengthAwarePaginator`
+* `\Illuminate\Pagination\Paginator`
 
 ## Examples ##
 

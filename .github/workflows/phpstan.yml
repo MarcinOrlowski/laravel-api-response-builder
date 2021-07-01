@@ -23,7 +23,7 @@ on:
     - "dev"
 
 jobs:
-  build:
+  check:
     strategy:
       # do not stop the workflow if single run failed
       fail-fast: false
