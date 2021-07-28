@@ -28,7 +28,9 @@ namespace App;
 
 class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
-   protected function buildResponse(bool $success, int $api_code, $msg_or_api_code, array $placeholders = null, $data = null, array $debug_data = null): array
+   protected function buildResponse(bool $success, int $api_code,
+                                   $msg_or_api_code, array $placeholders = null,
+                                   $data = null, array $debug_data = null): array
    {
      // tell ResponseBuilder to do all the heavy lifting first
      $response = parent::buildResponse($success, $api_code, $msg_or_api_code, $placeholders, $data, $debug_data);
