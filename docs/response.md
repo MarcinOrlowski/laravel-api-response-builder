@@ -28,12 +28,12 @@ namespace App;
 
 class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
-   protected static function buildResponse(bool $success, int $api_code, 
-                                           $message_or_api_code, array $lang_args = null,
-                                           $data = null, array $debug_data = null): array
+   protected function buildResponse(bool $success, int $api_code,
+                                   $msg_or_api_code, array $placeholders = null,
+                                   $data = null, array $debug_data = null): array
    {
-      // tell ResponseBuilder to do all the heavy lifting first
-      $response = parent::buildResponse($success, $api_code, $message_or_api_code, $lang_args, $data, $debug_data);
+     // tell ResponseBuilder to do all the heavy lifting first
+     $response = parent::buildResponse($success, $api_code, $msg_or_api_code, $placeholders, $data, $debug_data);
 
       // then do all the tweaks you need
       $date = new DateTime();

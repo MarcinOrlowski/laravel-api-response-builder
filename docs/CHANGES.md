@@ -9,6 +9,9 @@
 
 ## CHANGE LOG ##
 
+* v9.3.1 (2021-10-23)
+  * Default `composer.json` also includes development packages now.
+
 * v9.3.0 (2021-06-22)
   * Added `data_always_object` config option that, when enabled enforces response `data` node
     to always be JSON object (for `NULL` it will return empty object `{}`).
