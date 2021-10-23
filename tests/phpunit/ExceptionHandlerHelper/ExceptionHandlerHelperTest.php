@@ -496,9 +496,7 @@ class ExceptionHandlerHelperTest extends TestCase
         \App::setLocale($default_lang);
 
         // We must NOT call langGet() wrapper as we want whole translation array
-	    /** @var array $msgs */
-	    $msgs = \Lang::get('response-builder::builder');
-        return $msgs;
+	    return \Lang::get('response-builder::builder');
     }
 
     /**
