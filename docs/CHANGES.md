@@ -9,7 +9,7 @@
 
 ## CHANGE LOG ##
 
-* @dev
+* v9.3.1 (2021-10-23)
   * Default `composer.json` also includes development packages now.
 
 * v9.3.0 (2021-06-22)
