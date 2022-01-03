@@ -93,22 +93,20 @@ class Converter
 
 		// check for exact class name match...
 		$cls = \get_class($data);
-		if (\is_string($cls)) {
-			if (\array_key_exists($cls, $this->classes)) {
-				$result = $this->classes[ $cls ];
-				$debug_result = 'exact config match';
-			} else {
-				// no exact match, then lets try with `instanceof`
-				foreach (\array_keys($this->classes) as $class_name) {
-					/** @var string $class_name */
-					if ($data instanceof $class_name) {
-						$result = $this->classes[ $class_name ];
-						$debug_result = "subclass of {$class_name}";
-						break;
-					}
-				}
-			}
-		}
+        if (\array_key_exists($cls, $this->classes)) {
+            $result = $this->classes[ $cls ];
+            $debug_result = 'exact config match';
+        } else {
+            // no exact match, then lets try with `instanceof`
+            foreach (\array_keys($this->classes) as $class_name) {
+                /** @var string $class_name */
+                if ($data instanceof $class_name) {
+                    $result = $this->classes[ $class_name ];
+                    $debug_result = "subclass of {$class_name}";
+                    break;
+                }
+            }
+        }
 
 		if ($result === null) {
 			throw new Ex\ConfigurationNotFoundException(
