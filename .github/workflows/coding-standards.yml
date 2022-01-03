@@ -27,7 +27,7 @@ jobs:
       matrix:
         # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
         laravel: ["8.x"]
-        php: ["8.0"]
+        php: ["8.0", "8.1"]
 
     runs-on: ubuntu-latest
 

@@ -30,7 +30,7 @@ jobs:
       matrix:
         # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
         laravel: ["6.x", "7.x", "8.x"]
-        php: ["7.2", "7.3", "7.4", "8.0"]
+        php: ["7.2", "7.3", "7.4", "8.0", "8.1"]
         exclude:
           # Laravel 8.x requires PHP 7.3+
           - laravel: "8.x"
