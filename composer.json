@@ -42,13 +42,13 @@
     }
   },
   "require": {
-    "php": "^7.2 | ^7.3 | ^8.0",
-    "laravel/framework": ">= 6.0"
+    "php": "^8.0",
+    "laravel/framework": ">= 9.0"
   },
   "require-dev": {
-    "marcin-orlowski/phpunit-extra-asserts": "^1.2",
-    "orchestra/testbench": "^4.0",
-    "phpunit/phpunit": "^8.0",
-    "phpunit/php-code-coverage": "^7.0"
+    "marcin-orlowski/phpunit-extra-asserts": "^2.0",
+    "orchestra/testbench": "^7.0",
+    "phpunit/phpunit": "^9.0",
+    "phpunit/php-code-coverage": "^9.2"
   }
 }
