@@ -14,7 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\JsonResponse as HttpResponse;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**

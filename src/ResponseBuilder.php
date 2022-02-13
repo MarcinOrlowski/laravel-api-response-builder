@@ -16,7 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\JsonResponse as HttpResponse;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 

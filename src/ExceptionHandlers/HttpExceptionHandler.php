@@ -17,7 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\JsonResponse as HttpResponse;
 
 /**
  * Handles HttpException
