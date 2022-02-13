@@ -32,8 +32,6 @@ class BuilderTest extends TestCase
 {
     /**
      * Check plain success() invocation
-     *
-     * @return void
      */
     public function testSuccess(): void
     {
@@ -41,7 +39,7 @@ class BuilderTest extends TestCase
 
         $builder = RB::asSuccess($expected_api_code);
         $this->assertInstanceOf(RB::class, $builder);
-	    $this->response = $builder->build();
+        $this->response = $builder->build();
 
         $j = $this->getResponseSuccessObject();
 
@@ -74,14 +72,14 @@ class BuilderTest extends TestCase
 
         $builder = RB::asSuccess();
         $this->assertInstanceOf(RB::class, $builder);
-	    $this->response = $builder
+        $this->response = $builder
             ->withHttpHeaders($headers)
             ->build();
 
-	    foreach ($headers as $key => $val) {
-		    $this->assertTrue($this->response->headers->has($key));
-		    $this->assertEquals($val, $this->response->headers->get($key));
-	    }
+        foreach ($headers as $key => $val) {
+            $this->assertTrue($this->response->headers->has($key));
+            $this->assertEquals($val, $this->response->headers->get($key));
+        }
     }
 
     /**
@@ -93,4 +91,5 @@ class BuilderTest extends TestCase
         $this->expectException(\OutOfBoundsException::class);
         RB::asError(BaseApiCodes::OK());
     }
-}
+
+} // end of class

@@ -34,8 +34,6 @@ interface ExceptionHandlerContract
 	 *
 	 * @param array      $user_config Config array (can be empty) with any keys required by given handle.
 	 * @param \Throwable $ex          The throwable to handle.
-	 *
-	 * @return array|null
 	 */
 	public function handle(array $user_config, \Throwable $ex): ?array;
 }

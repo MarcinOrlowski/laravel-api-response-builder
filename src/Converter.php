@@ -56,8 +56,6 @@ class Converter
 	 *
 	 * @param boolean|string|double|array|int $data Primitive to get config for.
 	 *
-	 * @return array
-	 *
 	 * @throws Ex\ConfigurationNotFoundException
 	 */
 	protected function getPrimitiveMappingConfigOrThrow($data): array
@@ -81,8 +79,6 @@ class Converter
 	 * Returns "converter/map" mapping configured for given $data object class or throws exception if not found.
 	 *
 	 * @param object $data Object to get config for.
-	 *
-	 * @return array
 	 *
 	 * @throws Ex\ConfigurationNotFoundException
 	 */
@@ -124,8 +120,6 @@ class Converter
 	 * Main entry for data conversion
 	 *
 	 * @param mixed|null $data
-	 *
-	 * @return array|null
 	 *
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\ArrayWithMixedKeysException
@@ -177,8 +171,6 @@ class Converter
 	 *
 	 * @param array $data array to recursively convert known elements of
 	 *
-	 * @return array
-	 *
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\ArrayWithMixedKeysException
 	 */
@@ -201,9 +193,8 @@ class Converter
 	}
 
 	/**
-	 * Reads and validates "converter/map" config mapping
-	 *
-	 * @return array Classes mapping as specified in configuration or empty array if configuration found
+     * Reads and validates "converter/map" config mapping. Returns Classes mapping as specified in
+     * configuration or empty array if configuration found.
 	 *
 	 * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
 	 * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
@@ -244,9 +235,8 @@ class Converter
 	}
 
 	/**
-	 * Reads and validates "converter/primitives" config mapping
-	 *
-	 * @return array Primitives mapping config as specified in configuration or empty array if configuration found
+     * Reads and validates "converter/primitives" config mapping. Returns primitives mapping config
+     * as specified in configuration or empty array if configuration found.
 	 *
 	 * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
 	 * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
@@ -282,4 +272,5 @@ class Converter
 
 		return $primitives;
 	}
-}
+
+} // end of class

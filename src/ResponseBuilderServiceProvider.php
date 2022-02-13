@@ -110,4 +110,4 @@ class ResponseBuilderServiceProvider extends ServiceProvider
         $this->app['config']->set($key, $merged_config);
     }
 
-}
+} // end of class

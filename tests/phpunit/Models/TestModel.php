@@ -35,9 +35,6 @@ class TestModel
 		$this->val = $val;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getVal(): ?string
 	{
 		return $this->val;
@@ -45,8 +42,6 @@ class TestModel
 
 	/**
 	 * Converts model to array
-	 *
-	 * @return array
 	 */
 	public function toArray(): array
 	{

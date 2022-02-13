@@ -34,8 +34,6 @@ class AutoConversionTest extends TestCase
 {
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion
-	 *
-	 * @return void
 	 */
     public function testClassAutoConversionSingleElement(): void
     {
@@ -67,8 +65,6 @@ class AutoConversionTest extends TestCase
 	/**
 	 * Tests if buildResponse() would properly handle auto conversion when mapped
 	 * class is part of bigger data set.
-	 *
-	 * @return void
 	 */
     public function testClassAutoConversionAsPartOfDataset(): void
     {
@@ -133,8 +129,6 @@ class AutoConversionTest extends TestCase
 	 *
 	 * @param mixed $value Primitive type to be converted and returned in payload.
 	 *
-	 * @return void
-	 *
 	 * @dataProvider successWithPrimitiveProvider
 	 */
 	public function testSuccessWithPrimitive($value): void
@@ -169,4 +163,5 @@ class AutoConversionTest extends TestCase
 		];
     }
 
-}
+} // end of class
+

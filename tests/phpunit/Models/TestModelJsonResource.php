@@ -38,9 +38,6 @@ class TestModelJsonResource extends JsonResource
         $this->val = $val;
     }
 
-    /**
-     * @return string|null
-     */
     public function getVal(): ?string
     {
         return $this->val;
@@ -50,8 +47,6 @@ class TestModelJsonResource extends JsonResource
      * Converts model to array.
      *
      * @param mixed $request
-     *
-     * @return array
      *
      * @noinspection PhpUnusedParameterInspection
      *

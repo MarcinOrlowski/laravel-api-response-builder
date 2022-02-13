@@ -38,9 +38,6 @@ class TestModelArrayable implements Arrayable
 		$this->val = $val;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getVal(): ?string
 	{
 		return $this->val;
@@ -50,8 +47,6 @@ class TestModelArrayable implements Arrayable
 	 * Converts model to array.
 	 *
 	 * @param Request $request
-	 *
-	 * @return array
 	 *
 	 * @noinspection PhpUnusedParameterInspection
 	 *

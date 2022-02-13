@@ -42,4 +42,5 @@ class FakeConverter implements ConverterContract
 	{
 		return [$this->key => $this->val];
 	}
-}
+
+} // end of class

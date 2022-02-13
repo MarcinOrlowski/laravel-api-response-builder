@@ -30,8 +30,6 @@ class FactoryTest extends TestCase
 {
 	/**
 	 * Checks if asSuccess() properly returns object of extending class
-	 *
-	 * @return void
 	 */
 	public function testAsSuccess(): void
 	{
@@ -41,12 +39,11 @@ class FactoryTest extends TestCase
 
 	/**
 	 * Checks if asError(); properly returns object of extending class
-	 *
-	 * @return void
 	 */
 	public function testAsError(): void
 	{
 		$dummy_rb = DummyResponseBuilder::asError(BaseApiCodes::NO_ERROR_MESSAGE());
 		$this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
 	}
-}
+
+} // end of class

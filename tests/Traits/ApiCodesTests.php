@@ -34,10 +34,7 @@ trait ApiCodesTests
 	use TestingHelpers;
 
 	/**
-	 * Returns array of constant names that should be ignored during other
-	 * tests.
-	 *
-	 * @return array
+	 * Returns array of constant names that should be ignored during other tests.
 	 */
 	protected function getConstantsToIgnore(): array
 	{
@@ -48,11 +45,8 @@ trait ApiCodesTests
 	}
 
 	/**
-	 * Returns array of constant names that are now turned into
-	 * regular methods, so these methods will be now called
-	 * by other tests.
-	 *
-	 * @return array
+     * Returns array of constant names that are now turned into regular methods, so
+     * these methods will be now called by other tests.
 	 */
 	protected function getConstantsThatAreNowMethods(): array
 	{
@@ -68,8 +62,6 @@ trait ApiCodesTests
 
 	/**
 	 * Checks if Api codes range is set right
-	 *
-	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -87,8 +79,6 @@ trait ApiCodesTests
 	/**
 	 * Checks if defined code range is large enough to accommodate built-in codes.
 	 *
-	 * @return void
-	 *
 	 * @throws \ReflectionException
 	 */
 	public function testCodeRangeIsLargeEnough(): void
@@ -102,8 +92,6 @@ trait ApiCodesTests
 
 	/**
 	 * Checks if all Api codes defined in ApiCodes class contain mapping entry.
-	 *
-	 * @return void
 	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -136,8 +124,6 @@ trait ApiCodesTests
 	/**
 	 * Checks if all Api codes are in correct and allowed range.
 	 *
-	 * @return void
-	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public function testIfAllCodesAreInRange(): void
@@ -169,8 +155,6 @@ trait ApiCodesTests
 	/**
 	 * Checks if all defined Api code constants' values are unique.
 	 *
-	 * @return void
-	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException
 	 */
@@ -186,8 +170,6 @@ trait ApiCodesTests
 
 	/**
 	 * Checks if all codes are mapped to existing locale strings.
-	 *
-	 * @return void
 	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -209,8 +191,6 @@ trait ApiCodesTests
 	/**
 	 * Tests if "classes" config entries are properly set and use at least
 	 * mandatory configuration elements.
-	 *
-	 * @return void
 	 */
 	public function testConfigClassesMappingEntriesMandatoryKeys(): void
 	{
@@ -236,8 +216,6 @@ trait ApiCodesTests
 	/**
 	 * Tests if "classes" config entries properly set, which means we look for any
 	 * unknown/unsupported configuration key.
-	 *
-	 * @return void
 	 */
 	public function testConfigClassesMappingEntriesUnwantedConfigKeys(): void
 	{
@@ -292,4 +270,4 @@ trait ApiCodesTests
 		}
 	}
 
-} // end of ApiCodesTests trait
+} // end of trait

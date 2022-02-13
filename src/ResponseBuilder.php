@@ -82,8 +82,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param integer|null $json_opts     See http://php.net/manual/en/function.json-encode.php for supported
 	 *                                    options or pass @null to use value from your config (or defaults).
 	 *
-	 * @return HttpResponse
-	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\IncompatibleTypeException
@@ -117,8 +115,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param integer|null      $json_opts     See http://php.net/manual/en/function.json-encode.php for supported
 	 *                                         options or pass @null to use value from your config (or defaults).
 	 *
-	 * @return HttpResponse
-	 *
 	 * @throws Ex\ArrayWithMixedKeysException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
@@ -142,8 +138,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	/**
 	 * @param int|null $api_code
 	 *
-	 * @return \MarcinOrlowski\ResponseBuilder\ResponseBuilder
-	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\NotIntegerException
@@ -156,8 +150,6 @@ class ResponseBuilder extends ResponseBuilderBase
 
 	/**
 	 * @param int $api_code
-	 *
-	 * @return \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\NotIntegerException
@@ -182,8 +174,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	/**
 	 * @param int|null $http_code
 	 *
-	 * @return $this
-	 *
 	 * @throws Ex\InvalidTypeException
 	 */
 	public function withHttpCode(int $http_code = null): self
@@ -198,8 +188,6 @@ class ResponseBuilder extends ResponseBuilderBase
 
 	/**
 	 * @param mixed $data
-	 *
-	 * @return $this
 	 *
 	 * @throws Ex\InvalidTypeException
 	 */
@@ -222,8 +210,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	/**
 	 * @param int|null $json_opts
 	 *
-	 * @return $this
-	 *
 	 * @throws Ex\InvalidTypeException
 	 */
 	public function withJsonOptions(int $json_opts = null): self
@@ -237,8 +223,6 @@ class ResponseBuilder extends ResponseBuilderBase
 
 	/**
 	 * @param array|null $debug_data
-	 *
-	 * @return $this
 	 *
 	 * @throws Ex\InvalidTypeException
 	 */
@@ -254,8 +238,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	/**
 	 * @param string|null $msg
 	 *
-	 * @return $this
-	 *
 	 * @throws Ex\InvalidTypeException
 	 */
 	public function withMessage(string $msg = null): self
@@ -269,8 +251,6 @@ class ResponseBuilder extends ResponseBuilderBase
 
 	/**
 	 * @param array|null $placeholders
-	 *
-	 * @return $this
 	 */
 	public function withPlaceholders(array $placeholders = null): self
 	{
@@ -281,8 +261,6 @@ class ResponseBuilder extends ResponseBuilderBase
 
 	/**
 	 * @param array|null $http_headers
-	 *
-	 * @return $this
 	 */
 	public function withHttpHeaders(array $http_headers = null): self
 	{
@@ -295,8 +273,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * Builds and returns final HttpResponse. It's safe to call build() as many times as needed, as no
 	 * internal state is changed. It's also safe to alter any parameter set previously and call build()
 	 * again to get new response object that includes new changes.
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 * @throws Ex\ArrayWithMixedKeysException
 	 * @throws Ex\ConfigurationNotFoundException
@@ -347,8 +323,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *                                           options or pass @null to use value from your config (or defaults).
 	 * @param array|null        $debug_data      Optional debug data array to be added to returned JSON.
 	 *
-	 * @return HttpResponse
-	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
 	 * @throws Ex\ArrayWithMixedKeysException
@@ -384,7 +358,7 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * Creates standardised API response array. This is final method called in the whole pipeline before we
 	 * return final JSON back to client. If you want to manipulate your response, this is the place to do that.
 	 * If you set APP_DEBUG to true, 'code_hex' field will be additionally added to reported JSON for easier
-	 * manual debugging.
+	 * manual debugging. Returns response ready to be encoded as json and sent back to client.
 	 *
 	 * @param boolean           $success         @true if response reports successful operation, @false otherwise.
 	 * @param integer           $api_code        Your API code to be returned with the response object.
@@ -393,8 +367,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	 *                                           substitution or @null if none.
 	 * @param object|array|null $data            API response data if any
 	 * @param array|null        $debug_data      optional debug data array to be added to returned JSON.
-	 *
-	 * @return array response ready to be encoded as json and sent back to client
 	 *
 	 * @throws Ex\ArrayWithMixedKeysException
 	 * @throws Ex\ConfigurationNotFoundException
@@ -453,8 +425,6 @@ class ResponseBuilder extends ResponseBuilderBase
 	 * @param integer    $api_code     Your API code to be returned with the response object.
 	 * @param array|null $placeholders Placeholders passed to Lang::get() for message placeholders
 	 *                                 substitution or @null if none.
-	 *
-	 * @return string
 	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException

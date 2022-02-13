@@ -27,21 +27,20 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
  */
 class CustomResponseObjectTest extends TestCase
 {
-	/**
-	 * Check if overring response object works.
-	 *
-	 * @return void
-	 */
-	public function testCustomResponse(): void
-	{
-		/** @noinspection DisallowWritingIntoStaticPropertiesInspection */
-		MyResponseBuilder::$fake_response = [];
-		for ($i = 0; $i < 10; $i++) {
-			/** @noinspection AmbiguousMethodsCallsInArrayMappingInspection */
-			MyResponseBuilder::$fake_response[ $this->getRandomString() ] = $this->getRandomString();
-		}
+    /**
+     * Check if overring response object works.
+     */
+    public function testCustomResponse(): void
+    {
+        /** @noinspection DisallowWritingIntoStaticPropertiesInspection */
+        MyResponseBuilder::$fake_response = [];
+        for ($i = 0; $i < 10; $i++) {
+            /** @noinspection AmbiguousMethodsCallsInArrayMappingInspection */
+            MyResponseBuilder::$fake_response[ $this->getRandomString() ] = $this->getRandomString();
+        }
 
-		$response = MyResponseBuilder::success();
-		$this->assertArrayEquals(MyResponseBuilder::$fake_response, json_decode($this->getResponseContent($response), true));
-	}
-}
+        $response = MyResponseBuilder::success();
+        $this->assertArrayEquals(MyResponseBuilder::$fake_response, json_decode($this->getResponseContent($response), true));
+    }
+
+} // end of class

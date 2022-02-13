@@ -31,8 +31,6 @@ final class Util
 	 * @param array $merging  Array with items to be merged into $original, overriding (primitives) or merging
 	 *                        (arrays) entries in destination array.
 	 *
-	 * @return array
-	 *
 	 * @throws Ex\IncompatibleTypeException
 	 */
 	public static function mergeConfig(array $original, array $merging): array
@@ -81,8 +79,6 @@ final class Util
 	 * Checks if given array uses custom (non numeric) keys.
 	 *
 	 * @param array $data
-	 *
-	 * @return bool
 	 */
 	public static function isArrayWithNonNumericKeys(array $data): bool
 	{

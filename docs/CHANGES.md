@@ -9,6 +9,9 @@
 
 ## CHANGE LOG ##
 
+* dev
+  * Removed redundant PHPDocs entries for type-hinted elements.
+
 * v9.3.2 (2022-02-13)
   * Laravel 9.x is now included in test matrices.
   * PHP 8.1 is now included in test matrices.

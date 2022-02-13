@@ -26,8 +26,6 @@ class TranslationTest extends TestCase
 {
     /**
      * Checks if translations are in par with base language
-     *
-     * @return void
      */
     public function testTranslationFiles(): void
     {
@@ -37,32 +35,32 @@ class TranslationTest extends TestCase
         // Load translation array for default language and then compare all the
         // other translations with it.
         \App::setLocale($default_lang);
-	    // We must NOT call langGet() wrapper as we want whole translation array
-	    /** @var array $base_translations */
+        // We must NOT call langGet() wrapper as we want whole translation array
+        /** @var array $base_translations */
         $base_translations = \Lang::get('response-builder::builder');
 
         // get list of all other directories in library's lang folder.
-	    /** @var array $entries */
-	    $entries = glob(__DIR__ . '/../../../src/lang/*', GLOB_ONLYDIR);
-	    $supported_languages =
-		    array_filter(
-			    array_filter(
-				    array_map(static function($entry) {
-					    return basename($entry);
-				    }, $entries)
-			    ),
-			    static function($item) use ($default_lang) {
-				    return $item !== $default_lang;
-			    }
-		    );
+        /** @var array $entries */
+        $entries = glob(__DIR__ . '/../../../src/lang/*', GLOB_ONLYDIR);
+        $supported_languages =
+            array_filter(
+                array_filter(
+                    array_map(static function($entry) {
+                        return basename($entry);
+                    }, $entries)
+                ),
+                static function($item) use ($default_lang) {
+                    return $item !== $default_lang;
+                }
+            );
 
         $this->assertGreaterThan(0, \count($supported_languages));
 
         foreach ($supported_languages as $lang) {
             // get the translation array for given language
             \App::setLocale($lang);
-	        // We must NOT call langGet() wrapper as we want whole translation array
-	        /** @var array $translation */
+            // We must NOT call langGet() wrapper as we want whole translation array
+            /** @var array $translation */
             $translation = \Lang::get('response-builder::builder');
 
             // ensure it has all the keys base translation do
@@ -78,5 +76,5 @@ class TranslationTest extends TestCase
             $this->assertEmpty($translation, $msg);
         }
     }
-}
 
+} // end of class

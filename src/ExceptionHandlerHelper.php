@@ -37,8 +37,6 @@ class ExceptionHandlerHelper
 	 * @param \Illuminate\Http\Request $request Request object
 	 * @param \Throwable               $ex      Throwable to handle
 	 *
-	 * @return HttpResponse
-	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\NotIntegerException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -144,8 +142,6 @@ class ExceptionHandlerHelper
 	 * @param int        $http_code
 	 * @param array      $placeholders
 	 *
-	 * @return string
-	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\InvalidTypeException
@@ -180,8 +176,6 @@ class ExceptionHandlerHelper
 	 *
 	 * @param \Illuminate\Http\Request                 $request
 	 * @param \Illuminate\Auth\AuthenticationException $exception
-	 *
-	 * @return HttpResponse
 	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\NotIntegerException
@@ -219,8 +213,6 @@ class ExceptionHandlerHelper
 	 * @param integer     $api_code
 	 * @param int|null    $http_code
 	 * @param string|null $error_message
-	 *
-	 * @return HttpResponse
 	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\ConfigurationNotFoundException
@@ -280,8 +272,6 @@ class ExceptionHandlerHelper
 	/**
 	 * Returns ExceptionHandlerHelper configration array with user configuration merged into built-in defaults.
 	 *
-	 * @return array
-	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -336,8 +326,6 @@ class ExceptionHandlerHelper
 	 *
 	 * @param \Throwable $ex Exception to handle
 	 *
-	 * @return array|null
-	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -368,4 +356,4 @@ class ExceptionHandlerHelper
 		return $result;
 	}
 
-}
+} // end of class

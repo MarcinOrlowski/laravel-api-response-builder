@@ -36,7 +36,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
  */
 class ArrayTest extends TestCase
 {
-
 	/**
 	 * Tests how we convert array of objects
 	 */
@@ -359,4 +358,5 @@ class ArrayTest extends TestCase
 		$this->assertArrayHasKey(TestModel::FIELD_NAME, $item);
 		$this->assertEquals($obj->getVal(), $item[TestModel::FIELD_NAME]);
 	}
-}
+
+} // end of class

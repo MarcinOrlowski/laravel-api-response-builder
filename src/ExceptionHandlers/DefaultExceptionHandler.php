@@ -28,7 +28,6 @@ final class DefaultExceptionHandler implements ExceptionHandlerContract
 	 * @param array      $user_config
 	 * @param \Throwable $ex
 	 *
-	 * @return array|null
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\MissingConfigurationKeyException
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\NotIntegerException

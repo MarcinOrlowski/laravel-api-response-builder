@@ -33,8 +33,6 @@ class SuccessTest extends TestCase
 {
 	/**
 	 * Check plain success() invocation
-	 *
-	 * @return void
 	 */
 	public function testSuccess(): void
 	{
@@ -72,4 +70,4 @@ class SuccessTest extends TestCase
 		$this->assertEquals($this->langGet($msg_key), $j->message);
 	}
 
-}
+} // end of class

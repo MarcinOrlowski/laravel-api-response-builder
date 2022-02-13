@@ -30,8 +30,6 @@ final class ArrayableConverter implements ConverterContract
 	 * @param array  $config                                 Converter config array to be used for this object (based on exact class
 	 *                                                       name match or inheritance).
 	 *
-	 * @return array
-	 *
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
 	 */
 	public function convert(object $obj, array $config): array

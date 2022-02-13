@@ -37,8 +37,6 @@ class DefaultConfigTest extends TestCase
 {
 	/**
 	 * Tests converter behavior on default config on object implementing Laravel's Arrayable interface.
-	 *
-	 * @return void
 	 */
 	public function testArrayable(): void
 	{
@@ -67,8 +65,6 @@ class DefaultConfigTest extends TestCase
 
 	/**
 	 * Tests converter behavior on default config on object implementing JsonSerializable interface.
-	 *
-	 * @return void
 	 */
 	public function testJsonSerializable(): void
 	{
@@ -105,8 +101,6 @@ class DefaultConfigTest extends TestCase
 
 	/**
 	 * Tests converter behavior on default config on object extending Laravel's JsonResource class.
-	 *
-	 * @return void
 	 */
 	public function testJsonResource(): void
 	{
@@ -135,8 +129,6 @@ class DefaultConfigTest extends TestCase
 
 	/**
 	 * Tests converter behavior on default config on Laravel's Support\Collection.
-	 *
-	 * @return void
 	 */
 	public function testSupportCollection(): void
 	{
@@ -149,8 +141,6 @@ class DefaultConfigTest extends TestCase
 
 	/**
 	 * Tests converter behavior on default config on Laravel Eloquent's Collection.
-	 *
-	 * @return void
 	 */
 	public function testEloquentCollection(): void
 	{
@@ -228,8 +218,6 @@ class DefaultConfigTest extends TestCase
 	 * Helper method to perform some common tests of built-in support for Laravel's collections.
 	 *
 	 * @param object|array $collection
-	 *
-	 * @return array
 	 */
 	protected function doCollectionTests($collection): array
 	{
@@ -253,4 +241,5 @@ class DefaultConfigTest extends TestCase
 
 		return $result;
 	}
-}
+
+} // end of class

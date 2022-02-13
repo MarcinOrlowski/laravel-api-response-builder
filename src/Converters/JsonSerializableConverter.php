@@ -31,8 +31,6 @@ final class JsonSerializableConverter implements ConverterContract
 	 * @param object $obj               Object to be converted
 	 * @param array  $config            Converter config array to be used for this object (based on exact class
 	 *                                  name match or inheritance).
-	 *
-	 * @return array
 	 */
 	public function convert(object $obj, array $config): array
 	{

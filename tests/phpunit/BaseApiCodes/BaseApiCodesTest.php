@@ -31,8 +31,6 @@ class BaseApiCodesTest extends TestCase
 {
     /**
      * Tests getMinCode() with invalid config
-     *
-     * @return void
      */
     public function testGetMinCodeMissingConfigKey(): void
     {
@@ -46,8 +44,6 @@ class BaseApiCodesTest extends TestCase
 
     /**
      * Tests getMaxCode() with invalid config
-     *
-     * @return void
      */
     public function testGetMaxCodeMissingConfigKey(): void
     {
@@ -61,8 +57,6 @@ class BaseApiCodesTest extends TestCase
 
     /**
      * Tests getMap() with missing config
-     *
-     * @return void
      */
     public function testGetMapMissingConfigKey(): void
     {
@@ -76,8 +70,6 @@ class BaseApiCodesTest extends TestCase
 
     /**
      * Tests getMap() with wrong config
-     *
-     * @return void
      */
     public function testGetMapWrongConfig(): void
     {
@@ -88,4 +80,5 @@ class BaseApiCodesTest extends TestCase
 	    /** @noinspection PhpUnhandledExceptionInspection */
         BaseApiCodes::getMap();
     }
-}
+
+} // end of class

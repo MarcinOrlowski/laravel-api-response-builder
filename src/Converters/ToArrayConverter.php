@@ -30,8 +30,6 @@ final class ToArrayConverter implements ConverterContract
 	 * @param array  $config Converter config array to be used for this object (based on exact class
 	 *                       name match or inheritance).
 	 *
-	 * @return array
-	 *
 	 * @throws Ex\InvalidTypeException
 	 *
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed

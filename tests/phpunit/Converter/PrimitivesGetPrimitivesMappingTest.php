@@ -100,4 +100,4 @@ class PrimitivesGetPrimitivesMappingTest extends TestCase
 		$converter->convert(false);
 	}
 
-}
+} // end of class

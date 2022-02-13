@@ -30,8 +30,6 @@ class ErrorTest extends TestCase
 {
 	/**
 	 * Check success()
-	 *
-	 * @return void
 	 */
     public function testError(): void
     {
@@ -49,4 +47,4 @@ class ErrorTest extends TestCase
         $this->assertNull($j->data);
     }
 
-}
+} // end of class

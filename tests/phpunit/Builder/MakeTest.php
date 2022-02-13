@@ -30,8 +30,6 @@ class MakeTest extends TestCase
 {
     /**
      * @noinspection PhpDocMissingThrowsInspection
-     *
-     * @return void
      */
     public function testWrongMessage(): void
     {
@@ -54,8 +52,6 @@ class MakeTest extends TestCase
     }
 
     /**
-     * @return void
-     *
      * @noinspection PhpDocMissingThrowsInspection
      */
     public function testCustomMessageAndCodeOutOfRange(): void
@@ -68,8 +64,6 @@ class MakeTest extends TestCase
 
     /**
      * Validates make() handling invalid type of encoding_options
-     *
-     * @return void
      *
      * @noinspection PhpDocMissingThrowsInspection
      */
@@ -84,8 +78,6 @@ class MakeTest extends TestCase
 
     /**
      * Tests fallback to default encoding_options
-     *
-     * @return void
      *
      * @noinspection PhpDocMissingThrowsInspection
      */
@@ -117,8 +109,6 @@ class MakeTest extends TestCase
 
     /**
      * Checks encoding_options influences result JSON data
-     *
-     * @return void
      *
      * @noinspection PhpDocMissingThrowsInspection
      */
@@ -175,4 +165,4 @@ class MakeTest extends TestCase
 	    $this->assertEmpty((array)$j->{RB::KEY_DATA});
     }
 
-}
+} // end of class

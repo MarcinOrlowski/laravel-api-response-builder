@@ -26,8 +26,6 @@ trait ApiCodesHelpers
 	/**
 	 * Returns lowest allowed error code for this module
 	 *
-	 * @return integer
-	 *
 	 * @throws Ex\MissingConfigurationKeyException Throws exception if no min_code set up
 	 */
 	public static function getMinCode(): int
@@ -45,8 +43,6 @@ trait ApiCodesHelpers
 	/**
 	 * Returns highest allowed error code for this module
 	 *
-	 * @return integer
-	 *
 	 * @throws Ex\MissingConfigurationKeyException Throws exception if no max_code set up
 	 */
 	public static function getMaxCode(): int
@@ -63,8 +59,6 @@ trait ApiCodesHelpers
 
 	/**
 	 * Returns array of error code constants defined in this class. Used mainly for debugging/tests
-	 *
-	 * @return array
 	 */
 	public static function getApiCodeConstants(): array
 	{
@@ -74,8 +68,6 @@ trait ApiCodesHelpers
 
 	/**
 	 * Returns complete error code to locale string mapping array
-	 *
-	 * @return array
 	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\InvalidTypeException
@@ -98,8 +90,6 @@ trait ApiCodesHelpers
 	 * Returns locale mappings key for given api code or @null if there's no mapping
 	 *
 	 * @param integer $api_code Api code to look for mapped message for.
-	 *
-	 * @return string|null
 	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\NotIntegerException
@@ -125,8 +115,6 @@ trait ApiCodesHelpers
 	 *
 	 * @param int $code API code to validate
 	 *
-	 * @return bool
-	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 */
 	public static function isCodeValid(int $code): bool
@@ -138,8 +126,6 @@ trait ApiCodesHelpers
 	 * Returns final API code for internal code, remapped to configured code range
 	 *
 	 * @param int $internal_code
-	 *
-	 * @return int
 	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -154,4 +140,4 @@ trait ApiCodesHelpers
 		return ($internal_code === 0) ? 0 : $internal_code + static::getMinCode();
 	}
 
-}
+} // end of class

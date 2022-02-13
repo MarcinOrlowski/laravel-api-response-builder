@@ -31,8 +31,6 @@ class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 	 * @param null       $data
 	 * @param array|null $debug_data
 	 *
-	 * @return array
-	 *
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed
 	 */
 	protected function buildResponse(bool $success, int $api_code,

@@ -127,4 +127,4 @@ class PrimitivesTest extends TestCase
 		$this->assertEquals($value, $converted[ $key ]);
 	}
 
-}
+} // end of class

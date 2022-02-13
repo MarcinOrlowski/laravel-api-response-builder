@@ -92,8 +92,6 @@ class BaseApiCodes
 	/**
 	 * Returns base code mapping array
 	 *
-	 * @return array
-	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\NotIntegerException
@@ -118,9 +116,7 @@ class BaseApiCodes
     }
 
 	/**
-	 * Returns API code for internal code OK
-	 *
-	 * @return int valid API code in current range
+	 * Returns API code for internal code OK. Returns valid API code in current range.
 	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -135,9 +131,7 @@ class BaseApiCodes
     }
 
 	/**
-	 * Returns API code for internal code NO_ERROR_MESSAGE
-	 *
-	 * @return int valid API code in current range
+     * Returns API code for internal code NO_ERROR_MESSAGE.
 	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -152,9 +146,7 @@ class BaseApiCodes
     }
 
 	/**
-	 * Returns API code for internal code EX_HTTP_NOT_FOUND
-	 *
-	 * @return int valid API code in current range
+	 * Returns API code for internal code EX_HTTP_NOT_FOUND.
 	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -171,8 +163,6 @@ class BaseApiCodes
 	/**
 	 * Returns API code for internal code EX_HTTP_EXCEPTION
 	 *
-	 * @return int valid API code in current range
-	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\NotIntegerException
@@ -187,8 +177,6 @@ class BaseApiCodes
 
 	/**
 	 * Returns API code for internal code EX_UNCAUGHT_EXCEPTION
-	 *
-	 * @return int valid API code in current range
 	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -205,8 +193,6 @@ class BaseApiCodes
 	/**
 	 * Returns API code for internal code EX_AUTHENTICATION_EXCEPTION
 	 *
-	 * @return int valid API code in current range
-	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\NotIntegerException
@@ -221,8 +207,6 @@ class BaseApiCodes
 
 	/**
 	 * Returns API code for internal code EX_VALIDATION_EXCEPTION
-	 *
-	 * @return int valid API code in current range
 	 *
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -239,8 +223,6 @@ class BaseApiCodes
 	/**
 	 * Returns API code for internal code EX_HTTP_SERVICE_UNAVAILABLE
 	 *
-	 * @return int valid API code in current range
-	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\NotIntegerException
@@ -253,4 +235,4 @@ class BaseApiCodes
         return static::getCodeForInternalOffset(static::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET);
     }
 
-}
+} // end of class

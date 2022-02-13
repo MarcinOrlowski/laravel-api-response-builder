@@ -38,8 +38,6 @@ class ExceptionHandlerHelperTest extends TestCase
 {
 	/**
 	 * Tests behaviour of ExceptionHandler::unauthenticated()
-	 *
-	 * @return void
 	 */
     public function testUnauthenticated(): void
     {
@@ -59,8 +57,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
 	/**
 	 * Tests if optional debug info is properly added to JSON response
-	 *
-	 * @return void
 	 */
     public function testErrorMethodWithDebugTrace(): void
     {
@@ -85,8 +81,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
 	/**
 	 * Check exception handler behavior when provided with various exception types.
-	 *
-	 * @return void
 	 */
     public function testRenderMethodWithHttpException(): void
     {
@@ -117,8 +111,6 @@ class ExceptionHandlerHelperTest extends TestCase
 	 * @param bool   $validate_response_message_text Set to @true, to validate returned response message with
 	 *                                               current localization.
 	 * @param bool   $expect_data                    Set to @true if response is expected to have non null `data` node.
-	 *
-	 * @return void
 	 *
 	 * @noinspection PhpTooManyParametersInspection
 	 */
@@ -189,8 +181,6 @@ class ExceptionHandlerHelperTest extends TestCase
 	/**
 	 * Tests if ExceptionHandler's error() method will correctly drop invalid HTTP
 	 * found in configuration, and try to obtain code from the exception.
-	 *
-	 * @return void
 	 */
     public function testHttpCodeFallbackToExceptionStatusCode(): void
     {
@@ -210,8 +200,6 @@ class ExceptionHandlerHelperTest extends TestCase
 	 * Checks if error() will fall back to provided HTTP code, given the fact exception
 	 * handler configuration uses invalid `http_code` but also Exception's http status
 	 * code is set to invalid value. In such case we should fallback to DEFAULT_HTTP_CODE_ERROR.
-	 *
-	 * @return void
 	 */
     public function testHttpCodeFallbackToProvidedFallbackValue(): void
     {
@@ -344,7 +332,6 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertEquals($api_code, $json->code);
     }
 
-
     /**
      * Checks if ExceptionHandler would ignore exception's message as well as built-in fallback message
      * and use the one configured with `msg_key` instead.
@@ -448,8 +435,6 @@ class ExceptionHandlerHelperTest extends TestCase
 	 * @param int           $expected_http_code Expected HTTP code to be returned in response.
 	 * @param HttpException $ex                 Exception to use for testing.
 	 * @param int           $config_http_code   HTTP code to set as part for exception handler configuration
-	 *
-	 * @return void
 	 */
     protected function doTestErrorMethodFallbackMechanism(int $expected_http_code,
                                                           HttpException $ex, int $config_http_code): void
@@ -486,8 +471,6 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /**
      * Returns content of localization file for 'default' language.
-     *
-     * @return array
      */
     protected function getTranslationForDefaultLang(): array
     {
@@ -573,4 +556,4 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertEmpty($diff, $msg);
     }
 
-}
+} // end of class

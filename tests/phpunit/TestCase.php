@@ -59,8 +59,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	/**
 	 * Returns ApiCodes class name. We need that done this way, so you can easily plug-and-play
 	 * out testing trait into your project.
-	 *
-	 * @return string
 	 */
 	public function getApiCodesClassName(): string
 	{
@@ -71,8 +69,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	 * [Orchestra] Load service providers we need during the tests
 	 *
 	 * @param \Illuminate\Foundation\Application $app
-	 *
-	 * @return array
 	 *
 	 * NOTE: not return typehint due to compatibility with TestBench's method signature.
 	 * @noinspection PhpUnusedParameterInspection
@@ -86,4 +82,5 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 			\MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
 		];
 	}
-}
+
+} // end of class

@@ -29,9 +29,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 trait TestingHelpers
 {
-    /**
-     * @return string
-     */
     abstract public function getApiCodesClassName(): string;
 
     /** @var int */
@@ -64,8 +61,6 @@ trait TestingHelpers
 
 	/**
 	 * Sets up testing environment
-	 *
-	 * @return void
 	 *
 	 * @throws \ReflectionException
 	 */
@@ -104,8 +99,6 @@ trait TestingHelpers
 	 *
 	 * @param \Symfony\Component\HttpFoundation\Response $response
 	 *
-	 * @return string
-	 *
 	 * @throws \InvalidArgumentException If response object is not of HttpResponse class.
 	 * @throws \RuntimeException if there's no conent to be returned from the response.
 	 */
@@ -127,8 +120,6 @@ trait TestingHelpers
 	 *
 	 * @param string     $key     String key as passed to Lang::get()
 	 * @param array|null $replace Optional replacement array as passed to Lang::get()
-	 *
-	 * @return string
 	 */
 	public function langGet($key, array $replace = null): string
 	{
@@ -143,16 +134,15 @@ trait TestingHelpers
 	// -----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Checks if response object was returned with expected success HTTP
-	 * code (200-299) indicating API method executed successfully
+     * Checks if response object was returned with expected success HTTP code (200-299) indicating
+     * API method executed successfully. Returns validated response object data (as object,
+     * not an array).
 	 *
 	 * NOTE: content of `data` node is NOT checked here!
 	 *
 	 * @param int|null    $expected_api_code_offset expected api code offset or @null for default value
 	 * @param int|null    $expected_http_code       HTTP return code to check against or @null for default
 	 * @param string|null $expected_message         Expected value of 'message' or @null for default message
-	 *
-	 * @return \StdClass validated response object data (as object, not array)
 	 *
 	 * @throws Ex\IncompatibleTypeException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -189,13 +179,12 @@ trait TestingHelpers
 
 
 	/**
-	 * Retrieves and validates response as expected from errorXXX() methods
+     * Retrieves and validates response as expected from errorXXX() methods. Returns response
+     * object built from JSON.
 	 *
 	 * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default value
 	 * @param int         $expected_http_code       Expected HTTP code
 	 * @param string|null $message                  Expected return message or @null if we automatically mapped message fits
-	 *
-	 * @return \StdClass response object built from JSON
 	 *
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\IncompatibleTypeException
@@ -269,8 +258,6 @@ trait TestingHelpers
      * Validates if given $json_object contains all expected elements
      *
      * @param \StdClass $json_object JSON Object holding Api response to validate
-     *
-     * @return void
      */
     public function assertValidResponse(\stdClass $json_object): void
     {
@@ -293,8 +280,6 @@ trait TestingHelpers
      *
      * @param int       $expected_code ApiCode::XXX code expected
      * @param \StdClass $response_json response json object
-     *
-     * @return void
      */
     public function assertResponseStatusCode(int $expected_code, \stdClass $response_json): void
     {
@@ -322,8 +307,6 @@ trait TestingHelpers
 	 * @param array|null $headers                    HTTP headers to include
 	 * @param int|null   $encoding_options           see http://php.net/manual/en/function.json-encode.php
 	 * @param array|null $debug_data                 optional data to be included in response JSON
-	 *
-	 * @return HttpResponse
 	 *
 	 * @throws \ReflectionException
 	 * @throws Ex\MissingConfigurationKeyException
@@ -462,8 +445,6 @@ trait TestingHelpers
 	 * Generates random string, with optional prefix
 	 *
 	 * @param string|null $prefix
-	 *
-	 * @return string
 	 */
     protected function getRandomString(string $prefix = null): string
     {
@@ -477,7 +458,7 @@ trait TestingHelpers
     // -----------------------------------------------------------------------------------------------------------
 
     /**
-     * UTF8 aware version of ord()
+     * UTF8 aware version of ord(). Returns code of the character at given string offset.
      *
      * @param string $string UTF8 string to work on
      * @param int    $offset start offset. Note, offset will be updated to properly skip multi-byte chars!
@@ -487,10 +468,8 @@ trait TestingHelpers
      * while ($offset >= 0) {
      *    printf("%d: %d\n", $offset, ord8($text, $offset));
      * }
-     *
-     * @return int code of the character
      */
-    protected function ord8(string $string, int &$offset)
+    protected function ord8(string $string, int &$offset): int
     {
         $code = \ord($string[ $offset ]);
         $bytes_number = 1;
@@ -523,8 +502,6 @@ trait TestingHelpers
      * UTF8 escape of given string
      *
      * @param string $string UTF8 string to escape
-     *
-     * @return string
      */
     protected function escape8(string $string): string
     {
@@ -539,4 +516,4 @@ trait TestingHelpers
         return $escaped;
     }
 
-}
+} // end of class
