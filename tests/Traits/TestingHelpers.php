@@ -12,7 +12,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2021 Marcin Orlowski
+ * @copyright 2016-2022 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -88,7 +88,8 @@ trait TestingHelpers
         $map = $this->callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
         $idx = \random_int(1, \count($map));
         $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
-	    $this->random_api_code_message = $this->langGet($this->random_api_code_message_key, ['api_code' => $this->random_api_code,]);
+	    $this->random_api_code_message = $this->langGet($this->random_api_code_message_key,
+            ['api_code' => $this->random_api_code,]);
 
 	    $this->error_message_map = [
             $this->random_api_code => $this->random_api_code_message_key,
@@ -334,10 +335,6 @@ trait TestingHelpers
                                       array $headers = null, int $encoding_options = null,
                                       array $debug_data = null): HttpResponse
     {
-        if (!\is_bool($success)) {
-            $this->fail(sprintf('"success" must be of type boolean ("%s" found)', \gettype($success)));
-        }
-
         $http_code = null;
         $lang_args = null;
 

@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2021 Marcin Orlowski
+ * @copyright 2016-2022 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -348,24 +348,22 @@ class ExceptionHandlerHelper
 		$result = null;
 
 		$cls = \get_class($ex);
-		if (\is_string($cls)) {
-			$cfg = self::getExceptionHandlerConfig();
+        $cfg = self::getExceptionHandlerConfig();
 
-			// check for exact class name match...
-			if (\array_key_exists($cls, $cfg)) {
-				$result = $cfg[ $cls ];
-			} else {
-				// no exact match, then lets try with `instanceof`
-				// Config entries are already sorted by priority.
-				foreach (\array_keys($cfg) as $class_name) {
-					/** @var string $class_name */
-					if ($ex instanceof $class_name) {
-						$result = $cfg[ $class_name ];
-						break;
-					}
-				}
-			}
-		}
+        // check for exact class name match...
+        if (\array_key_exists($cls, $cfg)) {
+            $result = $cfg[ $cls ];
+        } else {
+            // no exact match, then lets try with `instanceof`
+            // Config entries are already sorted by priority.
+            foreach (\array_keys($cfg) as $class_name) {
+                /** @var string $class_name */
+                if ($ex instanceof $class_name) {
+                    $result = $cfg[ $class_name ];
+                    break;
+                }
+            }
+        }
 
 		return $result;
 	}

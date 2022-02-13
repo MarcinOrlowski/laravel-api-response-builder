@@ -13,7 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2021 Marcin Orlowski
+ * @copyright 2016-2022 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
