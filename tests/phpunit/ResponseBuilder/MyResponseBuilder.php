@@ -39,4 +39,5 @@ class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 	{
 		return static::$fake_response;
 	}
-}
+
+} // end of class

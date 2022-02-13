@@ -60,4 +60,5 @@ class TestModelArrayable implements Arrayable
 			self::FIELD_NAME => $this->val,
 		];
 	}
-}
+
+} // end of class

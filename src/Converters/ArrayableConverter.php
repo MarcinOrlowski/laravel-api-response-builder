@@ -38,4 +38,5 @@ final class ArrayableConverter implements ConverterContract
 
 		return $obj->toArray();
 	}
-}
+
+} // end of class

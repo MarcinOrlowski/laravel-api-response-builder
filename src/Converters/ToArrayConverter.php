@@ -40,4 +40,5 @@ final class ToArrayConverter implements ConverterContract
 
         return $obj->toArray(null);
     }
-}
+
+} // end of class

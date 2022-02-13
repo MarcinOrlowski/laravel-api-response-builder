@@ -36,4 +36,5 @@ interface ExceptionHandlerContract
 	 * @param \Throwable $ex          The throwable to handle.
 	 */
 	public function handle(array $user_config, \Throwable $ex): ?array;
-}
+
+} // end of class

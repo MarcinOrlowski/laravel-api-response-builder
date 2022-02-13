@@ -63,4 +63,5 @@ class TestModelJsonSerializable implements \JsonSerializable
 	{
 		return $this->val;
 	}
-}
+
+} // end of class

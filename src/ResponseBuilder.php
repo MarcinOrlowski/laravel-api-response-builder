@@ -458,4 +458,5 @@ class ResponseBuilder extends ResponseBuilderBase
 
 		return $msg;
 	}
-}
+
+} // end of class

@@ -43,4 +43,5 @@ final class JsonSerializableConverter implements ConverterContract
 
 		return [$config[ RB::KEY_KEY ] => \json_decode($encoded, true)];
 	}
-}
+
+} // end of class
