@@ -9,12 +9,10 @@
 
 ## CHANGE LOG ##
 
-* v9.3.3 (2022-02-13)
+* v9.3.2 (2022-02-13)
   * Laravel 9.x is now included in test matrices.
-
-* v9.3.2 (2022-01-03)
-  * Simplified some logic by removing redundant checks.
   * PHP 8.1 is now included in test matrices.
+  * Simplified some logic by removing redundant checks.
 
 * v9.3.1 (2021-10-23)
   * Default `composer.json` also includes development packages now.
