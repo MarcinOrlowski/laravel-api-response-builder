@@ -10,9 +10,9 @@ From release 9.5 onward, `ResponseBuilder` major version number is in sync with 
 version number to show target framework version. If you use `Laravel 9` - you'd need
 `ResponseBuilder v9.*`. Version  `ResponseBuilder v10.*` would be then your dependency in (future)
 `Laraver v10` based projects, and so on. Also, due to limited time and funds I am having to maintain
-this project,  only the most recent Laravel version will be officially supported. The same applies 
-to PHP version  requirement. Starting from v9.5, `ResponseBuilder` requires exactly the same PHP 
-version `Laravel` do, even if technically still should work perfect on older versions too. That 
+this project, only the most recent Laravel version will be officially supported. The same applies to
+PHP version requirement. Starting from v9.5, `ResponseBuilder` requires exactly the same PHP
+version `Laravel` do, even if technically still should work perfect on older versions too. That
 should pose no real problem for you as `ResponseBuilder` has solid and stable code base and **you**
 should be able to easily backport future new features to older versions rather easily.
 
@@ -21,9 +21,12 @@ should be able to easily backport future new features to older versions rather e
 * dev (v9.5.0)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
   * Removed redundant PHPDocs entries for type-hinted elements.
-  * Fixed exception handler helper not properly handling iterating over mismatched configuration items.
+  * Fixed exception handler helper not properly handling iterating over mismatched configuration
+    items.
   * Fixed missing dependency entry in `composer.json` (development tools).
-  * Reworked tests to use strict object representation of API response stricture to reduce overall LoC.
+  * Reworked tests to use strict object representation of API response stricture to reduce overall
+    LoC.
+  * Removed `assertValidResponse()` test helper method due to introduction of `ApiResponse` class.
 
 * v9.4.0
   * No such release. Version number ommited.

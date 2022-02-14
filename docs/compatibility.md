@@ -35,6 +35,8 @@ Backward (in)compatibility notes. Pay attention if you are upgrading.
   on older versions too. That should pose no real problem for you as `ResponseBuilder` has solid and
   stable code base and you should be able to easily backport future new features to older versions
   rather easily.
+* `[BREAKING/Low]` Due to introduction of `ApiResponse` data class `assertValidResponse()` method is
+  removed.
 
 ## v9 ##
 
