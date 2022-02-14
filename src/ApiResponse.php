@@ -33,13 +33,15 @@ class ApiResponse
             ResponseBuilder::KEY_CODE    => [Type::INTEGER],
             ResponseBuilder::KEY_MESSAGE => [Type::STRING],
             ResponseBuilder::KEY_LOCALE  => [Type::STRING],
-            ResponseBuilder::KEY_DATA    => [Type::OBJECT, Type::NULL],
+            ResponseBuilder::KEY_DATA    => [Type::ARRAY, Type::NULL],
         ];
         foreach ($keys as $key => $allowed_types) {
             if (!\array_key_exists($key, $decoded_json)) {
                 throw new \InvalidArgumentException("Missing key '$key' in JSON response.");
             }
-            if (!empty($typeall)) {
+            /** @var mixed|null $allowed_types */
+            if (!empty($allowed_types)) {
+                /** @var array $allowed_types */
                 Validator::assertIsType($key, $decoded_json[ $key ], $allowed_types);
             }
         }

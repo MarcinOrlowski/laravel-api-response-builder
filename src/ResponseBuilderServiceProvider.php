@@ -95,7 +95,9 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 		/** @noinspection PhpIncludeInspection */
 		/** @noinspection UsingInclusionReturnValueInspection */
 		$defaults = require $path;
-		$config = $this->app['config']->get($key, []);
+        /** @var array $app */
+        $app = $this->app;
+		$config = $app['config']->get($key, []);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$merged_config = Util::mergeConfig($defaults, $config);
@@ -107,7 +109,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 
 		Util::sortArrayByPri($merged_config['converter']['classes']);
 
-        $this->app['config']->set($key, $merged_config);
+        $app['config']->set($key, $merged_config);
     }
 
 } // end of class

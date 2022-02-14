@@ -152,6 +152,10 @@ final class Validator
     public static function assertIsType(string $var_name, $value, array $allowed_types,
                                         string $ex_class = Ex\InvalidTypeException::class): void
     {
+        if (empty($allowed_types)) {
+            throw new \InvalidArgumentException('The $allowed_types array cannot be empty.');
+        }
+
         // Type::EXISTING_CLASS is artificial type, so we need separate logic to handle it.
         $tmp = $allowed_types;
         $idx = \array_search(Type::EXISTING_CLASS, $tmp, true);

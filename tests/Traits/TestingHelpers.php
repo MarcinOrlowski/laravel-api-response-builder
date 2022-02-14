@@ -263,25 +263,6 @@ trait TestingHelpers
         return $api;
     }
 
-    /**
-     * Validates if given $json_object contains all expected elements
-     *
-     * @param \StdClass $json_object JSON Object holding Api response to validate
-     *
-     * @deprecated
-     */
-    public function assertValidResponse(\stdClass $json_object): void
-    {
-        $this->assertIsBool($json_object->{RB::KEY_SUCCESS});
-        $this->assertIsInt($json_object->code);
-        $this->assertIsString($json_object->locale);
-        /** @noinspection UnNecessaryDoubleQuotesInspection */
-        $this->assertNotEquals(\trim($json_object->locale), '', "'locale' cannot be empty string");
-        $this->assertIsString($json_object->message);
-        $this->assertTrue(($json_object->data === null) || \is_object($json_object->data),
-            "Response 'data' must be either object or null");
-    }
-
     // ---------------------------------------------------------------------------------------------
 
     /**

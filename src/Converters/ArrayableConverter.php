@@ -23,21 +23,21 @@ use MarcinOrlowski\ResponseBuilder\Validator;
  */
 final class ArrayableConverter implements ConverterContract
 {
-	/**
-	 * Returns array representation of the object implementing Arrayable interface
-	 *
-	 * @param object $obj                                    Object to be converted
-	 * @param array  $config                                 Converter config array to be used for this object (based on exact class
-	 *                                                       name match or inheritance).
-	 *
-	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
-	 */
-	public function convert(object $obj, array $config): array
-	{
-		Validator::assertInstanceOf('obj', $obj, Arrayable::class);
+    /**
+     * Returns array representation of the object implementing Arrayable interface
+     *
+     * @param object $obj                                    Object to be converted
+     * @param array  $config                                 Converter config array to be used for this object (based on exact class
+     *                                                       name match or inheritance).
+     *
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
+     */
+    public function convert(object $obj, array $config): array
+    {
+        Validator::assertInstanceOf('obj', $obj, Arrayable::class);
 
-        /** @var Arrayable $obj */
-		return $obj->toArray();
-	}
+        /** @var Arrayable<string, mixed> $obj */
+        return $obj->toArray();
+    }
 
 } // end of class

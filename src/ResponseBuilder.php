@@ -25,32 +25,17 @@ use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
  */
 class ResponseBuilder extends ResponseBuilderBase
 {
-    /** @var bool */
-    protected $success = false;
+    protected bool    $success      = false;
+    protected int     $api_code;
+    protected ?int    $http_code    = null;
+    protected ?string $message      = null;
+    protected ?array  $placeholders = null;
+    protected ?int    $json_opts    = null;
+    protected ?array  $debug_data   = null;
+    protected array   $http_headers = [];
 
-    /** @var int */
-    protected $api_code;
-
-    /** @var int|null */
-    protected $http_code = null;
-
-    /** @var array|object|null */
+    /** @var mixed|null $data */
     protected $data = null;
-
-    /** @var string|null */
-    protected $message = null;
-
-    /** @var array|null */
-    protected $placeholders = null;
-
-    /** @var int|null */
-    protected $json_opts = null;
-
-    /** @var array|null */
-    protected $debug_data = null;
-
-    /** @var array */
-    protected $http_headers = [];
 
     // ---------------------------------------------------------------------------------------------
 
@@ -291,7 +276,6 @@ class ResponseBuilder extends ResponseBuilderBase
         $http_headers = $this->http_headers ?? [];
 
         if ($this->success) {
-            $api_code = $api_code ?? BaseApiCodes::OK();
             $http_code = $this->http_code ?? RB::DEFAULT_HTTP_CODE_OK;
 
             Validator::assertOkHttpCode($http_code);
@@ -311,18 +295,18 @@ class ResponseBuilder extends ResponseBuilderBase
     }
 
     /**
-     * @param boolean           $success         @true if response reports successful operation, @false otherwise.
-     * @param integer           $api_code        Your API code to be returned with the response object.
-     * @param string|integer    $msg_or_api_code message string or valid API code to get message for
-     * @param object|array|null $data            optional additional data to be included in response object
-     * @param integer|null      $http_code       HTTP code for the HttpResponse or @null for either DEFAULT_HTTP_CODE_OK
+     * @param boolean        $success            @true if response reports successful operation, @false otherwise.
+     * @param integer        $api_code           Your API code to be returned with the response object.
+     * @param string|integer $msg_or_api_code    message string or valid API code to get message for
+     * @param mixed|null     $data               optional additional data to be included in response object
+     * @param integer|null   $http_code          HTTP code for the HttpResponse or @null for either DEFAULT_HTTP_CODE_OK
      *                                           or DEFAULT_HTTP_CODE_ERROR depending on the $success.
-     * @param array|null        $placeholders    Placeholders passed to Lang::get() for message placeholders
+     * @param array|null     $placeholders       Placeholders passed to Lang::get() for message placeholders
      *                                           substitution or @null if none.
-     * @param array|null        $http_headers    Optional HTTP headers to be returned in the response.
-     * @param integer|null      $json_opts       See http://php.net/manual/en/function.json-encode.php for supported
+     * @param array|null     $http_headers       Optional HTTP headers to be returned in the response.
+     * @param integer|null   $json_opts          See http://php.net/manual/en/function.json-encode.php for supported
      *                                           options or pass @null to use value from your config (or defaults).
-     * @param array|null        $debug_data      Optional debug data array to be added to returned JSON.
+     * @param array|null     $debug_data         Optional debug data array to be added to returned JSON.
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\ConfigurationNotFoundException
@@ -341,6 +325,7 @@ class ResponseBuilder extends ResponseBuilderBase
     {
         $http_headers = $http_headers ?? [];
         $http_code = $http_code ?? ($success ? RB::DEFAULT_HTTP_CODE_OK : RB::DEFAULT_HTTP_CODE_ERROR);
+        /** @var int $json_opts */
         $json_opts = $json_opts ?? Config::get(RB::CONF_KEY_ENCODING_OPTIONS, RB::DEFAULT_ENCODING_OPTIONS);
 
         Validator::assertIsInt('encoding_options', $json_opts);
@@ -362,13 +347,13 @@ class ResponseBuilder extends ResponseBuilderBase
      * If you set APP_DEBUG to true, 'code_hex' field will be additionally added to reported JSON for easier
      * manual debugging. Returns response ready to be encoded as json and sent back to client.
      *
-     * @param boolean           $success         @true if response reports successful operation, @false otherwise.
-     * @param integer           $api_code        Your API code to be returned with the response object.
-     * @param string|integer    $msg_or_api_code Message string or valid API code to get message for.
-     * @param array|null        $placeholders    Placeholders passed to Lang::get() for message placeholders
-     *                                           substitution or @null if none.
-     * @param object|array|null $data            API response data if any
-     * @param array|null        $debug_data      optional debug data array to be added to returned JSON.
+     * @param boolean        $success         @true if response reports successful operation, @false otherwise.
+     * @param integer        $api_code        Your API code to be returned with the response object.
+     * @param string|integer $msg_or_api_code Message string or valid API code to get message for.
+     * @param array|null     $placeholders    Placeholders passed to Lang::get() for message placeholders
+     *                                        substitution or @null if none.
+     * @param mixed|null     $data            API response data if any
+     * @param array|null     $debug_data      optional debug data array to be added to returned JSON.
      *
      * @throws Ex\ArrayWithMixedKeysException
      * @throws Ex\ConfigurationNotFoundException
