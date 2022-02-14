@@ -37,6 +37,7 @@ trait ApiCodesHelpers
 			throw new Ex\MissingConfigurationKeyException($key);
 		}
 
+        /** @var int $min_code */
 		return $min_code;
 	}
 
@@ -54,6 +55,7 @@ trait ApiCodesHelpers
 			throw new Ex\MissingConfigurationKeyException($key);
 		}
 
+        /** @var int $max_code */
 		return $max_code;
 	}
 
@@ -83,6 +85,7 @@ trait ApiCodesHelpers
 		}
 		Validator::assertIsArray(RB::CONF_KEY_MAP, $user_map);
 
+        /** @var array $user_map */
 		return Util::mergeConfig(BaseApiCodes::getBaseMap(), $user_map);
 	}
 

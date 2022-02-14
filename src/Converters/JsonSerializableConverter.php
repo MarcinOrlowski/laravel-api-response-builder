@@ -36,6 +36,7 @@ final class JsonSerializableConverter implements ConverterContract
 	{
 		Validator::assertInstanceOf('obj', $obj, \JsonSerializable::class);
 
+        /** @var \JsonSerializable $obj */
 		$encoded = \json_encode($obj->jsonSerialize());
 		if ($encoded === false) {
 			$encoded = '';

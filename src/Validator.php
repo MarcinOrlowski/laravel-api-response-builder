@@ -14,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\Contracts\InvalidTypeExceptionContract;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
@@ -109,7 +110,7 @@ final class Validator
 
     /**
      * @param string $var_name Label or name of the variable to be used in exception message (if thrown).
-     * @param mixed  $value    Variable to be asserted.
+     * @param int    $value    Variable to be asserted.
      * @param int    $min      Min allowed value (inclusive)
      * @param int    $max      Max allowed value (inclusive)
      *
@@ -166,6 +167,7 @@ final class Validator
         if (!empty($tmp)) {
             if (!\in_array($type, $allowed_types, true)) {
                 // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
+                /** @var \Exception $ex_class */
                 throw new $ex_class($var_name, $type, $allowed_types);
             }
         } else {

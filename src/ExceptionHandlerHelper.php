@@ -14,17 +14,18 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Throwable;
 use Illuminate\Auth\AuthenticationException as AuthException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
+use MarcinOrlowski\ResponseBuilder\Contracts\ExceptionHandlerContract;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\HttpExceptionHandler;
-use Symfony\Component\HttpFoundation\JsonResponse as HttpResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 /**
  * Exception handler using ResponseBuilder to return JSON even in such hard tines
@@ -62,7 +63,7 @@ class ExceptionHandlerHelper
             }
 
             $handler = new $cfg[ RB::KEY_HANDLER ]();
-            /** @var array $handler_result */
+            /**  @var ExceptionHandlerContract $handler */
             $handler_result = $handler->handle($cfg[ RB::KEY_CONFIG ], $ex);
             if ($handler_result !== null) {
                 $result = static::processException($ex, $handler_result);
@@ -317,8 +318,10 @@ class ExceptionHandlerHelper
             ],
         ];
 
-        $cfg = Util::mergeConfig($default_config,
-            \Config::get(RB::CONF_KEY_EXCEPTION_HANDLER, []));
+        /** @var array $user_handler_config */
+        $user_handler_config = \Config::get(RB::CONF_KEY_EXCEPTION_HANDLER, []);
+        $cfg = Util::mergeConfig($default_config, $user_handler_config );
+
         Util::sortArrayByPri($cfg);
 
         return $cfg;

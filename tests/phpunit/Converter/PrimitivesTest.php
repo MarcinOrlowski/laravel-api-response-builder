@@ -113,15 +113,17 @@ class PrimitivesTest extends TestCase
 
 		// WHEN passing it as direct payaload
 		$converter = new Converter();
+        /** @var array $converted */
 		$converted = $converter->convert($value);
 
 		// THEN we expect returned data to be keyed as per primitive's configuration.
 		$this->assertIsArray($converted);
-		/** @var array $converted */
 
+        /** @var array $cfg */
 		$cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [$value]);
 		$this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
+        /** @var string $key */
 		$key = $cfg[ RB::KEY_KEY ];
 		$this->assertArrayHasKey($key, $converted);
 		$this->assertEquals($value, $converted[ $key ]);

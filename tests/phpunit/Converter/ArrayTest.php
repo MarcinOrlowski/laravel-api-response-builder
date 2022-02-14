@@ -68,6 +68,7 @@ class ArrayTest extends TestCase
 		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
+        /** @var string $key */
 
 		$this->assertIsArray($converted);
 		/** @var array $converted */
@@ -123,6 +124,7 @@ class ArrayTest extends TestCase
 		$this->assertIsArray($converted);
 		/** @var array $converted */
 		$this->assertCount(1, $converted);
+        /** @var string $key */
 		$this->assertArrayHasKey($key, $converted);
 		$converted = $converted[ $key ];
 		$this->assertCount(\count($data), $converted);

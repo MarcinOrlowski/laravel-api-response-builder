@@ -67,9 +67,11 @@ trait ApiCodesTests
 	 */
 	public function testMinMaxCode(): void
 	{
+        /** @var int $min */
 		$min = $this->callProtectedMethod(BaseApiCodes::class, 'getMinCode');
 		$this->assertNotNull($min);
 
+        /** @var int $max */
 		$max = $this->callProtectedMethod(BaseApiCodes::class, 'getMaxCode');
 		$this->assertNotNull($max);
 
@@ -194,6 +196,7 @@ trait ApiCodesTests
 	 */
 	public function testConfigClassesMappingEntriesMandatoryKeys(): void
 	{
+        /** @var array $classes */
 		$classes = \Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
 		if (\count($classes) === 0) {
 			// to make PHPUnit not complaining about no assertion.
@@ -219,7 +222,8 @@ trait ApiCodesTests
 	 */
 	public function testConfigClassesMappingEntriesUnwantedConfigKeys(): void
 	{
-		$classes = \Config::get(RB::CONF_KEY_CONVERTER_CLASSES, []);
+        /** @var array $classes */
+        $classes = \Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
 		if (\count($classes) === 0) {
 			// to make PHPUnit not complaining about no assertion.
 			$this->assertTrue(true);

@@ -38,6 +38,7 @@ final class ToArrayConverter implements ConverterContract
     {
         Validator::assertIsObject('obj', $obj);
 
+        /** @var \Illuminate\Contracts\Support\Arrayable $obj */
         return $obj->toArray(null);
     }
 
