@@ -57,12 +57,19 @@ class ApiResponse
                 "The '{$key}' in JSON response cannot be NULL.");
         }
 
-        return (new self())
+        $api = (new self())
             ->setSuccess($decoded_json[ ResponseBuilder::KEY_SUCCESS ])
             ->setCode($decoded_json[ ResponseBuilder::KEY_CODE ])
             ->setMessage($decoded_json[ ResponseBuilder::KEY_MESSAGE ])
             ->setLocale($decoded_json[ ResponseBuilder::KEY_LOCALE ])
             ->setData($decoded_json[ ResponseBuilder::KEY_DATA ]);
+
+        // Optional debug data
+        if (\array_key_exists(ResponseBuilder::KEY_DEBUG, $decoded_json)) {
+            $api->setDebug($decoded_json[ ResponseBuilder::KEY_DEBUG ]);
+        }
+
+        return $api;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -139,5 +146,22 @@ class ApiResponse
         $this->data = $data;
         return $this;
     }
+
+    // ---------------------------------------------------------------------------------------------
+
+    protected ?array $debug;
+
+    public function getDebug(): ?array
+    {
+        return $this->debug;
+    }
+
+    public function setDebug(?array $debug): self
+    {
+        $this->debug = $debug;
+        return $this;
+    }
+
+    // ---------------------------------------------------------------------------------------------
 
 } // end of class
