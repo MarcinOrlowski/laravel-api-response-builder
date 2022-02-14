@@ -347,7 +347,7 @@ class ArrayTest extends TestCase
 		$this->assertEquals($result[ $fake->key ], $fake->val);
 	}
 
-	// -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
 	/**
 	 * Helper method that validates converted element with values from

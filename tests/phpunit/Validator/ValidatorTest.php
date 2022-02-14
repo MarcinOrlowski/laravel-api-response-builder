@@ -45,7 +45,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsInt(__FUNCTION__, 'chicken');
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Tests if assertIsObject() pass if given valid data.
@@ -67,7 +67,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsObject(__FUNCTION__, 'chicken');
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Checks behavior of assertIsArray() with valid data
@@ -88,7 +88,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsArray(__FUNCTION__, false);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Tests if assertIsString() pass with valid data type
@@ -109,7 +109,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsString(__FUNCTION__, 666);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Tests if assertIsBool() pass with valid data type
@@ -130,7 +130,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsBool(__FUNCTION__, 666);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     public function testAssertIsIntRangeWithValidData(): void
     {
@@ -167,7 +167,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsIntRange(__FUNCTION__, 100, 300, 500);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Checks if assertInstanceOf() would throw exception if obj is not instance of given class
@@ -190,7 +190,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue(true);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Tests assertIsType() helper.

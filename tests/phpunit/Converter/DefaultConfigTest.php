@@ -162,7 +162,7 @@ class DefaultConfigTest extends TestCase
         $this->doCollectionTests($collection);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Checks if default config for LengthAwarePaginator class produces expected output.
@@ -221,7 +221,7 @@ class DefaultConfigTest extends TestCase
         ], $result);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Helper method to perform some common tests of built-in support for Laravel's collections.
