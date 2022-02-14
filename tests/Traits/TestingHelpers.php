@@ -17,6 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\ApiResponse;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
@@ -158,7 +159,7 @@ trait TestingHelpers
      */
     public function getResponseSuccessObject(int    $expected_api_code_offset = null,
                                              int    $expected_http_code = null,
-                                             string $expected_message = null): \stdClass
+                                             string $expected_message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes */
@@ -180,13 +181,12 @@ trait TestingHelpers
             $expected_message = $this->langGet($key, ['api_code' => $expected_api_code_offset]);
         }
 
-        $j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $expected_message);
-        /** @var \stdClass $j */
-        $this->assertEquals(true, $j->{RB::KEY_SUCCESS});
+        $api = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $expected_message);
 
-        return $j;
+        $this->assertEquals(true, $api->success());
+
+        return $api;
     }
-
 
     /**
      * Retrieves and validates response as expected from errorXXX() methods. Returns response
@@ -201,7 +201,7 @@ trait TestingHelpers
      */
     public function getResponseErrorObject(int    $expected_api_code_offset = null,
                                            int    $expected_http_code = RB::DEFAULT_HTTP_CODE_ERROR,
-                                           string $message = null): \stdClass
+                                           string $message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes_class_name */
@@ -210,20 +210,19 @@ trait TestingHelpers
         }
 
         if ($expected_http_code > RB::ERROR_HTTP_CODE_MAX) {
-            $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be above %d',
+            $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be higher than %d',
                 $expected_http_code, RB::ERROR_HTTP_CODE_MAX));
         }
         if ($expected_http_code < RB::ERROR_HTTP_CODE_MIN) {
-            $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be below %d',
+            $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be lower than %d',
                 $expected_http_code, RB::ERROR_HTTP_CODE_MIN));
         }
 
-        $j = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message);
-        /** @var \stdClass $j */
+        $api = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message);
 
-        $this->assertEquals(false, $j->success);
+        $this->assertEquals(false, $api->success());
 
-        return $j;
+        return $api;
     }
 
 
@@ -232,24 +231,21 @@ trait TestingHelpers
      * @param int         $expected_http_code expected HTTP code
      * @param string|null $expected_message   expected message string or @null if default
      *
-     * @return object
-     *
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\MissingConfigurationKeyException
      */
     private function getResponseObjectRaw(int    $expected_api_code, int $expected_http_code,
-                                          string $expected_message = null)
+                                          string $expected_message = null): ApiResponse
     {
         $actual = $this->response->getStatusCode();
         $contents = $this->getResponseContent($this->response);
         $this->assertEquals($expected_http_code, $actual,
             "Expected status code {$expected_http_code}, got {$actual}. Response: {$contents}");
 
-        // get response as Json object
-        $j = \json_decode($this->getResponseContent($this->response), false);
-        /** @var \stdClass $j */
+        // get response
+        $api = ApiResponse::fromJson($this->getResponseContent($this->response));
 
-        $this->assertEquals($expected_api_code, $j->code);
+        $this->assertEquals($expected_api_code, $api->getCode());
 
         /** @var BaseApiCodes $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
@@ -262,19 +258,20 @@ trait TestingHelpers
         } else {
             $expected_message_string = $expected_message;
         }
-        $this->assertEquals($expected_message_string, $j->message);
+        $this->assertEquals($expected_message_string, $api->getMessage());
 
-        return $j;
+        return $api;
     }
 
     /**
      * Validates if given $json_object contains all expected elements
      *
      * @param \StdClass $json_object JSON Object holding Api response to validate
+     *
+     * @deprecated
      */
     public function assertValidResponse(\stdClass $json_object): void
     {
-        $this->assertIsObject($json_object);
         $this->assertIsBool($json_object->{RB::KEY_SUCCESS});
         $this->assertIsInt($json_object->code);
         $this->assertIsString($json_object->locale);

@@ -31,7 +31,6 @@ final class Validator
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotBooleanException
-     *
      */
     public static function assertIsBool(string $var_name, $value): void
     {
@@ -153,11 +152,11 @@ final class Validator
     {
         // Type::EXISTING_CLASS is artificial type, so we need separate logic to handle it.
         $tmp = $allowed_types;
-        $idx = array_search(Type::EXISTING_CLASS, $tmp, true);
+        $idx = \array_search(Type::EXISTING_CLASS, $tmp, true);
         if ($idx !== false) {
             // Remove the type, so gettype() test loop won't see it.
             unset($tmp[ $idx ]);
-            if (is_string($value) && class_exists($value)) {
+            if (\is_string($value) && \class_exists($value)) {
                 // It's existing class, no need to test further.
                 return;
             }

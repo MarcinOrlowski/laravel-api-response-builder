@@ -40,11 +40,11 @@ class ErrorTest extends TestCase
         $this->response = RB::error($api_code);
 
         // THEN returned message contains given error code and mapped message
-        $j = $this->getResponseErrorObject($api_code);
-        $this->assertEquals($this->random_api_code_message, $j->message);
+        $api = $this->getResponseErrorObject($api_code);
+        $this->assertEquals($this->random_api_code_message, $api->getMessage());
 
         // AND no data
-        $this->assertNull($j->data);
+        $this->assertNull($api->getData());
     }
 
 } // end of class

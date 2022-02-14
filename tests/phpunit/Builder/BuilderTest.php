@@ -41,12 +41,12 @@ class BuilderTest extends TestCase
         $this->assertInstanceOf(RB::class, $builder);
         $this->response = $builder->build();
 
-        $j = $this->getResponseSuccessObject();
+        $api = $this->getResponseSuccessObject();
 
-        $this->assertNull($j->data);
+        $this->assertNull($api->getData());
         $msg_key = BaseApiCodes::getCodeMessageKey($expected_api_code);
         /** @var string $msg_key */
-        $this->assertEquals($this->langGet($msg_key), $j->message);
+        $this->assertEquals($this->langGet($msg_key), $api->getMessage());
     }
 
     /**

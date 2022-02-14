@@ -21,6 +21,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ExceptionHandlerHelper;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
+use MarcinOrlowski\ResponseBuilder\ApiResponse;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
@@ -48,13 +49,10 @@ class ExceptionHandlerHelperTest extends TestCase
         $eh_response = $this->callProtectedMethod($obj, 'unauthenticated', [null,
                                                                             $exception]);
 
-        /** @var \stdClass $response */
-        $response = json_decode($this->getResponseContent($eh_response), false);
-
-        $this->assertValidResponse($response);
-        $this->assertNull($response->data);
-        $this->assertEquals(BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(), $response->{RB::KEY_CODE});
-        $this->assertEquals($exception->getMessage(), $response->{RB::KEY_MESSAGE});
+        $response = ApiResponse::fromJson($this->getResponseContent($eh_response));
+        $this->assertNull($response->getData());
+        $this->assertEquals(BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(), $response->getCode());
+        $this->assertEquals($exception->getMessage(), $response->getMessage());
     }
 
     /**
@@ -228,19 +226,15 @@ class ExceptionHandlerHelperTest extends TestCase
         // then we can safely skip the codes not covered by default language.
         if (\array_key_exists($key, $translation)) {
             $ex = new HttpException($code);
+            /** @var HttpResponse $response */
             $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'render', [
                     null,
                     $ex,
                 ]
             );
 
-            // get response as Json object
-            $json = json_decode($this->getResponseContent($response), false);
-            $this->assertValidResponse($json);
-
-            // Ensure returned response used HTTP code from the exception
-            $this->assertNotEmpty($json->message);
-            $this->assertEquals($translation[ $key ], $json->message,
+            $api = ApiResponse::fromJson($this->getResponseContent($response));
+            $this->assertEquals($translation[ $key ], $api->getMessage(),
                 "error message mismatch for http code: {$code}");
         }
     }
@@ -319,19 +313,18 @@ class ExceptionHandlerHelperTest extends TestCase
         $ex_msg = $this->getRandomString('user_msg');
         $ex = new \RuntimeException($ex_msg);
 
-        $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'render', [null,
-                                                                                         $ex]);
-        $json = json_decode($this->getResponseContent($response), false);
-        $this->assertValidResponse($json);
+        $http_response = $this->callProtectedMethod(
+            ExceptionHandlerHelper::class, 'render', [null, $ex,]);
+        $api = ApiResponse::fromJson($this->getResponseContent($http_response));
 
         // THEN we should see exception message.
 
         // however thre's no message matching $msg_key, but Lang::get() would return
         // the key if no string exists, which is sufficient
-        $this->assertEquals($ex_msg, $json->message);
+        $this->assertEquals($ex_msg, $api->getMessage());
 
-        $this->assertEquals($http_code, $response->getStatusCode());
-        $this->assertEquals($api_code, $json->code);
+        $this->assertEquals($http_code, $http_response->getStatusCode());
+        $this->assertEquals($api_code, $api->getCode());
     }
 
     /**
@@ -359,7 +352,7 @@ class ExceptionHandlerHelperTest extends TestCase
         // GIVEN exception that should be handled
         $ex = new \RuntimeException('this message should be ignored');
 
-        $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
+        $http_response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
                 $ex,
                 $api_code,
                 $http_code,
@@ -367,16 +360,14 @@ class ExceptionHandlerHelperTest extends TestCase
             ]
         );
 
-        // get response as Json object
-        $json = json_decode($this->getResponseContent($response), false);
-        $this->assertValidResponse($json);
+        $api = ApiResponse::fromJson($this->getResponseContent($http_response));
 
         // however thre's no message matching $msg_key, but Lang::get() would return
         // the key if no string exists, which is sufficient
-        $this->assertEquals($msg_key, $json->message);
+        $this->assertEquals($msg_key, $api->getMessage());
 
-        $this->assertEquals($http_code, $response->getStatusCode());
-        $this->assertEquals($api_code, $json->code);
+        $this->assertEquals($http_code, $http_response->getStatusCode());
+        $this->assertEquals($api_code, $api->getCode());
     }
 
     // -----------------------------------------------------------------------------------------------------------
@@ -403,14 +394,14 @@ class ExceptionHandlerHelperTest extends TestCase
         $ex_msg = $this->getRandomString('ex');
         $ex = new \RuntimeException($ex_msg);
 
-        /** @var HttpResponse $response */
-        $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'processException', [
+        /** @var HttpResponse $http_response */
+        $http_response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'processException', [
             $ex,
             $ex_cfg,
             $fallback_http_code,
         ]);
-        $json = json_decode($this->getResponseContent($response), false);
-        $this->assertValidResponse($json);
+
+        $api = ApiResponse::fromJson($this->getResponseContent($http_response));
 
         $msg = $ex->getMessage();
         $placeholders = [
@@ -424,9 +415,9 @@ class ExceptionHandlerHelperTest extends TestCase
         /** @var string $expected_msg_key */
         $expected_msg = \Lang::get($expected_msg_key, $placeholders);
 
-        $this->assertEquals($expected_msg, $json->message);
-        $this->assertEquals($http_code, $response->getStatusCode());
-        $this->assertEquals($api_code, $json->code);
+        $this->assertEquals($expected_msg, $api->getMessage());
+        $this->assertEquals($http_code, $http_response->getStatusCode());
+        $this->assertEquals($api_code, $api->getCode());
     }
 
     // -----------------------------------------------------------------------------------------------------------
@@ -456,7 +447,7 @@ class ExceptionHandlerHelperTest extends TestCase
         ];
         Config::set(RB::CONF_KEY_EXCEPTION_HANDLER, $cfg);
 
-        $response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
+        $http_response = $this->callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
                 $ex,
                 BaseApiCodes::EX_HTTP_NOT_FOUND(),
                 $config_http_code,
@@ -464,12 +455,13 @@ class ExceptionHandlerHelperTest extends TestCase
             ]
         );
 
-        // get response as Json object
-        $json = json_decode($this->getResponseContent($response), false);
-        $this->assertValidResponse($json);
+        // Get parsed response.
+        // NOTE: even if $api is not used, calling fromJson() here ensures validity of
+        // the response JSON structure.
+        $api = ApiResponse::fromJson($this->getResponseContent($http_response));
 
         // Ensure returned response used HTTP code from the exception
-        $this->assertEquals($expected_http_code, $response->getStatusCode());
+        $this->assertEquals($expected_http_code, $http_response->getStatusCode());
     }
 
     /**

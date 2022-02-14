@@ -37,12 +37,12 @@ class SuccessTest extends TestCase
 	public function testSuccess(): void
 	{
 		$this->response = RB::success();
-		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
+		$api = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
-		$this->assertNull($j->data);
+		$this->assertNull($api->getData());
 		$msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
 		/** @var string $msg_key */
-		$this->assertEquals($this->langGet($msg_key), $j->message);
+		$this->assertEquals($this->langGet($msg_key), $api->getMessage());
 	}
 
 	public function testSuccessWithArrayPayload(): void
@@ -53,21 +53,21 @@ class SuccessTest extends TestCase
 		}
 
 		$this->response = RB::success($payload);
-		$j = $this->getResponseSuccessObject(BaseApiCodes::OK());
+		$api = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
-		$this->assertNotNull($j->data);
-		$data = (array)$j->data;
+		$this->assertNotNull($api->getData());
+		$data = (array)$api->getData();
 
 		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
 		$this->assertCount(1, $data);
-		$this->assertArrayEquals($payload, (array)$j->data->{$key});
+		$this->assertArrayEquals($payload, (array)$api->getData()[$key]);
 
 		$msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
 		/** @var string $msg_key */
-		$this->assertEquals($this->langGet($msg_key), $j->message);
+		$this->assertEquals($this->langGet($msg_key), $api->getMessage());
 	}
 
 } // end of class

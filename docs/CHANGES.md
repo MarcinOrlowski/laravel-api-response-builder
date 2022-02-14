@@ -23,6 +23,7 @@ should be able to easily backport future new features to older versions rather e
   * Removed redundant PHPDocs entries for type-hinted elements.
   * Fixed exception handler helper not properly handling iterating over mismatched configuration items.
   * Fixed missing dependency entry in `composer.json` (development tools).
+  * Reworked tests to use strict object representation of API response stricture to reduce overall LoC.
 
 * v9.4.0
   * No such release. Version number ommited.
