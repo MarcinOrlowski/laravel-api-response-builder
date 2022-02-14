@@ -40,8 +40,9 @@ class CustomResponseObjectTest extends TestCase
         }
 
         $response = MyResponseBuilder::success();
-        $this->assertArrayEquals(MyResponseBuilder::$fake_response,
-            \json_decode($this->getResponseContent($response), true));
+        /** @var array $array_b */
+        $array_b = \json_decode($this->getResponseContent($response), true);
+        $this->assertArrayEquals(MyResponseBuilder::$fake_response, $array_b);
     }
 
 } // end of class

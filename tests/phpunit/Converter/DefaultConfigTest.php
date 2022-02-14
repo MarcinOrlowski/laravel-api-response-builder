@@ -155,8 +155,11 @@ class DefaultConfigTest extends TestCase
     {
         // GIVEN Eloquent collection with content
         $collection = new EloquentCollection();
+        /** @phpstan-ignore-next-line */
         $collection->add($this->getRandomString('item1'));
+        /** @phpstan-ignore-next-line */
         $collection->add($this->getRandomString('item2'));
+        /** @phpstan-ignore-next-line */
         $collection->add($this->getRandomString('item3'));
 
         $this->doCollectionTests($collection);

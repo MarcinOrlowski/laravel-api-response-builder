@@ -151,7 +151,7 @@ class ApiResponse
 
     // ---------------------------------------------------------------------------------------------
 
-    protected ?array $debug;
+    protected ?array $debug = null;
 
     public function getDebug(): ?array
     {

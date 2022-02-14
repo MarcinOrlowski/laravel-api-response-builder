@@ -90,7 +90,10 @@ class PrimitivesGetPrimitivesMappingTest extends TestCase
 	 */
 	public function testGetPrimitiveMappingConfigOrThrowDealsWithNoConfig(): void
 	{
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
+        /** @var array $cfg */
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
+        $this->assertIsArray($cfg);
+        $this->assertNotEmpty($cfg);
 		unset($cfg[ Type::BOOLEAN ]);
 		Config::set(RB::CONF_KEY_CONVERTER_PRIMITIVES, $cfg);
 

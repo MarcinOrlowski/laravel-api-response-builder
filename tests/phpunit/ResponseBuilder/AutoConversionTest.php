@@ -57,9 +57,12 @@ class AutoConversionTest extends TestCase
         $api = $this->getResponseSuccessObject();
 
         // THEN returned response object should have it auto converted
-        $this->assertNotNull($api->getData());
-        $this->assertArrayHasKey($key, $api->getData());
-        $this->assertEquals($model_val, $api->getData()[ $key ]['val']);
+        $data = $api->getData();
+        $this->assertNotNull($data);
+        $this->assertIsArray($data);
+        /** @var array $data */
+        $this->assertArrayHasKey($key, $data);
+        $this->assertEquals($model_val, $data[ $key ]['val']);
     }
 
     /**
@@ -105,7 +108,9 @@ class AutoConversionTest extends TestCase
 
         // THEN returned response object should have it auto converted properly
         $data = $api->getData();
+        $this->assertIsArray($data);
         $this->assertNotNull($data);
+        /** @var array $data */
 
         // single key item must not be used
         /** @noinspection OffsetOperationsInspection */
@@ -143,11 +148,14 @@ class AutoConversionTest extends TestCase
         // THEN returned response object should have it auto converted
         $data = $api->getData();
         $this->assertNotNull($data);
+        $this->assertIsArray($data);
+        /** @var array $data */
 
         $converter = new Converter();
         $cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
+        /** @var array $cfg */
         $key = $cfg[ RB::KEY_KEY ];
         $this->assertArrayHasKey($key, $data);
         $this->assertEquals($value, $data[ $key ]);

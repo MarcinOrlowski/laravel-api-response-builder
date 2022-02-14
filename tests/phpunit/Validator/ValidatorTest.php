@@ -145,6 +145,11 @@ class ValidatorTest extends TestCase
     public function testAssertIsIntRangeVarType(): void
     {
         $this->expectException(Ex\InvalidTypeException::class);
+        /**
+         * Using wrong type is intentional in this test.
+         *
+         * @phpstan-ignore-next-line
+         */
         Validator::assertIsIntRange(__FUNCTION__, 'string', 100, 200);
     }
 

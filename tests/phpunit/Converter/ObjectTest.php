@@ -43,7 +43,8 @@ class ObjectTest extends TestCase
 
         $data = collect([1, 2, 3]);
 
-        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+        /** @var array $cfg */
+        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
         $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
         $cfg[ Collection::class ][ RB::KEY_KEY ] = null;
 
@@ -87,7 +88,8 @@ class ObjectTest extends TestCase
 
         $data = collect([1, 2, 3]);
 
-        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+        /** @var array $cfg */
+        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
         $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
 
         \collect($allowed_keys)->each(function($allowed_key) use ($data, $fake, $cfg) {

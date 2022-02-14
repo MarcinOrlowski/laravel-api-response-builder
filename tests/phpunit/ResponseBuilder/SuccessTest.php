@@ -60,10 +60,14 @@ class SuccessTest extends TestCase
 
 		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 		$this->assertNotEmpty($cfg);
+        $this->assertIsArray($cfg);
+        /** @var array $cfg */
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
 		$this->assertCount(1, $data);
-		$this->assertArrayEquals($payload, (array)$api->getData()[$key]);
+        /** @var array $data */
+        $data = $api->getData();
+		$this->assertArrayEquals($payload, (array)$data[$key]);
 
 		$msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
 		/** @var string $msg_key */

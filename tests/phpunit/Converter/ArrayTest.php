@@ -67,6 +67,7 @@ class ArrayTest extends TestCase
 
         /** @var array $cfg */
 		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
+        $this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
         /** @var string $key */
@@ -118,7 +119,9 @@ class ArrayTest extends TestCase
 		// WHEN this object is returned
 		$converted = (new Converter())->convert($data);
 
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
+        /** @var array $cfg */
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
+        $this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
@@ -296,7 +299,9 @@ class ArrayTest extends TestCase
 			],
 		]);
 
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
+        /** @var array $cfg */
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
+        $this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
@@ -319,7 +324,8 @@ class ArrayTest extends TestCase
 	public function testConvertWithOverridenDefaultConfig(): void
 	{
 		// GIVEN built-in converter config
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+        /** @var array $cfg */
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
 		$this->assertIsArray($cfg);
 		$this->assertNotEmpty($cfg);
 

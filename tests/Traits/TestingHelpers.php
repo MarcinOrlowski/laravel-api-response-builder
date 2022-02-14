@@ -382,6 +382,12 @@ trait TestingHelpers
         $method = $reflection->getMethod($method_name);
         $method->setAccessible(true);
 
+        /**
+         * Because of fake typehint aboive, PHPStan thinks ternary in line bellow always
+         * yields the same results, which is not true. This is to make it STFU.
+         *
+         * @phpstan-ignore-next-line
+         */
         return $method->invokeArgs(\is_object($obj_or_cls) ? $obj_or_cls : null, $args);
     }
 
@@ -410,6 +416,12 @@ trait TestingHelpers
         $property = $reflection->getProperty($name);
         $property->setAccessible(true);
 
+        /**
+         * Because of fake typehint aboive, PHPStan thinks ternary in line bellow always
+         * yields the same results, which is not true. This is to make it STFU.
+         *
+         * @phpstan-ignore-next-line
+         */
         return $property->getValue(is_object($obj_or_cls) ? $obj_or_cls : null);
     }
 
