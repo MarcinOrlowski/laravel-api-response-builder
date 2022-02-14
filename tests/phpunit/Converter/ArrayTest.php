@@ -65,7 +65,8 @@ class ArrayTest extends TestCase
 		// WHEN this object is returned
 		$converted = (new Converter())->convert($data);
 
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
+        /** @var array $cfg */
+		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
 		$this->assertNotEmpty($cfg);
 		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
         /** @var string $key */

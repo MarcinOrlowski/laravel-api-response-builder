@@ -124,12 +124,14 @@ final class Validator
 
         if ($min > $max) {
             throw new \InvalidArgumentException(
-                \sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.', __FUNCTION__, $var_name));
+                \sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.',
+                    __FUNCTION__, $var_name));
         }
 
         if (($min > $value) || ($value > $max)) {
             throw new \OutOfBoundsException(
-                \sprintf('Value of "%s" (%d) is out of bounds. Must be between %d-%d inclusive.', $var_name, $value, $min, $max));
+                \sprintf('Value of "%s" (%d) is out of bounds. Must be between %d-%d inclusive.',
+                    $var_name, $value, $min, $max));
         }
     }
 
@@ -162,16 +164,18 @@ final class Validator
             }
         }
 
-        $type = \gettype($value);
+        // Get current type of the $value and next, validate
+        $value_type = \gettype($value);
+
         if (!empty($tmp)) {
-            if (!\in_array($type, $allowed_types, true)) {
+            if (!\in_array($value_type, $allowed_types, true)) {
                 // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
                 /** @var \Exception $ex_class */
-                throw new $ex_class($var_name, $type, $allowed_types);
+                throw new $ex_class($var_name, $value_type, $allowed_types);
             }
         } else {
             // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
-            throw new Ex\ClassNotFound($var_name, $type, $allowed_types);
+            throw new Ex\ClassNotFound($var_name, $value_type, $allowed_types);
         }
     }
 

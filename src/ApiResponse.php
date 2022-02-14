@@ -45,15 +45,16 @@ class ApiResponse
         }
 
         // Ensure certain elements are not empty.
-        $non_empty = [
-            ResponseBuilder::KEY_MESSAGE,
-            ResponseBuilder::KEY_LOCALE,
-        ];
-        foreach ($non_empty as $key) {
-            if (empty($decoded_json[ $key ])) {
-                throw new \InvalidArgumentException(
-                    "The '{$key}' element in JSON response cannot be empty.");
-            }
+        $key = ResponseBuilder::KEY_LOCALE;
+        if (empty($decoded_json[ $key ])) {
+            throw new \InvalidArgumentException(
+                "The '{$key}' in JSON response cannot be empty.");
+        }
+
+        $key = ResponseBuilder::KEY_MESSAGE;
+        if (\is_null($decoded_json[ $key ])) {
+            throw new \InvalidArgumentException(
+                "The '{$key}' in JSON response cannot be NULL.");
         }
 
         return (new self())
