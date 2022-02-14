@@ -44,7 +44,7 @@ use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 ```
 
  Next, register our handler in `register()` method:
- 
+
 ```php
 public function register()
 {
