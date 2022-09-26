@@ -52,4 +52,4 @@ jobs:
         with:
           configuration: "phpstan.neon"
           php_version: "${{ matrix.php }}"
-          # memory_limit: 16M
+          memory_limit: "16M"
