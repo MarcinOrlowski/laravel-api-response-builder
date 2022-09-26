@@ -20,6 +20,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
 use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
@@ -74,7 +75,7 @@ class ObjectTest extends TestCase
 
         $this->expectException(Ex\InvalidTypeException::class);
 
-        $this->callProtectedMethod(Converter::class, 'getClassesMapping');
+        Bridge::callProtectedMethod(Converter::class, 'getClassesMapping');
     }
 
     /**

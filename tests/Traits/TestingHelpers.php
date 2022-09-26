@@ -17,6 +17,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
+use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
 use MarcinOrlowski\ResponseBuilder\ApiResponse;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
@@ -74,10 +76,10 @@ trait TestingHelpers
 
         $obj = new $class_name();
         /** @var int $min */
-        $min = $this->callProtectedMethod($obj, 'getMinCode');
+        $min = Bridge::callProtectedMethod($obj, 'getMinCode');
         $this->min_allowed_code = $min;
         /** @var int $max */
-        $max = $this->callProtectedMethod($obj, 'getMaxCode');
+        $max = Bridge::callProtectedMethod($obj, 'getMaxCode');
         $this->max_allowed_code = $max;
 
         // generate random api_code
@@ -85,7 +87,7 @@ trait TestingHelpers
         $this->random_api_code = \mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
         // AND corresponding mapped message mapping
-        $map = $this->callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
+        $map = Bridge::callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
         /** @var array $map */
         if (empty($map)) {
             throw new \RuntimeException('getBaseMap() returned empty value.');
@@ -165,7 +167,7 @@ trait TestingHelpers
             /** @var BaseApiCodes $api_codes */
             $api_codes = $this->getApiCodesClassName();
             /** @var int $expected_api_code_offset */
-            $expected_api_code_offset = $this->getProtectedConstant($api_codes, 'OK_OFFSET');
+            $expected_api_code_offset = Bridge::getProtectedConstant($api_codes, 'OK_OFFSET');
         }
 
         $expected_http_code = $expected_http_code ?? RB::DEFAULT_HTTP_CODE_OK;
@@ -313,7 +315,7 @@ trait TestingHelpers
         $http_code = null;
         $lang_args = null;
 
-        $result = $this->callProtectedMethod(
+        $result = Bridge::callProtectedMethod(
             RB::asSuccess(), 'make', [$success,
                                       $api_code_offset,
                                       $message_or_api_code_offset,
@@ -331,7 +333,8 @@ trait TestingHelpers
     // ---------------------------------------------------------------------------------------------
 
     /**
-     * Returns ErrorCode constant name referenced by its value
+     * Returns ErrorCode constant name referenced by its value. Note, will return
+     * first one spotted with that value so this is pretty fragile.
      *
      * @param int $api_code_offset value to match constant name for
      *
@@ -351,101 +354,6 @@ trait TestingHelpers
         }
 
         return $name ?? "??? ({$api_code_offset})";
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    /**
-     * Calls protected method of $object, passing optional array of arguments.
-     *
-     * @param object|string $obj_or_cls  Object to call $method_name on or name of the class.
-     * @param string        $method_name Name of method to called.
-     * @param array         $args        Optional array of arguments (empty array if no args to pass).
-     *
-     * @return mixed
-     *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
-     */
-    protected function callProtectedMethod($obj_or_cls, string $method_name, array $args = [])
-    {
-        Validator::assertIsObjectOrExistingClass('obj_or_cls', $obj_or_cls);
-
-        /**
-         * At this point $obj_or_cls is either object or string but some static analyzers
-         * got problems figuring that out, so this (partially correct) var declaration is
-         * to make them believe.
-         *
-         * @var object $obj_or_cls
-         */
-        $reflection = new \ReflectionClass($obj_or_cls);
-        $method = $reflection->getMethod($method_name);
-        $method->setAccessible(true);
-
-        /**
-         * Because of fake typehint aboive, PHPStan thinks ternary in line bellow always
-         * yields the same results, which is not true. This is to make it STFU.
-         *
-         * @phpstan-ignore-next-line
-         */
-        return $method->invokeArgs(\is_object($obj_or_cls) ? $obj_or_cls : null, $args);
-    }
-
-    /**
-     * Returns value of otherwise non-public member of the class
-     *
-     * @param string|object $obj_or_cls class name to get member from, or instance of that class
-     * @param string        $name       member name to grab (i.e. `max_length`)
-     *
-     * @return mixed
-     *
-     * @throws \ReflectionException
-     */
-    protected function getProtectedMember($obj_or_cls, string $name)
-    {
-        Validator::assertIsObjectOrExistingClass('obj_or_cls', $obj_or_cls);
-
-        /**
-         * At this point $obj_or_cls is either object or string but some static analyzers
-         * got problems figuring that out, so this (partially correct) var declaration is
-         * to make them believe.
-         *
-         * @var object $obj_or_cls
-         */
-        $reflection = new \ReflectionClass($obj_or_cls);
-        $property = $reflection->getProperty($name);
-        $property->setAccessible(true);
-
-        /**
-         * Because of fake typehint aboive, PHPStan thinks ternary in line bellow always
-         * yields the same results, which is not true. This is to make it STFU.
-         *
-         * @phpstan-ignore-next-line
-         */
-        return $property->getValue(is_object($obj_or_cls) ? $obj_or_cls : null);
-    }
-
-    /**
-     * Returns value of otherwise non-public member of the class
-     *
-     * @param string|object $obj_or_cls class name to get member from, or instance of that class
-     * @param string        $name       name of constant to grab (i.e. `FOO`)
-     *
-     * @return mixed
-     * @throws \ReflectionException
-     */
-    protected function getProtectedConstant($obj_or_cls, string $name)
-    {
-        Validator::assertIsObjectOrExistingClass('obj_or_cls', $obj_or_cls);
-
-        /**
-         * At this point $obj_or_cls is either object or string but some static analyzers
-         * got problems figuring that out, so this (partially correct) var declaration is
-         * to make them believe.
-         *
-         * @var object $obj_or_cls
-         */
-        return (new \ReflectionClass($obj_or_cls))->getConstant($name);
     }
 
     // ---------------------------------------------------------------------------------------------

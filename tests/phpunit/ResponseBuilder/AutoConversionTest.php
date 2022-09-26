@@ -19,6 +19,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
 use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
@@ -153,7 +154,7 @@ class AutoConversionTest extends TestCase
         /** @var array $data */
 
         $converter = new Converter();
-        $cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
+        $cfg = Bridge::callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
         /** @var array $cfg */

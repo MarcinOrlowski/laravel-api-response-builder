@@ -19,6 +19,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
 use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
@@ -120,7 +121,7 @@ class PrimitivesTest extends TestCase
         $this->assertIsArray($converted);
 
         /** @var array $cfg */
-        $cfg = $this->callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [$value]);
+        $cfg = Bridge::callProtectedMethod($converter, 'getPrimitiveMappingConfigOrThrow', [$value]);
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
         /** @var string $key */
