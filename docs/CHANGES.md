@@ -7,8 +7,8 @@
 > **before** doing major upgrade!
 
 From release 9.5 onward, `ResponseBuilder` major version number is in sync with `Laravel`'s major
-version number to show target framework version. If you use `Laravel 9` - you'd need
-`ResponseBuilder v9.*`. Version  `ResponseBuilder v10.*` would be then your dependency in (future)
+version number to show target framework version. If you use `Laravel 9` - you'd need to depend on
+`ResponseBuilder v9.*`. Version `ResponseBuilder v10.*` would be then your dependency in (future)
 `Laraver v10` based projects, and so on. Also, due to limited time and funds I am having to maintain
 this project, only the most recent Laravel version will be officially supported. The same applies to
 PHP version requirement. Starting from v9.5, `ResponseBuilder` requires exactly the same PHP
