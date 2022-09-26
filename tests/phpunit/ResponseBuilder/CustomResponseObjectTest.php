@@ -18,6 +18,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
@@ -36,13 +38,13 @@ class CustomResponseObjectTest extends TestCase
         MyResponseBuilder::$fake_response = [];
         for ($i = 0; $i < 10; $i++) {
             /** @noinspection AmbiguousMethodsCallsInArrayMappingInspection */
-            MyResponseBuilder::$fake_response[ $this->getRandomString() ] = $this->getRandomString();
+            MyResponseBuilder::$fake_response[ Generator::getRandomString() ] = Generator::getRandomString();
         }
 
         $response = MyResponseBuilder::success();
         /** @var array $array_b */
         $array_b = \json_decode($this->getResponseContent($response), true);
-        $this->assertArrayEquals(MyResponseBuilder::$fake_response, $array_b);
+        ExtraAsserts::assertArrayEquals(MyResponseBuilder::$fake_response, $array_b);
     }
 
 } // end of class

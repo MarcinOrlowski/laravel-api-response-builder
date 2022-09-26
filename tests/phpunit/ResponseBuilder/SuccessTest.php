@@ -19,10 +19,12 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Type;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 
 /**
  * Class SuccessTest
@@ -31,47 +33,47 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
  */
 class SuccessTest extends TestCase
 {
-	/**
-	 * Check plain success() invocation
-	 */
-	public function testSuccess(): void
-	{
-		$this->response = RB::success();
-		$api = $this->getResponseSuccessObject(BaseApiCodes::OK());
+    /**
+     * Check plain success() invocation
+     */
+    public function testSuccess(): void
+    {
+        $this->response = RB::success();
+        $api = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
-		$this->assertNull($api->getData());
-		$msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
-		/** @var string $msg_key */
-		$this->assertEquals($this->langGet($msg_key), $api->getMessage());
-	}
+        $this->assertNull($api->getData());
+        $msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
+        /** @var string $msg_key */
+        $this->assertEquals($this->langGet($msg_key), $api->getMessage());
+    }
 
-	public function testSuccessWithArrayPayload(): void
-	{
-		$payload = [];
-		for ($i = 0; $i < 10; $i++) {
-			$payload[] = $this->getRandomString("item${i}");
-		}
+    public function testSuccessWithArrayPayload(): void
+    {
+        $payload = [];
+        for ($i = 0; $i < 10; $i++) {
+            $payload[] = Generator::getRandomString("item${i}");
+        }
 
-		$this->response = RB::success($payload);
-		$api = $this->getResponseSuccessObject(BaseApiCodes::OK());
+        $this->response = RB::success($payload);
+        $api = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
-		$this->assertNotNull($api->getData());
-		$data = (array)$api->getData();
+        $this->assertNotNull($api->getData());
+        $data = (array)$api->getData();
 
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
-		$this->assertNotEmpty($cfg);
+        $cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
+        $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
         /** @var array $cfg */
-		$key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
+        $key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
-		$this->assertCount(1, $data);
+        $this->assertCount(1, $data);
         /** @var array $data */
         $data = $api->getData();
-		$this->assertArrayEquals($payload, (array)$data[$key]);
+        ExtraAsserts::assertArrayEquals($payload, (array)$data[ $key ]);
 
-		$msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
-		/** @var string $msg_key */
-		$this->assertEquals($this->langGet($msg_key), $api->getMessage());
-	}
+        $msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
+        /** @var string $msg_key */
+        $this->assertEquals($this->langGet($msg_key), $api->getMessage());
+    }
 
 } // end of class

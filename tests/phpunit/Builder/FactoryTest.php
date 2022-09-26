@@ -34,7 +34,7 @@ class FactoryTest extends TestCase
 	public function testAsSuccess(): void
 	{
 		$dummy_rb = DummyResponseBuilder::asSuccess();
-		$this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
+        $this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
 	}
 
 	/**
@@ -43,7 +43,7 @@ class FactoryTest extends TestCase
 	public function testAsError(): void
 	{
 		$dummy_rb = DummyResponseBuilder::asError(BaseApiCodes::NO_ERROR_MESSAGE());
-		$this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
+        $this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
 	}
 
 } // end of class

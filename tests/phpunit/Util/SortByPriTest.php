@@ -16,6 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Util;
 
 use MarcinOrlowski\ResponseBuilder\Util;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 
 /**
  * Class SortByPriTest
@@ -29,10 +30,10 @@ class SortByPriTest extends TestCase
      */
     public function testSortByPri(): void
     {
-        $key1 = $this->getRandomString('key_1');
-        $key2 = $this->getRandomString('key_2');
-        $key3 = $this->getRandomString('key_3');
-        $key4 = $this->getRandomString('key_4');
+        $key1 = Generator::getRandomString('key_1');
+        $key2 = Generator::getRandomString('key_2');
+        $key3 = Generator::getRandomString('key_3');
+        $key4 = Generator::getRandomString('key_4');
 
         $data = [
             $key1 => ['pri' => -1,],

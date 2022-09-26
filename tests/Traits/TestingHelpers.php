@@ -448,20 +448,6 @@ trait TestingHelpers
         return (new \ReflectionClass($obj_or_cls))->getConstant($name);
     }
 
-    /**
-     * Generates random string, with optional prefix
-     *
-     * @param string|null $prefix
-     */
-    protected function getRandomString(string $prefix = null): string
-    {
-        if ($prefix !== null) {
-            $prefix = "{$prefix}_";
-        }
-
-        return $prefix . \md5(uniqid('', true));
-    }
-
     // ---------------------------------------------------------------------------------------------
 
     /**

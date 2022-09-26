@@ -20,6 +20,8 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 /**
  * Data validator helper
+ *
+ * @deprecated
  */
 final class Validator
 {

@@ -19,6 +19,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -38,12 +39,12 @@ class AutoConversionTest extends TestCase
     public function testClassAutoConversionSingleElement(): void
     {
         // GIVEN model object with randomly set member value
-        $model_val = $this->getRandomString('model');
+        $model_val = Generator::getRandomString('model');
         $model = new TestModel($model_val);
 
         // AND having its class configured for auto conversion
         $model_class_name = \get_class($model);
-        $key = $this->getRandomString();
+        $key = Generator::getRandomString();
         $cfg = [
             $model_class_name => [
                 RB::KEY_HANDLER => ToArrayConverter::class,
@@ -72,10 +73,10 @@ class AutoConversionTest extends TestCase
     public function testClassAutoConversionAsPartOfDataset(): void
     {
         // GIVEN model object with randomly set member value
-        $model_1_val = $this->getRandomString('model_1');
+        $model_1_val = Generator::getRandomString('model_1');
         $model_1 = new TestModel($model_1_val);
 
-        $model_2_val = $this->getRandomString('model_2');
+        $model_2_val = Generator::getRandomString('model_2');
         $model_2 = new TestModel($model_2_val);
 
         $model_1_data_key = 'model-data-key_1';
@@ -94,7 +95,7 @@ class AutoConversionTest extends TestCase
         // AND having the object as part of bigger data set
         $tmp_base = [];
         for ($i = 0; $i < 1; $i++) {
-            $tmp_base[ $this->getRandomString("key{$i}") ] = $this->getRandomString("val{$i}");
+            $tmp_base[ Generator::getRandomString("key{$i}") ] = Generator::getRandomString("val{$i}");
         }
 
         $data = $tmp_base;
@@ -171,7 +172,7 @@ class AutoConversionTest extends TestCase
             // double
             [((double)random_int(0, 10000)) / random_int(1, 100)],
             // string
-            [$this->getRandomString()],
+            [Generator::getRandomString()],
         ];
     }
 

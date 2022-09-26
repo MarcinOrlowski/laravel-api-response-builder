@@ -21,12 +21,15 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelArrayable;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonResource;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonSerializable;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use PHPUnit\Framework\Assert;
 
 /**
  * Class DefaultConfigTest
@@ -41,7 +44,7 @@ class DefaultConfigTest extends TestCase
     public function testArrayable(): void
     {
         // GIVEN object implementing Arrayable interface
-        $obj_val = $this->getRandomString('val_1');
+        $obj_val = Generator::getRandomString('val_1');
         $obj = new TestModelArrayable($obj_val);
 
         // HAVING converter with default settings
@@ -72,9 +75,9 @@ class DefaultConfigTest extends TestCase
     public function testJsonSerializable(): void
     {
         $values = [
-            $this->getRandomString('obj_val'),
-            [$this->getRandomString('obj_a'),
-             $this->getRandomString('obj_b')],
+            Generator::getRandomString('obj_val'),
+            [Generator::getRandomString('obj_a'),
+             Generator::getRandomString('obj_b')],
             mt_rand(),
         ];
 
@@ -112,7 +115,7 @@ class DefaultConfigTest extends TestCase
     public function testJsonResource(): void
     {
         // GIVEN JSONResource class object
-        $obj_val = $this->getRandomString('obj_val');
+        $obj_val = Generator::getRandomString('obj_val');
         $obj = new TestModelJsonResource($obj_val);
 
         // HAVING converter with default settings
@@ -143,7 +146,7 @@ class DefaultConfigTest extends TestCase
     {
         $data = [];
         for ($i = 0; $i < 10; $i++) {
-            $data[] = $this->getRandomString("item{$i}");
+            $data[] = Generator::getRandomString("item{$i}");
         }
         $this->doCollectionTests(collect($data));
     }
@@ -156,11 +159,11 @@ class DefaultConfigTest extends TestCase
         // GIVEN Eloquent collection with content
         $collection = new EloquentCollection();
         /** @phpstan-ignore-next-line */
-        $collection->add($this->getRandomString('item1'));
+        $collection->add(Generator::getRandomString('item1'));
         /** @phpstan-ignore-next-line */
-        $collection->add($this->getRandomString('item2'));
+        $collection->add(Generator::getRandomString('item2'));
         /** @phpstan-ignore-next-line */
-        $collection->add($this->getRandomString('item3'));
+        $collection->add(Generator::getRandomString('item3'));
 
         $this->doCollectionTests($collection);
     }
@@ -174,7 +177,7 @@ class DefaultConfigTest extends TestCase
     {
         $data = [];
         for ($i = 0; $i < \random_int(10, 20); $i++) {
-            $data[] = $this->getRandomString("item{$i}");
+            $data[] = Generator::getRandomString("item{$i}");
         }
         $total = \count($data);
         /** @noinspection PhpParamsInspection */
@@ -189,7 +192,7 @@ class DefaultConfigTest extends TestCase
     {
         $data = [];
         for ($i = 0; $i < \random_int(10, 20); $i++) {
-            $data[] = $this->getRandomString("item{$i}");
+            $data[] = Generator::getRandomString("item{$i}");
         }
 
         /** @noinspection PhpParamsInspection */
@@ -209,9 +212,9 @@ class DefaultConfigTest extends TestCase
     protected function doPaginatorSupportTests($paginator): void
     {
         $result = (new Converter())->convert($paginator);
-        $this->assertIsArray($result);
+        ExtraAsserts::assertIsArray($result);
         /** @var array $result */
-        $this->assertArrayHasKeys([
+        ExtraAsserts::assertArrayHasKeys([
             'current_page',
             'data',
             'first_page_url',

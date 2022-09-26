@@ -19,6 +19,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
  */
 
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
@@ -56,13 +58,13 @@ class ConverterTest extends TestCase
     public function testSubclassOfConfiguredClassConversion(): void
     {
         // GIVEN two objects with direct inheritance relation
-        $parent_val = $this->getRandomString('parent');
+        $parent_val = Generator::getRandomString('parent');
         $parent = new TestModel($parent_val);
-        $child_val = $this->getRandomString('child');
+        $child_val = Generator::getRandomString('child');
         $child = new TestModelChild($child_val);
 
         // HAVING indirect mapping configuration (of parent class)
-        $key = $this->getRandomString('key');
+        $key = Generator::getRandomString('key');
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
             \get_class($parent) => [
                 RB::KEY_HANDLER => ToArrayConverter::class,
@@ -74,7 +76,7 @@ class ConverterTest extends TestCase
         $result = (new Converter())->convert($child);
 
         // EXPECT it to be converted as per parent class configuration entry
-        $this->assertIsArray($result);
+        ExtraAsserts::assertIsArray($result);
         /** @var array $result */
         $this->assertArrayHasKey($key, $result);
         $result = $result[ $key ];

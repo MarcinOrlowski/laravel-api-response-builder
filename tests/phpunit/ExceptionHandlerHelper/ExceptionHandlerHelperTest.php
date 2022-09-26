@@ -21,15 +21,16 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ExceptionHandlerHelper;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
+use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\ApiResponse;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlers\DefaultExceptionHandler;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-use PHPUnit\Framework\MockObject\Api;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class ExceptionHandlerHelperTest
@@ -48,7 +49,8 @@ class ExceptionHandlerHelperTest extends TestCase
         $obj = new ExceptionHandlerHelper();
         /** @var HttpResponse $eh_response */
         $eh_response = $this->callProtectedMethod($obj, 'unauthenticated', [null,
-                                                                            $exception]);
+                                                                            $exception,
+        ]);
 
         $response = ApiResponse::fromJson($this->getResponseContent($eh_response));
         $this->assertNull($response->getData());
@@ -103,13 +105,15 @@ class ExceptionHandlerHelperTest extends TestCase
     /**
      * Handles single exception testing.
      *
-     * @param string $exception_config_key           ResponseBuilder's config key for this particular exception.
+     * @param string $exception_config_key           ResponseBuilder's config key for this particular
+     *                                               exception.
      * @param string $exception_class                Name of the class of exception to be constructed.
      * @param int    $expected_http_code             Expected response HTTP code
      * @param int    $expected_api_code              Expected response API code
      * @param bool   $validate_response_message_text Set to @true, to validate returned response message with
      *                                               current localization.
-     * @param bool   $expect_data                    Set to @true if response is expected to have non null `data` node.
+     * @param bool   $expect_data                    Set to @true if response is expected to have non null
+     *                                               `data` node.
      *
      * @noinspection PhpTooManyParametersInspection
      */
@@ -248,7 +252,7 @@ class ExceptionHandlerHelperTest extends TestCase
             HttpException::class,
             RB::KEY_DEFAULT,
         ];
-        $this->assertArrayHasKeys($keys, $cfg);
+        ExtraAsserts::assertArrayHasKeys($keys, $cfg);
 
         // check http_exception block and validate all required entries and the config content.
         $http_cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ];
@@ -294,7 +298,7 @@ class ExceptionHandlerHelperTest extends TestCase
         // HAVING exception handler configured to use user provided message string
         $api_code = BaseApiCodes::EX_HTTP_NOT_FOUND();
         $http_code = HttpResponse::HTTP_SERVICE_UNAVAILABLE;
-        $msg_key = $this->getRandomString('key');
+        $msg_key = Generator::getRandomString('key');
         $cfg = [
             RB::KEY_DEFAULT => [
                 RB::KEY_HANDLER => DefaultExceptionHandler::class,
@@ -309,7 +313,7 @@ class ExceptionHandlerHelperTest extends TestCase
         Config::set(RB::CONF_KEY_EXCEPTION_HANDLER, $cfg);
 
         // GIVEN exception with message that should be handled
-        $ex_msg = $this->getRandomString('user_msg');
+        $ex_msg = Generator::getRandomString('user_msg');
         $ex = new \RuntimeException($ex_msg);
 
         /** @var HttpResponse $http_response */
@@ -336,7 +340,7 @@ class ExceptionHandlerHelperTest extends TestCase
         // HAVING exception handler configured to use user provided message string
         $api_code = BaseApiCodes::EX_HTTP_NOT_FOUND();
         $http_code = HttpResponse::HTTP_SERVICE_UNAVAILABLE;
-        $msg_key = $this->getRandomString('key');
+        $msg_key = Generator::getRandomString('key');
         $cfg = [
             'map' => [
                 'default' => [
@@ -374,9 +378,10 @@ class ExceptionHandlerHelperTest extends TestCase
     // ---------------------------------------------------------------------------------------------
 
     /**
-     * Checks if processException() would properly handle the case when there's no `msg_key` specified in exception
-     * handler config for this particular exception type, yet method is ordered to ignore message provided by
-     * exception and fall back one from config (which in this case means another fallback to built-in settings).
+     * Checks if processException() would properly handle the case when there's no `msg_key` specified in
+     * exception handler config for this particular exception type, yet method is ordered to ignore message
+     * provided by exception and fall back one from config (which in this case means another fallback to
+     * built-in settings).
      */
     public function testProcessExceptionWithMsgEnforceWithNoFallbackMsgKey(): void
     {
@@ -392,7 +397,7 @@ class ExceptionHandlerHelperTest extends TestCase
             'msg_enforce' => true,
         ];
 
-        $ex_msg = $this->getRandomString('ex');
+        $ex_msg = Generator::getRandomString('ex');
         $ex = new \RuntimeException($ex_msg);
 
         /** @var HttpResponse $http_response */
@@ -414,7 +419,8 @@ class ExceptionHandlerHelperTest extends TestCase
             'getErrorMessageForException', [
                 $ex,
                 $http_code,
-                $placeholders]);
+                $placeholders,
+            ]);
         /** @var string $expected_msg_key */
         $expected_msg = \Lang::get($expected_msg_key, $placeholders);
 
@@ -520,7 +526,8 @@ class ExceptionHandlerHelperTest extends TestCase
             $optional_keys = [
                 'pri',
                 'msg_key',
-                'msg_force'];
+                'msg_force',
+            ];
         } else {
             $mandatory_keys = [
                 'api_code',
@@ -533,21 +540,21 @@ class ExceptionHandlerHelperTest extends TestCase
             ];
         }
 
-        $this->assertArrayHasKeys($mandatory_keys, $params);
+        ExtraAsserts::assertArrayHasKeys($mandatory_keys, $params);
 
-        $this->assertIsInt($params['api_code']);
+        ExtraAsserts::assertIsInteger($params['api_code']);
         $this->assertGreaterThanOrEqual(BaseApiCodes::getMinCode(), $params['api_code']);
         $this->assertLessThanOrEqual(BaseApiCodes::getMaxCode(), $params['api_code']);
 
         if (\array_key_exists('http_code', $params)) {
-            $this->assertIsInt($params['http_code']);
+            ExtraAsserts::assertIsInteger($params['http_code']);
             $this->assertGreaterThanOrEqual(RB::ERROR_HTTP_CODE_MIN, $params['http_code']);
             $this->assertLessThanOrEqual(RB::ERROR_HTTP_CODE_MAX, $params['http_code']);
         }
 
         // check config does not contain any unknown keys
         $diff = [];
-        $allowed_keys = array_merge($mandatory_keys, $optional_keys);
+        $allowed_keys = \array_merge($mandatory_keys, $optional_keys);
         foreach ($params as $key => $val) {
             if (!\in_array($key, $allowed_keys)) {
                 $diff[] = $key;

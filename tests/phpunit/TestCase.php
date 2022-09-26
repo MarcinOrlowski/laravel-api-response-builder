@@ -31,7 +31,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	protected $response;
 
 	use Traits\TestingHelpers;
-	use \MarcinOrlowski\PhpunitExtraAsserts\Traits\ExtraAsserts;
 
 	/**
 	 * Define environment setup.

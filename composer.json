@@ -47,7 +47,7 @@
     "laravel/framework": "^9.0"
   },
   "require-dev": {
-    "marcin-orlowski/phpunit-extra-asserts": "^2.0",
+    "marcin-orlowski/phpunit-extra-asserts": "^3.0",
     "orchestra/testbench": "^7.0",
     "phpunit/phpunit": "^9.0",
     "phpunit/php-code-coverage": "^9.2",

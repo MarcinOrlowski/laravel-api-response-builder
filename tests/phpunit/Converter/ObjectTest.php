@@ -20,6 +20,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -82,7 +83,7 @@ class ObjectTest extends TestCase
     public function testConvertWithValidKeyType(): void
     {
         // only string and null is allowed for RB::KEY_KEY
-        $allowed_keys = [$this->getRandomString(), null];
+        $allowed_keys = [Generator::getRandomString(), null];
 
         $fake = new FakeConverter();
 
