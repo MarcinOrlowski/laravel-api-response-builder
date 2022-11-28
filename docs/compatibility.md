@@ -5,7 +5,7 @@
 [« Documentation table of contents](README.md)
 
 * [Important incompatibile changes](#incompatibility-notes)
-  * [Changes in v9.5](#v9.5)
+  * [Changes in v9.5](#v95)
   * [Changes in v9.*](#v9) (up to v9.4)
   * [Changes in v8.*](#v8)
   * [Changes in v7.*](#v7)
