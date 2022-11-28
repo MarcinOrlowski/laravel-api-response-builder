@@ -43,27 +43,19 @@
 use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 ```
 
- Next, modify handler's `render()` method body to ensure it calls calls our `ExceptionHandlerHelper`'s.
- Default handler as of Laravel 5.2 has been significantly simplified and by default it looks like this:
+ Next, register our handler in `register()` method:
 
 ```php
-public function render($request, Throwable $e)
+public function register()
 {
-    return parent::render($request, $e);
-}
-```
-
- After your edit it shall look like this:
-
-```php
-public function render($request, Throwable $e)
-{
-    return ExceptionHandlerHelper::render($request, $e);
+    $this->renderable(function (Throwable $ex, $request) {
+        return ExceptionHandlerHelper::handle($ex, $request);
+    });
 }
 ```
 
  From now on, in case of any troubles, regular and standardized JSON responses will be
- returned by your API instead of HTML page.
+ returned by your API instead of HTML error page.
 
 
 ## Error codes ##

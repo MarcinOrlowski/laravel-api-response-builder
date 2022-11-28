@@ -91,4 +91,4 @@ final class Util
 		return false;
 	}
 
-}
+} // end of class

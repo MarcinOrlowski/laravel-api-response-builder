@@ -18,6 +18,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -41,12 +42,12 @@ class BuilderTest extends TestCase
         $this->assertInstanceOf(RB::class, $builder);
         $this->response = $builder->build();
 
-        $j = $this->getResponseSuccessObject();
+        $api = $this->getResponseSuccessObject();
 
-        $this->assertNull($j->data);
+        $this->assertNull($api->getData());
         $msg_key = BaseApiCodes::getCodeMessageKey($expected_api_code);
         /** @var string $msg_key */
-        $this->assertEquals($this->langGet($msg_key), $j->message);
+        $this->assertEquals($this->langGet($msg_key), $api->getMessage());
     }
 
     /**
@@ -54,14 +55,14 @@ class BuilderTest extends TestCase
      */
     public function testWithHttpHeaders(): void
     {
-        $key1 = $this->getRandomString('key1');
-        $val1 = $this->getRandomString('val1');
-        $key2 = $this->getRandomString('key2');
-        $val2 = $this->getRandomString('val2');
-        $key3 = $this->getRandomString('key3');
-        $val3 = $this->getRandomString('val3');
-        $key4 = $this->getRandomString('key4');
-        $val4 = $this->getRandomString('val4');
+        $key1 = Generator::getRandomString('key1');
+        $val1 = Generator::getRandomString('val1');
+        $key2 = Generator::getRandomString('key2');
+        $val2 = Generator::getRandomString('val2');
+        $key3 = Generator::getRandomString('key3');
+        $val3 = Generator::getRandomString('val3');
+        $key4 = Generator::getRandomString('key4');
+        $val4 = Generator::getRandomString('val4');
 
         $headers = [
             $key1 => $val1,

@@ -20,6 +20,8 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\Lockpick\Lockpick;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -43,7 +45,8 @@ class ObjectTest extends TestCase
 
         $data = collect([1, 2, 3]);
 
-        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+        /** @var array $cfg */
+        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
         $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
         $cfg[ Collection::class ][ RB::KEY_KEY ] = null;
 
@@ -72,7 +75,7 @@ class ObjectTest extends TestCase
 
         $this->expectException(Ex\InvalidTypeException::class);
 
-        $this->callProtectedMethod(Converter::class, 'getClassesMapping');
+        Lockpick::call(Converter::class, 'getClassesMapping');
     }
 
     /**
@@ -81,13 +84,14 @@ class ObjectTest extends TestCase
     public function testConvertWithValidKeyType(): void
     {
         // only string and null is allowed for RB::KEY_KEY
-        $allowed_keys = [$this->getRandomString(), null];
+        $allowed_keys = [Generator::getRandomString(), null];
 
         $fake = new FakeConverter();
 
         $data = collect([1, 2, 3]);
 
-        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+        /** @var array $cfg */
+        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
         $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
 
         \collect($allowed_keys)->each(function($allowed_key) use ($data, $fake, $cfg) {

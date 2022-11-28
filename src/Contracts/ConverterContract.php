@@ -23,4 +23,5 @@ interface ConverterContract
      *                       name match or inheritance).
      */
     public function convert(object $obj, array $config): array;
-}
+
+} // end of class

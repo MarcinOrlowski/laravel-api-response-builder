@@ -35,6 +35,7 @@ class TestModelJsonSerializable implements \JsonSerializable
 	 */
 	public function __construct($val)
 	{
+        /** @var string $val */
 		$this->val = $val;
 	}
 
@@ -63,4 +64,5 @@ class TestModelJsonSerializable implements \JsonSerializable
 	{
 		return $this->val;
 	}
-}
+
+} // end of class

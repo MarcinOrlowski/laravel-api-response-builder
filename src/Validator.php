@@ -14,11 +14,14 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\Contracts\InvalidTypeExceptionContract;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 
 /**
  * Data validator helper
+ *
+ * @deprecated
  */
 final class Validator
 {
@@ -30,9 +33,8 @@ final class Validator
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotBooleanException
-     *
      */
-    public static function assertIsBool(string $var_name, $value): void
+    public static function assertIsBool(string $var_name, mixed $value): void
     {
         self::assertIsType($var_name, $value, [Type::BOOLEAN], Ex\NotBooleanException::class);
     }
@@ -46,7 +48,7 @@ final class Validator
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
      */
-    public static function assertIsInt(string $var_name, $value): void
+    public static function assertIsInt(string $var_name, mixed $value): void
     {
         self::assertIsType($var_name, $value, [Type::INTEGER], Ex\NotIntegerException::class);
     }
@@ -60,7 +62,7 @@ final class Validator
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotArrayException
      */
-    public static function assertIsArray(string $var_name, $value): void
+    public static function assertIsArray(string $var_name, mixed $value): void
     {
         self::assertIsType($var_name, $value, [Type::ARRAY], Ex\NotArrayException::class);
     }
@@ -74,7 +76,7 @@ final class Validator
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotObjectException
      */
-    public static function assertIsObject(string $var_name, $value): void
+    public static function assertIsObject(string $var_name, mixed $value): void
     {
         self::assertIsType($var_name, $value, [Type::OBJECT], Ex\NotObjectException::class);
     }
@@ -109,7 +111,7 @@ final class Validator
 
     /**
      * @param string $var_name Label or name of the variable to be used in exception message (if thrown).
-     * @param mixed  $value    Variable to be asserted.
+     * @param int    $value    Variable to be asserted.
      * @param int    $min      Min allowed value (inclusive)
      * @param int    $max      Max allowed value (inclusive)
      *
@@ -124,12 +126,14 @@ final class Validator
 
         if ($min > $max) {
             throw new \InvalidArgumentException(
-                \sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.', __FUNCTION__, $var_name));
+                \sprintf('%s: Invalid range for "%s". Ensure bound values are not swapped.',
+                    __FUNCTION__, $var_name));
         }
 
         if (($min > $value) || ($value > $max)) {
             throw new \OutOfBoundsException(
-                \sprintf('Value of "%s" (%d) is out of bounds. Must be between %d-%d inclusive.', $var_name, $value, $min, $max));
+                \sprintf('Value of "%s" (%d) is out of bounds. Must be between %d-%d inclusive.',
+                    $var_name, $value, $min, $max));
         }
     }
 
@@ -150,27 +154,34 @@ final class Validator
     public static function assertIsType(string $var_name, $value, array $allowed_types,
                                         string $ex_class = Ex\InvalidTypeException::class): void
     {
+        if (empty($allowed_types)) {
+            throw new \InvalidArgumentException('The $allowed_types array cannot be empty.');
+        }
+
         // Type::EXISTING_CLASS is artificial type, so we need separate logic to handle it.
         $tmp = $allowed_types;
-        $idx = array_search(Type::EXISTING_CLASS, $tmp, true);
+        $idx = \array_search(Type::EXISTING_CLASS, $tmp, true);
         if ($idx !== false) {
             // Remove the type, so gettype() test loop won't see it.
             unset($tmp[ $idx ]);
-            if (is_string($value) && class_exists($value)) {
+            if (\is_string($value) && \class_exists($value)) {
                 // It's existing class, no need to test further.
                 return;
             }
         }
 
-        $type = \gettype($value);
+        // Get current type of the $value and next, validate
+        $value_type = \gettype($value);
+
         if (!empty($tmp)) {
-            if (!\in_array($type, $allowed_types, true)) {
+            if (!\in_array($value_type, $allowed_types, true)) {
                 // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
-                throw new $ex_class($var_name, $type, $allowed_types);
+                /** @var \Exception $ex_class */
+                throw new $ex_class($var_name, $value_type, $allowed_types);
             }
         } else {
             // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
-            throw new Ex\ClassNotFound($var_name, $type, $allowed_types);
+            throw new Ex\ClassNotFound($var_name, $value_type, $allowed_types);
         }
     }
 
@@ -204,9 +215,11 @@ final class Validator
     }
 
     /**
-     * Ensures $obj (that is value coming from variable, which name is passed in $label) is instance of $cls class.
+     * Ensures $obj (that is value coming from variable, which name is passed in $label) is instance of $cls
+     * class.
      *
-     * @param string $var_name Name of variable that the $obj value is coming from. Used for exception message.
+     * @param string $var_name Name of variable that the $obj value is coming from. Used for exception
+     *                         message.
      * @param object $obj      Object to check instance of
      * @param string $cls      Target class we want to check $obj agains.
      *

@@ -21,12 +21,15 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Config;
+use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelArrayable;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonResource;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModelJsonSerializable;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use PHPUnit\Framework\Assert;
 
 /**
  * Class DefaultConfigTest
@@ -35,211 +38,229 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
  */
 class DefaultConfigTest extends TestCase
 {
-	/**
-	 * Tests converter behavior on default config on object implementing Laravel's Arrayable interface.
-	 */
-	public function testArrayable(): void
-	{
-		// GIVEN object implementing Arrayable interface
-		$obj_val = $this->getRandomString('val_1');
-		$obj = new TestModelArrayable($obj_val);
+    /**
+     * Tests converter behavior on default config on object implementing Laravel's Arrayable interface.
+     */
+    public function testArrayable(): void
+    {
+        // GIVEN object implementing Arrayable interface
+        $obj_val = Generator::getRandomString('val_1');
+        $obj = new TestModelArrayable($obj_val);
 
-		// HAVING converter with default settings
-		$converter = new Converter();
+        // HAVING converter with default settings
+        $converter = new Converter();
 
-		// WHEN we try to pass of object of that class
-		$result = $converter->convert($obj);
+        // WHEN we try to pass of object of that class
+        $result = $converter->convert($obj);
 
-		// THEN it should be converted automatically as per configuration
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-		$this->assertNotEmpty($cfg);
-		$key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ RB::KEY_KEY ];
+        // THEN it should be converted automatically as per configuration
+        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+        $this->assertNotEmpty($cfg);
+        $this->assertIsArray($cfg);
+        /** @var array $cfg */
+        $key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ RB::KEY_KEY ];
 
-		$this->assertIsArray($result);
-		/** @var array $result */
-		$this->assertArrayHasKey($key, $result);
-		$result = $result[ $key ];
-		$this->assertArrayHasKey(TestModelArrayable::FIELD_NAME, $result);
-		$this->assertEquals($result[ TestModelArrayable::FIELD_NAME ], $obj_val);
-	}
+        $this->assertIsArray($result);
+        /** @var array $result */
+        $this->assertArrayHasKey($key, $result);
+        /** @var array $result */
+        $result = $result[ $key ];
+        $this->assertArrayHasKey(TestModelArrayable::FIELD_NAME, $result);
+        $this->assertEquals($result[ TestModelArrayable::FIELD_NAME ], $obj_val);
+    }
 
-	/**
-	 * Tests converter behavior on default config on object implementing JsonSerializable interface.
-	 */
-	public function testJsonSerializable(): void
-	{
-		$values = [
-			$this->getRandomString('obj_val'),
-			[$this->getRandomString('obj_a'),
-			 $this->getRandomString('obj_b')],
-			mt_rand(),
-		];
+    /**
+     * Tests converter behavior on default config on object implementing JsonSerializable interface.
+     */
+    public function testJsonSerializable(): void
+    {
+        $values = [
+            Generator::getRandomString('obj_val'),
+            [Generator::getRandomString('obj_a'),
+             Generator::getRandomString('obj_b')],
+            mt_rand(),
+        ];
 
-		foreach ($values as $obj_val) {
-			// GIVEN JsonSerializable class object
-			$obj = new TestModelJsonSerializable($obj_val);
+        foreach ($values as $obj_val) {
+            // GIVEN JsonSerializable class object
+            $obj = new TestModelJsonSerializable($obj_val);
 
-			// HAVING converter with default settings
-			$converter = new Converter();
+            // HAVING converter with default settings
+            $converter = new Converter();
 
-			// WHEN we try to pass of object of that class
-			$result = $converter->convert($obj);
+            // WHEN we try to pass of object of that class
+            $result = $converter->convert($obj);
 
-			// THEN it should be converted automatically as per configuration
-			$cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-			$this->assertNotEmpty($cfg);
-			$key = $cfg[ \JsonSerializable::class ][ RB::KEY_KEY ];
+            // THEN it should be converted automatically as per configuration
+            $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+            /** @var array $cfg */
 
-			$this->assertIsArray($result);
-			/** @var array $result */
-			$this->assertArrayHasKey($key, $result);
-			$result = $result[ $key ];
-			$this->assertArrayHasKey($key, $result);
-			$this->assertEquals($obj_val, $result[ $key ]);
-		}
-	}
+            $this->assertNotEmpty($cfg);
+            $this->assertIsArray($cfg);
 
-	/**
-	 * Tests converter behavior on default config on object extending Laravel's JsonResource class.
-	 */
-	public function testJsonResource(): void
-	{
-		// GIVEN JSONResource class object
-		$obj_val = $this->getRandomString('obj_val');
-		$obj = new TestModelJsonResource($obj_val);
+            $key = $cfg[ \JsonSerializable::class ][ RB::KEY_KEY ];
 
-		// HAVING converter with default settings
-		$converter = new Converter();
+            $this->assertIsArray($result);
+            /** @var array $result */
+            $this->assertArrayHasKey($key, $result);
+            $result = $result[ $key ];
+            $this->assertArrayHasKey($key, $result);
+            $this->assertEquals($obj_val, $result[ $key ]);
+        }
+    }
 
-		// WHEN we try to pass of object of that class
-		$result = $converter->convert($obj);
+    /**
+     * Tests converter behavior on default config on object extending Laravel's JsonResource class.
+     */
+    public function testJsonResource(): void
+    {
+        // GIVEN JSONResource class object
+        $obj_val = Generator::getRandomString('obj_val');
+        $obj = new TestModelJsonResource($obj_val);
 
-		// THEN it should be converted automatically as per configuration
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-		$this->assertNotEmpty($cfg);
-		$key = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ][ RB::KEY_KEY ];
+        // HAVING converter with default settings
+        $converter = new Converter();
 
-		$this->assertIsArray($result);
-		/** @var array $result */
-		$this->assertArrayHasKey($key, $result);
-		$result = $result[ $key ];
-		$this->assertArrayHasKey(TestModelJsonResource::FIELD_NAME, $result);
-		$this->assertEquals($result[ TestModelJsonResource::FIELD_NAME ], $obj_val);
-	}
+        // WHEN we try to pass of object of that class
+        $result = $converter->convert($obj);
 
-	/**
-	 * Tests converter behavior on default config on Laravel's Support\Collection.
-	 */
-	public function testSupportCollection(): void
-	{
-		$data = [];
-		for ($i = 0; $i < 10; $i++) {
-			$data[] = $this->getRandomString("item{$i}");
-		}
-		$this->doCollectionTests(collect($data));
-	}
+        // THEN it should be converted automatically as per configuration
+        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+        /** @var array $cfg */
+        $this->assertNotEmpty($cfg);
+        $this->assertIsArray($cfg);
+        $key = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ][ RB::KEY_KEY ];
 
-	/**
-	 * Tests converter behavior on default config on Laravel Eloquent's Collection.
-	 */
-	public function testEloquentCollection(): void
-	{
-		// GIVEN Eloquent collection with content
-		$collection = new EloquentCollection();
-		$collection->add($this->getRandomString('item1'));
-		$collection->add($this->getRandomString('item2'));
-		$collection->add($this->getRandomString('item3'));
+        $this->assertIsArray($result);
+        /** @var array $result */
+        $this->assertArrayHasKey($key, $result);
+        $result = $result[ $key ];
+        $this->assertArrayHasKey(TestModelJsonResource::FIELD_NAME, $result);
+        $this->assertEquals($result[ TestModelJsonResource::FIELD_NAME ], $obj_val);
+    }
 
-		$this->doCollectionTests($collection);
-	}
+    /**
+     * Tests converter behavior on default config on Laravel's Support\Collection.
+     */
+    public function testSupportCollection(): void
+    {
+        $data = [];
+        for ($i = 0; $i < 10; $i++) {
+            $data[] = Generator::getRandomString("item{$i}");
+        }
+        $this->doCollectionTests(collect($data));
+    }
 
-	// -----------------------------------------------------------------------------------------------------------
+    /**
+     * Tests converter behavior on default config on Laravel Eloquent's Collection.
+     */
+    public function testEloquentCollection(): void
+    {
+        // GIVEN Eloquent collection with content
+        $collection = new EloquentCollection();
+        /** @phpstan-ignore-next-line */
+        $collection->add(Generator::getRandomString('item1'));
+        /** @phpstan-ignore-next-line */
+        $collection->add(Generator::getRandomString('item2'));
+        /** @phpstan-ignore-next-line */
+        $collection->add(Generator::getRandomString('item3'));
 
-	/**
-	 * Checks if default config for LengthAwarePaginator class produces expected output.
-	 */
-	public function testLengthAwarePaginator(): void
-	{
-		$data = [];
-		for ($i = 0; $i < \random_int(10, 20); $i++) {
-			$data[] = $this->getRandomString("item{$i}");
-		}
-		$total = \count($data);
-		/** @noinspection PhpParamsInspection */
-		$this->doPaginatorSupportTests(
-			new \Illuminate\Pagination\LengthAwarePaginator(collect($data), $total, (int)($total / 2)));
-	}
+        $this->doCollectionTests($collection);
+    }
 
-	/**
-	 * Checks if default config for Paginator class produces expected output.
-	 */
-	public function testPaginator(): void
-	{
-		$data = [];
-		for ($i = 0; $i < \random_int(10, 20); $i++) {
-			$data[] = $this->getRandomString("item{$i}");
-		}
+    // ---------------------------------------------------------------------------------------------
 
-		/** @noinspection PhpParamsInspection */
-		$this->doPaginatorSupportTests(
-			new \Illuminate\Pagination\Paginator(collect($data), (int)(\count($data) / 2)));
-	}
+    /**
+     * Checks if default config for LengthAwarePaginator class produces expected output.
+     */
+    public function testLengthAwarePaginator(): void
+    {
+        $data = [];
+        for ($i = 0; $i < \random_int(10, 20); $i++) {
+            $data[] = Generator::getRandomString("item{$i}");
+        }
+        $total = \count($data);
+        /** @noinspection PhpParamsInspection */
+        $this->doPaginatorSupportTests(
+            new \Illuminate\Pagination\LengthAwarePaginator(collect($data), $total, (int)($total / 2)));
+    }
 
-	/**
-	 * Helper that performs common tests for Paginator support.
-	 *
-	 * @param \Illuminate\Pagination\AbstractPaginator $paginator
-	 *
-	 * NOTE: not param typehint due to PHP not matching subclasses hints properly
-	 *
-	 * @noinspection PhpMissingParamTypeInspection
-	 */
-	protected function doPaginatorSupportTests($paginator): void
-	{
-		$result = (new Converter())->convert($paginator);
-		$this->assertIsArray($result);
-		/** @var array $result */
-		$this->assertArrayHasKeys([
-			'current_page',
-			'data',
-			'first_page_url',
-			'from',
-			'next_page_url',
-			'path',
-			'per_page',
-			'prev_page_url',
-			'to',
-		], $result);
-	}
+    /**
+     * Checks if default config for Paginator class produces expected output.
+     */
+    public function testPaginator(): void
+    {
+        $data = [];
+        for ($i = 0; $i < \random_int(10, 20); $i++) {
+            $data[] = Generator::getRandomString("item{$i}");
+        }
 
-	// -----------------------------------------------------------------------------------------------------------
+        /** @noinspection PhpParamsInspection */
+        $this->doPaginatorSupportTests(
+            new \Illuminate\Pagination\Paginator(collect($data), (int)(\count($data) / 2)));
+    }
 
-	/**
-	 * Helper method to perform some common tests of built-in support for Laravel's collections.
-	 *
-	 * @param object|array $collection
-	 */
-	protected function doCollectionTests($collection): array
-	{
-		// HAVING Converter with default settings
-		// WHEN we try to pass of object of that class
-		$result = (new Converter())->convert($collection);
+    /**
+     * Helper that performs common tests for Paginator support.
+     *
+     * @param \Illuminate\Pagination\AbstractPaginator $paginator
+     *
+     * NOTE: not param typehint due to PHP not matching subclasses hints properly
+     *
+     * @noinspection PhpMissingParamTypeInspection
+     */
+    protected function doPaginatorSupportTests($paginator): void
+    {
+        $result = (new Converter())->convert($paginator);
+        ExtraAsserts::assertIsArray($result);
+        /** @var array $result */
+        ExtraAsserts::assertArrayHasKeys([
+            'current_page',
+            'data',
+            'first_page_url',
+            'from',
+            'next_page_url',
+            'path',
+            'per_page',
+            'prev_page_url',
+            'to',
+        ], $result);
+    }
 
-		// THEN it should be converted automatically as per default configuration
-		$cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-		$key = $cfg[ \get_class($collection) ][ RB::KEY_KEY ];
+    // ---------------------------------------------------------------------------------------------
 
-		$this->assertIsArray($result);
-		/** @var array $result */
-		$this->assertArrayHasKey($key, $result);
-		$result = $result[ $key ];
+    /**
+     * Helper method to perform some common tests of built-in support for Laravel's collections.
+     *
+     * @param object $collection
+     */
+    protected function doCollectionTests($collection): array
+    {
+        // HAVING Converter with default settings
+        // WHEN we try to pass of object of that class
+        /** @var array $result */
+        $result = (new Converter())->convert($collection);
 
-		foreach ($collection as $key => $val) {
-			$this->assertArrayHasKey($key, $result);
-			$this->assertEquals($val, $result[ $key ]);
-		}
+        // THEN it should be converted automatically as per default configuration
+        /** @var array $cfg */
+        $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
+        $key = $cfg[ \get_class($collection) ][ RB::KEY_KEY ];
 
-		return $result;
-	}
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey($key, $result);
+        $result = $result[ $key ];
+
+        $this->assertIsIterable($collection);
+        /**
+         * @var iterable $collection
+         * @var  string  $key
+         */
+        foreach ($collection as $key => $val) {
+            $this->assertArrayHasKey($key, $result);
+            $this->assertEquals($val, $result[ $key ]);
+        }
+
+        return $result;
+    }
 
 } // end of class
