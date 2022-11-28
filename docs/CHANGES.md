@@ -18,7 +18,7 @@ should be able to easily backport future new features to older versions rather e
 
 ## CHANGE LOG ##
 
-* dev (v9.5.0)
+* v9.4.0 (2022-11-28)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
   * Removed redundant PHPDocs entries for type-hinted elements.
   * Fixed exception handler helper not properly handling iterating over mismatched configuration
@@ -27,9 +27,6 @@ should be able to easily backport future new features to older versions rather e
   * Reworked tests to use strict object representation of API response stricture to reduce overall
     LoC.
   * Removed `assertValidResponse()` test helper method due to introduction of `ApiResponse` class.
-
-* v9.4.0
-  * No such release. Version number ommited.
 
 * v9.3.2 (2022-02-13)
   * Laravel 9.x is now included in test matrices.

@@ -5,8 +5,8 @@
 [« Documentation table of contents](README.md)
 
 * [Important incompatibile changes](#incompatibility-notes)
-  * [Changes in v9.5](#v95)
-  * [Changes in v9.*](#v9) (up to v9.4)
+  * [Changes in v9.4](#v94)
+  * [Changes in v9.*](#v9) (up to v9.3)
   * [Changes in v8.*](#v8)
   * [Changes in v7.*](#v7)
   * [Changes in v6.*](#v6)
@@ -22,10 +22,10 @@
 
 Backward (in)compatibility notes. Pay attention if you are upgrading.
 
-## v9.5 ##
+## v9.4 ##
 
 * Requires Laravel 9.0+ and PHP 8.0+
-* `[BREAKING/Low]` From release 9.5 onward, `ResponseBuilder` major version number is in sync
+* `[BREAKING/Low]` From release 9.4 onward, `ResponseBuilder` major version number is in sync
   with `Laravel`'s major version number to show target framework version. If you use `Laravel 9` -
   you'd need `ResponseBuilder v9.*`. Version `ResponseBuilder v10.*` would be then your dependency
   in (future) `Laravel v10` based projects, and so on. Also, due to limited time and funds I am
