@@ -18,7 +18,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
+use MarcinOrlowski\Lockpick\Lockpick;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
@@ -50,7 +50,7 @@ class InternalsTest extends TestCase
         \Config::set(RB::CONF_KEY_CONVERTER_CLASSES, false);
 
         $this->expectException(Ex\InvalidConfigurationException::class);
-        Bridge::callProtectedMethod(Converter::class, 'getClassesMapping');
+        Lockpick::call(Converter::class, 'getClassesMapping');
     }
 
     /**
@@ -64,7 +64,7 @@ class InternalsTest extends TestCase
         ]);
 
         $this->expectException(Ex\IncompleteConfigurationException::class);
-        Bridge::callProtectedMethod(Converter::class, 'getClassesMapping');
+        Lockpick::call(Converter::class, 'getClassesMapping');
     }
 
     /**
@@ -78,7 +78,7 @@ class InternalsTest extends TestCase
         ]);
 
         $this->expectException(Ex\InvalidConfigurationElementException::class);
-        Bridge::callProtectedMethod(Converter::class, 'getClassesMapping');
+        Lockpick::call(Converter::class, 'getClassesMapping');
     }
 
     /**
@@ -87,10 +87,10 @@ class InternalsTest extends TestCase
     public function testGetCodeForInternalOffsetMethodWithOffsetOutOfMaxBounds(): void
     {
         $obj = new BaseApiCodes();
-        $max = Bridge::getProtectedConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
+        $max = Lockpick::getConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
 
         $this->expectException(\OutOfBoundsException::class);
-        Bridge::callProtectedMethod($obj, 'getCodeForInternalOffset', [$max + 1]);
+        Lockpick::call($obj, 'getCodeForInternalOffset', [$max + 1]);
     }
 
     /**
@@ -99,10 +99,10 @@ class InternalsTest extends TestCase
     public function testGetCodeForInternalOffsetMethodWithOffsetOutOfMinBounds(): void
     {
         $obj = new BaseApiCodes();
-        $min = Bridge::getprotectedconstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
+        $min = Lockpick::getConstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
 
         $this->expectException(\OutOfBoundsException::class);
-        Bridge::callProtectedMethod($obj, 'getCodeForInternalOffset', [$min - 1]);
+        Lockpick::call($obj, 'getCodeForInternalOffset', [$min - 1]);
     }
 
     /**
@@ -150,7 +150,7 @@ class InternalsTest extends TestCase
         $model = new TestModel('');
 
         $this->expectException(Ex\ConfigurationNotFoundException::class);
-        Bridge::callProtectedMethod($converter, 'getClassMappingConfigOrThrow', [$model]);
+        Lockpick::call($converter, 'getClassMappingConfigOrThrow', [$model]);
     }
 
 } // end of class

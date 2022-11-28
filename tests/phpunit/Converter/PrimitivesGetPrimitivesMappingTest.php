@@ -19,7 +19,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
  */
 
 use Illuminate\Support\Facades\Config;
-use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
+use MarcinOrlowski\Lockpick\Lockpick;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -42,7 +42,7 @@ class PrimitivesGetPrimitivesMappingTest extends TestCase
 
         $this->expectException(Ex\InvalidConfigurationException::class);
 
-        Bridge::callProtectedMethod(Converter::class, 'getPrimitivesMapping');
+        Lockpick::call(Converter::class, 'getPrimitivesMapping');
     }
 
     /**
@@ -54,7 +54,7 @@ class PrimitivesGetPrimitivesMappingTest extends TestCase
         /** @noinspection PhpUndefinedMethodInspection */
         Config::offsetUnset(RB::CONF_KEY_CONVERTER_PRIMITIVES);
 
-        $result = Bridge::callProtectedMethod(Converter::class, 'getPrimitivesMapping');
+        $result = Lockpick::call(Converter::class, 'getPrimitivesMapping');
         $this->assertIsArray($result);
         $this->assertEmpty($result);
     }

@@ -17,7 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
+use MarcinOrlowski\Lockpick\Lockpick;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -69,11 +69,11 @@ trait ApiCodesTests
     public function testMinMaxCode(): void
     {
         /** @var int $min */
-        $min = Bridge::callProtectedMethod(BaseApiCodes::class, 'getMinCode');
+        $min = Lockpick::call(BaseApiCodes::class, 'getMinCode');
         $this->assertNotNull($min);
 
         /** @var int $max */
-        $max = Bridge::callProtectedMethod(BaseApiCodes::class, 'getMaxCode');
+        $max = Lockpick::call(BaseApiCodes::class, 'getMaxCode');
         $this->assertNotNull($max);
 
         $this->assertTrue($max > $min);
@@ -87,8 +87,8 @@ trait ApiCodesTests
     public function testCodeRangeIsLargeEnough(): void
     {
         $base_max = BaseApiCodes::RESERVED_MAX_API_CODE_OFFSET;
-        $min = Bridge::callProtectedMethod(BaseApiCodes::class, 'getMinCode');
-        $max = Bridge::callProtectedMethod(BaseApiCodes::class, 'getMaxCode');
+        $min = Lockpick::call(BaseApiCodes::class, 'getMinCode');
+        $max = Lockpick::call(BaseApiCodes::class, 'getMaxCode');
 
         $this->assertTrue(($max - $min) > $base_max);
     }

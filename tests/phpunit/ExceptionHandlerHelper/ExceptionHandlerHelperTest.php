@@ -21,7 +21,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ExceptionHandlerHelper;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
-use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
+use MarcinOrlowski\Lockpick\Lockpick;
 use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
 use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\ApiResponse;
@@ -49,8 +49,8 @@ class ExceptionHandlerHelperTest extends TestCase
 
         $obj = new ExceptionHandlerHelper();
         /** @var HttpResponse $eh_response */
-        $eh_response = Bridge::callProtectedMethod($obj, 'unauthenticated', [null,
-                                                                             $exception,
+        $eh_response = Lockpick::call($obj, 'unauthenticated', [null,
+                                                                $exception,
         ]);
 
         $response = ApiResponse::fromJson($this->getResponseContent($eh_response));
@@ -231,7 +231,7 @@ class ExceptionHandlerHelperTest extends TestCase
         if (\array_key_exists($key, $translation)) {
             $ex = new HttpException($code);
             /** @var HttpResponse $response */
-            $response = Bridge::callProtectedMethod(ExceptionHandlerHelper::class, 'render', [
+            $response = Lockpick::call(ExceptionHandlerHelper::class, 'render', [
                     null,
                     $ex,
                 ]
@@ -318,7 +318,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $ex = new \RuntimeException($ex_msg);
 
         /** @var HttpResponse $http_response */
-        $http_response = Bridge::callProtectedMethod(
+        $http_response = Lockpick::call(
             ExceptionHandlerHelper::class, 'render', [null, $ex,]);
         $api = ApiResponse::fromJson($this->getResponseContent($http_response));
 
@@ -358,7 +358,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $ex = new \RuntimeException('this message should be ignored');
 
         /** @var HttpResponse $http_response */
-        $http_response = Bridge::callProtectedMethod(ExceptionHandlerHelper::class, 'error', [
+        $http_response = Lockpick::call(ExceptionHandlerHelper::class, 'error', [
                 $ex,
                 $api_code,
                 $http_code,
@@ -402,7 +402,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $ex = new \RuntimeException($ex_msg);
 
         /** @var HttpResponse $http_response */
-        $http_response = Bridge::callProtectedMethod(ExceptionHandlerHelper::class,
+        $http_response = Lockpick::call(ExceptionHandlerHelper::class,
             'processException', [
                 $ex,
                 $ex_cfg,
@@ -416,7 +416,7 @@ class ExceptionHandlerHelperTest extends TestCase
             'api_code' => $api_code,
             'message'  => ($msg !== '') ? $msg : '???',
         ];
-        $expected_msg_key = Bridge::callProtectedMethod(ExceptionHandlerHelper::class,
+        $expected_msg_key = Lockpick::call(ExceptionHandlerHelper::class,
             'getErrorMessageForException', [
                 $ex,
                 $http_code,
@@ -458,7 +458,7 @@ class ExceptionHandlerHelperTest extends TestCase
         Config::set(RB::CONF_KEY_EXCEPTION_HANDLER, $cfg);
 
         /** @var HttpResponse $http_response */
-        $http_response = Bridge::callProtectedMethod(ExceptionHandlerHelper::class,
+        $http_response = Lockpick::call(ExceptionHandlerHelper::class,
             'error', [
                 $ex,
                 BaseApiCodes::EX_HTTP_NOT_FOUND(),
@@ -495,7 +495,7 @@ class ExceptionHandlerHelperTest extends TestCase
     protected function getExceptionHandlerConfig(): array
     {
         /** @noinspection ArgumentEqualsDefaultValueInspection */
-        $cfg = Bridge::callProtectedMethod(ExceptionHandlerHelper::class,
+        $cfg = Lockpick::call(ExceptionHandlerHelper::class,
             'getExceptionHandlerConfig', []);
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);

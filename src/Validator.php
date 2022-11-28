@@ -34,7 +34,7 @@ final class Validator
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotBooleanException
      */
-    public static function assertIsBool(string $var_name, $value): void
+    public static function assertIsBool(string $var_name, mixed $value): void
     {
         self::assertIsType($var_name, $value, [Type::BOOLEAN], Ex\NotBooleanException::class);
     }
@@ -48,7 +48,7 @@ final class Validator
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
      */
-    public static function assertIsInt(string $var_name, $value): void
+    public static function assertIsInt(string $var_name, mixed $value): void
     {
         self::assertIsType($var_name, $value, [Type::INTEGER], Ex\NotIntegerException::class);
     }
@@ -62,7 +62,7 @@ final class Validator
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotArrayException
      */
-    public static function assertIsArray(string $var_name, $value): void
+    public static function assertIsArray(string $var_name, mixed $value): void
     {
         self::assertIsType($var_name, $value, [Type::ARRAY], Ex\NotArrayException::class);
     }
@@ -76,7 +76,7 @@ final class Validator
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotObjectException
      */
-    public static function assertIsObject(string $var_name, $value): void
+    public static function assertIsObject(string $var_name, mixed $value): void
     {
         self::assertIsType($var_name, $value, [Type::OBJECT], Ex\NotObjectException::class);
     }
@@ -215,9 +215,11 @@ final class Validator
     }
 
     /**
-     * Ensures $obj (that is value coming from variable, which name is passed in $label) is instance of $cls class.
+     * Ensures $obj (that is value coming from variable, which name is passed in $label) is instance of $cls
+     * class.
      *
-     * @param string $var_name Name of variable that the $obj value is coming from. Used for exception message.
+     * @param string $var_name Name of variable that the $obj value is coming from. Used for exception
+     *                         message.
      * @param object $obj      Object to check instance of
      * @param string $cls      Target class we want to check $obj agains.
      *

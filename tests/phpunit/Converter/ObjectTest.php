@@ -20,7 +20,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
-use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
+use MarcinOrlowski\Lockpick\Lockpick;
 use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
@@ -75,7 +75,7 @@ class ObjectTest extends TestCase
 
         $this->expectException(Ex\InvalidTypeException::class);
 
-        Bridge::callProtectedMethod(Converter::class, 'getClassesMapping');
+        Lockpick::call(Converter::class, 'getClassesMapping');
     }
 
     /**

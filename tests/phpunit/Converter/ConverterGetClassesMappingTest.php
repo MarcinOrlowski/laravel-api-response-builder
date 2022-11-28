@@ -19,7 +19,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
  */
 
 use Illuminate\Support\Facades\Config;
-use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
+use MarcinOrlowski\Lockpick\Lockpick;
 use MarcinOrlowski\ResponseBuilder\Converter;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -41,7 +41,7 @@ class ConverterGetClassesMappingTest extends TestCase
 
         $this->expectException(Ex\InvalidConfigurationException::class);
 
-        Bridge::callProtectedMethod(Converter::class, 'getClassesMapping');
+        Lockpick::call(Converter::class, 'getClassesMapping');
     }
 
     /**
@@ -53,7 +53,7 @@ class ConverterGetClassesMappingTest extends TestCase
         /** @noinspection PhpUndefinedMethodInspection */
         Config::offsetUnset(RB::CONF_KEY_CONVERTER_CLASSES);
 
-        $result = Bridge::callProtectedMethod(Converter::class, 'getClassesMapping');
+        $result = Lockpick::call(Converter::class, 'getClassesMapping');
         $this->assertIsArray($result);
         $this->assertEmpty($result);
     }

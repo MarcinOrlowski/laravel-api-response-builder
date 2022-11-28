@@ -17,8 +17,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\PhpunitExtraAsserts\Bridge;
-use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
+use MarcinOrlowski\Lockpick\Lockpick;
 use MarcinOrlowski\ResponseBuilder\ApiResponse;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
@@ -76,10 +75,10 @@ trait TestingHelpers
 
         $obj = new $class_name();
         /** @var int $min */
-        $min = Bridge::callProtectedMethod($obj, 'getMinCode');
+        $min = Lockpick::call($obj, 'getMinCode');
         $this->min_allowed_code = $min;
         /** @var int $max */
-        $max = Bridge::callProtectedMethod($obj, 'getMaxCode');
+        $max = Lockpick::call($obj, 'getMaxCode');
         $this->max_allowed_code = $max;
 
         // generate random api_code
@@ -87,7 +86,7 @@ trait TestingHelpers
         $this->random_api_code = \mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
         // AND corresponding mapped message mapping
-        $map = Bridge::callProtectedMethod(new BaseApiCodes(), 'getBaseMap');
+        $map = Lockpick::call(new BaseApiCodes(), 'getBaseMap');
         /** @var array $map */
         if (empty($map)) {
             throw new \RuntimeException('getBaseMap() returned empty value.');
@@ -126,8 +125,9 @@ trait TestingHelpers
 
     /**
      * As Lang::get() wrapper can also return whole translation array, not only single strings,
-     * this make static code analysers unhappy as its signature indicates it can return arrays too, which we do not want to happen,
-     * not handle separately after each invocation, so this wrapper deals with it for us.
+     * this make static code analysers unhappy as its signature indicates it can return arrays too, which we
+     * do not want to happen, not handle separately after each invocation, so this wrapper deals with it for
+     * us.
      *
      * @param string     $key     String key as passed to Lang::get()
      * @param array|null $replace Optional replacement array as passed to Lang::get()
@@ -167,7 +167,7 @@ trait TestingHelpers
             /** @var BaseApiCodes $api_codes */
             $api_codes = $this->getApiCodesClassName();
             /** @var int $expected_api_code_offset */
-            $expected_api_code_offset = Bridge::getProtectedConstant($api_codes, 'OK_OFFSET');
+            $expected_api_code_offset = Lockpick::getConstant($api_codes, 'OK_OFFSET');
         }
 
         $expected_http_code = $expected_http_code ?? RB::DEFAULT_HTTP_CODE_OK;
@@ -178,7 +178,7 @@ trait TestingHelpers
         if ($expected_message === null) {
             $key = \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey($expected_api_code_offset);
             $key = $key ?? \MarcinOrlowski\ResponseBuilder\BaseApiCodes::getCodeMessageKey(
-                    \MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK());
+                \MarcinOrlowski\ResponseBuilder\BaseApiCodes::OK());
             /** @var string $key */
             $expected_message = $this->langGet($key, ['api_code' => $expected_api_code_offset]);
         }
@@ -194,9 +194,11 @@ trait TestingHelpers
      * Retrieves and validates response as expected from errorXXX() methods. Returns response
      * object built from JSON.
      *
-     * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default value
+     * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default
+     *                                              value
      * @param int         $expected_http_code       Expected HTTP code
-     * @param string|null $message                  Expected return message or @null if we automatically mapped message fits
+     * @param string|null $message                  Expected return message or @null if we automatically
+     *                                              mapped message fits
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\IncompatibleTypeException
@@ -293,7 +295,8 @@ trait TestingHelpers
     /**
      * Calls protected method make()
      *
-     * @param boolean    $success                    @true if response should indicate success, @false otherwise
+     * @param boolean    $success                    @true if response should indicate success, @false
+     *                                               otherwise
      * @param int        $api_code_offset            API code to use with produced response
      * @param string|int $message_or_api_code_offset Resolvable Api code or message string
      * @param array|null $data                       Data to return
@@ -315,7 +318,7 @@ trait TestingHelpers
         $http_code = null;
         $lang_args = null;
 
-        $result = Bridge::callProtectedMethod(
+        $result = Lockpick::call(
             RB::asSuccess(), 'make', [$success,
                                       $api_code_offset,
                                       $message_or_api_code_offset,
@@ -324,7 +327,8 @@ trait TestingHelpers
                                       $lang_args,
                                       $headers,
                                       $encoding_options,
-                                      $debug_data]);
+                                      $debug_data,
+        ]);
 
         /** @var HttpResponse $result */
         return $result;
