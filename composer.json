@@ -13,6 +13,7 @@
     "helper",
     "php",
     "php8",
+    "php81",
     "mobile",
     "android",
     "ios"
@@ -21,7 +22,7 @@
   "authors": [
     {
       "name": "Marcin Orlowski",
-      "homepage": "http://MarcinOrlowski.com/"
+      "homepage": "https://MarcinOrlowski.com/"
     }
   ],
   "support": {
