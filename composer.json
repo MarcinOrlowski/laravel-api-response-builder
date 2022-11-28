@@ -43,11 +43,11 @@
     }
   },
   "require": {
-    "php": "^8.0",
+    "php": "^8.0|^8.1",
     "laravel/framework": "^9.0"
   },
   "require-dev": {
-    "marcin-orlowski/phpunit-extra-asserts": "^3.0",
+    "marcin-orlowski/phpunit-extra-asserts": "^5.0.0",
     "orchestra/testbench": "^7.0",
     "phpunit/phpunit": "^9.0",
     "phpunit/php-code-coverage": "^9.2",
