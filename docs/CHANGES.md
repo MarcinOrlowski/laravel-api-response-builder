@@ -6,7 +6,7 @@
 > See [compatibility docs](compatibility.md) for details about backward compatibility
 > **before** doing major upgrade!
 
-From release 9.5 onward, `ResponseBuilder` major version number is in sync with `Laravel`'s major
+From release 9.4 onward, `ResponseBuilder` major version number is in sync with `Laravel`'s major
 version number to show target framework version. If you use `Laravel 9` - you'd need to depend on
 `ResponseBuilder v9.*`. Version `ResponseBuilder v10.*` would be then your dependency in (future)
 `Laraver v10` based projects, and so on. Also, due to limited time and funds I am having to maintain
