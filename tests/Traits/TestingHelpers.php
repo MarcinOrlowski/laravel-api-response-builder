@@ -368,7 +368,7 @@ trait TestingHelpers
      * @param string $string UTF8 string to work on
      * @param int    $offset start offset. Note, offset will be updated to properly skip multi-byte chars!
      *
-     * $text = "abcàêß€abc";
+     * $text = "abcàêß€abc"; // @ignore-non-ascii
      * $offset = 0;
      * while ($offset >= 0) {
      *    printf("%d: %d\n", $offset, ord8($text, $offset));

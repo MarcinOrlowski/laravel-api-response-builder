@@ -85,7 +85,7 @@ class MakeTest extends TestCase
     public function testDefaultEncodingOptions(): void
     {
         // source data
-        $test_string = 'ąćę';
+        $test_string = 'ąćę'; // @ignore-non-ascii
         $data = ['test' => $test_string];
 
         // fallback defaults in action
@@ -115,7 +115,7 @@ class MakeTest extends TestCase
      */
     public function testValidateEncodingOptionsPreventsEscaping(): void
     {
-        $test_string = 'ąćę';
+        $test_string = 'ąćę'; // @ignore-non-ascii
         $test_string_escaped = $this->escape8($test_string);
 
         // source data

@@ -46,8 +46,9 @@ jobs:
 
       - name: "Find non-printable ASCII characters"
         run: |
-          #! LC_ALL=C.UTF-8 find . -type f -name '*.php' -print0 | xargs --null -- grep --perl-regexp --with-filename --line-number '[^ -~]' | grep -v '// @ignore-non-ascii$'
-          ! LC_ALL=C.UTF-8 find . -type f -name '*.php' -print0 | xargs --null -- grep --perl-regexp --with-filename --line-number '[^ -~]'
+          ! LC_ALL=C.UTF-8 find . -type f -name '*.php' -not -path "./src/lang/*" -print0 \
+            | xargs --null -- grep --perl-regexp --with-filename --line-number '[^ -~]' \
+            | grep -v '// @ignore-non-ascii$'
 
   syntax_errors:
     name: "1️⃣ Syntax errors"
