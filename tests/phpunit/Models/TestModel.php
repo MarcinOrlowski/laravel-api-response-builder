@@ -19,35 +19,35 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
  */
 class TestModel
 {
-	/** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
-	public const FIELD_NAME = 'val';
+    /** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
+    public const FIELD_NAME = 'val';
 
-	/** @var string|null */
-	protected $val;
+    /** @var string|null */
+    protected $val;
 
-	/**
-	 * TestModel constructor.
-	 *
-	 * @param string $val
-	 */
-	public function __construct(string $val)
-	{
-		$this->val = $val;
-	}
+    /**
+     * TestModel constructor.
+     *
+     * @param string $val
+     */
+    public function __construct(string $val)
+    {
+        $this->val = $val;
+    }
 
-	public function getVal(): ?string
-	{
-		return $this->val;
-	}
+    public function getVal(): ?string
+    {
+        return $this->val;
+    }
 
-	/**
-	 * Converts model to array
-	 */
-	public function toArray(): array
-	{
-		return [
-			self::FIELD_NAME => $this->val,
-		];
-	}
+    /**
+     * Converts model to array
+     */
+    public function toArray(): array
+    {
+        return [
+            self::FIELD_NAME => $this->val,
+        ];
+    }
 
 } // end of class

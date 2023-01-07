@@ -23,24 +23,24 @@ use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
  */
 class FakeConverter implements ConverterContract
 {
-	/** @var string */
-	public $key = 'fake';
-	/** @var string */
-	public $val = 'converter';
+    /** @var string */
+    public $key = 'fake';
+    /** @var string */
+    public $val = 'converter';
 
-	/**
-	 * Simulates object conversion.
-	 *
-	 * @param object $obj
-	 * @param array  $config
-	 *
-	 * @return string[]
-	 *
-	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
-	 */
-	public function convert(object $obj, array $config): array
-	{
-		return [$this->key => $this->val];
-	}
+    /**
+     * Simulates object conversion.
+     *
+     * @param object $obj
+     * @param array  $config
+     *
+     * @return string[]
+     *
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
+     */
+    public function convert(object $obj, array $config): array
+    {
+        return [$this->key => $this->val];
+    }
 
 } // end of class

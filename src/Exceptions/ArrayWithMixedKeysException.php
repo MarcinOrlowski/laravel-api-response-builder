@@ -15,8 +15,8 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 final class ArrayWithMixedKeysException extends \Exception
 {
-	/** @var string */
-	protected $message =
-		'Invalid data array. Either set own keys for all the items or do not specify any keys at all. ' .
-		'Arrays with mixed keys are not supported by design.';
+    /** @var string */
+    protected $message =
+        'Invalid data array. Either set own keys for all the items or do not specify any keys at all. ' .
+        'Arrays with mixed keys are not supported by design.';
 }

@@ -15,13 +15,13 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 final class MissingConfigurationKeyException extends ConfigurationException
 {
-	/**
-	 * MissingConfigurationKeyException constructor.
-	 *
-	 * @param string $var_name
-	 */
-	public function __construct($var_name)
-	{
-		parent::__construct(sprintf('Missing "%s" key.', $var_name));
-	}
+    /**
+     * MissingConfigurationKeyException constructor.
+     *
+     * @param string $var_name
+     */
+    public function __construct($var_name)
+    {
+        parent::__construct(sprintf('Missing "%s" key.', $var_name));
+    }
 }

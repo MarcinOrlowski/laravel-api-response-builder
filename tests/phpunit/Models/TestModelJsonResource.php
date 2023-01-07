@@ -22,10 +22,10 @@ use Illuminate\Support\Facades\Request;
  */
 class TestModelJsonResource extends JsonResource
 {
-	/** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
-	public const FIELD_NAME = 'val';
+    /** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
+    public const FIELD_NAME = 'val';
 
-	/** @var string|null */
+    /** @var string|null */
     protected $val;
 
     /**
@@ -57,7 +57,7 @@ class TestModelJsonResource extends JsonResource
     public function toArray($request): array
     {
         return [
-        	self::FIELD_NAME => $this->val,
+            self::FIELD_NAME => $this->val,
         ];
     }
 

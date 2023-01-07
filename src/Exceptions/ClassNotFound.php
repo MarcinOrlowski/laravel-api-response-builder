@@ -15,5 +15,5 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 final class ClassNotFound extends InvalidTypeException
 {
-	// empty
+    // empty
 }

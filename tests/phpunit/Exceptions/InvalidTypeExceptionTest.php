@@ -23,14 +23,14 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
  */
 class InvalidTypeExceptionTest extends TestCase
 {
-	/**
-	 * Checks if InvalidTypeException's constructor correctly deals with
-	 * empty array of allowed types and fails.
-	 */
-	public function testX(): void
-	{
-		$this->expectException(\InvalidArgumentException::class);
-		new Ex\InvalidTypeException('foo', Type::STRING, []);
-	}
+    /**
+     * Checks if InvalidTypeException's constructor correctly deals with
+     * empty array of allowed types and fails.
+     */
+    public function testX(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new Ex\InvalidTypeException('foo', Type::STRING, []);
+    }
 
 }

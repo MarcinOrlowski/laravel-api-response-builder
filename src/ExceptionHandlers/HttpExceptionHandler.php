@@ -24,42 +24,42 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 final class HttpExceptionHandler implements ExceptionHandlerContract
 {
-	public function handle(array $user_config, \Throwable $ex): ?array
-	{
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$default_config = [
-			// used by unauthenticated() to obtain api and http code for the exception
-			HttpResponse::HTTP_UNAUTHORIZED         => [
-				'api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
-			],
-			// Required by ValidationException handler
-			HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
-				'api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
-			],
+    public function handle(array $user_config, \Throwable $ex): ?array
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $default_config = [
+            // used by unauthenticated() to obtain api and http code for the exception
+            HttpResponse::HTTP_UNAUTHORIZED         => [
+                'api_code' => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
+            ],
+            // Required by ValidationException handler
+            HttpResponse::HTTP_UNPROCESSABLE_ENTITY => [
+                'api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+            ],
 
-			// Default entry MUST exists. Enforced by unit tests.
-			RB::KEY_DEFAULT            => [
-				'api_code' => BaseApiCodes::EX_HTTP_EXCEPTION(),
-			],
-		];
+            // Default entry MUST exists. Enforced by unit tests.
+            RB::KEY_DEFAULT            => [
+                'api_code' => BaseApiCodes::EX_HTTP_EXCEPTION(),
+            ],
+        ];
 
-		$config = \array_replace($default_config, $user_config);
+        $config = \array_replace($default_config, $user_config);
 
-		/** @var \Symfony\Component\HttpKernel\Exception\HttpException $ex */
-		$http_code = $ex->getStatusCode();
-		$result = $config[ $http_code ] ?? null;
+        /** @var \Symfony\Component\HttpKernel\Exception\HttpException $ex */
+        $http_code = $ex->getStatusCode();
+        $result = $config[ $http_code ] ?? null;
 
-		// If we do not have dedicated entry fort this particular http_code,
-		// fall back to default value.
-		if ($result === null) {
-			$result = $config[ RB::KEY_DEFAULT ];
-		}
+        // If we do not have dedicated entry fort this particular http_code,
+        // fall back to default value.
+        if ($result === null) {
+            $result = $config[ RB::KEY_DEFAULT ];
+        }
 
-		// Some defaults to fall back to if not set in user config.
-		$fallback = [
-			RB::KEY_HTTP_CODE => $http_code,
-			RB::KEY_MSG_KEY   => \sprintf('response-builder::builder.http_%d', $http_code),
-		];
-		return \array_replace($fallback, $result);
-	}
+        // Some defaults to fall back to if not set in user config.
+        $fallback = [
+            RB::KEY_HTTP_CODE => $http_code,
+            RB::KEY_MSG_KEY   => \sprintf('response-builder::builder.http_%d', $http_code),
+        ];
+        return \array_replace($fallback, $result);
+    }
 }

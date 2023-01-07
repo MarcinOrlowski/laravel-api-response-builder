@@ -19,25 +19,25 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  */
 class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
-	/** @var array */
-	public static $fake_response = [];
+    /** @var array */
+    public static $fake_response = [];
 
-	/** @noinspection PhpMissingParentCallCommonInspection */
-	/**
-	 * @param bool       $success
-	 * @param int        $api_code
-	 * @param int|string $msg_or_api_code
-	 * @param array|null $placeholders
-	 * @param null       $data
-	 * @param array|null $debug_data
-	 *
-	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed
-	 */
-	protected function buildResponse(bool $success, int $api_code,
-	                                 $msg_or_api_code, array $placeholders = null,
-	                                 $data = null, array $debug_data = null): array
-	{
-		return static::$fake_response;
-	}
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @param bool       $success
+     * @param int        $api_code
+     * @param int|string $msg_or_api_code
+     * @param array|null $placeholders
+     * @param null       $data
+     * @param array|null $debug_data
+     *
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed
+     */
+    protected function buildResponse(bool $success, int $api_code,
+                                     $msg_or_api_code, array $placeholders = null,
+                                     $data = null, array $debug_data = null): array
+    {
+        return static::$fake_response;
+    }
 
 } // end of class

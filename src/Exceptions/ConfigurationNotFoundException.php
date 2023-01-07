@@ -15,5 +15,5 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 final class ConfigurationNotFoundException extends ConfigurationException
 {
-	// empty
+    // empty
 }

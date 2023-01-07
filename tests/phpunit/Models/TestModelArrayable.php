@@ -22,43 +22,43 @@ use Illuminate\Support\Facades\Request;
  */
 class TestModelArrayable implements Arrayable
 {
-	/** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
-	public const FIELD_NAME = 'val';
+    /** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
+    public const FIELD_NAME = 'val';
 
-	/** @var string|null */
-	protected $val;
+    /** @var string|null */
+    protected $val;
 
-	/**
-	 * TestModel constructor.
-	 *
-	 * @param string $val
-	 */
-	public function __construct(string $val)
-	{
-		$this->val = $val;
-	}
+    /**
+     * TestModel constructor.
+     *
+     * @param string $val
+     */
+    public function __construct(string $val)
+    {
+        $this->val = $val;
+    }
 
-	public function getVal(): ?string
-	{
-		return $this->val;
-	}
+    public function getVal(): ?string
+    {
+        return $this->val;
+    }
 
-	/**
-	 * Converts model to array.
-	 *
-	 * @param Request $request
-	 *
-	 * @noinspection PhpUnusedParameterInspection
-	 *
-	 * NOTE: No typehint as signature must match JsonResource::toArray()
-	 * @noinspection PhpMissingParamTypeInspection
-	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterface
-	 */
-	public function toArray($request = null): array
-	{
-		return [
-			self::FIELD_NAME => $this->val,
-		];
-	}
+    /**
+     * Converts model to array.
+     *
+     * @param Request $request
+     *
+     * @noinspection PhpUnusedParameterInspection
+     *
+     * NOTE: No typehint as signature must match JsonResource::toArray()
+     * @noinspection PhpMissingParamTypeInspection
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterface
+     */
+    public function toArray($request = null): array
+    {
+        return [
+            self::FIELD_NAME => $this->val,
+        ];
+    }
 
 } // end of class

@@ -28,9 +28,9 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
  */
 class ErrorTest extends TestCase
 {
-	/**
-	 * Check success()
-	 */
+    /**
+     * Check success()
+     */
     public function testError(): void
     {
         // GIVEN random error code

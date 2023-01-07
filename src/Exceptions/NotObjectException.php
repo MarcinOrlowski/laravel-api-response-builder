@@ -15,5 +15,5 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  */
 final class NotObjectException extends InvalidTypeException
 {
-	// empty
+    // empty
 }

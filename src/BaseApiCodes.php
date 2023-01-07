@@ -89,16 +89,16 @@ class BaseApiCodes
      */
     protected const EX_VALIDATION_EXCEPTION_OFFSET = 15;
 
-	/**
-	 * Returns base code mapping array
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns base code mapping array
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpUnhandledExceptionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     protected static function getBaseMap(): array
     {
         $tpl = 'response-builder::builder.http_%d';
@@ -115,121 +115,121 @@ class BaseApiCodes
         ];
     }
 
-	/**
-	 * Returns API code for internal code OK. Returns valid API code in current range.
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code OK. Returns valid API code in current range.
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function OK(): int
     {
         return static::getCodeForInternalOffset(static::OK_OFFSET);
     }
 
-	/**
+    /**
      * Returns API code for internal code NO_ERROR_MESSAGE.
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function NO_ERROR_MESSAGE(): int
     {
         return static::getCodeForInternalOffset(static::NO_ERROR_MESSAGE_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_HTTP_NOT_FOUND.
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_HTTP_NOT_FOUND.
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_HTTP_NOT_FOUND(): int
     {
         return static::getCodeForInternalOffset(static::EX_HTTP_NOT_FOUND_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_HTTP_EXCEPTION
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_HTTP_EXCEPTION
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_HTTP_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_HTTP_EXCEPTION_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_UNCAUGHT_EXCEPTION
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_UNCAUGHT_EXCEPTION
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_UNCAUGHT_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_UNCAUGHT_EXCEPTION_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_AUTHENTICATION_EXCEPTION
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_AUTHENTICATION_EXCEPTION
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_AUTHENTICATION_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_AUTHENTICATION_EXCEPTION_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_VALIDATION_EXCEPTION
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_VALIDATION_EXCEPTION
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_VALIDATION_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_VALIDATION_EXCEPTION_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_HTTP_SERVICE_UNAVAILABLE
-	 *
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_HTTP_SERVICE_UNAVAILABLE
+     *
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_HTTP_SERVICE_UNAVAILABLE(): int
     {
         return static::getCodeForInternalOffset(static::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET);

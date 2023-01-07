@@ -15,5 +15,5 @@ namespace MarcinOrlowski\ResponseBuilder\Contracts;
  */
 interface InvalidTypeExceptionContract
 {
-	public function __construct(string $var_name, string $type, array $allowed_types);
+    public function __construct(string $var_name, string $type, array $allowed_types);
 }

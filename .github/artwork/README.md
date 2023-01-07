@@ -1,4 +1,4 @@
-![REST API Response Builder for Laravel](../artwork/laravel-api-response-builder-logo.png)
+![REST API Response Builder for Laravel](laravel-api-response-builder-logo.png)
 
 # Project artwork #
 

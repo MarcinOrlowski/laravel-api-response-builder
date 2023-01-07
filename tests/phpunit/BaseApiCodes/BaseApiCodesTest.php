@@ -38,8 +38,8 @@ class BaseApiCodesTest extends TestCase
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::offsetUnset(RB::CONF_KEY_MIN_CODE);
-	    /** @noinspection PhpUnhandledExceptionInspection */
-	    BaseApiCodes::getMinCode();
+        /** @noinspection PhpUnhandledExceptionInspection */
+        BaseApiCodes::getMinCode();
     }
 
     /**
@@ -51,7 +51,7 @@ class BaseApiCodesTest extends TestCase
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::offsetUnset(RB::CONF_KEY_MAX_CODE);
-	    /** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection PhpUnhandledExceptionInspection */
         BaseApiCodes::getMaxCode();
     }
 
@@ -64,7 +64,7 @@ class BaseApiCodesTest extends TestCase
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::offsetUnset(RB::CONF_KEY_MAP);
-	    /** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection PhpUnhandledExceptionInspection */
         BaseApiCodes::getMap();
     }
 
@@ -77,7 +77,7 @@ class BaseApiCodesTest extends TestCase
 
         /** @noinspection PhpUndefinedClassInspection */
         \Config::set(RB::CONF_KEY_MAP, false);
-	    /** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection PhpUnhandledExceptionInspection */
         BaseApiCodes::getMap();
     }
 

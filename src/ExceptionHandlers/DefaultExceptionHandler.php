@@ -24,26 +24,26 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 final class DefaultExceptionHandler implements ExceptionHandlerContract
 {
-	/**
-	 * @param array      $user_config
-	 * @param \Throwable $ex
-	 *
-	 * @return array|null
-	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException
-	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\MissingConfigurationKeyException
-	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\NotIntegerException
-	 *
-	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
-	 */
-	public function handle(array $user_config, \Throwable $ex): ?array
-	{
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$defaults = [
-			RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
-			RB::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-		];
+    /**
+     * @param array      $user_config
+     * @param \Throwable $ex
+     *
+     * @return array|null
+     * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException
+     * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\MissingConfigurationKeyException
+     * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\NotIntegerException
+     *
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
+     */
+    public function handle(array $user_config, \Throwable $ex): ?array
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $defaults = [
+            RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+            RB::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+        ];
 
-		return \array_replace($defaults, $user_config);
-	}
+        return \array_replace($defaults, $user_config);
+    }
 
 } // end of class
