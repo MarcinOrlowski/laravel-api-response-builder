@@ -27,8 +27,6 @@ on:
       - "**/*.md"
   # Add [skip ci] to commit message to skip CI.
 
-only *.md
-
 permissions:
   contents: "read"
 
