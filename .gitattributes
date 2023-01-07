@@ -1,4 +1,10 @@
 * -text
+.codecov.yml export-ignore
+.editorconfig export-ignore
+.gitattributes export-ignore
+.github/ export-ignore
+.gitignore export-ignore
+.markdownlint.yaml export-ignore
 /docs/ export-ignore
 /phpcs.xml export-ignore
 /phpstan.neon export-ignore
