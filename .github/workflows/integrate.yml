@@ -69,8 +69,7 @@ jobs:
           dependency-versions: "highest"
 
       - name: "Check source code for syntax errors"
-        run: "composer exec -- parallel-lint src/"
-        # @TODO Check template files for syntax errors
+        run: "composer exec -- parallel-lint src/ tests/"
 
   unit_tests:
     name: "2️⃣ Unit tests"
