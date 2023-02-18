@@ -2,10 +2,10 @@
   "name": "marcin-orlowski/laravel-api-response-builder",
   "description": "Helps building nice, normalized and easy to consume Laravel REST API.",
   "homepage": "https://github.com/MarcinOrlowski/laravel-api-response-builder",
-  "version": "9.4.0",
+  "version": "10.0.0",
   "keywords": [
     "laravel",
-    "laravel9",
+    "laravel10",
     "json",
     "api",
     "builder",
