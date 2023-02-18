@@ -30,14 +30,13 @@ jobs:
       matrix:
         # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
         laravel: ["9.x"]
-        # PHP 8.0 should be covered as well, but I switched to PHPUnit 10 and that requires PHP 8.1
-        php: ["8.1"]
+        php: ["8,0", "8.1"]
 
     runs-on: ubuntu-latest
 
     steps:
       - name: "Checkout repository..."
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # https://github.com/marketplace/actions/composer-php-actions
       - name: "Installing dependencies..."
@@ -53,5 +52,6 @@ jobs:
         with:
           bootstrap: "vendor/autoload.php"
           configuration: "tests/phpunit.xml"
-          memory_limit: "16M"
+          version: "9.6.3"
+          # memory_limit: "16M"
           php_version: "${{ matrix.php }}"

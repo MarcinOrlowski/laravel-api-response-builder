@@ -50,7 +50,7 @@
   "require-dev": {
     "marcin-orlowski/phpunit-extra-asserts": "^5.1.0",
     "orchestra/testbench": "^7.0",
-    "phpunit/phpunit": "^9.0",
+    "phpunit/phpunit": "^9.6.3",
     "phpunit/php-code-coverage": "^9.2",
     "nunomaduro/larastan": "^2.0",
     "marcin-orlowski/php-lockpick": "^1.0"
