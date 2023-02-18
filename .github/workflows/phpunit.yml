@@ -50,6 +50,6 @@ jobs:
         with:
           bootstrap: "vendor/autoload.php"
           configuration: "tests/phpunit.xml"
-          version: "9.6.3"
+          # version: "10.0.89"
           # memory_limit: "16M"
           php_version: "${{ matrix.php }}"
