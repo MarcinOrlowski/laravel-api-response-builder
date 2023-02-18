@@ -22,13 +22,10 @@ class TestModel
 	/** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
 	public const FIELD_NAME = 'val';
 
-	/** @var string|null */
-	protected $val;
+	protected ?string $val;
 
 	/**
 	 * TestModel constructor.
-	 *
-	 * @param string $val
 	 */
 	public function __construct(string $val)
 	{

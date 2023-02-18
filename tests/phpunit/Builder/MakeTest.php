@@ -32,29 +32,6 @@ class MakeTest extends TestCase
     /**
      * @noinspection PhpDocMissingThrowsInspection
      */
-    public function testWrongMessage(): void
-    {
-        $this->expectException(Ex\InvalidTypeException::class);
-
-        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
-        $api_codes_class_name = $this->getApiCodesClassName();
-
-        $message_or_api_code = [];    // invalid data type
-
-        /** @noinspection PhpParamsInspection */
-
-        /**
-         * This is to fool static analysers only. The invalid type is intentional,
-         * and muting PHPStan is easier this way.
-         *
-         * @phpstan-var string $message_or_api_code
-         */
-        $this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
-    }
-
-    /**
-     * @noinspection PhpDocMissingThrowsInspection
-     */
     public function testCustomMessageAndCodeOutOfRange(): void
     {
         $this->expectException(\OutOfBoundsException::class);

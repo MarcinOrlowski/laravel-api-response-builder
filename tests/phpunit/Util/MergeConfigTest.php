@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 /**
  * @noinspection PhpUnhandledExceptionInspection
  */
-declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Util;
 

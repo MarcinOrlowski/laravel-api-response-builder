@@ -22,16 +22,13 @@ use Illuminate\Support\Facades\Request;
  */
 class TestModelJsonResource extends JsonResource
 {
-	/** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
-	public const FIELD_NAME = 'val';
+    /** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
+    public const FIELD_NAME = 'val';
 
-	/** @var string|null */
-    protected $val;
+    protected ?string $val;
 
     /**
      * TestModel constructor.
-     *
-     * @param string $val
      */
     public function __construct(string $val)
     {
@@ -46,18 +43,16 @@ class TestModelJsonResource extends JsonResource
     /**
      * Converts model to array.
      *
-     * @param mixed $request
-     *
      * @noinspection PhpUnusedParameterInspection
      *
      * NOTE: No typehint as signature must match JsonResource::toArray()
      * @noinspection PhpMissingParamTypeInspection
      * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
      */
-    public function toArray($request): array
+    public function toArray(mixed $request): array
     {
         return [
-        	self::FIELD_NAME => $this->val,
+            self::FIELD_NAME => $this->val,
         ];
     }
 

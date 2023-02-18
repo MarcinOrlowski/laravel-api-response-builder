@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * @noinspection PhpDocMissingThrowsInspection
  * @noinspection PhpUnhandledExceptionInspection
  */
-declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
 

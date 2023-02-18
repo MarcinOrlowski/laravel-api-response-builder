@@ -105,10 +105,8 @@ class PrimitivesTest extends TestCase
 
     /**
      * Helper method to perform some common tests for primitive as direct payload.
-     *
-     * @param mixed $value
      */
-    protected function doDirectPrimitiveTest($value): void
+    protected function doDirectPrimitiveTest(mixed $value): void
     {
         // GIVEN primitive value $value
 

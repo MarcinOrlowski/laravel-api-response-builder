@@ -26,6 +26,7 @@ use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class AutoConversionTest
@@ -137,12 +138,9 @@ class AutoConversionTest extends TestCase
 
     /**
      * Checks if buildResponse() would accept support payload types
-     *
-     * @param mixed $value Primitive type to be converted and returned in payload.
-     *
-     * @dataProvider successWithPrimitiveProvider
      */
-    public function testSuccessWithPrimitive($value): void
+    #[DataProvider('successWithPrimitiveProvider')]
+    public function testSuccessWithPrimitive(mixed $value): void
     {
         $this->response = RB::success($value);
         $api = $this->getResponseSuccessObject();

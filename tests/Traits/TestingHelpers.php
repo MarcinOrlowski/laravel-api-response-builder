@@ -106,17 +106,12 @@ trait TestingHelpers
 
     /**
      * We wrap call to response's getContent() to handle case of `false` being return value.
-     *
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     *
-     * @throws \InvalidArgumentException If response object is not of HttpResponse class.
-     * @throws \RuntimeException if there's no conent to be returned from the response.
      */
     public function getResponseContent(HttpResponse $response): string
     {
         $content = $response->getContent();
         if ($content === false) {
-            throw new \RuntimeException('Response does not contains any content.');
+            throw new \LogicException('Response does not contains any content.');
         }
         return $content;
     }
@@ -132,7 +127,7 @@ trait TestingHelpers
      * @param string     $key     String key as passed to Lang::get()
      * @param array|null $replace Optional replacement array as passed to Lang::get()
      */
-    public function langGet($key, array $replace = null): string
+    public function langGet(string $key, ?array $replace = null): string
     {
         $replace = $replace ?? [];
         $result = \Lang::get($key, $replace);
@@ -159,9 +154,9 @@ trait TestingHelpers
      * @throws Ex\MissingConfigurationKeyException
      * @throws \ReflectionException
      */
-    public function getResponseSuccessObject(int    $expected_api_code_offset = null,
-                                             int    $expected_http_code = null,
-                                             string $expected_message = null): ApiResponse
+    public function getResponseSuccessObject(?int    $expected_api_code_offset = null,
+                                             int     $expected_http_code = null,
+                                             ?string $expected_message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes */
@@ -203,9 +198,9 @@ trait TestingHelpers
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\IncompatibleTypeException
      */
-    public function getResponseErrorObject(int    $expected_api_code_offset = null,
-                                           int    $expected_http_code = RB::DEFAULT_HTTP_CODE_ERROR,
-                                           string $message = null): ApiResponse
+    public function getResponseErrorObject(?int    $expected_api_code_offset = null,
+                                           int     $expected_http_code = RB::DEFAULT_HTTP_CODE_ERROR,
+                                           ?string $message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes_class_name */
@@ -238,8 +233,9 @@ trait TestingHelpers
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\MissingConfigurationKeyException
      */
-    private function getResponseObjectRaw(int    $expected_api_code, int $expected_http_code,
-                                          string $expected_message = null): ApiResponse
+    private function getResponseObjectRaw(int     $expected_api_code,
+                                          int     $expected_http_code,
+                                          ?string $expected_message = null): ApiResponse
     {
         $actual = $this->response->getStatusCode();
         $contents = $this->getResponseContent($this->response);
@@ -309,11 +305,13 @@ trait TestingHelpers
      *
      * @noinspection PhpTooManyParametersInspection
      */
-    protected function callMakeMethod(bool  $success, int $api_code_offset,
-                                            $message_or_api_code_offset,
-                                      array $data = null,
-                                      array $headers = null, int $encoding_options = null,
-                                      array $debug_data = null): HttpResponse
+    protected function callMakeMethod(bool       $success,
+                                      int        $api_code_offset,
+                                      string|int $message_or_api_code_offset,
+                                      ?array     $data = null,
+                                      ?array     $headers = null,
+                                      ?int       $encoding_options = null,
+                                      ?array     $debug_data = null): HttpResponse
     {
         $http_code = null;
         $lang_args = null;

@@ -22,48 +22,22 @@ use Illuminate\Support\Facades\Request;
  */
 class TestModelJsonSerializable implements \JsonSerializable
 {
-	/** @var string */
-    protected $val;
-
-	/**
-	 * TestModelJsonSerializable constructor.
-	 *
-	 * @param mixed $val
-	 *
-	 * NOTE: no argument typehint due to compatibility with interface's signature.
-	 * @noinspection PhpMissingParamTypeInspection
-	 */
-	public function __construct($val)
-	{
-        /** @var string $val */
-		$this->val = $val;
-	}
-
-	/**
-	 * @return string
-	 *
-	 * NOTE: no return typehint due to compatibility with Laravel signature.
+    /**
+     * TestModelJsonSerializable constructor.
      *
-	 * @noinspection PhpMissingReturnTypeInspection
-	 * @noinspection ReturnTypeCanBeDeclaredInspection
-	 */
-    public function getVal()
+     * @noinspection PhpMissingParamTypeInspection
+     */
+    public function __construct(protected mixed $val) {}
+
+    public function getVal(): string
     {
         return $this->val;
     }
 
-	/**
-	 * @return string
-	 *
-	 * NOTE: no typehints due to compatibility with interface's method signature.
-     *
-	 * @noinspection PhpMissingReturnTypeInspection
-	 * @noinspection ReturnTypeCanBeDeclaredInspection
-	 */
     #[\ReturnTypeWillChange]
-	public function jsonSerialize()
-	{
-		return $this->val;
-	}
+    public function jsonSerialize(): mixed
+    {
+        return $this->val;
+    }
 
 } // end of class
