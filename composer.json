@@ -54,5 +54,8 @@
     "phpunit/php-code-coverage": "^9.2",
     "nunomaduro/larastan": "^2.0",
     "marcin-orlowski/php-lockpick": "^1.0"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit -c tests/phpunit.xml"
   }
 }
