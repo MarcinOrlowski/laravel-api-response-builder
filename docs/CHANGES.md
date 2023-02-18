@@ -18,6 +18,9 @@ should be able to easily backport future new features to older versions rather e
 
 ## CHANGE LOG ##
 
+* dev
+  * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)). 
+
 * v9.4.0 (2023-12-18)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
   * Removed redundant PHPDocs entries for type-hinted elements.
