@@ -54,6 +54,10 @@ jobs:
       #     php_version: "${{ matrix.php }}"
       #     # memory_limit: "16M"
 
+      - name: "Create cache folder"
+        shell: bash
+        run: mkdir --mode=777 vendor/orchestra/testbench-core/laravel/bootstrap/cache
+
       - name: "Running PHPStan..."
         shell: bash
         run: vendor/bin/phpstan
