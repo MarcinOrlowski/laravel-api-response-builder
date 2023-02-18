@@ -56,7 +56,8 @@ jobs:
 
       - name: "Create cache folder"
         shell: bash
-        run: mkdir --mode=777 vendor/orchestra/testbench-core/laravel/bootstrap/cache
+        run: mkdir vendor/orchestra/testbench-core/laravel/bootstrap/cache
+      - run: chmod 777 vendor/orchestra/testbench-core/laravel/bootstrap/cache
 
       - name: "Running PHPStan..."
         shell: bash
