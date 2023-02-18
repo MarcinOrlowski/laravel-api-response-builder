@@ -1,15 +1,13 @@
 <?php
+declare(strict_types=1);
 /**
  * @noinspection PhpUnhandledExceptionInspection
  */
-declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Util;
 
 /**
  * Laravel API Response Builder
- *
- * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski

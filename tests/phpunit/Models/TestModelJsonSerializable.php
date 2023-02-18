@@ -6,8 +6,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -22,48 +20,22 @@ use Illuminate\Support\Facades\Request;
  */
 class TestModelJsonSerializable implements \JsonSerializable
 {
-	/** @var string */
-    protected $val;
-
-	/**
-	 * TestModelJsonSerializable constructor.
-	 *
-	 * @param mixed $val
-	 *
-	 * NOTE: no argument typehint due to compatibility with interface's signature.
-	 * @noinspection PhpMissingParamTypeInspection
-	 */
-	public function __construct($val)
-	{
-        /** @var string $val */
-		$this->val = $val;
-	}
-
-	/**
-	 * @return string
-	 *
-	 * NOTE: no return typehint due to compatibility with Laravel signature.
+    /**
+     * TestModelJsonSerializable constructor.
      *
-	 * @noinspection PhpMissingReturnTypeInspection
-	 * @noinspection ReturnTypeCanBeDeclaredInspection
-	 */
-    public function getVal()
+     * @noinspection PhpMissingParamTypeInspection
+     */
+    public function __construct(protected mixed $val) {}
+
+    public function getVal(): string
     {
         return $this->val;
     }
 
-	/**
-	 * @return string
-	 *
-	 * NOTE: no typehints due to compatibility with interface's method signature.
-     *
-	 * @noinspection PhpMissingReturnTypeInspection
-	 * @noinspection ReturnTypeCanBeDeclaredInspection
-	 */
     #[\ReturnTypeWillChange]
-	public function jsonSerialize()
-	{
-		return $this->val;
-	}
+    public function jsonSerialize(): mixed
+    {
+        return $this->val;
+    }
 
 } // end of class

@@ -10,8 +10,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -20,6 +18,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
 use MarcinOrlowski\PhpunitExtraAsserts\Generator;
@@ -202,14 +201,8 @@ class DefaultConfigTest extends TestCase
 
     /**
      * Helper that performs common tests for Paginator support.
-     *
-     * @param \Illuminate\Pagination\AbstractPaginator $paginator
-     *
-     * NOTE: not param typehint due to PHP not matching subclasses hints properly
-     *
-     * @noinspection PhpMissingParamTypeInspection
      */
-    protected function doPaginatorSupportTests($paginator): void
+    protected function doPaginatorSupportTests(AbstractPaginator $paginator): void
     {
         $result = (new Converter())->convert($paginator);
         ExtraAsserts::assertIsArray($result);
@@ -231,10 +224,8 @@ class DefaultConfigTest extends TestCase
 
     /**
      * Helper method to perform some common tests of built-in support for Laravel's collections.
-     *
-     * @param object $collection
      */
-    protected function doCollectionTests($collection): array
+    protected function doCollectionTests(object $collection): array
     {
         // HAVING Converter with default settings
         // WHEN we try to pass of object of that class

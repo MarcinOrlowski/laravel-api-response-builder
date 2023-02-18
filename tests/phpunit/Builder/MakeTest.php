@@ -10,8 +10,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -29,29 +27,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
  */
 class MakeTest extends TestCase
 {
-    /**
-     * @noinspection PhpDocMissingThrowsInspection
-     */
-    public function testWrongMessage(): void
-    {
-        $this->expectException(Ex\InvalidTypeException::class);
-
-        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
-        $api_codes_class_name = $this->getApiCodesClassName();
-
-        $message_or_api_code = [];    // invalid data type
-
-        /** @noinspection PhpParamsInspection */
-
-        /**
-         * This is to fool static analysers only. The invalid type is intentional,
-         * and muting PHPStan is easier this way.
-         *
-         * @phpstan-var string $message_or_api_code
-         */
-        $this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
-    }
-
     /**
      * @noinspection PhpDocMissingThrowsInspection
      */
