@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Validator;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowskis
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -28,8 +28,6 @@ class ValidatorTest extends TestCase
 {
     /**
      * Tests if assertIsInt() pass if given valid data.
-     *
-     * @return void
      */
     public function testAssertIsIntCorrectType(): void
     {
@@ -40,8 +38,6 @@ class ValidatorTest extends TestCase
 
     /**
      * Tests if assertIsInt() throws exception when feed with invalid type argument.
-     *
-     * @return void
      */
     public function testAssertIsIntWrongType(): void
     {
@@ -49,12 +45,10 @@ class ValidatorTest extends TestCase
         Validator::assertIsInt(__FUNCTION__, 'chicken');
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Tests if assertIsObject() pass if given valid data.
-     *
-     * @return void
      */
     public function testAssertIsObjectCorrectType(): void
     {
@@ -66,8 +60,6 @@ class ValidatorTest extends TestCase
 
     /**
      * Tests if assertIsObject() throws exception when feed with invalid type argument.
-     *
-     * @return void
      */
     public function testAssertIsObjectWrongType(): void
     {
@@ -75,7 +67,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsObject(__FUNCTION__, 'chicken');
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Checks behavior of assertIsArray() with valid data
@@ -96,12 +88,10 @@ class ValidatorTest extends TestCase
         Validator::assertIsArray(__FUNCTION__, false);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Tests if assertIsString() pass with valid data type
-     *
-     * @return void
      */
     public function testAssertIsStringCorrectType(): void
     {
@@ -112,8 +102,6 @@ class ValidatorTest extends TestCase
 
     /**
      * Tests if assertIsString() throws exception when feed with invalid type argument.
-     *
-     * @return void
      */
     public function testAssertIsStringWrongType(): void
     {
@@ -121,12 +109,10 @@ class ValidatorTest extends TestCase
         Validator::assertIsString(__FUNCTION__, 666);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Tests if assertIsBool() pass with valid data type
-     *
-     * @return void
      */
     public function testAssertIsBoolCorrectType(): void
     {
@@ -137,8 +123,6 @@ class ValidatorTest extends TestCase
 
     /**
      * Tests if assertIsBool() throws exception when feed with invalid type argument.
-     *
-     * @return void
      */
     public function testAssertIsBoolWrongType(): void
     {
@@ -146,7 +130,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsBool(__FUNCTION__, 666);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     public function testAssertIsIntRangeWithValidData(): void
     {
@@ -157,19 +141,20 @@ class ValidatorTest extends TestCase
 
     /**
      * Check if assertIntRange() main variable type is ensured to be integer.
-     *
-     * @return void
      */
     public function testAssertIsIntRangeVarType(): void
     {
         $this->expectException(Ex\InvalidTypeException::class);
+        /**
+         * Using wrong type is intentional in this test.
+         *
+         * @phpstan-ignore-next-line
+         */
         Validator::assertIsIntRange(__FUNCTION__, 'string', 100, 200);
     }
 
     /**
      * Check if assertIntRange() range $min and $max are in right order.
-     *
-     * @return void
      */
     public function testAssertIsIntRangeMinMaxOrder(): void
     {
@@ -179,8 +164,6 @@ class ValidatorTest extends TestCase
 
     /**
      * Check if assertIntRange() to ensure we check $var is in range nd $max bounds only
-     *
-     * @return void
      */
     public function testAssertIsIntRangeVarInMinMaxRangeWithDataOutOfRange(): void
     {
@@ -189,7 +172,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsIntRange(__FUNCTION__, 100, 300, 500);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Checks if assertInstanceOf() would throw exception if obj is not instance of given class
@@ -212,7 +195,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue(true);
     }
 
-    // -----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Tests assertIsType() helper.
@@ -276,4 +259,4 @@ class ValidatorTest extends TestCase
         }
     }
 
-}
+} // end of class

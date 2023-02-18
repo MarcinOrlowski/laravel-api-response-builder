@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -95,7 +95,9 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 		/** @noinspection PhpIncludeInspection */
 		/** @noinspection UsingInclusionReturnValueInspection */
 		$defaults = require $path;
-		$config = $this->app['config']->get($key, []);
+        /** @var array $app */
+        $app = $this->app;
+		$config = $app['config']->get($key, []);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$merged_config = Util::mergeConfig($defaults, $config);
@@ -107,7 +109,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 
 		Util::sortArrayByPri($merged_config['converter']['classes']);
 
-        $this->app['config']->set($key, $merged_config);
+        $app['config']->set($key, $merged_config);
     }
 
-}
+} // end of class

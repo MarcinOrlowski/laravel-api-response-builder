@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -30,8 +30,6 @@ final class Util
 	 * @param array $original Array to merge other array into. Usually default values to overwrite.
 	 * @param array $merging  Array with items to be merged into $original, overriding (primitives) or merging
 	 *                        (arrays) entries in destination array.
-	 *
-	 * @return array
 	 *
 	 * @throws Ex\IncompatibleTypeException
 	 */
@@ -81,8 +79,6 @@ final class Util
 	 * Checks if given array uses custom (non numeric) keys.
 	 *
 	 * @param array $data
-	 *
-	 * @return bool
 	 */
 	public static function isArrayWithNonNumericKeys(array $data): bool
 	{
@@ -95,4 +91,4 @@ final class Util
 		return false;
 	}
 
-}
+} // end of class

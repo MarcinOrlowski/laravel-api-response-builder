@@ -13,7 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -31,8 +31,6 @@ class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 	 * @param null       $data
 	 * @param array|null $debug_data
 	 *
-	 * @return array
-	 *
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed
 	 */
 	protected function buildResponse(bool $success, int $api_code,
@@ -41,4 +39,5 @@ class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 	{
 		return static::$fake_response;
 	}
-}
+
+} // end of class

@@ -13,7 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -30,23 +30,20 @@ class FactoryTest extends TestCase
 {
 	/**
 	 * Checks if asSuccess() properly returns object of extending class
-	 *
-	 * @return void
 	 */
 	public function testAsSuccess(): void
 	{
 		$dummy_rb = DummyResponseBuilder::asSuccess();
-		$this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
+        $this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
 	}
 
 	/**
 	 * Checks if asError(); properly returns object of extending class
-	 *
-	 * @return void
 	 */
 	public function testAsError(): void
 	{
 		$dummy_rb = DummyResponseBuilder::asError(BaseApiCodes::NO_ERROR_MESSAGE());
-		$this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
+        $this->assertEquals(DummyResponseBuilder::class, \get_class($dummy_rb));
 	}
-}
+
+} // end of class

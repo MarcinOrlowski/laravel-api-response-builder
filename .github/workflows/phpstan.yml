@@ -5,7 +5,7 @@
 # @package   MarcinOrlowski\ResponseBuilder
 #
 # @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
-# @copyright 2016-2022 Marcin Orlowski
+# @copyright 2016-2023 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
 #
@@ -29,18 +29,14 @@ jobs:
       fail-fast: false
       matrix:
         # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
-        laravel: ["8.x"]
-        php: ["7.4", "8.0", "8.1"]
+        laravel: ["9.x"]
+        php: ["8.0", "8.1"]
 
     runs-on: ubuntu-latest
 
     steps:
       - name: "Checkout repository..."
-        uses: actions/checkout@v2
-
-      - name: "Setup proper composer.json"
-        shell: bash
-        run: cp -f ".config/composer-laravel-${{ matrix.laravel }}.json" composer.json
+        uses: actions/checkout@v3
 
       # https://github.com/marketplace/actions/composer-php-actions
       - name: "Installing dependencies..."
@@ -50,10 +46,18 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
-      # https://github.com/marketplace/actions/phpstan-php-actions
+      # # https://github.com/marketplace/actions/phpstan-php-actions
+      # - name: "Running PHPStan..."
+      #   uses: php-actions/phpstan@v3
+      #   with:
+      #     configuration: "phpstan.neon"
+      #     php_version: "${{ matrix.php }}"
+      #     # memory_limit: "16M"
+
+      # - name: "Making cache folder writable"
+      #   shell: bash
+      #   run: chmod 777 vendor/orchestra/testbench-core/laravel/bootstrap/cache
+
       - name: "Running PHPStan..."
-        uses: php-actions/phpstan@v3
-        with:
-          configuration: "phpstan.neon"
-          php_version: "${{ matrix.php }}"
-          memory_limit: 16M
+        shell: bash
+        run: vendor/bin/phpstan

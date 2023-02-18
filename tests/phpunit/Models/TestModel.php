@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -35,9 +35,6 @@ class TestModel
 		$this->val = $val;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getVal(): ?string
 	{
 		return $this->val;
@@ -45,8 +42,6 @@ class TestModel
 
 	/**
 	 * Converts model to array
-	 *
-	 * @return array
 	 */
 	public function toArray(): array
 	{
@@ -54,4 +49,5 @@ class TestModel
 			self::FIELD_NAME => $this->val,
 		];
 	}
-}
+
+} // end of class

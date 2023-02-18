@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -35,6 +35,7 @@ class TestModelJsonSerializable implements \JsonSerializable
 	 */
 	public function __construct($val)
 	{
+        /** @var string $val */
 		$this->val = $val;
 	}
 
@@ -42,6 +43,7 @@ class TestModelJsonSerializable implements \JsonSerializable
 	 * @return string
 	 *
 	 * NOTE: no return typehint due to compatibility with Laravel signature.
+     *
 	 * @noinspection PhpMissingReturnTypeInspection
 	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
@@ -54,11 +56,14 @@ class TestModelJsonSerializable implements \JsonSerializable
 	 * @return string
 	 *
 	 * NOTE: no typehints due to compatibility with interface's method signature.
+     *
 	 * @noinspection PhpMissingReturnTypeInspection
 	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
+    #[\ReturnTypeWillChange]
 	public function jsonSerialize()
 	{
 		return $this->val;
 	}
-}
+
+} // end of class

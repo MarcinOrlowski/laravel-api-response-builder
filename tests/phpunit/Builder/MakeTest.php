@@ -13,11 +13,12 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use MarcinOrlowski\ResponseBuilder\ApiResponse;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
@@ -30,8 +31,6 @@ class MakeTest extends TestCase
 {
     /**
      * @noinspection PhpDocMissingThrowsInspection
-     *
-     * @return void
      */
     public function testWrongMessage(): void
     {
@@ -44,18 +43,16 @@ class MakeTest extends TestCase
 
         /** @noinspection PhpParamsInspection */
 
-	    /**
-	     * This is to fool static analysers only. The invalid type is intentional,
-	     * and muting PHPStan is easier this way.
-	     *
-	     * @phpstan-var string $message_or_api_code
-	     */
+        /**
+         * This is to fool static analysers only. The invalid type is intentional,
+         * and muting PHPStan is easier this way.
+         *
+         * @phpstan-var string $message_or_api_code
+         */
         $this->callMakeMethod(true, $api_codes_class_name::OK(), $message_or_api_code);
     }
 
     /**
-     * @return void
-     *
      * @noinspection PhpDocMissingThrowsInspection
      */
     public function testCustomMessageAndCodeOutOfRange(): void
@@ -68,8 +65,6 @@ class MakeTest extends TestCase
 
     /**
      * Validates make() handling invalid type of encoding_options
-     *
-     * @return void
      *
      * @noinspection PhpDocMissingThrowsInspection
      */
@@ -84,8 +79,6 @@ class MakeTest extends TestCase
 
     /**
      * Tests fallback to default encoding_options
-     *
-     * @return void
      *
      * @noinspection PhpDocMissingThrowsInspection
      */
@@ -117,8 +110,6 @@ class MakeTest extends TestCase
 
     /**
      * Checks encoding_options influences result JSON data
-     *
-     * @return void
      *
      * @noinspection PhpDocMissingThrowsInspection
      */
@@ -154,25 +145,25 @@ class MakeTest extends TestCase
         $this->assertNotEquals($result_escaped, $result_unescaped);
     }
 
-	/**
-	 * Checks if RB::CONF_KEY_DATA_ALWAYS_OBJECT correctly resturns NULL payload
-	 * as empty JSON Object
-	 */
+    /**
+     * Checks if RB::CONF_KEY_DATA_ALWAYS_OBJECT correctly resturns NULL payload
+     * as empty JSON Object
+     */
     public function testDataAlwaysObjectConfigFlag(): void
     {
-    	// When enabling data_always_object feature
-	    \Config::set(RB::CONF_KEY_DATA_ALWAYS_OBJECT, true);
+        // When enabling data_always_object feature
+        \Config::set(RB::CONF_KEY_DATA_ALWAYS_OBJECT, true);
 
-	    // and passing NULL as data
-	    $data = null;
-	    $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
+        // and passing NULL as data
+        $data = null;
+        $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data);
 
-	    // returned 'data' branch should be empty JSON object
-	    $j = json_decode($this->getResponseContent($resp), false);
-	    $this->assertEquals(true, $j->{RB::KEY_SUCCESS});
-	    $this->assertNotNull($j->{RB::KEY_DATA});
-	    $this->assertIsObject($j->{RB::KEY_DATA});
-	    $this->assertEmpty((array)$j->{RB::KEY_DATA});
+        // returned 'data' branch should be empty JSON object
+        $j = ApiResponse::fromJson($this->getResponseContent($resp));
+        $this->assertEquals(true, $j->success());
+        $data = $j->getData();
+        $this->assertNotNull($data);
+        $this->assertEmpty($data);
     }
 
-}
+} // end of class

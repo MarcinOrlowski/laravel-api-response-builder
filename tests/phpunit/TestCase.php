@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -31,7 +31,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	protected $response;
 
 	use Traits\TestingHelpers;
-	use \MarcinOrlowski\PhpunitExtraAsserts\Traits\ExtraAsserts;
 
 	/**
 	 * Define environment setup.
@@ -59,8 +58,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	/**
 	 * Returns ApiCodes class name. We need that done this way, so you can easily plug-and-play
 	 * out testing trait into your project.
-	 *
-	 * @return string
 	 */
 	public function getApiCodesClassName(): string
 	{
@@ -71,8 +68,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 	 * [Orchestra] Load service providers we need during the tests
 	 *
 	 * @param \Illuminate\Foundation\Application $app
-	 *
-	 * @return array
 	 *
 	 * NOTE: not return typehint due to compatibility with TestBench's method signature.
 	 * @noinspection PhpUnusedParameterInspection
@@ -86,4 +81,5 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 			\MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
 		];
 	}
-}
+
+} // end of class

@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder\Contracts;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -34,8 +34,7 @@ interface ExceptionHandlerContract
 	 *
 	 * @param array      $user_config Config array (can be empty) with any keys required by given handle.
 	 * @param \Throwable $ex          The throwable to handle.
-	 *
-	 * @return array|null
 	 */
 	public function handle(array $user_config, \Throwable $ex): ?array;
-}
+
+} // end of class

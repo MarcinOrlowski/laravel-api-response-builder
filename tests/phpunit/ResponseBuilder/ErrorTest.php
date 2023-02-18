@@ -13,7 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -30,8 +30,6 @@ class ErrorTest extends TestCase
 {
 	/**
 	 * Check success()
-	 *
-	 * @return void
 	 */
     public function testError(): void
     {
@@ -42,11 +40,11 @@ class ErrorTest extends TestCase
         $this->response = RB::error($api_code);
 
         // THEN returned message contains given error code and mapped message
-        $j = $this->getResponseErrorObject($api_code);
-        $this->assertEquals($this->random_api_code_message, $j->message);
+        $api = $this->getResponseErrorObject($api_code);
+        $this->assertEquals($this->random_api_code_message, $api->getMessage());
 
         // AND no data
-        $this->assertNull($j->data);
+        $this->assertNull($api->getData());
     }
 
-}
+} // end of class

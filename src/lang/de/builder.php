@@ -5,9 +5,9 @@ declare(strict_types=1);
  * Laravel API Response Builder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
- * @link      https://github.com/MarcinOrlowski/laravel-response-builder
+ * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 return [
 

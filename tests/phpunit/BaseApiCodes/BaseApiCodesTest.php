@@ -12,7 +12,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\BaseApiCodes;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -31,8 +31,6 @@ class BaseApiCodesTest extends TestCase
 {
     /**
      * Tests getMinCode() with invalid config
-     *
-     * @return void
      */
     public function testGetMinCodeMissingConfigKey(): void
     {
@@ -46,8 +44,6 @@ class BaseApiCodesTest extends TestCase
 
     /**
      * Tests getMaxCode() with invalid config
-     *
-     * @return void
      */
     public function testGetMaxCodeMissingConfigKey(): void
     {
@@ -61,8 +57,6 @@ class BaseApiCodesTest extends TestCase
 
     /**
      * Tests getMap() with missing config
-     *
-     * @return void
      */
     public function testGetMapMissingConfigKey(): void
     {
@@ -76,8 +70,6 @@ class BaseApiCodesTest extends TestCase
 
     /**
      * Tests getMap() with wrong config
-     *
-     * @return void
      */
     public function testGetMapWrongConfig(): void
     {
@@ -88,4 +80,5 @@ class BaseApiCodesTest extends TestCase
 	    /** @noinspection PhpUnhandledExceptionInspection */
         BaseApiCodes::getMap();
     }
-}
+
+} // end of class

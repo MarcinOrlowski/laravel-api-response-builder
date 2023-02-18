@@ -1,13 +1,32 @@
-![REST API Response Builder for Laravel](../artwork/laravel-api-response-builder-logo.svg)
-
+![REST API Response Builder for Laravel](../artwork/laravel-api-response-builder-logo.png)
 
 # REST API Response Builder for Laravel #
 
- > ![WARNING](img/warning.png) This library follows [semantic versioning](https://semver.org).
- > See [compatibility docs](compatibility.md) for details about backward compatibility
- > **before** doing major upgrade!
+> ![WARNING](img/warning.png) This library follows [semantic versioning](https://semver.org).
+> See [compatibility docs](compatibility.md) for details about backward compatibility
+> **before** doing major upgrade!
+
+From release 9.4 onward, `ResponseBuilder` major version number is in sync with `Laravel`'s major
+version number to show target framework version. If you use `Laravel 9` - you'd need to depend on
+`ResponseBuilder v9.*`. Version `ResponseBuilder v10.*` would be then your dependency in (future)
+`Laraver v10` based projects, and so on. Also, due to limited time and funds I am having to maintain
+this project, only the most recent Laravel version will be officially supported. The same applies to
+PHP version requirement. Starting from v9.5, `ResponseBuilder` requires exactly the same PHP
+version `Laravel` do, even if technically still should work perfect on older versions too. That
+should pose no real problem for you as `ResponseBuilder` has solid and stable code base and **you**
+should be able to easily backport future new features to older versions rather easily.
 
 ## CHANGE LOG ##
+
+* v9.4.0 (2023-12-18)
+  * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
+  * Removed redundant PHPDocs entries for type-hinted elements.
+  * Fixed exception handler helper not properly handling iterating over mismatched configuration
+    items.
+  * Fixed missing dependency entry in `composer.json` (development tools).
+  * Reworked tests to use strict object representation of API response stricture to reduce overall
+    LoC.
+  * Removed `assertValidResponse()` test helper method due to introduction of `ApiResponse` class.
 
 * v9.3.2 (2022-02-13)
   * Laravel 9.x is now included in test matrices.
@@ -20,8 +39,8 @@
   * Small code cleanup.
 
 * v9.3.0 (2021-06-22)
-  * Added `data_always_object` config option that, when enabled enforces response `data` node
-    to always be JSON object (for `NULL` it will return empty object `{}`).
+  * Added `data_always_object` config option that, when enabled enforces response `data` node to
+    always be JSON object (for `NULL` it will return empty object `{}`).
   * Updated project logo
   * Updated code style to match standard ruleset.
   * Improved code quality (fully pass on PHPStan's strict mode)
@@ -32,8 +51,10 @@
   * `Validator::assertIsInt()` throws now `NotIntegerException` as expected.
   * Corrected `Validator` class tests to check agains specific exceptions thrown, not base class.
   * Improved error handling in `JsonSerializableConverter`
-  * Switched Composer's autoload to follow `psr-4` instead of plain `classmap` (thanks to Viktor Szépe).
-  * Added `TestingHelpers::getResponseContent()`, `TestingHelpers::langGet()` to satisfy static analyzers.
+  * Switched Composer's autoload to follow `psr-4` instead of plain `classmap` (thanks to Viktor
+    Szépe).
+  * Added `TestingHelpers::getResponseContent()`, `TestingHelpers::langGet()` to satisfy static
+    analyzers.
   * Updated and corrected PHPDocs (incl. some type hints).
   * Added missing type hint to `success()`.
   * Added strict type header to classes.
@@ -66,8 +87,8 @@
 
 * v9.0.3 (2020-10-27)
   * `Validator` type related exceptions must now implement `InvalidTypeExceptionContract`.
-  * The `converter` config `key` element now accepts `null` to indicate you want no key to
-     be used (patch by Raja).
+  * The `converter` config `key` element now accepts `null` to indicate you want no key to be used (
+    patch by Raja).
 
 * v9.0.2 (2020-10-24)
   * Corrected tests to use regular ServiceProvider.
@@ -82,17 +103,20 @@
 * v9.0.0 (2020-10-17)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
   * [RB-156] Added logic to deal with directly returned objects or arrays.
-  * [RB-158] Passing primitives as direct payload (i.e. `success(12.50);` is now supported for `array`, `boolean`,
+  * [RB-158] Passing primitives as direct payload (i.e. `success(12.50);` is now supported
+    for `array`, `boolean`,
     `double`, `integer` and `string` types, configurable via new `converter/primitives`.
   * Removed hadrcoded `val` key used by `JsonSerializable` converter.
-  * Introduced own exceptions for better error reporting. See [src/Exceptions](../src/Exceptions) for more info.
+  * Introduced own exceptions for better error reporting. See [src/Exceptions](../src/Exceptions)
+    for more info.
 
 * v8.1.1 (2020-10-15)
-  * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from
-     being invoked, thus making response object structure manipulation ineffective (reported by @krek95).
+  * [RB-155] Fixed `ResponseBuilder` internals preventing exdending class code from being invoked,
+    thus making response object structure manipulation ineffective (reported by @krek95).
 
 * v8.1.0 (2020-09-17)
-  * Added logging (`.env` controllable) for payload Converter to help debugging inproper data conversion.
+  * Added logging (`.env` controllable) for payload Converter to help debugging inproper data
+    conversion.
 
 * v8.0.1 (2020-09-09)
   * Updated Travis config to make tests run against Laravel 8.0.
@@ -108,7 +132,8 @@
   * Added German localization.
 
 * v7.1.2 (2020-07-12)
-  * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan Fekete).
+  * [RB-141] Fixed `JsonSerializableConverter` to deal non-string return data (reported by Jonatan
+    Fekete).
 
 * v7.1.1 (2020-07-11)
   * Added more tests.
@@ -133,18 +158,23 @@
 * v7.0.0 (2019-11-22)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
   * New, flexible API based on `Builder` pattern (see [docs](compatibility.md) for details).
-  * Reworked `ExceptionHandlerHelper` configuration. Now, you will be able to easily configure every `HttpException`
-    for each HTTP status code you want. Separate `ExceptionHandler::TYPE_HTTP_NOT_FOUND_KEY` and all related stuff,
-    incl. localization key `http_not_found`, configuration is now replace with more flexible generic code that provides
-    error messages for all supported HTTP codes from in range `400-599`.
+  * Reworked `ExceptionHandlerHelper` configuration. Now, you will be able to easily configure
+    every `HttpException`
+    for each HTTP status code you want. Separate `ExceptionHandler::TYPE_HTTP_NOT_FOUND_KEY` and all
+    related stuff, incl. localization key `http_not_found`, configuration is now replace with more
+    flexible generic code that provides error messages for all supported HTTP codes from in
+    range `400-599`.
   * Added support for external data converters (related part of config changed too).
-  * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler` is used instead.
-    needs to be added now, pointing to the class implementing `ConverterContract` acting as delegate worker.
-  * Data converter now handles objects implementing `JsonSerializable` and `Arrayable` contracts as well.
+  * Config key `classes` is now (partially) `converter`. Its `method` key is gone and `handler` is
+    used instead. needs to be added now, pointing to the class implementing `ConverterContract`
+    acting as delegate worker.
+  * Data converter now handles objects implementing `JsonSerializable` and `Arrayable` contracts as
+    well.
 
 * v6.3.2 (2019-11-07)
   * Added `RB::successWithMessage()` method.
-  * Entries in `classes` config array can now have `pri` to enforce order while merging config with a built-in configuration.
+  * Entries in `classes` config array can now have `pri` to enforce order while merging config with
+    a built-in configuration.
   * Persian translation (Thanks to @FaridAghili).
   * Added Laravel 6.5 to Travis-CI unit tests.
 
@@ -155,7 +185,8 @@
 
 * v6.3.0 (2019-11-02)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md))
-  * Signature of `RB::buildResponse()` changed to allow customization of final `message` entry (@hawezo).
+  * Signature of `RB::buildResponse()` changed to allow customization of final `message` entry (
+    @hawezo).
   * Moved all code that produces messages for API codes to `RB::getMessageForApiCode()`.
   * Added `Validator::assertType()` helper method that validates var against set of allowed types.
   * Added `Validator::assertString()` helper.
@@ -175,7 +206,8 @@
 
 * v6.2.0 (2019-10-19)
   * Changed how auto-converter checks for supported classes (see [Data Conversion](conversion.md))
-  * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources) data class.
+  * Data conversion now supports [JsonResource](https://laravel.com/docs/6.0/eloquent-resources)
+    data class.
   * Added unit test for `ResponseBuilderServiceProvider::mergeConfg()`.
   * Moved data conversion code to separate `Converter` class.
   * Added `LICENSE.md` file.
@@ -186,7 +218,8 @@
   * Corrected ServiceProvider used for tests.
 
 * v6.1.1 (2019-10-02)
-  * Fixed `ResponseBuilderServiceProvider` using unreferenced `Arr` class method (reported by yassir3wad).
+  * Fixed `ResponseBuilderServiceProvider` using unreferenced `Arr` class method (reported by
+    yassir3wad).
 
 * v6.1.0 (2019-09-28)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md))
@@ -277,12 +310,17 @@
 * v4.0.0 (2017-04-10)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
   * [RB-59] Added option to remap response JSON keys to user provided values.
-  * [RB-54] Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root data structure.
-  * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config keys defaults.
-  * [RB-47] Exception Handler now supports `FormRequests` and returns all messages in `RB::KEY_MESSAGES`.
-  * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled same way `authentication_exception` is.
+  * [RB-54] Debug data no longer pollutes `data` leaf. Instead, it adds `debug` dictionary to root
+    data structure.
+  * [RB-37] Added support for Laravel 5.3+ `unauthenticated()` in Exception Handler. See new config
+    keys defaults.
+  * [RB-47] Exception Handler now supports `FormRequests` and returns all messages
+    in `RB::KEY_MESSAGES`.
+  * Uncaught `HttpResponse::HTTP_UNAUTHORIZED` exception is now handled same
+    way `authentication_exception` is.
   * [RB-56] Added configurable key for debug trace added to returned JSON response (if enabled).
-  * Added traits to help testing your config and ApiCodes with ease. See `Unit Testing your ApiCodes` docs for details.
+  * Added traits to help testing your config and ApiCodes with ease.
+    See `Unit Testing your ApiCodes` docs for details.
   * `ApiCodeBase` class is now named `BaseApiCodes`.
   * [RB-35] ExceptionHandlerHelper is now covered by tests.
 
@@ -290,7 +328,8 @@
   * [RB-49] Fixed `artisan vendor:publish` not publishing config file correctly.
 
 * v3.2.0 (2017-03-02)
-  * [RB-42] Default value of `encoding_options` include `JSON_UNESCAPED_UNICODE` to prevent unicode escaping.
+  * [RB-42] Default value of `encoding_options` include `JSON_UNESCAPED_UNICODE` to prevent unicode
+    escaping.
   * [RB-41] Updated documentation.
 
 * v3.1.0 (2017-02-28)
@@ -303,7 +342,8 @@
   * No changes. v3.0.2 was incorrectly released.
 
 * v3.0.2 (2017-02-24)
-  * [RB-31] Fixed incorrect exception message thrown in case of incomplete `classes` config mapping (@dragonfire1119).
+  * [RB-31] Fixed incorrect exception message thrown in case of incomplete `classes` config
+    mapping (@dragonfire1119).
 
 * v3.0.1 (2017-02-23)
   * Updated `composer.json` to list `laravel/framework` among requirements.
@@ -318,7 +358,8 @@
   * All exceptions thrown due to misconfiguration have `CONFIG:` message prefix now.
   * Renamed `error_code` param to `api_code` in all the method signatures.
   * `:api_code` is now code placeholder in strings (`:error_code` is no longer supported).
-  * Default HTTP codes are now declared as constants `DEFAULT_HTTP_CODE_xxx` if you need to know them.
+  * Default HTTP codes are now declared as constants `DEFAULT_HTTP_CODE_xxx` if you need to know
+    them.
   * `ApiCodeBase::getMap()` now ensures `map` config entry of expected `array` type.
   * [RB-26] Added `successWithCode()` method.
 
@@ -327,10 +368,13 @@
 
 * v2.2.0 (2017-02-20)
   * [RB-5] Fixed error code range not being checked when used with custom message strings.
-  * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception if `http_code` is `null`.
+  * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception
+    if `http_code` is `null`.
   * `http_code` can be handed as null to all other methods and it will be replaced by default codes.
-  * `classes` mapping now features `method` field to specify method name to call for automatic object conversion.
-  * [RB-10] When `$data` is an `array`, all elements mapped via "classes" config will be converted recursively.
+  * `classes` mapping now features `method` field to specify method name to call for automatic
+    object conversion.
+  * [RB-10] When `$data` is an `array`, all elements mapped via "classes" config will be converted
+    recursively.
   * [RB-3] Unit tests are now part of the package.
 
 * v2.1.2 (2016-08-24)
@@ -343,8 +387,8 @@
   * Eloquent Model can now be directly returned as response payload.
   * Eloquent Collection can now be directly returned as response payload.
   * Added some config parameters (see `config/response_builder.php` in `vendor/....`).
-  * You can now pass literally anything to be returned in `data` payload, however data type conversion will be enforced
-    to ensure returning data matches specification.
+  * You can now pass literally anything to be returned in `data` payload, however data type
+    conversion will be enforced to ensure returning data matches specification.
   * Updated documentation.
 
 * v2.0.0 (2016-04-21)
@@ -352,11 +396,15 @@
   * Built-in localization keys changed
   * Added `errorWithMessageAndData()` method
   * ExceptionHandlerHelper adds `class`, `file` and `line` to returned JSON for apps in DEBUG mode
-  * ExceptionHandlerHelper can now use `:message`, `:api_code`, `:http_code` and `:class` placeholders
+  * ExceptionHandlerHelper can now use `:message`, `:api_code`, `:http_code` and `:class`
+    placeholders
   * ExceptionHandlerHelper now automatically resolves message mappings and needs no config entries
-  * ExceptionHandlerHelper now comes with built-in error codes (still, using own codes is recommended)
-  * Added option to configure HTTP codes for each `ExceptionHandlerHelper` returned response separately
-  * Exception provided messages can now have priorities over ExceptionHandlerHelper configured error messages
+  * ExceptionHandlerHelper now comes with built-in error codes (still, using own codes is
+    recommended)
+  * Added option to configure HTTP codes for each `ExceptionHandlerHelper` returned response
+    separately
+  * Exception provided messages can now have priorities over ExceptionHandlerHelper configured error
+    messages
 
 * v1.5.0 (2016-04-18)
   * ExHandler: ExceptionHandler is now replaced by ExceptionHandlerHelper

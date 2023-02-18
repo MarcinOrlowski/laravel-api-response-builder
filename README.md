@@ -1,4 +1,4 @@
-![REST API Response Builder for Laravel](artwork/laravel-api-response-builder-logo.svg)
+![REST API Response Builder for Laravel](artwork/laravel-api-response-builder-logo.png)
 
 # REST API Response Builder for Laravel #
 
@@ -66,5 +66,5 @@ Development branch:
 
 ## License ##
 
-* Written and copyrighted &copy;2016-2022 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
+* Written and copyrighted &copy;2016-2023 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
 * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

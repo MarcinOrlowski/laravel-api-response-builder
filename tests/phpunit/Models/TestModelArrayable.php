@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -38,9 +38,6 @@ class TestModelArrayable implements Arrayable
 		$this->val = $val;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getVal(): ?string
 	{
 		return $this->val;
@@ -50,8 +47,6 @@ class TestModelArrayable implements Arrayable
 	 * Converts model to array.
 	 *
 	 * @param Request $request
-	 *
-	 * @return array
 	 *
 	 * @noinspection PhpUnusedParameterInspection
 	 *
@@ -65,4 +60,5 @@ class TestModelArrayable implements Arrayable
 			self::FIELD_NAME => $this->val,
 		];
 	}
-}
+
+} // end of class

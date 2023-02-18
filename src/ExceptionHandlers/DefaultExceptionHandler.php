@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -45,4 +45,5 @@ final class DefaultExceptionHandler implements ExceptionHandlerContract
 
 		return \array_replace($defaults, $user_config);
 	}
-}
+
+} // end of class

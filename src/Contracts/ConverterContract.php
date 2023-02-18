@@ -9,7 +9,7 @@ namespace MarcinOrlowski\ResponseBuilder\Contracts;
  * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
- * @copyright 2016-2022 Marcin Orlowski
+ * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
@@ -21,8 +21,7 @@ interface ConverterContract
      * @param object $obj    Object to be converted
      * @param array  $config Converter config array to be used for this object (based on exact class
      *                       name match or inheritance).
-     *
-     * @return array
      */
     public function convert(object $obj, array $config): array;
-}
+
+} // end of class
