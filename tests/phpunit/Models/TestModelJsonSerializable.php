@@ -60,6 +60,7 @@ class TestModelJsonSerializable implements \JsonSerializable
 	 * @noinspection PhpMissingReturnTypeInspection
 	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
+    #[\ReturnTypeWillChange]
 	public function jsonSerialize()
 	{
 		return $this->val;
