@@ -18,7 +18,7 @@ should be able to easily backport future new features to older versions rather e
 
 ## CHANGE LOG ##
 
-* v9.4.0 (2022-11-28)
+* v9.4.0 (2023-12-18)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
   * Removed redundant PHPDocs entries for type-hinted elements.
   * Fixed exception handler helper not properly handling iterating over mismatched configuration

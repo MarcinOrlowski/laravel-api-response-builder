@@ -28,15 +28,15 @@ Backward (in)compatibility notes. Pay attention if you are upgrading.
 * `[BREAKING/Low]` From release 9.4 onward, `ResponseBuilder` major version number is in sync
   with `Laravel`'s major version number to show target framework version. If you use `Laravel 9` -
   you'd need `ResponseBuilder v9.*`. Version `ResponseBuilder v10.*` would be then your dependency
-  in (future) `Laravel v10` based projects, and so on. Also, due to limited time and funds I am
+  in `Laravel v10` based projects, and so on. Also, due to limited time and funds I am
   having to maintain this project, only the most recent Laravel version will be officially
-  supported. The same applies to PHP version requirement. Starting from v9.5, `ResponseBuilder`
+  supported. The same applies to PHP version requirement. Starting from v9.4, `ResponseBuilder`
   requires exactly the same PHP version `Laravel` do, even if technically still should work perfect
   on older versions too. That should pose no real problem for you as `ResponseBuilder` has solid and
   stable code base and you should be able to easily backport future new features to older versions
   rather easily.
-* `[BREAKING/Low]` Due to introduction of `ApiResponse` data class `assertValidResponse()` method is
-  removed.
+* `[BREAKING/Low]` Due to introduction of `ApiResponse` data class `assertValidResponse()` testing
+  helper method is removed.
 
 ## v9 ##
 
