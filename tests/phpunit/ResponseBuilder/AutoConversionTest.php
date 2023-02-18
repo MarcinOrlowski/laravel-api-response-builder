@@ -159,7 +159,7 @@ class AutoConversionTest extends TestCase
         $this->assertEquals($value, $data[ $key ]);
     }
 
-    public function successWithPrimitiveProvider(): array
+    public static function successWithPrimitiveProvider(): array
     {
         return [
             // boolean
