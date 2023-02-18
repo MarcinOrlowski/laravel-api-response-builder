@@ -30,7 +30,8 @@ jobs:
       matrix:
         # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
         laravel: ["9.x"]
-        php: ["8.0", "8.1"]
+        # PHP 8.0 should be covered as well, but I switched to PHPUnit 10 and that requires PHP 8.1
+        php: ["8.1"]
 
     runs-on: ubuntu-latest
 
