@@ -54,9 +54,9 @@ jobs:
       #     php_version: "${{ matrix.php }}"
       #     # memory_limit: "16M"
 
-      - name: "Making cache folder writable"
-        shell: bash
-        run: chmod 777 vendor/orchestra/testbench-core/laravel/bootstrap/cache
+      # - name: "Making cache folder writable"
+      #   shell: bash
+      #   run: chmod 777 vendor/orchestra/testbench-core/laravel/bootstrap/cache
 
       - name: "Patching testbench's onNotSuccessfulTest() signature..."
         shell: bash
