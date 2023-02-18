@@ -170,7 +170,8 @@ class ResponseBuilder extends ResponseBuilderBase
     {
         Validator::assertIsType('http_code', $http_code, [
             Type::INTEGER,
-            Type::NULL]);
+            Type::NULL,
+        ]);
         $this->http_code = $http_code;
 
         return $this;
@@ -205,7 +206,8 @@ class ResponseBuilder extends ResponseBuilderBase
     public function withJsonOptions(int $json_opts = null): self
     {
         Validator::assertIsType('json_opts', $json_opts, [Type::INTEGER,
-                                                          Type::NULL]);
+                                                          Type::NULL,
+        ]);
         $this->json_opts = $json_opts;
 
         return $this;
@@ -219,7 +221,8 @@ class ResponseBuilder extends ResponseBuilderBase
     public function withDebugData(array $debug_data = null): self
     {
         Validator::assertIsType('$debug_data', $debug_data, [Type::ARRAY,
-                                                             Type::NULL]);
+                                                             Type::NULL,
+        ]);
         $this->debug_data = $debug_data;
 
         return $this;
@@ -233,7 +236,8 @@ class ResponseBuilder extends ResponseBuilderBase
     public function withMessage(string $msg = null): self
     {
         Validator::assertIsType('message', $msg, [Type::STRING,
-                                                  Type::NULL]);
+                                                  Type::NULL,
+        ]);
         $this->message = $msg;
 
         return $this;
@@ -309,10 +313,10 @@ class ResponseBuilder extends ResponseBuilderBase
      * @param integer|null   $http_code          HTTP code for the HttpResponse or @null for either
      *                                           DEFAULT_HTTP_CODE_OK or DEFAULT_HTTP_CODE_ERROR
      *                                           depending on the $success.
-     * @param array|null $placeholders           Placeholders passed to Lang::get() for message
+     * @param array|null     $placeholders       Placeholders passed to Lang::get() for message
      *                                           placeholders substitution or @null if none.
      * @param array|null     $http_headers       Optional HTTP headers to be returned in the response.
-     * @param integer|null $json_opts            See http://php.net/manual/en/function.json-encode.php
+     * @param integer|null   $json_opts          See http://php.net/manual/en/function.json-encode.php
      *                                           for supported options or pass @null to use value from
      *                                           your config (or defaults).
      * @param array|null     $debug_data         Optional debug data array to be added to returned JSON.
@@ -373,9 +377,12 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @noinspection PhpTooManyParametersInspection
      */
-    protected function buildResponse(bool $success, int $api_code,
-                                          $msg_or_api_code, array $placeholders = null,
-                                          $data = null, array $debug_data = null): array
+    protected function buildResponse(bool       $success,
+                                     int        $api_code,
+                                     string|int $msg_or_api_code,
+                                     ?array     $placeholders = null,
+                                     mixed      $data = null,
+                                     ?array     $debug_data = null): array
     {
         // ensure $data is either @null, array or object of class with configured mapping.
         $data = (new Converter())->convert($data);
