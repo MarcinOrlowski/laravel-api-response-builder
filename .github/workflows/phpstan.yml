@@ -46,10 +46,14 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
-      # https://github.com/marketplace/actions/phpstan-php-actions
+      # # https://github.com/marketplace/actions/phpstan-php-actions
+      # - name: "Running PHPStan..."
+      #   uses: php-actions/phpstan@v3
+      #   with:
+      #     configuration: "phpstan.neon"
+      #     php_version: "${{ matrix.php }}"
+      #     # memory_limit: "16M"
+
       - name: "Running PHPStan..."
-        uses: php-actions/phpstan@v3
-        with:
-          configuration: "phpstan.neon"
-          php_version: "${{ matrix.php }}"
-          # memory_limit: "16M"
+        shell: bash
+        run: vendor/bin/phpstan
