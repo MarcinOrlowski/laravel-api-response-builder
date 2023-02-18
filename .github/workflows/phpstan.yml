@@ -61,7 +61,7 @@ jobs:
 
       - name: "Patching testbench's onNotSuccessfulTest() signature..."
         shell: bash
-        run: sed -i 's/^protected function onNotSuccessfulTest(Throwable \$exception): void/protected function onNotSuccessfulTest(Throwable \$exception): never/' vendor/orchestra/testbench-core/src/TestCase.php
+        run: "sed -i 's/^protected function onNotSuccessfulTest(Throwable \\$exception)\\: void/protected function onNotSuccessfulTest(Throwable \\$exception)\\: never/' vendor/orchestra/testbench-core/src/TestCase.php"
 
       - name: "Running PHPStan..."
         shell: bash

@@ -48,7 +48,7 @@ jobs:
 
       - name: "Patching testbench's onNotSuccessfulTest() signature..."
         shell: bash
-        run: sed -i 's/^protected function onNotSuccessfulTest(Throwable \$exception): void/protected function onNotSuccessfulTest(Throwable \$exception): never/' vendor/orchestra/testbench-core/src/TestCase.php
+        run: "sed -i 's/^protected function onNotSuccessfulTest(Throwable \\$exception)\\: void/protected function onNotSuccessfulTest(Throwable \\$exception)\\: never/' vendor/orchestra/testbench-core/src/TestCase.php"
 
       # https://github.com/marketplace/actions/phpunit-php-actions
       - name: "Running PHPUnit with Coverage..."
