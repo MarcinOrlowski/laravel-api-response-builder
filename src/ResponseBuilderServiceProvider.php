@@ -24,8 +24,6 @@ use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 
 /**
  * Laravel's service provider for ResponseBuilder
- *
- * @package MarcinOrlowski\ResponseBuilder
  */
 class ResponseBuilderServiceProvider extends ServiceProvider
 {

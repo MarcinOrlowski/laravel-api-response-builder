@@ -26,8 +26,6 @@ use MarcinOrlowski\ResponseBuilder\Type;
 
 /**
  * Class PrimitivesGetPrimitivesMappingTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class PrimitivesGetPrimitivesMappingTest extends TestCase
 {

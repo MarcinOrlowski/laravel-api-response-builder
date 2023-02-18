@@ -19,8 +19,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
 /**
  * Class DummyResponseBuilder
  *
- * @package MarcinOrlowski\ResponseBuilder\Tests
- *
  * @noinspection EmptyClassInspection
  * phpcs:disable Squiz.Classes.ClassFileName.NoMatch
  */

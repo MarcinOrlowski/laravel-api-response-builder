@@ -19,8 +19,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class ValidatorTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class ValidatorTest extends TestCase
 {

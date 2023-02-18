@@ -21,8 +21,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class FactoryTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class FactoryTest extends TestCase
 {

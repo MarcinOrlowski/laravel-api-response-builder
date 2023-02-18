@@ -23,8 +23,6 @@ use MarcinOrlowski\ResponseBuilder\Util;
 
 /**
  * Class MergeConfigTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class MergeConfigTest extends TestCase
 {

@@ -29,8 +29,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class ConverterTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class ConverterTest extends TestCase
 {

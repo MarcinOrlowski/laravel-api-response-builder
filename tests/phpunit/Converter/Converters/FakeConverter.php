@@ -16,8 +16,6 @@ use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 
 /**
  * Class FakeConverter
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests\Converters
  */
 class FakeConverter implements ConverterContract
 {

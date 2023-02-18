@@ -26,8 +26,6 @@ use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 
 /**
  * Class SuccessTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class SuccessTest extends TestCase
 {

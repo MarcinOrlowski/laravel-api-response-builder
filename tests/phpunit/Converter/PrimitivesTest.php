@@ -27,8 +27,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class PrimitivesTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class PrimitivesTest extends TestCase
 {

@@ -28,8 +28,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class AutoConversionTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class AutoConversionTest extends TestCase
 {

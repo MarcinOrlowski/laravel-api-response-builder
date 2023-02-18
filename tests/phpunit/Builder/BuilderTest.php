@@ -24,8 +24,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class BuilderTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class BuilderTest extends TestCase
 {

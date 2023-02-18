@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
  * Class TestCase
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {

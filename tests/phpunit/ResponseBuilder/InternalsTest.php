@@ -26,8 +26,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class InternalsTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class InternalsTest extends TestCase
 {

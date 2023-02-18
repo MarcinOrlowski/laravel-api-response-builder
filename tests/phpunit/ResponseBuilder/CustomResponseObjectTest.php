@@ -22,8 +22,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class CustomResponseObjectTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class CustomResponseObjectTest extends TestCase
 {

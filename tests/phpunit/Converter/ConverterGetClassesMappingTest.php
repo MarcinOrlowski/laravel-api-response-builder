@@ -25,8 +25,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class ConverterGetClassesMappingTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class ConverterGetClassesMappingTest extends TestCase
 {

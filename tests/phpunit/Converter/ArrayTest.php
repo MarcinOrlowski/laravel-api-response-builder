@@ -32,8 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ArrayTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class ArrayTest extends TestCase
 {

@@ -33,8 +33,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class ExceptionHandlerHelperTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class ExceptionHandlerHelperTest extends TestCase
 {

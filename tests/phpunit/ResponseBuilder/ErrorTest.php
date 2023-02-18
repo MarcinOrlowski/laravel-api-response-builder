@@ -21,8 +21,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class ErrorTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class ErrorTest extends TestCase
 {

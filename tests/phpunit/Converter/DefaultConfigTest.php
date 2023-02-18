@@ -32,8 +32,6 @@ use PHPUnit\Framework\Assert;
 
 /**
  * Class DefaultConfigTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class DefaultConfigTest extends TestCase
 {

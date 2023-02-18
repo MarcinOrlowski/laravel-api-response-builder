@@ -28,8 +28,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class ObjectTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class ObjectTest extends TestCase
 {

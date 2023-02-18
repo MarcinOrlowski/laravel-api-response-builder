@@ -17,8 +17,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class TranslationTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class TranslationTest extends TestCase
 {

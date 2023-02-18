@@ -18,8 +18,6 @@ use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 
 /**
  * Class SortByPriTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class SortByPriTest extends TestCase
 {

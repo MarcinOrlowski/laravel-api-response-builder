@@ -22,8 +22,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class BaseApiCodesTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class BaseApiCodesTest extends TestCase
 {
