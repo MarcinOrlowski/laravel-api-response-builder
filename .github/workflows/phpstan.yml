@@ -58,10 +58,6 @@ jobs:
       #   shell: bash
       #   run: chmod 777 vendor/orchestra/testbench-core/laravel/bootstrap/cache
 
-      - name: "Patching testbench's onNotSuccessfulTest() signature..."
-        shell: bash
-        run: "sed -i 's/^protected function onNotSuccessfulTest(Throwable \\$exception)\\: void/protected function onNotSuccessfulTest(Throwable \\$exception)\\: never/' vendor/orchestra/testbench-core/src/TestCase.php"
-
       - name: "Running PHPStan..."
         shell: bash
         run: vendor/bin/phpstan
