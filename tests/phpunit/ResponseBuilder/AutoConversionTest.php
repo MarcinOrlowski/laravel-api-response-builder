@@ -10,8 +10,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -26,11 +24,10 @@ use MarcinOrlowski\ResponseBuilder\Converters\ToArrayConverter;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class AutoConversionTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class AutoConversionTest extends TestCase
 {
@@ -137,12 +134,9 @@ class AutoConversionTest extends TestCase
 
     /**
      * Checks if buildResponse() would accept support payload types
-     *
-     * @param mixed $value Primitive type to be converted and returned in payload.
-     *
-     * @dataProvider successWithPrimitiveProvider
      */
-    public function testSuccessWithPrimitive($value): void
+    #[DataProvider('successWithPrimitiveProvider')]
+    public function testSuccessWithPrimitive(mixed $value): void
     {
         $this->response = RB::success($value);
         $api = $this->getResponseSuccessObject();
@@ -163,7 +157,7 @@ class AutoConversionTest extends TestCase
         $this->assertEquals($value, $data[ $key ]);
     }
 
-    public function successWithPrimitiveProvider(): array
+    public static function successWithPrimitiveProvider(): array
     {
         return [
             // boolean

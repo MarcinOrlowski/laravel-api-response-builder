@@ -1,16 +1,14 @@
 <?php
+declare(strict_types=1);
 /**
  * @noinspection PhpDocMissingThrowsInspection
  * @noinspection PhpUnhandledExceptionInspection
  */
-declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
 
 /**
  * Laravel API Response Builder
- *
- * @package   MarcinOrlowski\ResponseBuilder
  *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
@@ -19,25 +17,20 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  */
 class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
-	/** @var array */
-	public static $fake_response = [];
+    public static array $fake_response = [];
 
-	/** @noinspection PhpMissingParentCallCommonInspection */
-	/**
-	 * @param bool       $success
-	 * @param int        $api_code
-	 * @param int|string $msg_or_api_code
-	 * @param array|null $placeholders
-	 * @param null       $data
-	 * @param array|null $debug_data
-	 *
-	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed
-	 */
-	protected function buildResponse(bool $success, int $api_code,
-	                                 $msg_or_api_code, array $placeholders = null,
-	                                 $data = null, array $debug_data = null): array
-	{
-		return static::$fake_response;
-	}
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed
+     */
+    protected function buildResponse(bool       $success,
+                                     int        $api_code,
+                                     int|string $msg_or_api_code,
+                                     ?array     $placeholders = null,
+                                     mixed      $data = null,
+                                     ?array     $debug_data = null): array
+    {
+        return static::$fake_response;
+    }
 
 } // end of class

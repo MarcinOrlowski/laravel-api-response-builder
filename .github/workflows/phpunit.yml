@@ -2,8 +2,6 @@
 #
 # Laravel API Response Builder Unit tests Github Action config
 #
-# @package   MarcinOrlowski\ResponseBuilder
-#
 # @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
 # @copyright 2016-2023 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -29,8 +27,8 @@ jobs:
       fail-fast: false
       matrix:
         # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
-        laravel: ["9.x"]
-        php: ["8.0", "8.1"]
+        laravel: ["10.x"]
+        php: ["8.1"]
 
     runs-on: ubuntu-latest
 
@@ -52,6 +50,6 @@ jobs:
         with:
           bootstrap: "vendor/autoload.php"
           configuration: "tests/phpunit.xml"
-          version: "9.6.3"
+          # version: "10.0.89"
           # memory_limit: "16M"
           php_version: "${{ matrix.php }}"

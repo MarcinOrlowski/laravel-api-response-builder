@@ -10,8 +10,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -26,8 +24,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class BuilderTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class BuilderTest extends TestCase
 {

@@ -6,8 +6,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Util;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -20,8 +18,6 @@ use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 
 /**
  * Class SortByPriTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class SortByPriTest extends TestCase
 {

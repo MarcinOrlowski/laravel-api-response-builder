@@ -10,8 +10,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -30,11 +28,10 @@ use MarcinOrlowski\ResponseBuilder\Tests\Converter\Converters\FakeConverter;
 use MarcinOrlowski\ResponseBuilder\Tests\Models\TestModel;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 use MarcinOrlowski\ResponseBuilder\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ArrayTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class ArrayTest extends TestCase
 {
@@ -144,11 +141,8 @@ class ArrayTest extends TestCase
 
     /**
      * Tests if exception is thrown for invalid mixed-key array
-     *
-     * @param array $data
-     *
-     * @dataProvider convertArrayOfKeyAndKeylessItemsProvider
      */
+    #[DataProvider('convertArrayOfKeyAndKeylessItemsProvider')]
     public function testConvertArrayOfKeyAndKeylessItems(array $data): void
     {
         // GIVEN $data array with mixed keys (int/string and string/int order)
@@ -172,7 +166,7 @@ class ArrayTest extends TestCase
     /**
      * Data provider for testConvertArrayOfKeyAndKeylessItems
      */
-    public function convertArrayOfKeyAndKeylessItemsProvider(): array
+    public static function convertArrayOfKeyAndKeylessItemsProvider(): array
     {
         // GIVEN model object with randomly set member value
         $model_1 = new TestModel(Generator::getRandomString('model_1'));

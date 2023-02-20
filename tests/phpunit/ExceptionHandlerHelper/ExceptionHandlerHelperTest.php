@@ -10,8 +10,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ExceptionHandlerHelper;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -35,8 +33,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class ExceptionHandlerHelperTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class ExceptionHandlerHelperTest extends TestCase
 {

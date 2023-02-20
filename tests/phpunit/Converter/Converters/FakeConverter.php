@@ -6,8 +6,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter\Converters;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -18,8 +16,6 @@ use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 
 /**
  * Class FakeConverter
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests\Converters
  */
 class FakeConverter implements ConverterContract
 {

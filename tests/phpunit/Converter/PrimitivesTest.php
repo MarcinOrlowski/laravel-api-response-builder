@@ -10,8 +10,6 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
 /**
  * Laravel API Response Builder
  *
- * @package   MarcinOrlowski\ResponseBuilder
- *
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
@@ -29,8 +27,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
  * Class PrimitivesTest
- *
- * @package MarcinOrlowski\ResponseBuilder\Tests
  */
 class PrimitivesTest extends TestCase
 {
@@ -105,10 +101,8 @@ class PrimitivesTest extends TestCase
 
     /**
      * Helper method to perform some common tests for primitive as direct payload.
-     *
-     * @param mixed $value
      */
-    protected function doDirectPrimitiveTest($value): void
+    protected function doDirectPrimitiveTest(mixed $value): void
     {
         // GIVEN primitive value $value
 
