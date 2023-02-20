@@ -56,6 +56,7 @@
     "marcin-orlowski/php-lockpick": "^1.0"
   },
   "scripts": {
-    "test": "vendor/bin/phpunit -c tests/phpunit.xml"
+    "test": "vendor/bin/phpunit -c tests/phpunit.xml",
+    "mdlint": "markdownlint --config .markdownlint.yaml --ignore vendor **/*.md .github/**/*.md docs README.md"
   }
 }
