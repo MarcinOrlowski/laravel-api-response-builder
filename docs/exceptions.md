@@ -48,8 +48,8 @@ use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 ```php
 public function register()
 {
-    $this->renderable(function (Throwable $ex, $request) {
-        return ExceptionHandlerHelper::handle($ex, $request);
+    $this->renderable(function (\Throwable $ex, $request) {
+        return ExceptionHandlerHelper::render($request, $ex);
     });
 }
 ```
