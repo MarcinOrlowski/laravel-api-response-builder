@@ -52,7 +52,7 @@
     "orchestra/testbench": "^8.0",
     "phpunit/phpunit": "^10.0.0",
     "phpunit/php-code-coverage": "^10.0",
-    "nunomaduro/larastan": "^2.0",
+    "larastan/larastan": "^2.0",
     "marcin-orlowski/php-lockpick": "^1.0"
   },
   "scripts": {
