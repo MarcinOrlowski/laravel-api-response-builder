@@ -560,7 +560,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
         $sep = "\n  ";
         $code_name = $code ?? '"default"';
-        $msg = "Unsupported keys in config for HTTP Exception, handler for code {$code_name}:${sep}" . implode($sep, $diff);
+        $msg = "Unsupported keys in config for HTTP Exception, handler for code {$code_name}:{$sep}" . implode($sep, $diff);
         $this->assertEmpty($diff, $msg);
     }
 

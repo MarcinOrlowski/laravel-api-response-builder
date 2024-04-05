@@ -47,7 +47,7 @@ class SuccessTest extends TestCase
     {
         $payload = [];
         for ($i = 0; $i < 10; $i++) {
-            $payload[] = Generator::getRandomString("item${i}");
+            $payload[] = Generator::getRandomString("item{$i}");
         }
 
         $this->response = RB::success($payload);
