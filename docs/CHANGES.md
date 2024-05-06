@@ -18,7 +18,7 @@ should be able to easily backport future new features to older versions rather e
 
 ## CHANGE LOG ##
 
-* v11.0.0 (2023-02-20)
+* v11.0.0 (2024-05-06)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
   * Added support for Laravel v11.
   * Corrected documentation (thanks to Ehsan Soleimanian)
