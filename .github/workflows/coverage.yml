@@ -26,15 +26,16 @@ jobs:
       # do not stop the workflow if single run failed
       fail-fast: false
       matrix:
-        # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
-        laravel: ["9.x"]
-        php: ["8.0", "8.1"]
+        # quotes are needed it is treated as a number and zero at decimal part is gone
+        # at runtime i.e. 8.10 -> 8.1, while "8.10" => "8.10".
+        laravel: ["11.0"]
+        php: ["8.2"]
 
     runs-on: ubuntu-latest
 
     steps:
       - name: "Checkout repository..."
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # https://github.com/marketplace/actions/composer-php-actions
       - name: "Installing dependencies..."

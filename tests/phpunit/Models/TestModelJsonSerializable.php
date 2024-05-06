@@ -29,6 +29,7 @@ class TestModelJsonSerializable implements \JsonSerializable
 
     public function getVal(): string
     {
+        /** @phpstan-ignore-next-line */
         return $this->val;
     }
 
