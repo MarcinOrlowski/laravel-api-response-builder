@@ -49,14 +49,6 @@ jobs:
       - name: "Checkout repository..."
         uses: actions/checkout@v4
 
-      # https://github.com/marketplace/actions/composer-php-actions
-      - name: "Installing dependencies..."
-        uses: php-actions/composer@v6
-        with:
-          version: 2
-          php_version: "${{ matrix.php }}"
-          dev: yes
-
       - name: "Running PHPUnit..."
         shell: bash
         run: |
