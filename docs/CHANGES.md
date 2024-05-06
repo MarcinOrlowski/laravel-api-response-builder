@@ -20,6 +20,7 @@ should be able to easily backport future new features to older versions rather e
 
 * dev
   * Added support for Laravel v11.
+  * Corrected documentation (thanks to Ehsan Soleimanian)
 
 * v10.0.0 (2023-02-20)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md)).
