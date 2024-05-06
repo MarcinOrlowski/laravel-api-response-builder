@@ -57,7 +57,13 @@
     "marcin-orlowski/lockpick": "^1.0"
   },
   "scripts": {
-    "test": "vendor/bin/phpunit -c tests/phpunit.xml",
-    "mdlint": "markdownlint --config .markdownlint.yaml --ignore vendor **/*.md .github/**/*.md docs README.md"
+    "test": [
+		"Composer\\Config::disableProcessTimeout",
+		"vendor/bin/phpunit -c tests/phpunit.xml"
+	],
+    "mdlint": [
+		"Composer\\Config::disableProcessTimeout",
+		"markdownlint --config .markdownlint.yaml --ignore vendor **/*.md .github/**/*.md docs README.md"
+	]
   }
 }
