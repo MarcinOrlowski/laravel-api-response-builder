@@ -24,8 +24,8 @@ jobs:
       fail-fast: false
       matrix:
         # quotes are needed it is treated as a number and zero at decimal part is gone at runtime
-        laravel: ["9.x"]
-        php: ["8.0", "8.1"]
+        laravel: ["11.x"]
+        php: ["8.2"]
 
     runs-on: ubuntu-latest
 
