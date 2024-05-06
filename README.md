@@ -66,5 +66,5 @@ Development branch:
 
 ## License ##
 
-* Written and copyrighted &copy;2016-2023 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
+* Written and copyrighted &copy;2016-2024 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
 * ResponseBuilder is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
