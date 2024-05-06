@@ -49,7 +49,7 @@ use MarcinOrlowski\ResponseBuilder\ExceptionHandlerHelper;
 public function register()
 {
     $this->renderable(function (Throwable $ex, $request) {
-        return ExceptionHandlerHelper::handle($ex, $request);
+        return ExceptionHandlerHelper::render($request ,$ex );
     });
 }
 ```
