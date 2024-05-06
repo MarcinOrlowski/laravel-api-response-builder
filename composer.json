@@ -58,12 +58,16 @@
   },
   "scripts": {
     "test": [
-		"Composer\\Config::disableProcessTimeout",
-		"vendor/bin/phpunit -c tests/phpunit.xml"
-	],
+      "Composer\\Config::disableProcessTimeout",
+      "vendor/bin/phpunit -c tests/phpunit.xml"
+    ],
+    "lint": [
+      "Composer\\Config::disableProcessTimeout",
+      "vendor/bin/phpstan analyse --no-progress --no-interaction -c phpstan.neon"
+    ],
     "mdlint": [
-		"Composer\\Config::disableProcessTimeout",
-		"markdownlint --config .markdownlint.yaml --ignore vendor **/*.md .github/**/*.md docs README.md"
-	]
+      "Composer\\Config::disableProcessTimeout",
+      "markdownlint --config .markdownlint.yaml --ignore vendor **/*.md .github/**/*.md docs README.md"
+    ]
   }
 }
