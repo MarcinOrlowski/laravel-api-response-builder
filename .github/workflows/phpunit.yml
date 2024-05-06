@@ -40,11 +40,6 @@ jobs:
         with:
           php-version: "${{ matrix.php }}"
 
-      - name: "Environment"
-        shell: bash
-        run: |
-          php -v
-
       # https://github.com/marketplace/actions/checkout
       - name: "Checkout repository..."
         uses: actions/checkout@v4
