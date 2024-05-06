@@ -5,6 +5,7 @@
 [« Documentation table of contents](README.md)
 
 * [Important incompatibile changes](#incompatibility-notes)
+  * [Changes in v11.*](#v11)
   * [Changes in v10.*](#v10)
   * [Changes in v9.4](#v94)
   * [Changes in v9.*](#v9) (up to v9.3)
@@ -22,6 +23,10 @@
 # Incompatibility notes #
 
 Backward (in)compatibility notes. Pay attention if you are upgrading.
+
+## v11 ##
+
+* Requires Laravel 11.0+ and PHP 8.2+
 
 ## v10 ##
 
