@@ -18,7 +18,7 @@
  Starting from version 6.0, `ResponseBuilder` requires [Laravel](https://laravel.com/) v6 or newer which automatically means it
  also requires PHP 7.2+, same as Laravel.
 
- It however does not mean, recent `RespnseBuilder` will not work with older Laravel versions (and even lower PHP versions)
+ It however does not mean, recent `ResponseBuilder` will not work with older Laravel versions (and even lower PHP versions)
  but this is no longer officially supported. No unit tests run against anything older than Laravel 6.x and PHP 7.2,
  so if for any reasons you want to use new `ResponseBuilder` with legacy environment then you are on your own. At least ensure
  all unit tests pass.
@@ -48,4 +48,3 @@ composer require marcin-orlowski/laravel-api-response-builder "^4.0"
  however, current implementation relies on Exception Handler code from (IIRC) Laravel 5.5. So that shouldn't be a problem and is
  pretty easy to check. And if you are on even older Laravel, then backporting helpers' code should also be pretty easy. It's just
  no longer supported by me.
-
