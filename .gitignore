@@ -5,3 +5,6 @@ vendor/
 *.swp
 *~
 *.bak
+
+.roo
+.roomodes
