@@ -18,6 +18,10 @@ should be able to easily backport future new features to older versions rather e
 
 ## CHANGE LOG ##
 
+* @dev
+  * [RB-255] Fixed `ToArrayConverter` using a new Request instance instead of the actual request.
+
+
 * v12.0.0 (2025-04-16)
   * Added support for Laravel v12.
   * [BR-256] Fixed `ToArrayConverter` potentially causing fatal error if object lacks `toArray` method.
