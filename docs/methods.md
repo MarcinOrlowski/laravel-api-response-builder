@@ -99,7 +99,7 @@ shortcuts for reporting success or failure:
 
 * `public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null, int $json_opts = null)`
 
-  Returns error indicating response. `$api_code` must not equal to value indicating `OK` 
+  Returns error indicating response. `$api_code` must not equal to value indicating `OK`
   (`ApiCodes::OK()`), all other params are optional.
 
   ```php
