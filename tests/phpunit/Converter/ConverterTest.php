@@ -80,4 +80,29 @@ class ConverterTest extends TestCase
         $this->assertEquals($child_val, $result[ TestModel::FIELD_NAME ]);
     }
 
+    /**
+     * Checks if ToArrayConverter throws exception for object without toArray method.
+     */
+    public function testToArrayConverterThrowsExceptionForObjectWithoutToArrayMethod(): void
+    {
+        // GIVEN an object without a toArray method
+        $obj = new \stdClass();
+        $obj->foo = Generator::getRandomString('foo');
+
+        // HAVING configuration mapping stdClass to ToArrayConverter
+        $key = Generator::getRandomString('key');
+        Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
+            \get_class($obj) => [
+                RB::KEY_HANDLER => ToArrayConverter::class,
+                RB::KEY_KEY     => $key,
+            ],
+        ]);
+
+        // THEN we expect an exception
+        $this->expectException(\InvalidArgumentException::class);
+
+        // WHEN we try to convert the object
+        (new Converter())->convert($obj);
+    }
+
 } // end of class
