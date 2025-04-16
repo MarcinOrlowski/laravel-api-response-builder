@@ -38,8 +38,15 @@ final class ToArrayConverter implements ConverterContract
     {
         Validator::assertIsObject('obj', $obj);
 
+        if (!\method_exists($obj, 'toArray')) {
+            $cls = \get_class($obj);
+            throw new \InvalidArgumentException(
+                "Object of class '{$cls}' does not have a 'toArray' method."
+            );
+        }
+
         /** @var JsonResource $obj */
-        $request = new \Illuminate\Http\Request();
+        $request = \request();
         return (array)$obj->toArray($request);
     }
 
