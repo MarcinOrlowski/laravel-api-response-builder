@@ -12,7 +12,6 @@ namespace MarcinOrlowski\ResponseBuilder\Converters;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
@@ -39,7 +38,7 @@ final class ToArrayConverter implements ConverterContract
         Validator::assertIsObject('obj', $obj);
 
         /** @var JsonResource $obj */
-        $request = new \Illuminate\Http\Request();
+        $request = request();
         return (array)$obj->toArray($request);
     }
 
