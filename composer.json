@@ -50,10 +50,10 @@
   },
   "require-dev": {
     "marcin-orlowski/phpunit-extra-asserts": "^5.1.0",
-    "orchestra/testbench": "^9.0",
+    "orchestra/testbench": "^10.0",
     "phpunit/phpunit": "^11.0",
     "phpunit/php-code-coverage": "^11.0",
-    "larastan/larastan": "^2.0",
+    "larastan/larastan": "^3.0",
     "marcin-orlowski/lockpick": "^1.0"
   },
   "scripts": {
