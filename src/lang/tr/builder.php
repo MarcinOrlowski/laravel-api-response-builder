@@ -5,7 +5,7 @@ declare(strict_types=1);
  * Laravel API Response Builder
  *
  * @author    Muzaffer Ali AKYIL <m.akyil (#) qt (.) net (.) tr>
- * @copyright 2016-2024 Marcin Orlowski
+ * @copyright 2016-2025 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
