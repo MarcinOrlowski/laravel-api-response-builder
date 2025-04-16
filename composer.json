@@ -2,7 +2,7 @@
   "name": "marcin-orlowski/laravel-api-response-builder",
   "description": "Helps building nice, normalized and easy to consume Laravel REST API.",
   "homepage": "https://github.com/MarcinOrlowski/laravel-api-response-builder",
-  "version": "11.0.0",
+  "version": "12.0.0",
   "keywords": [
     "laravel",
     "laravel10",
@@ -45,15 +45,15 @@
     }
   },
   "require": {
-    "php": "^8.2|^8.3",
-    "laravel/framework": "^11.0"
+    "php": "^8.2|^8.3|^8.4",
+    "laravel/framework": "^12.0"
   },
   "require-dev": {
     "marcin-orlowski/phpunit-extra-asserts": "^5.1.0",
-    "orchestra/testbench": "^9.0",
+    "orchestra/testbench": "^10.0",
     "phpunit/phpunit": "^11.0",
     "phpunit/php-code-coverage": "^11.0",
-    "larastan/larastan": "^2.0",
+    "larastan/larastan": "^3.0",
     "marcin-orlowski/lockpick": "^1.0"
   },
   "scripts": {

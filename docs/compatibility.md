@@ -5,6 +5,7 @@
 [« Documentation table of contents](README.md)
 
 * [Important incompatibile changes](#incompatibility-notes)
+  * [Changes in v12.*](#v12)
   * [Changes in v11.*](#v11)
   * [Changes in v10.*](#v10)
   * [Changes in v9.4](#v94)
@@ -24,13 +25,21 @@
 
 Backward (in)compatibility notes. Pay attention if you are upgrading.
 
+## v12 ##
+
+* Requires Laravel 12.0+ and PHP 8.2+
+* No backward incompatible code changes.
+
+
 ## v11 ##
 
 * Requires Laravel 11.0+ and PHP 8.2+
+* No backward incompatible code changes.
 
 ## v10 ##
 
 * Requires Laravel 10.0+ and PHP 8.1+
+* No backward incompatible code changes.
 
 ## v9.4 ##
 

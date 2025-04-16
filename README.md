@@ -38,20 +38,21 @@ Development branch:
 
 ## Benefits ##
 
- `ResponseBuilder` is written for REST API developers by REST API developer and is based on long-lasting experience on both
- "sides" of API. It's lightweight, with **no** dependencies, extensively tested and simple to use yet flexible and powerful,
- with support for [on-the-fly data conversion](docs/conversion.md), [localization support](docs/docs.md#messages-and-localization),
- automatic message building, [chained APIs](docs/docs.md#code-ranges) and (hopefully) [exhaustive documentation](docs/README.md).
- But that's not all! The JSON structure produced by `ResponseBuilder` is designed with **users of your API** in mind, so its
- structure is predictible and [well-defined](docs/docs.md#response-structure) which makes dealing with your API using
- `ResponseBuilder` library a breeze. Simple JSON response, with well-defined and predictable structure, easy to consume
- without any hassle or trickery. **Your** clients will love it. And will love **you** too :)
+ `ResponseBuilder` is written for REST API developers by REST API developers, drawing from extensive experience on both
+ sides of API development. It's lightweight, with **no** dependencies, thoroughly tested, and simple to use while remaining
+ flexible and powerful. It offers support for [on-the-fly data conversion](docs/conversion.md), [localization](docs/docs.md#messages-and-localization),
+ automatic message building, [chained APIs](docs/docs.md#code-ranges), and [comprehensive documentation](docs/README.md).
 
- You are also covered in a case of emergency, as provided [ExceptionHandlerhelper](docs/exceptions.md), ensures your API keeps
- talking JSON (and NOT lame HTML) to its clients even in case of unexpected.
+ Moreover, the JSON structure produced by `ResponseBuilder` is designed with **your API users** in mind. Its
+ [well-defined and predictable structure](docs/docs.md#response-structure) makes interacting with your API using
+ `ResponseBuilder` effortless. The simple, consistent JSON responses are easy to consume without any complications.
+ **Your** clients will appreciate it, and by extension, appreciate **you** as well!
+
+ You're also covered in case of emergencies. The provided [ExceptionHandlerHelper](docs/exceptions.md) ensures your API
+ continues to communicate in JSON (not HTML) with its clients, even in unexpected situations.
 
  Did I mention, you would also get [testing traits](docs/testing.md) that automatically add PHPUnit based unit test to your
- whole `ResponseBuilder` related code and configuration with just a few lines of code **absolutely for free**?
+ whole `ResponseBuilder` related code and configuration with just a few lines of code **absolutely free of charge**?
 
 ## Features ##
 
