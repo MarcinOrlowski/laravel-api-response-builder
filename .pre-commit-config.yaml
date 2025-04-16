@@ -1,0 +1,83 @@
+##################################################################################
+#
+# Laravel API Response Builder PHPStan config file
+#
+# @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
+# @copyright 2016-2025 Marcin Orlowski
+# @license   http://www.opensource.org/licenses/mit-license.php MIT
+# @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+#
+##################################################################################
+#
+# Using pre-commit hooks #
+#
+# To improve quality of your commit, it's recommended to use "pre-commit"
+# (http://pre-commit.com) hooks, that will block  your commits unless all tests
+# pass. This project comes with template configuration file
+# `.pre-commit-config.yaml.dist`.
+#
+# Brief installation instruction:
+#
+# * Ensure you got Python installed
+# * Install pre-commit: `pip install pre-commit`
+# * Go to your Logisim-evolution source code root directory
+# * Copy provided config file template: `cp .pre-commit-config.yaml.dist .pre-commit-config.yaml`
+# * Plug hooks into Git pipeline: `pre-commit install`
+#
+# See `pre-commit` official installation docs too: https://pre-commit.com/#install
+#
+# To see how pre-commit identifies given file (i.e. for 'exclude_type' config) use `identify-cli <FILE>`
+#
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      # Prevent giant files from being committed
+      - id: check-added-large-files
+        args: [ '--maxkb=1555550' ]
+      # This hook checks yaml files for parseable syntax
+      - id: check-yaml
+      # Check for files that would conflict in case-insensitive filesystems
+      - id: check-case-conflict
+      # Ensures that (non-binary) executables have a shebang.
+      - id: check-executables-have-shebangs
+      # Check for files that contain merge conflict strings
+      - id: check-merge-conflict
+      # Prevent addition of new git submodules
+      - id: forbid-new-submodules
+      # Replaces or checks mixed line ending
+      - id: mixed-line-ending
+        args: [ '--fix=no' ]
+
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 3.0.0
+    hooks:
+      # Non-executable shell script filename ends in .sh
+      - id: script-must-have-extension
+
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+    hooks:
+      # Forbid files containing CRLF end-lines to be committed
+      - id: forbid-crlf
+        exclude: \.svg$
+
+  - repo: https://github.com/MarcinOrlowski/pre-commit-hooks
+    rev: 1.3.1
+    hooks:
+      # This hook trims trailing whitespace.
+      - id: trailing-whitespaces
+        exclude_types: [ 'binary', 'xml', 'png', 'jpeg', 'pdf', 'svg' ]
+        args: [ '--markdown-linebreak-ext=md', '--fix=yes' ]
+      # Ensures that a file is either empty, or ends with one newline
+      - id: end-of-file
+        exclude_types: [ 'binary', 'xml', 'png', 'jpeg', 'pdf', 'svg' ]
+        args: [ '--fix=yes' ]
+
+  - repo: https://github.com/digitalpulp/pre-commit-php.git
+    rev: 1.4.0
+    hooks:
+      # Runs PHPStan analyser
+      - id: php-stan
+        files: \.(php)$
