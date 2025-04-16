@@ -156,6 +156,13 @@ final class Validator
             throw new \InvalidArgumentException('The $allowed_types array cannot be empty.');
         }
 
+        // Ensure the provided exception class implements the required contract
+        if (!is_subclass_of($ex_class, InvalidTypeExceptionContract::class)) {
+            throw new \InvalidArgumentException(
+                sprintf('Exception class "%s" must implement "%s".', $ex_class, InvalidTypeExceptionContract::class)
+            );
+        }
+
         // Type::EXISTING_CLASS is artificial type, so we need separate logic to handle it.
         $tmp = $allowed_types;
         $idx = \array_search(Type::EXISTING_CLASS, $tmp, true);
@@ -173,13 +180,14 @@ final class Validator
 
         if (!empty($tmp)) {
             if (!\in_array($value_type, $allowed_types, true)) {
-                // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
-                /** @var \Exception $ex_class */
+                /** @var InvalidTypeExceptionContract $ex_class */
                 throw new $ex_class($var_name, $value_type, $allowed_types);
             }
         } else {
-            // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
-            throw new Ex\ClassNotFound($var_name, $value_type, $allowed_types);
+            // This case implies only Type::EXISTING_CLASS was allowed, but the class check failed earlier.
+            // We still need to throw an exception that adheres to the contract.
+            /** @var InvalidTypeExceptionContract $ex_class */
+            throw new $ex_class($var_name, $value_type, $allowed_types);
         }
     }
 
