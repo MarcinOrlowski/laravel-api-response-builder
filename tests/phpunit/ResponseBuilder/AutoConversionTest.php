@@ -58,7 +58,6 @@ class AutoConversionTest extends TestCase
         // THEN returned response object should have it auto converted
         $data = $api->getData();
         $this->assertNotNull($data);
-        $this->assertIsArray($data);
         /** @var array<string, mixed> $data */
         $this->assertArrayHasKey($key, $data);
         /** @var array<string, mixed> $key_data */
@@ -109,7 +108,6 @@ class AutoConversionTest extends TestCase
 
         // THEN returned response object should have it auto converted properly
         $data = $api->getData();
-        $this->assertIsArray($data);
         $this->assertNotNull($data);
         /** @var array<string, mixed> $data */
 
@@ -120,12 +118,18 @@ class AutoConversionTest extends TestCase
         // instead original key must be preserved
         $this->assertArrayHasKey($model_1_data_key, $data,
             "Unable to find '{$model_1_data_key}' model 1 key'");
-        $this->assertEquals($model_1_val, $data[ $model_1_data_key ]['val']);
+        /** @var array<string, mixed> $model_1_data */
+        $model_1_data = $data[ $model_1_data_key ];
+        $this->assertEquals($model_1_val, $model_1_data['val']);
 
         $this->assertArrayHasKey('nested', $data);
-        $this->assertArrayHasKey($model_2_data_key, $data['nested'],
+        /** @var array<string, mixed> $nested_data */
+        $nested_data = $data['nested'];
+        $this->assertArrayHasKey($model_2_data_key, $nested_data,
             "Unable to find '{$model_2_data_key}' model 2 key'");
-        $this->assertEquals($model_2_val, $data['nested'][ $model_2_data_key ]['val']);
+        /** @var array<string, mixed> $model_2_data */
+        $model_2_data = $nested_data[ $model_2_data_key ];
+        $this->assertEquals($model_2_val, $model_2_data['val']);
 
         // and all other elements of data set should also be here
         foreach ($tmp_base as $key => $val) {
@@ -146,19 +150,21 @@ class AutoConversionTest extends TestCase
         // THEN returned response object should have it auto converted
         $data = $api->getData();
         $this->assertNotNull($data);
-        $this->assertIsArray($data);
         /** @var array<string, mixed> $data */
 
         $converter = new Converter();
         $cfg = Lockpick::call($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $key = $cfg[ RB::KEY_KEY ];
         $this->assertArrayHasKey($key, $data);
         $this->assertEquals($value, $data[ $key ]);
     }
 
+    /**
+     * @return array<int, array<int, mixed>>
+     */
     public static function successWithPrimitiveProvider(): array
     {
         return [

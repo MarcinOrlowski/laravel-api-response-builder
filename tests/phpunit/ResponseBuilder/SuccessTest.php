@@ -60,7 +60,9 @@ class SuccessTest extends TestCase
         $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
         /** @var array<string, mixed> $cfg */
-        $key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $array_config */
+        $array_config = $cfg[ Type::ARRAY ];
+        $key = $array_config[ RB::KEY_KEY ];
 
         $this->assertCount(1, $data);
         /** @var array<string, mixed> $data */
