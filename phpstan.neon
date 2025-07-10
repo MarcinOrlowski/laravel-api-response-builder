@@ -14,7 +14,7 @@ includes:
 parameters:
   checkGenericClassInNonGenericObjectType: false
   level: max
-  checkMissingIterableValueType: false
+  # checkMissingIterableValueType: false
   paths:
     - src/
     - tests/
