@@ -17,5 +17,5 @@ parameters:
   paths:
     - src/
     - tests/
-  ignoreErrors:
-    - '#^Unsafe usage of new static\(\)\.$#'
+  #ignoreErrors:
+  #  - '#^Unsafe usage of new static\(\)\.$#'

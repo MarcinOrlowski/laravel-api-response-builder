@@ -217,6 +217,10 @@ trait TestingHelpers
                 $expected_http_code, RB::ERROR_HTTP_CODE_MIN));
         }
 
+        // Ensure we have a valid integer for API code
+        if (!is_int($expected_api_code_offset) && !is_numeric($expected_api_code_offset)) {
+            $this->fail("TEST: Invalid API code offset type: " . gettype($expected_api_code_offset));
+        }
         $api_code = is_int($expected_api_code_offset) ? $expected_api_code_offset : (int)$expected_api_code_offset;
         $api = $this->getResponseObjectRaw($api_code, $expected_http_code, $message);
 
@@ -248,7 +252,7 @@ trait TestingHelpers
 
         $this->assertEquals($expected_api_code, $api->getCode());
 
-        /** @var BaseApiCodes $api_codes_class_name */
+        /** @var string $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
 
         if ($expected_message === null) {
@@ -278,12 +282,16 @@ trait TestingHelpers
         $response_code = $response_json->code;
 
         if ($response_code !== $expected_code) {
-            /** @var int $response_code_int */
-            $response_code_int = (int)$response_code;
+            // Safely handle response code conversion
+            if (!is_int($response_code) && !is_numeric($response_code)) {
+                $response_code_int = 0; // Default for invalid responses
+            } else {
+                $response_code_int = is_int($response_code) ? $response_code : (int)$response_code;
+            }
             $msg = \sprintf('Status code mismatch. Expected: %s, found %s. Message: "%s"',
                 $this->resolveConstantFromCode($expected_code),
                 $this->resolveConstantFromCode($response_code_int),
-                (string)$response_json->message);
+                is_string($response_json->message) ? $response_json->message : var_export($response_json->message, true));
 
             $this->fail($msg);
         }
@@ -355,6 +363,9 @@ trait TestingHelpers
         /** @var string $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
         $const = $api_codes_class_name::getApiCodeConstants();
+        if (!is_array($const)) {
+            return "??? ({$api_code_offset})";
+        }
         $name = null;
         foreach ($const as $const_name => $const_value) {
             if (\is_int($const_value) && ($const_value === $api_code_offset)) {
