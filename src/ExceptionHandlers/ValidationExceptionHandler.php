@@ -25,7 +25,7 @@ final class ValidationExceptionHandler implements ExceptionHandlerContract
     /**
      * @param array<string, mixed>      $user_config
      * @param \Throwable $ex
-     * @return array<string, mixed>|null
+     * @return array<string, mixed>
      *
      * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException
      * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\MissingConfigurationKeyException
@@ -33,14 +33,14 @@ final class ValidationExceptionHandler implements ExceptionHandlerContract
      *
      * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
      */
-    public function handle(array $user_config, \Throwable $ex): ?array
+    public function handle(array $user_config, \Throwable $ex): array
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $result = [
             RB::KEY_API_CODE  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
             RB::KEY_HTTP_CODE => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
         ];
-        /** @var array<string, mixed> $result */
+        /** @var array{api_code: int, http_code: 422} $result */
         return $result;
     }
 

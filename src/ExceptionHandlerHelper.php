@@ -274,6 +274,7 @@ class ExceptionHandlerHelper
             $data = [RB::KEY_MESSAGES => $ex->validator->errors()->messages()];
         }
 
+        /** @var non-empty-array<array{class: class-string, file: string, line: int}>|null $debug_data */
         return RB::asError($api_code)
             ->withMessage($error_message)
             ->withHttpCode($http_code)

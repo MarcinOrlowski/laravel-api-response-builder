@@ -25,9 +25,9 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 	/**
 	 * @param array<string, mixed> $user_config
 	 * @param \Throwable $ex
-	 * @return array<string, mixed>|null
+	 * @return array<string, mixed>
 	 */
-	public function handle(array $user_config, \Throwable $ex): ?array
+	public function handle(array $user_config, \Throwable $ex): array
 	{
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$default_config = [
@@ -63,6 +63,7 @@ final class HttpExceptionHandler implements ExceptionHandlerContract
 			RB::KEY_HTTP_CODE => $http_code,
 			RB::KEY_MSG_KEY   => \sprintf('response-builder::builder.http_%d', $http_code),
 		];
+		/** @var array<string, mixed> $result */
 		$finalResult = \array_replace($fallback, $result);
 		/** @var array<string, mixed> $finalResult */
 		return $finalResult;

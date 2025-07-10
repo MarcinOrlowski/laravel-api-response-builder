@@ -76,6 +76,7 @@ class Converter
         /** @var array<string, mixed> $result */
         if ($this->debug_enabled) {
             $keyValue = $result[RB::KEY_KEY] ?? '';
+            /** @var string|int|float|bool|null $keyValue */
             $key = \is_string($keyValue) ? $keyValue : \strval($keyValue);
             Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node with key '{$key}'.");
         }
@@ -121,6 +122,7 @@ class Converter
         /** @var array<string, mixed> $result */
         if ($this->debug_enabled) {
             $handlerValue = $result[RB::KEY_HANDLER] ?? '';
+            /** @var string|int|float|bool|null $handlerValue */
             $handler = \is_string($handlerValue) ? $handlerValue : \strval($handlerValue);
             Log::debug(__CLASS__ . ": Converting {$cls} using {$handler} because: {$debug_result}.");
         }

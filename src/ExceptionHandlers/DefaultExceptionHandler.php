@@ -26,14 +26,14 @@ final class DefaultExceptionHandler implements ExceptionHandlerContract
 	 * @param array<string, mixed>      $user_config
 	 * @param \Throwable $ex
 	 *
-	 * @return array<string, mixed>|null
+	 * @return array<string, mixed>
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\MissingConfigurationKeyException
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\NotIntegerException
 	 *
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
 	 */
-	public function handle(array $user_config, \Throwable $ex): ?array
+	public function handle(array $user_config, \Throwable $ex): array
 	{
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$defaults = [
