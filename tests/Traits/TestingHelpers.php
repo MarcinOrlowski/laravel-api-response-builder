@@ -159,7 +159,7 @@ trait TestingHelpers
                                              ?string $expected_message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
-            /** @var BaseApiCodes $api_codes */
+            /** @var string $api_codes */
             $api_codes = $this->getApiCodesClassName();
             /** @var int $expected_api_code_offset */
             $expected_api_code_offset = Lockpick::getConstant($api_codes, 'OK_OFFSET');
@@ -203,7 +203,7 @@ trait TestingHelpers
                                            ?string $message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
-            /** @var BaseApiCodes $api_codes_class_name */
+            /** @var string $api_codes_class_name */
             $api_codes_class_name = $this->getApiCodesClassName();
             $expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE();
         }
@@ -217,7 +217,8 @@ trait TestingHelpers
                 $expected_http_code, RB::ERROR_HTTP_CODE_MIN));
         }
 
-        $api = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message);
+        $api_code = is_int($expected_api_code_offset) ? $expected_api_code_offset : (int)$expected_api_code_offset;
+        $api = $this->getResponseObjectRaw($api_code, $expected_http_code, $message);
 
         $this->assertEquals(false, $api->success());
 
@@ -277,10 +278,12 @@ trait TestingHelpers
         $response_code = $response_json->code;
 
         if ($response_code !== $expected_code) {
+            /** @var int $response_code_int */
+            $response_code_int = (int)$response_code;
             $msg = \sprintf('Status code mismatch. Expected: %s, found %s. Message: "%s"',
                 $this->resolveConstantFromCode($expected_code),
-                $this->resolveConstantFromCode($response_code),
-                $response_json->message);
+                $this->resolveConstantFromCode($response_code_int),
+                (string)$response_json->message);
 
             $this->fail($msg);
         }
@@ -304,6 +307,11 @@ trait TestingHelpers
      * @throws Ex\MissingConfigurationKeyException
      *
      * @noinspection PhpTooManyParametersInspection
+     */
+    /**
+     * @param array<string, mixed>|null $data
+     * @param array<string, mixed>|null $headers
+     * @param array<string, mixed>|null $debug_data
      */
     protected function callMakeMethod(bool       $success,
                                       int        $api_code_offset,
@@ -344,7 +352,7 @@ trait TestingHelpers
      */
     protected function resolveConstantFromCode(int $api_code_offset)
     {
-        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
+        /** @var string $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
         $const = $api_codes_class_name::getApiCodeConstants();
         $name = null;
