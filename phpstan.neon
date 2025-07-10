@@ -12,9 +12,8 @@
 includes:
   - vendor/larastan/larastan/extension.neon
 parameters:
-  checkGenericClassInNonGenericObjectType: false
   level: max
-  # checkMissingIterableValueType: false
+  treatPhpDocTypesAsCertain: false
   paths:
     - src/
     - tests/
