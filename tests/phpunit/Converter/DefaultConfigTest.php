@@ -54,13 +54,13 @@ class DefaultConfigTest extends TestCase
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
         $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ RB::KEY_KEY ];
 
         $this->assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $this->assertArrayHasKey($key, $result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $result = $result[ $key ];
         $this->assertArrayHasKey(TestModelArrayable::FIELD_NAME, $result);
         $this->assertEquals($result[ TestModelArrayable::FIELD_NAME ], $obj_val);
@@ -90,7 +90,7 @@ class DefaultConfigTest extends TestCase
 
             // THEN it should be converted automatically as per configuration
             $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-            /** @var array $cfg */
+            /** @var array<string, mixed> $cfg */
 
             $this->assertNotEmpty($cfg);
             $this->assertIsArray($cfg);
@@ -98,7 +98,7 @@ class DefaultConfigTest extends TestCase
             $key = $cfg[ \JsonSerializable::class ][ RB::KEY_KEY ];
 
             $this->assertIsArray($result);
-            /** @var array $result */
+            /** @var array<string, mixed> $result */
             $this->assertArrayHasKey($key, $result);
             $result = $result[ $key ];
             $this->assertArrayHasKey($key, $result);
@@ -123,13 +123,13 @@ class DefaultConfigTest extends TestCase
 
         // THEN it should be converted automatically as per configuration
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
         $key = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ][ RB::KEY_KEY ];
 
         $this->assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $this->assertArrayHasKey($key, $result);
         $result = $result[ $key ];
         $this->assertArrayHasKey(TestModelJsonResource::FIELD_NAME, $result);
@@ -204,7 +204,7 @@ class DefaultConfigTest extends TestCase
     {
         $result = (new Converter())->convert($paginator);
         ExtraAsserts::assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         ExtraAsserts::assertArrayHasKeys([
             'current_page',
             'data',
@@ -222,16 +222,18 @@ class DefaultConfigTest extends TestCase
 
     /**
      * Helper method to perform some common tests of built-in support for Laravel's collections.
+     *
+     * @return array<string, mixed>
      */
     protected function doCollectionTests(object $collection): array
     {
         // HAVING Converter with default settings
         // WHEN we try to pass of object of that class
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $result = (new Converter())->convert($collection);
 
         // THEN it should be converted automatically as per default configuration
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
         $key = $cfg[ \get_class($collection) ][ RB::KEY_KEY ];
 

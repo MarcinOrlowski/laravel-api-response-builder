@@ -59,11 +59,11 @@ class SuccessTest extends TestCase
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
         $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
 
         $this->assertCount(1, $data);
-        /** @var array $data */
+        /** @var array<string, mixed> $data */
         $data = $api->getData();
         ExtraAsserts::assertArrayEquals($payload, (array)$data[ $key ]);
 
