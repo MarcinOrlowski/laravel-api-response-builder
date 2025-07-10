@@ -14,9 +14,11 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
+use MarcinOrlowski\ResponseBuilder\Exceptions\ClassNotFound;
+use MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
  * Builds standardized HttpResponse response object
@@ -74,8 +76,11 @@ class ResponseBuilder extends ResponseBuilderBase
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
      */
-    public static function success($data = null, int $api_code = null, array $placeholders = null,
-                                   int $http_code = null, int $json_opts = null): HttpResponse
+    public static function success(mixed  $data = null,
+                                   ?int   $api_code = null,
+                                   ?array $placeholders = null,
+                                   ?int   $http_code = null,
+                                   ?int   $json_opts = null): HttpResponse
     {
         return static::asSuccess($api_code)
             ->withData($data)
@@ -108,9 +113,11 @@ class ResponseBuilder extends ResponseBuilderBase
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
      */
-    public static function error(int $api_code, array $placeholders = null, $data = null,
-                                 int $http_code = null,
-                                 int $json_opts = null): HttpResponse
+    public static function error(int    $api_code,
+                                 ?array $placeholders = null,
+                                 mixed  $data = null,
+                                 int    $http_code = null,
+                                 int    $json_opts = null): HttpResponse
     {
         return static::asError($api_code)
             ->withPlaceholders($placeholders)
@@ -149,7 +156,7 @@ class ResponseBuilder extends ResponseBuilderBase
         if ($api_code !== $code_ok) {
             /** @noinspection PhpUnhandledExceptionInspection */
             Validator::assertIsIntRange('api_code', $api_code,
-                BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+                                        BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
         }
         if ($api_code === $code_ok) {
             throw new \OutOfBoundsException(
@@ -164,7 +171,7 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @throws Ex\InvalidTypeException
      */
-    public function withHttpCode(int $http_code = null): self
+    public function withHttpCode(?int $http_code = null): self
     {
         Validator::assertIsType('http_code', $http_code, [
             Type::INTEGER,
@@ -180,7 +187,7 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @throws Ex\InvalidTypeException
      */
-    public function withData($data = null): self
+    public function withData(mixed $data = null): self
     {
         Validator::assertIsType('data', $data, [
             Type::ARRAY,
@@ -201,10 +208,10 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @throws Ex\InvalidTypeException
      */
-    public function withJsonOptions(int $json_opts = null): self
+    public function withJsonOptions(?int $json_opts = null): self
     {
         Validator::assertIsType('json_opts', $json_opts, [Type::INTEGER,
-                                                          Type::NULL,
+            Type::NULL,
         ]);
         $this->json_opts = $json_opts;
 
@@ -214,12 +221,14 @@ class ResponseBuilder extends ResponseBuilderBase
     /**
      * @param array|null $debug_data
      *
-     * @throws Ex\InvalidTypeException
+     * @return ResponseBuilder
+     * @throws ClassNotFound
+     * @throws InvalidTypeException
      */
-    public function withDebugData(array $debug_data = null): self
+    public function withDebugData(?array $debug_data = null): self
     {
         Validator::assertIsType('$debug_data', $debug_data, [Type::ARRAY,
-                                                             Type::NULL,
+            Type::NULL,
         ]);
         $this->debug_data = $debug_data;
 
@@ -229,12 +238,14 @@ class ResponseBuilder extends ResponseBuilderBase
     /**
      * @param string|null $msg
      *
-     * @throws Ex\InvalidTypeException
+     * @return ResponseBuilder
+     * @throws ClassNotFound
+     * @throws InvalidTypeException
      */
-    public function withMessage(string $msg = null): self
+    public function withMessage(?string $msg = null): self
     {
         Validator::assertIsType('message', $msg, [Type::STRING,
-                                                  Type::NULL,
+            Type::NULL,
         ]);
         $this->message = $msg;
 
@@ -243,8 +254,10 @@ class ResponseBuilder extends ResponseBuilderBase
 
     /**
      * @param array|null $placeholders
+     *
+     * @return ResponseBuilder
      */
-    public function withPlaceholders(array $placeholders = null): self
+    public function withPlaceholders(?array $placeholders = null): self
     {
         $this->placeholders = $placeholders;
 
@@ -253,8 +266,10 @@ class ResponseBuilder extends ResponseBuilderBase
 
     /**
      * @param array|null $http_headers
+     *
+     * @return ResponseBuilder
      */
-    public function withHttpHeaders(array $http_headers = null): self
+    public function withHttpHeaders(?array $http_headers = null): self
     {
         $this->http_headers = $http_headers ?? [];
 
@@ -287,16 +302,16 @@ class ResponseBuilder extends ResponseBuilderBase
             Validator::assertOkHttpCode($http_code);
 
             $result = $this->make($this->success, $api_code,
-                $msg_or_api_code, $this->data, $http_code,
-                $this->placeholders, $http_headers, $this->json_opts);
+                                  $msg_or_api_code, $this->data, $http_code,
+                                  $this->placeholders, $http_headers, $this->json_opts);
         } else {
             $http_code = $this->http_code ?? RB::DEFAULT_HTTP_CODE_ERROR;
 
             Validator::assertErrorHttpCode($http_code);
 
             $result = $this->make(false, $api_code, $msg_or_api_code,
-                $this->data, $http_code, $this->placeholders,
-                $this->http_headers, $this->json_opts, $this->debug_data);
+                                  $this->data, $http_code, $this->placeholders,
+                                  $this->http_headers, $this->json_opts, $this->debug_data);
         }
 
         return $result;
@@ -329,10 +344,15 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @noinspection PhpTooManyParametersInspection
      */
-    protected function make(bool  $success, int $api_code, $msg_or_api_code, $data = null,
-                            int   $http_code = null, array $placeholders = null,
-                            array $http_headers = null,
-                            int   $json_opts = null, array $debug_data = null): HttpResponse
+    protected function make(bool       $success,
+                            int        $api_code,
+                            string|int $msg_or_api_code,
+                            mixed      $data = null,
+                            ?int       $http_code = null,
+                            ?array     $placeholders = null,
+                            ?array     $http_headers = null,
+                            ?int       $json_opts = null,
+                            ?array     $debug_data = null): HttpResponse
     {
         $http_headers = $http_headers ?? [];
         $http_code = $http_code ?? ($success ? RB::DEFAULT_HTTP_CODE_OK : RB::DEFAULT_HTTP_CODE_ERROR);
@@ -412,7 +432,7 @@ class ResponseBuilder extends ResponseBuilderBase
 
         if ($debug_data !== null) {
             $debug_key = Config::get(RB::CONF_KEY_DEBUG_DEBUG_KEY, RB::KEY_DEBUG);
-            $response[ $debug_key ] = $debug_data;
+            $response[$debug_key] = $debug_data;
         }
 
         return $response;
@@ -433,8 +453,9 @@ class ResponseBuilder extends ResponseBuilderBase
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
      */
-    protected function getMessageForApiCode(bool  $success, int $api_code,
-                                            array $placeholders = null): string
+    protected function getMessageForApiCode(bool   $success,
+                                            int    $api_code,
+                                            ?array $placeholders = null): string
     {
         // We got integer value here not a message string, so we need to check if we have the mapping for
         // this string already configured.
