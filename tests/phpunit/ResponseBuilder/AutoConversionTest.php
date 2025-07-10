@@ -59,9 +59,11 @@ class AutoConversionTest extends TestCase
         $data = $api->getData();
         $this->assertNotNull($data);
         $this->assertIsArray($data);
-        /** @var array $data */
+        /** @var array<string, mixed> $data */
         $this->assertArrayHasKey($key, $data);
-        $this->assertEquals($model_val, $data[ $key ]['val']);
+        /** @var array<string, mixed> $key_data */
+        $key_data = $data[ $key ];
+        $this->assertEquals($model_val, $key_data['val']);
     }
 
     /**
@@ -109,7 +111,7 @@ class AutoConversionTest extends TestCase
         $data = $api->getData();
         $this->assertIsArray($data);
         $this->assertNotNull($data);
-        /** @var array $data */
+        /** @var array<string, mixed> $data */
 
         // single key item must not be used
         /** @noinspection OffsetOperationsInspection */
@@ -145,7 +147,7 @@ class AutoConversionTest extends TestCase
         $data = $api->getData();
         $this->assertNotNull($data);
         $this->assertIsArray($data);
-        /** @var array $data */
+        /** @var array<string, mixed> $data */
 
         $converter = new Converter();
         $cfg = Lockpick::call($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);

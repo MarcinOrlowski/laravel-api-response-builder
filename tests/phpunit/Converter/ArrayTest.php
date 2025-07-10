@@ -78,12 +78,17 @@ class ArrayTest extends TestCase
         $this->assertCount(1, $converted);
         $this->assertArrayHasKey($key, $converted);
         $converted = $converted[ $key ];
+        /** @var array<int, mixed> $converted */
         $this->assertCount(\count($data), $converted);
 
         $this->assertCount(\count($data), $converted);
 
-        $this->assertValidConvertedTestClass($model_1, $converted[0]);
-        $this->assertValidConvertedTestClass($model_2, $converted[1]);
+        /** @var array<string, mixed> $item0 */
+        $item0 = $converted[0];
+        $this->assertValidConvertedTestClass($model_1, $item0);
+        /** @var array<string, mixed> $item1 */
+        $item1 = $converted[1];
+        $this->assertValidConvertedTestClass($model_2, $item1);
         $this->assertIsNotBool($converted[2]);
         $this->assertNull($converted[2]);
     }
@@ -134,17 +139,24 @@ class ArrayTest extends TestCase
         /** @var string $key */
         $this->assertArrayHasKey($key, $converted);
         $converted = $converted[ $key ];
+        /** @var array<int, array<int, mixed>> $converted */
         $this->assertCount(\count($data), $converted);
 
         foreach ($converted as $row) {
             ExtraAsserts::assertIsArray($row);
-            $this->assertValidConvertedTestClass($model_1, $row[0]);
-            $this->assertValidConvertedTestClass($model_2, $row[1]);
+            /** @var array<string, mixed> $item0 */
+            $item0 = $row[0];
+            /** @var array<string, mixed> $item1 */
+            $item1 = $row[1];
+            $this->assertValidConvertedTestClass($model_1, $item0);
+            $this->assertValidConvertedTestClass($model_2, $item1);
         }
     }
 
     /**
      * Tests if exception is thrown for invalid mixed-key array
+     *
+     * @param array<int|string, mixed> $data
      */
     #[DataProvider('convertArrayOfKeyAndKeylessItemsProvider')]
     public function testConvertArrayOfKeyAndKeylessItems(array $data): void
@@ -169,6 +181,8 @@ class ArrayTest extends TestCase
 
     /**
      * Data provider for testConvertArrayOfKeyAndKeylessItems
+     *
+     * @return array<int, array<int, array<int|string, mixed>>>
      */
     public static function convertArrayOfKeyAndKeylessItemsProvider(): array
     {

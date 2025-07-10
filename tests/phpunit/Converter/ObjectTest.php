@@ -41,14 +41,17 @@ class ObjectTest extends TestCase
 
         $data = collect([1, 2, 3]);
 
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
-        $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
-        $cfg[ Collection::class ][ RB::KEY_KEY ] = null;
+        /** @var array<string, mixed> $collection_config */
+        $collection_config = $cfg[ Collection::class ] ?? [];
+        $collection_config[ RB::KEY_HANDLER ] = FakeConverter::class;
+        $collection_config[ RB::KEY_KEY ] = null;
+        $cfg[ Collection::class ] = $collection_config;
 
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $result = (new Converter())->convert($data);
 
         $this->assertIsArray($result);
@@ -86,7 +89,7 @@ class ObjectTest extends TestCase
 
         $data = collect([1, 2, 3]);
 
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
         $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
 
@@ -98,7 +101,7 @@ class ObjectTest extends TestCase
             $result = (new Converter())->convert($data);
 
             $this->assertIsArray($result);
-            /** @var array $result */
+            /** @var array<string, mixed> $result */
             $this->assertCount(1, $result);
 
             if (\is_string($allowed_key)) {

@@ -131,12 +131,15 @@ class DefaultConfigTest extends TestCase
         /** @var array<string, mixed> $cfg */
         $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
-        $key = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $json_resource_config */
+        $json_resource_config = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ];
+        $key = $json_resource_config[ RB::KEY_KEY ];
 
         $this->assertIsArray($result);
         /** @var array<string, mixed> $result */
         $this->assertArrayHasKey($key, $result);
         $result = $result[ $key ];
+        /** @var array<string, mixed> $result */
         $this->assertArrayHasKey(TestModelJsonResource::FIELD_NAME, $result);
         $this->assertEquals($result[ TestModelJsonResource::FIELD_NAME ], $obj_val);
     }
@@ -240,7 +243,9 @@ class DefaultConfigTest extends TestCase
         // THEN it should be converted automatically as per default configuration
         /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-        $key = $cfg[ \get_class($collection) ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $collection_config */
+        $collection_config = $cfg[ \get_class($collection) ];
+        $key = $collection_config[ RB::KEY_KEY ];
 
         $this->assertIsArray($result);
         $this->assertArrayHasKey($key, $result);
@@ -248,14 +253,16 @@ class DefaultConfigTest extends TestCase
 
         $this->assertIsIterable($collection);
         /**
-         * @var iterable $collection
+         * @var iterable<string, mixed> $collection
          * @var  string  $key
          */
-        foreach ($collection as $key => $val) {
-            $this->assertArrayHasKey($key, $result);
-            $this->assertEquals($val, $result[ $key ]);
+        foreach ($collection as $foreach_key => $val) {
+            /** @var array<string, mixed> $result */
+            $this->assertArrayHasKey($foreach_key, $result);
+            $this->assertEquals($val, $result[ $foreach_key ]);
         }
 
+        /** @var array<string, mixed> $result */
         return $result;
     }
 
