@@ -23,10 +23,10 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 final class DefaultExceptionHandler implements ExceptionHandlerContract
 {
 	/**
-	 * @param array      $user_config
+	 * @param array<string, mixed>      $user_config
 	 * @param \Throwable $ex
 	 *
-	 * @return array|null
+	 * @return array<string, mixed>|null
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\MissingConfigurationKeyException
 	 * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\NotIntegerException
@@ -41,7 +41,9 @@ final class DefaultExceptionHandler implements ExceptionHandlerContract
 			RB::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
 		];
 
-		return \array_replace($defaults, $user_config);
+		$result = \array_replace($defaults, $user_config);
+		/** @var array<string, mixed> $result */
+		return $result;
 	}
 
 } // end of class

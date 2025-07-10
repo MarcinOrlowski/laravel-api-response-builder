@@ -23,8 +23,9 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 final class ValidationExceptionHandler implements ExceptionHandlerContract
 {
     /**
-     * @param array      $user_config
+     * @param array<string, mixed>      $user_config
      * @param \Throwable $ex
+     * @return array<string, mixed>|null
      *
      * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException
      * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\MissingConfigurationKeyException
@@ -35,10 +36,12 @@ final class ValidationExceptionHandler implements ExceptionHandlerContract
     public function handle(array $user_config, \Throwable $ex): ?array
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        return [
+        $result = [
             RB::KEY_API_CODE  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
             RB::KEY_HTTP_CODE => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
         ];
+        /** @var array<string, mixed> $result */
+        return $result;
     }
 
 } // end of class

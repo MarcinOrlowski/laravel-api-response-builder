@@ -81,7 +81,7 @@ class ExceptionHandlerHelper
      * Handles given throwable and produces valid HTTP response object.
      *
      * @param \Throwable $ex                 Throwable to be handled.
-     * @param array      $ex_cfg             ExceptionHandler's config excerpt related to $ex exception type.
+     * @param array<string, mixed>      $ex_cfg             ExceptionHandler's config excerpt related to $ex exception type.
      * @param int        $fallback_http_code HTTP code to be assigned to produced $ex related response in
      *                                       case configuration array lacks own `http_code` value. Default
      *                                       HttpResponse::HTTP_INTERNAL_SERVER_ERROR
@@ -102,13 +102,18 @@ class ExceptionHandlerHelper
     protected static function processException(\Throwable $ex, array $ex_cfg,
                                                int        $fallback_http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR)
     {
+        /** @var int $api_code */
         $api_code = $ex_cfg['api_code'];
+        /** @var int $http_code */
         $http_code = $ex_cfg['http_code'] ?? $fallback_http_code;
+        /** @var string|null $msg_key */
         $msg_key = $ex_cfg['msg_key'] ?? null;
+        /** @var bool $msg_enforce */
         $msg_enforce = $ex_cfg['msg_enforce'] ?? false;
 
         // No message key, let's get exception message and if there's nothing useful, fallback to built-in one.
         $msg = $ex->getMessage();
+        /** @var array<string, mixed> $placeholders */
         $placeholders = [
             'api_code' => $api_code,
             'message'  => ($msg !== '') ? $msg : '???',
@@ -143,7 +148,7 @@ class ExceptionHandlerHelper
      *
      * @param \Throwable $ex
      * @param int        $http_code
-     * @param array      $placeholders
+     * @param array<string, mixed>      $placeholders
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\IncompatibleTypeException
@@ -158,9 +163,7 @@ class ExceptionHandlerHelper
             $error_message = Lang::get("response-builder::builder.http_{$http_code}", $placeholders);
         } else {
             // Still got nothing? Fall back to built-in generic message for this type of exception.
-            $http_ex_cls = HttpException::class;
-            /** @var object $ex */
-            $key = BaseApiCodes::getCodeMessageKey($ex instanceof $http_ex_cls
+            $key = BaseApiCodes::getCodeMessageKey($ex instanceof HttpException
                 ? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
             // Default strings are expected to always be available.
             /** @var string $key */
@@ -198,10 +201,15 @@ class ExceptionHandlerHelper
      */
     protected function unauthenticated($request, AuthException $exception): HttpResponse
     {
-        $cfg = static::getExceptionHandlerConfig();
+        $fullCfg = static::getExceptionHandlerConfig();
 
         // This config entry is guaranted to exist. Enforced by tests.
-        $cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ][ HttpResponse::HTTP_UNAUTHORIZED ];
+        /** @var array<string, mixed> $handlerCfg */
+        $handlerCfg = $fullCfg[ HttpException::class ];
+        /** @var array<string, mixed> $configSection */
+        $configSection = $handlerCfg[ RB::KEY_CONFIG ];
+        /** @var array<string, mixed> $cfg */
+        $cfg = $configSection[ HttpResponse::HTTP_UNAUTHORIZED ];
 
         /**
          * NOTE: no typehint due to compatibility with Laravel signature.
@@ -278,6 +286,7 @@ class ExceptionHandlerHelper
     /**
      * Returns ExceptionHandlerHelper configration array with user configuration merged into built-in defaults.
      *
+     * @return array<string, mixed>
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\InvalidTypeException
      * @throws Ex\MissingConfigurationKeyException
@@ -319,7 +328,7 @@ class ExceptionHandlerHelper
             ],
         ];
 
-        /** @var array $user_handler_config */
+        /** @var array<string, mixed> $user_handler_config */
         $user_handler_config = \Config::get(RB::CONF_KEY_EXCEPTION_HANDLER, []);
         $cfg = Util::mergeConfig($default_config, $user_handler_config );
 
@@ -333,6 +342,7 @@ class ExceptionHandlerHelper
      * or @null if no exception handler can be determined.
      *
      * @param \Throwable $ex Exception to handle
+     * @return array<string, mixed>|null
      *
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\InvalidTypeException
@@ -361,6 +371,7 @@ class ExceptionHandlerHelper
             }
         }
 
+        /** @var array<string, mixed>|null $result */
         return $result;
     }
 

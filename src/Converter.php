@@ -75,7 +75,8 @@ class Converter
 
         /** @var array<string, mixed> $result */
         if ($this->debug_enabled) {
-            $key = (string)($result[RB::KEY_KEY] ?? '');
+            $keyValue = $result[RB::KEY_KEY] ?? '';
+            $key = \is_string($keyValue) ? $keyValue : \strval($keyValue);
             Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node with key '{$key}'.");
         }
 
@@ -119,7 +120,8 @@ class Converter
 
         /** @var array<string, mixed> $result */
         if ($this->debug_enabled) {
-            $handler = (string)($result[RB::KEY_HANDLER] ?? '');
+            $handlerValue = $result[RB::KEY_HANDLER] ?? '';
+            $handler = \is_string($handlerValue) ? $handlerValue : \strval($handlerValue);
             Log::debug(__CLASS__ . ": Converting {$cls} using {$handler} because: {$debug_result}.");
         }
 
@@ -153,15 +155,13 @@ class Converter
             Type::STRING,
         ]);
 
-        if ($result === null && \is_object($data)) {
+        if (\is_object($data)) {
             $cfg = $this->getClassMappingConfigOrThrow($data);
             $worker = new $cfg[ RB::KEY_HANDLER ]();
             /** @var ConverterContract $worker */
             $result = $worker->convert($data, $cfg);
             $result = $cfg[ RB::KEY_KEY ] === null ? $result : [$cfg[ RB::KEY_KEY ] => $result];
-        }
-
-        if ($result === null && \is_array($data)) {
+        } elseif (\is_array($data)) {
             /** @var array<string, mixed> $arrayData */
             $arrayData = $data;
             $cfg = $this->getPrimitiveMappingConfigOrThrow($arrayData);
@@ -170,9 +170,7 @@ class Converter
             if (!Util::isArrayWithNonNumericKeys($arrayData)) {
                 $result = [$cfg[ RB::KEY_KEY ] => $result];
             }
-        }
-
-        if (\is_bool($data) || \is_float($data) || \is_int($data) || \is_string($data)) {
+        } elseif (\is_bool($data) || \is_float($data) || \is_int($data) || \is_string($data)) {
             $result = [$this->getPrimitiveMappingConfigOrThrow($data)[ RB::KEY_KEY ] => $data];
         }
 
