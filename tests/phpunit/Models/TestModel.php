@@ -37,6 +37,8 @@ class TestModel
 
 	/**
 	 * Converts model to array
+	 *
+	 * @return array<string, mixed>
 	 */
 	public function toArray(): array
 	{

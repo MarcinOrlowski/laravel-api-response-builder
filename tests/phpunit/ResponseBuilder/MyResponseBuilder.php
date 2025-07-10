@@ -17,9 +17,12 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  */
 class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
+    /** @var array<string, mixed> */
     public static array $fake_response = [];
 
     /**
+     * @return array<string, mixed>
+     *
      * @noinspection PhpMissingParentCallCommonInspection
      * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed
      */
