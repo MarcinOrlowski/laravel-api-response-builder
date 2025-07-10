@@ -91,10 +91,13 @@ class ObjectTest extends TestCase
 
         /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
-        $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
+        /** @var array<string, mixed> $collection_config */
+        $collection_config = $cfg[ Collection::class ] ?? [];
+        $collection_config[ RB::KEY_HANDLER ] = FakeConverter::class;
 
-        \collect($allowed_keys)->each(function($allowed_key) use ($data, $fake, $cfg) {
-            $cfg[ Collection::class ][ RB::KEY_KEY ] = $allowed_key;
+        \collect($allowed_keys)->each(function($allowed_key) use ($data, $fake, &$cfg, $collection_config) {
+            $collection_config[ RB::KEY_KEY ] = $allowed_key;
+            $cfg[ Collection::class ] = $collection_config;
 
             Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
@@ -106,9 +109,11 @@ class ObjectTest extends TestCase
 
             if (\is_string($allowed_key)) {
                 $this->assertArrayHasKey($allowed_key, $result);
-                $this->assertArrayHasKey($fake->key, $result[ $allowed_key ]);
-                $this->assertEquals($result[ $allowed_key ][ $fake->key ], $fake->val);
-            } else if (\is_null($allowed_key)) {
+                /** @var array<string, mixed> $allowed_key_data */
+                $allowed_key_data = $result[ $allowed_key ];
+                $this->assertArrayHasKey($fake->key, $allowed_key_data);
+                $this->assertEquals($allowed_key_data[ $fake->key ], $fake->val);
+            } else {
                 $this->assertArrayHasKey($fake->key, $result);
                 $this->assertEquals($result[ $fake->key ], $fake->val);
             }

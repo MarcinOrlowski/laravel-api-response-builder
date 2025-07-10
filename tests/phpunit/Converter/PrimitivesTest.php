@@ -58,7 +58,7 @@ class PrimitivesTest extends TestCase
         /** @var array<string, mixed> $key_data */
         $key_data = $converted[ $key ];
         $this->assertCount(1, $key_data);
-        $this->assertEquals($model_val, $converted[ $key ][ TestModel::FIELD_NAME ]);
+        $this->assertEquals($model_val, $key_data[ TestModel::FIELD_NAME ]);
     }
 
     /**

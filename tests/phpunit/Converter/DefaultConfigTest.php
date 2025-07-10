@@ -163,11 +163,8 @@ class DefaultConfigTest extends TestCase
     {
         // GIVEN Eloquent collection with content
         $collection = new EloquentCollection();
-        /** @phpstan-ignore-next-line */
         $collection->add(Generator::getRandomString('item1'));
-        /** @phpstan-ignore-next-line */
         $collection->add(Generator::getRandomString('item2'));
-        /** @phpstan-ignore-next-line */
         $collection->add(Generator::getRandomString('item3'));
 
         $this->doCollectionTests($collection);
@@ -185,9 +182,9 @@ class DefaultConfigTest extends TestCase
             $data[] = Generator::getRandomString("item{$i}");
         }
         $total = \count($data);
-        /** @noinspection PhpParamsInspection */
-        $this->doPaginatorSupportTests(
-            new \Illuminate\Pagination\LengthAwarePaginator(collect($data), $total, (int)($total / 2)));
+        /** @var \Illuminate\Pagination\LengthAwarePaginator<int, string> $paginator */
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(collect($data), $total, (int)($total / 2));
+        $this->doPaginatorSupportTests($paginator);
     }
 
     /**
@@ -200,13 +197,15 @@ class DefaultConfigTest extends TestCase
             $data[] = Generator::getRandomString("item{$i}");
         }
 
-        /** @noinspection PhpParamsInspection */
-        $this->doPaginatorSupportTests(
-            new \Illuminate\Pagination\Paginator(collect($data), (int)(\count($data) / 2)));
+        /** @var \Illuminate\Pagination\Paginator<int, string> $paginator */
+        $paginator = new \Illuminate\Pagination\Paginator(collect($data), (int)(\count($data) / 2));
+        $this->doPaginatorSupportTests($paginator);
     }
 
     /**
      * Helper that performs common tests for Paginator support.
+     *
+     * @param AbstractPaginator<int, string> $paginator
      */
     protected function doPaginatorSupportTests(AbstractPaginator $paginator): void
     {
@@ -254,7 +253,7 @@ class DefaultConfigTest extends TestCase
         $this->assertIsIterable($collection);
         /**
          * @var iterable<string, mixed> $collection
-         * @var  string  $key
+         * @var  string  $foreach_key
          */
         foreach ($collection as $foreach_key => $val) {
             /** @var array<string, mixed> $result */
