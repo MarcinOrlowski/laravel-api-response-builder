@@ -14,26 +14,73 @@ name: "Static Analysis"
 on:
   push:
     branches:
-    - "master"
+      - "master"
   pull_request:
     branches:
-    - "master"
-    - "dev"
+      - "master"
+      - "dev"
 
 jobs:
+  analyze_sources:
+    name: "Is there any source code to work on?"
+    runs-on: ubuntu-latest
+
+    outputs:
+      # Export 'filter' step check result so next step can use it.
+      run_action: ${{ steps.filter.outputs.src }}
+      # These are source files matching our filter that are affected by the PR.
+      changed_files: ${{ steps.filter.outputs.src_files }}
+
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - name: "Checkout sources"
+        uses: actions/checkout@v4
+
+      # https://github.com/marketplace/actions/paths-changes-filter
+      - name: "Look for changes that matters for us..."
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          # Token is optional for public repos, but required for private repos
+          token: ${{ secrets.GITHUB_TOKEN }}
+          list-files: 'escape'
+          filters: |
+            src:
+              - 'src/**/*.php'
+              - 'tests/**/*.php'
+
+      - name: "Will action step be run?"
+        run: |
+          found="NO"
+          [[ ${{ steps.filter.outputs.src }} == 'true' ]] && found="YES"
+          echo "run_action=${found}" >> $GITHUB_OUTPUT
+          echo -e "\n****************************************\n"
+          echo "${found}"
+          echo -e "****************************************"
+
   check:
+    # Will run only if analyze_sources determined it is needed.
+    needs: analyze_sources
+    if: needs.analyze_sources.outputs.run_action == 'true'
+
     strategy:
       # do not stop the workflow if single run failed
       fail-fast: false
       matrix:
-        # quotes are needed it is treated as a number and zero at decimal part is gone
+        # Quotes are needed it is treated as a number and zero at decimal part is gone
         # at runtime i.e. 8.10 -> 8.1, while "8.10" => "8.10".
-        laravel: ["12.0"]
-        php: ["8.2", "8.3", "8.4"]
+        php: [ "8.1", "8.4" ]
 
     runs-on: ubuntu-latest
 
     steps:
+      # https://github.com/marketplace/actions/setup-php-action
+      - name: "Setup PHP ${{ matrix.php }}"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+
+      # https://github.com/marketplace/actions/checkout
       - name: "Checkout repository..."
         uses: actions/checkout@v4
 
@@ -45,18 +92,6 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
-      # # https://github.com/marketplace/actions/phpstan-php-actions
-      # - name: "Running PHPStan..."
-      #   uses: php-actions/phpstan@v3
-      #   with:
-      #     configuration: "phpstan.neon"
-      #     php_version: "${{ matrix.php }}"
-      #     # memory_limit: "16M"
-
-      # - name: "Making cache folder writable"
-      #   shell: bash
-      #   run: chmod 777 vendor/orchestra/testbench-core/laravel/bootstrap/cache
-
       - name: "Running PHPStan..."
         shell: bash
-        run: vendor/bin/phpstan
+        run: composer lint
