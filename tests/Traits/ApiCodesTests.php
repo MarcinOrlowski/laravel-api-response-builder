@@ -217,9 +217,11 @@ trait ApiCodesTests
         ];
         /** @noinspection PhpUnusedLocalVariableInspection */
         foreach ($classes as $class_name => $class_config) {
-            /** @var array<string, mixed> $class_config */
+            $this->assertIsArray($class_config);
+            /** @var array<string, mixed> $config */
+            $config = $class_config;
             foreach ($mandatory_keys as $key_name) {
-                $this->assertArrayHasKey($key_name, $class_config);
+                $this->assertArrayHasKey($key_name, $config);
             }
         }
     }
@@ -240,15 +242,17 @@ trait ApiCodesTests
         }
 
         foreach ($classes as $class_name => $class_config) {
-            foreach ($class_config as $cfg_key => $cfg_val) {
+            $this->assertIsArray($class_config);
+            /** @var array<string, mixed> $config */
+            $config = $class_config;
+            foreach ($config as $cfg_key => $cfg_val) {
                 switch ($cfg_key) {
                     case RB::KEY_KEY:
                         if (\is_string($cfg_val)) {
-                            $this->assertIsString($cfg_val);
                             $this->assertNotEmpty(trim($cfg_val));
                         } elseif ($cfg_val !== null) {
                             $this->fail(
-                                \sprintf("Value for key '{$cfg_key}' in '{$class_name}' must be string or null (%s found)", \gettype($cfg_key)));
+                                \sprintf("Value for key '%s' in '%s' must be string or null (%s found)", $cfg_key, $class_name, \gettype($cfg_val)));
                         }
                         break;
 
@@ -259,12 +263,11 @@ trait ApiCodesTests
 
                     case RB::KEY_PRI:
                         $this->assertIsInt($cfg_val);
-                        $this->assertIsNumeric($cfg_val);
                         break;
 
                     // phpcs:disable Squiz.ControlStructures.SwitchDeclaration.DefaultNoBreak
                     default:
-                        $this->fail("Unknown key '{$cfg_key}' in '{$class_name}' data conversion config.");
+                        $this->fail(\sprintf("Unknown key '%s' in '%s' data conversion config.", $cfg_key, $class_name));
                 }
             }
         }
@@ -275,8 +278,11 @@ trait ApiCodesTests
             RB::KEY_HANDLER,
         ];
         foreach ($classes as $class_name => $class_config) {
-            foreach ($class_config as $cfg_key => $cfg_val) {
-                $msg = "Unknown key '{$cfg_key}' in '{$class_name}' data conversion config.";
+            $this->assertIsArray($class_config);
+            /** @var array<string, mixed> $config */
+            $config = $class_config;
+            foreach ($config as $cfg_key => $cfg_val) {
+                $msg = \sprintf("Unknown key '%s' in '%s' data conversion config.", $cfg_key, $class_name);
                 $this->assertContains($cfg_key, $supported_keys, $msg);
             }
         }

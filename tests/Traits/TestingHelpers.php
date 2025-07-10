@@ -40,7 +40,7 @@ trait TestingHelpers
     /** @var int */
     protected $random_api_code;
 
-    /** @var array */
+    /** @var array<int, string> */
     protected $error_message_map = [];
 
     /**
@@ -85,12 +85,14 @@ trait TestingHelpers
 
         // AND corresponding mapped message mapping
         $map = Lockpick::call(new BaseApiCodes(), 'getBaseMap');
-        /** @var array $map */
+        /** @var array<int, string> $map */
         if (empty($map)) {
             throw new \RuntimeException('getBaseMap() returned empty value.');
         }
         $idx = \random_int(1, \count($map));
-        $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
+        $keys = \array_keys($map);
+        $key = $keys[ $idx - 1 ];
+        $this->random_api_code_message_key = $map[ $key ];
         $this->random_api_code_message = $this->langGet($this->random_api_code_message_key,
             ['api_code' => $this->random_api_code,]);
 
@@ -122,8 +124,8 @@ trait TestingHelpers
      * do not want to happen, not handle separately after each invocation, so this wrapper deals with it for
      * us.
      *
-     * @param string     $key     String key as passed to Lang::get()
-     * @param array|null $replace Optional replacement array as passed to Lang::get()
+     * @param string                  $key     String key as passed to Lang::get()
+     * @param array<string, mixed>|null $replace Optional replacement array as passed to Lang::get()
      */
     public function langGet(string $key, ?array $replace = null): string
     {
