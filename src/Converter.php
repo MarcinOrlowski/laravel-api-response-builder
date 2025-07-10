@@ -75,7 +75,8 @@ class Converter
 
         /** @var array<string, mixed> $result */
         if ($this->debug_enabled) {
-            Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node with key '" . (string)$result[RB::KEY_KEY] . "'.");
+            $key = (string)($result[RB::KEY_KEY] ?? '');
+            Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node with key '{$key}'.");
         }
 
         return $result;
@@ -118,7 +119,8 @@ class Converter
 
         /** @var array<string, mixed> $result */
         if ($this->debug_enabled) {
-            Log::debug(__CLASS__ . ": Converting {$cls} using " . (string)$result[RB::KEY_HANDLER] . " because: {$debug_result}.");
+            $handler = (string)($result[RB::KEY_HANDLER] ?? '');
+            Log::debug(__CLASS__ . ": Converting {$cls} using {$handler} because: {$debug_result}.");
         }
 
         return $result;
@@ -160,10 +162,12 @@ class Converter
         }
 
         if ($result === null && \is_array($data)) {
-            $cfg = $this->getPrimitiveMappingConfigOrThrow($data);
+            /** @var array<string, mixed> $arrayData */
+            $arrayData = $data;
+            $cfg = $this->getPrimitiveMappingConfigOrThrow($arrayData);
 
-            $result = $this->convertArray($data);
-            if (!Util::isArrayWithNonNumericKeys($data)) {
+            $result = $this->convertArray($arrayData);
+            if (!Util::isArrayWithNonNumericKeys($arrayData)) {
                 $result = [$cfg[ RB::KEY_KEY ] => $result];
             }
         }
@@ -172,6 +176,7 @@ class Converter
             $result = [$this->getPrimitiveMappingConfigOrThrow($data)[ RB::KEY_KEY ] => $data];
         }
 
+        /** @var array<string, mixed>|null $result */
         return $result;
     }
 
@@ -179,7 +184,8 @@ class Converter
      * Recursively walks $data array and converts all known objects if found. Note
      * $data array is passed by reference so source $data array may be modified.
      *
-     * @param array $data array to recursively convert known elements of
+     * @param array<string, mixed> $data array to recursively convert known elements of
+     * @return array<string, mixed>
      *
      * @throws Ex\ConfigurationNotFoundException
      * @throws Ex\ArrayWithMixedKeysException
@@ -190,7 +196,9 @@ class Converter
 
         foreach ($data as $key => $val) {
             if (\is_array($val)) {
-                $data[ $key ] = $this->convertArray($val);
+                /** @var array<string, mixed> $arrayVal */
+                $arrayVal = $val;
+                $data[ $key ] = $this->convertArray($arrayVal);
             } elseif (\is_object($val)) {
                 $cfg = $this->getClassMappingConfigOrThrow($val);
                 $worker = new $cfg[ RB::KEY_HANDLER ]();
@@ -206,6 +214,8 @@ class Converter
     /**
      * Reads and validates "converter/map" config mapping. Returns Classes mapping as specified in
      * configuration or empty array if configuration found.
+     *
+     * @return array<string, mixed>
      *
      * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
      * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
@@ -242,12 +252,15 @@ class Converter
             }
         }
 
+        /** @var array<string, mixed> $classes */
         return $classes;
     }
 
     /**
      * Reads and validates "converter/primitives" config mapping. Returns primitives mapping config
      * as specified in configuration or empty array if configuration found.
+     *
+     * @return array<string, mixed>
      *
      * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
      * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
@@ -281,6 +294,7 @@ class Converter
             }
         }
 
+        /** @var array<string, mixed> $primitives */
         return $primitives;
     }
 

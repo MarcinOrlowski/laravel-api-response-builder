@@ -60,9 +60,12 @@ class ExceptionHandlerHelper
                 $cfg = static::getExceptionHandlerConfig()[ RB::KEY_DEFAULT ];
             }
 
+            /** @var array<string, mixed> $cfg */
             $handler = new $cfg[ RB::KEY_HANDLER ]();
             /**  @var ExceptionHandlerContract $handler */
-            $handler_result = $handler->handle($cfg[ RB::KEY_CONFIG ], $ex);
+            /** @var array<string, mixed> $config */
+            $config = $cfg[ RB::KEY_CONFIG ];
+            $handler_result = $handler->handle($config, $ex);
             if ($handler_result !== null) {
                 $result = static::processException($ex, $handler_result);
             } else {
