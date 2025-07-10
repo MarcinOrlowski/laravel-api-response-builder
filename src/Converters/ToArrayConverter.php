@@ -26,8 +26,9 @@ final class ToArrayConverter implements ConverterContract
      * Returns array representation of the object.
      *
      * @param object $obj    Object to be converted
-     * @param array  $config Converter config array to be used for this object (based on exact class
+     * @param array<string, mixed>  $config Converter config array to be used for this object (based on exact class
      *                       name match or inheritance).
+     * @return array<string, mixed>
      *
      * @throws Ex\InvalidTypeException
      *
@@ -46,7 +47,9 @@ final class ToArrayConverter implements ConverterContract
 
         /** @var JsonResource $obj */
         $request = \request();
-        return (array)$obj->toArray($request);
+        $result = (array)$obj->toArray($request);
+        /** @var array<string, mixed> $result */
+        return $result;
     }
 
 } // end of class

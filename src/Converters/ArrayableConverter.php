@@ -25,8 +25,9 @@ final class ArrayableConverter implements ConverterContract
      * Returns array representation of the object implementing Arrayable interface
      *
      * @param object $obj                                    Object to be converted
-     * @param array  $config                                 Converter config array to be used for this object (based on exact class
+     * @param array<string, mixed>  $config                                 Converter config array to be used for this object (based on exact class
      *                                                       name match or inheritance).
+     * @return array<string, mixed>
      *
      * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
      */
@@ -35,7 +36,9 @@ final class ArrayableConverter implements ConverterContract
         Validator::assertInstanceOf('obj', $obj, Arrayable::class);
 
         /** @var Arrayable<string, mixed> $obj */
-        return $obj->toArray();
+        $result = $obj->toArray();
+        /** @var array<string, mixed> $result */
+        return $result;
     }
 
 } // end of class

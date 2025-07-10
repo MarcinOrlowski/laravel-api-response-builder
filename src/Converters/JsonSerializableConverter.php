@@ -25,8 +25,9 @@ final class JsonSerializableConverter implements ConverterContract
 	 * Returns array representation of the object implementing \JsonSerializable interface.
 	 *
 	 * @param object $obj               Object to be converted
-	 * @param array  $config            Converter config array to be used for this object (based on exact class
+	 * @param array<string, mixed>  $config            Converter config array to be used for this object (based on exact class
 	 *                                  name match or inheritance).
+	 * @return array<string, mixed>
 	 */
 	public function convert(object $obj, array $config): array
 	{
@@ -38,7 +39,9 @@ final class JsonSerializableConverter implements ConverterContract
 			$encoded = '';
 		}
 
-		return [$config[ RB::KEY_KEY ] => \json_decode($encoded, true)];
+		$result = [$config[ RB::KEY_KEY ] => \json_decode($encoded, true)];
+		/** @var array<string, mixed> $result */
+		return $result;
 	}
 
 } // end of class

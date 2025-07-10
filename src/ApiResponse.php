@@ -22,10 +22,11 @@ class ApiResponse
 
     public static function fromJson(string $jsonString): self
     {
-        /** @var array $decoded_json */
+        /** @var array<string, mixed> $decoded_json */
         $decoded_json = \json_decode($jsonString, true, 32, JSON_THROW_ON_ERROR);
 
         // Ensure all response elements are present.
+        /** @var array<string, array<string>> $keys */
         $keys = [
             ResponseBuilder::KEY_SUCCESS => [Type::BOOLEAN],
             ResponseBuilder::KEY_CODE    => [Type::INTEGER],
@@ -37,11 +38,7 @@ class ApiResponse
             if (!\array_key_exists($key, $decoded_json)) {
                 throw new \InvalidArgumentException("Missing key '$key' in JSON response.");
             }
-            /** @var mixed|null $allowed_types */
-            if (!empty($allowed_types)) {
-                /** @var array $allowed_types */
-                Validator::assertIsType($key, $decoded_json[ $key ], $allowed_types);
-            }
+            Validator::assertIsType($key, $decoded_json[$key], $allowed_types);
         }
 
         // Ensure certain elements are not empty.
@@ -57,16 +54,29 @@ class ApiResponse
                 "The '{$key}' in JSON response cannot be NULL.");
         }
 
+        /** @var bool $success */
+        $success = $decoded_json[ResponseBuilder::KEY_SUCCESS];
+        /** @var int $code */
+        $code = $decoded_json[ResponseBuilder::KEY_CODE];
+        /** @var string $message */
+        $message = $decoded_json[ResponseBuilder::KEY_MESSAGE];
+        /** @var string $locale */
+        $locale = $decoded_json[ResponseBuilder::KEY_LOCALE];
+        /** @var array<string, mixed>|null $data */
+        $data = $decoded_json[ResponseBuilder::KEY_DATA];
+
         $api = (new self())
-            ->setSuccess($decoded_json[ ResponseBuilder::KEY_SUCCESS ])
-            ->setCode($decoded_json[ ResponseBuilder::KEY_CODE ])
-            ->setMessage($decoded_json[ ResponseBuilder::KEY_MESSAGE ])
-            ->setLocale($decoded_json[ ResponseBuilder::KEY_LOCALE ])
-            ->setData($decoded_json[ ResponseBuilder::KEY_DATA ]);
+            ->setSuccess($success)
+            ->setCode($code)
+            ->setMessage($message)
+            ->setLocale($locale)
+            ->setData($data);
 
         // Optional debug data
         if (\array_key_exists(ResponseBuilder::KEY_DEBUG, $decoded_json)) {
-            $api->setDebug($decoded_json[ ResponseBuilder::KEY_DEBUG ]);
+            /** @var array<string, mixed>|null $debug */
+            $debug = $decoded_json[ResponseBuilder::KEY_DEBUG];
+            $api->setDebug($debug);
         }
 
         return $api;
@@ -134,13 +144,20 @@ class ApiResponse
 
     // ---------------------------------------------------------------------------------------------
 
+    /** @var array<string, mixed>|null */
     protected ?array $data;
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getData(): ?array
     {
         return $this->data;
     }
 
+    /**
+     * @param array<string, mixed>|null $data
+     */
     protected function setData(?array $data): self
     {
         $this->data = $data;
@@ -149,13 +166,20 @@ class ApiResponse
 
     // ---------------------------------------------------------------------------------------------
 
+    /** @var array<string, mixed>|null */
     protected ?array $debug = null;
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getDebug(): ?array
     {
         return $this->debug;
     }
 
+    /**
+     * @param array<string, mixed>|null $debug
+     */
     public function setDebug(?array $debug): self
     {
         $this->debug = $debug;

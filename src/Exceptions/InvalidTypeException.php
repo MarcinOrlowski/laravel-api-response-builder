@@ -19,7 +19,7 @@ class InvalidTypeException extends \Exception implements InvalidTypeExceptionCon
 	 * NotAnTypeBaseException constructor.
 	 *
 	 * @param string $var_name      Name of the variable (to be included in error message)
-	 * @param array  $allowed_types Array of allowed types [Type::*]
+	 * @param array<string> $allowed_types Array of allowed types [Type::*]
 	 * @param string $type          Current type of the $value
 	 *
 	 * @throws \InvalidArgumentException
