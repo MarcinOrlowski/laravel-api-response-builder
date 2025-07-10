@@ -163,8 +163,7 @@ class ExceptionHandlerHelper
             $error_message = Lang::get("response-builder::builder.http_{$http_code}", $placeholders);
         } else {
             // Still got nothing? Fall back to built-in generic message for this type of exception.
-            $key = BaseApiCodes::getCodeMessageKey($ex instanceof HttpException
-                ? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
+            $key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE());
             // Default strings are expected to always be available.
             /** @var string $key */
             $error_message = Lang::get($key, $placeholders);
@@ -209,7 +208,7 @@ class ExceptionHandlerHelper
         /** @var array<string, mixed> $configSection */
         $configSection = $handlerCfg[ RB::KEY_CONFIG ];
         /** @var array<string, mixed> $cfg */
-        $cfg = $configSection[ HttpResponse::HTTP_UNAUTHORIZED ];
+        $cfg = $configSection[ HttpResponse::HTTP_UNAUTHORIZED ] ?? [];
 
         /**
          * NOTE: no typehint due to compatibility with Laravel signature.
@@ -334,6 +333,7 @@ class ExceptionHandlerHelper
 
         Util::sortArrayByPri($cfg);
 
+        /** @var array<string, mixed> $cfg */
         return $cfg;
     }
 
