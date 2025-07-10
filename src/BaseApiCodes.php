@@ -90,6 +90,7 @@ class BaseApiCodes
 	/**
 	 * Returns base code mapping array
 	 *
+	 * @return array<int, string>
 	 * @throws Ex\InvalidTypeException
 	 * @throws Ex\MissingConfigurationKeyException
 	 * @throws Ex\NotIntegerException

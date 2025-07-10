@@ -11,7 +11,10 @@ namespace MarcinOrlowski\ResponseBuilder\Contracts;
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
-interface InvalidTypeExceptionContract
+interface InvalidTypeExceptionContract extends \Throwable
 {
+	/**
+	 * @param array<string> $allowed_types
+	 */
 	public function __construct(string $var_name, string $type, array $allowed_types);
 }

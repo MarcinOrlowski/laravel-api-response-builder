@@ -59,6 +59,8 @@ trait ApiCodesHelpers
 
     /**
      * Returns array of error code constants defined in this class. Used mainly for debugging/tests
+     *
+     * @return array<string, mixed>
      */
     public static function getApiCodeConstants(): array
     {
@@ -69,6 +71,7 @@ trait ApiCodesHelpers
     /**
      * Returns complete error code to locale string mapping array
      *
+     * @return array<int, string>
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\InvalidTypeException
      * @throws Ex\MissingConfigurationKeyException Thrown when builder map is not configured.
@@ -83,8 +86,10 @@ trait ApiCodesHelpers
         }
         Validator::assertIsArray(RB::CONF_KEY_MAP, $user_map);
 
-        /** @var array $user_map */
-        return Util::mergeConfig(BaseApiCodes::getBaseMap(), $user_map);
+        /** @var array<int, string> $user_map */
+        $result = Util::mergeConfig(BaseApiCodes::getBaseMap(), $user_map);  // @phpstan-ignore-line
+        /** @var array<int, string> $result */
+        return $result;
     }
 
     /**
@@ -108,7 +113,7 @@ trait ApiCodesHelpers
 
         $map = static::getMap();
 
-        return $map[ $api_code ] ?? null;
+        return $map[$api_code] ?? null;
     }
 
     /**

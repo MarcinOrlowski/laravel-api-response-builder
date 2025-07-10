@@ -91,19 +91,28 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 		/** @noinspection PhpIncludeInspection */
 		/** @noinspection UsingInclusionReturnValueInspection */
 		$defaults = require $path;
-        /** @var array $app */
+        /** @var \Illuminate\Foundation\Application $app */
         $app = $this->app;
 		$config = $app['config']->get($key, []);
 
 		/** @noinspection PhpUnhandledExceptionInspection */
+		/** @var array<string, mixed> $config */
+		/** @var array<string, mixed> $defaults */
 		$merged_config = Util::mergeConfig($defaults, $config);
 
+		/** @var array<string, mixed> $merged_config */
+		/** @phpstan-ignore-next-line offsetAccess.nonOffsetAccessible */
 		if (!isset($merged_config['converter']['classes'])) {
 			throw new Ex\IncompleteConfigurationException(
 				sprintf('Configuration lacks "%s" array.', ResponseBuilder::CONF_KEY_CONVERTER_CLASSES));
 		}
+		/** @var array<string, mixed> $converter_config */
+		$converter_config = $merged_config['converter'];
 
-		Util::sortArrayByPri($merged_config['converter']['classes']);
+		/** @var array<string, mixed> $converter_classes */
+		$converter_classes = $converter_config['classes'];
+		Util::sortArrayByPri($converter_classes);
+		$merged_config['converter']['classes'] = $converter_classes;
 
         $app['config']->set($key, $merged_config);
     }

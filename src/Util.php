@@ -25,9 +25,11 @@ final class Util
 	 * Throws \RuntimeException if arrays stucture causes type conflics (i.e. you want to merge
 	 * array with int).
 	 *
-	 * @param array $original Array to merge other array into. Usually default values to overwrite.
-	 * @param array $merging  Array with items to be merged into $original, overriding (primitives) or merging
+	 * @param array<string, mixed> $original Array to merge other array into. Usually default values to overwrite.
+	 * @param array<string, mixed> $merging  Array with items to be merged into $original, overriding (primitives) or merging
 	 *                        (arrays) entries in destination array.
+	 *
+	 * @return array<string, mixed>
 	 *
 	 * @throws Ex\IncompatibleTypeException
 	 */
@@ -45,7 +47,10 @@ final class Util
 
 				if (\is_array($m_val)) {
 					/** @noinspection PhpUnnecessaryStaticReferenceInspection */
-					$array[ $m_key ] = static::mergeConfig($original[ $m_key ], $m_val);
+					/** @var array<string, mixed> $original_value */
+					$original_value = $original[ $m_key ];
+					/** @var array<string, mixed> $m_val */
+					$array[ $m_key ] = static::mergeConfig($original_value, $m_val);
 				} else {
 					$array[ $m_key ] = $m_val;
 				}
@@ -61,11 +66,13 @@ final class Util
 	 * Sorts array (in place) by value, assuming value is an array and contains `pri` key with integer
 	 * (positive/negative) value which is used for sorting higher -> lower priority.
 	 *
-	 * @param array $array
+	 * @param array<string, mixed> $array
 	 */
 	public static function sortArrayByPri(array &$array): void
 	{
-		uasort($array, static function(array $array_a, array $array_b) {
+		uasort($array, static function($array_a, $array_b) {
+			/** @var array<string, mixed> $array_a */
+			/** @var array<string, mixed> $array_b */
 			$pri_a = $array_a['pri'] ?? 0;
 			$pri_b = $array_b['pri'] ?? 0;
 
@@ -76,7 +83,7 @@ final class Util
 	/**
 	 * Checks if given array uses custom (non numeric) keys.
 	 *
-	 * @param array $data
+	 * @param array<string, mixed> $data
 	 */
 	public static function isArrayWithNonNumericKeys(array $data): bool
 	{

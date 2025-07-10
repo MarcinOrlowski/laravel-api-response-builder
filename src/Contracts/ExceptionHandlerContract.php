@@ -30,8 +30,9 @@ interface ExceptionHandlerContract
 	 *                  `msg_key` is set, or message referenced by `msg_key` completely ignoring exception
 	 *                  message ($ex->getMessage()).
 	 *
-	 * @param array      $user_config Config array (can be empty) with any keys required by given handle.
+	 * @param array<string, mixed>      $user_config Config array (can be empty) with any keys required by given handle.
 	 * @param \Throwable $ex          The throwable to handle.
+	 * @return array<string, mixed>|null
 	 */
 	public function handle(array $user_config, \Throwable $ex): ?array;
 

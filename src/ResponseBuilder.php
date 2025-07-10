@@ -14,9 +14,11 @@ namespace MarcinOrlowski\ResponseBuilder;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
+use MarcinOrlowski\ResponseBuilder\Exceptions\ClassNotFound;
+use MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
  * Builds standardized HttpResponse response object
@@ -27,9 +29,12 @@ class ResponseBuilder extends ResponseBuilderBase
     protected int     $api_code;
     protected ?int    $http_code    = null;
     protected ?string $message      = null;
+    /** @var array<string, mixed>|null */
     protected ?array  $placeholders = null;
     protected ?int    $json_opts    = null;
+    /** @var array<string, mixed>|null */
     protected ?array  $debug_data   = null;
+    /** @var array<string, mixed> */
     protected array   $http_headers = [];
 
     /** @var mixed|null $data */
@@ -59,7 +64,7 @@ class ResponseBuilder extends ResponseBuilderBase
      *                                   or @null if there's no to be returned.
      * @param integer|null $api_code     API code to be returned or @null to use value of
      *                                   BaseApiCodes::OK().
-     * @param array|null   $placeholders Placeholders passed to Lang::get() for message placeholders
+     * @param array<string, mixed>|null   $placeholders Placeholders passed to Lang::get() for message placeholders
      *                                   substitution or @null if none.
      * @param integer|null $http_code    HTTP code to be used for HttpResponse sent or @null
      *                                   for default DEFAULT_HTTP_CODE_OK.
@@ -74,8 +79,11 @@ class ResponseBuilder extends ResponseBuilderBase
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
      */
-    public static function success($data = null, int $api_code = null, array $placeholders = null,
-                                   int $http_code = null, int $json_opts = null): HttpResponse
+    public static function success(mixed  $data = null,
+                                   ?int   $api_code = null,
+                                   ?array $placeholders = null,
+                                   ?int   $http_code = null,
+                                   ?int   $json_opts = null): HttpResponse
     {
         return static::asSuccess($api_code)
             ->withData($data)
@@ -90,9 +98,9 @@ class ResponseBuilder extends ResponseBuilderBase
      * message uses placeholders as well as return data payload
      *
      * @param integer           $api_code      Your API code to be returned with the response object.
-     * @param array|null        $placeholders  Placeholders passed to Lang::get() for message
+     * @param array<string, mixed>|null        $placeholders  Placeholders passed to Lang::get() for message
      *                                         placeholders substitution or @null if none.
-     * @param object|array|null $data          Array of primitives and supported objects to be
+     * @param object|array<string, mixed>|null $data          Array of primitives and supported objects to be
      *                                         returned in 'data' node of the JSON response, single
      *                                         supported object or @null if there's no to be returned.
      * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
@@ -108,9 +116,11 @@ class ResponseBuilder extends ResponseBuilderBase
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
      */
-    public static function error(int $api_code, array $placeholders = null, $data = null,
-                                 int $http_code = null,
-                                 int $json_opts = null): HttpResponse
+    public static function error(int    $api_code,
+                                 ?array $placeholders = null,
+                                 mixed  $data = null,
+                                 int    $http_code = null,
+                                 int    $json_opts = null): HttpResponse
     {
         return static::asError($api_code)
             ->withPlaceholders($placeholders)
@@ -149,7 +159,7 @@ class ResponseBuilder extends ResponseBuilderBase
         if ($api_code !== $code_ok) {
             /** @noinspection PhpUnhandledExceptionInspection */
             Validator::assertIsIntRange('api_code', $api_code,
-                BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
+                                        BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
         }
         if ($api_code === $code_ok) {
             throw new \OutOfBoundsException(
@@ -164,7 +174,7 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @throws Ex\InvalidTypeException
      */
-    public function withHttpCode(int $http_code = null): self
+    public function withHttpCode(?int $http_code = null): self
     {
         Validator::assertIsType('http_code', $http_code, [
             Type::INTEGER,
@@ -180,7 +190,7 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @throws Ex\InvalidTypeException
      */
-    public function withData($data = null): self
+    public function withData(mixed $data = null): self
     {
         Validator::assertIsType('data', $data, [
             Type::ARRAY,
@@ -201,10 +211,10 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @throws Ex\InvalidTypeException
      */
-    public function withJsonOptions(int $json_opts = null): self
+    public function withJsonOptions(?int $json_opts = null): self
     {
         Validator::assertIsType('json_opts', $json_opts, [Type::INTEGER,
-                                                          Type::NULL,
+            Type::NULL,
         ]);
         $this->json_opts = $json_opts;
 
@@ -212,14 +222,16 @@ class ResponseBuilder extends ResponseBuilderBase
     }
 
     /**
-     * @param array|null $debug_data
+     * @param array<string, mixed>|null $debug_data
      *
-     * @throws Ex\InvalidTypeException
+     * @return ResponseBuilder
+     * @throws ClassNotFound
+     * @throws InvalidTypeException
      */
-    public function withDebugData(array $debug_data = null): self
+    public function withDebugData(?array $debug_data = null): self
     {
         Validator::assertIsType('$debug_data', $debug_data, [Type::ARRAY,
-                                                             Type::NULL,
+            Type::NULL,
         ]);
         $this->debug_data = $debug_data;
 
@@ -229,12 +241,14 @@ class ResponseBuilder extends ResponseBuilderBase
     /**
      * @param string|null $msg
      *
-     * @throws Ex\InvalidTypeException
+     * @return ResponseBuilder
+     * @throws ClassNotFound
+     * @throws InvalidTypeException
      */
-    public function withMessage(string $msg = null): self
+    public function withMessage(?string $msg = null): self
     {
         Validator::assertIsType('message', $msg, [Type::STRING,
-                                                  Type::NULL,
+            Type::NULL,
         ]);
         $this->message = $msg;
 
@@ -242,9 +256,11 @@ class ResponseBuilder extends ResponseBuilderBase
     }
 
     /**
-     * @param array|null $placeholders
+     * @param array<string, mixed>|null $placeholders
+     *
+     * @return ResponseBuilder
      */
-    public function withPlaceholders(array $placeholders = null): self
+    public function withPlaceholders(?array $placeholders = null): self
     {
         $this->placeholders = $placeholders;
 
@@ -252,9 +268,11 @@ class ResponseBuilder extends ResponseBuilderBase
     }
 
     /**
-     * @param array|null $http_headers
+     * @param array<string, mixed>|null $http_headers
+     *
+     * @return ResponseBuilder
      */
-    public function withHttpHeaders(array $http_headers = null): self
+    public function withHttpHeaders(?array $http_headers = null): self
     {
         $this->http_headers = $http_headers ?? [];
 
@@ -287,16 +305,16 @@ class ResponseBuilder extends ResponseBuilderBase
             Validator::assertOkHttpCode($http_code);
 
             $result = $this->make($this->success, $api_code,
-                $msg_or_api_code, $this->data, $http_code,
-                $this->placeholders, $http_headers, $this->json_opts);
+                                  $msg_or_api_code, $this->data, $http_code,
+                                  $this->placeholders, $http_headers, $this->json_opts);
         } else {
             $http_code = $this->http_code ?? RB::DEFAULT_HTTP_CODE_ERROR;
 
             Validator::assertErrorHttpCode($http_code);
 
             $result = $this->make(false, $api_code, $msg_or_api_code,
-                $this->data, $http_code, $this->placeholders,
-                $this->http_headers, $this->json_opts, $this->debug_data);
+                                  $this->data, $http_code, $this->placeholders,
+                                  $this->http_headers, $this->json_opts, $this->debug_data);
         }
 
         return $result;
@@ -311,13 +329,13 @@ class ResponseBuilder extends ResponseBuilderBase
      * @param integer|null   $http_code          HTTP code for the HttpResponse or @null for either
      *                                           DEFAULT_HTTP_CODE_OK or DEFAULT_HTTP_CODE_ERROR
      *                                           depending on the $success.
-     * @param array|null     $placeholders       Placeholders passed to Lang::get() for message
+     * @param array<string, mixed>|null     $placeholders       Placeholders passed to Lang::get() for message
      *                                           placeholders substitution or @null if none.
-     * @param array|null     $http_headers       Optional HTTP headers to be returned in the response.
+     * @param array<string, mixed>|null     $http_headers       Optional HTTP headers to be returned in the response.
      * @param integer|null   $json_opts          See http://php.net/manual/en/function.json-encode.php
      *                                           for supported options or pass @null to use value from
      *                                           your config (or defaults).
-     * @param array|null     $debug_data         Optional debug data array to be added to returned JSON.
+     * @param array<string, mixed>|null     $debug_data         Optional debug data array to be added to returned JSON.
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\ConfigurationNotFoundException
@@ -329,10 +347,15 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @noinspection PhpTooManyParametersInspection
      */
-    protected function make(bool  $success, int $api_code, $msg_or_api_code, $data = null,
-                            int   $http_code = null, array $placeholders = null,
-                            array $http_headers = null,
-                            int   $json_opts = null, array $debug_data = null): HttpResponse
+    protected function make(bool       $success,
+                            int        $api_code,
+                            string|int $msg_or_api_code,
+                            mixed      $data = null,
+                            ?int       $http_code = null,
+                            ?array     $placeholders = null,
+                            ?array     $http_headers = null,
+                            ?int       $json_opts = null,
+                            ?array     $debug_data = null): HttpResponse
     {
         $http_headers = $http_headers ?? [];
         $http_code = $http_code ?? ($success ? RB::DEFAULT_HTTP_CODE_OK : RB::DEFAULT_HTTP_CODE_ERROR);
@@ -362,10 +385,12 @@ class ResponseBuilder extends ResponseBuilderBase
      * @param boolean        $success         TRUE if response reports successful operation, FALSE otherwise.
      * @param integer        $api_code        Your API code to be returned with the response object.
      * @param string|integer $msg_or_api_code Message string or valid API code to get message for.
-     * @param array|null     $placeholders    Placeholders passed to Lang::get() for message placeholders
+     * @param array<string, mixed>|null     $placeholders    Placeholders passed to Lang::get() for message placeholders
      *                                        substitution or @null if none.
      * @param mixed|null     $data            API response data if any
-     * @param array|null     $debug_data      optional debug data array to be added to returned JSON.
+     * @param array<string, mixed>|null     $debug_data      optional debug data array to be added to returned JSON.
+     *
+     * @return array<string, mixed>
      *
      * @throws Ex\ArrayWithMixedKeysException
      * @throws Ex\ConfigurationNotFoundException
@@ -412,10 +437,10 @@ class ResponseBuilder extends ResponseBuilderBase
 
         if ($debug_data !== null) {
             $debug_key = Config::get(RB::CONF_KEY_DEBUG_DEBUG_KEY, RB::KEY_DEBUG);
-            $response[ $debug_key ] = $debug_data;
+            $response[$debug_key] = $debug_data;
         }
 
-        return $response;
+        return $response;  // @phpstan-ignore-line
     }
 
     /**
@@ -425,7 +450,7 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @param boolean    $success      TRUE if response reports successful operation, FALSE otherwise.
      * @param integer    $api_code     Your API code to be returned with the response object.
-     * @param array|null $placeholders Placeholders passed to Lang::get() for message placeholders
+     * @param array<string, mixed>|null $placeholders Placeholders passed to Lang::get() for message placeholders
      *                                 substitution or NULL if none.
      *
      * @throws Ex\IncompatibleTypeException
@@ -433,8 +458,9 @@ class ResponseBuilder extends ResponseBuilderBase
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
      */
-    protected function getMessageForApiCode(bool  $success, int $api_code,
-                                            array $placeholders = null): string
+    protected function getMessageForApiCode(bool   $success,
+                                            int    $api_code,
+                                            ?array $placeholders = null): string
     {
         // We got integer value here not a message string, so we need to check if we have the mapping for
         // this string already configured.

@@ -141,7 +141,7 @@ final class Validator
      *
      * @param string $var_name      Label or name of the variable to be used in exception message (if thrown).
      * @param mixed  $value         Variable to be asserted.
-     * @param array  $allowed_types Array of allowed types for $value, i.e. [Type::INTEGER]
+     * @param array<string>  $allowed_types Array of allowed types for $value, i.e. [Type::INTEGER]
      * @param string $ex_class      Name of exception class (which implements InvalidTypeExceptionContract) to
      *                              be used when assertion fails. In that case object of that class will be
      *                              instantiated and thrown.
@@ -154,6 +154,13 @@ final class Validator
     {
         if (empty($allowed_types)) {
             throw new \InvalidArgumentException('The $allowed_types array cannot be empty.');
+        }
+
+        // Ensure the provided exception class implements the required contract
+        if (!is_subclass_of($ex_class, InvalidTypeExceptionContract::class)) {
+            throw new \InvalidArgumentException(
+                sprintf('Exception class "%s" must implement "%s".', $ex_class, InvalidTypeExceptionContract::class)
+            );
         }
 
         // Type::EXISTING_CLASS is artificial type, so we need separate logic to handle it.
@@ -173,13 +180,14 @@ final class Validator
 
         if (!empty($tmp)) {
             if (!\in_array($value_type, $allowed_types, true)) {
-                // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
-                /** @var \Exception $ex_class */
+                /** @var class-string<InvalidTypeExceptionContract> $ex_class */
                 throw new $ex_class($var_name, $value_type, $allowed_types);
             }
         } else {
-            // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
-            throw new Ex\ClassNotFound($var_name, $value_type, $allowed_types);
+            // This case implies only Type::EXISTING_CLASS was allowed, but the class check failed earlier.
+            // We still need to throw an exception that adheres to the contract.
+            /** @var class-string<InvalidTypeExceptionContract> $ex_class */
+            throw new $ex_class($var_name, $value_type, $allowed_types);
         }
     }
 
@@ -237,7 +245,7 @@ final class Validator
      * be turned into JSON object or array without user specified keys (['bar']) which we would return as JSON
      * array. But you can't mix these two as the final JSON would not produce predictable results.
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws Ex\ArrayWithMixedKeysException
      */

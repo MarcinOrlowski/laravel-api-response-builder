@@ -2,7 +2,7 @@
   "name": "marcin-orlowski/laravel-api-response-builder",
   "description": "Helps building nice, normalized and easy to consume Laravel REST API.",
   "homepage": "https://github.com/MarcinOrlowski/laravel-api-response-builder",
-  "version": "12.0.1",
+  "version": "12.0.2",
   "keywords": [
     "laravel",
     "laravel10",
@@ -63,7 +63,7 @@
     ],
     "lint": [
       "Composer\\Config::disableProcessTimeout",
-      "vendor/bin/phpstan analyse --no-progress --no-interaction -c phpstan.neon"
+      "vendor/bin/phpstan analyse --no-progress --no-interaction src/"
     ],
     "mdlint": [
       "Composer\\Config::disableProcessTimeout",

@@ -23,10 +23,10 @@ use MarcinOrlowski\ResponseBuilder\Contracts\ConverterContract;
  */
 class Converter
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     protected $classes = [];
 
-    /** @var array */
+    /** @var array<string, mixed> */
     protected $primitives = [];
 
     /** @var bool */
@@ -42,8 +42,13 @@ class Converter
      */
     public function __construct()
     {
-        $this->classes = static::getClassesMapping();
-        $this->primitives = static::getPrimitivesMapping();
+        /** @var array<string, mixed> $classes */
+        $classes = static::getClassesMapping();
+        /** @var array<string, mixed> $primitives */
+        $primitives = static::getPrimitivesMapping();
+
+        $this->classes = $classes;
+        $this->primitives = $primitives;
 
         $this->debug_enabled = (bool)Config::get(RB::CONF_KEY_DEBUG_CONVERTER_DEBUG_ENABLED, false);
     }
@@ -53,8 +58,9 @@ class Converter
      * Throws \RuntimeException if there's no config "classes" mapping entry for this object configured.
      * Throws \InvalidArgumentException if No data conversion mapping configured for given class.
      *
-     * @param boolean|string|double|array|int $data Primitive to get config for.
+     * @param boolean|string|double|array<string, mixed>|int $data Primitive to get config for.
      *
+     * @return array<string, mixed>
      * @throws Ex\ConfigurationNotFoundException
      */
     protected function getPrimitiveMappingConfigOrThrow($data): array
@@ -67,8 +73,12 @@ class Converter
                 sprintf('No data conversion mapping configured for "%s" primitive.', $type));
         }
 
+        /** @var array<string, mixed> $result */
         if ($this->debug_enabled) {
-            Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node with key '{$result[RB::KEY_KEY]}'.");
+            $keyValue = $result[RB::KEY_KEY] ?? '';
+            /** @var string|int|float|bool|null $keyValue */
+            $key = \is_string($keyValue) ? $keyValue : \strval($keyValue);
+            Log::debug(__CLASS__ . ": Converting primitive type of '{$type}' to data node with key '{$key}'.");
         }
 
         return $result;
@@ -78,6 +88,7 @@ class Converter
      * Returns "converter/map" mapping configured for given $data object class or throws exception if not found.
      *
      * @param object $data Object to get config for.
+     * @return array<string, mixed>
      *
      * @throws Ex\ConfigurationNotFoundException
      */
@@ -108,8 +119,12 @@ class Converter
                 sprintf('No data conversion mapping configured for "%s" class.', $cls));
         }
 
+        /** @var array<string, mixed> $result */
         if ($this->debug_enabled) {
-            Log::debug(__CLASS__ . ": Converting {$cls} using {$result[RB::KEY_HANDLER]} because: {$debug_result}.");
+            $handlerValue = $result[RB::KEY_HANDLER] ?? '';
+            /** @var string|int|float|bool|null $handlerValue */
+            $handler = \is_string($handlerValue) ? $handlerValue : \strval($handlerValue);
+            Log::debug(__CLASS__ . ": Converting {$cls} using {$handler} because: {$debug_result}.");
         }
 
         return $result;
@@ -119,6 +134,7 @@ class Converter
      * Main entry for data conversion
      *
      * @param mixed|null $data
+     * @return array<string, mixed>|null
      *
      * @throws Ex\ConfigurationNotFoundException
      * @throws Ex\ArrayWithMixedKeysException
@@ -141,27 +157,26 @@ class Converter
             Type::STRING,
         ]);
 
-        if ($result === null && \is_object($data)) {
+        if (\is_object($data)) {
             $cfg = $this->getClassMappingConfigOrThrow($data);
             $worker = new $cfg[ RB::KEY_HANDLER ]();
             /** @var ConverterContract $worker */
             $result = $worker->convert($data, $cfg);
             $result = $cfg[ RB::KEY_KEY ] === null ? $result : [$cfg[ RB::KEY_KEY ] => $result];
-        }
+        } elseif (\is_array($data)) {
+            /** @var array<string, mixed> $arrayData */
+            $arrayData = $data;
+            $cfg = $this->getPrimitiveMappingConfigOrThrow($arrayData);
 
-        if ($result === null && \is_array($data)) {
-            $cfg = $this->getPrimitiveMappingConfigOrThrow($data);
-
-            $result = $this->convertArray($data);
-            if (!Util::isArrayWithNonNumericKeys($data)) {
+            $result = $this->convertArray($arrayData);
+            if (!Util::isArrayWithNonNumericKeys($arrayData)) {
                 $result = [$cfg[ RB::KEY_KEY ] => $result];
             }
-        }
-
-        if (\is_bool($data) || \is_float($data) || \is_int($data) || \is_string($data)) {
+        } elseif (\is_bool($data) || \is_float($data) || \is_int($data) || \is_string($data)) {
             $result = [$this->getPrimitiveMappingConfigOrThrow($data)[ RB::KEY_KEY ] => $data];
         }
 
+        /** @var array<string, mixed>|null $result */
         return $result;
     }
 
@@ -169,7 +184,8 @@ class Converter
      * Recursively walks $data array and converts all known objects if found. Note
      * $data array is passed by reference so source $data array may be modified.
      *
-     * @param array $data array to recursively convert known elements of
+     * @param array<string, mixed> $data array to recursively convert known elements of
+     * @return array<string, mixed>
      *
      * @throws Ex\ConfigurationNotFoundException
      * @throws Ex\ArrayWithMixedKeysException
@@ -180,7 +196,9 @@ class Converter
 
         foreach ($data as $key => $val) {
             if (\is_array($val)) {
-                $data[ $key ] = $this->convertArray($val);
+                /** @var array<string, mixed> $arrayVal */
+                $arrayVal = $val;
+                $data[ $key ] = $this->convertArray($arrayVal);
             } elseif (\is_object($val)) {
                 $cfg = $this->getClassMappingConfigOrThrow($val);
                 $worker = new $cfg[ RB::KEY_HANDLER ]();
@@ -196,6 +214,8 @@ class Converter
     /**
      * Reads and validates "converter/map" config mapping. Returns Classes mapping as specified in
      * configuration or empty array if configuration found.
+     *
+     * @return array<string, mixed>
      *
      * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
      * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
@@ -232,12 +252,15 @@ class Converter
             }
         }
 
+        /** @var array<string, mixed> $classes */
         return $classes;
     }
 
     /**
      * Reads and validates "converter/primitives" config mapping. Returns primitives mapping config
      * as specified in configuration or empty array if configuration found.
+     *
+     * @return array<string, mixed>
      *
      * @throws Ex\InvalidConfigurationException if whole config mapping is technically invalid (i.e. not an array etc).
      * @throws Ex\InvalidConfigurationElementException if config for specific class is technically invalid (i.e. not an array etc).
@@ -271,6 +294,7 @@ class Converter
             }
         }
 
+        /** @var array<string, mixed> $primitives */
         return $primitives;
     }
 

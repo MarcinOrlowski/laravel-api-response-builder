@@ -255,4 +255,48 @@ class ValidatorTest extends TestCase
         }
     }
 
+    /**
+     * Tests if assertIsType() throws InvalidArgumentException when provided
+     * exception class does not implement InvalidTypeExceptionContract.
+     */
+    public function testAssertIsTypeWithInvalidExceptionClass(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/must implement/');
+
+        // \stdClass does not implement the required contract
+        Validator::assertIsType('var_name', 'string', [Type::INTEGER], \stdClass::class);
+    }
+
+    /**
+     * Tests if assertIsType() throws the specified custom exception (that implements the contract)
+     * when the type check fails.
+     */
+    public function testAssertIsTypeWithValidCustomExceptionOnFailure(): void
+    {
+        // Use a valid exception class from the project that implements the contract
+        $customExceptionClass = Ex\NotIntegerException::class;
+
+        $this->expectException($customExceptionClass);
+
+        Validator::assertIsType('var_name', 'string', [Type::INTEGER], $customExceptionClass);
+    }
+
+    /**
+     * Tests if assertIsType() passes silently when a valid custom exception class (that implements the contract)
+     * is provided and the type check succeeds.
+     */
+    public function testAssertIsTypeWithValidCustomExceptionOnSuccess(): void
+    {
+        // Use a valid exception class from the project that implements the contract
+        $customExceptionClass = Ex\NotIntegerException::class;
+
+        Validator::assertIsType('var_name', 123, [Type::INTEGER], $customExceptionClass);
+
+        // If no exception is thrown, the test passes.
+        $this->assertTrue(true);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
 } // end of class

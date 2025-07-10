@@ -60,9 +60,12 @@ class ExceptionHandlerHelper
                 $cfg = static::getExceptionHandlerConfig()[ RB::KEY_DEFAULT ];
             }
 
+            /** @var array<string, mixed> $cfg */
             $handler = new $cfg[ RB::KEY_HANDLER ]();
             /**  @var ExceptionHandlerContract $handler */
-            $handler_result = $handler->handle($cfg[ RB::KEY_CONFIG ], $ex);
+            /** @var array<string, mixed> $config */
+            $config = $cfg[ RB::KEY_CONFIG ];
+            $handler_result = $handler->handle($config, $ex);
             if ($handler_result !== null) {
                 $result = static::processException($ex, $handler_result);
             } else {
@@ -78,7 +81,7 @@ class ExceptionHandlerHelper
      * Handles given throwable and produces valid HTTP response object.
      *
      * @param \Throwable $ex                 Throwable to be handled.
-     * @param array      $ex_cfg             ExceptionHandler's config excerpt related to $ex exception type.
+     * @param array<string, mixed>      $ex_cfg             ExceptionHandler's config excerpt related to $ex exception type.
      * @param int        $fallback_http_code HTTP code to be assigned to produced $ex related response in
      *                                       case configuration array lacks own `http_code` value. Default
      *                                       HttpResponse::HTTP_INTERNAL_SERVER_ERROR
@@ -99,13 +102,18 @@ class ExceptionHandlerHelper
     protected static function processException(\Throwable $ex, array $ex_cfg,
                                                int        $fallback_http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR)
     {
+        /** @var int $api_code */
         $api_code = $ex_cfg['api_code'];
+        /** @var int $http_code */
         $http_code = $ex_cfg['http_code'] ?? $fallback_http_code;
+        /** @var string|null $msg_key */
         $msg_key = $ex_cfg['msg_key'] ?? null;
+        /** @var bool $msg_enforce */
         $msg_enforce = $ex_cfg['msg_enforce'] ?? false;
 
         // No message key, let's get exception message and if there's nothing useful, fallback to built-in one.
         $msg = $ex->getMessage();
+        /** @var array<string, mixed> $placeholders */
         $placeholders = [
             'api_code' => $api_code,
             'message'  => ($msg !== '') ? $msg : '???',
@@ -140,7 +148,7 @@ class ExceptionHandlerHelper
      *
      * @param \Throwable $ex
      * @param int        $http_code
-     * @param array      $placeholders
+     * @param array<string, mixed>      $placeholders
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\IncompatibleTypeException
@@ -155,10 +163,7 @@ class ExceptionHandlerHelper
             $error_message = Lang::get("response-builder::builder.http_{$http_code}", $placeholders);
         } else {
             // Still got nothing? Fall back to built-in generic message for this type of exception.
-            $http_ex_cls = HttpException::class;
-            /** @var object $ex */
-            $key = BaseApiCodes::getCodeMessageKey($ex instanceof $http_ex_cls
-                ? BaseApiCodes::EX_HTTP_EXCEPTION() : BaseApiCodes::NO_ERROR_MESSAGE());
+            $key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::NO_ERROR_MESSAGE());
             // Default strings are expected to always be available.
             /** @var string $key */
             $error_message = Lang::get($key, $placeholders);
@@ -195,10 +200,15 @@ class ExceptionHandlerHelper
      */
     protected function unauthenticated($request, AuthException $exception): HttpResponse
     {
-        $cfg = static::getExceptionHandlerConfig();
+        $fullCfg = static::getExceptionHandlerConfig();
 
         // This config entry is guaranted to exist. Enforced by tests.
-        $cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ][ HttpResponse::HTTP_UNAUTHORIZED ];
+        /** @var array<string, mixed> $handlerCfg */
+        $handlerCfg = $fullCfg[ HttpException::class ];
+        /** @var array<string, mixed> $configSection */
+        $configSection = $handlerCfg[ RB::KEY_CONFIG ];
+        /** @var array<string, mixed> $cfg */
+        $cfg = $configSection[ HttpResponse::HTTP_UNAUTHORIZED ] ?? [];
 
         /**
          * NOTE: no typehint due to compatibility with Laravel signature.
@@ -264,17 +274,19 @@ class ExceptionHandlerHelper
             $data = [RB::KEY_MESSAGES => $ex->validator->errors()->messages()];
         }
 
+        /** @var non-empty-array<array{class: class-string, file: string, line: int}>|null $debug_data */
         return RB::asError($api_code)
             ->withMessage($error_message)
             ->withHttpCode($http_code)
             ->withData($data)
-            ->withDebugData($debug_data)
+            ->withDebugData($debug_data)  // @phpstan-ignore-line
             ->build();
     }
 
     /**
      * Returns ExceptionHandlerHelper configration array with user configuration merged into built-in defaults.
      *
+     * @return array<string, mixed>
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\InvalidTypeException
      * @throws Ex\MissingConfigurationKeyException
@@ -316,12 +328,13 @@ class ExceptionHandlerHelper
             ],
         ];
 
-        /** @var array $user_handler_config */
+        /** @var array<string, mixed> $user_handler_config */
         $user_handler_config = \Config::get(RB::CONF_KEY_EXCEPTION_HANDLER, []);
         $cfg = Util::mergeConfig($default_config, $user_handler_config );
 
         Util::sortArrayByPri($cfg);
 
+        /** @var array<string, mixed> $cfg */
         return $cfg;
     }
 
@@ -330,6 +343,7 @@ class ExceptionHandlerHelper
      * or @null if no exception handler can be determined.
      *
      * @param \Throwable $ex Exception to handle
+     * @return array<string, mixed>|null
      *
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\InvalidTypeException
@@ -358,6 +372,7 @@ class ExceptionHandlerHelper
             }
         }
 
+        /** @var array<string, mixed>|null $result */
         return $result;
     }
 
