@@ -29,9 +29,12 @@ class ResponseBuilder extends ResponseBuilderBase
     protected int     $api_code;
     protected ?int    $http_code    = null;
     protected ?string $message      = null;
+    /** @var array<string, mixed>|null */
     protected ?array  $placeholders = null;
     protected ?int    $json_opts    = null;
+    /** @var array<string, mixed>|null */
     protected ?array  $debug_data   = null;
+    /** @var array<string, mixed> */
     protected array   $http_headers = [];
 
     /** @var mixed|null $data */
@@ -61,7 +64,7 @@ class ResponseBuilder extends ResponseBuilderBase
      *                                   or @null if there's no to be returned.
      * @param integer|null $api_code     API code to be returned or @null to use value of
      *                                   BaseApiCodes::OK().
-     * @param array|null   $placeholders Placeholders passed to Lang::get() for message placeholders
+     * @param array<string, mixed>|null   $placeholders Placeholders passed to Lang::get() for message placeholders
      *                                   substitution or @null if none.
      * @param integer|null $http_code    HTTP code to be used for HttpResponse sent or @null
      *                                   for default DEFAULT_HTTP_CODE_OK.
@@ -95,9 +98,9 @@ class ResponseBuilder extends ResponseBuilderBase
      * message uses placeholders as well as return data payload
      *
      * @param integer           $api_code      Your API code to be returned with the response object.
-     * @param array|null        $placeholders  Placeholders passed to Lang::get() for message
+     * @param array<string, mixed>|null        $placeholders  Placeholders passed to Lang::get() for message
      *                                         placeholders substitution or @null if none.
-     * @param object|array|null $data          Array of primitives and supported objects to be
+     * @param object|array<string, mixed>|null $data          Array of primitives and supported objects to be
      *                                         returned in 'data' node of the JSON response, single
      *                                         supported object or @null if there's no to be returned.
      * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
@@ -219,7 +222,7 @@ class ResponseBuilder extends ResponseBuilderBase
     }
 
     /**
-     * @param array|null $debug_data
+     * @param array<string, mixed>|null $debug_data
      *
      * @return ResponseBuilder
      * @throws ClassNotFound
@@ -253,7 +256,7 @@ class ResponseBuilder extends ResponseBuilderBase
     }
 
     /**
-     * @param array|null $placeholders
+     * @param array<string, mixed>|null $placeholders
      *
      * @return ResponseBuilder
      */
@@ -265,7 +268,7 @@ class ResponseBuilder extends ResponseBuilderBase
     }
 
     /**
-     * @param array|null $http_headers
+     * @param array<string, mixed>|null $http_headers
      *
      * @return ResponseBuilder
      */
@@ -326,13 +329,13 @@ class ResponseBuilder extends ResponseBuilderBase
      * @param integer|null   $http_code          HTTP code for the HttpResponse or @null for either
      *                                           DEFAULT_HTTP_CODE_OK or DEFAULT_HTTP_CODE_ERROR
      *                                           depending on the $success.
-     * @param array|null     $placeholders       Placeholders passed to Lang::get() for message
+     * @param array<string, mixed>|null     $placeholders       Placeholders passed to Lang::get() for message
      *                                           placeholders substitution or @null if none.
-     * @param array|null     $http_headers       Optional HTTP headers to be returned in the response.
+     * @param array<string, mixed>|null     $http_headers       Optional HTTP headers to be returned in the response.
      * @param integer|null   $json_opts          See http://php.net/manual/en/function.json-encode.php
      *                                           for supported options or pass @null to use value from
      *                                           your config (or defaults).
-     * @param array|null     $debug_data         Optional debug data array to be added to returned JSON.
+     * @param array<string, mixed>|null     $debug_data         Optional debug data array to be added to returned JSON.
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\ConfigurationNotFoundException
@@ -382,10 +385,12 @@ class ResponseBuilder extends ResponseBuilderBase
      * @param boolean        $success         TRUE if response reports successful operation, FALSE otherwise.
      * @param integer        $api_code        Your API code to be returned with the response object.
      * @param string|integer $msg_or_api_code Message string or valid API code to get message for.
-     * @param array|null     $placeholders    Placeholders passed to Lang::get() for message placeholders
+     * @param array<string, mixed>|null     $placeholders    Placeholders passed to Lang::get() for message placeholders
      *                                        substitution or @null if none.
      * @param mixed|null     $data            API response data if any
-     * @param array|null     $debug_data      optional debug data array to be added to returned JSON.
+     * @param array<string, mixed>|null     $debug_data      optional debug data array to be added to returned JSON.
+     *
+     * @return array<string, mixed>
      *
      * @throws Ex\ArrayWithMixedKeysException
      * @throws Ex\ConfigurationNotFoundException
@@ -445,7 +450,7 @@ class ResponseBuilder extends ResponseBuilderBase
      *
      * @param boolean    $success      TRUE if response reports successful operation, FALSE otherwise.
      * @param integer    $api_code     Your API code to be returned with the response object.
-     * @param array|null $placeholders Placeholders passed to Lang::get() for message placeholders
+     * @param array<string, mixed>|null $placeholders Placeholders passed to Lang::get() for message placeholders
      *                                 substitution or NULL if none.
      *
      * @throws Ex\IncompatibleTypeException
