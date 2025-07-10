@@ -55,7 +55,9 @@ class DefaultConfigTest extends TestCase
         $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
         /** @var array<string, mixed> $cfg */
-        $key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $arrayable_config */
+        $arrayable_config = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ];
+        $key = $arrayable_config[ RB::KEY_KEY ];
 
         $this->assertIsArray($result);
         /** @var array<string, mixed> $result */
@@ -95,11 +97,14 @@ class DefaultConfigTest extends TestCase
             $this->assertNotEmpty($cfg);
             $this->assertIsArray($cfg);
 
-            $key = $cfg[ \JsonSerializable::class ][ RB::KEY_KEY ];
+            /** @var array<string, mixed> $json_config */
+            $json_config = $cfg[ \JsonSerializable::class ];
+            $key = $json_config[ RB::KEY_KEY ];
 
             $this->assertIsArray($result);
             /** @var array<string, mixed> $result */
             $this->assertArrayHasKey($key, $result);
+            /** @var array<string, mixed> $result */
             $result = $result[ $key ];
             $this->assertArrayHasKey($key, $result);
             $this->assertEquals($obj_val, $result[ $key ]);
