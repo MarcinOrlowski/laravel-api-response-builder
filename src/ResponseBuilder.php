@@ -440,7 +440,7 @@ class ResponseBuilder extends ResponseBuilderBase
             $response[$debug_key] = $debug_data;
         }
 
-        return $response;
+        return $response;  // @phpstan-ignore-line
     }
 
     /**

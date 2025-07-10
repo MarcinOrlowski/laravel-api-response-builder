@@ -63,7 +63,7 @@
     ],
     "lint": [
       "Composer\\Config::disableProcessTimeout",
-      "vendor/bin/phpstan analyse --no-progress --no-interaction -c phpstan.neon"
+      "vendor/bin/phpstan analyse --no-progress --no-interaction"
     ],
     "mdlint": [
       "Composer\\Config::disableProcessTimeout",

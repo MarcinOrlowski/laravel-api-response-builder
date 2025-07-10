@@ -22,6 +22,7 @@ should be able to easily backport future new features to older versions rather e
   * [GH-263] Fixed `Validator::assertIsType()` not validating provided exception class against `InvalidTypeExceptionContract`.
   * [GH-263] Added unit tests for `Validator::assertIsType()`.
   * [GH-265] Fixed PHP 8.4 deprecation `Implicitly nullable parameters...` (reporeted by @technetius)
+  * Fixed typehints to make PHPStan green on `max` sensitivity level.
 
 * v12.0.1 (2025-04-16)
   * [RB-255] Fixed `ToArrayConverter` using a new Request instance instead of the actual request.

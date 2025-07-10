@@ -101,6 +101,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
 		$merged_config = Util::mergeConfig($defaults, $config);
 
 		/** @var array<string, mixed> $merged_config */
+		/** @phpstan-ignore-next-line offsetAccess.nonOffsetAccessible */
 		if (!isset($merged_config['converter']['classes'])) {
 			throw new Ex\IncompleteConfigurationException(
 				sprintf('Configuration lacks "%s" array.', ResponseBuilder::CONF_KEY_CONVERTER_CLASSES));

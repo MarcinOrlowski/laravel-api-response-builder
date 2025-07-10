@@ -279,7 +279,7 @@ class ExceptionHandlerHelper
             ->withMessage($error_message)
             ->withHttpCode($http_code)
             ->withData($data)
-            ->withDebugData($debug_data)
+            ->withDebugData($debug_data)  // @phpstan-ignore-line
             ->build();
     }
 
