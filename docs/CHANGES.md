@@ -18,7 +18,7 @@ should be able to easily backport future new features to older versions rather e
 
 ## CHANGE LOG ##
 
-* @dev
+* v12.0.2 (2025-07-10)
   * [GH-263] Fixed `Validator::assertIsType()` not validating provided exception class against `InvalidTypeExceptionContract`.
   * [GH-263] Added unit tests for `Validator::assertIsType()`.
   * [GH-265] Fixed PHP 8.4 deprecation `Implicitly nullable parameters...` (reporeted by @technetius)
