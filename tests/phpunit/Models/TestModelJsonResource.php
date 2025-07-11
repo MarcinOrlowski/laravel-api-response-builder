@@ -41,6 +41,8 @@ class TestModelJsonResource extends JsonResource
     /**
      * Converts model to array.
      *
+     * @return array<string, mixed>
+     *
      * @noinspection PhpUnusedParameterInspection
      *
      * NOTE: No typehint as signature must match JsonResource::toArray()

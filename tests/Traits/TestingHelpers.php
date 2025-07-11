@@ -40,7 +40,7 @@ trait TestingHelpers
     /** @var int */
     protected $random_api_code;
 
-    /** @var array */
+    /** @var array<int, string> */
     protected $error_message_map = [];
 
     /**
@@ -85,12 +85,14 @@ trait TestingHelpers
 
         // AND corresponding mapped message mapping
         $map = Lockpick::call(new BaseApiCodes(), 'getBaseMap');
-        /** @var array $map */
+        /** @var array<int, string> $map */
         if (empty($map)) {
             throw new \RuntimeException('getBaseMap() returned empty value.');
         }
         $idx = \random_int(1, \count($map));
-        $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
+        $keys = \array_keys($map);
+        $key = $keys[ $idx - 1 ];
+        $this->random_api_code_message_key = $map[ $key ];
         $this->random_api_code_message = $this->langGet($this->random_api_code_message_key,
             ['api_code' => $this->random_api_code,]);
 
@@ -122,8 +124,8 @@ trait TestingHelpers
      * do not want to happen, not handle separately after each invocation, so this wrapper deals with it for
      * us.
      *
-     * @param string     $key     String key as passed to Lang::get()
-     * @param array|null $replace Optional replacement array as passed to Lang::get()
+     * @param string                  $key     String key as passed to Lang::get()
+     * @param array<string, mixed>|null $replace Optional replacement array as passed to Lang::get()
      */
     public function langGet(string $key, ?array $replace = null): string
     {
@@ -157,7 +159,7 @@ trait TestingHelpers
                                              ?string $expected_message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
-            /** @var BaseApiCodes $api_codes */
+            /** @var string $api_codes */
             $api_codes = $this->getApiCodesClassName();
             /** @var int $expected_api_code_offset */
             $expected_api_code_offset = Lockpick::getConstant($api_codes, 'OK_OFFSET');
@@ -201,7 +203,7 @@ trait TestingHelpers
                                            ?string $message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
-            /** @var BaseApiCodes $api_codes_class_name */
+            /** @var string $api_codes_class_name */
             $api_codes_class_name = $this->getApiCodesClassName();
             $expected_api_code_offset = $api_codes_class_name::NO_ERROR_MESSAGE();
         }
@@ -215,7 +217,12 @@ trait TestingHelpers
                 $expected_http_code, RB::ERROR_HTTP_CODE_MIN));
         }
 
-        $api = $this->getResponseObjectRaw($expected_api_code_offset, $expected_http_code, $message);
+        // Ensure we have a valid integer for API code
+        if (!is_int($expected_api_code_offset) && !is_numeric($expected_api_code_offset)) {
+            $this->fail("TEST: Invalid API code offset type: " . gettype($expected_api_code_offset));
+        }
+        $api_code = is_int($expected_api_code_offset) ? $expected_api_code_offset : (int)$expected_api_code_offset;
+        $api = $this->getResponseObjectRaw($api_code, $expected_http_code, $message);
 
         $this->assertEquals(false, $api->success());
 
@@ -245,7 +252,7 @@ trait TestingHelpers
 
         $this->assertEquals($expected_api_code, $api->getCode());
 
-        /** @var BaseApiCodes $api_codes_class_name */
+        /** @var string $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
 
         if ($expected_message === null) {
@@ -275,10 +282,16 @@ trait TestingHelpers
         $response_code = $response_json->code;
 
         if ($response_code !== $expected_code) {
+            // Safely handle response code conversion
+            if (!is_int($response_code) && !is_numeric($response_code)) {
+                $response_code_int = 0; // Default for invalid responses
+            } else {
+                $response_code_int = is_int($response_code) ? $response_code : (int)$response_code;
+            }
             $msg = \sprintf('Status code mismatch. Expected: %s, found %s. Message: "%s"',
                 $this->resolveConstantFromCode($expected_code),
-                $this->resolveConstantFromCode($response_code),
-                $response_json->message);
+                $this->resolveConstantFromCode($response_code_int),
+                is_string($response_json->message) ? $response_json->message : var_export($response_json->message, true));
 
             $this->fail($msg);
         }
@@ -302,6 +315,11 @@ trait TestingHelpers
      * @throws Ex\MissingConfigurationKeyException
      *
      * @noinspection PhpTooManyParametersInspection
+     */
+    /**
+     * @param array<string, mixed>|null $data
+     * @param array<string, mixed>|null $headers
+     * @param array<string, mixed>|null $debug_data
      */
     protected function callMakeMethod(bool       $success,
                                       int        $api_code_offset,
@@ -342,9 +360,12 @@ trait TestingHelpers
      */
     protected function resolveConstantFromCode(int $api_code_offset)
     {
-        /** @var \MarcinOrlowski\ResponseBuilder\BaseApiCodes $api_codes_class_name */
+        /** @var string $api_codes_class_name */
         $api_codes_class_name = $this->getApiCodesClassName();
         $const = $api_codes_class_name::getApiCodeConstants();
+        if (!is_array($const)) {
+            return "??? ({$api_code_offset})";
+        }
         $name = null;
         foreach ($const as $const_name => $const_value) {
             if (\is_int($const_value) && ($const_value === $api_code_offset)) {

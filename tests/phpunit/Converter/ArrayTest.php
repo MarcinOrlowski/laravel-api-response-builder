@@ -64,24 +64,31 @@ class ArrayTest extends TestCase
         // WHEN this object is returned
         $converted = (new Converter())->convert($data);
 
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
         ExtraAsserts::assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
-        $key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $array_config */
+        $array_config = $cfg[ Type::ARRAY ];
+        $key = $array_config[ RB::KEY_KEY ];
         /** @var string $key */
 
         ExtraAsserts::assertIsArray($converted);
-        /** @var array $converted */
+        /** @var array<string, mixed> $converted */
         $this->assertCount(1, $converted);
         $this->assertArrayHasKey($key, $converted);
         $converted = $converted[ $key ];
+        /** @var array<int, mixed> $converted */
         $this->assertCount(\count($data), $converted);
 
         $this->assertCount(\count($data), $converted);
 
-        $this->assertValidConvertedTestClass($model_1, $converted[0]);
-        $this->assertValidConvertedTestClass($model_2, $converted[1]);
+        /** @var array<string, mixed> $item0 */
+        $item0 = $converted[0];
+        $this->assertValidConvertedTestClass($model_1, $item0);
+        /** @var array<string, mixed> $item1 */
+        $item1 = $converted[1];
+        $this->assertValidConvertedTestClass($model_2, $item1);
         $this->assertIsNotBool($converted[2]);
         $this->assertNull($converted[2]);
     }
@@ -118,29 +125,38 @@ class ArrayTest extends TestCase
         // WHEN this object is returned
         $converted = (new Converter())->convert($data);
 
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
         ExtraAsserts::assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
-        $key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $array_config */
+        $array_config = $cfg[ Type::ARRAY ];
+        $key = $array_config[ RB::KEY_KEY ];
 
         ExtraAsserts::assertIsArray($converted);
-        /** @var array $converted */
+        /** @var array<string, mixed> $converted */
         $this->assertCount(1, $converted);
         /** @var string $key */
         $this->assertArrayHasKey($key, $converted);
         $converted = $converted[ $key ];
+        /** @var array<int, array<int, mixed>> $converted */
         $this->assertCount(\count($data), $converted);
 
         foreach ($converted as $row) {
             ExtraAsserts::assertIsArray($row);
-            $this->assertValidConvertedTestClass($model_1, $row[0]);
-            $this->assertValidConvertedTestClass($model_2, $row[1]);
+            /** @var array<string, mixed> $item0 */
+            $item0 = $row[0];
+            /** @var array<string, mixed> $item1 */
+            $item1 = $row[1];
+            $this->assertValidConvertedTestClass($model_1, $item0);
+            $this->assertValidConvertedTestClass($model_2, $item1);
         }
     }
 
     /**
      * Tests if exception is thrown for invalid mixed-key array
+     *
+     * @param array<int|string, mixed> $data
      */
     #[DataProvider('convertArrayOfKeyAndKeylessItemsProvider')]
     public function testConvertArrayOfKeyAndKeylessItems(array $data): void
@@ -165,6 +181,8 @@ class ArrayTest extends TestCase
 
     /**
      * Data provider for testConvertArrayOfKeyAndKeylessItems
+     *
+     * @return array<int, array<int, array<int|string, mixed>>>
      */
     public static function convertArrayOfKeyAndKeylessItemsProvider(): array
     {
@@ -230,18 +248,28 @@ class ArrayTest extends TestCase
         $converted = (new Converter())->convert($data);
 
         ExtraAsserts::assertIsArray($converted);
-        /** @var array $converted */
+        /** @var array<string, mixed> $converted */
         $this->assertCount(\count($data), $converted);
         $this->assertArrayHasKey($item3_key, $converted);
         $nested = $data[ $item3_key ];
         ExtraAsserts::assertIsArray($nested);
-        /** @var array $nested */
-        $this->assertCount(\count($nested), $converted[ $item3_key ]);
+        /** @var non-empty-array<string, TestModel> $nested */
+        /** @var array<string, mixed> $nested_converted */
+        $nested_converted = $converted[ $item3_key ];
+        $this->assertCount(\count($nested), $nested_converted);
 
-        $this->assertEquals($model_1->getVal(), $converted[ $item1_key ][ TestModel::FIELD_NAME ]);
-        $this->assertEquals($model_2->getVal(), $converted[ $item2_key ][ TestModel::FIELD_NAME ]);
-        $this->assertEquals($model_4->getVal(), $converted[ $item3_key ][ $item4_key ][ TestModel::FIELD_NAME ]);
-        $this->assertEquals($model_5->getVal(), $converted[ $item3_key ][ $item5_key ][ TestModel::FIELD_NAME ]);
+        /** @var array<string, mixed> $item1_data */
+        $item1_data = $converted[ $item1_key ];
+        $this->assertEquals($model_1->getVal(), $item1_data[ TestModel::FIELD_NAME ]);
+        /** @var array<string, mixed> $item2_data */
+        $item2_data = $converted[ $item2_key ];
+        $this->assertEquals($model_2->getVal(), $item2_data[ TestModel::FIELD_NAME ]);
+        /** @var array<string, mixed> $item4_data */
+        $item4_data = $nested_converted[ $item4_key ];
+        $this->assertEquals($model_4->getVal(), $item4_data[ TestModel::FIELD_NAME ]);
+        /** @var array<string, mixed> $item5_data */
+        $item5_data = $nested_converted[ $item5_key ];
+        $this->assertEquals($model_5->getVal(), $item5_data[ TestModel::FIELD_NAME ]);
     }
 
     /**
@@ -264,11 +292,13 @@ class ArrayTest extends TestCase
         $result = (new Converter())->convert($model_1);
 
         ExtraAsserts::assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $this->assertArrayHasKey($key, $result);
-        $this->assertCount(1, $result[ $key ]);
-        $this->assertArrayHasKey(TestModel::FIELD_NAME, $result[ $key ]);
-        $this->assertEquals($model_1->getVal(), $result[ $key ][ TestModel::FIELD_NAME ]);
+        /** @var array<string, mixed> $key_data */
+        $key_data = $result[ $key ];
+        $this->assertCount(1, $key_data);
+        $this->assertArrayHasKey(TestModel::FIELD_NAME, $key_data);
+        $this->assertEquals($model_1->getVal(), $key_data[ TestModel::FIELD_NAME ]);
     }
 
     /**
@@ -295,23 +325,30 @@ class ArrayTest extends TestCase
             ],
         ]);
 
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES) ?? [];
         ExtraAsserts::assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
-        $key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $array_config */
+        $array_config = $cfg[ Type::ARRAY ];
+        $key = $array_config[ RB::KEY_KEY ];
 
         $result = (new Converter())->convert($data);
         ExtraAsserts::assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $this->assertCount(1, $result);
-        $result = $result[ $key ];
-        $this->assertCount(\count($data), $result);
+        /** @var array<int, mixed> $result_data */
+        $result_data = $result[ $key ];
+        $this->assertCount(\count($data), $result_data);
 
-        $this->assertArrayHasKey(TestModel::FIELD_NAME, $result[0]);
-        $this->assertEquals($model_1->getVal(), $result[0][ TestModel::FIELD_NAME ]);
-        $this->assertArrayHasKey(TestModel::FIELD_NAME, $result[1]);
-        $this->assertEquals($model_2->getVal(), $result[1][ TestModel::FIELD_NAME ]);
+        /** @var array<string, mixed> $item0 */
+        $item0 = $result_data[0];
+        $this->assertArrayHasKey(TestModel::FIELD_NAME, $item0);
+        $this->assertEquals($model_1->getVal(), $item0[ TestModel::FIELD_NAME ]);
+        /** @var array<string, mixed> $item1 */
+        $item1 = $result_data[1];
+        $this->assertArrayHasKey(TestModel::FIELD_NAME, $item1);
+        $this->assertEquals($model_2->getVal(), $item1[ TestModel::FIELD_NAME ]);
     }
 
     /**
@@ -320,7 +357,7 @@ class ArrayTest extends TestCase
     public function testConvertWithOverridenDefaultConfig(): void
     {
         // GIVEN built-in converter config
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
         ExtraAsserts::assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
@@ -329,8 +366,11 @@ class ArrayTest extends TestCase
         $fake = new FakeConverter();
 
         $key = Generator::getRandomString();
-        $cfg[ Collection::class ][ RB::KEY_HANDLER ] = \get_class($fake);
-        $cfg[ Collection::class ][ RB::KEY_KEY ] = $key;
+        /** @var array<string, mixed> $collection_config */
+        $collection_config = $cfg[ Collection::class ];
+        $collection_config[ RB::KEY_HANDLER ] = \get_class($fake);
+        $collection_config[ RB::KEY_KEY ] = $key;
+        $cfg[ Collection::class ] = $collection_config;
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
         // WHEN converting the data, we expect FakeConverter to be used
@@ -342,12 +382,13 @@ class ArrayTest extends TestCase
         $result = (new Converter())->convert($data);
 
         ExtraAsserts::assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $this->assertArrayHasKey($key, $result);
-        $result = $result[ $key ];
-        $this->assertCount(1, $result);
-        $this->assertArrayHasKey($fake->key, $result);
-        $this->assertEquals($result[ $fake->key ], $fake->val);
+        /** @var array<string, mixed> $result_data */
+        $result_data = $result[ $key ];
+        $this->assertCount(1, $result_data);
+        $this->assertArrayHasKey($fake->key, $result_data);
+        $this->assertEquals($result_data[ $fake->key ], $fake->val);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -357,7 +398,7 @@ class ArrayTest extends TestCase
      * source object.
      *
      * @param TestModel $obj  Source object converted.
-     * @param array     $item Result of the conversion.
+     * @param array<string, mixed> $item Result of the conversion.
      */
     protected function assertValidConvertedTestClass(TestModel $obj, array $item): void
     {
