@@ -96,6 +96,7 @@ jobs:
       #   shell: bash
       #   run: composer lint
 
+      # https://github.com/marketplace/actions/phpstan-php-actions
       - name: "Running PHPStan..."
         uses: php-actions/phpstan@v3
         with:
