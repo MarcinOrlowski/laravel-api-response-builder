@@ -9,16 +9,6 @@
 [![Code Coverage](https://codecov.io/gh/MarcinOrlowski/laravel-api-response-builder/branch/master/graph/badge.svg?token=s3WnvhiI7n)](https://codecov.io/gh/MarcinOrlowski/laravel-api-response-builder)
 [![License](https://poser.pugx.org/marcin-orlowski/laravel-api-response-builder/license)](https://packagist.org/packages/marcin-orlowski/laravel-api-response-builder)
 
-Master branch:
-[![Unit Tests](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpunit.yml)
-[![Static Analysis](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpstan.yml/badge.svg?branch=master)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpstan.yml)
-[![Coding Standards](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/coding-standards.yml/badge.svg?branch=master)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/coding-standards.yml)
-
-Development branch:
-[![Unit Tests](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpunit.yml/badge.svg?branch=dev)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpunit.yml)
-[![Static Analysis](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpstan.yml/badge.svg?branch=dev)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/phpstan.yml)
-[![Coding Standards](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/coding-standards.yml/badge.svg?branch=dev)](https://github.com/MarcinOrlowski/laravel-api-response-builder/actions/workflows/coding-standards.yml)
-
 ## Table of contents ##
 
 * [Introduction](#introduction)

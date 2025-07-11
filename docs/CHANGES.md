@@ -9,17 +9,18 @@
 From release 9.4 onward, `ResponseBuilder` major version number is in sync with `Laravel`'s major
 version number to show target framework version. If you use `Laravel 9` - you'd need to depend on
 `ResponseBuilder v9.*`. Version `ResponseBuilder v10.*` would be then your dependency in (future)
-`Laraver v10` based projects, and so on. Also, due to limited time and funds I am having to maintain
+`Laravel v10` based projects, and so on. Also, due to the limited time and funds I have to maintain
 this project, only the most recent Laravel version will be officially supported. The same applies to
 PHP version requirement. Starting from v9.5, `ResponseBuilder` requires exactly the same PHP
-version `Laravel` do, even if technically still should work perfect on older versions too. That
-should pose no real problem for you as `ResponseBuilder` has solid and stable code base and **you**
-should be able to easily backport future new features to older versions rather easily.
+version `Laravel` does, even if it technically should still work perfectly on older versions too. That
+should pose no real problem for you as `ResponseBuilder` has a solid and stable code base and **you**
+should be able to easily backport future new features to older versions.
 
 ## CHANGE LOG ##
 
 * v12.0.2 (2025-07-10)
-  * [GH-263] Fixed `Validator::assertIsType()` not validating provided exception class against `InvalidTypeExceptionContract`.
+  * [GH-263] Fixed `Validator::assertIsType()` not validating provided exception
+    class against `InvalidTypeExceptionContract`.
   * [GH-263] Added unit tests for `Validator::assertIsType()`.
   * [GH-265] Fixed PHP 8.4 deprecation `Implicitly nullable parameters...` (reporeted by @technetius)
   * Fixed typehints to make PHPStan green on `max` sensitivity level.
