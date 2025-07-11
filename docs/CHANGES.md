@@ -21,7 +21,7 @@ should be able to easily backport future new features to older versions.
 * v12.1.0 (2025-07-11)
   * [GH-267] Fixed `Util::mergeConfig()` causing PHPStan errors due to incorrect type usage.
   * Refactored `ResponseBuilder` to extract message handling into a new `MessageManager` class.
-  * Reworkded and updated project documentation.
+  * Reworked and updated project documentation.
 
 * v12.0.2 (2025-07-10)
   * [GH-263] Fixed `Validator::assertIsType()` not validating provided exception
