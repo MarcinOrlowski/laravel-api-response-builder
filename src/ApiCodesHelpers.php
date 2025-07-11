@@ -87,7 +87,7 @@ trait ApiCodesHelpers
         Validator::assertIsArray(RB::CONF_KEY_MAP, $user_map);
 
         /** @var array<int, string> $user_map */
-        $result = Util::mergeConfig(BaseApiCodes::getBaseMap(), $user_map);  // @phpstan-ignore-line
+        $result = Util::mergeApiCodeMap(BaseApiCodes::getBaseMap(), $user_map);
         /** @var array<int, string> $result */
         return $result;
     }
