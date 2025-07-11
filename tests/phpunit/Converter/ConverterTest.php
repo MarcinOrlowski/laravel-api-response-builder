@@ -73,9 +73,10 @@ class ConverterTest extends TestCase
 
         // EXPECT it to be converted as per parent class configuration entry
         ExtraAsserts::assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $this->assertArrayHasKey($key, $result);
         $result = $result[ $key ];
+        /** @var array<string, mixed> $result */
         $this->assertCount(1, $result);
         $this->assertEquals($child_val, $result[ TestModel::FIELD_NAME ]);
     }

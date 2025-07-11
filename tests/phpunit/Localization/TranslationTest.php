@@ -32,16 +32,19 @@ class TranslationTest extends TestCase
         // other translations with it.
         \App::setLocale($default_lang);
         // We must NOT call langGet() wrapper as we want whole translation array
-        /** @var array $base_translations */
+        /** @var array<string, mixed> $base_translations */
         $base_translations = \Lang::get('response-builder::builder');
 
         // get list of all other directories in library's lang folder.
-        /** @var array $entries */
         $entries = glob(__DIR__ . '/../../../src/lang/*', GLOB_ONLYDIR);
+        if ($entries === false) {
+            $entries = [];
+        }
+        /** @var list<string> $entries */
         $supported_languages =
             array_filter(
                 array_filter(
-                    array_map(static function($entry) {
+                    array_map(static function(string $entry): string {
                         return basename($entry);
                     }, $entries)
                 ),
@@ -56,7 +59,7 @@ class TranslationTest extends TestCase
             // get the translation array for given language
             \App::setLocale($lang);
             // We must NOT call langGet() wrapper as we want whole translation array
-            /** @var array $translation */
+            /** @var array<string, mixed> $translation */
             $translation = \Lang::get('response-builder::builder');
 
             // ensure it has all the keys base translation do

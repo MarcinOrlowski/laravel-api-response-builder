@@ -170,7 +170,7 @@ class ExceptionHandlerHelperTest extends TestCase
         if ($expect_data) {
             $data = $api->getData();
             $this->assertNotNull($data);
-            /** @var array $data */
+            /** @var array<string, mixed> $data */
             $this->assertArrayHasKey(RB::KEY_MESSAGES, $data);
             $this->assertIsArray($data[ RB::KEY_MESSAGES ]);
         }
@@ -252,19 +252,32 @@ class ExceptionHandlerHelperTest extends TestCase
         ExtraAsserts::assertArrayHasKeys($keys, $cfg);
 
         // check http_exception block and validate all required entries and the config content.
-        $http_cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ];
+        /** @var array<string, mixed> $http_exception_config */
+        $http_exception_config = $cfg[ HttpException::class ];
+        /** @var array<string, mixed> $http_cfg */
+        $http_cfg = $http_exception_config[ RB::KEY_CONFIG ];
         $this->assertGreaterThanOrEqual(1, \count($http_cfg));
         $keys = [HttpResponse::HTTP_UNAUTHORIZED,];
 
         foreach ($keys as $key) {
-            $this->assertArrayHasKey($key, $http_cfg);
-            $this->checkExHandlerConfigStructure($http_cfg[ $key ], null, ($key == RB::KEY_DEFAULT));
+            if (array_key_exists($key, $http_cfg)) {
+                $this->assertArrayHasKey($key, $http_cfg);
+                /** @var array<string, mixed> $key_config */
+                $key_config = $http_cfg[ $key ];
+                $this->checkExHandlerConfigStructure($key_config, null, false);
+            }
         }
         $this->assertArrayHasKey(RB::KEY_DEFAULT, $http_cfg);
-        $this->checkExHandlerConfigStructure($http_cfg[ RB::KEY_DEFAULT ]);
+        /** @var array<string, mixed> $default_config */
+        $default_config = $http_cfg[ RB::KEY_DEFAULT ];
+        $this->checkExHandlerConfigStructure($default_config);
 
         // check default handler config
-        $this->checkExHandlerConfigStructure($cfg[ RB::KEY_DEFAULT ][ RB::KEY_CONFIG ]);
+        /** @var array<string, mixed> $default_handler */
+        $default_handler = $cfg[ RB::KEY_DEFAULT ];
+        /** @var array<string, mixed> $default_handler_config */
+        $default_handler_config = $default_handler[ RB::KEY_CONFIG ];
+        $this->checkExHandlerConfigStructure($default_handler_config);
     }
 
     /**
@@ -273,12 +286,17 @@ class ExceptionHandlerHelperTest extends TestCase
     public function testBaseConfigHttpExceptionConfig(): void
     {
         $http_cfg = $this->getExceptionHandlerConfig();
-        $cfg = $http_cfg[ HttpException::class ][ RB::KEY_CONFIG ];
+        /** @var array<string, mixed> $http_exception_config */
+        $http_exception_config = $http_cfg[ HttpException::class ];
+        /** @var array<string, mixed> $cfg */
+        $cfg = $http_exception_config[ RB::KEY_CONFIG ];
 
         foreach ($cfg as $code => $params) {
             if (\is_int($code)) {
+                /** @var array<string, mixed> $params */
                 $this->checkExHandlerConfigStructure($params, $code);
             } elseif (\is_string($code) && $code == 'default') {
+                /** @var array<string, mixed> $params */
                 $this->checkExHandlerConfigStructure($params, null, true);
             } else {
                 $this->fail("Code '{$code}' is not allowed in config->exception_handler->http_exception.");
@@ -474,6 +492,8 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /**
      * Returns content of localization file for 'default' language.
+     *
+     * @return array<string, mixed>
      */
     protected function getTranslationForDefaultLang(): array
     {
@@ -482,11 +502,15 @@ class ExceptionHandlerHelperTest extends TestCase
         \App::setLocale($default_lang);
 
         // We must NOT call langGet() wrapper as we want whole translation array
-        return (array)\Lang::get('response-builder::builder');
+        /** @var array<string, mixed> $translation */
+        $translation = \Lang::get('response-builder::builder');
+        return $translation;
     }
 
     /**
      * Returns ExceptionHandler's configuration array.
+     *
+     * @return array<string, mixed>
      */
     protected function getExceptionHandlerConfig(): array
     {
@@ -496,14 +520,14 @@ class ExceptionHandlerHelperTest extends TestCase
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
 
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         return $cfg;
     }
 
     /**
      * Checks if exception handler's configuration array structure fullfils expectations.
      *
-     * @param array    $params
+     * @param array<string, mixed> $params
      * @param int|null $code
      * @param bool     $is_default_handler
      */

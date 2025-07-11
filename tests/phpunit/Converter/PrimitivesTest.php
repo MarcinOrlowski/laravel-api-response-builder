@@ -49,14 +49,16 @@ class PrimitivesTest extends TestCase
         ]);
 
         // WHEN this object is returned
-        /** @var array $converted */
+        /** @var array<string, mixed> $converted */
         $converted = (new Converter())->convert($model);
 
         // THEN we expect returned data to be converted and use KEY_KEY element.
         $this->assertIsArray($converted);
         $this->assertArrayHasKey($key, $converted);
-        $this->assertCount(1, $converted[ $key ]);
-        $this->assertEquals($model_val, $converted[ $key ][ TestModel::FIELD_NAME ]);
+        /** @var array<string, mixed> $key_data */
+        $key_data = $converted[ $key ];
+        $this->assertCount(1, $key_data);
+        $this->assertEquals($model_val, $key_data[ TestModel::FIELD_NAME ]);
     }
 
     /**
@@ -108,13 +110,13 @@ class PrimitivesTest extends TestCase
 
         // WHEN passing it as direct payaload
         $converter = new Converter();
-        /** @var array $converted */
+        /** @var array<string, mixed> $converted */
         $converted = $converter->convert($value);
 
         // THEN we expect returned data to be keyed as per primitive's configuration.
         $this->assertIsArray($converted);
 
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $cfg = Lockpick::call($converter, 'getPrimitiveMappingConfigOrThrow', [$value]);
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);

@@ -38,7 +38,7 @@ class CustomResponseObjectTest extends TestCase
         }
 
         $response = MyResponseBuilder::success();
-        /** @var array $array_b */
+        /** @var array<string, mixed> $array_b */
         $array_b = \json_decode($this->getResponseContent($response), true);
         ExtraAsserts::assertArrayEquals(MyResponseBuilder::$fake_response, $array_b);
     }

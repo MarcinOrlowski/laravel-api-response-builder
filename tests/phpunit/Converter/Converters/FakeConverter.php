@@ -28,7 +28,7 @@ class FakeConverter implements ConverterContract
 	 * Simulates object conversion.
 	 *
 	 * @param object $obj
-	 * @param array  $config
+	 * @param array<string, mixed> $config
 	 *
 	 * @return string[]
 	 *
