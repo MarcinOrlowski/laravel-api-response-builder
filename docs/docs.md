@@ -70,13 +70,11 @@ assign non-overlapping ranges to your APIs and `ResponseBuilder` do the rest. An
 code range ends up with exception thrown.
 
 > ![IMPORTANT](img/warning.png) First `20` codes in your range (from `0` to `19` inclusive) are
-> reserved for `ResponseBuilder`
-> internals and must not be used directly nor assigned to your codes.
+> reserved for `ResponseBuilder` internals and must not be used directly nor assigned to your codes.
 >
 > ![NOTE](img/notes.png) Code ranges cannot be turned off, but if you do not need it or you just
-> have one API or need
-> no chaining, then just set `max_code` in your configuration file to some very high value if needed
-> or defaults do not fit.
+> have one API or need no chaining, then just set `max_code` in your configuration file to some very
+> high value if needed or defaults do not fit.
 
 ## ApiCodes class ##
 
@@ -142,8 +140,8 @@ localization string key etc.
 
 # Overriding built-in messages #
 
-At the moment `ResponseBuilder` provides few built-in messages (
-see [src/BaseApiCodes.php](../src/BaseApiCodes.php)): one is used for success code `0` and another
+At the moment `ResponseBuilder` provides a few built-in messages (see
+[src/BaseApiCodes.php](../src/BaseApiCodes.php)): one is used for success code `0` and another
 provides fallback message for codes without custom mapping. If for any reason you want to override
 them, simply map these codes in your `map` config using codes from package reserved range:
 

@@ -62,9 +62,9 @@ returned by your API instead of HTML error page.
 ## Error codes ##
 
 `ExceptionHandlerHelper` can be used out of the box as it requires no extra configuration, however
-it's strongly recommended you at least assign your own api codes for the events it handles,
-so you will know what module in your code thrown the exception. For consistency, I recommend
-doing so even if you have just one module and do not chain APIs.
+it's strongly recommended you at least assign your own api codes for the events it handles, so you
+will know what module in your code thrown the exception. For consistency, I recommend doing so even
+if you have just one module and do not chain APIs.
 
 First edit your `ApiCodes` class (that one which stores **your** API return code constants) and
 define codes **within your allowed code range** (constants can be named as you like), representing
@@ -161,17 +161,16 @@ replaced by exception's `getMessage()` return value.
 
 ### Possible Exception Handler conflicts ###
 
-Please note that some 3rd party packages may also provide own exception handling helpers and may
-recommend using said handlers in your application. Unfortunately this will cause conflict with
-`ResponseBuilder`'s handler which usually lead to one (or another) handler not being executed
+Please note that some 3rd party packages may also provide their own exception handling helpers and
+may recommend using said handlers in your application. Unfortunately, this will cause a conflict
+with `ResponseBuilder`'s handler, which usually leads to one of the handlers not being executed
 at all.
 
 For example if your API delegates OAuth2 related tasks to popular
 [lucadegasperi/oauth2-server-laravel](https://packagist.org/packages/lucadegasperi/oauth2-server-laravel)
-package, then you
-must **NOT** use its `OAuthExceptionHandlerMiddleware` class and ensure it is not set, by inspecting
-`app/Kernel.php` file
-and ensuring the following line (if present) is removed or commented out:
+package, then you must **NOT** use its `OAuthExceptionHandlerMiddleware` class and ensure it is not
+set, by inspecting `app/Kernel.php` file and ensuring the following line (if present) is removed or
+commented out:
 
 ```php
 // remove or comment out

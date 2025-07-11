@@ -10,16 +10,16 @@
 
 ## Manipulating Response Object ##
 
- If you need to return more fields in response object you can simply extend `ResponseBuilder` class
- and override `buildResponse()` method.
+If you need to return more fields in response object you can simply extend `ResponseBuilder` class
+and override `buildResponse()` method.
 
 ## Custom response structure ##
 
- For example, you want to get rid of `locale` field and add server time and timezone to returned
- responses. First, create `MyResponseBuilder.php` file in `app/` folder (both location and class
- name can be anything you wish, just remember to adjust the namespace too) and override
- `buildResponse()` method which builds normalized response array for all the helper methods.
- So the class content should be as follow:
+For example, you want to get rid of `locale` field and add server time and timezone to returned
+responses. First, create `MyResponseBuilder.php` file in `app/` folder (both location and class
+name can be anything you wish, just remember to adjust the namespace too) and override
+`buildResponse()` method which builds normalized response array for all the helper methods.
+So the class content should be as follow:
 
 ```php
 <?php
@@ -28,9 +28,12 @@ namespace App;
 
 class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
-   protected function buildResponse(bool $success, int $api_code,
-                                   $msg_or_api_code, array $placeholders = null,
-                                   $data = null, array $debug_data = null): array
+  protected function buildResponse(bool       $success,
+                                   int        $api_code,
+                                   string|int $msg_or_api_code,
+                                   ?array     $placeholders = null,
+                                   mixed      $data = null,
+                                   ?array     $debug_data = null): array
    {
      // tell ResponseBuilder to do all the heavy lifting first
      $response = parent::buildResponse($success, $api_code, $msg_or_api_code, $placeholders, $data, $debug_data);
@@ -49,15 +52,15 @@ class MyResponseBuilder extends MarcinOrlowski\ResponseBuilder\ResponseBuilder
 }
 ```
 
- and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`. As all responses are
- always produced with use of `buildResponse()` internally, your **all** responses will be affected
- the same way. For example:
+and from now on use `MyResponseBuilder` class instead of `ResponseBuilder`. As all responses are
+always produced with use of `buildResponse()` internally, your **all** responses will be affected
+the same way. For example:
 
 ```php
 MyRB::success();
 ```
 
- which should then return your desired JSON structure:
+which should then return your desired JSON structure:
 
 ```json
 {
@@ -70,25 +73,24 @@ MyRB::success();
 }
 ```
 
- and
+and
 
 ```php
-$data = [ 'foo'=>'bar ];
+$data = [ 'foo' => 'bar' ];
 return MyRB::errorWithData(ApiCode::SOMETHING_WENT_WRONG, $data);
 ```
 
- would produce:
+would produce:
 
 ```json
 {
-   "success": false,
-   "code": 250,
-   "message": "Error #250",
-   "timestamp": 1272509157,
-   "timezone": "UTC",
-   "data": {
-      "foo": "bar"
-   }
+  "success": false,
+  "code": 250,
+  "message": "Error #250",
+  "timestamp": 1272509157,
+  "timezone": "UTC",
+  "data": {
+    "foo": "bar"
+  }
 }
 ```
-
