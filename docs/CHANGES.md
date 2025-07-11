@@ -18,6 +18,9 @@ should be able to easily backport future new features to older versions.
 
 ## CHANGE LOG ##
 
+* dev
+  * Reworkded and updated project documentation.
+
 * v12.0.2 (2025-07-10)
   * [GH-263] Fixed `Validator::assertIsType()` not validating provided exception
     class against `InvalidTypeExceptionContract`.
@@ -255,7 +258,7 @@ should be able to easily backport future new features to older versions.
 
 * v6.0.0 (2019-09-20)
   * **BACKWARD INCOMPATIBLE CHANGES** ([more info](compatibility.md))
-  * Requires Laravel 6.0+ and PHP 7.2+ (see [docs](legacy.md) for legacy support hints).
+  * Requires Laravel 6.0+ and PHP 7.2+
   * All API codes are now withing defined code range, incl. built-in codes.
   * Reserved codes reduced to 19 (from former 63).
   * Added type hints to all method arguments and return values
@@ -392,7 +395,7 @@ should be able to easily backport future new features to older versions.
   * [RB-5] Fixed error code range not being checked when used with custom message strings.
   * `successWithHttpCode()`, `errorWithDataAndHttpCode()`, `errorWithHttpCode()` throws exception
     if `http_code` is `null`.
-  * `http_code` can be handed as null to all other methods and it will be replaced by default codes.
+  * `http_code` can be handled as null to all other methods and it will be replaced by default codes.
   * `classes` mapping now features `method` field to specify method name to call for automatic
     object conversion.
   * [RB-10] When `$data` is an `array`, all elements mapped via "classes" config will be converted

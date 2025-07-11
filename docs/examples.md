@@ -177,7 +177,7 @@ return RB::error(ApiCodeBase::SOMETHING_WENT_WRONG, ['login' => $login]);
 and if message assigned to `SOMETHING_WENT_WRONG` code uses `:login` placeholder, it will be
 correctly replaced with content of your `$login` variable.
 
-You can, however this is not recommended, override built-in error message mapping too as
+You can also override the built-in error message mapping, though this is not recommended, as
 `ResponseBuilder` comes with `errorWithMessage()` method, which expects string message as argument.
 This means you can just pass any string you want and it will be returned as `message` element in
 JSON response regardless the `code` value. Please note this method is pretty low-level and string is

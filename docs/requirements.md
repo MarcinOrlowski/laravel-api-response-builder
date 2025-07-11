@@ -8,8 +8,7 @@
 
 # Requirements #
 
-Minimum requirements:
-
-* PHP 7.2+ with [json extension](https://www.php.net/manual/en/book.json.php),
-* Laravel v6.x or v7.x (see [legacy](legacy.md) for Laravel 5.x support).
-
+Each major version of `ResponseBuilder` is tightly coupled with the PHP version required by its
+target Laravel version. For example, `ResponseBuilder` v12 requires PHP 8.2+, because Laravel v12
+requires PHP 8.2+. This is the case even if the library would technically work on older PHP
+versions.

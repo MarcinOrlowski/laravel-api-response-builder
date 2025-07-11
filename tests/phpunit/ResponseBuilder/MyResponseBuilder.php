@@ -1,9 +1,5 @@
 <?php
 declare(strict_types=1);
-/**
- * @noinspection PhpDocMissingThrowsInspection
- * @noinspection PhpUnhandledExceptionInspection
- */
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
 
@@ -14,6 +10,9 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @copyright 2016-2025 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
+ *
+ * @noinspection PhpDocMissingThrowsInspection
+ * @noinspection PhpUnhandledExceptionInspection
  */
 class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {

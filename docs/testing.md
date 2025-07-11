@@ -86,7 +86,7 @@ class LoginTest extends \Illuminate\Foundation\Testing\TestCase
 }
 ```
 
-**NOTE:** The `ApiResponse` validates response structure too. Because of that plus because
-`ApiResponse` is type hinted class, you do not need to bother data types for core elements like
-i.e. `code`, or `language`. For obvious reasons, **content** of `data` node is not validated
-(the type of `data` node itself is).
+**NOTE:** The `ApiResponse` validates the response structure too. Because `ApiResponse` is a
+type-hinted class, you do not need to bother with data types for core elements like `code` or
+`language`. For obvious reasons, the **content** of the `data` node is not validated (though the
+type of the `data` node itself is).

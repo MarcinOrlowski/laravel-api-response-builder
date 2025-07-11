@@ -45,10 +45,10 @@ configuration file as described in [Configuration file](config.md) documentation
 
 # Configuration file #
 
-`ResponseBuilder` looks for
-`config/response_builder.php` [configuration file](../config/response_builder.php).
-It's advised to publish default config file to application's `config/` directory on installation
-and then tweak it as needed:
+`ResponseBuilder` looks for `config/response_builder.php`
+[configuration file](../config/response_builder.php).
+It's advisable to publish the default config file to the application's `config/` directory on
+installation and then tweak it as needed:
 
 ```bash
 php artisan vendor:publish

@@ -3,7 +3,7 @@
 # REST API Response Builder for Laravel #
 
  `ResponseBuilder` is a helper library for [Laravel](https://laravel.com/) framework,
- designed to help you build nice, normalized and easy to consume JSON response structures
+ designed to help you build clean, normalized, and easy-to-consume JSON response structures
  for your REST API.
 
 ## Table of contents ##
