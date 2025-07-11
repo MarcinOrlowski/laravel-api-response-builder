@@ -31,8 +31,7 @@ return RB::asSuccess()
 ```
 
 Naturally, if you just need to return success without any payload, just call `success()` as you
-would have in previous
-versions:
+would have in previous versions:
 
 ```php
 return RB::success();
@@ -57,10 +56,10 @@ Parameter setters:
   allowed. Please see [W3 specification](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
   for more information about all HTTP codes and their meaning.
 * `withData($data)`: (**mixed**) data you want to be returned in your response in `data` node,
-* `withJsonOptions($opts)`: (**int**) data-to-json conversion options as
-  [documented](http://php.net/manual/en/function.json-encode.php). Pass `null` for default
-  `RB::DEFAULT_ENCODING_OPTIONS` ([source](../src/ResponseBuilder.php)). Please see
-  [configuration](../config/response_builder.php) file and config's `encoding_options` too.
+* `withJsonOptions($opts)`: (**int**) data-to-json conversion options
+  as   [documented](http://php.net/manual/en/function.json-encode.php). Pass `null` for default
+  `RB::DEFAULT_ENCODING_OPTIONS` ([source](../src/ResponseBuilder.php)). Please
+  see   [configuration](../config/response_builder.php) file and config's `encoding_options` too.
 * `withMessage($message)`: (**string**) custom message to be returned as part of error response
   (avoid, use error code mapping feature).
 * `withPlaceholders($placeholders)`: (**array**) array of placeholders as expected by `Lang::get()`
@@ -97,11 +96,13 @@ shortcuts for reporting success or failure:
   return RB::success();
   ```
 
-* `public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null, int $json_opts = null)`
+*
 
-  Returns error indicating response. `$api_code` must not equal to value indicating `OK`
-  (`ApiCodes::OK()`), all other params are optional.
+`public static function error(int $api_code, array $placeholders = null, $data = null, int $http_code = null, int $json_opts = null)`
 
-  ```php
-  return RB::error(ApiCodes::SOMETHING_FAILED);
-  ```
+Returns an error response. `$api_code` must not equal the value indicating `OK`
+(`ApiCodes::OK()`); all other parameters are optional.
+
+```php
+return RB::error(ApiCodes::SOMETHING_FAILED);
+```

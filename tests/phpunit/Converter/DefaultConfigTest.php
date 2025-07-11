@@ -54,13 +54,15 @@ class DefaultConfigTest extends TestCase
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
         $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
-        /** @var array $cfg */
-        $key = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $cfg */
+        /** @var array<string, mixed> $arrayable_config */
+        $arrayable_config = $cfg[ \Illuminate\Contracts\Support\Arrayable::class ];
+        $key = $arrayable_config[ RB::KEY_KEY ];
 
         $this->assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $this->assertArrayHasKey($key, $result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $result = $result[ $key ];
         $this->assertArrayHasKey(TestModelArrayable::FIELD_NAME, $result);
         $this->assertEquals($result[ TestModelArrayable::FIELD_NAME ], $obj_val);
@@ -90,16 +92,19 @@ class DefaultConfigTest extends TestCase
 
             // THEN it should be converted automatically as per configuration
             $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-            /** @var array $cfg */
+            /** @var array<string, mixed> $cfg */
 
             $this->assertNotEmpty($cfg);
             $this->assertIsArray($cfg);
 
-            $key = $cfg[ \JsonSerializable::class ][ RB::KEY_KEY ];
+            /** @var array<string, mixed> $json_config */
+            $json_config = $cfg[ \JsonSerializable::class ];
+            $key = $json_config[ RB::KEY_KEY ];
 
             $this->assertIsArray($result);
-            /** @var array $result */
+            /** @var array<string, mixed> $result */
             $this->assertArrayHasKey($key, $result);
+            /** @var array<string, mixed> $result */
             $result = $result[ $key ];
             $this->assertArrayHasKey($key, $result);
             $this->assertEquals($obj_val, $result[ $key ]);
@@ -123,15 +128,18 @@ class DefaultConfigTest extends TestCase
 
         // THEN it should be converted automatically as per configuration
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
-        $key = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $json_resource_config */
+        $json_resource_config = $cfg[ \Illuminate\Http\Resources\Json\JsonResource::class ];
+        $key = $json_resource_config[ RB::KEY_KEY ];
 
         $this->assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $this->assertArrayHasKey($key, $result);
         $result = $result[ $key ];
+        /** @var array<string, mixed> $result */
         $this->assertArrayHasKey(TestModelJsonResource::FIELD_NAME, $result);
         $this->assertEquals($result[ TestModelJsonResource::FIELD_NAME ], $obj_val);
     }
@@ -155,11 +163,8 @@ class DefaultConfigTest extends TestCase
     {
         // GIVEN Eloquent collection with content
         $collection = new EloquentCollection();
-        /** @phpstan-ignore-next-line */
         $collection->add(Generator::getRandomString('item1'));
-        /** @phpstan-ignore-next-line */
         $collection->add(Generator::getRandomString('item2'));
-        /** @phpstan-ignore-next-line */
         $collection->add(Generator::getRandomString('item3'));
 
         $this->doCollectionTests($collection);
@@ -177,9 +182,9 @@ class DefaultConfigTest extends TestCase
             $data[] = Generator::getRandomString("item{$i}");
         }
         $total = \count($data);
-        /** @noinspection PhpParamsInspection */
-        $this->doPaginatorSupportTests(
-            new \Illuminate\Pagination\LengthAwarePaginator(collect($data), $total, (int)($total / 2)));
+        /** @var \Illuminate\Pagination\LengthAwarePaginator<int, string> $paginator */
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(collect($data), $total, (int)($total / 2));
+        $this->doPaginatorSupportTests($paginator);
     }
 
     /**
@@ -192,19 +197,21 @@ class DefaultConfigTest extends TestCase
             $data[] = Generator::getRandomString("item{$i}");
         }
 
-        /** @noinspection PhpParamsInspection */
-        $this->doPaginatorSupportTests(
-            new \Illuminate\Pagination\Paginator(collect($data), (int)(\count($data) / 2)));
+        /** @var \Illuminate\Pagination\Paginator<int, string> $paginator */
+        $paginator = new \Illuminate\Pagination\Paginator(collect($data), (int)(\count($data) / 2));
+        $this->doPaginatorSupportTests($paginator);
     }
 
     /**
      * Helper that performs common tests for Paginator support.
+     *
+     * @param AbstractPaginator<int, string> $paginator
      */
     protected function doPaginatorSupportTests(AbstractPaginator $paginator): void
     {
         $result = (new Converter())->convert($paginator);
         ExtraAsserts::assertIsArray($result);
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         ExtraAsserts::assertArrayHasKeys([
             'current_page',
             'data',
@@ -222,18 +229,22 @@ class DefaultConfigTest extends TestCase
 
     /**
      * Helper method to perform some common tests of built-in support for Laravel's collections.
+     *
+     * @return array<string, mixed>
      */
     protected function doCollectionTests(object $collection): array
     {
         // HAVING Converter with default settings
         // WHEN we try to pass of object of that class
-        /** @var array $result */
+        /** @var array<string, mixed> $result */
         $result = (new Converter())->convert($collection);
 
         // THEN it should be converted automatically as per default configuration
-        /** @var array $cfg */
+        /** @var array<string, mixed> $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES);
-        $key = $cfg[ \get_class($collection) ][ RB::KEY_KEY ];
+        /** @var array<string, mixed> $collection_config */
+        $collection_config = $cfg[ \get_class($collection) ];
+        $key = $collection_config[ RB::KEY_KEY ];
 
         $this->assertIsArray($result);
         $this->assertArrayHasKey($key, $result);
@@ -241,14 +252,16 @@ class DefaultConfigTest extends TestCase
 
         $this->assertIsIterable($collection);
         /**
-         * @var iterable $collection
-         * @var  string  $key
+         * @var iterable<string, mixed> $collection
+         * @var  string  $foreach_key
          */
-        foreach ($collection as $key => $val) {
-            $this->assertArrayHasKey($key, $result);
-            $this->assertEquals($val, $result[ $key ]);
+        foreach ($collection as $foreach_key => $val) {
+            /** @var array<string, mixed> $result */
+            $this->assertArrayHasKey($foreach_key, $result);
+            $this->assertEquals($val, $result[ $foreach_key ]);
         }
 
+        /** @var array<string, mixed> $result */
         return $result;
     }
 

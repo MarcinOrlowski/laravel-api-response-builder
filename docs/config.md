@@ -21,8 +21,8 @@
 # Configuration file #
 
 At runtime `ResponseBuilder` looks for `response_builder.php` configuration file in your application
-`config/` folder and falls back to defaults if no config file is found. Please
-see [Installation](installation.md) docs for more info how to properly set up config file.
+`config/` folder and falls back to defaults if no config file is found. Please see
+[Installation](installation.md) docs for more info how to properly set up config file.
 
 ## Configuration options ##
 
@@ -44,13 +44,12 @@ tune the config when needed.
 ### converter ###
 
 `Response Builder` can auto-convert data to be used as response `data`. It supports both primitives
-and objects of
-any classes that have corresponding converter configured.
+and objects of any classes that have corresponding converter configured.
 
 #### classes ####
 
-Create new entry for each class you want to have supported. The entry key is a full class name (
-including namespace):
+Create new entry for each class you want to have supported. The entry key is a full class name
+(including namespace):
 
 ```php
 'converter' => [
@@ -249,8 +248,7 @@ case the object will be returned empty:
 ### debug ###
 
 > ![NOTE](img/warning.png) Do not use debug mode on production as it may expose i.e. your filesystem
-> structure
-> or class names or other internals that should not really be public.
+> structure or class names or other internals that should not really be public.
 
 ```php
 'debug' => [
@@ -317,17 +315,13 @@ See [json_encode() manual](http://php.net/manual/en/function.json-encode.php) fo
 
 `ResponseBuilder`'s Exception handler helper is plug-and-play helper that will automatically handle
 any exception thrown by your code and expose valid JSON response to the client applications. But
-aside
-from error handling, some programmers use exceptions to quickly break the flow and return with
-additional
-information. In such case you may want to assign separate API code to each of these "special"
-exceptions
-and this is where `exception_handler` section comes in.
+aside from error handling, some programmers use exceptions to quickly break the flow and return with
+additional information. In such case you may want to assign separate API code to each of these "
+special" exceptions and this is where `exception_handler` section comes in.
 
 `ResponseBuilder` delegates handling of exceptions to dedicated handlers which lets you add your own
 when needed. Each configuration entry consits of name of the handler, its priority (which is useful
-if you
-deal with inherited exception classes) and optional configuration (depending on the handler):
+if you deal with inherited exception classes) and optional configuration (depending on the handler):
 
 ```php
 'exception_handler' => [
@@ -352,18 +346,15 @@ deal with inherited exception classes) and optional configuration (depending on 
 ```
 
 At runtime, exception handler will look for config entry for particualr exception class and use
-dedicated handler if found. If
-no exact match exists, it will try to match the handler using `instanceof` and eventually faill back
-to default handler
-as specified in (mandatory) `default` config node.
+dedicated handler if found. If no exact match exists, it will try to match the handler using
+`instanceof` and eventually faill back to default handler as specified in (mandatory) `default`
+config node.
 
 ### map ###
 
-`ResponseBuilder` can automatically use text error message associated with error code and return in
-the
-response, once its configured to know which string to use for which code. `ResponseBuilder` uses
-standard
-Laravel's `Lang` facade to process strings.
+`ResponseBuilder` can automatically use text error message associated with error code and returned
+in the response, once its configured to know which string to use for which code. `ResponseBuilder`
+uses standard Laravel's `Lang` facade to process strings.
 
 ```php
 'map' => [
@@ -373,10 +364,8 @@ Laravel's `Lang` facade to process strings.
 ```
 
 If given error code is not present in `map`, `ResponseBuilder` will provide fallback message
-automatically
-(default message is like "Error #xxx"). This means it's perfectly fine to have whole `map` array
-empty in
-your config, however you **MUST** have `map` key present nonetheless:
+automatically (default message is like "Error #xxx"). This means it's perfectly fine to have whole
+`map` array empty in your config, however you **MUST** have `map` key present nonetheless:
 
 ```php
 'map' => [],
@@ -389,8 +378,8 @@ messages.
 **NOTE:** Config file may grow in future so if you are not using defaults, then on package upgrades
 check CHANGES.md to see if there're new configuration options. If so, and you already have config
 published, then you need to look into dist config file in
-`vendor/marcin-orlowski/laravel-api-response-builder/config/`
-folder and grab new version of config file.
+`vendor/marcin-orlowski/laravel-api-response-builder/config/` folder and grab new version of config
+file.
 
 See [Exception Handling with Response Builder](exceptions.md) if you want to provide own messages
 for built-in codes.
@@ -409,8 +398,8 @@ This option defines lowest allowed (inclusive) code that can be used.
 
 ### max_code ###
 
-Min api code in assigned for this module (inclusive). This option defines the highest allowed (
-inclusive) code that can be used.
+Max api code in assigned for this module (inclusive). This option defines the highest allowed
+(inclusive) code that can be used.
 
 ```php
 'max_code' => 1024,

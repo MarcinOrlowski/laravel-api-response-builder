@@ -54,7 +54,7 @@ jobs:
           found="NO"
           [[ ${{ steps.filter.outputs.src }} == 'true' ]] && found="YES"
           echo "run_action=${found}" >> $GITHUB_OUTPUT
-          echo -e "\n****************************************\n"
+          echo -e "\n****************************************"
           echo "${found}"
           echo -e "****************************************"
 
@@ -92,6 +92,14 @@ jobs:
           php_version: "${{ matrix.php }}"
           dev: yes
 
+      # - name: "Running PHPStan..."
+      #   shell: bash
+      #   run: composer lint
+
+      # https://github.com/marketplace/actions/phpstan-php-actions
       - name: "Running PHPStan..."
-        shell: bash
-        run: composer lint
+        uses: php-actions/phpstan@v3
+        with:
+          php_version: "${{ matrix.php }}"
+          memory_limit: 512M
+          path: src/ tests/

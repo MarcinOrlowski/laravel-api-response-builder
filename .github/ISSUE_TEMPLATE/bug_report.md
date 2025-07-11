@@ -1,34 +1,34 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
+title: "[BUG] "
 labels: bug
 assignees: ''
 
 ---
 
-# What is wrong? #
+# Description
 
-Please put a clear and concise description of what the bug is.
+A clear and concise description of the bug.
 
-## Steps to reproduce the behavior: ##
+## Steps to reproduce the behavior:
 
 1.
 1.
 1.
 1.
 
-## Expected behavior ##
+## Expected behavior
 
 A clear and concise description of what you expected to happen instead of currently observed behaviour.
 
-## Environment ##
+## Environment
 
-* Name and version of OS: [i.e. Windows 10, Ubuntu 19.04, etc]
-* PHP version [i.e. 8.0]
-* Laravel version [i.e. 7.1.3]
-* ResponseBuilder version used [i.e. 9.2.1]
+* Name and version of OS: [i.e. Windows 10, Ubuntu 22.04, etc]
+* PHP version [i.e. 8.3]
+* Laravel version [i.e. 11.1.3]
+* ResponseBuilder version used [i.e. 11.2.1]
 
-## Notes ##
+## Notes
 
 Any additional information that may be helpful diagnosing the problem.

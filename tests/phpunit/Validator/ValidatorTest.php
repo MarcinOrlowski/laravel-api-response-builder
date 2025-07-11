@@ -29,7 +29,7 @@ class ValidatorTest extends TestCase
     {
         Validator::assertIsInt(__FUNCTION__, 666);
         // This assert won't be called if exception is thrown
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -51,7 +51,7 @@ class ValidatorTest extends TestCase
         $obj = new \stdClass();
         Validator::assertIsObject(__FUNCTION__, $obj);
         // This assert won't be called if exception is thrown
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -72,7 +72,7 @@ class ValidatorTest extends TestCase
     {
         Validator::assertIsArray(__FUNCTION__, []);
         // This assert won't be called if exception is thrown
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -93,7 +93,7 @@ class ValidatorTest extends TestCase
     {
         Validator::assertIsString(__FUNCTION__, 'string');
         // This assert won't be called if exception is thrown
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -114,7 +114,7 @@ class ValidatorTest extends TestCase
     {
         Validator::assertIsBool(__FUNCTION__, false);
         // This assert won't be called if exception is thrown
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -132,7 +132,7 @@ class ValidatorTest extends TestCase
     {
         Validator::assertIsIntRange(__FUNCTION__, 300, 100, 500);
         // This assert won't be called if exception is thrown
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -188,7 +188,7 @@ class ValidatorTest extends TestCase
         $obj = new \stdClass();
         Validator::assertInstanceOf('obj', $obj, \stdClass::class);
         // This assert won't be called if exception is thrown
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ class ValidatorTest extends TestCase
         Validator::assertIsType('var_name', 123, [Type::INTEGER], $customExceptionClass);
 
         // If no exception is thrown, the test passes.
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     // ---------------------------------------------------------------------------------------------

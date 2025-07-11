@@ -86,6 +86,7 @@ class InternalsTest extends TestCase
         $max = Lockpick::getConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
 
         $this->expectException(\OutOfBoundsException::class);
+        /** @var int $max */
         Lockpick::call($obj, 'getCodeForInternalOffset', [$max + 1]);
     }
 
@@ -98,6 +99,7 @@ class InternalsTest extends TestCase
         $min = Lockpick::getConstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
 
         $this->expectException(\OutOfBoundsException::class);
+        /** @var int $min */
         Lockpick::call($obj, 'getCodeForInternalOffset', [$min - 1]);
     }
 

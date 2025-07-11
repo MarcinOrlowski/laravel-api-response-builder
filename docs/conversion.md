@@ -13,9 +13,9 @@
 # On-the-fly data conversion #
 
 `ResponseBuilder` can save you some work by automatically converting objects into array
-representation. For example, having `ResponseBuilder` configured to auto-convet objects of
+representation. For example, having `ResponseBuilder` configured to auto-convert objects of
 Eloquent's `Model` class and passing object of that class either directly using `withData()` or as
-part of bigger structurre) will have it converted to JSON format automatically.
+part of a bigger structure) will have it converted to JSON format automatically.
 
 The following classes are supported out of the box:
 

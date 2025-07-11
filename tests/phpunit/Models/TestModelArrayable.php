@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Request;
 
 /**
  * Class TestModel to verify auto-conversion feature
+ *
+ * @implements Arrayable<string, mixed>
  */
 class TestModelArrayable implements Arrayable
 {

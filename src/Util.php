@@ -96,4 +96,17 @@ final class Util
 		return false;
 	}
 
+	/**
+	 * Merges API code mappings, with user codes overriding base codes.
+	 *
+	 * @param array<int, string> $original Base API code to message key mappings
+	 * @param array<int, string> $merging User API code to message key mappings
+	 *
+	 * @return array<int, string> Merged API code mappings
+	 */
+	public static function mergeApiCodeMap(array $original, array $merging): array
+	{
+		return array_replace($original, $merging);
+	}
+
 } // end of class
