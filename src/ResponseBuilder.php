@@ -25,17 +25,17 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 class ResponseBuilder extends ResponseBuilderBase
 {
-    protected bool    $success      = false;
+    protected bool    $success   = false;
     protected int     $api_code;
-    protected ?int    $http_code    = null;
-    protected ?string $message      = null;
+    protected ?int    $http_code = null;
+    protected ?string $message   = null;
     /** @var array<string, mixed>|null */
-    protected ?array  $placeholders = null;
-    protected ?int    $json_opts    = null;
+    protected ?array $placeholders = null;
+    protected ?int   $json_opts    = null;
     /** @var array<string, mixed>|null */
-    protected ?array  $debug_data   = null;
+    protected ?array $debug_data = null;
     /** @var array<string, mixed> */
-    protected array   $http_headers = [];
+    protected array $http_headers = [];
 
     /** @var mixed|null $data */
     protected $data = null;
@@ -59,18 +59,18 @@ class ResponseBuilder extends ResponseBuilderBase
     /**
      * Returns success
      *
-     * @param mixed|null   $data         Array of primitives and supported objects to be returned in
-     *                                   'data' node of the JSON response, single supported object
-     *                                   or @null if there's no to be returned.
-     * @param integer|null $api_code     API code to be returned or @null to use value of
-     *                                   BaseApiCodes::OK().
-     * @param array<string, mixed>|null   $placeholders Placeholders passed to Lang::get() for message placeholders
-     *                                   substitution or @null if none.
-     * @param integer|null $http_code    HTTP code to be used for HttpResponse sent or @null
-     *                                   for default DEFAULT_HTTP_CODE_OK.
-     * @param integer|null $json_opts    See http://php.net/manual/en/function.json-encode.php for
-     *                                   supported options or pass @null to use value from your
-     *                                   config (or defaults).
+     * @param mixed|null                $data         Array of primitives and supported objects to be returned in
+     *                                                'data' node of the JSON response, single supported object
+     *                                                or @null if there's no to be returned.
+     * @param integer|null              $api_code     API code to be returned or @null to use value of
+     *                                                BaseApiCodes::OK().
+     * @param array<string, mixed>|null $placeholders Placeholders passed to Lang::get() for message placeholders
+     *                                                substitution or @null if none.
+     * @param integer|null              $http_code    HTTP code to be used for HttpResponse sent or @null
+     *                                                for default DEFAULT_HTTP_CODE_OK.
+     * @param integer|null              $json_opts    See http://php.net/manual/en/function.json-encode.php for
+     *                                                supported options or pass @null to use value from your
+     *                                                config (or defaults).
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\ConfigurationNotFoundException
@@ -97,17 +97,17 @@ class ResponseBuilder extends ResponseBuilderBase
      * Builds error Response object. Supports optional arguments passed to Lang::get() if associated error
      * message uses placeholders as well as return data payload
      *
-     * @param integer           $api_code      Your API code to be returned with the response object.
-     * @param array<string, mixed>|null        $placeholders  Placeholders passed to Lang::get() for message
-     *                                         placeholders substitution or @null if none.
-     * @param object|array<string, mixed>|null $data          Array of primitives and supported objects to be
-     *                                         returned in 'data' node of the JSON response, single
-     *                                         supported object or @null if there's no to be returned.
-     * @param integer|null      $http_code     HTTP code to be used for HttpResponse sent or @null
-     *                                         for default DEFAULT_HTTP_CODE_ERROR.
-     * @param integer|null      $json_opts     See http://php.net/manual/en/function.json-encode.php
-     *                                         for supported options or pass @null to use value from
-     *                                         your config (or defaults).
+     * @param integer                          $api_code     Your API code to be returned with the response object.
+     * @param array<string, mixed>|null        $placeholders Placeholders passed to Lang::get() for message
+     *                                                       placeholders substitution or @null if none.
+     * @param object|array<string, mixed>|null $data         Array of primitives and supported objects to be
+     *                                                       returned in 'data' node of the JSON response, single
+     *                                                       supported object or @null if there's no to be returned.
+     * @param integer|null                     $http_code    HTTP code to be used for HttpResponse sent or @null
+     *                                                       for default DEFAULT_HTTP_CODE_ERROR.
+     * @param integer|null                     $json_opts    See http://php.net/manual/en/function.json-encode.php
+     *                                                       for supported options or pass @null to use value from
+     *                                                       your config (or defaults).
      *
      * @throws Ex\ArrayWithMixedKeysException
      * @throws Ex\MissingConfigurationKeyException
@@ -119,8 +119,8 @@ class ResponseBuilder extends ResponseBuilderBase
     public static function error(int    $api_code,
                                  ?array $placeholders = null,
                                  mixed  $data = null,
-                                 int    $http_code = null,
-                                 int    $json_opts = null): HttpResponse
+                                 ?int   $http_code = null,
+                                 ?int   $json_opts = null): HttpResponse
     {
         return static::asError($api_code)
             ->withPlaceholders($placeholders)
@@ -139,7 +139,7 @@ class ResponseBuilder extends ResponseBuilderBase
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\NotIntegerException
      */
-    public static function asSuccess(int $api_code = null): self
+    public static function asSuccess(?int $api_code = null): self
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         return new static(true, $api_code ?? BaseApiCodes::OK());
@@ -321,21 +321,21 @@ class ResponseBuilder extends ResponseBuilderBase
     }
 
     /**
-     * @param boolean        $success            TRUE if response reports successful operation,
-     *                                           FALSE otherwise.
-     * @param integer        $api_code           API code to be returned with the response object.
-     * @param string|integer $msg_or_api_code    Message string or valid API code to get message for
-     * @param mixed|null     $data               optional additional data to be included in response.
-     * @param integer|null   $http_code          HTTP code for the HttpResponse or @null for either
-     *                                           DEFAULT_HTTP_CODE_OK or DEFAULT_HTTP_CODE_ERROR
-     *                                           depending on the $success.
-     * @param array<string, mixed>|null     $placeholders       Placeholders passed to Lang::get() for message
-     *                                           placeholders substitution or @null if none.
-     * @param array<string, mixed>|null     $http_headers       Optional HTTP headers to be returned in the response.
-     * @param integer|null   $json_opts          See http://php.net/manual/en/function.json-encode.php
-     *                                           for supported options or pass @null to use value from
-     *                                           your config (or defaults).
-     * @param array<string, mixed>|null     $debug_data         Optional debug data array to be added to returned JSON.
+     * @param boolean                   $success         TRUE if response reports successful operation,
+     *                                                   FALSE otherwise.
+     * @param integer                   $api_code        API code to be returned with the response object.
+     * @param string|integer            $msg_or_api_code Message string or valid API code to get message for
+     * @param mixed|null                $data            optional additional data to be included in response.
+     * @param integer|null              $http_code       HTTP code for the HttpResponse or @null for either
+     *                                                   DEFAULT_HTTP_CODE_OK or DEFAULT_HTTP_CODE_ERROR
+     *                                                   depending on the $success.
+     * @param array<string, mixed>|null $placeholders    Placeholders passed to Lang::get() for message
+     *                                                   placeholders substitution or @null if none.
+     * @param array<string, mixed>|null $http_headers    Optional HTTP headers to be returned in the response.
+     * @param integer|null              $json_opts       See http://php.net/manual/en/function.json-encode.php
+     *                                                   for supported options or pass @null to use value from
+     *                                                   your config (or defaults).
+     * @param array<string, mixed>|null $debug_data      Optional debug data array to be added to returned JSON.
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\ConfigurationNotFoundException
@@ -382,13 +382,13 @@ class ResponseBuilder extends ResponseBuilderBase
      * added to reported JSON for easier manual debugging. Returns response ready to be encoded as
      * JSON and sent back to client.
      *
-     * @param boolean        $success         TRUE if response reports successful operation, FALSE otherwise.
-     * @param integer        $api_code        Your API code to be returned with the response object.
-     * @param string|integer $msg_or_api_code Message string or valid API code to get message for.
-     * @param array<string, mixed>|null     $placeholders    Placeholders passed to Lang::get() for message placeholders
-     *                                        substitution or @null if none.
-     * @param mixed|null     $data            API response data if any
-     * @param array<string, mixed>|null     $debug_data      optional debug data array to be added to returned JSON.
+     * @param boolean                   $success         TRUE if response reports successful operation, FALSE otherwise.
+     * @param integer                   $api_code        Your API code to be returned with the response object.
+     * @param string|integer            $msg_or_api_code Message string or valid API code to get message for.
+     * @param array<string, mixed>|null $placeholders    Placeholders passed to Lang::get() for message placeholders
+     *                                                   substitution or @null if none.
+     * @param mixed|null                $data            API response data if any
+     * @param array<string, mixed>|null $debug_data      optional debug data array to be added to returned JSON.
      *
      * @return array<string, mixed>
      *
