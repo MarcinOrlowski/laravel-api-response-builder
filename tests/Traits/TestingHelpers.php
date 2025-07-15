@@ -91,10 +91,10 @@ trait TestingHelpers
         }
         $idx = \random_int(1, \count($map));
         $keys = \array_keys($map);
-        $key = $keys[ $idx - 1 ];
-        $this->random_api_code_message_key = $map[ $key ];
+        $key = $keys[$idx - 1];
+        $this->random_api_code_message_key = $map[$key];
         $this->random_api_code_message = $this->langGet($this->random_api_code_message_key,
-            ['api_code' => $this->random_api_code,]);
+                                                        ['api_code' => $this->random_api_code,]);
 
         $this->error_message_map = [
             $this->random_api_code => $this->random_api_code_message_key,
@@ -124,7 +124,7 @@ trait TestingHelpers
      * do not want to happen, not handle separately after each invocation, so this wrapper deals with it for
      * us.
      *
-     * @param string                  $key     String key as passed to Lang::get()
+     * @param string                    $key     String key as passed to Lang::get()
      * @param array<string, mixed>|null $replace Optional replacement array as passed to Lang::get()
      */
     public function langGet(string $key, ?array $replace = null): string
@@ -155,12 +155,12 @@ trait TestingHelpers
      * @throws \ReflectionException
      */
     public function getResponseSuccessObject(?int    $expected_api_code_offset = null,
-                                             int     $expected_http_code = null,
+                                             ?int    $expected_http_code = null,
                                              ?string $expected_message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
-            /** @var string $api_codes */
             $api_codes = $this->getApiCodesClassName();
+            /** @var string $api_codes */
             /** @var int $expected_api_code_offset */
             $expected_api_code_offset = Lockpick::getConstant($api_codes, 'OK_OFFSET');
         }
@@ -210,11 +210,11 @@ trait TestingHelpers
 
         if ($expected_http_code > RB::ERROR_HTTP_CODE_MAX) {
             $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be higher than %d',
-                $expected_http_code, RB::ERROR_HTTP_CODE_MAX));
+                                 $expected_http_code, RB::ERROR_HTTP_CODE_MAX));
         }
         if ($expected_http_code < RB::ERROR_HTTP_CODE_MIN) {
             $this->fail(\sprintf('TEST: Error HTTP code (%d) cannot be lower than %d',
-                $expected_http_code, RB::ERROR_HTTP_CODE_MIN));
+                                 $expected_http_code, RB::ERROR_HTTP_CODE_MIN));
         }
 
         // Ensure we have a valid integer for API code
@@ -245,7 +245,7 @@ trait TestingHelpers
         $actual = $this->response->getStatusCode();
         $contents = $this->getResponseContent($this->response);
         $this->assertEquals($expected_http_code, $actual,
-            "Expected status code {$expected_http_code}, got {$actual}. Response: {$contents}");
+                            "Expected status code {$expected_http_code}, got {$actual}. Response: {$contents}");
 
         // get response
         $api = ApiResponse::fromJson($this->getResponseContent($this->response));
@@ -289,9 +289,9 @@ trait TestingHelpers
                 $response_code_int = is_int($response_code) ? $response_code : (int)$response_code;
             }
             $msg = \sprintf('Status code mismatch. Expected: %s, found %s. Message: "%s"',
-                $this->resolveConstantFromCode($expected_code),
-                $this->resolveConstantFromCode($response_code_int),
-                is_string($response_json->message) ? $response_json->message : var_export($response_json->message, true));
+                            $this->resolveConstantFromCode($expected_code),
+                            $this->resolveConstantFromCode($response_code_int),
+                            is_string($response_json->message) ? $response_json->message : var_export($response_json->message, true));
 
             $this->fail($msg);
         }
@@ -334,14 +334,14 @@ trait TestingHelpers
 
         $result = Lockpick::call(
             RB::asSuccess(), 'make', [$success,
-                                      $api_code_offset,
-                                      $message_or_api_code_offset,
-                                      $data,
-                                      $http_code,
-                                      $lang_args,
-                                      $headers,
-                                      $encoding_options,
-                                      $debug_data,
+            $api_code_offset,
+            $message_or_api_code_offset,
+            $data,
+            $http_code,
+            $lang_args,
+            $headers,
+            $encoding_options,
+            $debug_data,
         ]);
 
         /** @var HttpResponse $result */
@@ -393,7 +393,7 @@ trait TestingHelpers
      */
     protected function ord8(string $string, int &$offset): int
     {
-        $code = \ord($string[ $offset ]);
+        $code = \ord($string[$offset]);
         $bytes_number = 1;
         if ($code >= 128) {             //otherwise 0xxxxxxx
             if ($code < 224) {          //110xxxxx

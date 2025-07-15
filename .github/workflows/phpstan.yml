@@ -69,7 +69,7 @@ jobs:
       matrix:
         # Quotes are needed it is treated as a number and zero at decimal part is gone
         # at runtime i.e. 8.10 -> 8.1, while "8.10" => "8.10".
-        php: [ "8.2" ]
+        php: [ "8.2", "8.3", "8.4" ]
 
     runs-on: ubuntu-latest
 

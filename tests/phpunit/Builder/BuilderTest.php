@@ -16,6 +16,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
+use Illuminate\Http\JsonResponse;
 use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\Builder;
@@ -87,6 +88,17 @@ class BuilderTest extends TestCase
     {
         $this->expectException(\OutOfBoundsException::class);
         RB::asError(BaseApiCodes::OK());
+    }
+
+    /**
+     * Checksi if explicit @null as HTTP code falls back to default HTTP error code..
+     */
+    public function testErrorWithNullHttpCode(): void
+    {
+        $apiCode = BaseApiCodes::getMinCode();
+        $response = RB::error($apiCode, http_code: null);
+        $this->assertInstanceOf(JsonResponse::class, $response);
+        $this->assertEquals(RB::DEFAULT_HTTP_CODE_ERROR, $response->getStatusCode());
     }
 
 } // end of class
