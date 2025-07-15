@@ -18,6 +18,9 @@ should be able to easily backport future new features to older versions.
 
 ## CHANGE LOG ##
 
+* v12.1.1 (2025-07-16)
+  * [GH-265] Fixed remaining PHP 8.4 deprecations `Implicitly nullable parameters...`
+
 * v12.1.0 (2025-07-11)
   * [GH-267] Fixed `Util::mergeConfig()` causing PHPStan errors due to incorrect type usage.
   * Refactored `ResponseBuilder` to extract message handling into a new `MessageManager` class.
