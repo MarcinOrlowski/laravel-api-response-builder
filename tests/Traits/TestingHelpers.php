@@ -159,8 +159,8 @@ trait TestingHelpers
                                              ?string $expected_message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
-            /** @var string $api_codes */
             $api_codes = $this->getApiCodesClassName();
+            /** @var string $api_codes */
             /** @var int $expected_api_code_offset */
             $expected_api_code_offset = Lockpick::getConstant($api_codes, 'OK_OFFSET');
         }
