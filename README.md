@@ -61,6 +61,6 @@ for your `ResponseBuilder` integration with just a few lines of code.
 
 ## License
 
-* Written and copyrighted &copy;2016-2025 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
+* Written and copyrighted &copy;2016-2026 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
 * ResponseBuilder is open-source software licensed under
   the [MIT license](http://opensource.org/licenses/MIT)

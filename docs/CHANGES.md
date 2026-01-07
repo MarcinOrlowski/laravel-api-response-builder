@@ -18,9 +18,8 @@ should be able to easily backport future new features to older versions.
 
 ## CHANGE LOG ##
 
-* v12.1.2 (TBD)
+* v12.1.2 (2026-01-07)
   * [GH-275] Updated GitHub Actions workflow to test using PHP 8.5.
-  * [GH-277] Muted PHPStan false positives on inproper use of `env()` in config file.
 
 * v12.1.1 (2025-07-16)
   * [GH-265] Fixed remaining PHP 8.4 deprecations `Implicitly nullable parameters...`
