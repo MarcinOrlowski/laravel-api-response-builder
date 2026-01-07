@@ -3,7 +3,7 @@
 # Laravel API Response Builder PHPStan config file
 #
 # @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
-# @copyright 2016-2025 Marcin Orlowski
+# @copyright 2016-2026 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
 #
@@ -19,3 +19,5 @@ parameters:
     - tests/
   ignoreErrors:
     - '#^Unsafe usage of new static\(\)\.$#'
+    - message: "#^Called 'env' outside of the config directory which returns null when the config is cached, use 'config'.$#"
+      path: *config/*.php
