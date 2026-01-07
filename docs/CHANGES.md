@@ -18,6 +18,10 @@ should be able to easily backport future new features to older versions.
 
 ## CHANGE LOG ##
 
+* v12.1.2 (TBD)
+  * [GH-275] Updated GitHub Actions workflow to test using PHP 8.5.
+
+
 * v12.1.1 (2025-07-16)
   * [GH-265] Fixed remaining PHP 8.4 deprecations `Implicitly nullable parameters...`
   * Included PHP 8.4 in PHPStan action
