@@ -1,4 +1,4 @@
-![REST API Response Builder for Laravel](../artwork/laravel-api-response-builder-logo.png)
+![REST API Response Builder for Laravel](../artwork/laravel-api-response-builder-logo.webp)
 
 # REST API Response Builder for Laravel #
 
@@ -17,6 +17,9 @@ should pose no real problem for you as `ResponseBuilder` has a solid and stable 
 should be able to easily backport future new features to older versions.
 
 ## CHANGE LOG ##
+
+* v12.1.3 (2026-01-31)
+  * [GH-281] Updated project logo and artwork.
 
 * v12.1.2 (2026-01-07)
   * [GH-275] Updated GitHub Actions workflow to test using PHP 8.5.
