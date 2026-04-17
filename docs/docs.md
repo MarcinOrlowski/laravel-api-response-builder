@@ -12,6 +12,7 @@
 * [Handling Exceptions API way](#handling-exceptions-api-way)
 * [Overriding code to message conversion](#overriding-code-to-message-conversion)
 * [Overriding built-in messages](#overriding-built-in-messages)
+* [Semantic Response Builders](#semantic-response-builders)
 
 ---
 
@@ -160,3 +161,46 @@ MarcinOrlowski\ResponseBuilder\BaseApiCodes::NO_ERROR_MESSAGE() => 'my_messages.
 
 You can use `:api_code` placeholder in the message and it will be substituted actual error code
 value.
+
+# Semantic Response Builders #
+
+This fork also provides semantic builder starter methods for common HTTP success and error
+responses. These methods are convenience wrappers over `asSuccess()` and `asError()` and preset the
+HTTP status code for standard cases.
+
+For example, instead of writing:
+
+```php
+return RB::asSuccess()
+    ->withData($data)
+    ->withHttpCode(HttpResponse::HTTP_CREATED)
+    ->build();
+```
+
+you can write:
+
+```php
+return SuccessResponseBuilder::asCreated()
+    ->withData($data)
+    ->build();
+```
+
+Likewise, instead of writing:
+
+```php
+return RB::asError(ApiCode::AUTHENTICATION_EXCEPTION)
+    ->withMessage(__('auths.failures.invalid_token'))
+    ->withHttpCode(HttpResponse::HTTP_UNAUTHORIZED)
+    ->build();
+```
+
+```php
+return FailureResponseBuilder::asUnauthorized()
+    ->withMessage(__('auths.failures.invalid_token'))
+    ->build();
+```
+
+Semantic builder methods preset and lock the HTTP status code. Calling withHttpCode() after one of
+these methods is not allowed and will result in exception.
+
+

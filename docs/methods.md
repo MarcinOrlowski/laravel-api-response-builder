@@ -7,6 +7,7 @@
 * [Exposed Methods](methods.md)
   * [Builder](#builder)
     * [Static builder methods](#builder-static)
+    * [Semantic builder methods](#semantic-builder-methods)
   * [Helpers](#helpers)
 
 ---
@@ -55,6 +56,8 @@ Parameter setters:
   `\InvalidArgumentException` will be thrown. HTTP codes from 3xx pool (redirection) are not
   allowed. Please see [W3 specification](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
   for more information about all HTTP codes and their meaning.
+  If HTTP status code was preset by a semantic builder method, calling `withHttpCode()` again is not
+  allowed and will result in exception.
 * `withData($data)`: (**mixed**) data you want to be returned in your response in `data` node,
 * `withJsonOptions($opts)`: (**int**) data-to-json conversion options
   as   [documented](http://php.net/manual/en/function.json-encode.php). Pass `null` for default
@@ -79,6 +82,38 @@ Once all the arguments are passed, call `build()` to have final `HttpResponse` o
 > object and result is returned instead. Several classes pre-configured but you can add additional
 > classes just by creating entry in configuration `converter` mapping.
 > See [Data Conversion](conversion.md) for more information.
+
+### Semantic builder methods ###
+
+This fork also provides semantic builder starter methods for common HTTP success and error
+responses. These methods are convenience wrappers over `asSuccess()` and `asError()` and preset the
+HTTP status code for standard cases.
+
+Success builders:
+
+* `SuccessResponseBuilder::asOk($api_code = null)`: Returns Builder instance configured as success
+  response with `200 OK`.
+* `SuccessResponseBuilder::asCreated($api_code = null)`: Returns Builder instance configured as
+  success response with `201 Created`.
+* `SuccessResponseBuilder::asAccepted($api_code = null)`: Returns Builder instance configured as
+  success response with `202 Accepted`.
+
+Failure builders:
+
+* `FailureResponseBuilder::asInternalServerError($api_code = null)`: Returns Builder instance configured as error response with `500 Internal Server Error`.
+* `FailureResponseBuilder::asUnauthorized($api_code = null)`: Returns Builder instance configured as error
+  response with `401 Unauthorized`.
+* `FailureResponseBuilder::asForbidden($api_code = null)`: Returns Builder instance configured as error
+  response with `403 Forbidden`.
+* `FailureResponseBuilder::asNotFound($api_code = null)`: Returns Builder instance configured as error
+  response with `404 Not Found`.
+* `FailureResponseBuilder::asTooManyRequests($api_code = null)`: Returns Builder instance configured as
+  error response with `429 Too Many Requests`.
+* `FailureResponseBuilder::asUnprocessableEntity($api_code = null)`: Returns Builder instance configured as
+  error response with `422 Unprocessable Entity`.
+
+These semantic builder methods preset and lock the HTTP status code. Calling `withHttpCode()` after
+one of these methods is not allowed and will result in exception.
 
 ## Helpers ##
 

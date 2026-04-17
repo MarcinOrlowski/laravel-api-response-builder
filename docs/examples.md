@@ -6,7 +6,9 @@
 
 * [Usage examples](#examples)
   * [Success](#success)
+	* [Success with semantic builders](#success-with-semantic-builders)
   * [Errors](#errors)
+    * [Errors with semantic builders](#errors-with-semantic-builders)
 
 ---
 
@@ -128,6 +130,40 @@ and your client will get that data in `data` node of your response:
 You can easily add own converters if none of built-in handles your data or fits your needs!
 See [Data Conversion](conversion.md) for more details.
 
+### Success with semantic builders ###
+
+Semantic success builders for common HTTP success responses are also provided. These methods
+preset and lock the HTTP status code, so there is no need to call `withHttpCode()` manually for
+standard cases.
+
+For example, instead of:
+
+```php
+return RB::asSuccess()
+    ->withData($data)
+    ->withHttpCode(HttpResponse::HTTP_OK)
+    ->build();
+```
+
+you can now write:
+
+```php
+return SuccessResponseBuilder::asOk()
+    ->withData($data)
+    ->build();
+```
+
+To return 201 Created:
+
+```php
+return SuccessResponseBuilder::asCreated()
+    ->withData($data)
+    ->build();
+```
+
+> ![WARNING](img/warning.png) Semantic builder methods preset and lock the HTTP status code.
+Calling withHttpCode() after one of these methods is not allowed and will result in exception.
+
 ## Errors ##
 
 Returning error responses is also simple, however in such case you are required to need to
@@ -188,3 +224,37 @@ to handle them yourself by calling `Lang::get()` manually first and pass the res
 $msg = Lang::get('message.something_wrong', ['login' => $login]);
 return RB::errorWithMessage(ApiCodeBase::SOMETHING_WENT_WRONG, $msg);
 ```
+
+### Errors with semantic builders ###
+
+Semantic failure builders for common HTTP error responses are also provided. These methods
+preset and lock the HTTP status code, so there is no need to call `withHttpCode()` manually for
+standard cases.
+
+For example, instead of:
+
+```php
+return RB::asError(ApiCode::AUTHENTICATION_EXCEPTION)
+    ->withMessage(__('auths.failures.invalid_token'))
+    ->withHttpCode(HttpResponse::HTTP_UNAUTHORIZED)
+    ->build();
+```
+
+you can now write:
+
+```php
+return FailureResponseBuilder::asUnauthorized()
+    ->withMessage(__('auths.failures.invalid_token'))
+    ->build();
+```
+
+To return 403 Forbidden:
+
+```php
+return FailureResponseBuilder::asForbidden()
+    ->withMessage(__('messages.failures.forbidden'))
+    ->build();
+```
+
+> ![WARNING](img/warning.png) Semantic builder methods preset and lock the HTTP status code.
+Calling withHttpCode() after one of these methods is not allowed and will result in exception.
