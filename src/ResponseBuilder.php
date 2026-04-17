@@ -28,6 +28,7 @@ class ResponseBuilder extends ResponseBuilderBase
     protected bool    $success   = false;
     protected int     $api_code;
     protected ?int    $http_code = null;
+	protected bool $http_code_was_preset = false;
     protected ?string $message   = null;
     /** @var array<string, mixed>|null */
     protected ?array $placeholders = null;
@@ -169,21 +170,54 @@ class ResponseBuilder extends ResponseBuilderBase
         return new static(false, $api_code);
     }
 
-    /**
-     * @param int|null $http_code
-     *
-     * @throws Ex\InvalidTypeException
-     */
-    public function withHttpCode(?int $http_code = null): self
-    {
-        Validator::assertIsType('http_code', $http_code, [
-            Type::INTEGER,
-            Type::NULL,
-        ]);
-        $this->http_code = $http_code;
+	/**
+	 * Sets HTTP status code.
+	 *
+	 * @param int|null $http_code HTTP code to be used for HttpResponse sent or @null
+	 *                            to use default value.
+	 *
+	 * @throws Ex\InvalidTypeException
+	 * @throws Ex\HttpCodeLockedException If HTTP code was already preset and cannot be overridden.
+	 */
+	public function withHttpCode(?int $http_code = null): self
+	{
+		if ($this->http_code_was_preset) {
+			throw new Ex\HttpCodeLockedException(
+				'HTTP code is locked for this response builder instance and was set to ' . $this->http_code . '.'
+			);
+		}
 
-        return $this;
-    }
+		Validator::assertIsType('http_code', $http_code, [
+			Type::INTEGER,
+			Type::NULL,
+		]);
+
+		$this->http_code = $http_code;
+
+		return $this;
+	}
+
+	/**
+	 * Sets HTTP status code and marks it as preset.
+	 *
+	 * Preset HTTP code cannot be later overridden by methods that only set
+	 * non-preset status codes.
+	 *
+	 * @param int $http_code HTTP status code to be used for the response.
+	 *
+	 * @throws Ex\InvalidTypeException
+	 */
+	protected function withPresetHttpCode(int $http_code): self
+	{
+		Validator::assertIsType('http_code', $http_code, [
+			Type::INTEGER,
+		]);
+
+		$this->http_code = $http_code;
+		$this->http_code_was_preset = true;
+
+		return $this;
+	}
 
     /**
      * @param mixed|null $data
