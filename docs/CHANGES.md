@@ -18,6 +18,9 @@ should be able to easily backport future new features to older versions.
 
 ## CHANGE LOG ##
 
+* v13.0.0 (TBD)
+  * [GH-286] Added support for Laravel v13.
+
 * v12.1.3 (2026-01-31)
   * [GH-281] Updated project logo and artwork.
 
