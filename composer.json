@@ -44,13 +44,13 @@
   },
   "require": {
     "php": "^8.3|^8.4|^8.5",
-    "laravel/framework": "^13.0"
+    "laravel/framework": "^13.2"
   },
   "require-dev": {
     "marcin-orlowski/phpunit-extra-asserts": "^5.1.0",
     "orchestra/testbench": "^11.0",
-    "phpunit/phpunit": "^13.2",
-    "phpunit/php-code-coverage": "^14.0",
+    "phpunit/phpunit": "^12.5",
+    "phpunit/php-code-coverage": "^12.5",
     "larastan/larastan": "^3.0",
     "marcin-orlowski/lockpick": "^1.0"
   },
