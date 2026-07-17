@@ -1,0 +1,27 @@
+# Local PHP 8.3 test environment.
+#
+#   docker compose build                       # build the image once
+#   docker compose run --rm test               # run the full PHPUnit suite
+#   docker compose run --rm test composer lint  # PHPStan (level max)
+#   docker compose run --rm test bash          # interactive shell
+#   docker compose run --rm test \
+#       vendor/bin/phpunit -c tests/phpunit.xml --filter testName   # single test
+#
+# The container installs deps into an isolated `vendor` volume, so the host's
+# own vendor/ (built on a different PHP version) is left untouched.
+services:
+  test:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: laravel-api-response-builder:php8.3
+    # Local-only image — never try to pull it from a registry (build instead).
+    pull_policy: build
+    volumes:
+      - .:/app
+      - vendor:/app/vendor
+    entrypoint: ["/app/docker/entrypoint.sh"]
+    command: ["composer", "test"]
+
+volumes:
+  vendor:

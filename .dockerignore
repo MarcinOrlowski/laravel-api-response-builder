@@ -1,0 +1,8 @@
+.git
+vendor
+.idea
+tests/.phpunit.cache
+*.cache
+*.swp
+*~
+*.bak
